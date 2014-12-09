@@ -23,6 +23,8 @@ IOS and Android versions are under development.</description>
 	<dependencies> 
 		<dependency id="Newtonsoft.Json" version="6.0.3" />
 		<dependency id="NPOI" version="1.2.5" />
+    <dependency id="Xbim.Essentials" version="3.0.0-Prerelease" />
+    <dependency id="Xbim.Geometry" version="3.0.0-Prerelease" />
 	</dependencies> 
     </metadata>
     <files>
