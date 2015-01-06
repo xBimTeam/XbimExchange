@@ -1,0 +1,160 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using Xbim.Ifc2x3.ActorResource;
+using Xbim.Ifc2x3.Kernel;
+using Xbim.XbimExtensions.SelectTypes;
+
+namespace Xbim.COBieLite
+{
+    public partial class ContactType
+    {
+        public ContactType()
+        {
+            
+        }
+
+
+        /// <summary>
+        /// Writes out a contact, 
+        /// </summary>
+        /// <param name="actor"></param>
+        /// <param name="helper"></param>
+        public ContactType(IfcActorSelect actor, CoBieLiteHelper helper)
+            : this()
+        {
+            var personAndOrganization = actor as IfcPersonAndOrganization;
+            var person = actor as IfcPerson;
+            var organisation = actor as IfcOrganization;
+            if (personAndOrganization != null)
+            {
+                ConvertOrganisation(personAndOrganization.TheOrganization, helper);
+                ConvertPerson(personAndOrganization.ThePerson, helper);
+              
+            }
+            else if(person!=null)
+                ConvertPerson(person, helper);
+            else if(organisation!=null)
+                ConvertOrganisation(organisation, helper);
+
+            ////Attributes
+            //AttributeType[] ifcAttributes = helper.GetAttributes(actor);
+            //if (ifcAttributes != null && ifcAttributes.Length > 0)
+            //    ContactAttributes = new AttributeCollectionType { Attribute = ifcAttributes };
+            
+          
+        }
+
+        private void ConvertOrganisation(IfcOrganization ifcOrganization, CoBieLiteHelper helper)
+        {
+            if (ifcOrganization.Addresses != null)
+            {
+                var telecom = ifcOrganization.Addresses.OfType<IfcTelecomAddress>();
+                var postal = ifcOrganization.Addresses.OfType<IfcPostalAddress>();
+                var ifcTelecomAddresses = telecom as IfcTelecomAddress[] ?? telecom.ToArray();
+                if (ifcTelecomAddresses.Any())
+                {
+                    var emailAddresses = string.Join(";",ifcTelecomAddresses.SelectMany(t => t.ElectronicMailAddresses));
+                    if (!string.IsNullOrWhiteSpace(emailAddresses))
+                        ContactEmail =  emailAddresses;
+                    var phoneNums = string.Join(";", ifcTelecomAddresses.SelectMany(t => t.TelephoneNumbers));
+                    if (!string.IsNullOrWhiteSpace(phoneNums))
+                        ContactPhoneNumber = phoneNums;
+                    var url = string.Join(";", ifcTelecomAddresses.Where(p => p.WWWHomePageURL.HasValue).SelectMany(p => p.WWWHomePageURL.ToString()));
+                    if (!string.IsNullOrWhiteSpace(url))
+                        ContactURL = url;
+
+                }
+
+                var ifcPostalAddresses = postal as IfcPostalAddress[] ?? postal.ToArray();
+                if (ifcPostalAddresses.Any())
+                {
+                    var deptNames = string.Join(";",ifcPostalAddresses.Where(p=>p.InternalLocation.HasValue).SelectMany(p => p.InternalLocation.ToString()));
+                    if (!string.IsNullOrWhiteSpace(deptNames))
+                        ContactDepartmentName = deptNames;
+                    var streetNames = string.Join(";",ifcPostalAddresses.Where(p=>p.AddressLines!=null).SelectMany(p => p.AddressLines.ToString()));
+                    if (!string.IsNullOrWhiteSpace(streetNames))
+                        ContactStreet = streetNames;
+                    var postalBox = string.Join(";", ifcPostalAddresses.Where(p => p.PostalBox.HasValue).SelectMany(p => p.PostalBox.ToString()));
+                    if (!string.IsNullOrWhiteSpace(postalBox))
+                        ContactPostalBoxNumber = postalBox;
+                    var town = string.Join(";", ifcPostalAddresses.Where(p => p.Town.HasValue).SelectMany(p => p.Town.ToString()));
+                    if (!string.IsNullOrWhiteSpace(town))
+                        ContactTownName = town;
+                    var region = string.Join(";", ifcPostalAddresses.Where(p => p.Region.HasValue).SelectMany(p => p.Region.ToString()));
+                    if (!string.IsNullOrWhiteSpace(region))
+                        ContactRegionCode = region;
+                    var postalCode = string.Join(";", ifcPostalAddresses.Where(p => p.PostalCode.HasValue).SelectMany(p => p.PostalCode.ToString()));
+                    if (!string.IsNullOrWhiteSpace(postalCode))
+                        ContactPostalCode = postalCode;
+                }
+               
+                
+            }
+            if (ifcOrganization.Roles != null)
+            {
+                var roles = string.Join(";",ifcOrganization.Roles.Select(r => r.RoleString)); //deals with User defined roles
+                if (!string.IsNullOrWhiteSpace(roles))
+                    ContactCategory =  roles;
+            }
+
+            ContactCompanyName = ifcOrganization.Name;
+
+          
+        }
+
+        private void ConvertPerson(IfcPerson ifcPerson, CoBieLiteHelper helper)
+        {
+            if (ifcPerson.Addresses != null)
+            {
+                var telecom = ifcPerson.Addresses.OfType<IfcTelecomAddress>();
+                var postal = ifcPerson.Addresses.OfType<IfcPostalAddress>();
+                var ifcTelecomAddresses = telecom as IfcTelecomAddress[] ?? telecom.ToArray();
+                if (ifcTelecomAddresses.Any())
+                {
+                    var emailAddresses = string.Join(";", ifcTelecomAddresses.SelectMany(t => t.ElectronicMailAddresses));
+                    if (!string.IsNullOrWhiteSpace(emailAddresses))
+                        ContactEmail = string.Join(";", emailAddresses, ContactEmail ?? "");
+                    var phoneNums = string.Join(";", ifcTelecomAddresses.SelectMany(t => t.TelephoneNumbers));
+                    if (!string.IsNullOrWhiteSpace(phoneNums))
+                        ContactPhoneNumber = string.Join(";", phoneNums, ContactPhoneNumber ?? "");
+                    var url = string.Join(";", ifcTelecomAddresses.Where(p => p.WWWHomePageURL.HasValue).SelectMany(p => p.WWWHomePageURL.ToString()));
+                    if (!string.IsNullOrWhiteSpace(url))
+                        ContactURL = string.Join(";", url, ContactURL ?? ""); ;
+                }
+
+                var ifcPostalAddresses = postal as IfcPostalAddress[] ?? postal.ToArray();
+                if (ifcPostalAddresses.Any())
+                {
+                    var deptNames = string.Join(";", ifcPostalAddresses.Where(p => p.InternalLocation.HasValue).SelectMany(p => p.InternalLocation.ToString()));
+                    if (!string.IsNullOrWhiteSpace(deptNames))
+                        ContactDepartmentName =  string.Join(";", deptNames,ContactDepartmentName??"");
+                    var streetNames = string.Join(";", ifcPostalAddresses.Where(p => p.AddressLines != null).SelectMany(p => p.AddressLines.ToString()));
+                    if (!string.IsNullOrWhiteSpace(streetNames))
+                        ContactStreet = string.Join(";", streetNames, ContactStreet ?? "");
+                    var postalBox = string.Join(";", ifcPostalAddresses.Where(p => p.PostalBox.HasValue).SelectMany(p => p.PostalBox.ToString()));
+                    if (!string.IsNullOrWhiteSpace(postalBox))
+                        ContactPostalBoxNumber = string.Join(";", postalBox, ContactPostalBoxNumber ?? "");
+                    var town = string.Join(";", ifcPostalAddresses.Where(p => p.Town.HasValue).SelectMany(p => p.Town.ToString()));
+                    if (!string.IsNullOrWhiteSpace(town))
+                        ContactTownName = string.Join(";", town, ContactTownName ?? "");
+                    var region = string.Join(";", ifcPostalAddresses.Where(p => p.Region.HasValue).SelectMany(p => p.Region.ToString()));
+                    if (!string.IsNullOrWhiteSpace(region))
+                        ContactRegionCode = string.Join(";", region, ContactRegionCode ?? "");
+                    var postalCode = string.Join(";", ifcPostalAddresses.Where(p => p.PostalCode.HasValue).SelectMany(p => p.PostalCode.ToString()));
+                    if (!string.IsNullOrWhiteSpace(postalCode))
+                        ContactPostalCode = string.Join(";", postalCode, ContactPostalCode ?? "");
+                }
+            }
+            if (ifcPerson.Roles != null)
+            {
+                var roles = string.Join(";", ifcPerson.Roles.SelectMany(r => r.RoleString)); //deals with User defined roles
+                if (!string.IsNullOrWhiteSpace(roles))
+                    ContactCategory = string.Join(";", roles, ContactCategory ?? "");
+            }
+
+        }
+    }
+}

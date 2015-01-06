@@ -1,0 +1,18 @@
+﻿<?xml version='1.0' encoding='utf-8'?>
+<SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings" CurrentProfile="(Default)" GeneratedClassNamespace="Xbim.COBieLite.Properties" GeneratedClassName="Settings">
+  <Profiles />
+  <Settings>
+    <Setting Name="SpaceGrossFloorArea" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">qto_SpaceBaseQuantities.GrossFloorArea;Pset_BaseQuantities.GrossFloorArea;BaseQuantities.GrossFloorArea;Pset_SpaceCommon.GrossPlannedArea</Value>
+    </Setting>
+    <Setting Name="SpaceNetFloorArea" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">qto_SpaceBaseQuantities.NetFloorArea;Pset_BaseQuantities.GrossFloorArea;BaseQuantities.NetFloorArea;Pset_SpaceCommon.NetPlannedArea</Value>
+    </Setting>
+    <Setting Name="SpaceFinishedCeilingHeight" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">qto_SpaceBaseQuantities.FinishCeilingHeight;</Value>
+    </Setting>
+    <Setting Name="SpaceRoomTag" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">COBie_Space.RoomTag;this.Name;Pset_SpaceCommon.Reference;Pset_SpaceCommon.RoomTag</Value>
+    </Setting>
+  </Settings>
+</SettingsFile>
