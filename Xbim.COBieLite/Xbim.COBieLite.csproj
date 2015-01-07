@@ -36,6 +36,18 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Esent.Interop">
+      <HintPath>..\packages\ManagedEsent.1.9.2.0\lib\net40\Esent.Interop.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="ICSharpCode.SharpZipLib">
+      <HintPath>..\packages\SharpZipLib.0.86.0\lib\20\ICSharpCode.SharpZipLib.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="log4net">
+      <HintPath>..\packages\log4net.2.0.3\lib\net40-full\log4net.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="Newtonsoft.Json, Version=6.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\Newtonsoft.Json.6.0.7\lib\net45\Newtonsoft.Json.dll</HintPath>
@@ -49,6 +61,22 @@
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
+    <Reference Include="Xbim.Common, Version=3.0.5484.31949, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Xbim.Essentials.3.0.1-Alpha\lib\net45\Xbim.Common.dll</HintPath>
+    </Reference>
+    <Reference Include="Xbim.Ifc.Extensions, Version=3.0.5484.32682, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Xbim.Essentials.3.0.1-Alpha\lib\net45\Xbim.Ifc.Extensions.dll</HintPath>
+    </Reference>
+    <Reference Include="Xbim.Ifc2x3, Version=3.0.5484.31950, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Xbim.Essentials.3.0.1-Alpha\lib\net45\Xbim.Ifc2x3.dll</HintPath>
+    </Reference>
+    <Reference Include="Xbim.IO, Version=3.0.5484.32682, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Xbim.Essentials.3.0.1-Alpha\lib\net45\Xbim.IO.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AssetInfoType.cs" />
@@ -74,24 +102,6 @@
     <Compile Include="XbimAttributedObject.cs" />
     <Compile Include="XbimCoBieLiteXmlWriter.cs" />
     <Compile Include="ZoneType.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\Xbim.Common\Xbim.Common.csproj">
-      <Project>{6745F5AC-AF3C-4372-81AA-A75E7B1FA03B}</Project>
-      <Name>Xbim.Common</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Xbim.Ifc.Extensions\Xbim.Ifc2x3.Extensions.csproj">
-      <Project>{6DF47D23-8F4D-4069-A44B-BBDACD3F9AEA}</Project>
-      <Name>Xbim.Ifc2x3.Extensions</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Xbim.Ifc2x3\Xbim.Ifc2x3.csproj">
-      <Project>{5D4C907D-1293-4E5F-9642-D0862AE4741C}</Project>
-      <Name>Xbim.Ifc2x3</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Xbim.IO\Xbim.IO.csproj">
-      <Project>{85856DF2-C8AB-4120-8A8D-AE05D2696B51}</Project>
-      <Name>Xbim.IO</Name>
-    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <None Include="COBieAttributes.config">

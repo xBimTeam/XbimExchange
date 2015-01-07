@@ -1,0 +1,453 @@
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:core="http://docs.buildingsmartalliance.org/nbims03/cobie/core" xmlns:cobielite="http://docs.buildingsmartalliance.org/nbims03/cobie/cobielite" targetNamespace="http://docs.buildingsmartalliance.org/nbims03/cobie/cobielite" elementFormDefault="unqualified" attributeFormDefault="unqualified" version="RC4">
+	<xs:import namespace="http://docs.buildingsmartalliance.org/nbims03/cobie/core" schemaLocation="core.xsd"/>
+	<!--Begin Assembly related content-->
+	<xs:complexType name="AssemblyType">
+		<xs:annotation>
+			<xs:documentation>The Assembly to which this Asset belongs</xs:documentation>
+		</xs:annotation>
+		<xs:complexContent>
+			<xs:extension base="core:AssemblyType">
+				<xs:sequence>
+					<xs:element ref="core:AssemblyCategory" minOccurs="0"/>
+					<xs:element ref="core:AssemblyDescription" minOccurs="0"/>
+					<xs:element ref="core:AssemblyAttributes" minOccurs="0"/>
+					<xs:element ref="core:AssemblyDocuments" minOccurs="0"/>
+					<xs:element ref="core:AssemblyIssues" minOccurs="0"/>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:element name="AssemblyAssignment" type="cobielite:AssemblyType" substitutionGroup="core:AssemblyAssignment">
+		<xs:annotation>
+			<xs:documentation>The assignment of an Asset or AssetType to an assembly</xs:documentation>
+		</xs:annotation>
+	</xs:element>
+	<!--End Assembly related content-->
+	<!--Begin Asset related content-->
+	<xs:complexType name="AssetInfoType">
+		<xs:annotation>
+			<xs:documentation>A minimum of one COBie.Asset record is required for all COBie deliverables related to equpment Asset information.</xs:documentation>
+		</xs:annotation>
+		<xs:complexContent>
+			<xs:extension base="core:AssetInfoType">
+				<xs:sequence>
+					<xs:element ref="core:AssetDescription" minOccurs="0"/>
+					<xs:element ref="core:AssetSerialNumber" minOccurs="0"/>
+					<xs:element ref="core:AssetInstallationDate" minOccurs="0"/>
+					<xs:element ref="core:AssetInstalledModelNumber" minOccurs="0"/>
+					<xs:element ref="core:AssetWarrantyStartDate" minOccurs="0"/>
+					<xs:element ref="core:AssetStartDate" minOccurs="0"/>
+					<xs:element ref="core:AssetTagNumber" minOccurs="0"/>
+					<xs:element ref="core:AssetBarCode" minOccurs="0"/>
+					<xs:element ref="core:AssetIdentifier" minOccurs="0"/>
+					<xs:element ref="core:AssetLocationDescription" minOccurs="0"/>
+					<xs:element ref="core:AssetSystemAssignments" minOccurs="0"/>
+					<xs:element ref="core:AssemblyAssignments" minOccurs="0"/>
+					<xs:element ref="core:AssetAttributes" minOccurs="0"/>
+					<xs:element ref="core:AssetDocuments" minOccurs="0"/>
+					<xs:element ref="core:AssetIssues" minOccurs="0"/>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:element name="Asset" type="cobielite:AssetInfoType" substitutionGroup="core:Asset">
+		<xs:annotation>
+			<xs:documentation>A minimum of one COBie.Component record is required for all COBie deliverables related to equpment Component information. </xs:documentation>
+		</xs:annotation>
+	</xs:element>
+	<!--End Asset related content-->
+	<!--Begin AssetType related content-->
+	<xs:complexType name="AssetTypeInfoType">
+		<xs:annotation>
+			<xs:documentation>A minimum of one COBie.Type record is required for all COBie deliverables related to equipment Type information.</xs:documentation>
+		</xs:annotation>
+		<xs:complexContent>
+			<xs:extension base="core:AssetTypeInfoType">
+				<xs:sequence>
+					<xs:element ref="core:AssetTypeCategory" minOccurs="0"/>
+					<xs:element ref="core:AssetTypeDescription" minOccurs="0"/>
+					<xs:element ref="core:AssetTypeAccountingCategory" minOccurs="0"/>
+					<xs:element ref="core:AssetTypeModelNumber" minOccurs="0"/>
+					<xs:element ref="core:AssetTypeReplacementCostValue" minOccurs="0"/>
+					<xs:element ref="core:AssetTypeExpectedLifeValue" minOccurs="0"/>
+					<xs:element ref="core:AssetTypeNominalLength" minOccurs="0"/>
+					<xs:element ref="core:AssetTypeNominalWidth" minOccurs="0"/>
+					<xs:element ref="core:AssetTypeNominalHeight" minOccurs="0"/>
+					<xs:element ref="core:AssetTypeAccessibilityText" minOccurs="0"/>
+					<xs:element ref="core:AssetTypeCodePerformance" minOccurs="0"/>
+					<xs:element ref="core:AssetTypeColorCode" minOccurs="0"/>
+					<xs:element ref="core:AssetTypeConstituentsDescription" minOccurs="0"/>
+					<xs:element ref="core:AssetTypeFeaturesDescription" minOccurs="0"/>
+					<xs:element ref="core:AssetTypeFinishDescription" minOccurs="0"/>
+					<xs:element ref="core:AssetTypeGradeDescription" minOccurs="0"/>
+					<xs:element ref="core:AssetTypeMaterialDescription" minOccurs="0"/>
+					<xs:element ref="core:AssetTypeShapeDescription" minOccurs="0"/>
+					<xs:element ref="core:AssetTypeSizeDescription" minOccurs="0"/>
+					<xs:element ref="core:AssetTypeSustainabilityPerformanceDescription" minOccurs="0"/>
+					<xs:element ref="core:Assets" minOccurs="0"/>
+					<xs:element ref="core:AssetTypeManufacturerContactAssignments" minOccurs="0"/>
+					<xs:element ref="core:Warranties" minOccurs="0"/>
+					<xs:element ref="core:Spares" minOccurs="0"/>
+					<xs:element ref="core:Jobs" minOccurs="0"/>
+					<xs:element ref="core:AssemblyAssignments" minOccurs="0"/>
+					<xs:element ref="core:AssetTypeAttributes" minOccurs="0"/>
+					<xs:element ref="core:AssetTypeDocuments" minOccurs="0"/>
+					<xs:element ref="core:AssetTypeIssues" minOccurs="0"/>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:element name="AssetType" type="cobielite:AssetTypeInfoType" substitutionGroup="core:AssetType">
+		<xs:annotation>
+			<xs:documentation>A minimum of one AssetType record is required for all COBie deliverables related to equipment Type information. AssetType is associated with one or more Assets.</xs:documentation>
+		</xs:annotation>
+	</xs:element>
+	<!--End AssetType related content-->
+	<!--Begin Attribute related content-->
+	<xs:complexType name="AttributeType">
+		<xs:annotation>
+			<xs:documentation>Information about a specific Attribute.</xs:documentation>
+		</xs:annotation>
+		<xs:complexContent>
+			<xs:extension base="core:AttributeType">
+				<xs:sequence>
+					<xs:element ref="core:AttributeDescription" minOccurs="0"/>
+					<xs:element ref="core:AttributeValue" minOccurs="0"/>
+					<xs:element ref="core:AttributeIssues" minOccurs="0"/>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:element name="Attribute" type="cobielite:AttributeType" substitutionGroup="core:Attribute">
+		<xs:annotation>
+			<xs:documentation>Information about a specific Attribute.</xs:documentation>
+		</xs:annotation>
+	</xs:element>
+	<!--End Attribute related content-->
+	<!--Begin Connection Related Content-->
+	<xs:complexType name="ConnectionType">
+		<xs:annotation>
+			<xs:documentation>A type for representing Connection Information.</xs:documentation>
+		</xs:annotation>
+		<xs:complexContent>
+			<xs:extension base="core:ConnectionType">
+				<xs:sequence>
+					<xs:element ref="core:ConnectionAsset1Name" minOccurs="0"/>
+					<xs:element ref="core:ConnectionAsset1PortName" minOccurs="0"/>
+					<xs:element ref="core:ConnectionAsset2Name" minOccurs="0"/>
+					<xs:element ref="core:ConnectionAsset2PortName" minOccurs="0"/>
+					<xs:element ref="core:ConnectionDescription" minOccurs="0"/>
+					<xs:element ref="core:ConnectionAttributes" minOccurs="0"/>
+					<xs:element ref="core:ConnectionDocuments" minOccurs="0"/>
+					<xs:element ref="core:ConnectionIssues" minOccurs="0"/>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:element name="Connection" type="cobielite:ConnectionType" substitutionGroup="core:Connection">
+		<xs:annotation>
+			<xs:documentation>Connection information is considered to be required only as-specified. Please refer to the COBie Guide for more information on specific requirements. </xs:documentation>
+		</xs:annotation>
+	</xs:element>
+	<!--End Connection Related Content-->
+	<!--Begin Contact Related Content-->
+	<xs:complexType name="ContactType">
+		<xs:annotation>
+			<xs:documentation>Information about a specific company who can provide the type of equipment.</xs:documentation>
+		</xs:annotation>
+		<xs:complexContent>
+			<xs:extension base="core:ContactType">
+				<xs:sequence>
+					<xs:element ref="core:ContactCategory" minOccurs="0"/>
+					<xs:element ref="core:ContactCompanyName" minOccurs="0"/>
+					<xs:element ref="core:ContactPhoneNumber" minOccurs="0"/>
+					<xs:element ref="core:ContactDepartmentName" minOccurs="0"/>
+					<xs:element ref="core:ContactGivenName" minOccurs="0"/>
+					<xs:element ref="core:ContactFamilyName" minOccurs="0"/>
+					<xs:element ref="core:ContactStreet" minOccurs="0"/>
+					<xs:element ref="core:ContactPostalBoxNumber" minOccurs="0"/>
+					<xs:element ref="core:ContactTownName" minOccurs="0"/>
+					<xs:element ref="core:ContactRegionCode" minOccurs="0"/>
+					<xs:element ref="core:ContactCountryName" minOccurs="0"/>
+					<xs:element ref="core:ContactPostalCode" minOccurs="0"/>
+					<xs:element ref="core:ContactURL" minOccurs="0"/>
+					<xs:element ref="core:ContactAttributes" minOccurs="0"/>
+					<xs:element ref="core:ContactDocuments" minOccurs="0"/>
+					<xs:element ref="core:ContactIssues" minOccurs="0"/>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:element name="Contact" type="cobielite:ContactType" substitutionGroup="core:Contact">
+		<xs:annotation>
+			<xs:documentation>Information about a specific manufacturer or supplier associated with an AssetType.</xs:documentation>
+		</xs:annotation>
+	</xs:element>
+	<!--End Contact Related Content-->
+	<!--Begin Document Related Content-->
+	<xs:complexType name="DocumentType">
+		<xs:annotation>
+			<xs:documentation>Information about a specific Document.</xs:documentation>
+		</xs:annotation>
+		<xs:complexContent>
+			<xs:extension base="core:DocumentType">
+				<xs:sequence>
+					<xs:element ref="core:DocumentCategory" minOccurs="0"/>
+					<xs:element ref="core:DocumentDescription" minOccurs="0"/>
+					<xs:element ref="core:DocumentURI" minOccurs="0"/>
+					<xs:element ref="core:DocumentReferenceURI" minOccurs="0"/>
+					<xs:element ref="core:DocumentAttributes" minOccurs="0"/>
+					<xs:element ref="core:DocumentIssues" minOccurs="0"/>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:element name="Document" type="cobielite:DocumentType" substitutionGroup="core:Document">
+		<xs:annotation>
+			<xs:documentation>
+			Information about a specific Document. 			
+			</xs:documentation>
+		</xs:annotation>
+	</xs:element>
+	<!--End Document Related Content-->
+	<!--Begin Facility Related Content-->
+	<xs:complexType name="FacilityType">
+		<xs:annotation>
+			<xs:documentation>A type for the Facility element that is the root of a COBie document</xs:documentation>
+		</xs:annotation>
+		<xs:complexContent>
+			<xs:extension base="core:FacilityType">
+				<xs:sequence>
+					<xs:element ref="core:FacilityCategory" minOccurs="0"/>
+					<xs:element ref="core:ProjectAssignment" minOccurs="0"/>
+					<xs:element ref="core:SiteAssignment" minOccurs="0"/>
+					<xs:element ref="core:FacilityDefaultLinearUnit" minOccurs="0"/>
+					<xs:element ref="core:FacilityDefaultAreaUnit" minOccurs="0"/>
+					<xs:element ref="core:FacilityDefaultVolumeUnit" minOccurs="0"/>
+					<xs:element ref="core:FacilityDefaultCurrencyUnit" minOccurs="0"/>
+					<xs:element ref="core:FacilityDefaultMeasurementStandard" minOccurs="0"/>
+					<xs:element ref="core:FacilityDescription" minOccurs="0"/>
+					<xs:element ref="core:FacilityDeliverablePhaseName" minOccurs="0"/>
+					<xs:element ref="core:Floors" minOccurs="0"/>
+					<xs:element ref="core:Zones" minOccurs="0"/>
+					<xs:element ref="core:AssetTypes" minOccurs="0"/>
+					<xs:element ref="core:Systems" minOccurs="0"/>
+					<xs:element ref="core:Connections" minOccurs="0"/>
+					<xs:element ref="core:Contacts" minOccurs="0"/>
+					<xs:element ref="core:FacilityAttributes" minOccurs="0"/>
+					<xs:element ref="core:FacilityDocuments" minOccurs="0"/>
+					<xs:element ref="core:FacilityIssues" minOccurs="0"/>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:element name="Facility" type="cobielite:FacilityType" substitutionGroup="core:Facility">
+		<xs:annotation>
+			<xs:documentation>
+			Facility contains information about the facility being exchanged during a given COBie deliverable.  Since COBie deliverables may be exchanged during planning, design, construction, handover, or operation phases there may be differences in facility designations.  COBie files will typically contain a single facility.
+			</xs:documentation>
+		</xs:annotation>
+	</xs:element>
+	<!--End Facility Related Content-->
+	<!--Begin Floor Related Content-->
+	<xs:complexType name="FloorType">
+		<xs:annotation>
+			<xs:documentation>A minimum of one COBie.Floor record is required for all COBie deliverables containing spatial information.</xs:documentation>
+		</xs:annotation>
+		<xs:complexContent>
+			<xs:extension base="core:FloorType">
+				<xs:sequence>
+					<xs:element ref="core:FloorCategory" minOccurs="0"/>
+					<xs:element ref="core:FloorDescription" minOccurs="0"/>
+					<xs:element ref="core:FloorElevationValue" minOccurs="0"/>
+					<xs:element ref="core:FloorHeightValue" minOccurs="0"/>
+					<xs:element ref="core:Spaces" minOccurs="0"/>
+					<xs:element ref="core:FloorAttributes" minOccurs="0"/>
+					<xs:element ref="core:FloorDocuments" minOccurs="0"/>
+					<xs:element ref="core:FloorIssues" minOccurs="0"/>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:element name="Floor" type="cobielite:FloorType" substitutionGroup="core:Floor">
+		<xs:annotation>
+			<xs:documentation>A minimum of one COBie.Floor record is required for all COBie deliverables containing spatial information. </xs:documentation>
+		</xs:annotation>
+	</xs:element>
+	<!--End Floor Related Content-->
+	<!--Begin Issue Related Content-->
+	<xs:complexType name="IssueType">
+		<xs:annotation>
+			<xs:documentation>A specific Issue within this set of Issues.</xs:documentation>
+		</xs:annotation>
+		<xs:complexContent>
+			<xs:extension base="core:IssueType">
+				<xs:sequence>
+					<xs:element ref="core:IssueRiskText" minOccurs="0"/>
+					<xs:element ref="core:IssueSeverityText" minOccurs="0"/>
+					<xs:element ref="core:IssueImpactText" minOccurs="0"/>
+					<xs:element ref="core:IssueDescription" minOccurs="0"/>
+					<xs:element ref="core:ContactAssignment" minOccurs="0"/>
+					<xs:element ref="core:IssueMitigationDescription" minOccurs="0"/>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:element name="Issue" type="cobielite:IssueType" substitutionGroup="core:Issue">
+		<xs:annotation>
+			<xs:documentation>A specific Issue within this set of Issues. </xs:documentation>
+		</xs:annotation>
+	</xs:element>
+	<!--End Issue Related Content-->
+	<!--Begin Job Related Content-->
+	<xs:complexType name="JobType">
+		<xs:annotation>
+			<xs:documentation>A minimum of one COBie.Job record is required for all relevant COBie.Type objects submitted at the benefical occupancy or facility handover stage.</xs:documentation>
+		</xs:annotation>
+		<xs:complexContent>
+			<xs:extension base="core:JobType">
+				<xs:sequence>
+					<xs:element ref="core:JobCategory" minOccurs="0"/>
+					<xs:element ref="core:JobStatus" minOccurs="0"/>
+					<xs:element ref="core:JobDescription" minOccurs="0"/>
+					<xs:element ref="core:JobDuration" minOccurs="0"/>
+					<xs:element ref="core:JobStartDate" minOccurs="0"/>
+					<xs:element ref="core:JobStartConditionDescription" minOccurs="0"/>
+					<xs:element ref="core:JobFrequencyValue" minOccurs="0"/>
+					<xs:element ref="core:JobPriorTaskID" minOccurs="0"/>
+					<xs:element ref="core:Resources" minOccurs="0"/>
+					<xs:element ref="core:JobAttributes" minOccurs="0"/>
+					<xs:element ref="core:JobDocuments" minOccurs="0"/>
+					<xs:element ref="core:JobIssues" minOccurs="0"/>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:element name="Job" type="cobielite:JobType" substitutionGroup="core:Job">
+		<xs:annotation>
+			<xs:documentation>A minimum of one COBie.Job record is required for all relevant COBie.Type objects submitted at the benefical occupancy or facility handover stage. </xs:documentation>
+		</xs:annotation>
+	</xs:element>
+	<!--End Job Related Content-->
+	<!--Begin Resource Related Content-->
+	<xs:complexType name="ResourceType">
+		<xs:annotation>
+			<xs:documentation>Information about a specific resource.</xs:documentation>
+		</xs:annotation>
+		<xs:complexContent>
+			<xs:extension base="core:ResourceType">
+				<xs:sequence>
+					<xs:element ref="core:ResourceCategory" minOccurs="0"/>
+					<xs:element ref="core:ResourceDescription" minOccurs="0"/>
+					<xs:element ref="core:ResourceAttributes" minOccurs="0"/>
+					<xs:element ref="core:ResourceDocuments" minOccurs="0"/>
+					<xs:element ref="core:ResourceIssues" minOccurs="0"/>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:element name="Resource" type="cobielite:ResourceType" substitutionGroup="core:Resource">
+		<xs:annotation>
+			<xs:documentation>Information about a specific resource. </xs:documentation>
+		</xs:annotation>
+	</xs:element>
+	<!--End Resource Related Content-->
+	<!--Begin Space Related Content-->
+	<xs:complexType name="SpaceType">
+		<xs:annotation>
+			<xs:documentation>A minimum of one COBie.Space record is required for all COBie deliverables related to Space information.</xs:documentation>
+		</xs:annotation>
+		<xs:complexContent>
+			<xs:extension base="core:SpaceType">
+				<xs:sequence>
+					<xs:element ref="core:SpaceCategory" minOccurs="0"/>
+					<xs:element ref="core:SpaceDescription" minOccurs="0"/>
+					<xs:element ref="core:SpaceSignageName" minOccurs="0"/>
+					<xs:element ref="core:SpaceUsableHeightValue" minOccurs="0"/>
+					<xs:element ref="core:SpaceGrossAreaValue" minOccurs="0"/>
+					<xs:element ref="core:SpaceNetAreaValue" minOccurs="0"/>
+					<xs:element ref="core:SpaceZoneAssignments" minOccurs="0"/>
+					<xs:element ref="core:SpaceAttributes" minOccurs="0"/>
+					<xs:element ref="core:SpaceDocuments" minOccurs="0"/>
+					<xs:element ref="core:SpaceIssues" minOccurs="0"/>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:element name="Space" type="cobielite:SpaceType" substitutionGroup="core:Space">
+		<xs:annotation>
+			<xs:documentation>A minimum of one COBie.Space record is required for all COBie deliverables related to Space information. </xs:documentation>
+		</xs:annotation>
+	</xs:element>
+	<!--End Space Related Content-->
+	<!--Begin Spare Related Content-->
+	<xs:complexType name="SpareType">
+		<xs:annotation>
+			<xs:documentation>Information about a specific Spare.</xs:documentation>
+		</xs:annotation>
+		<xs:complexContent>
+			<xs:extension base="core:SpareType">
+				<xs:sequence>
+					<xs:element ref="core:SpareDescription" minOccurs="0"/>
+					<xs:element ref="core:SpareSetNumber" minOccurs="0"/>
+					<xs:element ref="core:SparePartNumber" minOccurs="0"/>
+					<xs:element ref="core:SpareSupplierContactAssignments" minOccurs="0"/>
+					<xs:element ref="core:SpareAttributes" minOccurs="0"/>
+					<xs:element ref="core:SpareDocuments" minOccurs="0"/>
+					<xs:element ref="core:SpareIssues" minOccurs="0"/>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:element name="Spare" type="cobielite:SpareType" substitutionGroup="core:Spare">
+		<xs:annotation>
+			<xs:documentation>Information about a specific Spare.</xs:documentation>
+		</xs:annotation>
+	</xs:element>
+	<!--End Spare Related Content-->
+	<!--Begin System Related Content-->
+	<xs:complexType name="SystemType">
+		<xs:annotation>
+			<xs:documentation>COBie.System information is considered to be required only as-specified.  Please refer to the COBie Guide for more information on specific system requirements.</xs:documentation>
+		</xs:annotation>
+		<xs:complexContent>
+			<xs:extension base="core:SystemType">
+				<xs:sequence>
+					<xs:element ref="core:SystemDescription" minOccurs="0"/>
+					<xs:element ref="core:SystemAttributes" minOccurs="0"/>
+					<xs:element ref="core:SystemDocuments" minOccurs="0"/>
+					<xs:element ref="core:SystemIssues" minOccurs="0"/>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:element name="System" type="cobielite:SystemType" substitutionGroup="core:System">
+		<xs:annotation>
+			<xs:documentation>Definition
+COBie.System information is considered to be required only as-specified. Please refer to the COBie Guide for more information on specific system requirements. </xs:documentation>
+		</xs:annotation>
+	</xs:element>
+	<!--End System Related Content-->
+	<!--Begin Zone Related Content-->
+	<xs:complexType name="ZoneType">
+		<xs:annotation>
+			<xs:documentation>COBie.Zone information is considered to be required only as-specified.  Please refer to the COBie Guide for more information on specific zoning requirements.</xs:documentation>
+		</xs:annotation>
+		<xs:complexContent>
+			<xs:extension base="core:ZoneType">
+				<xs:sequence>
+					<xs:element ref="core:ZoneDescription" minOccurs="0"/>
+					<xs:element ref="core:ZoneAttributes" minOccurs="0"/>
+					<xs:element ref="core:ZoneDocuments" minOccurs="0"/>
+					<xs:element ref="core:ZoneIssues" minOccurs="0"/>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:element name="Zone" type="cobielite:ZoneType" substitutionGroup="core:Zone">
+		<xs:annotation>
+			<xs:documentation>COBie.Zone information is considered to be required only as-specified. Please refer to the COBie Guide for more information on specific zoning requirements.</xs:documentation>
+		</xs:annotation>
+	</xs:element>
+	<!--End Zone Related Content-->
+</xs:schema>
