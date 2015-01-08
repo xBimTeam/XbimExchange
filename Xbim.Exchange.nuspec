@@ -10,16 +10,16 @@
         <projectUrl>http://xbim.codeplex.com/</projectUrl>
         <iconUrl>http://download-codeplex.sec.s-msft.com/Download?ProjectName=xbim&amp;DownloadId=373774&amp;Build=20335</iconUrl>
         <requireLicenseAcceptance>true</requireLicenseAcceptance>
-        <description>xBIM Exchange is the COBie and other Exchange based Xbim libraries.
+        <description>xBIM Exchange is the COBie, COBieLite and other Exchange based Xbim libraries. These suppport interoperation with other BIM Standards.
 xBIM is an Open Source Toolkit for developing IFC based applications (BuildingSmart Data model). 
 It provides full support for reading and writing geometry, topology and data in accordance with the Ifc2x3 schema.
 xBIM reads and writes Ifc, IfcXMl and IfcZip formats.
 The xBIM project provides packages to convert IFC models to COBie spreadsheets in both UK and US cultures as well as a range of 3D viewing controls for use with Windows forms, WPF, WEBGL and OpenGL platforms.
 IOS and Android versions are under development.</description>
         <summary>The .Net toolkit for developing BIM applications based on the IFC standard. Essential support for the Ifc data model</summary>
-        <releaseNotes>3.0 contains a new geometry engine that has a full API to allow geometry constructions, boolean operations and meshing. All Ifc2x3 class are now supported.</releaseNotes>
+        <releaseNotes>3.0 contains an implementation of the COBieLite protocol as weel as the COBieLite Spreadsheet format.</releaseNotes>
         <language>en-GB</language>
-        <tags>BIM, IFC, IfcXml, IfcZip, COBie, .Net, C#, BuildingSmart</tags>
+        <tags>BIM, IFC, IfcXml, IfcZip, COBie, COBieLite, .Net, C#, BuildingSmart</tags>
 	<dependencies> 
 		<dependency id="Newtonsoft.Json" version="6.0.3" />
 		<dependency id="NPOI" version="1.2.5" />
@@ -29,7 +29,7 @@ IOS and Android versions are under development.</description>
     </metadata>
     <files>
         <file src="Output\Xbim.COBie.dll" target="lib\net45\Xbim.COBie.dll" />
-        <file src="Output\Xbim.COBie.Client.exe" target="lib\net45\Xbim.COBie.Client.exe" />
+        <file src="Output\Xbim.COBieLite.dll" target="lib\net45\Xbim.COBieLite.dll" />
     </files>
 	
 </package>

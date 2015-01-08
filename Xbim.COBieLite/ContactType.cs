@@ -107,6 +107,9 @@ namespace Xbim.COBieLite
 
         private void ConvertPerson(IfcPerson ifcPerson, CoBieLiteHelper helper)
         {
+            ContactFamilyName = ifcPerson.FamilyName;
+            ContactGivenName = ifcPerson.GivenName;
+           
             if (ifcPerson.Addresses != null)
             {
                 var telecom = ifcPerson.Addresses.OfType<IfcTelecomAddress>();
