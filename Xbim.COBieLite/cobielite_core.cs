@@ -2064,11 +2064,11 @@ namespace Xbim.COBieLite {
     [System.Xml.Serialization.XmlRootAttribute("AssetTypes", Namespace="http://docs.buildingsmartalliance.org/nbims03/cobie/core", IsNullable=false)]
     public partial class AssetTypeCollectionType : CobieWorksheetType {
         
-        private AssetTypeInfoTypeBase[] assetTypeField;
+        private AssetTypeInfoType[] assetTypeField;
         
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute("AssetType")]
-        public AssetTypeInfoTypeBase[] AssetType {
+        public AssetTypeInfoType[] AssetType {
             get {
                 return this.assetTypeField;
             }

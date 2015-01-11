@@ -28,14 +28,14 @@ namespace Xbim.COBieLite
     public enum EntityIdentifierMode
     {
         /// <summary>
-        /// Use the Entity Label in the Ifc file (i.e. #23)
+        /// Use the Entity Label in the Ifc file (e.g. #23)
         /// </summary>
         IfcEntityLabels = 0,
         /// <summary>
-        /// Use the GlobalId of the Entity ("10mjSDZJj9gPS2PrQaxa3z")
+        /// Use the GlobalId of the Entity (e.g. "10mjSDZJj9gPS2PrQaxa3z")
         /// </summary>
         GloballyUniqueIds = 1,
-                /// <summary>
+        /// <summary>
         /// Does not write any External Identifier for Entities
         /// </summary>
         None = 2
@@ -246,11 +246,13 @@ namespace Xbim.COBieLite
                         attributedObject = new XbimAttributedObject(typeObject);
                         _attributedObjects.Add(typeObject, attributedObject);
                     }
-                foreach (var pset in typeObject.HasPropertySets)
+                if (typeObject.HasPropertySets != null)
                 {
-                    attributedObject.AddPropertySetDefinition(pset); 
+                    foreach (var pset in typeObject.HasPropertySets)
+                    {
+                        attributedObject.AddPropertySetDefinition(pset);
+                    }
                 }
-                    
             }
             
         }
