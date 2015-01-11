@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.IO;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Xbim.COBieLite;
@@ -15,10 +16,13 @@ namespace Xbim.Tests.COBie
         [TestMethod]
         public void ConvertCoBieLiteToJson()
         {
-            
             using (var m = new XbimModel())
             {
-                m.CreateFrom("2012-03-23-Duplex-Handover.ifc", "2012-03-23-Duplex-Handover.xbim", null, true, true);
+                var IfcTestFile = "2012-03-23-Duplex-Handover.ifc";
+                IfcTestFile =
+                    @"C:\Data\dev\XbimTeam\XbimExchange\Tests\TestFiles\Standard_Classroom_CIC_6_Project_mod2.ifc";
+                var XbimTestFile = Path.ChangeExtension(IfcTestFile, "xbim");
+                m.CreateFrom(IfcTestFile, XbimTestFile, null, true, true);
                 var helper = new CoBieLiteHelper(m,"UniClass");
                 var facilities = helper.GetFacilities();
                 foreach (var facilityType in facilities)
@@ -37,16 +41,26 @@ namespace Xbim.Tests.COBie
 
             using (var m = new XbimModel())
             {
-                m.CreateFrom("2012-03-23-Duplex-Handover.ifc", "2012-03-23-Duplex-Handover.xbim", null, true, true);
+                var IfcTestFile = "2012-03-23-Duplex-Handover.ifc";
+                // IfcTestFile = @"C:\Data\dev\XbimTeam\XbimExchange\Tests\TestFiles\Standard_Classroom_CIC_6_Project_mod2.ifc";
+                var xbimTestFile = Path.ChangeExtension(IfcTestFile, "xbim");
+                m.CreateFrom(IfcTestFile, xbimTestFile, null, true, true);
                 var helper = new CoBieLiteHelper(m, "UniClass");
                 var facilities = helper.GetFacilities();
+                var i = 1;
                 foreach (var facilityType in facilities)
                 {
                     Assert.IsTrue(facilityType.FacilityDefaultLinearUnitSpecified);
                     Assert.IsTrue(facilityType.FacilityDefaultAreaUnitSpecified);
                     Assert.IsTrue(facilityType.FacilityDefaultVolumeUnitSpecified);
-                    helper.WriteXml(Console.Out,facilityType);
-                    
+                    var outName = string.Format("Facility{0}.xml", i++);
+                    var f = new FileInfo(outName);
+                    Debug.WriteLine("Writing to " + f.FullName);
+                    using (TextWriter writer = File.CreateText(outName))
+                    {
+                        helper.WriteXml(writer, facilityType);
+                    }
+                    helper.WriteXml(Console.Out, facilityType);
                 }
             }
         } 
@@ -56,7 +70,11 @@ namespace Xbim.Tests.COBie
 
             using (var m = new XbimModel())
             {
-                m.CreateFrom("2012-03-23-Duplex-Handover.ifc", "2012-03-23-Duplex-Handover.xbim", null, true, true);
+                var IfcTestFile = "2012-03-23-Duplex-Handover.ifc";
+                IfcTestFile =
+                    @"C:\Data\dev\XbimTeam\XbimExchange\Tests\TestFiles\Standard_Classroom_CIC_6_Project_mod2.ifc";
+                var XbimTestFile = Path.ChangeExtension(IfcTestFile, "xbim");
+                m.CreateFrom(IfcTestFile, XbimTestFile, null, true, true);
                 var helper = new CoBieLiteHelper(m, "UniClass");
                 var facilities = helper.GetFacilities();
                 foreach (var facilityType in facilities)
