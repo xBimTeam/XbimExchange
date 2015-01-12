@@ -74,5 +74,24 @@ namespace Xbim.Tests.COBie
                 }
             }
         }
+
+        [TestMethod]
+        public void ConvertCoBieLiteToIfc()
+        {
+
+            using (var m = new XbimModel())
+            {
+                m.CreateFrom("2012-03-23-Duplex-Handover.ifc", "2012-03-23-Duplex-Handover.xbim", null, true, true);
+                var helper = new CoBieLiteHelper(m, "UniClass");
+                var facilities = helper.GetFacilities();
+                foreach (var facilityType in facilities)
+                {
+                    using (var sw = new FileStream("facility.bson", FileMode.Create))
+                    {                       
+                         helper.WriteIfc(Console.Out, facilityType);
+                    }
+                }
+            }
+        }
     }
 }

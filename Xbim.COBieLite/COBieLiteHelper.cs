@@ -784,5 +784,10 @@ namespace Xbim.COBieLite
             actors = new HashSet<IfcActorSelect>(actors.Concat(persons));
             return actors;
         }
+
+        public void WriteIfc(TextWriter textWriter, FacilityType facilityType)
+        {
+            
+        }
     }
 }
