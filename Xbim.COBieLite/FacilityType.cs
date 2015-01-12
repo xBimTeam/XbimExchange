@@ -79,7 +79,7 @@ namespace Xbim.COBieLite
             {
                 AssetTypes = new AssetTypeCollectionType
                 {
-                    AssetType = new AssetTypeInfoTypeBase[allAssetTypesInThisFacility.Count]
+                    AssetType = new AssetTypeInfoType[allAssetTypesInThisFacility.Count]
                 };
                 for (int i = 0; i < allAssetTypesInThisFacility.Count; i++)
                 {
