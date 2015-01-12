@@ -14,13 +14,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Xbim.COBieLite", "Xbim.COBieLite\Xbim.COBieLite.csproj", "{E550C721-50AF-4AD0-998E-0C61F305EEC8}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{A5CC181F-8898-40B8-AD3F-82B28E06CA72}"
-	ProjectSection(SolutionItems) = preProject
-		.nuget\NuGet.Config = .nuget\NuGet.Config
-		.nuget\NuGet.exe = .nuget\NuGet.exe
-		.nuget\NuGet.targets = .nuget\NuGet.targets
-	EndProjectSection
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tests", "Tests\Tests.csproj", "{65C0C5FF-70D7-49CC-ACCF-057C91F382CC}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Xbim.CobieLite.Validation", "Xbim.CobieLite.Validation\Xbim.CobieLite.Validation.csproj", "{D2D0B192-93B2-409F-AAA0-47BD3038C87E}"
