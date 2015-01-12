@@ -61,7 +61,7 @@ namespace Xbim.COBieLite
             List<IfcElement> allAssetsofThisType;
             if (helper.DefiningTypeObjectMap.TryGetValue(ifcTypeObject, out allAssetsofThisType)) //should always work
             {
-                Assets = new AssetCollectionType { Asset = new AssetInfoTypeBase[allAssetsofThisType.Count] };
+                Assets = new AssetCollectionType { Asset = new AssetInfoType[allAssetsofThisType.Count] };
                 for (int i = 0; i < allAssetsofThisType.Count; i++)
                 {
                     Assets.Asset[i] = new AssetInfoType(allAssetsofThisType[i], helper); ;

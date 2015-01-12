@@ -181,3 +181,4 @@ UpgradeLog*.htm
 # Microsoft Fakes
 FakesAssemblies/
 /Output
+/Xbim.DPoW.Schema/CodeGeneration.Log.xml
