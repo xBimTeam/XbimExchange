@@ -525,6 +525,7 @@ namespace Xbim.COBieLite
 
                         foreach (var ClassificationRule in cfg)
                         {
+                            bool ok = true;
                             string result = ClassificationRule;
                             var mts = regex.Matches(ClassificationRule);
                             foreach (Match mt in mts)
@@ -533,10 +534,14 @@ namespace Xbim.COBieLite
                                 string PropVal = "";
                                 val.GetSimplePropertyValue(PropName, out PropVal);
                                 if (PropVal == null)
-                                    continue;
+                                {
+                                    ok = false;
+                                    break;
+                                }
                                 result = result.Replace("SimpleProp(" + PropName + ")", PropVal);
                             }
-                            return result;
+                            if (ok)
+                                return result;
                         }
                     }
                 }
@@ -674,7 +679,7 @@ namespace Xbim.COBieLite
 
         #region Exporters
 
-        public void WriteBson(BinaryWriter binaryWriter, FacilityType theFacility)
+        static public void WriteBson(BinaryWriter binaryWriter, FacilityType theFacility)
         {
             var serializerSettings = new JsonSerializerSettings
             {
@@ -688,7 +693,7 @@ namespace Xbim.COBieLite
             serialiser.Serialize(writer, theFacility);
         }
 
-        public void WriteJson(TextWriter textWriter, FacilityType theFacility)
+        static public void WriteJson(TextWriter textWriter, FacilityType theFacility)
         {
             var serializerSettings = new JsonSerializerSettings
             {
@@ -704,7 +709,7 @@ namespace Xbim.COBieLite
 
        
 
-        public void WriteXml(TextWriter textWriter, FacilityType theFacility)
+        static public void WriteXml(TextWriter textWriter, FacilityType theFacility)
         {
             var namespaces = new XmlSerializerNamespaces(new[]
             {
