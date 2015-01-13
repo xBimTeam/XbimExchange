@@ -19,8 +19,7 @@ namespace Xbim.Tests.COBie
             using (var m = new XbimModel())
             {
                 var IfcTestFile = "2012-03-23-Duplex-Handover.ifc";
-                IfcTestFile =
-                    @"C:\Data\dev\XbimTeam\XbimExchange\Tests\TestFiles\Standard_Classroom_CIC_6_Project_mod2.ifc";
+              //  IfcTestFile = @"D:\Users\steve\xBIM\Test Models\BimAlliance BillEast\Model 1 Duplex Apartment\Duplex_MEP_20110907.ifc";
                 var XbimTestFile = Path.ChangeExtension(IfcTestFile, "xbim");
                 m.CreateFrom(IfcTestFile, XbimTestFile, null, true, true);
                 var helper = new CoBieLiteHelper(m,"UniClass");
@@ -42,7 +41,7 @@ namespace Xbim.Tests.COBie
             using (var m = new XbimModel())
             {
                 var IfcTestFile = "2012-03-23-Duplex-Handover.ifc";
-                // IfcTestFile = @"C:\Data\dev\XbimTeam\XbimExchange\Tests\TestFiles\Standard_Classroom_CIC_6_Project_mod2.ifc";
+               // var IfcTestFile = @"D:\Users\steve\xBIM\Test Models\BimAlliance BillEast\Model 1 Duplex Apartment\Duplex_MEP_20110907.ifc";
                 var xbimTestFile = Path.ChangeExtension(IfcTestFile, "xbim");
                 m.CreateFrom(IfcTestFile, xbimTestFile, null, true, true);
                 var helper = new CoBieLiteHelper(m, "UniClass");
@@ -71,8 +70,7 @@ namespace Xbim.Tests.COBie
             using (var m = new XbimModel())
             {
                 var IfcTestFile = "2012-03-23-Duplex-Handover.ifc";
-                IfcTestFile =
-                    @"C:\Data\dev\XbimTeam\XbimExchange\Tests\TestFiles\Standard_Classroom_CIC_6_Project_mod2.ifc";
+               // IfcTestFile = @"C:\Data\dev\XbimTeam\XbimExchange\Tests\TestFiles\Standard_Classroom_CIC_6_Project_mod2.ifc";
                 var XbimTestFile = Path.ChangeExtension(IfcTestFile, "xbim");
                 m.CreateFrom(IfcTestFile, XbimTestFile, null, true, true);
                 var helper = new CoBieLiteHelper(m, "UniClass");

@@ -10,6 +10,11 @@ namespace Xbim.DPoW.Interfaces
     {
         internal static readonly ILogger Logger = LoggerFactory.GetLogger();
         internal const string DpowSystemName = "DPoW";
+
+        public void ReadDpowFromJson(string jsonFileName)
+        {
+            
+        }
         /// <summary>
         /// Processes the Plan of work and returns the number of warnings, these can be accessed through the Logger static member
         /// </summary>

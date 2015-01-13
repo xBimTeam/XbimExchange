@@ -643,6 +643,8 @@ namespace Xbim.COBieLite
 
         }
 
+       
+
         public void WriteXml(TextWriter textWriter, FacilityType theFacility)
         {
             var namespaces = new XmlSerializerNamespaces(new[]
