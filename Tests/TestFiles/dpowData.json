@@ -417,7 +417,7 @@
 							"RequiredLOD" : {
 								"RequiredLODCode" : "1"
 							}
-						}
+						} 
 					],
 					"JobName" : "Corridors"
 				}, {
