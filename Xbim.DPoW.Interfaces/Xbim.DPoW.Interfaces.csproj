@@ -43,6 +43,10 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\log4net.2.0.3\lib\net40-full\log4net.dll</HintPath>
     </Reference>
+    <Reference Include="Newtonsoft.Json, Version=6.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Newtonsoft.Json.6.0.8\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -65,7 +69,23 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="DPoWHelper.cs" />
+    <Compile Include="Assembly.cs" />
+    <Compile Include="AssetType.cs" />
+    <Compile Include="Classification.cs" />
+    <Compile Include="ClassificationReference.cs" />
+    <Compile Include="Contact.cs" />
+    <Compile Include="Document.cs" />
+    <Compile Include="DPoWObjectConverter.cs" />
+    <Compile Include="Facility.cs" />
+    <Compile Include="DpowHelper.cs" />
+    <Compile Include="DPoWObject.cs" />
+    <Compile Include="PlanOfWork.cs" />
+    <Compile Include="Project.cs" />
+    <Compile Include="ProjectStage.cs" />
+    <Compile Include="RequiredAttribute.cs" />
+    <Compile Include="RequiredLOD.cs" />
+    <Compile Include="Job.cs" />
+    <Compile Include="Zone.cs" />
     <Compile Include="GeneratedCode\AreaUnits.cs" />
     <Compile Include="GeneratedCode\CurrencyUnits.cs" />
     <Compile Include="GeneratedCode\IAssembly.cs" />

@@ -1,0 +1,1579 @@
+{
+	"ClassificationSystem" : [{
+			"ClassificationEdition" : "1",
+			"ClassificationEditionDate" : "12/04/2015",
+			"ClassificationName" : "New Uniclass",
+			"ClassificationPublisher" : "NBS",
+			"ClassificationReferences" : [{
+					"ClassificationCode" : "Ss-30-30-72-72",
+					"ClassificationDescription" : "Roof Light Systems"
+				}, {
+					"ClassificationCode" : "Ss-25-30-20-29",
+					"ClassificationDescription" : "Flexible Doorset Systems"
+				}, {
+					"ClassificationCode" : "Ss-25-50-95-25",
+					"ClassificationDescription" : "External window system"
+				}, {
+					"ClassificationCode" : "Ss-25-10-20-85",
+					"ClassificationDescription" : "Stick Curtain Walling Systems"
+				}, {
+					"ClassificationCode" : "Ss-55-70-38-15",
+					"ClassificationDescription" : "Cold Water Supply Systems"
+				}, {
+					"ClassificationCode" : "Ss-60-40-37-81",
+					"ClassificationDescription" : "Solar Heating Systems"
+				}, {
+					"ClassificationCode" : "Ss-75-40-02-11",
+					"ClassificationDescription" : "Card Access Control Systems"
+				}, {
+					"ClassificationCode" : "Ss-25-30-20-29/A",
+					"ClassificationDescription" : "Flexible Doorset Systems"
+				}, {
+					"ClassificationCode" : "Ss-25-30-20-29/B",
+					"ClassificationDescription" : "Flexible Doorset Systems"
+				}
+			],
+			"ClassificationURI" : ""
+		}
+	],
+	"Client" : {
+		"ContactCompanyName" : "Newtown CC"
+	},
+	"Contacts" : [{
+			"ContactCompanyName" : "Big Widget Limited"
+		}, {
+			"ContactCompanyName" : "Newtown CC"
+		}, {
+			"ContactCompanyName" : "SJH Consult"
+		}, {
+			"ContactCompanyName" : "Clear Costs"
+		}, {
+			"ContactCompanyName" : "ABC Architect"
+		}, {
+			"ContactCompanyName" : "Wires and Fires"
+		}, {
+			"ContactCompanyName" : "NBS"
+		}
+	],
+	"Facility" : {
+		"FacilityDescription" : "",
+		"FacilityName" : "Newtown High School",
+		"FacilitySiteDescription" : "",
+		"FacilitySiteName" : "Newtown High School"
+	},
+	"Project" : {
+		"AreaUnits" : 0,
+		"CurrencyUnits" : 2,
+		"CurrentProjectStage" : {
+			"Jobs" : [{
+					"Documents" : [{
+							"DocumentCategory" : {
+								"ClassificationEdition" : "1",
+								"ClassificationEditionDate" : "12/04/2015",
+								"ClassificationName" : "New Uniclass",
+								"ClassificationPublisher" : "NBS",
+								"ClassificationReferences" : [{
+										"ClassificationCode" : "Ss-30-30-72-72",
+										"ClassificationDescription" : "Roof Light Systems"
+									}, {
+										"ClassificationCode" : "Ss-25-30-20-29",
+										"ClassificationDescription" : "Flexible Doorset Systems"
+									}, {
+										"ClassificationCode" : "Ss-25-50-95-25",
+										"ClassificationDescription" : "External window system"
+									}, {
+										"ClassificationCode" : "Ss-25-10-20-85",
+										"ClassificationDescription" : "Stick Curtain Walling Systems"
+									}, {
+										"ClassificationCode" : "Ss-55-70-38-15",
+										"ClassificationDescription" : "Cold Water Supply Systems"
+									}, {
+										"ClassificationCode" : "Ss-60-40-37-81",
+										"ClassificationDescription" : "Solar Heating Systems"
+									}, {
+										"ClassificationCode" : "Ss-75-40-02-11",
+										"ClassificationDescription" : "Card Access Control Systems"
+									}, {
+										"ClassificationCode" : "Ss-25-30-20-29/A",
+										"ClassificationDescription" : "Flexible Doorset Systems"
+									}, {
+										"ClassificationCode" : "Ss-25-30-20-29/B",
+										"ClassificationDescription" : "Flexible Doorset Systems"
+									}
+								],
+								"ClassificationURI" : ""
+							},
+							"DocumentName" : "1.1 Develop the Project Objectives",
+							"Scope" : 1
+						}
+					],
+					"JobName" : "1.1 Develop the Project Objectives"
+				}, {
+					"Documents" : [{
+							"DocumentCategory" : {
+								"ClassificationEdition" : "1",
+								"ClassificationEditionDate" : "12/04/2015",
+								"ClassificationName" : "New Uniclass",
+								"ClassificationPublisher" : "NBS",
+								"ClassificationReferences" : [{
+										"ClassificationCode" : "Ss-30-30-72-72",
+										"ClassificationDescription" : "Roof Light Systems"
+									}, {
+										"ClassificationCode" : "Ss-25-30-20-29",
+										"ClassificationDescription" : "Flexible Doorset Systems"
+									}, {
+										"ClassificationCode" : "Ss-25-50-95-25",
+										"ClassificationDescription" : "External window system"
+									}, {
+										"ClassificationCode" : "Ss-25-10-20-85",
+										"ClassificationDescription" : "Stick Curtain Walling Systems"
+									}, {
+										"ClassificationCode" : "Ss-55-70-38-15",
+										"ClassificationDescription" : "Cold Water Supply Systems"
+									}, {
+										"ClassificationCode" : "Ss-60-40-37-81",
+										"ClassificationDescription" : "Solar Heating Systems"
+									}, {
+										"ClassificationCode" : "Ss-75-40-02-11",
+										"ClassificationDescription" : "Card Access Control Systems"
+									}, {
+										"ClassificationCode" : "Ss-25-30-20-29/A",
+										"ClassificationDescription" : "Flexible Doorset Systems"
+									}, {
+										"ClassificationCode" : "Ss-25-30-20-29/B",
+										"ClassificationDescription" : "Flexible Doorset Systems"
+									}
+								],
+								"ClassificationURI" : ""
+							},
+							"DocumentName" : "1.2 Contribute to the Project Objectives",
+							"Scope" : 1
+						}
+					],
+					"JobName" : "1.2 Contribute to the Project Objectives",
+					"ResponsibleFor" : {
+						"ContactCompanyName" : "Newtown CC"
+					}
+				}, {
+					"Documents" : [{
+							"DocumentCategory" : {
+								"ClassificationEdition" : "1",
+								"ClassificationEditionDate" : "12/04/2015",
+								"ClassificationName" : "New Uniclass",
+								"ClassificationPublisher" : "NBS",
+								"ClassificationReferences" : [{
+										"ClassificationCode" : "Ss-30-30-72-72",
+										"ClassificationDescription" : "Roof Light Systems"
+									}, {
+										"ClassificationCode" : "Ss-25-30-20-29",
+										"ClassificationDescription" : "Flexible Doorset Systems"
+									}, {
+										"ClassificationCode" : "Ss-25-50-95-25",
+										"ClassificationDescription" : "External window system"
+									}, {
+										"ClassificationCode" : "Ss-25-10-20-85",
+										"ClassificationDescription" : "Stick Curtain Walling Systems"
+									}, {
+										"ClassificationCode" : "Ss-55-70-38-15",
+										"ClassificationDescription" : "Cold Water Supply Systems"
+									}, {
+										"ClassificationCode" : "Ss-60-40-37-81",
+										"ClassificationDescription" : "Solar Heating Systems"
+									}, {
+										"ClassificationCode" : "Ss-75-40-02-11",
+										"ClassificationDescription" : "Card Access Control Systems"
+									}, {
+										"ClassificationCode" : "Ss-25-30-20-29/A",
+										"ClassificationDescription" : "Flexible Doorset Systems"
+									}, {
+										"ClassificationCode" : "Ss-25-30-20-29/B",
+										"ClassificationDescription" : "Flexible Doorset Systems"
+									}
+								],
+								"ClassificationURI" : ""
+							},
+							"DocumentName" : "1.3 Develop the Quality Objectives",
+							"Scope" : 1
+						}
+					],
+					"JobName" : "1.3 Develop the Quality Objectives"
+				}, {
+					"Documents" : [{
+							"DocumentCategory" : {
+								"ClassificationEdition" : "1",
+								"ClassificationEditionDate" : "12/04/2015",
+								"ClassificationName" : "New Uniclass",
+								"ClassificationPublisher" : "NBS",
+								"ClassificationReferences" : [{
+										"ClassificationCode" : "Ss-30-30-72-72",
+										"ClassificationDescription" : "Roof Light Systems"
+									}, {
+										"ClassificationCode" : "Ss-25-30-20-29",
+										"ClassificationDescription" : "Flexible Doorset Systems"
+									}, {
+										"ClassificationCode" : "Ss-25-50-95-25",
+										"ClassificationDescription" : "External window system"
+									}, {
+										"ClassificationCode" : "Ss-25-10-20-85",
+										"ClassificationDescription" : "Stick Curtain Walling Systems"
+									}, {
+										"ClassificationCode" : "Ss-55-70-38-15",
+										"ClassificationDescription" : "Cold Water Supply Systems"
+									}, {
+										"ClassificationCode" : "Ss-60-40-37-81",
+										"ClassificationDescription" : "Solar Heating Systems"
+									}, {
+										"ClassificationCode" : "Ss-75-40-02-11",
+										"ClassificationDescription" : "Card Access Control Systems"
+									}, {
+										"ClassificationCode" : "Ss-25-30-20-29/A",
+										"ClassificationDescription" : "Flexible Doorset Systems"
+									}, {
+										"ClassificationCode" : "Ss-25-30-20-29/B",
+										"ClassificationDescription" : "Flexible Doorset Systems"
+									}
+								],
+								"ClassificationURI" : ""
+							},
+							"DocumentName" : "1.4 Contribute to the Quality Objectives",
+							"Scope" : 1
+						}
+					],
+					"JobName" : "1.4 Contribute to the Quality Objectives",
+					"ResponsibleFor" : {
+						"ContactCompanyName" : "Newtown CC"
+					}
+				}, {
+					"Documents" : [{
+							"DocumentCategory" : {
+								"ClassificationEdition" : "1",
+								"ClassificationEditionDate" : "12/04/2015",
+								"ClassificationName" : "New Uniclass",
+								"ClassificationPublisher" : "NBS",
+								"ClassificationReferences" : [{
+										"ClassificationCode" : "Ss-30-30-72-72",
+										"ClassificationDescription" : "Roof Light Systems"
+									}, {
+										"ClassificationCode" : "Ss-25-30-20-29",
+										"ClassificationDescription" : "Flexible Doorset Systems"
+									}, {
+										"ClassificationCode" : "Ss-25-50-95-25",
+										"ClassificationDescription" : "External window system"
+									}, {
+										"ClassificationCode" : "Ss-25-10-20-85",
+										"ClassificationDescription" : "Stick Curtain Walling Systems"
+									}, {
+										"ClassificationCode" : "Ss-55-70-38-15",
+										"ClassificationDescription" : "Cold Water Supply Systems"
+									}, {
+										"ClassificationCode" : "Ss-60-40-37-81",
+										"ClassificationDescription" : "Solar Heating Systems"
+									}, {
+										"ClassificationCode" : "Ss-75-40-02-11",
+										"ClassificationDescription" : "Card Access Control Systems"
+									}, {
+										"ClassificationCode" : "Ss-25-30-20-29/A",
+										"ClassificationDescription" : "Flexible Doorset Systems"
+									}, {
+										"ClassificationCode" : "Ss-25-30-20-29/B",
+										"ClassificationDescription" : "Flexible Doorset Systems"
+									}
+								],
+								"ClassificationURI" : ""
+							},
+							"DocumentName" : "1.5 Develop the Project Outcomes",
+							"Scope" : 1
+						}
+					],
+					"JobName" : "1.5 Develop the Project Outcomes"
+				}, {
+					"Documents" : [{
+							"DocumentCategory" : {
+								"ClassificationEdition" : "1",
+								"ClassificationEditionDate" : "12/04/2015",
+								"ClassificationName" : "New Uniclass",
+								"ClassificationPublisher" : "NBS",
+								"ClassificationReferences" : [{
+										"ClassificationCode" : "Ss-30-30-72-72",
+										"ClassificationDescription" : "Roof Light Systems"
+									}, {
+										"ClassificationCode" : "Ss-25-30-20-29",
+										"ClassificationDescription" : "Flexible Doorset Systems"
+									}, {
+										"ClassificationCode" : "Ss-25-50-95-25",
+										"ClassificationDescription" : "External window system"
+									}, {
+										"ClassificationCode" : "Ss-25-10-20-85",
+										"ClassificationDescription" : "Stick Curtain Walling Systems"
+									}, {
+										"ClassificationCode" : "Ss-55-70-38-15",
+										"ClassificationDescription" : "Cold Water Supply Systems"
+									}, {
+										"ClassificationCode" : "Ss-60-40-37-81",
+										"ClassificationDescription" : "Solar Heating Systems"
+									}, {
+										"ClassificationCode" : "Ss-75-40-02-11",
+										"ClassificationDescription" : "Card Access Control Systems"
+									}, {
+										"ClassificationCode" : "Ss-25-30-20-29/A",
+										"ClassificationDescription" : "Flexible Doorset Systems"
+									}, {
+										"ClassificationCode" : "Ss-25-30-20-29/B",
+										"ClassificationDescription" : "Flexible Doorset Systems"
+									}
+								],
+								"ClassificationURI" : ""
+							},
+							"DocumentName" : "1.6 Contribute to the Project Outcomes",
+							"Scope" : 1
+						}
+					],
+					"JobName" : "1.6 Contribute to the Project Outcomes",
+					"ResponsibleFor" : {
+						"ContactCompanyName" : "Newtown CC"
+					}
+				}, {
+					"Documents" : [{
+							"DocumentCategory" : {
+								"ClassificationEdition" : "1",
+								"ClassificationEditionDate" : "12/04/2015",
+								"ClassificationName" : "New Uniclass",
+								"ClassificationPublisher" : "NBS",
+								"ClassificationReferences" : [{
+										"ClassificationCode" : "Ss-30-30-72-72",
+										"ClassificationDescription" : "Roof Light Systems"
+									}, {
+										"ClassificationCode" : "Ss-25-30-20-29",
+										"ClassificationDescription" : "Flexible Doorset Systems"
+									}, {
+										"ClassificationCode" : "Ss-25-50-95-25",
+										"ClassificationDescription" : "External window system"
+									}, {
+										"ClassificationCode" : "Ss-25-10-20-85",
+										"ClassificationDescription" : "Stick Curtain Walling Systems"
+									}, {
+										"ClassificationCode" : "Ss-55-70-38-15",
+										"ClassificationDescription" : "Cold Water Supply Systems"
+									}, {
+										"ClassificationCode" : "Ss-60-40-37-81",
+										"ClassificationDescription" : "Solar Heating Systems"
+									}, {
+										"ClassificationCode" : "Ss-75-40-02-11",
+										"ClassificationDescription" : "Card Access Control Systems"
+									}, {
+										"ClassificationCode" : "Ss-25-30-20-29/A",
+										"ClassificationDescription" : "Flexible Doorset Systems"
+									}, {
+										"ClassificationCode" : "Ss-25-30-20-29/B",
+										"ClassificationDescription" : "Flexible Doorset Systems"
+									}
+								],
+								"ClassificationURI" : ""
+							},
+							"DocumentName" : "1.7 Review Feasibility Studies",
+							"Scope" : 1
+						}
+					],
+					"JobName" : "1.7 Review Feasibility Studies"
+				}, {
+					"DPoWObjects" : [{
+							"DPoWObjectName" : "Secondary Classrooms",
+							"RequiredLOD" : {
+								"RequiredLODCode" : "2"
+							}
+						}
+					],
+					"JobName" : "Secondary Classrooms"
+				}, {
+					"DPoWObjects" : [{
+							"DPoWObjectName" : "Staff Common Rooms",
+							"RequiredLOD" : {
+								"RequiredLODCode" : "1"
+							}
+						}
+					],
+					"JobName" : "Staff Common Rooms"
+				}, {
+					"DPoWObjects" : [{
+							"DPoWObjectName" : "Student Common Rooms",
+							"RequiredLOD" : {
+								"RequiredLODCode" : "1"
+							}
+						}
+					],
+					"JobName" : "Student Common Rooms"
+				}, {
+					"DPoWObjects" : [{
+							"DPoWObjectName" : "Scientific Laboratory Spaces",
+							"RequiredLOD" : {
+								"RequiredLODCode" : "2"
+							}
+						}
+					],
+					"JobName" : "Scientific Laboratory Spaces"
+				}, {
+					"DPoWObjects" : [{
+							"DPoWObjectName" : "Corridors",
+							"RequiredLOD" : {
+								"RequiredLODCode" : "1"
+							}
+						}
+					],
+					"JobName" : "Corridors"
+				}, {
+					"DPoWObjects" : [{
+							"DPoWObjectName" : "Multi-Sports Courts",
+							"RequiredLOD" : {
+								"RequiredLODCode" : "1"
+							}
+						}
+					],
+					"JobName" : "Multi-Sports Courts"
+				}, {
+					"DPoWObjects" : [{
+							"DPoWObjectName" : "Cricket Pitches",
+							"RequiredLOD" : {
+								"RequiredLODCode" : "1"
+							}
+						}
+					],
+					"JobName" : "Cricket Pitches"
+				}, {
+					"DPoWObjects" : [{
+							"DPoWObjectName" : "Car Parking Spaces - Outdoor",
+							"RequiredLOD" : {
+								"RequiredLODCode" : "1"
+							}
+						}
+					],
+					"JobName" : "Car Parking Spaces - Outdoor"
+				}, {
+					"DPoWObjects" : [{
+							"DPoWObjectName" : "Plant Rooms",
+							"RequiredLOD" : {
+								"RequiredLODCode" : "1"
+							}
+						}
+					],
+					"JobName" : "Plant Rooms"
+				}
+			],
+			"ProjectStageCode" : "1",
+			"ProjectStageDescription" : "",
+			"ProjectStageName" : "Brief"
+		},
+		"LinearUnits" : 0,
+		"ProjectDescription" : "",
+		"ProjectName" : "Newtown High School",
+		"ProjectURI" : "",
+		"VolumeUnits" : 0
+	},
+	"ProjectStages" : [{
+			"ProjectStageCode" : "0",
+			"ProjectStageDescription" : "",
+			"ProjectStageName" : "Strategy"
+		}, {
+			"Jobs" : [{
+					"Documents" : [{
+							"DocumentCategory" : {
+								"ClassificationEdition" : "1",
+								"ClassificationEditionDate" : "12/04/2015",
+								"ClassificationName" : "New Uniclass",
+								"ClassificationPublisher" : "NBS",
+								"ClassificationReferences" : [{
+										"ClassificationCode" : "Ss-30-30-72-72",
+										"ClassificationDescription" : "Roof Light Systems"
+									}, {
+										"ClassificationCode" : "Ss-25-30-20-29",
+										"ClassificationDescription" : "Flexible Doorset Systems"
+									}, {
+										"ClassificationCode" : "Ss-25-50-95-25",
+										"ClassificationDescription" : "External window system"
+									}, {
+										"ClassificationCode" : "Ss-25-10-20-85",
+										"ClassificationDescription" : "Stick Curtain Walling Systems"
+									}, {
+										"ClassificationCode" : "Ss-55-70-38-15",
+										"ClassificationDescription" : "Cold Water Supply Systems"
+									}, {
+										"ClassificationCode" : "Ss-60-40-37-81",
+										"ClassificationDescription" : "Solar Heating Systems"
+									}, {
+										"ClassificationCode" : "Ss-75-40-02-11",
+										"ClassificationDescription" : "Card Access Control Systems"
+									}, {
+										"ClassificationCode" : "Ss-25-30-20-29/A",
+										"ClassificationDescription" : "Flexible Doorset Systems"
+									}, {
+										"ClassificationCode" : "Ss-25-30-20-29/B",
+										"ClassificationDescription" : "Flexible Doorset Systems"
+									}
+								],
+								"ClassificationURI" : ""
+							},
+							"DocumentName" : "1.1 Develop the Project Objectives",
+							"Scope" : 1
+						}
+					],
+					"JobName" : "1.1 Develop the Project Objectives"
+				}, {
+					"Documents" : [{
+							"DocumentCategory" : {
+								"ClassificationEdition" : "1",
+								"ClassificationEditionDate" : "12/04/2015",
+								"ClassificationName" : "New Uniclass",
+								"ClassificationPublisher" : "NBS",
+								"ClassificationReferences" : [{
+										"ClassificationCode" : "Ss-30-30-72-72",
+										"ClassificationDescription" : "Roof Light Systems"
+									}, {
+										"ClassificationCode" : "Ss-25-30-20-29",
+										"ClassificationDescription" : "Flexible Doorset Systems"
+									}, {
+										"ClassificationCode" : "Ss-25-50-95-25",
+										"ClassificationDescription" : "External window system"
+									}, {
+										"ClassificationCode" : "Ss-25-10-20-85",
+										"ClassificationDescription" : "Stick Curtain Walling Systems"
+									}, {
+										"ClassificationCode" : "Ss-55-70-38-15",
+										"ClassificationDescription" : "Cold Water Supply Systems"
+									}, {
+										"ClassificationCode" : "Ss-60-40-37-81",
+										"ClassificationDescription" : "Solar Heating Systems"
+									}, {
+										"ClassificationCode" : "Ss-75-40-02-11",
+										"ClassificationDescription" : "Card Access Control Systems"
+									}, {
+										"ClassificationCode" : "Ss-25-30-20-29/A",
+										"ClassificationDescription" : "Flexible Doorset Systems"
+									}, {
+										"ClassificationCode" : "Ss-25-30-20-29/B",
+										"ClassificationDescription" : "Flexible Doorset Systems"
+									}
+								],
+								"ClassificationURI" : ""
+							},
+							"DocumentName" : "1.2 Contribute to the Project Objectives",
+							"Scope" : 1
+						}
+					],
+					"JobName" : "1.2 Contribute to the Project Objectives",
+					"ResponsibleFor" : {
+						"ContactCompanyName" : "Newtown CC"
+					}
+				}, {
+					"Documents" : [{
+							"DocumentCategory" : {
+								"ClassificationEdition" : "1",
+								"ClassificationEditionDate" : "12/04/2015",
+								"ClassificationName" : "New Uniclass",
+								"ClassificationPublisher" : "NBS",
+								"ClassificationReferences" : [{
+										"ClassificationCode" : "Ss-30-30-72-72",
+										"ClassificationDescription" : "Roof Light Systems"
+									}, {
+										"ClassificationCode" : "Ss-25-30-20-29",
+										"ClassificationDescription" : "Flexible Doorset Systems"
+									}, {
+										"ClassificationCode" : "Ss-25-50-95-25",
+										"ClassificationDescription" : "External window system"
+									}, {
+										"ClassificationCode" : "Ss-25-10-20-85",
+										"ClassificationDescription" : "Stick Curtain Walling Systems"
+									}, {
+										"ClassificationCode" : "Ss-55-70-38-15",
+										"ClassificationDescription" : "Cold Water Supply Systems"
+									}, {
+										"ClassificationCode" : "Ss-60-40-37-81",
+										"ClassificationDescription" : "Solar Heating Systems"
+									}, {
+										"ClassificationCode" : "Ss-75-40-02-11",
+										"ClassificationDescription" : "Card Access Control Systems"
+									}, {
+										"ClassificationCode" : "Ss-25-30-20-29/A",
+										"ClassificationDescription" : "Flexible Doorset Systems"
+									}, {
+										"ClassificationCode" : "Ss-25-30-20-29/B",
+										"ClassificationDescription" : "Flexible Doorset Systems"
+									}
+								],
+								"ClassificationURI" : ""
+							},
+							"DocumentName" : "1.3 Develop the Quality Objectives",
+							"Scope" : 1
+						}
+					],
+					"JobName" : "1.3 Develop the Quality Objectives"
+				}, {
+					"Documents" : [{
+							"DocumentCategory" : {
+								"ClassificationEdition" : "1",
+								"ClassificationEditionDate" : "12/04/2015",
+								"ClassificationName" : "New Uniclass",
+								"ClassificationPublisher" : "NBS",
+								"ClassificationReferences" : [{
+										"ClassificationCode" : "Ss-30-30-72-72",
+										"ClassificationDescription" : "Roof Light Systems"
+									}, {
+										"ClassificationCode" : "Ss-25-30-20-29",
+										"ClassificationDescription" : "Flexible Doorset Systems"
+									}, {
+										"ClassificationCode" : "Ss-25-50-95-25",
+										"ClassificationDescription" : "External window system"
+									}, {
+										"ClassificationCode" : "Ss-25-10-20-85",
+										"ClassificationDescription" : "Stick Curtain Walling Systems"
+									}, {
+										"ClassificationCode" : "Ss-55-70-38-15",
+										"ClassificationDescription" : "Cold Water Supply Systems"
+									}, {
+										"ClassificationCode" : "Ss-60-40-37-81",
+										"ClassificationDescription" : "Solar Heating Systems"
+									}, {
+										"ClassificationCode" : "Ss-75-40-02-11",
+										"ClassificationDescription" : "Card Access Control Systems"
+									}, {
+										"ClassificationCode" : "Ss-25-30-20-29/A",
+										"ClassificationDescription" : "Flexible Doorset Systems"
+									}, {
+										"ClassificationCode" : "Ss-25-30-20-29/B",
+										"ClassificationDescription" : "Flexible Doorset Systems"
+									}
+								],
+								"ClassificationURI" : ""
+							},
+							"DocumentName" : "1.4 Contribute to the Quality Objectives",
+							"Scope" : 1
+						}
+					],
+					"JobName" : "1.4 Contribute to the Quality Objectives",
+					"ResponsibleFor" : {
+						"ContactCompanyName" : "Newtown CC"
+					}
+				}, {
+					"Documents" : [{
+							"DocumentCategory" : {
+								"ClassificationEdition" : "1",
+								"ClassificationEditionDate" : "12/04/2015",
+								"ClassificationName" : "New Uniclass",
+								"ClassificationPublisher" : "NBS",
+								"ClassificationReferences" : [{
+										"ClassificationCode" : "Ss-30-30-72-72",
+										"ClassificationDescription" : "Roof Light Systems"
+									}, {
+										"ClassificationCode" : "Ss-25-30-20-29",
+										"ClassificationDescription" : "Flexible Doorset Systems"
+									}, {
+										"ClassificationCode" : "Ss-25-50-95-25",
+										"ClassificationDescription" : "External window system"
+									}, {
+										"ClassificationCode" : "Ss-25-10-20-85",
+										"ClassificationDescription" : "Stick Curtain Walling Systems"
+									}, {
+										"ClassificationCode" : "Ss-55-70-38-15",
+										"ClassificationDescription" : "Cold Water Supply Systems"
+									}, {
+										"ClassificationCode" : "Ss-60-40-37-81",
+										"ClassificationDescription" : "Solar Heating Systems"
+									}, {
+										"ClassificationCode" : "Ss-75-40-02-11",
+										"ClassificationDescription" : "Card Access Control Systems"
+									}, {
+										"ClassificationCode" : "Ss-25-30-20-29/A",
+										"ClassificationDescription" : "Flexible Doorset Systems"
+									}, {
+										"ClassificationCode" : "Ss-25-30-20-29/B",
+										"ClassificationDescription" : "Flexible Doorset Systems"
+									}
+								],
+								"ClassificationURI" : ""
+							},
+							"DocumentName" : "1.5 Develop the Project Outcomes",
+							"Scope" : 1
+						}
+					],
+					"JobName" : "1.5 Develop the Project Outcomes"
+				}, {
+					"Documents" : [{
+							"DocumentCategory" : {
+								"ClassificationEdition" : "1",
+								"ClassificationEditionDate" : "12/04/2015",
+								"ClassificationName" : "New Uniclass",
+								"ClassificationPublisher" : "NBS",
+								"ClassificationReferences" : [{
+										"ClassificationCode" : "Ss-30-30-72-72",
+										"ClassificationDescription" : "Roof Light Systems"
+									}, {
+										"ClassificationCode" : "Ss-25-30-20-29",
+										"ClassificationDescription" : "Flexible Doorset Systems"
+									}, {
+										"ClassificationCode" : "Ss-25-50-95-25",
+										"ClassificationDescription" : "External window system"
+									}, {
+										"ClassificationCode" : "Ss-25-10-20-85",
+										"ClassificationDescription" : "Stick Curtain Walling Systems"
+									}, {
+										"ClassificationCode" : "Ss-55-70-38-15",
+										"ClassificationDescription" : "Cold Water Supply Systems"
+									}, {
+										"ClassificationCode" : "Ss-60-40-37-81",
+										"ClassificationDescription" : "Solar Heating Systems"
+									}, {
+										"ClassificationCode" : "Ss-75-40-02-11",
+										"ClassificationDescription" : "Card Access Control Systems"
+									}, {
+										"ClassificationCode" : "Ss-25-30-20-29/A",
+										"ClassificationDescription" : "Flexible Doorset Systems"
+									}, {
+										"ClassificationCode" : "Ss-25-30-20-29/B",
+										"ClassificationDescription" : "Flexible Doorset Systems"
+									}
+								],
+								"ClassificationURI" : ""
+							},
+							"DocumentName" : "1.6 Contribute to the Project Outcomes",
+							"Scope" : 1
+						}
+					],
+					"JobName" : "1.6 Contribute to the Project Outcomes",
+					"ResponsibleFor" : {
+						"ContactCompanyName" : "Newtown CC"
+					}
+				}, {
+					"Documents" : [{
+							"DocumentCategory" : {
+								"ClassificationEdition" : "1",
+								"ClassificationEditionDate" : "12/04/2015",
+								"ClassificationName" : "New Uniclass",
+								"ClassificationPublisher" : "NBS",
+								"ClassificationReferences" : [{
+										"ClassificationCode" : "Ss-30-30-72-72",
+										"ClassificationDescription" : "Roof Light Systems"
+									}, {
+										"ClassificationCode" : "Ss-25-30-20-29",
+										"ClassificationDescription" : "Flexible Doorset Systems"
+									}, {
+										"ClassificationCode" : "Ss-25-50-95-25",
+										"ClassificationDescription" : "External window system"
+									}, {
+										"ClassificationCode" : "Ss-25-10-20-85",
+										"ClassificationDescription" : "Stick Curtain Walling Systems"
+									}, {
+										"ClassificationCode" : "Ss-55-70-38-15",
+										"ClassificationDescription" : "Cold Water Supply Systems"
+									}, {
+										"ClassificationCode" : "Ss-60-40-37-81",
+										"ClassificationDescription" : "Solar Heating Systems"
+									}, {
+										"ClassificationCode" : "Ss-75-40-02-11",
+										"ClassificationDescription" : "Card Access Control Systems"
+									}, {
+										"ClassificationCode" : "Ss-25-30-20-29/A",
+										"ClassificationDescription" : "Flexible Doorset Systems"
+									}, {
+										"ClassificationCode" : "Ss-25-30-20-29/B",
+										"ClassificationDescription" : "Flexible Doorset Systems"
+									}
+								],
+								"ClassificationURI" : ""
+							},
+							"DocumentName" : "1.7 Review Feasibility Studies",
+							"Scope" : 1
+						}
+					],
+					"JobName" : "1.7 Review Feasibility Studies"
+				}, {
+					"DPoWObjects" : [{
+							"DPoWObjectName" : "Secondary Classrooms",
+							"RequiredLOD" : {
+								"RequiredLODCode" : "2"
+							}
+						}
+					],
+					"JobName" : "Secondary Classrooms"
+				}, {
+					"DPoWObjects" : [{
+							"DPoWObjectName" : "Staff Common Rooms",
+							"RequiredLOD" : {
+								"RequiredLODCode" : "1"
+							}
+						}
+					],
+					"JobName" : "Staff Common Rooms"
+				}, {
+					"DPoWObjects" : [{
+							"DPoWObjectName" : "Student Common Rooms",
+							"RequiredLOD" : {
+								"RequiredLODCode" : "1"
+							}
+						}
+					],
+					"JobName" : "Student Common Rooms"
+				}, {
+					"DPoWObjects" : [{
+							"DPoWObjectName" : "Scientific Laboratory Spaces",
+							"RequiredLOD" : {
+								"RequiredLODCode" : "2"
+							}
+						}
+					],
+					"JobName" : "Scientific Laboratory Spaces"
+				}, {
+					"DPoWObjects" : [{
+							"DPoWObjectName" : "Corridors",
+							"RequiredLOD" : {
+								"RequiredLODCode" : "1"
+							}
+						}
+					],
+					"JobName" : "Corridors"
+				}, {
+					"DPoWObjects" : [{
+							"DPoWObjectName" : "Multi-Sports Courts",
+							"RequiredLOD" : {
+								"RequiredLODCode" : "1"
+							}
+						}
+					],
+					"JobName" : "Multi-Sports Courts"
+				}, {
+					"DPoWObjects" : [{
+							"DPoWObjectName" : "Cricket Pitches",
+							"RequiredLOD" : {
+								"RequiredLODCode" : "1"
+							}
+						}
+					],
+					"JobName" : "Cricket Pitches"
+				}, {
+					"DPoWObjects" : [{
+							"DPoWObjectName" : "Car Parking Spaces - Outdoor",
+							"RequiredLOD" : {
+								"RequiredLODCode" : "1"
+							}
+						}
+					],
+					"JobName" : "Car Parking Spaces - Outdoor"
+				}, {
+					"DPoWObjects" : [{
+							"DPoWObjectName" : "Plant Rooms",
+							"RequiredLOD" : {
+								"RequiredLODCode" : "1"
+							}
+						}
+					],
+					"JobName" : "Plant Rooms"
+				}
+			],
+			"ProjectStageCode" : "1",
+			"ProjectStageDescription" : "",
+			"ProjectStageName" : "Brief"
+		}, {
+			"Jobs" : [{
+					"Documents" : [{
+							"DocumentCategory" : {
+								"ClassificationEdition" : "1",
+								"ClassificationEditionDate" : "12/04/2015",
+								"ClassificationName" : "New Uniclass",
+								"ClassificationPublisher" : "NBS",
+								"ClassificationReferences" : [{
+										"ClassificationCode" : "Ss-30-30-72-72",
+										"ClassificationDescription" : "Roof Light Systems"
+									}, {
+										"ClassificationCode" : "Ss-25-30-20-29",
+										"ClassificationDescription" : "Flexible Doorset Systems"
+									}, {
+										"ClassificationCode" : "Ss-25-50-95-25",
+										"ClassificationDescription" : "External window system"
+									}, {
+										"ClassificationCode" : "Ss-25-10-20-85",
+										"ClassificationDescription" : "Stick Curtain Walling Systems"
+									}, {
+										"ClassificationCode" : "Ss-55-70-38-15",
+										"ClassificationDescription" : "Cold Water Supply Systems"
+									}, {
+										"ClassificationCode" : "Ss-60-40-37-81",
+										"ClassificationDescription" : "Solar Heating Systems"
+									}, {
+										"ClassificationCode" : "Ss-75-40-02-11",
+										"ClassificationDescription" : "Card Access Control Systems"
+									}, {
+										"ClassificationCode" : "Ss-25-30-20-29/A",
+										"ClassificationDescription" : "Flexible Doorset Systems"
+									}, {
+										"ClassificationCode" : "Ss-25-30-20-29/B",
+										"ClassificationDescription" : "Flexible Doorset Systems"
+									}
+								],
+								"ClassificationURI" : ""
+							},
+							"DocumentName" : "2.1 Sign-off Concept Design and Final Project Brief",
+							"Scope" : 1
+						}
+					],
+					"JobName" : "2.1 Sign-off Concept Design and Final Project Brief",
+					"ResponsibleFor" : {
+						"ContactCompanyName" : "Newtown CC"
+					}
+				}, {
+					"Documents" : [{
+							"DocumentCategory" : {
+								"ClassificationEdition" : "1",
+								"ClassificationEditionDate" : "12/04/2015",
+								"ClassificationName" : "New Uniclass",
+								"ClassificationPublisher" : "NBS",
+								"ClassificationReferences" : [{
+										"ClassificationCode" : "Ss-30-30-72-72",
+										"ClassificationDescription" : "Roof Light Systems"
+									}, {
+										"ClassificationCode" : "Ss-25-30-20-29",
+										"ClassificationDescription" : "Flexible Doorset Systems"
+									}, {
+										"ClassificationCode" : "Ss-25-50-95-25",
+										"ClassificationDescription" : "External window system"
+									}, {
+										"ClassificationCode" : "Ss-25-10-20-85",
+										"ClassificationDescription" : "Stick Curtain Walling Systems"
+									}, {
+										"ClassificationCode" : "Ss-55-70-38-15",
+										"ClassificationDescription" : "Cold Water Supply Systems"
+									}, {
+										"ClassificationCode" : "Ss-60-40-37-81",
+										"ClassificationDescription" : "Solar Heating Systems"
+									}, {
+										"ClassificationCode" : "Ss-75-40-02-11",
+										"ClassificationDescription" : "Card Access Control Systems"
+									}, {
+										"ClassificationCode" : "Ss-25-30-20-29/A",
+										"ClassificationDescription" : "Flexible Doorset Systems"
+									}, {
+										"ClassificationCode" : "Ss-25-30-20-29/B",
+										"ClassificationDescription" : "Flexible Doorset Systems"
+									}
+								],
+								"ClassificationURI" : ""
+							},
+							"DocumentName" : "2.2 Comment on Project Strategies as requested",
+							"Scope" : 1
+						}
+					],
+					"JobName" : "2.2 Comment on Project Strategies as requested",
+					"ResponsibleFor" : {
+						"ContactCompanyName" : "Newtown CC"
+					}
+				}, {
+					"Documents" : [{
+							"DocumentCategory" : {
+								"ClassificationEdition" : "1",
+								"ClassificationEditionDate" : "12/04/2015",
+								"ClassificationName" : "New Uniclass",
+								"ClassificationPublisher" : "NBS",
+								"ClassificationReferences" : [{
+										"ClassificationCode" : "Ss-30-30-72-72",
+										"ClassificationDescription" : "Roof Light Systems"
+									}, {
+										"ClassificationCode" : "Ss-25-30-20-29",
+										"ClassificationDescription" : "Flexible Doorset Systems"
+									}, {
+										"ClassificationCode" : "Ss-25-50-95-25",
+										"ClassificationDescription" : "External window system"
+									}, {
+										"ClassificationCode" : "Ss-25-10-20-85",
+										"ClassificationDescription" : "Stick Curtain Walling Systems"
+									}, {
+										"ClassificationCode" : "Ss-55-70-38-15",
+										"ClassificationDescription" : "Cold Water Supply Systems"
+									}, {
+										"ClassificationCode" : "Ss-60-40-37-81",
+										"ClassificationDescription" : "Solar Heating Systems"
+									}, {
+										"ClassificationCode" : "Ss-75-40-02-11",
+										"ClassificationDescription" : "Card Access Control Systems"
+									}, {
+										"ClassificationCode" : "Ss-25-30-20-29/A",
+										"ClassificationDescription" : "Flexible Doorset Systems"
+									}, {
+										"ClassificationCode" : "Ss-25-30-20-29/B",
+										"ClassificationDescription" : "Flexible Doorset Systems"
+									}
+								],
+								"ClassificationURI" : ""
+							},
+							"DocumentName" : "2.3 Review and update Project Execution Plan",
+							"Scope" : 1
+						}
+					],
+					"JobName" : "2.3 Review and update Project Execution Plan",
+					"ResponsibleFor" : {
+						"ContactCompanyName" : "SJH Consult"
+					}
+				}, {
+					"Documents" : [{
+							"DocumentCategory" : {
+								"ClassificationEdition" : "1",
+								"ClassificationEditionDate" : "12/04/2015",
+								"ClassificationName" : "New Uniclass",
+								"ClassificationPublisher" : "NBS",
+								"ClassificationReferences" : [{
+										"ClassificationCode" : "Ss-30-30-72-72",
+										"ClassificationDescription" : "Roof Light Systems"
+									}, {
+										"ClassificationCode" : "Ss-25-30-20-29",
+										"ClassificationDescription" : "Flexible Doorset Systems"
+									}, {
+										"ClassificationCode" : "Ss-25-50-95-25",
+										"ClassificationDescription" : "External window system"
+									}, {
+										"ClassificationCode" : "Ss-25-10-20-85",
+										"ClassificationDescription" : "Stick Curtain Walling Systems"
+									}, {
+										"ClassificationCode" : "Ss-55-70-38-15",
+										"ClassificationDescription" : "Cold Water Supply Systems"
+									}, {
+										"ClassificationCode" : "Ss-60-40-37-81",
+										"ClassificationDescription" : "Solar Heating Systems"
+									}, {
+										"ClassificationCode" : "Ss-75-40-02-11",
+										"ClassificationDescription" : "Card Access Control Systems"
+									}, {
+										"ClassificationCode" : "Ss-25-30-20-29/A",
+										"ClassificationDescription" : "Flexible Doorset Systems"
+									}, {
+										"ClassificationCode" : "Ss-25-30-20-29/B",
+										"ClassificationDescription" : "Flexible Doorset Systems"
+									}
+								],
+								"ClassificationURI" : ""
+							},
+							"DocumentName" : "2.4 Prepare preliminary Cost information",
+							"Scope" : 1
+						}
+					],
+					"JobName" : "2.4 Prepare preliminary Cost information",
+					"ResponsibleFor" : {
+						"ContactCompanyName" : "Clear Costs"
+					}
+				}, {
+					"DPoWObjects" : [{
+							"DPoWObjectCategory" : {
+								"ClassificationCode" : "Ss-30-30-72-72",
+								"ClassificationDescription" : "Roof Light Systems"
+							},
+							"DPoWObjectName" : "Roof Light Systems",
+							"RequiredAttributes" : [{
+									"AttributeDescription" : "Purpose and Provision of information",
+									"AttributeName" : "Design submittals for rooflights, roof windows and roof ventilators"
+								}
+							],
+							"RequiredLOD" : {
+								"RequiredLODCode" : "2"
+							}
+						}
+					],
+					"JobName" : "Roof Light Systems",
+					"ResponsibleFor" : {
+						"ContactCompanyName" : "ABC Architect"
+					}
+				}, {
+					"DPoWObjects" : [{
+							"DPoWObjectCategory" : {
+								"ClassificationCode" : "Ss-25-30-20-29",
+								"ClassificationDescription" : "Flexible Doorset Systems"
+							},
+							"DPoWObjectName" : "Doorset system",
+							"RequiredAttributes" : [{
+									"AttributeDescription" : "Standards, Fire resistance and Smoke control",
+									"AttributeName" : "Fire performance"
+								}
+							],
+							"RequiredLOD" : {
+								"RequiredLODCode" : "2"
+							}
+						}
+					],
+					"JobName" : "Doorset system",
+					"ResponsibleFor" : {
+						"ContactCompanyName" : "ABC Architect"
+					}
+				}, {
+					"DPoWObjects" : [{
+							"DPoWObjectCategory" : {
+								"ClassificationCode" : "Ss-25-50-95-25",
+								"ClassificationDescription" : "External window system"
+							},
+							"DPoWObjectName" : "External window system",
+							"RequiredAttributes" : [{
+									"AttributeDescription" : "Standards",
+									"AttributeName" : "Thermal transmittance (U-value)"
+								}
+							],
+							"RequiredLOD" : {
+								"RequiredLODCode" : "2"
+							}
+						}
+					],
+					"JobName" : "External window system",
+					"ResponsibleFor" : {
+						"ContactCompanyName" : "ABC Architect"
+					}
+				}, {
+					"DPoWObjects" : [{
+							"DPoWObjectCategory" : {
+								"ClassificationCode" : "Ss-25-10-20-85",
+								"ClassificationDescription" : "Stick Curtain Walling Systems"
+							},
+							"DPoWObjectName" : "Stick curtain walling system",
+							"RequiredAttributes" : [{
+									"AttributeDescription" : "Watertightness, Water leakage requirements and Verification test",
+									"AttributeName" : "Water penetration"
+								}
+							],
+							"RequiredLOD" : {
+								"RequiredLODCode" : "2"
+							}
+						}
+					],
+					"JobName" : "Stick curtain walling system"
+				}, {
+					"DPoWObjects" : [{
+							"DPoWObjectCategory" : {
+								"ClassificationCode" : "Ss-55-70-38-15",
+								"ClassificationDescription" : "Cold Water Supply Systems"
+							},
+							"DPoWObjectName" : "Cold water supply system",
+							"RequiredAttributes" : [{
+									"AttributeDescription" : "Sizing, Proposals and Performance",
+									"AttributeName" : "Pipeline sizes for hot and cold water systems"
+								}
+							],
+							"RequiredLOD" : {
+								"RequiredLODCode" : "2"
+							}
+						}
+					],
+					"JobName" : "Cold water supply system",
+					"ResponsibleFor" : {
+						"ContactCompanyName" : "Wires and Fires"
+					}
+				}, {
+					"DPoWObjects" : [{
+							"DPoWObjectCategory" : {
+								"ClassificationCode" : "Ss-60-40-37-81",
+								"ClassificationDescription" : "Solar Heating Systems"
+							},
+							"DPoWObjectName" : "Solar heating system",
+							"RequiredAttributes" : [{
+									"AttributeDescription" : "Total solar collector area, Total solar collector output and Number of collectors",
+									"AttributeName" : "Solar arrays"
+								}
+							],
+							"RequiredLOD" : {
+								"RequiredLODCode" : "2"
+							}
+						}
+					],
+					"JobName" : "Solar heating system",
+					"ResponsibleFor" : {
+						"ContactCompanyName" : "Wires and Fires"
+					}
+				}, {
+					"DPoWObjects" : [{
+							"DPoWObjectCategory" : {
+								"ClassificationCode" : "Ss-75-40-02-11",
+								"ClassificationDescription" : "Card Access Control Systems"
+							},
+							"DPoWObjectName" : "Access control system",
+							"RequiredAttributes" : [{
+									"AttributeDescription" : "Recognition classification, Access classification and Environmental classification",
+									"AttributeName" : "Access control points"
+								}
+							],
+							"RequiredLOD" : {
+								"RequiredLODCode" : "2"
+							}
+						}
+					],
+					"JobName" : "Access control system",
+					"ResponsibleFor" : {
+						"ContactCompanyName" : "Wires and Fires"
+					}
+				}
+			],
+			"ProjectStageCode" : "2",
+			"ProjectStageDescription" : "",
+			"ProjectStageName" : "Concept"
+		}, {
+			"Jobs" : [{
+					"Documents" : [{
+							"DocumentCategory" : {
+								"ClassificationEdition" : "1",
+								"ClassificationEditionDate" : "12/04/2015",
+								"ClassificationName" : "New Uniclass",
+								"ClassificationPublisher" : "NBS",
+								"ClassificationReferences" : [{
+										"ClassificationCode" : "Ss-30-30-72-72",
+										"ClassificationDescription" : "Roof Light Systems"
+									}, {
+										"ClassificationCode" : "Ss-25-30-20-29",
+										"ClassificationDescription" : "Flexible Doorset Systems"
+									}, {
+										"ClassificationCode" : "Ss-25-50-95-25",
+										"ClassificationDescription" : "External window system"
+									}, {
+										"ClassificationCode" : "Ss-25-10-20-85",
+										"ClassificationDescription" : "Stick Curtain Walling Systems"
+									}, {
+										"ClassificationCode" : "Ss-55-70-38-15",
+										"ClassificationDescription" : "Cold Water Supply Systems"
+									}, {
+										"ClassificationCode" : "Ss-60-40-37-81",
+										"ClassificationDescription" : "Solar Heating Systems"
+									}, {
+										"ClassificationCode" : "Ss-75-40-02-11",
+										"ClassificationDescription" : "Card Access Control Systems"
+									}, {
+										"ClassificationCode" : "Ss-25-30-20-29/A",
+										"ClassificationDescription" : "Flexible Doorset Systems"
+									}, {
+										"ClassificationCode" : "Ss-25-30-20-29/B",
+										"ClassificationDescription" : "Flexible Doorset Systems"
+									}
+								],
+								"ClassificationURI" : ""
+							},
+							"DocumentName" : "3.1 Review updated Handover Strategy and Risk Assessments with project team",
+							"Scope" : 1
+						}
+					],
+					"JobName" : "3.1 Review updated Handover Strategy and Risk Assessments with project team",
+					"ResponsibleFor" : {
+						"ContactCompanyName" : "SJH Consult"
+					}
+				}, {
+					"Documents" : [{
+							"DocumentCategory" : {
+								"ClassificationEdition" : "1",
+								"ClassificationEditionDate" : "12/04/2015",
+								"ClassificationName" : "New Uniclass",
+								"ClassificationPublisher" : "NBS",
+								"ClassificationReferences" : [{
+										"ClassificationCode" : "Ss-30-30-72-72",
+										"ClassificationDescription" : "Roof Light Systems"
+									}, {
+										"ClassificationCode" : "Ss-25-30-20-29",
+										"ClassificationDescription" : "Flexible Doorset Systems"
+									}, {
+										"ClassificationCode" : "Ss-25-50-95-25",
+										"ClassificationDescription" : "External window system"
+									}, {
+										"ClassificationCode" : "Ss-25-10-20-85",
+										"ClassificationDescription" : "Stick Curtain Walling Systems"
+									}, {
+										"ClassificationCode" : "Ss-55-70-38-15",
+										"ClassificationDescription" : "Cold Water Supply Systems"
+									}, {
+										"ClassificationCode" : "Ss-60-40-37-81",
+										"ClassificationDescription" : "Solar Heating Systems"
+									}, {
+										"ClassificationCode" : "Ss-75-40-02-11",
+										"ClassificationDescription" : "Card Access Control Systems"
+									}, {
+										"ClassificationCode" : "Ss-25-30-20-29/A",
+										"ClassificationDescription" : "Flexible Doorset Systems"
+									}, {
+										"ClassificationCode" : "Ss-25-30-20-29/B",
+										"ClassificationDescription" : "Flexible Doorset Systems"
+									}
+								],
+								"ClassificationURI" : ""
+							},
+							"DocumentName" : "3.2 Monitor and review progress and performance of design team",
+							"Scope" : 1
+						}
+					],
+					"JobName" : "3.2 Monitor and review progress and performance of design team",
+					"ResponsibleFor" : {
+						"ContactCompanyName" : "ABC Architect"
+					}
+				}, {
+					"Documents" : [{
+							"DocumentCategory" : {
+								"ClassificationEdition" : "1",
+								"ClassificationEditionDate" : "12/04/2015",
+								"ClassificationName" : "New Uniclass",
+								"ClassificationPublisher" : "NBS",
+								"ClassificationReferences" : [{
+										"ClassificationCode" : "Ss-30-30-72-72",
+										"ClassificationDescription" : "Roof Light Systems"
+									}, {
+										"ClassificationCode" : "Ss-25-30-20-29",
+										"ClassificationDescription" : "Flexible Doorset Systems"
+									}, {
+										"ClassificationCode" : "Ss-25-50-95-25",
+										"ClassificationDescription" : "External window system"
+									}, {
+										"ClassificationCode" : "Ss-25-10-20-85",
+										"ClassificationDescription" : "Stick Curtain Walling Systems"
+									}, {
+										"ClassificationCode" : "Ss-55-70-38-15",
+										"ClassificationDescription" : "Cold Water Supply Systems"
+									}, {
+										"ClassificationCode" : "Ss-60-40-37-81",
+										"ClassificationDescription" : "Solar Heating Systems"
+									}, {
+										"ClassificationCode" : "Ss-75-40-02-11",
+										"ClassificationDescription" : "Card Access Control Systems"
+									}, {
+										"ClassificationCode" : "Ss-25-30-20-29/A",
+										"ClassificationDescription" : "Flexible Doorset Systems"
+									}, {
+										"ClassificationCode" : "Ss-25-30-20-29/B",
+										"ClassificationDescription" : "Flexible Doorset Systems"
+									}
+								],
+								"ClassificationURI" : ""
+							},
+							"DocumentName" : "3.3 Submit Planning Application",
+							"Scope" : 1
+						}
+					],
+					"JobName" : "3.3 Submit Planning Application",
+					"ResponsibleFor" : {
+						"ContactCompanyName" : "ABC Architect"
+					}
+				}, {
+					"Documents" : [{
+							"DocumentCategory" : {
+								"ClassificationEdition" : "1",
+								"ClassificationEditionDate" : "12/04/2015",
+								"ClassificationName" : "New Uniclass",
+								"ClassificationPublisher" : "NBS",
+								"ClassificationReferences" : [{
+										"ClassificationCode" : "Ss-30-30-72-72",
+										"ClassificationDescription" : "Roof Light Systems"
+									}, {
+										"ClassificationCode" : "Ss-25-30-20-29",
+										"ClassificationDescription" : "Flexible Doorset Systems"
+									}, {
+										"ClassificationCode" : "Ss-25-50-95-25",
+										"ClassificationDescription" : "External window system"
+									}, {
+										"ClassificationCode" : "Ss-25-10-20-85",
+										"ClassificationDescription" : "Stick Curtain Walling Systems"
+									}, {
+										"ClassificationCode" : "Ss-55-70-38-15",
+										"ClassificationDescription" : "Cold Water Supply Systems"
+									}, {
+										"ClassificationCode" : "Ss-60-40-37-81",
+										"ClassificationDescription" : "Solar Heating Systems"
+									}, {
+										"ClassificationCode" : "Ss-75-40-02-11",
+										"ClassificationDescription" : "Card Access Control Systems"
+									}, {
+										"ClassificationCode" : "Ss-25-30-20-29/A",
+										"ClassificationDescription" : "Flexible Doorset Systems"
+									}, {
+										"ClassificationCode" : "Ss-25-30-20-29/B",
+										"ClassificationDescription" : "Flexible Doorset Systems"
+									}
+								],
+								"ClassificationURI" : ""
+							},
+							"DocumentName" : "3.4 Update Health and Safety Strategy",
+							"Scope" : 1
+						}
+					],
+					"JobName" : "3.4 Update Health and Safety Strategy",
+					"ResponsibleFor" : {
+						"ContactCompanyName" : "Clear Costs"
+					}
+				}, {
+					"DPoWObjects" : [{
+							"DPoWObjectCategory" : {
+								"ClassificationCode" : "Ss-30-30-72-72",
+								"ClassificationDescription" : "Roof Light Systems"
+							},
+							"DPoWObjectName" : "Roof Light Systems",
+							"RequiredAttributes" : [{
+									"AttributeDescription" : "",
+									"AttributeName" : "Installation fasteners"
+								}
+							],
+							"RequiredLOD" : {
+								"RequiredLODCode" : "3"
+							}
+						}
+					],
+					"JobName" : "Roof Light Systems",
+					"ResponsibleFor" : {
+						"ContactCompanyName" : "ABC Architect"
+					}
+				}, {
+					"DPoWObjects" : [{
+							"DPoWObjectCategory" : {
+								"ClassificationCode" : "Ss-25-30-20-29/A",
+								"ClassificationDescription" : "Flexible Doorset Systems"
+							},
+							"DPoWObjectName" : "Doorset system",
+							"RequiredAttributes" : [{
+									"AttributeDescription" : "",
+									"AttributeName" : "Doorset - Type"
+								}
+							],
+							"RequiredLOD" : {
+								"RequiredLODCode" : "4"
+							}
+						}
+					],
+					"JobName" : "Doorset system",
+					"ResponsibleFor" : {
+						"ContactCompanyName" : "ABC Architect"
+					}
+				}, {
+					"DPoWObjects" : [{
+							"DPoWObjectCategory" : {
+								"ClassificationCode" : "Ss-25-30-20-29/B",
+								"ClassificationDescription" : "Flexible Doorset Systems"
+							},
+							"DPoWObjectName" : "Doorset system",
+							"RequiredAttributes" : [{
+									"AttributeDescription" : "",
+									"AttributeName" : "Doorset - Type"
+								}
+							],
+							"RequiredLOD" : {
+								"RequiredLODCode" : "3"
+							}
+						}
+					],
+					"JobName" : "Doorset system",
+					"ResponsibleFor" : {
+						"ContactCompanyName" : "ABC Architect"
+					}
+				}, {
+					"DPoWObjects" : [{
+							"DPoWObjectCategory" : {
+								"ClassificationCode" : "Ss-25-50-95-25",
+								"ClassificationDescription" : "External window system"
+							},
+							"DPoWObjectName" : "External window system",
+							"RequiredAttributes" : [{
+									"AttributeDescription" : "",
+									"AttributeName" : "Window unit - Material"
+								}
+							],
+							"RequiredLOD" : {
+								"RequiredLODCode" : "3"
+							}
+						}
+					],
+					"JobName" : "External window system",
+					"ResponsibleFor" : {
+						"ContactCompanyName" : "ABC Architect"
+					}
+				}, {
+					"DPoWObjects" : [{
+							"DPoWObjectCategory" : {
+								"ClassificationCode" : "Ss-25-10-20-85",
+								"ClassificationDescription" : "Stick Curtain Walling Systems"
+							},
+							"DPoWObjectName" : "Stick curtain walling system",
+							"RequiredAttributes" : [{
+									"AttributeDescription" : "",
+									"AttributeName" : "Framing - Fasteners"
+								}
+							],
+							"RequiredLOD" : {
+								"RequiredLODCode" : "4"
+							}
+						}
+					],
+					"JobName" : "Stick curtain walling system"
+				}, {
+					"DPoWObjects" : [{
+							"DPoWObjectCategory" : {
+								"ClassificationCode" : "Ss-55-70-38-15",
+								"ClassificationDescription" : "Cold Water Supply Systems"
+							},
+							"DPoWObjectName" : "Cold water supply system",
+							"RequiredAttributes" : [{
+									"AttributeDescription" : "",
+									"AttributeName" : "Storage tank or cistern"
+								}
+							],
+							"RequiredLOD" : {
+								"RequiredLODCode" : "3"
+							}
+						}
+					],
+					"JobName" : "Cold water supply system",
+					"ResponsibleFor" : {
+						"ContactCompanyName" : "Wires and Fires"
+					}
+				}, {
+					"DPoWObjects" : [{
+							"DPoWObjectCategory" : {
+								"ClassificationCode" : "Ss-60-40-37-81",
+								"ClassificationDescription" : "Solar Heating Systems"
+							},
+							"DPoWObjectName" : "Solar heating system",
+							"RequiredAttributes" : [{
+									"AttributeDescription" : "",
+									"AttributeName" : "Heat source"
+								}
+							],
+							"RequiredLOD" : {
+								"RequiredLODCode" : "3"
+							}
+						}
+					],
+					"JobName" : "Solar heating system",
+					"ResponsibleFor" : {
+						"ContactCompanyName" : "Wires and Fires"
+					}
+				}, {
+					"DPoWObjects" : [{
+							"DPoWObjectCategory" : {
+								"ClassificationCode" : "Ss-75-40-02-11",
+								"ClassificationDescription" : "Card Access Control Systems"
+							},
+							"DPoWObjectName" : "Access control system",
+							"RequiredAttributes" : [{
+									"AttributeDescription" : "",
+									"AttributeName" : "System manufacturer"
+								}
+							],
+							"RequiredLOD" : {
+								"RequiredLODCode" : "3"
+							}
+						}
+					],
+					"JobName" : "Access control system",
+					"ResponsibleFor" : {
+						"ContactCompanyName" : "Wires and Fires"
+					}
+				}
+			],
+			"ProjectStageCode" : "3",
+			"ProjectStageDescription" : "",
+			"ProjectStageName" : "Definition"
+		}, {
+			"ProjectStageCode" : "4",
+			"ProjectStageDescription" : "",
+			"ProjectStageName" : "Design"
+		}, {
+			"ProjectStageCode" : "5",
+			"ProjectStageDescription" : "",
+			"ProjectStageName" : "Build and commission"
+		}, {
+			"ProjectStageCode" : "6",
+			"ProjectStageDescription" : "",
+			"ProjectStageName" : "Handover and closeout"
+		}, {
+			"ProjectStageCode" : "7",
+			"ProjectStageDescription" : "",
+			"ProjectStageName" : "Operation and end of life"
+		}
+	]
+}
