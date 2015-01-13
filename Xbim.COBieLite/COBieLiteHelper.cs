@@ -131,6 +131,8 @@ namespace Xbim.COBieLite
 
         }
 
+        
+
         private void GetSystems()
         {
             _systemAssignment = 
@@ -461,6 +463,8 @@ namespace Xbim.COBieLite
 
         public string GetClassification(IfcRoot classifiedObject)
         {
+            
+
             IfcClassificationReference classification;
             if (_classifiedObjects.TryGetValue(classifiedObject, out classification))
             {
@@ -483,6 +487,43 @@ namespace Xbim.COBieLite
                     }
                 }
             }
+            if (classifiedObject.EntityLabel == 9982)
+            {
+
+            }
+            if (classifiedObject is IfcSpace)
+            {
+                var val = _attributedObjects[(IfcSpace)classifiedObject];
+                string classificationName = "";
+                val.GetSimplePropertyValue("PSet_Revit_Identity Data.OmniClass Table 13 Category", out classificationName);
+
+                if (classificationName != null)
+                {
+                    return classificationName;
+                }
+            }
+            else if (classifiedObject is IfcTypeObject)
+            {
+                if (_definingTypeObjectMap.ContainsKey((IfcTypeObject) classifiedObject))
+                {
+                    var obj = _definingTypeObjectMap[(IfcTypeObject) classifiedObject].FirstOrDefault();
+
+                    if (obj != null)
+                    {
+                        var val = _attributedObjects[obj];
+                        string NumberPart = "";
+                        string DescPart = "";
+                        val.GetSimplePropertyValue("PSet_Revit_Type_Identity Data.OmniClass Number", out NumberPart);
+                        val.GetSimplePropertyValue("PSet_Revit_Type_Identity Data.OmniClass Title", out DescPart);
+                        if (NumberPart != null)
+                        {
+                            string fullName = NumberPart + ": " + DescPart;
+                            return fullName;
+                        }
+                    }
+                }
+            }
+
             return null;
         }
 
