@@ -4,6 +4,7 @@ using System.Configuration;
 using System.Globalization;
 using System.IO;
 using System.Linq;
+using System.Text.RegularExpressions;
 using System.Xml.Serialization;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Bson;
@@ -487,7 +488,7 @@ namespace Xbim.COBieLite
                     }
                 }
             }
-            if (classifiedObject.EntityLabel == 9982)
+            if (classifiedObject.EntityLabel == 11640)
             {
 
             }
@@ -510,15 +511,32 @@ namespace Xbim.COBieLite
 
                     if (obj != null)
                     {
+                        // PSet_Revit_Type_Other.Classification Code
+                        var cfg =
+                            new string[]
+                            {
+                                "SimpleProp(PSet_Revit_Type_Other.Classification Code): SimpleProp(PSet_Revit_Type_Other.Classification Description)",
+                                "SimpleProp(PSet_Revit_Type_Identity Data.OmniClass Number): SimpleProp(PSet_Revit_Type_Identity Data.OmniClass Title)"
+                            };
+
                         var val = _attributedObjects[obj];
-                        string NumberPart = "";
-                        string DescPart = "";
-                        val.GetSimplePropertyValue("PSet_Revit_Type_Identity Data.OmniClass Number", out NumberPart);
-                        val.GetSimplePropertyValue("PSet_Revit_Type_Identity Data.OmniClass Title", out DescPart);
-                        if (NumberPart != null)
+                        string pattern = @"SimpleProp\(([^\)]*)\)";
+                        Regex regex = new Regex(pattern);
+
+                        foreach (var ClassificationRule in cfg)
                         {
-                            string fullName = NumberPart + ": " + DescPart;
-                            return fullName;
+                            string result = ClassificationRule;
+                            var mts = regex.Matches(ClassificationRule);
+                            foreach (Match mt in mts)
+                            {
+                                string PropName = mt.Groups[1].Value;
+                                string PropVal = "";
+                                val.GetSimplePropertyValue(PropName, out PropVal);
+                                if (PropVal == null)
+                                    continue;
+                                result = result.Replace("SimpleProp(" + PropName + ")", PropVal);
+                            }
+                            return result;
                         }
                     }
                 }
