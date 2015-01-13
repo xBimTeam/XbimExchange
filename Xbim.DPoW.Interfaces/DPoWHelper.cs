@@ -1,15 +1,19 @@
 ﻿using System;
+using System.IO;
 using System.Linq;
+using Newtonsoft.Json;
 using Xbim.COBieLite;
 using Xbim.Common.Logging;
 
 namespace Xbim.DPoW.Interfaces
 {
-    
+
     public class DpoWHelper
     {
         internal static readonly ILogger Logger = LoggerFactory.GetLogger();
         internal const string DpowSystemName = "DPoW";
+
+       
         /// <summary>
         /// Processes the Plan of work and returns the number of warnings, these can be accessed through the Logger static member
         /// </summary>
