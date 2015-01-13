@@ -29,7 +29,7 @@ namespace Xbim.Tests.COBie
                     Assert.IsTrue(facilityType.FacilityDefaultLinearUnitSpecified);
                     Assert.IsTrue(facilityType.FacilityDefaultAreaUnitSpecified);
                     Assert.IsTrue(facilityType.FacilityDefaultVolumeUnitSpecified);
-                    helper.WriteJson(Console.Out, facilityType);
+                    CoBieLiteHelper.WriteJson(Console.Out, facilityType);
                 }
             }
         }
@@ -41,7 +41,9 @@ namespace Xbim.Tests.COBie
             using (var m = new XbimModel())
             {
                 var IfcTestFile = "2012-03-23-Duplex-Handover.ifc";
-               // var IfcTestFile = @"D:\Users\steve\xBIM\Test Models\BimAlliance BillEast\Model 1 Duplex Apartment\Duplex_MEP_20110907.ifc";
+                // var IfcTestFile = @"D:\Users\steve\xBIM\Test Models\BimAlliance BillEast\Model 1 Duplex Apartment\Duplex_MEP_20110907.ifc";
+                IfcTestFile = "Duplex_MEP_20110907.ifc";
+
                 var xbimTestFile = Path.ChangeExtension(IfcTestFile, "xbim");
                 m.CreateFrom(IfcTestFile, xbimTestFile, null, true, true);
                 var helper = new CoBieLiteHelper(m, "UniClass");
@@ -57,16 +59,15 @@ namespace Xbim.Tests.COBie
                     Debug.WriteLine("Writing to " + f.FullName);
                     using (TextWriter writer = File.CreateText(outName))
                     {
-                        helper.WriteXml(writer, facilityType);
+                        CoBieLiteHelper.WriteXml(writer, facilityType);
                     }
-                    helper.WriteXml(Console.Out, facilityType);
+                    CoBieLiteHelper.WriteXml(Console.Out, facilityType);
                 }
             }
         } 
         [TestMethod]
         public void ConvertCoBieLiteToBson()
         {
-
             using (var m = new XbimModel())
             {
                 var IfcTestFile = "2012-03-23-Duplex-Handover.ifc";
@@ -84,7 +85,7 @@ namespace Xbim.Tests.COBie
                     {
                         using (var bw = new BinaryWriter(sw))
                         {
-                            helper.WriteBson(bw, facilityType);
+                            CoBieLiteHelper.WriteBson(bw, facilityType);
                         }
                     }
                 }
