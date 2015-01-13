@@ -59,6 +59,7 @@
     </Content>
     <Content Include="Standard_Classroom_CIC_6_Project_mod2.CobieLight.xml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <SubType>Designer</SubType>
     </Content>
   </ItemGroup>
   <ItemGroup>
