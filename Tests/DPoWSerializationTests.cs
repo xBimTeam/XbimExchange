@@ -23,6 +23,8 @@ namespace Tests
 
             Assert.AreEqual("Newtown High School", dpow.Project.ProjectName);
             Assert.AreEqual("New Uniclass", dpow.ClassificationSystem[0].ClassificationName);
+
+            var data2 = JsonConvert.SerializeObject(dpow);
         }
     }
 }
