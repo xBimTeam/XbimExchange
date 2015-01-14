@@ -2,7 +2,7 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2011/10/nuspec.xsd">
     <metadata>
         <id>Xbim.Exchange</id>
-        <version>3.0.3-Prerelease</version>
+        <version>3.0.4-Prerelease</version>
         <title>xBIM Exchange</title>
         <authors>xBIM team</authors>
         <owners>Steve Lockley</owners>
@@ -30,6 +30,8 @@ IOS and Android versions are under development.</description>
     <files>
         <file src="Output\Xbim.COBie.dll" target="lib\net45\Xbim.COBie.dll" />
         <file src="Output\Xbim.COBieLite.dll" target="lib\net45\Xbim.COBieLite.dll" />
+		<file src="Output\COBieAttributes.config" target="content\COBieAttributes.config" />
+		<file src="install.ps1" target="tools\install.ps1" /> 
     </files>
 	
 </package>

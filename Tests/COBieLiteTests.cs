@@ -4,6 +4,9 @@ using System.IO;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Xbim.COBieLite;
 using Xbim.IO;
+using System.Xml.Serialization;
+using System.Xml;
+using System.Collections.Generic;
 
 namespace Xbim.Tests.COBie
 {
@@ -19,7 +22,8 @@ namespace Xbim.Tests.COBie
             using (var m = new XbimModel())
             {
                 var IfcTestFile = "2012-03-23-Duplex-Handover.ifc";
-              //  IfcTestFile = @"D:\Users\steve\xBIM\Test Models\BimAlliance BillEast\Model 1 Duplex Apartment\Duplex_MEP_20110907.ifc";
+                
+                // IfcTestFile = @"D:\Users\steve\xBIM\Test Models\BimAlliance BillEast\Model 1 Duplex Apartment\Duplex_MEP_20110907.ifc";
                 var XbimTestFile = Path.ChangeExtension(IfcTestFile, "xbim");
                 m.CreateFrom(IfcTestFile, XbimTestFile, null, true, true);
                 var helper = new CoBieLiteHelper(m,"UniClass");
@@ -32,6 +36,19 @@ namespace Xbim.Tests.COBie
                     CoBieLiteHelper.WriteJson(Console.Out, facilityType);
                 }
             }
+        }
+
+        [TestMethod]
+        public void CobieLiteFromXbim()
+        {
+            XbimModel m = new XbimModel();
+            m.Open("Duplex_MEP_20110907.xbim");
+
+            var helper = new CoBieLiteHelper(m, "UniClass");
+            var facilities = helper.GetFacilities();
+
+            m.Close();
+
         }
 
         [TestMethod]
@@ -64,7 +81,49 @@ namespace Xbim.Tests.COBie
                     CoBieLiteHelper.WriteXml(Console.Out, facilityType);
                 }
             }
-        } 
+        }
+
+        
+        public void XMLCobieSimplification()
+        {
+            var cobieModelFileName = @"C:\Data\dev\XbimTeam\XbimExchange\Tests\TestFiles\2012-03-23-Duplex-Handover.Req.CobieLight.xml";
+
+            var x = new XmlSerializer(typeof(FacilityType));
+            var reader = new XmlTextReader(cobieModelFileName);
+            var theFacility = (FacilityType)x.Deserialize(reader);
+            reader.Close();
+
+            HashSet<string> atClassifications = new HashSet<string>();
+
+            for (int i = 0; i < theFacility.AssetTypes.AssetType.Length; i++)
+            {
+                string thisCat = theFacility.AssetTypes.AssetType[i].AssetTypeCategory;
+
+                if (atClassifications.Contains(thisCat))
+                {
+                    theFacility.AssetTypes.AssetType[i] = null;
+                }
+                else
+                {
+                    atClassifications.Add(thisCat);
+
+                    for (int j = 1; j < theFacility.AssetTypes.AssetType[i].Assets.Asset.Length; j++)
+                    {
+                        theFacility.AssetTypes.AssetType[i].Assets.Asset[j] = null;
+                    }
+                }
+            }
+
+            var outName = string.Format("FacilitySimplified.xml");
+            var f = new FileInfo(outName);
+            Debug.WriteLine("Writing to " + f.FullName);
+            using (TextWriter writer = File.CreateText(outName))
+            {
+                CoBieLiteHelper.WriteXml(writer, theFacility);
+            }
+        }
+
+
         [TestMethod]
         public void ConvertCoBieLiteToBson()
         {
