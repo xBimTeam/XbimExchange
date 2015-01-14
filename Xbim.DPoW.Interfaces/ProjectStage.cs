@@ -11,6 +11,11 @@ namespace Xbim.DPoW.Interfaces
         public string ProjectStageName { get; set; }
         public string ProjectStageCode { get; set; }
         public string ProjectStageDescription { get; set; }
-        public IEnumerable<Job> Jobs { get; set; }
+        public List<Job> Jobs { get; set; }
+
+        public ProjectStage()
+        {
+            Jobs = new List<Job>();
+        }
     }
 }

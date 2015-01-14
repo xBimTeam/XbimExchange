@@ -46,7 +46,7 @@
   <ItemGroup>
     <Compile Include="COBieLiteTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="TestFiles\DpowInterfaceTests.cs" />
+    <Compile Include="DPoWSerializationTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Xbim.COBieLite\Xbim.COBieLite.csproj">

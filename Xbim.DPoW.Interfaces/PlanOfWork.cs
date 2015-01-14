@@ -5,11 +5,19 @@ namespace Xbim.DPoW.Interfaces
 {
     public class PlanOfWork 
     {
-        public IEnumerable<Classification> ClassificationSystem { get; set; }
+        public List<Classification> ClassificationSystem { get; set; }
         public Project Project { get; set; }
         public Facility Facility { get; set; }
-        public IEnumerable<ProjectStage> ProjectStages { get; set; }
+        public List<ProjectStage> ProjectStages { get; set; }
         public Contact Client { get; set; }
-        public IEnumerable<Contact> Contacts { get; set; }
+        public List<Contact> Contacts { get; set; }
+
+        public PlanOfWork()
+        {
+            Contacts = new List<Contact>();
+            ProjectStages = new List<ProjectStage>();
+            ClassificationSystem = new List<Classification>();
+        }
+
     }
 }
