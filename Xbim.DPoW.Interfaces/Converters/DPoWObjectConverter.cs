@@ -1,4 +1,5 @@
 ﻿using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,19 +12,40 @@ namespace Xbim.DPoW.Interfaces.Converters
     {
         public override bool CanConvert(Type objectType)
         {
-            if (objectType == typeof(DPoWObject)) return true;
+            if (typeof(DPoWObject).IsAssignableFrom(objectType)) return true;
             return false;
         }
 
         public override object ReadJson(JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer)
         {
-            return serializer.Deserialize(reader, typeof(Assembly));
+            var jObject = JObject.Load(reader);
+            var type = (string)jObject["$type"];
+
+            object result = null;
+            switch (type)
+            {
+                case "Assembly":
+                    result = new Assembly();
+                    break;
+                case "AssetType":
+                    result = new AssetType();
+                    break;
+                case "Zone":
+                    result = new Zone();
+                    break;
+                default:
+                    result = new Assembly();
+                    break;
+            }
+            serializer.Populate(jObject.CreateReader(), result);
+            return result;
         }
 
         public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer)
         {
-            
-            throw new NotImplementedException();
+            var jObject = JObject.FromObject(value);
+            jObject.AddFirst(new JProperty("$type", value.GetType().Name));
+            jObject.WriteTo(writer);
         }
     }
 }

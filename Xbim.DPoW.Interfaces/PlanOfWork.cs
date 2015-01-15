@@ -47,15 +47,21 @@ namespace Xbim.DPoW.Interfaces
             using (var file = System.IO.File.Create(path))
             {
                 Save(file);
-                file.Close();
             }
         }
 
         public void Save(System.IO.Stream stream)
         {
-            var writer = new System.IO.StreamWriter(stream);
-            var data = JsonConvert.SerializeObject(this);
-            writer.Write(data);
+            using (var writer = new System.IO.StreamWriter(stream))
+            {
+                var settings = new JsonSerializerSettings()
+                {
+                };
+                settings.Converters.Add(new Xbim.DPoW.Interfaces.Converters.DPoWObjectConverter());
+                var data = JsonConvert.SerializeObject(this, settings);
+                writer.Write(data);
+                writer.Close();
+            }
         }
     }
 

@@ -69,6 +69,9 @@
     <None Include="TestFiles\Duplex_MEP_20110907.ifc">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+    <None Include="TestFiles\SampleJsonWithTypes.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Reference Include="Esent.Interop">
@@ -87,6 +90,7 @@
       <HintPath>..\packages\Newtonsoft.Json.6.0.8\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="System" />
+    <Reference Include="System.Data.Linq" />
     <Reference Include="System.XML" />
     <Reference Include="System.Xml.Serialization" />
     <Reference Include="Xbim.Common">
