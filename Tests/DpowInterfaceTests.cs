@@ -53,7 +53,7 @@ namespace Tests.TestFiles
                                 {
                                     using (var textWriter = new StreamWriter(cobieFile))
                                     {
-                                        helper.WriteJson(textWriter, facilityType);
+                                        CoBieLiteHelper.WriteJson(textWriter, facilityType);
                                     }
                                 }
                                 i++;

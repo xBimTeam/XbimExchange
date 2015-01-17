@@ -8,9 +8,17 @@ namespace Xbim.DPoW.Interfaces
     {
         public string JobName { get; set; }
         public string JobDescription { get; set; }
-        [JsonConverter(typeof(DPoWObjectConverter<DPoWObject>))]
-        public IEnumerable<DPoWObject> DPoWObjects { get; set; }
-        public IEnumerable<Document> Documents { get; set; }
+        
+        //[JsonConverter(typeof(DPoWObjectConverter<DPoWObject>))]
+         [JsonProperty(ItemTypeNameHandling = TypeNameHandling.Auto)]
+        public List<DPoWObject> DPoWObjects { get; set; }
+        public List<Document> Documents { get; set; }
         public Contact ResponsibleFor { get; set; }
+
+        public Job()
+        {
+            DPoWObjects = new List<DPoWObject>();
+            Documents = new List<Document>();
+        }
     }
 }

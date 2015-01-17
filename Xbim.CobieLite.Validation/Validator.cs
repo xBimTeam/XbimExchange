@@ -8,6 +8,12 @@ namespace Xbim.CobieLite.Validation
 {
     public class Validator
     {
+        public Validator()
+        {
+            RunningMode = ValidationRunningMode.Complete;
+        }
+
+
         public enum ValidationRunningMode
         {
             /// <summary>
@@ -25,10 +31,14 @@ namespace Xbim.CobieLite.Validation
         /// </summary>
         /// <param name="validationRequirement">the candidate object to be validated.</param>
         /// <returns></returns>
-        static ValidationResult Validate(IValidationRequirement validationRequirement, ValidationRunningMode runningModemode = ValidationRunningMode.Complete)
+        public ValidationResult Validate(IValidationRequirement validationRequirement)
         {
             validationRequirement.LastValidationResult = new ValidationResult(validationRequirement);
             return validationRequirement.LastValidationResult;
         }
+        
+        public ValidationRunningMode RunningMode { get; set; }
+        
+
     }
 }

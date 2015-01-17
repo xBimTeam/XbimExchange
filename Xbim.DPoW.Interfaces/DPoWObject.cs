@@ -11,7 +11,12 @@ namespace Xbim.DPoW.Interfaces
         public ClassificationReference DPoWObjectCategory { get; set; }
         public string DPoWObjectName { get; set; }
         public string DPoWObjectDescription { get; set; }
-        public IEnumerable<RequiredAttribute> RequiredAttributes { get; set; }
+        public List<RequiredAttribute> RequiredAttributes { get; set; }
         public RequiredLOD RequiredLOD { get; set; }
+
+        public DPoWObject()
+        {
+            RequiredAttributes = new List<RequiredAttribute>();
+        }
     }
 }

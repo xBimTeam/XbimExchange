@@ -81,8 +81,8 @@
     <Compile Include="Classification.cs" />
     <Compile Include="ClassificationReference.cs" />
     <Compile Include="Contact.cs" />
+    <Compile Include="Converters\DPoWObjectConverter.cs" />
     <Compile Include="Document.cs" />
-    <Compile Include="DPoWObjectConverter.cs" />
     <Compile Include="Facility.cs" />
     <Compile Include="DpowHelper.cs" />
     <Compile Include="DPoWObject.cs" />

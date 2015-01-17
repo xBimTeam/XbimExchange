@@ -29,7 +29,7 @@ namespace Xbim.Tests.COBie
                     Assert.IsTrue(facilityType.FacilityDefaultLinearUnitSpecified);
                     Assert.IsTrue(facilityType.FacilityDefaultAreaUnitSpecified);
                     Assert.IsTrue(facilityType.FacilityDefaultVolumeUnitSpecified);
-                    helper.WriteJson(Console.Out, facilityType);
+                    CoBieLiteHelper.WriteJson(Console.Out, facilityType);
                 }
             }
         }
@@ -57,9 +57,9 @@ namespace Xbim.Tests.COBie
                     Debug.WriteLine("Writing to " + f.FullName);
                     using (TextWriter writer = File.CreateText(outName))
                     {
-                        helper.WriteXml(writer, facilityType);
+                        CoBieLiteHelper.WriteXml(writer, facilityType);
                     }
-                    helper.WriteXml(Console.Out, facilityType);
+                    CoBieLiteHelper.WriteXml(Console.Out, facilityType);
                 }
             }
         } 
@@ -84,7 +84,7 @@ namespace Xbim.Tests.COBie
                     {
                         using (var bw = new BinaryWriter(sw))
                         {
-                            helper.WriteBson(bw, facilityType);
+                            CoBieLiteHelper.WriteBson(bw, facilityType);
                         }
                     }
                 }

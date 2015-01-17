@@ -4,6 +4,7 @@ using System.Configuration;
 using System.Globalization;
 using System.IO;
 using System.Linq;
+using System.Text.RegularExpressions;
 using System.Xml.Serialization;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Bson;
@@ -130,6 +131,8 @@ namespace Xbim.COBieLite
             GetSpaceAssetLookup();
 
         }
+
+        
 
         private void GetSystems()
         {
@@ -461,6 +464,8 @@ namespace Xbim.COBieLite
 
         public string GetClassification(IfcRoot classifiedObject)
         {
+            
+
             IfcClassificationReference classification;
             if (_classifiedObjects.TryGetValue(classifiedObject, out classification))
             {
@@ -483,6 +488,65 @@ namespace Xbim.COBieLite
                     }
                 }
             }
+            if (classifiedObject.EntityLabel == 11640)
+            {
+
+            }
+            if (classifiedObject is IfcSpace)
+            {
+                var val = _attributedObjects[(IfcSpace)classifiedObject];
+                string classificationName = "";
+                val.GetSimplePropertyValue("PSet_Revit_Identity Data.OmniClass Table 13 Category", out classificationName);
+
+                if (classificationName != null)
+                {
+                    return classificationName;
+                }
+            }
+            else if (classifiedObject is IfcTypeObject)
+            {
+                if (_definingTypeObjectMap.ContainsKey((IfcTypeObject) classifiedObject))
+                {
+                    var obj = _definingTypeObjectMap[(IfcTypeObject) classifiedObject].FirstOrDefault();
+
+                    if (obj != null)
+                    {
+                        // PSet_Revit_Type_Other.Classification Code
+                        var cfg =
+                            new string[]
+                            {
+                                "SimpleProp(PSet_Revit_Type_Other.Classification Code): SimpleProp(PSet_Revit_Type_Other.Classification Description)",
+                                "SimpleProp(PSet_Revit_Type_Identity Data.OmniClass Number): SimpleProp(PSet_Revit_Type_Identity Data.OmniClass Title)"
+                            };
+
+                        var val = _attributedObjects[obj];
+                        string pattern = @"SimpleProp\(([^\)]*)\)";
+                        Regex regex = new Regex(pattern);
+
+                        foreach (var ClassificationRule in cfg)
+                        {
+                            bool ok = true;
+                            string result = ClassificationRule;
+                            var mts = regex.Matches(ClassificationRule);
+                            foreach (Match mt in mts)
+                            {
+                                string PropName = mt.Groups[1].Value;
+                                string PropVal = "";
+                                val.GetSimplePropertyValue(PropName, out PropVal);
+                                if (PropVal == null)
+                                {
+                                    ok = false;
+                                    break;
+                                }
+                                result = result.Replace("SimpleProp(" + PropName + ")", PropVal);
+                            }
+                            if (ok)
+                                return result;
+                        }
+                    }
+                }
+            }
+
             return null;
         }
 
@@ -615,7 +679,7 @@ namespace Xbim.COBieLite
 
         #region Exporters
 
-        public void WriteBson(BinaryWriter binaryWriter, FacilityType theFacility)
+        static public void WriteBson(BinaryWriter binaryWriter, FacilityType theFacility)
         {
             var serializerSettings = new JsonSerializerSettings
             {
@@ -629,7 +693,7 @@ namespace Xbim.COBieLite
             serialiser.Serialize(writer, theFacility);
         }
 
-        public void WriteJson(TextWriter textWriter, FacilityType theFacility)
+        static public void WriteJson(TextWriter textWriter, FacilityType theFacility)
         {
             var serializerSettings = new JsonSerializerSettings
             {
@@ -645,7 +709,7 @@ namespace Xbim.COBieLite
 
        
 
-        public void WriteXml(TextWriter textWriter, FacilityType theFacility)
+        static public void WriteXml(TextWriter textWriter, FacilityType theFacility)
         {
             var namespaces = new XmlSerializerNamespaces(new[]
             {

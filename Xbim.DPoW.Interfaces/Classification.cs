@@ -9,6 +9,11 @@ namespace Xbim.DPoW.Interfaces
         public string ClassificationName { get; set; }
         public string ClassificationEdition { get; set; }
         public string ClassificationPublisher { get; set; }
-        public IEnumerable<ClassificationReference> ClassificationReferences { get; set; }
+        public List<ClassificationReference> ClassificationReferences { get; set; }
+
+        public Classification()
+        {
+            ClassificationReferences = new List<ClassificationReference>();
+        }
     }
 }
