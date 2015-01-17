@@ -27,7 +27,7 @@ namespace Xbim.COBie.Data
         /// <summary>
         /// Fill sheet rows for Impact sheet
         /// </summary>
-        /// <returns>COBieSheet<COBieImpactRow></returns>
+        /// <returns>COBieSheet</returns>
         public override COBieSheet<COBieImpactRow> Fill()
         {
             ProgressIndicator.ReportMessage("Starting Impacts...");

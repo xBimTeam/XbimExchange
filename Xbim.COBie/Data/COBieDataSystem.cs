@@ -35,7 +35,7 @@ namespace Xbim.COBie.Data
         /// <summary>
         /// Fill sheet rows for System sheet
         /// </summary>
-        /// <returns>COBieSheet<COBieSystemRow></returns>
+        /// <returns>COBieSheet</returns>
         public  COBieSheet<COBieSystemRow> Fill(Dictionary<string, HashSet<string>> compIndices)
         {
             ProgressIndicator.ReportMessage("Starting Systems...");

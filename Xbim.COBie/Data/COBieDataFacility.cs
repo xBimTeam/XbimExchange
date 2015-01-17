@@ -33,7 +33,7 @@ namespace Xbim.COBie.Data
         /// <summary>
         /// Fill sheet rows for Facility sheet
         /// </summary>
-        /// <returns>COBieSheet<COBieFacilityRow></returns>
+        /// <returns>COBieSheet</returns>
         public override COBieSheet<COBieFacilityRow> Fill()
         {
             ProgressIndicator.ReportMessage("Starting Facilities...");

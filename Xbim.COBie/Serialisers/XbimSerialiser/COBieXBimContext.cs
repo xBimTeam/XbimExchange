@@ -26,7 +26,7 @@ namespace Xbim.COBie.Serialisers.XbimSerialiser
         #endregion
 
         #region Properties
-        // <summary>
+        /// <summary>
         /// Model to add COBie data too
         /// </summary>
         public XbimModel Model { get; set; }

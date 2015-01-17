@@ -31,7 +31,7 @@ namespace Xbim.COBie.Data
         /// <summary>
         /// Fill sheet rows for Document sheet
         /// </summary>
-        /// <returns>COBieSheet<COBieDocumentRow></returns>
+        /// <returns>COBieSheet</returns>
         public override COBieSheet<COBieDocumentRow> Fill()
         {
             ProgressIndicator.ReportMessage("Starting Documents...");

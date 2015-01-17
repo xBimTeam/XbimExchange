@@ -31,7 +31,7 @@ namespace Xbim.COBie.Data
         /// <summary>
         /// Fill sheet rows for Spare sheet
         /// </summary>
-        /// <returns>COBieSheet<COBieSpareRow></returns>
+        /// <returns>COBieSheet</returns>
         public override COBieSheet<COBieSpareRow> Fill()
         {
             ProgressIndicator.ReportMessage("Starting Spares...");

@@ -33,7 +33,7 @@ namespace Xbim.COBie.Data
         /// <summary>
         /// Fill sheet rows for Floor sheet
         /// </summary>
-        /// <returns>COBieSheet<COBieFloorRow></returns>
+        /// <returns>COBieSheet</returns>
         public override COBieSheet<COBieFloorRow> Fill()
         {
             ProgressIndicator.ReportMessage("Starting Floors...");

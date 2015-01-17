@@ -2,7 +2,7 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2011/10/nuspec.xsd">
     <metadata>
         <id>Xbim.Exchange</id>
-        <version>3.0.2-Prerelease</version>
+        <version>3.0.3-Prerelease</version>
         <title>xBIM Exchange</title>
         <authors>xBIM team</authors>
         <owners>Steve Lockley</owners>
@@ -19,17 +19,17 @@ IOS and Android versions are under development.</description>
         <summary>The .Net toolkit for developing BIM applications based on the IFC standard. Essential support for the Ifc data model</summary>
         <releaseNotes>3.0 contains an implementation of the COBieLite protocol as weel as the COBieLite Spreadsheet format.</releaseNotes>
         <language>en-GB</language>
-        <tags>BIM, IFC, IfcXml, IfcZip, COBie, COBieLite, .Net, C#, BuildingSmart</tags>
-	<dependencies> 
-		<dependency id="Newtonsoft.Json" version="6.0.3" />
-		<dependency id="NPOI" version="1.2.5" />
-    <dependency id="Xbim.Essentials" version="3.0.2-Prerelease" />
-    <dependency id="Xbim.Geometry" version="3.0.2-Prerelease" />
-	</dependencies> 
+      <tags>BIM, IFC, IfcXml, IfcZip, COBie, COBieLite, .Net, C#, BuildingSmart</tags>
+      <dependencies>
+        <dependency id="NPOI" version="1.2.5" />
+        <dependency id="Xbim.Geometry" version="3.0.3-Prerelease" />
+      </dependencies>
     </metadata>
     <files>
-        <file src="Output\Xbim.COBie.dll" target="lib\net45\Xbim.COBie.dll" />
-        <file src="Output\Xbim.COBieLite.dll" target="lib\net45\Xbim.COBieLite.dll" />
+      <file src="Output\Release\Xbim.COBie.dll" target="lib\net45\Xbim.COBie.dll" />
+      <file src="Output\Release\Xbim.COBieLite.dll" target="lib\net45\Xbim.COBieLite.dll" />
+      <file src="Output\Release\Xbim.COBie.xml" target="lib\net45\Xbim.COBie.xml" />
+      <file src="Output\Release\Xbim.COBieLite.xml" target="lib\net45\Xbim.COBieLite.xml" />
     </files>
-	
-</package>
+
+  </package>

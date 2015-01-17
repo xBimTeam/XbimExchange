@@ -322,17 +322,6 @@ namespace Xbim.COBie
             return typeObjectGlobalId;
         }
 
-        /// <summary>
-        /// Validate type sheet for merge types depending on the role of the model this worksheet was built from
-        /// </summary>
-        ///<param name="GlobalIds">List of GlobalId's</param>
-        ///<returns>Number of rows removed</returns>
-        //public int ValidateTypeMerge(List<string> GlobalIds)
-        //{
-        //    COBieColumn colExtId = Columns.Where(c => c.Value.ColumnName == "ExtIdentifier").Select(c => c.Value).FirstOrDefault();
-        //    RowsRemoved = Rows.FindAll(r => GlobalIds.Contains(r[colExtId.ColumnOrder].CellValue));
-        //    return Rows.RemoveAll(r => GlobalIds.Contains(r[colExtId.ColumnOrder].CellValue));
-        //}
 
         /// <summary>
         /// Validate type sheet for merge types depending on the role of the model this worksheet was built from
@@ -360,19 +349,7 @@ namespace Xbim.COBie
             return RowsRemoved.Count;
         }
 
-        /// <summary>
-        ///  Validate attribute sheet for merge types depending on the role of the model this worksheet was built from
-        /// </summary>
-        /// <param name="keys">string list holding the sheetname and name property concatenated together</param>
-        /// <returns>Number removed</returns>
-        //public int ValidateAttributeMerge(List<string> keys)
-        //{
-        //    COBieColumn colSheet = Columns.Where(c => c.Value.ColumnName == "SheetName").Select(c => c.Value).FirstOrDefault();
-        //    COBieColumn colName = Columns.Where(c => c.Value.ColumnName == "RowName").Select(c => c.Value).FirstOrDefault();
 
-        //    RowsRemoved = Rows.FindAll(r => keys.Contains(r[colSheet.ColumnOrder].CellValue + r[colName.ColumnOrder].CellValue));
-        //    return Rows.RemoveAll(r => keys.Contains(r[colSheet.ColumnOrder].CellValue + r[colName.ColumnOrder].CellValue));
-        //}
 
         /// <summary>
         ///  Validate attribute sheet for merge types depending on the role of the model this worksheet was built from
@@ -403,20 +380,7 @@ namespace Xbim.COBie
             return RowsRemoved.Count;
         }
 
-        /// <summary>
-        ///  Validate system sheet for merge types in ComponentName, depending on the role of the model this worksheet was built from
-        /// </summary>
-        /// <param name="names">string list holding the name properties removed from the component sheet</param>
-        /// <returns>Number removed</returns>
-        //public int ValidateSystemMerge(List<string> names)
-        //{
-        //    COBieColumn compName = Columns.Where(c => c.Value.ColumnName == "ComponentNames").Select(c => c.Value).FirstOrDefault();
-
-        //    RowsRemoved = Rows.FindAll(r => names.Contains(r[compName.ColumnOrder].CellValue));
-        //    return Rows.RemoveAll(r => names.Contains(r[compName.ColumnOrder].CellValue));
-
-        //}
-
+  
         /// <summary>
         ///  Validate system sheet for merge types in ComponentName, depending on the role of the model this worksheet was built from
         /// </summary>

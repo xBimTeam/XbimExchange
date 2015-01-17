@@ -32,7 +32,7 @@ namespace Xbim.COBie.Serialisers.XbimSerialiser
         }
 
         #region Methods
-        // <summary>
+        /// <summary>
         /// Create and setup objects held in the System COBieSheet
         /// </summary>
         /// <param name="cOBieSheet">COBieSheet of COBieSystemRow to read data from</param>

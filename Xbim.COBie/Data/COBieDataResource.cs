@@ -26,7 +26,7 @@ namespace Xbim.COBie.Data
         /// <summary>
         /// Fill sheet rows for Resource sheet
         /// </summary>
-        /// <returns>COBieSheet<COBieResourceRow></returns>
+        /// <returns>COBieSheet</returns>
         public override COBieSheet<COBieResourceRow> Fill()
         {
             ProgressIndicator.ReportMessage("Starting Resources...");

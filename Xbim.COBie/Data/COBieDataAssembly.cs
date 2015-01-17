@@ -30,7 +30,7 @@ namespace Xbim.COBie.Data
         /// <summary>
         /// Fill sheet rows for Assembly sheet
         /// </summary>
-        /// <returns>COBieSheet<COBieAssemblyRow></returns>
+        /// <returns>COBieSheet</returns>
         public override COBieSheet<COBieAssemblyRow> Fill()
         {
             ProgressIndicator.ReportMessage("Starting Assemblies...");

@@ -31,7 +31,7 @@ namespace Xbim.COBie.Data
         /// <summary>
         /// Fill sheet rows for Contact sheet
         /// </summary>
-        /// <returns>COBieSheet<COBieContactRow></returns>
+        /// <returns>COBieSheet</returns>
         public override COBieSheet<COBieContactRow> Fill()
         {
             ProgressIndicator.ReportMessage("Starting Contacts...");

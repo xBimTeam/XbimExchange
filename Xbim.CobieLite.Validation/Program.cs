@@ -23,7 +23,7 @@ namespace Xbim.CobieLite.Validation
         static int Main(string[] args)
         {
             var cobieModelFileName = @"Standard_Classroom_CIC_6_Project_mod2.CobieLight.xml";
-            var cobieDPoWFileName = @"";
+           // var cobieDPoWFileName = @"";
 
             // Model file identification
             //

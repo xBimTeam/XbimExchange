@@ -25,7 +25,7 @@ namespace Xbim.COBie.Serialisers.XbimSerialiser
         }
         
         #region Methods
-        // <summary>
+        /// <summary>
         /// Create and setup objects held in the Space COBieSheet
         /// </summary>
         /// <param name="cOBieSheet">COBieSheet of COBieSpaceRows to read data from</param>
