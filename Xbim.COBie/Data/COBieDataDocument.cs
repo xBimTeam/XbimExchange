@@ -75,7 +75,7 @@ namespace Xbim.COBie.Data
                 else if (di.CreationTime != null)
                     doc.CreatedOn = di.CreationTime.ToString();
                 else if ((Model.IfcProject as IfcRoot).OwnerHistory != null)
-                    doc.CreatedOn = Context.RunDate;
+                    doc.CreatedOn = Context.RunDateTime;
 
                 
                 doc.Category = (string.IsNullOrEmpty(di.Purpose.ToString()) ) ? DEFAULT_STRING :di.Purpose.ToString();

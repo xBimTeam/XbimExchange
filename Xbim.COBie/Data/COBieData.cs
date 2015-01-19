@@ -75,11 +75,11 @@ namespace Xbim.COBie.Data
         /// </summary>
         /// <param name="rootEntity">Entity to extract the Create On date</param>
         /// <returns></returns>
-        protected string GetCreatedOnDateAsFmtString(IfcOwnerHistory ownerHistory)
+        protected string GetCreatedOnDateAsFmtString(IfcOwnerHistory ownerHistory, bool RequiresTime = true)
         {
             string date = GetCreatedOnDate(ownerHistory);
             //return default date of now
-            return (date != null) ? date : Context.RunDate;
+            return (date != null) ? date : (RequiresTime) ? Context.RunDateTime : Context.RunDate; //if we don't have a date then use the context date or datetime
         }
 
         public static string GetCreatedOnDate(IfcOwnerHistory ownerHistory)
