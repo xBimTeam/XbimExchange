@@ -15,6 +15,9 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Xbim.COBieLite", "Xbim.COBieLite\Xbim.COBieLite.csproj", "{E550C721-50AF-4AD0-998E-0C61F305EEC8}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tests", "Tests\Tests.csproj", "{65C0C5FF-70D7-49CC-ACCF-057C91F382CC}"
+	ProjectSection(ProjectDependencies) = postProject
+		{2CD02B40-A823-4959-874B-E212569F8080} = {2CD02B40-A823-4959-874B-E212569F8080}
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Xbim.CobieLite.Validation", "Xbim.CobieLite.Validation\Xbim.CobieLite.Validation.csproj", "{D2D0B192-93B2-409F-AAA0-47BD3038C87E}"
 EndProject
