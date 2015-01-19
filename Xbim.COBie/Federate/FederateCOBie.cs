@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Diagnostics;
 using Xbim.COBie.Contracts;
 using Xbim.COBie.Rows;
 using Xbim.XbimExtensions.Interfaces;
