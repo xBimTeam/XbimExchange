@@ -47,7 +47,7 @@ namespace Xbim.COBie.Data
         /// <summary>
         /// Fill sheet rows for Component sheet
         /// </summary>
-        /// <returns>COBieSheet<COBieComponentRow></returns>
+        /// <returns>COBieSheet</returns>
         public override COBieSheet<COBieComponentRow> Fill()
         {
 #if DEBUG

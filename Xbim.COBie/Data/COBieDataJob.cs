@@ -32,7 +32,7 @@ namespace Xbim.COBie.Data
         /// <summary>
         /// Fill sheet rows for Job sheet
         /// </summary>
-        /// <returns>COBieSheet<COBieJobRow></returns>
+        /// <returns>COBieSheet</returns>
         public override COBieSheet<COBieJobRow> Fill()
         {
             ProgressIndicator.ReportMessage("Starting Jobs...");

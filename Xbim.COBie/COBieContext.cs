@@ -18,6 +18,7 @@ namespace Xbim.COBie
         public Dictionary<long, string> EMails { get; private set; } 
         public string TemplateFileName { get; set; } //template used by the workbook
         public string RunDate { get; set; } //Date the Workbook was created 
+        public string RunDateTime { get; set; } //Date the Workbook was created 
         public bool ExcludeFromPickList { get; set; }
 
         /// <summary>
@@ -66,6 +67,7 @@ namespace Xbim.COBie
         public COBieContext()
         {
             RunDate = DateTime.Now.ToString(Constants.DATE_FORMAT);
+            RunDateTime = DateTime.Now.ToString(Constants.DATETIME_FORMAT);
             EMails = new Dictionary<long, string>();
             Model = null;
             //if no IfcZones or no IfcSpace property names of "ZoneName" then if DepartmentsUsedAsZones is true we will list 

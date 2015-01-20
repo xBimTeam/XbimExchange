@@ -31,7 +31,7 @@ namespace Xbim.COBie.Data
         /// <summary>
         /// Fill sheet rows for Issue sheet
         /// </summary>
-        /// <returns>COBieSheet<COBieIssueRow></returns>
+        /// <returns>COBieSheet</returns>
         public override COBieSheet<COBieIssueRow> Fill()
         {
             ProgressIndicator.ReportMessage("Starting Issues...");

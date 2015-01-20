@@ -132,7 +132,7 @@ namespace Xbim.COBie
                                         typeof(IfcStructuralActivity),
                                         typeof(IfcStructuralItem)
                                         //typeof(ifcCovering),
-                                        ///typeof(IfcColumnStandardCase), //IFC2x Edition 4.
+                                        //typeof(IfcColumnStandardCase), //IFC2x Edition 4.
                                         //typeof(IfcMemberStandardCase), //IFC2x Edition 4.
                                         //typeof(IfcPlateStandardCase), //IFC2x Edition 4.
                                         //typeof(IfcSlabElementedCase), //IFC2x Edition 4.

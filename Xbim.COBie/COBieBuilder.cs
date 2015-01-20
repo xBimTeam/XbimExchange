@@ -63,6 +63,7 @@ namespace Xbim.COBie
 
             //set default date for this run
             Context.RunDate = DateTime.Now.ToString(Constants.DATE_FORMAT);
+            Context.RunDateTime = DateTime.Now.ToString(Constants.DATETIME_FORMAT);
 
             // set all the properties
             COBieQueries cq = new COBieQueries(Context);

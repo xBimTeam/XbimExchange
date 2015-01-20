@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.Linq;
-using System.Text;
 using Xbim.COBie.Contracts;
 using Xbim.COBie.Rows;
 using Xbim.XbimExtensions.Interfaces;
@@ -158,176 +156,31 @@ namespace Xbim.COBie.Federate
         /// <param name="fedWorkBook"></param>
         private void PopulateErrors(COBieWorkbook fedWorkBook)
         {
-            try
+
+            cOBieProgress.Initialise("Validating Workbooks", fedWorkBook.Count, 0);
+            cOBieProgress.ReportMessage("Building Indices...");
+            fedWorkBook.CreateIndices();
+            cOBieProgress.ReportMessage("Building Indices...Finished");
+
+            // Validate the workbook
+            cOBieProgress.ReportMessage("Starting Validation...");
+            fedWorkBook.Validate(ErrorRowStartIndex, null, (lastProcessedSheetIndex) =>
             {
-                cOBieProgress.Initialise("Validating Workbooks", fedWorkBook.Count, 0);
-                cOBieProgress.ReportMessage("Building Indices...");
-                fedWorkBook.CreateIndices();
-                cOBieProgress.ReportMessage("Building Indices...Finished");
+                // When each sheet has been processed, increment the progress bar
+                cOBieProgress.IncrementAndUpdate();
+            });
+            cOBieProgress.ReportMessage("Finished Validation");
 
-                // Validate the workbook
-                cOBieProgress.ReportMessage("Starting Validation...");
-                fedWorkBook.Validate(ErrorRowStartIndex, null, (lastProcessedSheetIndex) =>
-                {
-                    // When each sheet has been processed, increment the progress bar
-                    cOBieProgress.IncrementAndUpdate();
-                });
-                cOBieProgress.ReportMessage("Finished Validation");
+            cOBieProgress.Finalise();
 
-                cOBieProgress.Finalise();
 
-            }
-            catch (Exception)
-            {
-                // TODO: Handle
-                throw;
-            }
         }
 
-        /// <summary>
-        /// Add Row to sheet
-        /// </summary>
-        /// <param name="sheetname">Sheet name we want to add row too</param>
-        /// <returns>void</returns>
-        //private void AddRow(ICOBieSheet<COBieRow> sheet, COBieRow row)
-        //{
-        //    switch (sheet.SheetName)
-        //    {
-        //        case Constants.WORKSHEET_CONTACT:
-        //            ((COBieSheet<COBieContactRow>)sheet).AddRow((COBieContactRow)row);
-        //            break;
-        //        case Constants.WORKSHEET_FACILITY:
-        //            ((COBieSheet<COBieFacilityRow>)sheet).AddRow((COBieFacilityRow)row);
-        //            break;
-        //        case Constants.WORKSHEET_FLOOR:
-        //            ((COBieSheet<COBieFloorRow>)sheet).AddRow((COBieFloorRow)row);
-        //            break;
-        //        case Constants.WORKSHEET_SPACE:
-        //            ((COBieSheet<COBieSpaceRow>)sheet).AddRow((COBieSpaceRow)row);
-        //            break;
-        //        case Constants.WORKSHEET_ZONE:
-        //            ((COBieSheet<COBieZoneRow>)sheet).AddRow((COBieZoneRow)row);
-        //            break;
-        //        case Constants.WORKSHEET_TYPE:
-        //            ((COBieSheet<COBieTypeRow>)sheet).AddRow((COBieTypeRow)row);
-        //            break;
-        //        case Constants.WORKSHEET_COMPONENT:
-        //            ((COBieSheet<COBieComponentRow>)sheet).AddRow((COBieComponentRow)row);
-        //            break;
-        //        case Constants.WORKSHEET_SYSTEM:
-        //            ((COBieSheet<COBieSystemRow>)sheet).AddRow((COBieSystemRow)row);
-        //            break;
-        //        case Constants.WORKSHEET_ASSEMBLY:
-        //            ((COBieSheet<COBieAssemblyRow>)sheet).AddRow((COBieAssemblyRow)row);
-        //            break;
-        //        case Constants.WORKSHEET_CONNECTION:
-        //            ((COBieSheet<COBieConnectionRow>)sheet).AddRow((COBieConnectionRow)row);
-        //            break;
-        //        case Constants.WORKSHEET_SPARE:
-        //            ((COBieSheet<COBieSpareRow>)sheet).AddRow((COBieSpareRow)row);
-        //            break;
-        //        case Constants.WORKSHEET_RESOURCE:
-        //            ((COBieSheet<COBieResourceRow>)sheet).AddRow((COBieResourceRow)row);
-        //            break;
-        //        case Constants.WORKSHEET_JOB:
-        //            ((COBieSheet<COBieJobRow>)sheet).AddRow((COBieJobRow)row);
-        //            break;
-        //        case Constants.WORKSHEET_IMPACT:
-        //            ((COBieSheet<COBieImpactRow>)sheet).AddRow((COBieImpactRow)row);
-        //            break;
-        //        case Constants.WORKSHEET_DOCUMENT:
-        //            ((COBieSheet<COBieDocumentRow>)sheet).AddRow((COBieDocumentRow)row);
-        //            break;
-        //        case Constants.WORKSHEET_ATTRIBUTE:
-        //            ((COBieSheet<COBieAttributeRow>)sheet).AddRow((COBieAttributeRow)row);
-        //            break;
-        //        case Constants.WORKSHEET_COORDINATE:
-        //            ((COBieSheet<COBieCoordinateRow>)sheet).AddRow((COBieCoordinateRow)row);
-        //            break;
-        //        case Constants.WORKSHEET_ISSUE:
-        //            ((COBieSheet<COBieIssueRow>)sheet).AddRow((COBieIssueRow)row);
-        //            break;
-        //        case Constants.WORKSHEET_PICKLISTS:
-        //            ((COBieSheet<COBiePickListsRow>)sheet).AddRow((COBiePickListsRow)row);
-        //            break;
-        //        default:
-        //            break;
-        //    }
-        //}
+
+
 
         /// <summary>
-        /// Add Row to sheet
-        /// </summary>
-        /// <param name="sheetname">Sheet name we want to add row too</param>
-        /// <returns>void</returns>
-        //private void AddRemovedRow(ICOBieSheet<COBieRow> sheet, COBieRow row)
-        //{
-        //    switch (sheet.SheetName)
-        //    {
-        //        case Constants.WORKSHEET_CONTACT:
-        //            ((COBieSheet<COBieContactRow>)sheet).AddRemovedRow((COBieContactRow)row);
-        //            break;
-        //        case Constants.WORKSHEET_FACILITY:
-        //            ((COBieSheet<COBieFacilityRow>)sheet).AddRemovedRow((COBieFacilityRow)row);
-        //            break;
-        //        case Constants.WORKSHEET_FLOOR:
-        //            ((COBieSheet<COBieFloorRow>)sheet).AddRemovedRow((COBieFloorRow)row);
-        //            break;
-        //        case Constants.WORKSHEET_SPACE:
-        //            ((COBieSheet<COBieSpaceRow>)sheet).AddRemovedRow((COBieSpaceRow)row);
-        //            break;
-        //        case Constants.WORKSHEET_ZONE:
-        //            ((COBieSheet<COBieZoneRow>)sheet).AddRemovedRow((COBieZoneRow)row);
-        //            break;
-        //        case Constants.WORKSHEET_TYPE:
-        //            ((COBieSheet<COBieTypeRow>)sheet).AddRemovedRow((COBieTypeRow)row);
-        //            break;
-        //        case Constants.WORKSHEET_COMPONENT:
-        //            ((COBieSheet<COBieComponentRow>)sheet).AddRemovedRow((COBieComponentRow)row);
-        //            break;
-        //        case Constants.WORKSHEET_SYSTEM:
-        //            ((COBieSheet<COBieSystemRow>)sheet).AddRemovedRow((COBieSystemRow)row);
-        //            break;
-        //        case Constants.WORKSHEET_ASSEMBLY:
-        //            ((COBieSheet<COBieAssemblyRow>)sheet).AddRemovedRow((COBieAssemblyRow)row);
-        //            break;
-        //        case Constants.WORKSHEET_CONNECTION:
-        //            ((COBieSheet<COBieConnectionRow>)sheet).AddRemovedRow((COBieConnectionRow)row);
-        //            break;
-        //        case Constants.WORKSHEET_SPARE:
-        //            ((COBieSheet<COBieSpareRow>)sheet).AddRemovedRow((COBieSpareRow)row);
-        //            break;
-        //        case Constants.WORKSHEET_RESOURCE:
-        //            ((COBieSheet<COBieResourceRow>)sheet).AddRemovedRow((COBieResourceRow)row);
-        //            break;
-        //        case Constants.WORKSHEET_JOB:
-        //            ((COBieSheet<COBieJobRow>)sheet).AddRemovedRow((COBieJobRow)row);
-        //            break;
-        //        case Constants.WORKSHEET_IMPACT:
-        //            ((COBieSheet<COBieImpactRow>)sheet).AddRemovedRow((COBieImpactRow)row);
-        //            break;
-        //        case Constants.WORKSHEET_DOCUMENT:
-        //            ((COBieSheet<COBieDocumentRow>)sheet).AddRemovedRow((COBieDocumentRow)row);
-        //            break;
-        //        case Constants.WORKSHEET_ATTRIBUTE:
-        //            ((COBieSheet<COBieAttributeRow>)sheet).AddRemovedRow((COBieAttributeRow)row);
-        //            break;
-        //        case Constants.WORKSHEET_COORDINATE:
-        //            ((COBieSheet<COBieCoordinateRow>)sheet).AddRemovedRow((COBieCoordinateRow)row);
-        //            break;
-        //        case Constants.WORKSHEET_ISSUE:
-        //            ((COBieSheet<COBieIssueRow>)sheet).AddRemovedRow((COBieIssueRow)row);
-        //            break;
-        //        case Constants.WORKSHEET_PICKLISTS:
-        //            ((COBieSheet<COBiePickListsRow>)sheet).AddRemovedRow((COBiePickListsRow)row);
-        //            break;
-        //        default:
-        //            break;
-        //    }
-        //}
-
-        /// <summary>
-        /// Create the empty COBieSheet<COBieRow> to the correct type decided by sheet name
+        /// Create the empty COBieSheet to the correct type decided by sheet name
         /// </summary>
         /// <param name="sheetname">Sheet name we want to create</param>
         /// <returns>ICOBieSheet of COBieRow to the correct row type to match the sheet name</returns>

@@ -33,7 +33,7 @@ namespace Xbim.COBie.Data
         /// <summary>
         /// Fill sheet rows for Space sheet
         /// </summary>
-        /// <returns>COBieSheet<COBieSpaceRow></returns>
+        /// <returns>COBieSheet</returns>
         public override COBieSheet<COBieSpaceRow> Fill()
         {
 #if DEBUG

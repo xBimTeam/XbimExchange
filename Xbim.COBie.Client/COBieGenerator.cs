@@ -1,17 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Data;
-using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 using System.IO;
 using Xbim.IO;
-using Xbim.COBie;
 using Xbim.ModelGeometry.Scene;
-using Xbim.ModelGeometry;
-
 using Xbim.XbimExtensions;
 using System.Diagnostics;
 using Xbim.Ifc2x3.Kernel;
@@ -19,11 +14,6 @@ using Xbim.COBie.Contracts;
 using Xbim.COBie.Serialisers;
 using Xbim.COBie.Rows;
 using Xbim.XbimExtensions.Interfaces;
-using System.Threading.Tasks;
-using System.Threading;
-using System.Collections.Concurrent;
-using System.Windows.Media.Media3D;
-using Xbim.Common.Geometry;
 using Xbim.COBie.Federate;
 
 namespace Xbim.COBie.Client

@@ -56,7 +56,7 @@ namespace Xbim.COBie.Serialisers
         }
 
         /// <summary>
-        /// Create the empty COBieSheet<COBieRow> to the correct type decided by sheet name
+        /// Create the empty COBieSheet to the correct type decided by sheet name
         /// </summary>
         /// <param name="sheetname">Sheet name we want to create</param>
         /// <returns>ICOBieSheet of COBieRow to the correct row type to match the sheet name</returns>
@@ -155,7 +155,7 @@ namespace Xbim.COBie.Serialisers
                                 for (int i = 0; i < columnCount; i++)
                                 {
                                     ICell cell = row.GetCell(i);
-                                    if ((cell != null) && (cell.CellType != CellType.BLANK))
+                                    if ((cell != null) && (cell.CellType != CellType.Blank))
                                     {
                                         addRow = true;
                                         break;
@@ -172,10 +172,10 @@ namespace Xbim.COBie.Serialisers
                                         if (cell != null)
                                             switch (cell.CellType)
                                             {
-                                                case CellType.STRING:
+                                                case CellType.String:
                                                     cellValue = cell.StringCellValue;
                                                     break;
-                                                case CellType.NUMERIC:
+                                                case CellType.Numeric:
                                                     if (sheetRow[i].COBieColumn.AllowedType == COBieAllowedType.ISODate)
                                                         cellValue = cell.DateCellValue.ToString(Constants.DATE_FORMAT);
                                                     else if (sheetRow[i].COBieColumn.AllowedType == COBieAllowedType.ISODateTime)
@@ -183,14 +183,14 @@ namespace Xbim.COBie.Serialisers
                                                     else
                                                         cellValue = cell.NumericCellValue.ToString();
                                                     break;
-                                                case CellType.BOOLEAN:
+                                                case CellType.Boolean:
                                                     cellValue = cell.BooleanCellValue.ToString();
                                                     break;
-                                                case CellType.ERROR:
+                                                case CellType.Error:
                                                     cellValue = cell.ErrorCellValue.ToString();
                                                     break;
-                                                case CellType.BLANK:
-                                                case CellType.FORMULA:
+                                                case CellType.Blank:
+                                                case CellType.Formula:
                                                 case CellType.Unknown:
                                                     cellValue = cell.StringCellValue;
                                                     break;

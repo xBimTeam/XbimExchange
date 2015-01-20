@@ -30,14 +30,6 @@ namespace Tests
             var data2 = JsonConvert.SerializeObject(dpow, settings);
         }
 
-        [TestMethod]
-        public void OpenDPoW()
-        {
-            var dpow = PlanOfWork.Open("dpowData.json");
-
-            Assert.AreEqual("Newtown High School", dpow.Project.ProjectName);
-            Assert.AreEqual("New Uniclass", dpow.ClassificationSystem[0].ClassificationName);
-
             //create ZONE and AssetType
             dpow.ProjectStages[1].Jobs[0].DPoWObjects.Add(new Zone() { DPoWObjectCategory = new ClassificationReference() { ClassificationCode = "A" }, DPoWObjectName = "Zone A", RequiredLOD = new RequiredLOD() { RequiredLODCode = "123" } });
             dpow.ProjectStages[1].Jobs[0].DPoWObjects.Add(new AssetType() { DPoWObjectCategory = new ClassificationReference() { ClassificationCode = "A" }, DPoWObjectName = "Zone A", RequiredLOD = new RequiredLOD() { RequiredLODCode = "123" } });
@@ -47,6 +39,5 @@ namespace Tests
 
             Assert.IsTrue(dpow.ProjectStages[1].Jobs[0].DPoWObjects.Any( t => t.GetType() == typeof(Zone)));
             Assert.IsTrue(dpow.ProjectStages[1].Jobs[0].DPoWObjects.Any(t => t.GetType() == typeof(AssetType)));
-        }
     }
 }

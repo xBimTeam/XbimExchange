@@ -135,7 +135,7 @@ namespace Xbim.COBie.Serialisers
                 (_colours.ContainsKey("Grey"))
                 )
             {
-                excelSheet.TabColorIndex = _colours["Grey"].GetIndex();
+                excelSheet.TabColorIndex = _colours["Grey"].Indexed;
             }
             if (sheet.SheetName != Constants.WORKSHEET_PICKLISTS)
             {
@@ -235,11 +235,12 @@ namespace Xbim.COBie.Serialisers
             if (colour == null)
             {
                 // First 64 are system colours
-                if  (NPOI.HSSF.Record.PaletteRecord.STANDARD_PALETTE_SIZE < 64 )
-                {
-                     NPOI.HSSF.Record.PaletteRecord.STANDARD_PALETTE_SIZE = 64; 
-                }
-                NPOI.HSSF.Record.PaletteRecord.STANDARD_PALETTE_SIZE++;
+                //srl this code does not work with the latest version of NPOI
+                //if  (NPOI.HSSF.Record.PaletteRecord.STANDARD_PALETTE_SIZE  < 64 )
+                //{
+                //     NPOI.HSSF.Record.PaletteRecord.STANDARD_PALETTE_SIZE = 64; 
+                //}
+                //NPOI.HSSF.Record.PaletteRecord.STANDARD_PALETTE_SIZE++;
                 colour = palette.AddColor(red, green, blue);
             }
             _colours.Add(colourName, colour);
@@ -253,13 +254,13 @@ namespace Xbim.COBie.Serialisers
             HSSFDataFormat dataFormat = XlsWorkbook.CreateDataFormat() as HSSFDataFormat;
             cellStyle.DataFormat = dataFormat.GetFormat(formatString);
             
-            cellStyle.FillForegroundColor = _colours[colourName].GetIndex();
-            cellStyle.FillPattern = FillPatternType.SOLID_FOREGROUND;
+            cellStyle.FillForegroundColor = _colours[colourName].Indexed;
+            cellStyle.FillPattern = FillPattern.SolidForeground;
 
-            cellStyle.BorderBottom = BorderStyle.THIN;
-            cellStyle.BorderLeft = BorderStyle.THIN;
-            cellStyle.BorderRight = BorderStyle.THIN;
-            cellStyle.BorderTop = BorderStyle.THIN;
+            cellStyle.BorderBottom = BorderStyle.Thin;
+            cellStyle.BorderLeft = BorderStyle.Thin;
+            cellStyle.BorderRight = BorderStyle.Thin;
+            cellStyle.BorderTop = BorderStyle.Thin;
 
             // TODO:maybe clone from the template?
             _cellStyles.Add(type, cellStyle);

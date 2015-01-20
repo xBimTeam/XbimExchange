@@ -700,7 +700,7 @@ namespace Xbim.COBie.Serialisers.XbimSerialiser
         /// create a IfcValue array from a delimited string, either "," or ":" delimited
         /// </summary>
         /// <param name="value">string</param>
-        /// <returns>IfcValue[]/returns>
+        /// <returns>IfcValue[]</returns>
         public IfcValue[] GetValueArray(string value)
         {
             char splitKey = GetSplitChar(value);

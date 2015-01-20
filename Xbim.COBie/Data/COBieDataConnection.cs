@@ -30,7 +30,7 @@ namespace Xbim.COBie.Data
         /// <summary>
         /// Fill sheet rows for Connection sheet
         /// </summary>
-        /// <returns>COBieSheet<COBieConnectionRow></returns>
+        /// <returns>COBieSheet</returns>
         public override COBieSheet<COBieConnectionRow> Fill()
         {
             ProgressIndicator.ReportMessage("Starting Connections...");

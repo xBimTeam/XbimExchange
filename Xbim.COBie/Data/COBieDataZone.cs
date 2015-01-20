@@ -29,7 +29,7 @@ namespace Xbim.COBie.Data
         /// <summary>
         /// Fill sheet rows for Zone sheet
         /// </summary>
-        /// <returns>COBieSheet<COBieZoneRow></returns>
+        /// <returns>COBieSheet</returns>
         public override COBieSheet<COBieZoneRow> Fill()
         {
             ProgressIndicator.ReportMessage("Starting Zones...");

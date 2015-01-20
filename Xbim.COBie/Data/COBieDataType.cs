@@ -39,7 +39,7 @@ namespace Xbim.COBie.Data
         /// <summary>
         /// Fill sheet rows for Type sheet
         /// </summary>
-        /// <returns>COBieSheet<COBieTypeRow></returns>
+        /// <returns>COBieSheet</returns>
         public override COBieSheet<COBieTypeRow> Fill()
         {
 #if DEBUG
