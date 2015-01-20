@@ -4,7 +4,7 @@ using System.Xml.Serialization;
 namespace Xbim.DPoW.Interfaces
 {
     [XmlInclude(typeof(Zone))]
-    [XmlInclude( typeof(Assembly))]
+    [XmlInclude( typeof(AssemblyType))]
     [XmlInclude(typeof(AssetType))]
     public abstract class DPoWObject 
     {

@@ -4126,7 +4126,7 @@
       </Interface>
     </logicalClassDesignerModelHasTypes>
     <logicalClassDesignerModelHasTypes>
-      <Interface Id="bc46498b-ee6b-46c9-be12-da20a0475f89" name="IAssembly" isAbstract="false" isLeaf="false">
+      <Interface Id="bc46498b-ee6b-46c9-be12-da20a0475f89" name="IAssemblyType" isAbstract="false" isLeaf="false">
         <description>Classsification starts with Ss- or Ee-</description>
         <appliedStereotypesInternal>
           <stereotypeInstance Id="f480287f-90ff-463a-bad4-aa2a57e65a34" name="interface" profile="CSharpProfile">

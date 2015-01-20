@@ -5577,7 +5577,7 @@
     <packageHasNamedElement>
       <Interface
         Id="10acd2c9-5426-4ae0-8a94-c630e24d2f86"
-        name="IAssembly"
+        name="IAssemblyType"
         isAbstract="false"
         isLeaf="false">
         <description>Classsification starts with Ss- or Ee-</description>

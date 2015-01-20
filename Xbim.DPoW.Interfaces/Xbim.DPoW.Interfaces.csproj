@@ -76,7 +76,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Assembly.cs" />
+    <Compile Include="AssemblyType.cs" />
     <Compile Include="AssetType.cs" />
     <Compile Include="Classification.cs" />
     <Compile Include="ClassificationReference.cs" />
@@ -86,6 +86,7 @@
     <Compile Include="Facility.cs" />
     <Compile Include="DpowHelper.cs" />
     <Compile Include="DPoWObject.cs" />
+    <Compile Include="GeneratedCode\IAssemblyType.cs" />
     <Compile Include="PlanOfWork.cs" />
     <Compile Include="Project.cs" />
     <Compile Include="ProjectStage.cs" />

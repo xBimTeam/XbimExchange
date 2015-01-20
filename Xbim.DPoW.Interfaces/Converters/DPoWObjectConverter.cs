@@ -24,8 +24,8 @@ namespace Xbim.DPoW.Interfaces.Converters
             object result = null;
             switch (type)
             {
-                case "Assembly":
-                    result = new Assembly();
+                case "AssemblyType":
+                    result = new AssemblyType();
                     break;
                 case "AssetType":
                     result = new AssetType();
@@ -34,7 +34,7 @@ namespace Xbim.DPoW.Interfaces.Converters
                     result = new Zone();
                     break;
                 default:
-                    result = new Assembly();
+                    result = new AssemblyType();
                     break;
             }
             serializer.Populate(jObject.CreateReader(), result);
