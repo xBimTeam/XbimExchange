@@ -240,7 +240,7 @@ namespace Xbim.COBie.Data
         {
             IfcLengthMeasure usableHt = ifcSpace.GetHeight();
             if (usableHt != null)
-            return ((double)usableHt).ToString("F3");
+            return ((double)usableHt).ToString();
             
             //Fall back to properties
             //get the property single values for this ifcSpace
