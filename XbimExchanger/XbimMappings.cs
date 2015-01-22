@@ -1,18 +1,44 @@
-﻿using System.Collections.Concurrent;
+﻿using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 
 namespace XbimExchanger
 {
+    public interface IXbimMappings<TRepository>
+    {
+
+        Type MapFromType { get; }
+        Type MapToType { get; }
+
+        Type MapKeyType { get; }
+
+        XbimMappingsCollection<TRepository> MappingsCollection { get; set; }
+    }
+
     /// <summary>
     /// Abstract class for mapping between different object models and schemas
     /// </summary>
     /// <typeparam name="TFromKey">Type of the key in the From object to link mappings</typeparam>
     /// <typeparam name="TFromObject">Type of the object to map from</typeparam>
     /// <typeparam name="TToObject">Type of the object to map to</typeparam>
-    public abstract class XbimMappings<TFromKey, TFromObject, TToObject> where TToObject : new()
+    /// <typeparam name="TRepository">The repository that holds new objects</typeparam>
+    public abstract class XbimMappings<TRepository,TFromKey, TFromObject, TToObject> : IXbimMappings<TRepository> where TToObject : new()
     {
+
+
+        
         protected ConcurrentDictionary<TFromKey, TToObject> Results = new ConcurrentDictionary<TFromKey, TToObject>();
 
+        protected XbimMappings(XbimMappingsCollection<TRepository> mappingsCollection)
+        {    
+            MappingsCollection = mappingsCollection;     
+        }
+
+        internal XbimMappings()
+        {
+            
+        }
+        
         /// <summary>
         /// Returns the IDictionary of all objects that have been mapped in this mapping class
         /// </summary>
@@ -21,15 +47,15 @@ namespace XbimExchanger
             get { return Results; }
         }
 
+
         /// <summary>
-        /// Create an unitialised ToObject with the specified key
+        /// Creates an instance of toObject, override for special creation situations
         /// </summary>
         /// <param name="key"></param>
         /// <returns></returns>
-        public bool Create(TFromKey key)
+        protected virtual TToObject CreateToObject(TFromKey key)
         {
-            var toObject = new TToObject();
-            return Results.TryAdd(key, toObject);
+            return new TToObject();
         }
         /// <summary>
         /// Gets the ToObject with the specified key
@@ -39,7 +65,6 @@ namespace XbimExchanger
         /// <returns>false if no object has been added to this mapping</returns>
         public bool Get(TFromKey key, out TToObject to)
         {
-            to = default(TToObject);
             return Results.TryGetValue(key, out to);
         }
 
@@ -50,7 +75,7 @@ namespace XbimExchanger
         /// <returns></returns>
         public TToObject GetOrCreate(TFromKey key)
         {
-            return Results.GetOrAdd(key, new TToObject());
+            return Results.GetOrAdd(key, CreateToObject(key));
         }
 
         /// <summary>
@@ -62,7 +87,7 @@ namespace XbimExchanger
         public TToObject AddMapping(TFromObject from, TToObject to)
         {
             BeforeMapping();
-            TToObject res = Mapping(from);
+            TToObject res = Mapping(from, to); 
             AfterMapping();
             return res;
         }
@@ -75,11 +100,27 @@ namespace XbimExchanger
         /// </summary>
         /// <param name="from"></param>
         /// <returns>the mapped object</returns>
-        protected abstract TToObject Mapping(TFromObject from);
+        protected abstract TToObject Mapping(TFromObject from, TToObject  to  );
         /// <summary>
         /// Called after any mapping has been performed
         /// </summary>
         protected virtual void AfterMapping() { }
 
+        public Type MapFromType
+        {
+            get { return typeof (TFromObject); }
+        }
+
+        public Type MapToType
+        {
+            get { return typeof(TToObject); }
+        }
+
+        public Type MapKeyType
+        {
+            get { return typeof(TFromKey); }
+        }
+
+        public XbimMappingsCollection<TRepository> MappingsCollection { get; set; }
     }
 }
