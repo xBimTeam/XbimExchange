@@ -110,6 +110,7 @@
     <Compile Include="SystemType.cs" />
     <Compile Include="XbimAssetType.cs" />
     <Compile Include="XbimAttributedObject.cs" />
+    <Compile Include="XbimCOBieLiteToIfcConverter.cs" />
     <Compile Include="XbimCoBieLiteXmlWriter.cs" />
     <Compile Include="ZoneType.cs" />
   </ItemGroup>

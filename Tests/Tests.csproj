@@ -48,6 +48,7 @@
     <Compile Include="COBieLiteTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="DPoWSerializationTests.cs" />
+    <Compile Include="ConversionTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Xbim.COBieLite\Xbim.COBieLite.csproj">
