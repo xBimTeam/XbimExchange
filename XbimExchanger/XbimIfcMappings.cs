@@ -7,7 +7,7 @@ namespace XbimExchanger
     {
         public override TToObject CreateTargetObject()
         {
-            return MappingsCollection.Repository.Instances.New<TToObject>();
+            return Exchanger.Repository.Instances.New<TToObject>();
         }
     }
 }

@@ -12,7 +12,7 @@ namespace XbimExchanger
 
         Type MapKeyType { get; }
 
-        XbimMappingsCollection<TRepository> MappingsCollection { get; set; }
+        XbimExchanger<TRepository> Exchanger { get; set; }
     }
 
     /// <summary>
@@ -29,9 +29,9 @@ namespace XbimExchanger
         
         protected ConcurrentDictionary<TSourceKey, TTargetObject> Results = new ConcurrentDictionary<TSourceKey, TTargetObject>();
 
-        protected XbimMappings(XbimMappingsCollection<TRepository> mappingsCollection)
+        protected XbimMappings(XbimExchanger<TRepository> exchanger)
         {    
-            MappingsCollection = mappingsCollection;     
+            Exchanger = exchanger;     
         }
 
         protected XbimMappings()
@@ -96,12 +96,14 @@ namespace XbimExchanger
         /// Called before any mapping operation is performed
         /// </summary>
         protected virtual void BeforeMapping() { }
+
         /// <summary>
         /// Overrident in the concrete class to perform the actual mapping
         /// </summary>
-        /// <param name="from"></param>
+        /// <param name="source"></param>
+        /// <param name="target"></param>
         /// <returns>the mapped object</returns>
-        protected abstract TTargetObject Mapping(TSourceObject from, TTargetObject  to  );
+        protected abstract TTargetObject Mapping(TSourceObject source, TTargetObject  target );
         /// <summary>
         /// Called after any mapping has been performed
         /// </summary>
@@ -122,6 +124,6 @@ namespace XbimExchanger
             get { return typeof(TSourceKey); }
         }
 
-        public XbimMappingsCollection<TRepository> MappingsCollection { get; set; }
+        public XbimExchanger<TRepository> Exchanger { get; set; }
     }
 }

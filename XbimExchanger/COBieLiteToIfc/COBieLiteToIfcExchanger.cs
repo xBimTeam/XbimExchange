@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -9,12 +10,50 @@ using Xbim.IO;
 
 namespace XbimExchanger.COBieLiteToIfc
 {
-    public class CoBieLiteToIfcExchanger
+    public class CoBieLiteToIfcExchanger : XbimExchanger<XbimModel>
     {
-        public bool Convert(XbimModel model, FacilityType facility)
+        public struct NamedProperty
         {
-            var mapper = new XbimMappingsCollection<XbimModel>(model);
-            var mapping = mapper.GetOrCreateMappings<MappingFacilityTypeToIfcBuilding>();
+            public string PropertySetName;
+            public string PropertyName;
+
+            public NamedProperty(string propertyName, string propertySetName) : this()
+            {
+                PropertyName = propertyName;
+                PropertySetName = propertySetName;
+            }
+        }
+
+        static readonly IDictionary<string, NamedProperty> CobieToIfcPropertyMap = new Dictionary<string, NamedProperty>();
+        static CoBieLiteToIfcExchanger()
+        {
+           
+            var configMap = new ExeConfigurationFileMap { ExeConfigFilename = "COBieAttributes.config" };
+            var config = ConfigurationManager.OpenMappedExeConfiguration(configMap, ConfigurationUserLevel.None);
+            var cobiePropertyMaps = (AppSettingsSection)config.GetSection("COBiePropertyMaps");
+
+            foreach (KeyValueConfigurationElement keyVal in cobiePropertyMaps.Settings)
+            {
+                var values = keyVal.Value.Split(new[] { ';' }, StringSplitOptions.RemoveEmptyEntries);
+                var selected = values.FirstOrDefault();
+                if (selected != null)
+                {
+                    var names = selected.Split(new[] { '.' }, StringSplitOptions.RemoveEmptyEntries);
+                    if(names.Length==2)
+                        CobieToIfcPropertyMap.Add(keyVal.Key, new NamedProperty(names[0], names[1]));
+                }
+            }
+            
+        }
+
+        public CoBieLiteToIfcExchanger(XbimModel repository) : base(repository)
+        {
+
+        }
+
+        public bool Convert(FacilityType facility)
+        {
+            var mapping = GetOrCreateMappings<MappingFacilityTypeToIfcBuilding>();
             var building = mapping.GetOrCreateTargetObject(facility.externalID);
             building = mapping.AddMapping(facility, building);
             return true;

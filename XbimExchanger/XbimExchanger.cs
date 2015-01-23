@@ -1,14 +1,36 @@
 ﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Collections.Concurrent;
 
 namespace XbimExchanger
 {
-    public abstract class XbimExchanger<TDataSource, TDataTarget>
+    public class XbimExchanger<TRepository>
     {
-        
+        private readonly ConcurrentDictionary<Type, ConcurrentDictionary<Type, IXbimMappings<TRepository>>> _mappings = new ConcurrentDictionary<Type, ConcurrentDictionary<Type, IXbimMappings<TRepository>>>();
+
+       
+        public XbimExchanger(TRepository repository)
+        {
+            Repository = repository;
+        }
+
+        public TRepository Repository { get; set; }
+
+        public TMapping GetOrCreateMappings<TMapping>() where TMapping : IXbimMappings<TRepository>, new()
+        {
+            var mappings = new TMapping {Exchanger = this};
+            ConcurrentDictionary<Type, IXbimMappings<TRepository>> toMappings;
+            if (_mappings.TryGetValue(mappings.MapFromType, out toMappings))
+            {
+                IXbimMappings<TRepository> imappings;
+                if (toMappings.TryGetValue(mappings.MapToType, out imappings))
+                    return (TMapping)imappings;
+                toMappings.TryAdd(mappings.MapToType, mappings);
+                return mappings;
+            }
+            toMappings = new ConcurrentDictionary<Type, IXbimMappings<TRepository>>();
+            toMappings.TryAdd(mappings.MapToType, mappings);
+            _mappings.TryAdd(mappings.MapFromType, toMappings);
+            return mappings;
+        }
     }
 }

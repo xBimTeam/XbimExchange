@@ -9,6 +9,7 @@ using XbimExchanger.COBieLiteToIfc;
 namespace Tests
 {
     [DeploymentItem(@"TestFiles\")]
+    [DeploymentItem(@"COBieAttributes.config\")]
     [TestClass]
     public class ConversionTests
     {
@@ -22,8 +23,8 @@ namespace Tests
             {
                 using (var txn = model.BeginTransaction("Convert from COBieLite"))
                 {
-                    var exchanger = new CoBieLiteToIfcExchanger();
-                    exchanger.Convert(model, facility);
+                    var exchanger = new CoBieLiteToIfcExchanger(model);
+                    exchanger.Convert(facility);
                     txn.Commit();
                 }
                 model.SaveAs(@"C:\Users\Steve\Source\Repos\ConvertedFromCOBieLite.ifc", XbimStorageType.IFC);
