@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using Xbim.COBieLite;
 using Xbim.XbimExtensions.Interfaces;
 
-namespace XbimExchanger.IfcHelpers
+namespace XbimExchanger.COBieLiteToIfc
 {
     public abstract class COBieLiteIfcMappings<TFromKey, TFromObject, TToObject> : IfcMappings<FacilityType, TFromKey, TFromObject, TToObject> where TToObject : IPersistIfcEntity, new()
     {
