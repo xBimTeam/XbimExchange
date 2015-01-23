@@ -15,7 +15,7 @@ namespace XbimExchanger.COBieLiteToIfc
         {
             var mapper = new XbimMappingsCollection<XbimModel>(model);
             var mapping = mapper.GetOrCreateMappings<MappingFacilityTypeToIfcBuilding>();
-            var building = mapping.GetOrCreate(facility.externalID);
+            var building = mapping.GetOrCreateTargetObject(facility.externalID);
             building = mapping.AddMapping(facility, building);
             return true;
         }

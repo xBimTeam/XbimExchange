@@ -10,14 +10,14 @@ using Xbim.IO;
 
 namespace XbimExchanger.COBieLiteToIfc
 {
-    class MappingProjectTypeToIfcProject : XbimIfcMappings<string, ProjectType, IfcProject>
+    class MappingSiteTypeToIfcSite : XbimIfcMappings<string, SiteType, IfcSite>
     {
 
-        protected override IfcProject Mapping(ProjectType @from, IfcProject to)
+        protected override IfcSite Mapping(SiteType source, IfcSite target)
         {
-            to.Name = from.ProjectName;
-            to.Description = from.ProjectDescription;
-            return to;
+            target.Name = source.SiteName;
+            target.Description = source.SiteDescription;
+            return target;
         }
     }
 }
