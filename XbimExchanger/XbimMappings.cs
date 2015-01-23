@@ -4,17 +4,6 @@ using System.Collections.Generic;
 
 namespace XbimExchanger
 {
-    public interface IXbimMappings<TRepository>
-    {
-
-        Type MapFromType { get; }
-        Type MapToType { get; }
-
-        Type MapKeyType { get; }
-
-        XbimExchanger<TRepository> Exchanger { get; set; }
-    }
-
     /// <summary>
     /// Abstract class for mapping between different object models and schemas
     /// </summary>
@@ -22,14 +11,11 @@ namespace XbimExchanger
     /// <typeparam name="TSourceObject">Type of the object to map from</typeparam>
     /// <typeparam name="TTargetObject">Type of the object to map to</typeparam>
     /// <typeparam name="TRepository">The repository that holds new objects</typeparam>
-    public abstract class XbimMappings<TRepository,TSourceKey, TSourceObject, TTargetObject> : IXbimMappings<TRepository> where TTargetObject : new()
+    public abstract class XbimMappings<TSourceRepository, TTargetRepository, TSourceKey, TSourceObject, TTargetObject> : IXbimMappings<TSourceRepository, TTargetRepository> where TTargetObject : new()
     {
-
-
-        
         protected ConcurrentDictionary<TSourceKey, TTargetObject> Results = new ConcurrentDictionary<TSourceKey, TTargetObject>();
 
-        protected XbimMappings(XbimExchanger<TRepository> exchanger)
+        protected XbimMappings(XbimExchanger<TSourceRepository, TTargetRepository> exchanger)
         {    
             Exchanger = exchanger;     
         }
@@ -86,15 +72,9 @@ namespace XbimExchanger
         /// <returns>Returns the object which has been added to the mapping</returns>
         public TTargetObject AddMapping(TSourceObject source, TTargetObject target)
         {
-           // BeforeMapping();
             TTargetObject res = Mapping(source, target); 
-           // AfterMapping();
             return res;
         }
-        /// <summary>
-        /// Called before any mapping operation is performed
-        /// </summary>
-        protected virtual void BeforeMapping() { }
 
         /// <summary>
         /// Overrident in the concrete class to perform the actual mapping
@@ -103,10 +83,6 @@ namespace XbimExchanger
         /// <param name="target"></param>
         /// <returns>the mapped object</returns>
         protected abstract TTargetObject Mapping(TSourceObject source, TTargetObject  target );
-        /// <summary>
-        /// Called after any mapping has been performed
-        /// </summary>
-        protected virtual void AfterMapping() { }
 
         public Type MapFromType
         {
@@ -123,6 +99,37 @@ namespace XbimExchanger
             get { return typeof(TSourceKey); }
         }
 
-        public XbimExchanger<TRepository> Exchanger { get; set; }
+        public XbimExchanger<TSourceRepository, TTargetRepository> Exchanger { get; set; }
+
+  
+
+        IDictionary<object, object> IXbimMappings<TSourceRepository, TTargetRepository>.Mappings
+        {
+            get { return Results as IDictionary<object, object>; }
+        }
+
+        object IXbimMappings<TSourceRepository, TTargetRepository>.CreateTargetObject()
+        {
+            return CreateTargetObject();
+        }
+
+        bool IXbimMappings<TSourceRepository, TTargetRepository>.GetTargetObject(object key, out object targetObject)
+        {
+            targetObject = default(TTargetObject);
+            TTargetObject target = (TTargetObject)targetObject;
+            var result =  GetTargetObject((TSourceKey)key, out target);
+            targetObject = target;
+            return result;
+        }
+
+        object IXbimMappings<TSourceRepository, TTargetRepository>.GetOrCreateTargetObject(object key)
+        {
+            return GetOrCreateTargetObject((TSourceKey)key);
+        }
+
+        object IXbimMappings<TSourceRepository, TTargetRepository>.AddMapping(object source, object target)
+        {
+            return AddMapping((TSourceObject)source, (TTargetObject)target);
+        }
     }
 }

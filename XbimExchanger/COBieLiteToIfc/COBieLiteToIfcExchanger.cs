@@ -8,7 +8,7 @@ using Xbim.IO;
 
 namespace XbimExchanger.COBieLiteToIfc
 {
-    public class CoBieLiteToIfcExchanger : XbimExchanger<XbimModel>
+    public class CoBieLiteToIfcExchanger : XbimExchanger<FacilityType, XbimModel>
     {
         public struct NamedProperty
         {
@@ -44,16 +44,24 @@ namespace XbimExchanger.COBieLiteToIfc
             
         }
 
-        public CoBieLiteToIfcExchanger(XbimModel repository) : base(repository)
+        public CoBieLiteToIfcExchanger(FacilityType facility, XbimModel xbimModel) : base(facility, xbimModel)
         {
 
         }
 
-        public IfcBuilding Convert(FacilityType facility)
+
+        public override XbimModel Convert()
+        {
+            ConvertBuilding();
+            return TargetRepository;
+        }
+
+
+        public IfcBuilding ConvertBuilding()
         {
             var mapping = GetOrCreateMappings<MappingFacilityTypeToIfcBuilding>();
-            var building = mapping.GetOrCreateTargetObject(facility.externalID);
-            return  mapping.AddMapping(facility, building);
+            var building = mapping.GetOrCreateTargetObject(SourceRepository.externalID);
+            return  mapping.AddMapping(SourceRepository, building);
             
         }
 

@@ -4,6 +4,7 @@ using System.IO;
 using Xbim.COBieLite;
 using Xbim.IO;
 using Xbim.XbimExtensions.Interfaces;
+using XbimExchanger;
 using XbimExchanger.COBieLiteToIfc;
 
 namespace Tests
@@ -23,8 +24,8 @@ namespace Tests
             {
                 using (var txn = model.BeginTransaction("Convert from COBieLite"))
                 {
-                    var exchanger = new CoBieLiteToIfcExchanger(model);
-                    exchanger.Convert(facility);
+                    var exchanger = new CoBieLiteToIfcExchanger(facility, model);
+                    exchanger.Convert();
                     txn.Commit();
                 }
                 model.SaveAs(@"C:\Users\Steve\Source\Repos\ConvertedFromCOBieLite.ifc", XbimStorageType.IFC);
