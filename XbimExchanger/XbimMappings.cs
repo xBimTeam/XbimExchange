@@ -34,7 +34,7 @@ namespace XbimExchanger
             MappingsCollection = mappingsCollection;     
         }
 
-        internal XbimMappings()
+        protected XbimMappings()
         {
             
         }

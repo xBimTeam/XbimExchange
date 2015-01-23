@@ -1,11 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Xbim.COBieLite;
-using Xbim.Ifc2x3.Kernel;
+﻿using Xbim.COBieLite;
 using Xbim.Ifc2x3.ProductExtension;
 using Xbim.IO;
 
@@ -16,8 +9,13 @@ namespace XbimExchanger.COBieLiteToIfc
         public MappingFacilityTypeToIfcBuilding(XbimMappingsCollection<XbimModel> mappingsCollection)
             : base(mappingsCollection)
         {
-
         }
+
+        public MappingFacilityTypeToIfcBuilding()
+        {
+            
+        }
+
 
         protected override IfcBuilding CreateToObject(string key)
         {          
