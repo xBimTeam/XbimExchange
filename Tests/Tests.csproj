@@ -59,9 +59,17 @@
       <Project>{2CD02B40-A823-4959-874B-E212569F8080}</Project>
       <Name>Xbim.DPoW.Interfaces</Name>
     </ProjectReference>
+    <ProjectReference Include="..\XbimExchanger\XbimExchanger.csproj">
+      <Project>{5540768D-8ACD-4CC0-B3CD-1951DEF54C20}</Project>
+      <Name>XbimExchanger</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <None Include="App.config" />
     <None Include="packages.config" />
+    <None Include="TestFiles\COBieLite.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Include="TestFiles\NewtownHighSchool.dpow">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>

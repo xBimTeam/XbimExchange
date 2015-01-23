@@ -63,8 +63,13 @@
   <ItemGroup>
     <Compile Include="IXbimMappings.cs" />
     <Compile Include="XbimMapper.cs" />
+    <Compile Include="COBieLiteToIfc\COBieLiteToIfcExchanger.cs" />
+    <Compile Include="COBieLiteToIfc\MappingFacilityTypeToIfcBuilding.cs" />
+    <Compile Include="COBieLiteToIfc\MappingProjectTypeToIfcProject.cs" />
+    <Compile Include="XbimExchanger.cs" />
     <Compile Include="XbimMappings.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="XbimMappingsCollection.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
