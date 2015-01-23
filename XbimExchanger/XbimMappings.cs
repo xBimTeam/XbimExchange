@@ -47,11 +47,10 @@ namespace XbimExchanger
             get { return Results; }
         }
 
-       
+
         /// <summary>
         /// Creates an instance of toObject, override for special creation situations
         /// </summary>
-        /// <param name="key"></param>
         /// <returns></returns>
         public virtual TTargetObject CreateTargetObject()
         {

@@ -2,8 +2,6 @@
 using System.Collections.Generic;
 using System.Configuration;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Xbim.COBieLite;
 using Xbim.Ifc2x3.ProductExtension;
 using Xbim.IO;
@@ -51,12 +49,14 @@ namespace XbimExchanger.COBieLiteToIfc
 
         }
 
-        public bool Convert(FacilityType facility)
+        public IfcBuilding Convert(FacilityType facility)
         {
             var mapping = GetOrCreateMappings<MappingFacilityTypeToIfcBuilding>();
             var building = mapping.GetOrCreateTargetObject(facility.externalID);
-            building = mapping.AddMapping(facility, building);
-            return true;
+            return  mapping.AddMapping(facility, building);
+            
         }
+
+
     }
 }
