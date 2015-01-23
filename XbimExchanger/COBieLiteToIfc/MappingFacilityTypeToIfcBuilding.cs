@@ -1,34 +1,48 @@
 ﻿using Xbim.COBieLite;
 using Xbim.Ifc2x3.ProductExtension;
-using Xbim.IO;
+using Xbim.Ifc2x3.Extensions;
 
 namespace XbimExchanger.COBieLiteToIfc
 {
-    class MappingFacilityTypeToIfcBuilding : XbimMappings<XbimModel, string, FacilityType, IfcBuilding>
+    class MappingFacilityTypeToIfcBuilding : XbimIfcMappings<string, FacilityType, IfcBuilding>
     {
-        public MappingFacilityTypeToIfcBuilding(XbimMappingsCollection<XbimModel> mappingsCollection)
-            : base(mappingsCollection)
-        {
-        }
 
-        public MappingFacilityTypeToIfcBuilding()
+        protected override IfcBuilding Mapping(FacilityType facility, IfcBuilding ifcBuilding)
         {
+            ifcBuilding.Name = facility.FacilityName;
+            ifcBuilding.Description = facility.FacilityDescription;
+
+            var projectMapping = Exchanger.GetOrCreateMappings<MappingProjectTypeToIfcProject>();
+            //COBie does nor require a project but Ifc does
+            var ifcProject = facility.ProjectAssignment != null ? projectMapping.CreateTargetObject() : projectMapping.GetOrCreateTargetObject(facility.externalID);
+            projectMapping.AddMapping(facility.ProjectAssignment, ifcProject);
+            //add the relationship between the site and the building if a site exists
+            if (facility.SiteAssignment != null)
+            {
+                var siteMapping = Exchanger.GetOrCreateMappings<MappingSiteTypeToIfcSite>();
+                var ifcSite = siteMapping.AddMapping(facility.SiteAssignment,
+                    siteMapping.GetOrCreateTargetObject(facility.SiteAssignment.externalID));
+                //add the relationship between the site and the project and the building
+                ifcProject.AddSite(ifcSite);
+                ifcSite.AddBuilding(ifcBuilding);
+            }
+            else //relate the building to the project
+                ifcProject.AddBuilding(ifcBuilding);
+
+            //write out the floors if we have any
+            if (facility.Floors != null)
+            {
+                var floorMapping = Exchanger.GetOrCreateMappings<MappingFloorTypeToIfcBuildingStorey>();
+                foreach (var floor in facility.Floors)
+                {
+                    var ifcFloor = floorMapping.AddMapping(floor, floorMapping.GetOrCreateTargetObject(floor.externalID));
+                    ifcBuilding.AddToSpatialDecomposition(ifcFloor);
+                }
+            }
+
             
-        }
 
-
-        protected override IfcBuilding CreateToObject(string key)
-        {          
-            return MappingsCollection.Repository.Instances.New<IfcBuilding>(); 
-        }
-
-        protected override IfcBuilding Mapping(FacilityType @from, IfcBuilding to)
-        {
-            to.Name = from.FacilityName;
-            to.Description = from.FacilityDescription;
-            var mappings = MappingsCollection.GetOrCreateMappings<MappingProjectTypeToIfcProject>();
-            mappings.AddMapping(from.ProjectAssignment, mappings.GetOrCreate(from.externalID));
-            return to;
+            return ifcBuilding;
         }
     }
 }

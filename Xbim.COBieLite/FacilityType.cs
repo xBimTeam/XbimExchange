@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System.Collections;
+using System.Collections.Generic;
 using System.Linq;
 using System.Xml;
 using System.Xml.Serialization;
@@ -42,7 +43,7 @@ namespace Xbim.COBieLite
                 var ifcBuildingStories = storeys as IList<IfcBuildingStorey> ?? storeys.ToList();
                 if (ifcBuildingStories.Any())
                 {
-                    Floors = new FloorCollectionType {Floor = new FloorTypeBase[ifcBuildingStories.Count]};
+                    Floors = new FloorCollectionType {Floor = new FloorType[ifcBuildingStories.Count]};
                     for (int i = 0; i < ifcBuildingStories.Count; i++)
                     {
                         Floors.Floor[i] = new FloorType(ifcBuildingStories[i], helper);
@@ -175,5 +176,8 @@ namespace Xbim.COBieLite
             if ((FacilityDefaultCurrencyUnitSpecified = helper.HasCurrencyUnit) == true)
                 facilityDefaultCurrencyUnitField = helper.ModelCurrencyUnit;
         }
+
+       
+
     }
 }
