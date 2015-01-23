@@ -8,6 +8,7 @@ namespace XbimExchanger.COBieLiteToIfc
 
         protected override IfcSite Mapping(SiteType source, IfcSite target)
         {
+           
             target.Name = source.SiteName;
             target.Description = source.SiteDescription;
             return target;
