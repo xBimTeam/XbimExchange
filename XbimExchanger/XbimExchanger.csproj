@@ -61,6 +61,8 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="IXbimMappings.cs" />
+    <Compile Include="XbimMapper.cs" />
     <Compile Include="XbimMappings.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

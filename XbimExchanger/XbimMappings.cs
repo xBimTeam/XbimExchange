@@ -9,7 +9,7 @@ namespace XbimExchanger
     /// <typeparam name="TFromKey">Type of the key in the From object to link mappings</typeparam>
     /// <typeparam name="TFromObject">Type of the object to map from</typeparam>
     /// <typeparam name="TToObject">Type of the object to map to</typeparam>
-    public abstract class XbimMappings<TFromKey, TFromObject, TToObject> where TToObject : new()
+    public abstract class XbimMappings<TFromKey, TFromObject, TToObject> : IXbimMappings where TToObject : new() 
     {
         protected ConcurrentDictionary<TFromKey, TToObject> Results = new ConcurrentDictionary<TFromKey, TToObject>();
 
@@ -22,13 +22,24 @@ namespace XbimExchanger
         }
 
         /// <summary>
+        /// Function used to create new object. Override this in your implementation
+        /// if you need to use other than default parameterless constructor. Typically if
+        /// you need to register object to the model like model.Instances.New&lt;IfcBuilding&gt;()
+        /// </summary>
+        /// <returns>New instance of the TToObject</returns>
+        protected virtual TToObject Create()
+        { 
+            return new TToObject();
+        }
+
+        /// <summary>
         /// Create an unitialised ToObject with the specified key
         /// </summary>
         /// <param name="key"></param>
         /// <returns></returns>
         public bool Create(TFromKey key)
         {
-            var toObject = new TToObject();
+            var toObject = Create();
             return Results.TryAdd(key, toObject);
         }
         /// <summary>
@@ -50,7 +61,16 @@ namespace XbimExchanger
         /// <returns></returns>
         public TToObject GetOrCreate(TFromKey key)
         {
-            return Results.GetOrAdd(key, new TToObject());
+            TToObject result;
+            if (Results.TryGetValue(key, out result))
+                return result;
+            else 
+            {
+                result = Create();
+                if (Results.TryAdd(key, result))
+                    return result;
+            }
+            throw new System.Exception("It was not possible to get or create new object.");
         }
 
         /// <summary>
@@ -70,6 +90,7 @@ namespace XbimExchanger
         /// Called before any mapping operation is performed
         /// </summary>
         protected virtual void BeforeMapping() { }
+
         /// <summary>
         /// Overrident in the concrete class to perform the actual mapping
         /// </summary>
@@ -81,5 +102,32 @@ namespace XbimExchanger
         /// </summary>
         protected virtual void AfterMapping() { }
 
+
+        IDictionary<object, object> IXbimMappings.Mappings
+        {
+            get { return Results as IDictionary<object, object>; }
+        }
+
+        bool IXbimMappings.Create(object key)
+        {
+            return Create((TFromKey)key);
+        }
+
+        bool IXbimMappings.Get(object key, out object toObject)
+        {
+            toObject = null;
+            var o = (TToObject)toObject;
+            return Get((TFromKey)key, out o);
+        }
+
+        object IXbimMappings.GetOrCreate(object key)
+        {
+            return GetOrCreate((TFromKey)key);
+        }
+
+        object IXbimMappings.AddMapping(object from, object to)
+        {
+            return AddMapping((TFromObject)from, (TToObject)to);
+        }
     }
 }
