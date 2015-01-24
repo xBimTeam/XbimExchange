@@ -8,8 +8,7 @@ using Xbim.Ifc2x3.ProductExtension;
 
 namespace XbimExchanger.COBieLiteToIfc
 {
-    //To STEVE: This is a placeholder for the class you haven't submitted to source controll. It is not full implementation
-    //and should be replaced by your existing implementation completely.
+    
     public class MappingFloorTypeToIfcBuildingStorey : COBieLiteIfcMappings<string, FloorType, IfcBuildingStorey>
     {
         protected override IfcBuildingStorey Mapping(FloorType source, IfcBuildingStorey target)
