@@ -38,5 +38,20 @@ namespace XbimExchanger
         }
 
         public abstract TTargetRepository Convert();
+
+        private int _strId = 0;
+        public virtual string GetStringIdentifier() {
+            return (_strId++).ToString();
+        }
+
+        private int _intId = 0;
+        public virtual int GetIntIdentifier()
+        {
+            return _intId++;
+        }
+        public virtual Guid GetGuidIdentifier()
+        {
+            return Guid.NewGuid();
+        }
     }
 }

@@ -80,6 +80,10 @@
     <Compile Include="COBieLiteToIfc\MappingProjectTypeToIfcProject.cs" />
     <Compile Include="COBieLiteToIfc\MappingSiteTypeToIfcSite.cs" />
     <Compile Include="COBieLiteToIfc\MappingSpaceTypeToIfcSpace.cs" />
+    <Compile Include="DPoWToCOBieLite\DPoWToCOBieLiteExchanger.cs" />
+    <Compile Include="DPoWToCOBieLite\DPoWToCOBieLiteMapping.cs" />
+    <Compile Include="DPoWToCOBieLite\MappingContactToContact.cs" />
+    <Compile Include="DPoWToCOBieLite\MappingPlanOfWorkToFacilityType.cs" />
     <Compile Include="IfcHelpers\IfcMappings.cs" />
     <Compile Include="IXbimMappings.cs" />
     <Compile Include="XbimMappings.cs" />
@@ -97,6 +101,10 @@
     <ProjectReference Include="..\Xbim.COBieLite\Xbim.COBieLite.csproj">
       <Project>{E550C721-50AF-4AD0-998E-0C61F305EEC8}</Project>
       <Name>Xbim.COBieLite</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Xbim.DPoW.Interfaces\Xbim.DPoW.Interfaces.csproj">
+      <Project>{2cd02b40-a823-4959-874b-e212569f8080}</Project>
+      <Name>Xbim.DPoW.Interfaces</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
