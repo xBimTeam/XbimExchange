@@ -28,7 +28,7 @@ namespace Tests
                     exchanger.Convert();
                     txn.Commit();
                 }
-                model.SaveAs(@"C:\Users\Steve\Source\Repos\ConvertedFromCOBieLite.ifc", XbimStorageType.IFC);
+                model.SaveAs(@"ConvertedFromCOBieLite.ifc", XbimStorageType.IFC);
             }
 
         }

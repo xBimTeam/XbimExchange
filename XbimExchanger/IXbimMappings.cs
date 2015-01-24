@@ -16,12 +16,12 @@ namespace XbimExchanger
 
         XbimExchanger<TSourceRepository, TTargetRepository> Exchanger { get; set; }
 
-        public IDictionary<object, object> Mappings { get; }
+        IDictionary<object, object> Mappings { get; }
 
-        public object CreateTargetObject();
-        public bool GetTargetObject(object key, out object targetObject);
-        public object GetOrCreateTargetObject(object key);
-        public object AddMapping(object source, object target);
+        object CreateTargetObject();
+        bool GetTargetObject(object key, out object targetObject);
+        object GetOrCreateTargetObject(object key);
+        object AddMapping(object source, object target);
 
     }
 }

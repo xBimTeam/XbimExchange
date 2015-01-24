@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Xbim.COBieLite;
 using Xbim.XbimExtensions.Interfaces;
+using XbimExchanger.IfcHelpers;
 
 namespace XbimExchanger.COBieLiteToIfc
 {

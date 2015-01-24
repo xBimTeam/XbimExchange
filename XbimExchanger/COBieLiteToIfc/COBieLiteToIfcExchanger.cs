@@ -14,7 +14,7 @@ using Xbim.XbimExtensions.Interfaces;
 
 namespace XbimExchanger.COBieLiteToIfc
 {
-    public class CoBieLiteToIfcExchanger : XbimExchanger<XbimModel>
+    public class CoBieLiteToIfcExchanger : XbimExchanger<FacilityType, XbimModel>
     {
         public struct NamedProperty
         {
@@ -63,11 +63,11 @@ namespace XbimExchanger.COBieLiteToIfc
                     bool isQuantity = namedProperty.PropertySetName.StartsWith("qto", true,CultureInfo.InvariantCulture);
                     if (isQuantity)
                     {
-                        var psetDef = Repository.Instances.New<IfcElementQuantity>();
+                        var psetDef = TargetRepository.Instances.New<IfcElementQuantity>();
                     }
                     else
                     {
-                        var psetDef = Repository.Instances.New<IfcPropertySet>();
+                        var psetDef = TargetRepository.Instances.New<IfcPropertySet>();
                     }
 
                 }
@@ -75,14 +75,14 @@ namespace XbimExchanger.COBieLiteToIfc
             throw new ArgumentException("Incorrect property map", "theProperty");
         }
 
-        public CoBieLiteToIfcExchanger(XbimModel repository) : base(repository)
+        public CoBieLiteToIfcExchanger(FacilityType facility, XbimModel repository) : base(facility, repository)
         {
             LoadPropertySetDefinitions();
         }
 
         private void LoadPropertySetDefinitions()
         {
-            var relProps = Repository.Instances.OfType<IfcRelDefinesByProperties>().ToList();
+            var relProps = TargetRepository.Instances.OfType<IfcRelDefinesByProperties>().ToList();
             foreach (var relProp in relProps)
             {
                 foreach (var ifcObject in relProp.RelatedObjects)
@@ -105,6 +105,10 @@ namespace XbimExchanger.COBieLiteToIfc
             
         }
 
-
+        public override XbimModel Convert()
+        {
+            Convert(SourceRepository);
+            return TargetRepository;
+        }
     }
 }
