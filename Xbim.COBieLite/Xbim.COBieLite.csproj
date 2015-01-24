@@ -114,6 +114,7 @@
     <Compile Include="XbimAttributedObject.cs" />
     <Compile Include="XbimCOBieLiteToIfcConverter.cs" />
     <Compile Include="XbimCoBieLiteXmlWriter.cs" />
+    <Compile Include="XbimCOBieValueHelper.cs" />
     <Compile Include="ZoneType.cs" />
   </ItemGroup>
   <ItemGroup>
