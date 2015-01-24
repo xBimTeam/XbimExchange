@@ -2,9 +2,12 @@
 using Newtonsoft.Json;
 using System.IO;
 using Xbim.COBieLite;
+using Xbim.DPoW.Interfaces;
 using Xbim.IO;
 using Xbim.XbimExtensions.Interfaces;
+using XbimExchanger;
 using XbimExchanger.COBieLiteToIfc;
+using XbimExchanger.DPoWToCOBieLite;
 
 namespace Tests
 {
@@ -23,14 +26,25 @@ namespace Tests
             {
                 using (var txn = model.BeginTransaction("Convert from COBieLite"))
                 {
-                    var exchanger = new CoBieLiteToIfcExchanger(model);
-                    exchanger.Convert(facility);
+                    var exchanger = new CoBieLiteToIfcExchanger(facility, model);
+                    exchanger.Convert();
                     txn.Commit();
                 }
-                model.SaveAs(@"C:\Users\Steve\Source\Repos\ConvertedFromCOBieLite.ifc", XbimStorageType.IFC);
+                model.SaveAs(@"ConvertedFromCOBieLite.ifc", XbimStorageType.IFC);
             }
 
         }
 
+        [TestMethod]
+        public void ConvertDPoWToCOBieLite()
+        {
+            var dpow = PlanOfWork.Open("NewtownHighSchool.dpow");
+            var facility = new FacilityType();
+            var exchanger = new DPoWToCOBieLiteExchanger(dpow, facility);
+            exchanger.Convert();
+
+        }
+
     }
+
 }

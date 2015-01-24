@@ -1,9 +1,10 @@
 ﻿using Xbim.COBieLite;
 using Xbim.Ifc2x3.ProductExtension;
+using XbimExchanger.IfcHelpers;
 
 namespace XbimExchanger.COBieLiteToIfc
 {
-    class MappingSpaceTypeToIfcSpace : XbimIfcMappings<string, SpaceType, IfcSpace>
+    class MappingSpaceTypeToIfcSpace : COBieLiteIfcMappings<string, SpaceType, IfcSpace>
     {
         protected override IfcSpace Mapping(SpaceType source, IfcSpace target)
         {
