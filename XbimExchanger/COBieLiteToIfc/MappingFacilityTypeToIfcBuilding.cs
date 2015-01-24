@@ -1,11 +1,10 @@
 ﻿using Xbim.COBieLite;
 using Xbim.Ifc2x3.ProductExtension;
 using Xbim.Ifc2x3.Extensions;
-using XbimExchanger.IfcHelpers;
 
 namespace XbimExchanger.COBieLiteToIfc
 {
-    class MappingFacilityTypeToIfcBuilding : COBieLiteIfcMappings<string, FacilityType, IfcBuilding>
+    class MappingFacilityTypeToIfcBuilding : CoBieLiteIfcMappings<string, FacilityType, IfcBuilding>
     {
 
         protected override IfcBuilding Mapping(FacilityType facility, IfcBuilding ifcBuilding)

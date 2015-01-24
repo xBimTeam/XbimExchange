@@ -4,7 +4,7 @@ using XbimExchanger.IfcHelpers;
 
 namespace XbimExchanger.COBieLiteToIfc
 {
-    class MappingSpaceTypeToIfcSpace : COBieLiteIfcMappings<string, SpaceType, IfcSpace>
+    class MappingSpaceTypeToIfcSpace : CoBieLiteIfcMappings<string, SpaceType, IfcSpace>
     {
         protected override IfcSpace Mapping(SpaceType source, IfcSpace target)
         {

@@ -1,15 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Linq;
 using Xbim.COBieLite;
 using Xbim.Ifc2x3.ProductExtension;
 
 namespace XbimExchanger.COBieLiteToIfc
 {
     
-    public class MappingFloorTypeToIfcBuildingStorey : COBieLiteIfcMappings<string, FloorType, IfcBuildingStorey>
+    public class MappingFloorTypeToIfcBuildingStorey : CoBieLiteIfcMappings<string, FloorType, IfcBuildingStorey>
     {
         protected override IfcBuildingStorey Mapping(FloorType source, IfcBuildingStorey target)
         {

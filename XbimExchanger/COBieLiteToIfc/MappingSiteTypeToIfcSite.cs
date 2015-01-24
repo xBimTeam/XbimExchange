@@ -1,10 +1,9 @@
 ﻿using Xbim.COBieLite;
 using Xbim.Ifc2x3.ProductExtension;
-using XbimExchanger.IfcHelpers;
 
 namespace XbimExchanger.COBieLiteToIfc
 {
-    class MappingSiteTypeToIfcSite : COBieLiteIfcMappings<string, SiteType, IfcSite>
+    class MappingSiteTypeToIfcSite : CoBieLiteIfcMappings<string, SiteType, IfcSite>
     {
 
         protected override IfcSite Mapping(SiteType source, IfcSite target)

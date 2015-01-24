@@ -5,12 +5,10 @@ using System.Globalization;
 using System.Linq;
 using System.Reflection;
 using Xbim.COBieLite;
-using Xbim.COBieLite.Properties;
 using Xbim.Ifc2x3.Kernel;
 using Xbim.Ifc2x3.ProductExtension;
 using Xbim.Ifc2x3.PropertyResource;
 using Xbim.IO;
-using Xbim.XbimExtensions.Interfaces;
 
 namespace XbimExchanger.COBieLiteToIfc
 {
