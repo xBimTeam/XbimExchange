@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Concurrent;
+using System.Globalization;
 
 namespace XbimExchanger
 {
@@ -7,15 +8,15 @@ namespace XbimExchanger
     {
         private readonly ConcurrentDictionary<Type, ConcurrentDictionary<Type, IXbimMappings<TSourceRepository, TTargetRepository>>> _mappings = new ConcurrentDictionary<Type, ConcurrentDictionary<Type, IXbimMappings<TSourceRepository, TTargetRepository>>>();
 
-       
-        public XbimExchanger(TSourceRepository source, TTargetRepository target)
+
+        protected XbimExchanger(TSourceRepository source, TTargetRepository target)
         {
             _target = target;
             _source = source;
         }
 
-        private TSourceRepository _source;
-        private TTargetRepository _target;
+        private readonly TSourceRepository _source;
+        private readonly TTargetRepository _target;
         public TTargetRepository TargetRepository { get { return _target; } }
         public TSourceRepository SourceRepository { get { return _source; } }
 
@@ -39,12 +40,12 @@ namespace XbimExchanger
 
         public abstract TTargetRepository Convert();
 
-        private int _strId = 0;
+        private int _strId;
         public virtual string GetStringIdentifier() {
-            return (_strId++).ToString();
+            return (_strId++).ToString(CultureInfo.InvariantCulture);
         }
 
-        private int _intId = 0;
+        private int _intId;
         public virtual int GetIntIdentifier()
         {
             return _intId++;
