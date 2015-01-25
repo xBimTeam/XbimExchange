@@ -82,7 +82,10 @@
     <Compile Include="COBieLiteToIfc\MappingSpaceTypeToIfcSpace.cs" />
     <Compile Include="DPoWToCOBieLite\DPoWToCOBieLiteExchanger.cs" />
     <Compile Include="DPoWToCOBieLite\DPoWToCOBieLiteMapping.cs" />
+    <Compile Include="DPoWToCOBieLite\Extensions.cs" />
     <Compile Include="DPoWToCOBieLite\MappingContactToContact.cs" />
+    <Compile Include="DPoWToCOBieLite\MappingDocumentToDocumentType.cs" />
+    <Compile Include="DPoWToCOBieLite\MappingJobToIssueType.cs" />
     <Compile Include="DPoWToCOBieLite\MappingPlanOfWorkToFacilityType.cs" />
     <Compile Include="IfcHelpers\IfcMappings.cs" />
     <Compile Include="IXbimMappings.cs" />

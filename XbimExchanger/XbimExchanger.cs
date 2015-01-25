@@ -8,6 +8,10 @@ namespace XbimExchanger
     {
         private readonly ConcurrentDictionary<Type, ConcurrentDictionary<Type, IXbimMappings<TSourceRepository, TTargetRepository>>> _mappings = new ConcurrentDictionary<Type, ConcurrentDictionary<Type, IXbimMappings<TSourceRepository, TTargetRepository>>>();
 
+        /// <summary>
+        /// This property can be used by Exchanger to set up a context for all mappings (like a specific stage of project for example).
+        /// </summary>
+        public object Context { get; protected set; }
 
         protected XbimExchanger(TSourceRepository source, TTargetRepository target)
         {

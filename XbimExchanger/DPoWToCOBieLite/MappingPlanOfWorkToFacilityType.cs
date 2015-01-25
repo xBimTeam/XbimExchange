@@ -50,6 +50,101 @@ namespace XbimExchanger.DPoWToCOBieLite
                 target.FacilityDefaultVolumeUnitSpecified = true;
             }
 
+            //convert contacts
+            if (source.Contacts != null)
+            {
+                var mappings = Exchanger.GetOrCreateMappings<MappingContactToContact>();
+                if (target.Contacts == null) target.Contacts = new ContactCollectionType();
+                var tContacts = target.Contacts.Contact != null ? target.Contacts.Contact.ToList() : new List<ContactTypeBase>();
+
+                foreach (var sContact in source.Contacts)
+                {
+                    var key = MappingContactToContact.GetKey(sContact);
+                    var tContact = mappings.GetOrCreateTargetObject(key);
+                    mappings.AddMapping(sContact, tContact);
+                    tContacts.Add(tContact);
+                }
+
+                //assign array back
+                target.Contacts.Contact = tContacts.ToArray();
+            }
+
+            //set attributes for client
+            if (source.Client != null)
+            {
+                target.FacilityAttributes.Add(new []{
+                    new AttributeType()
+                    {
+                        AttributeName = "ProjectClientFamilyName",
+                        AttributeDescription = "Client of this project as defined in DPoW.",
+                        AttributeValue = new AttributeValueType() { Item = new AttributeStringValueType() { StringValue = source.Client.ContactFamilyName} }
+                    },
+                    new AttributeType()
+                    {
+                        AttributeName = "ProjectClientGivenName",
+                        AttributeDescription = "Client of this project as defined in DPoW.",
+                        AttributeValue = new AttributeValueType() { Item = new AttributeStringValueType() { StringValue = source.Client.ContactGivenName} }
+                    },
+                    new AttributeType()
+                    {
+                        AttributeName = "ProjectClientEmail",
+                        AttributeDescription = "Client of this project as defined in DPoW.",
+                        AttributeValue = new AttributeValueType() { Item = new AttributeStringValueType() { StringValue = source.Client.ContactEmail} }
+                    },
+                    new AttributeType()
+                    {
+                        AttributeName = "ProjectClientCompanyName",
+                        AttributeDescription = "Client of this project as defined in DPoW.",
+                        AttributeValue = new AttributeValueType() { Item = new AttributeStringValueType() { StringValue = source.Client.ContactCompanyName} }
+                    },
+                    new AttributeType()
+                    {
+                        AttributeName = "ProjectClientURL",
+                        AttributeDescription = "Client of this project as defined in DPoW.",
+                        AttributeValue = new AttributeValueType() { Item = new AttributeStringValueType() { StringValue = source.Client.ContactURL} }
+                    }
+                });
+            }
+            
+            //convert DPoW objects and related jobs from the specified stage
+            var stage = Exchanger.Context as ProjectStage;
+            if (stage == null) stage = source.Project.CurrentProjectStage;
+            if (stage != null)
+            {
+                if (stage.Jobs != null)
+                {
+                    foreach (var job in stage.Jobs)
+                    {
+                        //create job equivalent 
+                        var jMap = Exchanger.GetOrCreateMappings<MappingJobToIssueType>();
+                        var tIssue = jMap.GetOrCreateTargetObject(MappingJobToIssueType.GetKey(job));
+                        jMap.AddMapping(job, tIssue);
+
+                        //convert related documents and add them to documents of DPoW object
+
+                        foreach (var dObject in job.DPoWObjects)
+                        {
+                            //branch for asset type, assembly type and zones
+                            var zone = dObject as Zone;
+                            if (zone != null)
+                            { 
+                            }
+
+                            var assetType = dObject as AssetType;
+                            if (assetType != null)
+                            { 
+                            }
+
+                            var assemblyType = dObject as Xbim.DPoW.Interfaces.AssemblyType;
+                            if (assemblyType != null)
+                            { 
+                            }
+
+                        }
+                    }
+                }
+            }
+
             return target;
         }
     }
