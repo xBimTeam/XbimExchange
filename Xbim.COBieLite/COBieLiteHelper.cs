@@ -707,6 +707,14 @@ namespace Xbim.COBieLite
 
         }
 
+        public static FacilityType ReadXml(string cobieModelFileName)
+        {
+            var x = new XmlSerializer(typeof(FacilityType));
+            var reader = new XmlTextReader(cobieModelFileName);
+            var reqFacility = (FacilityType)x.Deserialize(reader);
+            reader.Close();
+            return reqFacility;
+        }
        
 
         static public void WriteXml(TextWriter textWriter, FacilityType theFacility)

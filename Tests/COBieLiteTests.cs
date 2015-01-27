@@ -60,6 +60,9 @@ namespace Xbim.Tests.COBie
                         CoBieLiteHelper.WriteXml(writer, facilityType);
                     }
                     CoBieLiteHelper.WriteXml(Console.Out, facilityType);
+
+                    // attempt reading
+                    var fread = CoBieLiteHelper.ReadXml(outName);
                 }
             }
         } 
