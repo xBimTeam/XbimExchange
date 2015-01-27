@@ -37,8 +37,8 @@ namespace Xbim.COBieLite
             AssetLocationDescription = helper.GetCoBieProperty("AssetLocationDescription", ifcElement);
             
             //Attributes
-            AttributeType[] ifcAttributes = helper.GetAttributes(ifcElement);
-            if (ifcAttributes != null && ifcAttributes.Length > 0)
+            var ifcAttributes = helper.GetAttributes(ifcElement);
+            if (ifcAttributes != null && ifcAttributes.Any())
                 AssetAttributes = new AttributeCollectionType { Attribute = ifcAttributes };
             
             //System Assignments

@@ -58,8 +58,8 @@ namespace Xbim.COBieLite
             }
 
             //Attributes
-            AttributeType[] ifcAttributes = helper.GetAttributes(ifcBuildingStorey);
-            if (ifcAttributes != null && ifcAttributes.Length > 0)
+            var ifcAttributes = helper.GetAttributes(ifcBuildingStorey);
+            if (ifcAttributes != null && ifcAttributes.Any())
                 FloorAttributes = new AttributeCollectionType { Attribute = ifcAttributes };
 
             //TODO:

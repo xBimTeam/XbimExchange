@@ -4,6 +4,7 @@ using System.IO;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Xbim.COBieLite;
 using Xbim.IO;
+using System.Xml.Serialization;
 
 namespace Xbim.Tests.COBie
 {
@@ -12,7 +13,26 @@ namespace Xbim.Tests.COBie
     [DeploymentItem(@"COBieAttributes.config")]
     public class CoBieLiteTests
     {
-       
+        [TestMethod]
+        public void CanSerialise()
+        {
+            try
+            {
+                var x = new XmlSerializer(typeof(ContactCollectionType));
+            }
+            catch (Exception ex)
+            {
+                while (ex.InnerException != null)
+                {
+                    Debug.WriteLine(ex.Message);
+                    ex = ex.InnerException;
+                }
+                Debug.WriteLine(ex.Message);
+                throw ex;
+            }
+        }
+
+
         [TestMethod]
         public void ConvertCoBieLiteToJson()
         {

@@ -52,8 +52,8 @@ namespace Xbim.COBieLite
 
             }
             //Attributes
-            AttributeType[] ifcAttributes = helper.GetAttributes(ifcBuilding);
-            if (ifcAttributes != null && ifcAttributes.Length > 0)
+            var ifcAttributes = helper.GetAttributes(ifcBuilding);
+            if (ifcAttributes != null && ifcAttributes.Any())
                 FacilityAttributes = new AttributeCollectionType { Attribute = ifcAttributes };
            
             //Zones

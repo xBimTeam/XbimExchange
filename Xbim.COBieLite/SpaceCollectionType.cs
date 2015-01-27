@@ -13,12 +13,18 @@ namespace Xbim.COBieLite
     {
         public IEnumerator<SpaceType> GetEnumerator()
         {
-            return this.Space.OfType<SpaceType>().GetEnumerator();
+            return this.Space.GetEnumerator();
         }
 
         IEnumerator IEnumerable.GetEnumerator()
         {
-            return this.Space.OfType<SpaceType>().GetEnumerator();
+            return this.Space.GetEnumerator();
         }
+
+        public void Add(SpaceType space)
+        {
+            Space.Add(space);
+        }
+
     }
 }
