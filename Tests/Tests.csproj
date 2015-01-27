@@ -17,7 +17,7 @@
     <IsCodedUITest>False</IsCodedUITest>
     <TestProjectType>UnitTest</TestProjectType>
     <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\</SolutionDir>
-    <NuGetPackageImportStamp>4d84e34b</NuGetPackageImportStamp>
+    <NuGetPackageImportStamp>f28cd7d2</NuGetPackageImportStamp>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -59,9 +59,17 @@
       <Project>{2CD02B40-A823-4959-874B-E212569F8080}</Project>
       <Name>Xbim.DPoW.Interfaces</Name>
     </ProjectReference>
+    <ProjectReference Include="..\XbimExchanger\XbimExchanger.csproj">
+      <Project>{5540768D-8ACD-4CC0-B3CD-1951DEF54C20}</Project>
+      <Name>XbimExchanger</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <None Include="App.config" />
     <None Include="packages.config" />
+    <None Include="TestFiles\COBieLite.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Include="TestFiles\NewtownHighSchool.dpow">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
@@ -95,6 +103,9 @@
     <Reference Include="Xbim.Common">
       <HintPath>..\packages\Xbim.Essentials.3.0.4-prerelease\lib\net45\Xbim.Common.dll</HintPath>
     </Reference>
+    <Reference Include="Xbim.Geometry.Engine.Interop">
+      <HintPath>..\packages\Xbim.Geometry.3.0.3-Prerelease\lib\net45\Xbim.Geometry.Engine.Interop.dll</HintPath>
+    </Reference>
     <Reference Include="Xbim.Ifc.Extensions">
       <HintPath>..\packages\Xbim.Essentials.3.0.4-prerelease\lib\net45\Xbim.Ifc.Extensions.dll</HintPath>
     </Reference>
@@ -103,6 +114,9 @@
     </Reference>
     <Reference Include="Xbim.IO">
       <HintPath>..\packages\Xbim.Essentials.3.0.4-prerelease\lib\net45\Xbim.IO.dll</HintPath>
+    </Reference>
+    <Reference Include="Xbim.ModelGeometry.Scene">
+      <HintPath>..\packages\Xbim.Geometry.3.0.3-Prerelease\lib\net45\Xbim.ModelGeometry.Scene.dll</HintPath>
     </Reference>
   </ItemGroup>
   <Choose>
@@ -125,6 +139,13 @@
   </Choose>
   <Import Project="$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets" Condition="Exists('$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets')" />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <Import Project="..\packages\Xbim.Geometry.3.0.3-Prerelease\build\net45\Xbim.Geometry.targets" Condition="Exists('..\packages\Xbim.Geometry.3.0.3-Prerelease\build\net45\Xbim.Geometry.targets')" />
+  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
+    <PropertyGroup>
+      <ErrorText>This project references NuGet package(s) that are missing on this computer. Enable NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
+    </PropertyGroup>
+    <Error Condition="!Exists('..\packages\Xbim.Geometry.3.0.3-Prerelease\build\net45\Xbim.Geometry.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Xbim.Geometry.3.0.3-Prerelease\build\net45\Xbim.Geometry.targets'))" />
+  </Target>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">

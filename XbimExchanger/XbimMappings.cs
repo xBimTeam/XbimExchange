@@ -1,4 +1,5 @@
-﻿using System.Collections.Concurrent;
+﻿using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 
 namespace XbimExchanger
@@ -6,30 +7,40 @@ namespace XbimExchanger
     /// <summary>
     /// Abstract class for mapping between different object models and schemas
     /// </summary>
-    /// <typeparam name="TFromKey">Type of the key in the From object to link mappings</typeparam>
-    /// <typeparam name="TFromObject">Type of the object to map from</typeparam>
-    /// <typeparam name="TToObject">Type of the object to map to</typeparam>
-    public abstract class XbimMappings<TFromKey, TFromObject, TToObject> where TToObject : new()
+    /// <typeparam name="TSourceKey">Type of the key in the From object to link mappings</typeparam>
+    /// <typeparam name="TSourceObject">Type of the object to map from</typeparam>
+    /// <typeparam name="TTargetObject">Type of the object to map to</typeparam>
+    /// <typeparam name="TRepository">The repository that holds new objects</typeparam>
+    public abstract class XbimMappings<TSourceRepository, TTargetRepository, TSourceKey, TSourceObject, TTargetObject> : IXbimMappings<TSourceRepository, TTargetRepository> where TTargetObject : new()
     {
-        protected ConcurrentDictionary<TFromKey, TToObject> Results = new ConcurrentDictionary<TFromKey, TToObject>();
+        protected ConcurrentDictionary<TSourceKey, TTargetObject> Results = new ConcurrentDictionary<TSourceKey, TTargetObject>();
 
+        protected XbimMappings(XbimExchanger<TSourceRepository, TTargetRepository> exchanger)
+        {    
+            Exchanger = exchanger;     
+        }
+
+        protected XbimMappings()
+        {
+            
+        }
+        
         /// <summary>
         /// Returns the IDictionary of all objects that have been mapped in this mapping class
         /// </summary>
-        public IDictionary<TFromKey, TToObject> Mappings
+        public IDictionary<TSourceKey, TTargetObject> Mappings
         {
             get { return Results; }
         }
 
+
         /// <summary>
-        /// Create an unitialised ToObject with the specified key
+        /// Creates an instance of toObject, override for special creation situations
         /// </summary>
-        /// <param name="key"></param>
         /// <returns></returns>
-        public bool Create(TFromKey key)
+        public virtual TTargetObject CreateTargetObject()
         {
-            var toObject = new TToObject();
-            return Results.TryAdd(key, toObject);
+            return new TTargetObject();
         }
         /// <summary>
         /// Gets the ToObject with the specified key
@@ -37,9 +48,8 @@ namespace XbimExchanger
         /// <param name="key">The key to look the object up with</param>
         /// <param name="to">the object which is mapped to this key</param>
         /// <returns>false if no object has been added to this mapping</returns>
-        public bool Get(TFromKey key, out TToObject to)
+        public bool GetTargetObject(TSourceKey key, out TTargetObject to)
         {
-            to = default(TToObject);
             return Results.TryGetValue(key, out to);
         }
 
@@ -48,38 +58,78 @@ namespace XbimExchanger
         /// </summary>
         /// <param name="key"></param>
         /// <returns></returns>
-        public TToObject GetOrCreate(TFromKey key)
+        public TTargetObject GetOrCreateTargetObject(TSourceKey key)
         {
-            return Results.GetOrAdd(key, new TToObject());
+            return Results.GetOrAdd(key, CreateTargetObject());
         }
 
+       
         /// <summary>
         /// Adds a mapping between the two object all mapped properties are mapped over by the Mapping function
         /// </summary>
-        /// <param name="from"></param>
-        /// <param name="to"></param>
+        /// <param name="source">The object to map data from</param>
+        /// <param name="target">The object to map data to</param>
         /// <returns>Returns the object which has been added to the mapping</returns>
-        public TToObject AddMapping(TFromObject from, TToObject to)
+        public TTargetObject AddMapping(TSourceObject source, TTargetObject target)
         {
-            BeforeMapping();
-            TToObject res = Mapping(from);
-            AfterMapping();
+            TTargetObject res = Mapping(source, target); 
             return res;
         }
-        /// <summary>
-        /// Called before any mapping operation is performed
-        /// </summary>
-        protected virtual void BeforeMapping() { }
+
         /// <summary>
         /// Overrident in the concrete class to perform the actual mapping
         /// </summary>
-        /// <param name="from"></param>
+        /// <param name="source"></param>
+        /// <param name="target"></param>
         /// <returns>the mapped object</returns>
-        protected abstract TToObject Mapping(TFromObject from);
-        /// <summary>
-        /// Called after any mapping has been performed
-        /// </summary>
-        protected virtual void AfterMapping() { }
+        protected abstract TTargetObject Mapping(TSourceObject source, TTargetObject  target );
 
+        public Type MapFromType
+        {
+            get { return typeof (TSourceObject); }
+        }
+
+        public Type MapToType
+        {
+            get { return typeof(TTargetObject); }
+        }
+
+        public Type MapKeyType
+        {
+            get { return typeof(TSourceKey); }
+        }
+
+        public XbimExchanger<TSourceRepository, TTargetRepository> Exchanger { get; set; }
+
+  
+
+        IDictionary<object, object> IXbimMappings<TSourceRepository, TTargetRepository>.Mappings
+        {
+            get { return Results as IDictionary<object, object>; }
+        }
+
+        object IXbimMappings<TSourceRepository, TTargetRepository>.CreateTargetObject()
+        {
+            return CreateTargetObject();
+        }
+
+        bool IXbimMappings<TSourceRepository, TTargetRepository>.GetTargetObject(object key, out object targetObject)
+        {
+            targetObject = default(TTargetObject);
+            TTargetObject target = (TTargetObject)targetObject;
+            var result =  GetTargetObject((TSourceKey)key, out target);
+            targetObject = target;
+            return result;
+        }
+
+        object IXbimMappings<TSourceRepository, TTargetRepository>.GetOrCreateTargetObject(object key)
+        {
+            return GetOrCreateTargetObject((TSourceKey)key);
+        }
+
+        object IXbimMappings<TSourceRepository, TTargetRepository>.AddMapping(object source, object target)
+        {
+            return AddMapping((TSourceObject)source, (TTargetObject)target);
+        }
     }
 }

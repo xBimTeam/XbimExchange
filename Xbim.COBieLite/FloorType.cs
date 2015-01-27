@@ -36,22 +36,23 @@ namespace Xbim.COBieLite
                 //TODO: work out if the units can change
                 //FloorElevationValue.UnitName = 
             }
-            var heightProperty = ifcBuildingStorey.GetTotalHeightProperty();
-            if (heightProperty != null)
-            {
-                FloorHeightValue = new DecimalValueType
-                {
-                    DecimalValue = heightProperty.LengthValue,
-                    DecimalValueSpecified = true,
-                    UnitName = heightProperty.Unit.GetName()
-                };
-            }
+            FloorHeightValue = helper.GetCoBieAttribute<DecimalValueType>("FloorHeightValue", ifcBuildingStorey);
+            //var heightProperty = ifcBuildingStorey.GetTotalHeightProperty();
+            //if (heightProperty != null)
+            //{
+            //    FloorHeightValue = new DecimalValueType
+            //    {
+            //        DecimalValue = heightProperty.LengthValue,
+            //        DecimalValueSpecified = true,
+            //        UnitName = heightProperty.Unit.GetName()
+            //    };
+            //}
            
             var spaces = ifcBuildingStorey.GetSpaces();
             var ifcSpaces = spaces as IList<IfcSpace> ?? spaces.ToList();
             if (ifcSpaces.Any())
             {
-                Spaces = new SpaceCollectionType {Space = new SpaceTypeBase[ifcSpaces.Count]};
+                Spaces = new SpaceCollectionType {Space = new SpaceType[ifcSpaces.Count]};
                 for (var i = 0; i < ifcSpaces.Count; i++)
                     Spaces.Space[i] = new SpaceType(ifcSpaces[i], helper);
             }
