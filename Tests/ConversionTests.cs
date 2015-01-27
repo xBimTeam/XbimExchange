@@ -1,6 +1,7 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Newtonsoft.Json;
 using System.IO;
+using System.Linq;
 using Xbim.COBieLite;
 using Xbim.DPoW.Interfaces;
 using Xbim.IO;
@@ -43,6 +44,31 @@ namespace Tests
             var exchanger = new DPoWToCOBieLiteExchanger(dpow, facility);
             exchanger.Convert();
 
+            using (var tw = File.CreateText("NewtownHighSchool.COBieLite.json"))
+            {
+                CoBieLiteHelper.WriteJson(tw, facility);
+                tw.Close();
+            }
+
+        }
+
+        [TestMethod]
+        public void ConvertDPoWToCOBieLiteDPoWObjects()
+        {
+            var dpow = PlanOfWork.Open("NewtownHighSchool.dpow");
+            var facility = new FacilityType();
+            var stage = dpow.ProjectStages.FirstOrDefault(s => s.Jobs.Any(j => j.DPoWObjects != null && j.DPoWObjects.Any()));
+            Assert.IsNotNull(stage);
+            var exchanger = new DPoWToCOBieLiteExchanger(dpow, facility, stage);
+            exchanger.Convert();
+
+            using (var tw = File.CreateText("NewtownHighSchool.COBieLite.json"))
+            {
+                CoBieLiteHelper.WriteJson(tw, facility);
+                tw.Close();
+            }
+
+            Assert.IsTrue(facility.AssetTypes.AssetType.Count() > 0);
         }
 
     }

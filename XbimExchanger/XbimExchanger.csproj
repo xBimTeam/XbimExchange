@@ -83,10 +83,14 @@
     <Compile Include="DPoWToCOBieLite\DPoWToCOBieLiteExchanger.cs" />
     <Compile Include="DPoWToCOBieLite\DPoWToCOBieLiteMapping.cs" />
     <Compile Include="DPoWToCOBieLite\Extensions.cs" />
+    <Compile Include="DPoWToCOBieLite\MappingAssemblyTypeToAssetTypeInfoType.cs" />
+    <Compile Include="DPoWToCOBieLite\MappingAssetTypeToAssetTypeInfoType.cs" />
     <Compile Include="DPoWToCOBieLite\MappingContactToContact.cs" />
     <Compile Include="DPoWToCOBieLite\MappingDocumentToDocumentType.cs" />
     <Compile Include="DPoWToCOBieLite\MappingJobToIssueType.cs" />
+    <Compile Include="DPoWToCOBieLite\MappingJobToJobType.cs" />
     <Compile Include="DPoWToCOBieLite\MappingPlanOfWorkToFacilityType.cs" />
+    <Compile Include="DPoWToCOBieLite\MappingZoneToZoneType.cs" />
     <Compile Include="IfcHelpers\IfcMappings.cs" />
     <Compile Include="IXbimMappings.cs" />
     <Compile Include="XbimMappings.cs" />

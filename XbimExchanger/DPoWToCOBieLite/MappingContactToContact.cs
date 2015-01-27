@@ -18,6 +18,7 @@ namespace XbimExchanger.DPoWToCOBieLite
         }
         protected override ContactType Mapping(Contact source, ContactType target)
         {
+            target.externalID = Exchanger.GetStringIdentifier();
             target.ContactCompanyName = source.ContactCompanyName;
             target.ContactCountryName = source.ContactCountry;
             target.ContactDepartmentName = source.ContactDepartmentName;
@@ -31,6 +32,10 @@ namespace XbimExchanger.DPoWToCOBieLite
             target.ContactStreet = source.ContactStreet;
             target.ContactTownName = source.ContactTownName;
             target.ContactURL = source.ContactURL;
+
+            //prepare attributes collection for the case it is necessary.
+            target.ContactAttributes = new AttributeCollectionType();
+
             return target;
         }
 
@@ -41,7 +46,8 @@ namespace XbimExchanger.DPoWToCOBieLite
         /// <returns>Identifier to be used as a key for mappings</returns>
         public static string GetKey(Contact contact)
         {
-            return String.Format("{0} {1} {2}", contact.ContactEmail, contact.ContactFamilyName, contact.ContactGivenName);
+            return contact.GetHashCode().ToString();
+            //return String.Format("{0} {1} {2} {3}", contact.ContactEmail, contact.ContactFamilyName, contact.ContactGivenName, contact.ContactCompanyName);
         }
     }
 }

@@ -8,11 +8,22 @@ using Xbim.DPoW.Interfaces;
 
 namespace XbimExchanger.DPoWToCOBieLite
 {
-    public class MappingJobToIssueType : DPoWToCOBieLiteMapping<Job, JobType>
+    public class MappingJobToIssueType : DPoWToCOBieLiteMapping<Job, IssueType>
     {
-        protected override JobType Mapping(Job source, JobType target)
+        protected override IssueType Mapping(Job source, IssueType target)
         {
-            throw new NotImplementedException();
+            target.externalID = Exchanger.GetStringIdentifier();
+            target.IssueName = source.JobName;
+            target.IssueDescription = source.JobDescription;
+            
+            //responsible person can only be saved as a set of attributes
+            var respPers = source.ResponsibleFor;
+            if (respPers != null)
+            {
+                var cMap = Exchanger.GetOrCreateMappings<MappingContactToContact>();
+                target.ContactAssignment = new ContactKeyType() { ContactEmailReference = respPers.ContactEmail };
+            }
+            return target;
         }
 
         public static string GetKey(Job job)

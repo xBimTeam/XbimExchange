@@ -12,8 +12,16 @@ namespace XbimExchanger.DPoWToCOBieLite
     {
         protected override FacilityType Mapping(PlanOfWork source, FacilityType target)
         {
-            var sFacility = source.Facility;
             target.externalID = Exchanger.GetStringIdentifier();
+
+            //init collections
+            target.FacilityAttributes = new AttributeCollectionType();
+            target.Zones = new ZoneCollectionType();
+            target.AssetTypes = new AssetTypeCollectionType();
+            target.FacilityDocuments = new DocumentCollectionType();
+            target.FacilityIssues = new IssueCollectionType();
+
+            var sFacility = source.Facility;
             if (sFacility != null)
             {
                 target.FacilityDescription = sFacility.FacilityDescription;
@@ -72,36 +80,41 @@ namespace XbimExchanger.DPoWToCOBieLite
             //set attributes for client
             if (source.Client != null)
             {
-                target.FacilityAttributes.Add(new []{
+                target.FacilityAttributes.Add(new[]{
                     new AttributeType()
                     {
                         AttributeName = "ProjectClientFamilyName",
                         AttributeDescription = "Client of this project as defined in DPoW.",
-                        AttributeValue = new AttributeValueType() { Item = new AttributeStringValueType() { StringValue = source.Client.ContactFamilyName} }
+                        AttributeValue = new AttributeValueType() { Item = new AttributeStringValueType() { StringValue = source.Client.ContactFamilyName} },
+                        propertySetName = "ProjectClient"
                     },
                     new AttributeType()
                     {
                         AttributeName = "ProjectClientGivenName",
                         AttributeDescription = "Client of this project as defined in DPoW.",
-                        AttributeValue = new AttributeValueType() { Item = new AttributeStringValueType() { StringValue = source.Client.ContactGivenName} }
+                        AttributeValue = new AttributeValueType() { Item = new AttributeStringValueType() { StringValue = source.Client.ContactGivenName} },
+                        propertySetName = "ProjectClient"
                     },
                     new AttributeType()
                     {
                         AttributeName = "ProjectClientEmail",
                         AttributeDescription = "Client of this project as defined in DPoW.",
-                        AttributeValue = new AttributeValueType() { Item = new AttributeStringValueType() { StringValue = source.Client.ContactEmail} }
+                        AttributeValue = new AttributeValueType() { Item = new AttributeStringValueType() { StringValue = source.Client.ContactEmail} },
+                        propertySetName = "ProjectClient"
                     },
                     new AttributeType()
                     {
                         AttributeName = "ProjectClientCompanyName",
                         AttributeDescription = "Client of this project as defined in DPoW.",
-                        AttributeValue = new AttributeValueType() { Item = new AttributeStringValueType() { StringValue = source.Client.ContactCompanyName} }
+                        AttributeValue = new AttributeValueType() { Item = new AttributeStringValueType() { StringValue = source.Client.ContactCompanyName} },
+                        propertySetName = "ProjectClient"
                     },
                     new AttributeType()
                     {
                         AttributeName = "ProjectClientURL",
                         AttributeDescription = "Client of this project as defined in DPoW.",
-                        AttributeValue = new AttributeValueType() { Item = new AttributeStringValueType() { StringValue = source.Client.ContactURL} }
+                        AttributeValue = new AttributeValueType() { Item = new AttributeStringValueType() { StringValue = source.Client.ContactURL} },
+                        propertySetName = "ProjectClient"
                     }
                 });
             }
@@ -115,33 +128,87 @@ namespace XbimExchanger.DPoWToCOBieLite
                 {
                     foreach (var job in stage.Jobs)
                     {
-                        //create job equivalent 
-                        var jMap = Exchanger.GetOrCreateMappings<MappingJobToIssueType>();
-                        var tIssue = jMap.GetOrCreateTargetObject(MappingJobToIssueType.GetKey(job));
-                        jMap.AddMapping(job, tIssue);
+                        //create job equivalent as an issue for zone and assembly which doesn't have a job equivalent
+                        //IssueType doesn't contain documents so these should be assigned to the target type on the level of the type (Zone or Assembly)
+                        var jiMap = Exchanger.GetOrCreateMappings<MappingJobToIssueType>();
+                        var tIssue = jiMap.GetOrCreateTargetObject(MappingJobToIssueType.GetKey(job));
+                        jiMap.AddMapping(job, tIssue);
+
+                        //create job which can be assigned to asset type. JobType also contains related documents
+                        var jjMap = Exchanger.GetOrCreateMappings<MappingJobToJobType>();
+                        var tJob = jjMap.GetOrCreateTargetObject(MappingJobToJobType.GetKey(job));
+                        jjMap.AddMapping(job, tJob);
 
                         //convert related documents and add them to documents of DPoW object
-
-                        foreach (var dObject in job.DPoWObjects)
+                        var dMap = Exchanger.GetOrCreateMappings<MappingDocumentToDocumentType>();
+                        var tDocs = new List<DocumentType>();
+                        foreach (var sDoc in job.Documents)
                         {
-                            //branch for asset type, assembly type and zones
-                            var zone = dObject as Zone;
-                            if (zone != null)
-                            { 
-                            }
-
-                            var assetType = dObject as AssetType;
-                            if (assetType != null)
-                            { 
-                            }
-
-                            var assemblyType = dObject as Xbim.DPoW.Interfaces.AssemblyType;
-                            if (assemblyType != null)
-                            { 
-                            }
-
+                            var dKey = MappingDocumentToDocumentType.GetKey(sDoc);
+                            var tDoc = dMap.GetOrCreateTargetObject(dKey);
+                            dMap.AddMapping(sDoc, tDoc);
+                            tDocs.Add(tDoc);
                         }
-                    }
+
+                        if (job.DPoWObjects != null && job.DPoWObjects.Any())
+                        {
+                            var zones = new List<ZoneType>();
+                            var assetTypes = new List<AssetTypeInfoType>();
+                            var zoneMapping = Exchanger.GetOrCreateMappings<MappingZoneToZoneType>();
+                            var assetTypeMapping = Exchanger.GetOrCreateMappings<MappingAssetTypeToAssetTypeInfoType>();
+                            var assemblyTypeMapping = Exchanger.GetOrCreateMappings<MappingAssemblyTypeToAssetTypeInfoType>();
+                            //branch for asset type, assembly type and zones
+                            foreach (var dObject in job.DPoWObjects)
+                            {
+                                var zone = dObject as Zone;
+                                if (zone != null)
+                                {
+                                    var zKey = MappingZoneToZoneType.GetKey(zone);
+                                    var tZone = zoneMapping.GetOrCreateTargetObject(zKey);
+                                    zoneMapping.AddMapping(zone, tZone);
+                                    tZone.ZoneDocuments = new DocumentCollectionType();
+                                    tZone.ZoneDocuments.Add(tDocs);
+                                    tZone.ZoneIssues = new IssueCollectionType();
+                                    tZone.ZoneIssues.Add(tIssue);
+                                    zones.Add(tZone);
+                                }
+
+                                var assetType = dObject as AssetType;
+                                if (assetType != null)
+                                {
+                                    var aKey = MappingAssetTypeToAssetTypeInfoType.GetKey(assetType);
+                                    var tAssetType = assetTypeMapping.GetOrCreateTargetObject(aKey);
+                                    assetTypeMapping.AddMapping(assetType, tAssetType);
+                                    tAssetType.Jobs = new JobCollectionType();
+                                    tAssetType.Jobs.Job = new[] { tJob };
+                                    //don't have to add documents as they are defined within the job
+                                    assetTypes.Add(tAssetType);
+                                }
+
+                                var assemblyType = dObject as Xbim.DPoW.Interfaces.AssemblyType;
+                                if (assemblyType != null)
+                                {
+                                    var aKey = MappingAssemblyTypeToAssetTypeInfoType.GetKey(assemblyType);
+                                    var tAssetType = assetTypeMapping.GetOrCreateTargetObject(aKey);
+                                    assemblyTypeMapping.AddMapping(assemblyType, tAssetType);
+                                    tAssetType.Jobs = new JobCollectionType();
+                                    tAssetType.Jobs.Job = new[] { tJob };
+                                    //don't have to add documents as they are defined within the job
+                                    assetTypes.Add(tAssetType);
+                                }
+
+                            }
+                            //assign object sets to facility
+                            target.Zones.Add(zones);
+                            target.AssetTypes.Add(assetTypes);
+                        }
+                        else
+                        {
+                            //assign documents and issues to the facility type (root)
+                            target.FacilityDocuments.Add(tDocs);
+                            target.FacilityIssues.Add(tIssue);
+                        }
+                   }
                 }
             }
 
