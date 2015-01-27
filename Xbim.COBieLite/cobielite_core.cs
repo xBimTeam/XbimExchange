@@ -1713,11 +1713,11 @@ namespace Xbim.COBieLite {
     [System.Xml.Serialization.XmlRootAttribute("Spaces", Namespace="http://docs.buildingsmartalliance.org/nbims03/cobie/core", IsNullable=false)]
     public partial class SpaceCollectionType : CobieWorksheetType {
         
-        private SpaceTypeBase[] spaceField;
+        private SpaceType[] spaceField;
         
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute("Space")]
-        public SpaceTypeBase[] Space {
+        public SpaceType[] Space {
             get {
                 return this.spaceField;
             }
@@ -1758,11 +1758,11 @@ namespace Xbim.COBieLite {
     [System.Xml.Serialization.XmlRootAttribute("Floors", Namespace="http://docs.buildingsmartalliance.org/nbims03/cobie/core", IsNullable=false)]
     public partial class FloorCollectionType : CobieWorksheetType {
         
-        private FloorTypeBase[] floorField;
+        private FloorType[] floorField;
         
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute("Floor")]
-        public FloorTypeBase[] Floor {
+        public FloorType[] Floor {
             get {
                 return this.floorField;
             }
@@ -3708,7 +3708,7 @@ namespace Xbim.COBieLite {
         }
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Namespace="http://docs.buildingsmartalliance.org/nbims03/cobie/core")]
+        [System.Xml.Serialization.XmlElementAttribute(Namespace="http://docs.buildingsmartalliance.org/nbims03/cobie/core") ]
         public FloorCollectionType Floors {
             get {
                 return this.floorsField;

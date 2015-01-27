@@ -19,7 +19,7 @@ namespace Xbim.Tests.COBie
             using (var m = new XbimModel())
             {
                 var IfcTestFile = "2012-03-23-Duplex-Handover.ifc";
-                IfcTestFile = @"D:\Users\steve\xBIM\Test Models\Autodesk\002ALakesiderestaurant.ifc";
+               // IfcTestFile = @"D:\Users\steve\xBIM\Test Models\Autodesk\002ALakesiderestaurant.ifc";
                 var XbimTestFile = Path.ChangeExtension(IfcTestFile, "xbim");
                 m.CreateFrom(IfcTestFile, XbimTestFile, null, true, true);
                 var helper = new CoBieLiteHelper(m,"UniClass");
