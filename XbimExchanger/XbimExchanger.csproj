@@ -73,6 +73,9 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="COBieLiteToDPoW\COBieLiteToDPoWExchanger.cs" />
+    <Compile Include="COBieLiteToDPoW\COBieLiteToDPoWMapping.cs" />
+    <Compile Include="COBieLiteToDPoW\MappingFacilityTypeToPlanOfWork.cs" />
     <Compile Include="COBieLiteToIfc\COBieLiteIfcMappings.cs" />
     <Compile Include="COBieLiteToIfc\COBieLiteToIfcExchanger.cs" />
     <Compile Include="COBieLiteToIfc\MappingFacilityTypeToIfcBuilding.cs" />
@@ -115,7 +118,6 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="COBieLiteToDPoW\" />
     <Folder Include="IfcToCOBieLite\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
