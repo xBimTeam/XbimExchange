@@ -14,11 +14,11 @@ namespace Xbim.Tests.COBie
     public class CoBieLiteTests
     {
         [TestMethod]
-        public void CanSerialise()
+        public void CanSerialiseXml()
         {
             try
             {
-                var x = new XmlSerializer(typeof(ContactCollectionType));
+                var x = new XmlSerializer(typeof(FacilityType));
             }
             catch (Exception ex)
             {

@@ -43,13 +43,12 @@ namespace Xbim.COBieLite
                 var ifcBuildingStories = storeys as IList<IfcBuildingStorey> ?? storeys.ToList();
                 if (ifcBuildingStories.Any())
                 {
-                    Floors = new FloorCollectionType {Floor = new FloorType[ifcBuildingStories.Count]};
+                    Floors = new FloorCollectionType {Floor = new List<FloorType>(ifcBuildingStories.Count)};
                     for (int i = 0; i < ifcBuildingStories.Count; i++)
                     {
-                        Floors.Floor[i] = new FloorType(ifcBuildingStories[i], helper);
+                        Floors.Add(new FloorType(ifcBuildingStories[i], helper));
                     }
                 }
-
             }
             //Attributes
             var ifcAttributes = helper.GetAttributes(ifcBuilding);

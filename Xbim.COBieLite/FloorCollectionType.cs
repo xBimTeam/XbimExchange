@@ -2,22 +2,22 @@
 using System.Collections.Generic;
 using System.Linq;
 using Newtonsoft.Json;
+using System.Xml.Serialization;
 
 namespace Xbim.COBieLite
 {
     [JsonObject]
-    public partial class FloorCollectionType : IEnumerable<FloorType>
+    public partial class FloorCollectionType : ICollectionType<FloorType>
     {
         public IEnumerator<FloorType> GetEnumerator()
         {
             return  this.Floor.OfType<FloorType>().GetEnumerator();
         }
 
-        IEnumerator IEnumerable.GetEnumerator()
+        [XmlIgnore]
+        public List<FloorType> InnerList
         {
-            return this.Floor.OfType<FloorType>().GetEnumerator();
+            get { return Floor; }
         }
-
-       
     }
 }
