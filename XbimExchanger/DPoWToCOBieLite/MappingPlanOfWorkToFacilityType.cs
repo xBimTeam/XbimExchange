@@ -80,7 +80,9 @@ namespace XbimExchanger.DPoWToCOBieLite
             //set attributes for client
             if (source.Client != null)
             {
-                target.FacilityAttributes.Add(new[]{
+                target.FacilityAttributes.AddRange(
+                    new List<AttributeType>()
+                    {
                     new AttributeType()
                     {
                         AttributeName = "ProjectClientFamilyName",

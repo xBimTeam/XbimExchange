@@ -22,5 +22,11 @@ namespace Xbim.COBieLite
         {
             basef.InnerList.Add(item);
         }
+
+        public static void AddRange<T>(this ICollectionType<T> basef, IEnumerable<T> items)
+        {
+            basef.InnerList.AddRange(items);
+        }
+        
     }
 }

@@ -103,11 +103,12 @@ namespace Xbim.COBieLite {
     [System.Xml.Serialization.XmlRootAttribute("Attributes", Namespace="http://docs.buildingsmartalliance.org/nbims03/cobie/core", IsNullable=false)]
     public partial class AttributeCollectionType : CobieWorksheetType {
         
-        private AttributeType[] attributeField;
+        private List<AttributeType> attributeField = new List<AttributeType>();
         
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute("Attribute")]
-        public AttributeType[] Attribute {
+        public List<AttributeType> Attribute
+        {
             get {
                 return this.attributeField;
             }
@@ -458,11 +459,12 @@ namespace Xbim.COBieLite {
     [System.Xml.Serialization.XmlRootAttribute("Warranties", Namespace="http://docs.buildingsmartalliance.org/nbims03/cobie/core", IsNullable=false)]
     public partial class WarrantyCollectionType : CobieComplexObjectType {
         
-        private WarrantyType[] warrantyField;
+        private List<WarrantyType> warrantyField = new List<WarrantyType>();
         
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute("Warranty")]
-        public WarrantyType[] Warranty {
+        public List<WarrantyType> Warranty
+        {
             get {
                 return this.warrantyField;
             }
@@ -672,11 +674,12 @@ namespace Xbim.COBieLite {
     [System.Xml.Serialization.XmlRootAttribute("AllowedValues", Namespace="http://docs.buildingsmartalliance.org/nbims03/cobie/core", IsNullable=false)]
     public partial class AllowedValueCollectionType : CobieComplexObjectType {
         
-        private string[] attributeAllowedValueField;
+        private List<string> attributeAllowedValueField;
         
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute("AttributeAllowedValue")]
-        public string[] AttributeAllowedValue {
+        public List<string> AttributeAllowedValue
+        {
             get {
                 return this.attributeAllowedValueField;
             }
@@ -864,11 +867,12 @@ namespace Xbim.COBieLite {
     [System.Xml.Serialization.XmlRootAttribute("SpareSupplierContactAssignments", Namespace="http://docs.buildingsmartalliance.org/nbims03/cobie/core", IsNullable=false)]
     public partial class ContactAssignmentCollectionType : CobieRowAssignmentsType {
         
-        private ContactKeyType[] contactAssignmentField;
+        private List<ContactKeyType> contactAssignmentField = new List<ContactKeyType>();
         
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute("ContactAssignment")]
-        public ContactKeyType[] ContactAssignment {
+        public List<ContactKeyType> ContactAssignment
+        {
             get {
                 return this.contactAssignmentField;
             }
@@ -1359,12 +1363,13 @@ namespace Xbim.COBieLite {
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://docs.buildingsmartalliance.org/nbims03/cobie/core")]
     [System.Xml.Serialization.XmlRootAttribute("AssetSpaceAssignments", Namespace="http://docs.buildingsmartalliance.org/nbims03/cobie/core", IsNullable=false)]
     public partial class SpaceAssignmentCollectionType : CobieComplexObjectType {
-        
-        private SpaceKeyType[] spaceAssignmentField;
+
+        private List<SpaceKeyType> spaceAssignmentField = new List<SpaceKeyType>();
         
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute("SpaceAssignment")]
-        public SpaceKeyType[] SpaceAssignment {
+        public List<SpaceKeyType> SpaceAssignment
+        {
             get {
                 return this.spaceAssignmentField;
             }
@@ -1714,7 +1719,7 @@ namespace Xbim.COBieLite {
     [System.Xml.Serialization.XmlRootAttribute("Spaces", Namespace="http://docs.buildingsmartalliance.org/nbims03/cobie/core", IsNullable=false)]
     public partial class SpaceCollectionType : CobieWorksheetType {
 
-        private List<SpaceType> spaceField;
+        private List<SpaceType> spaceField = new List<SpaceType>();
         
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute("Space")]
@@ -1757,9 +1762,9 @@ namespace Xbim.COBieLite {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://docs.buildingsmartalliance.org/nbims03/cobie/core")]
     [System.Xml.Serialization.XmlRootAttribute("Floors", Namespace="http://docs.buildingsmartalliance.org/nbims03/cobie/core", IsNullable=false)]
-    public partial class FloorCollectionType : CobieWorksheetType {
-        
-        private List<FloorType> floorField;
+    public partial class FloorCollectionType : CobieWorksheetType
+    {
+        private List<FloorType> floorField = new List<FloorType>();
         
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute("Floor")]

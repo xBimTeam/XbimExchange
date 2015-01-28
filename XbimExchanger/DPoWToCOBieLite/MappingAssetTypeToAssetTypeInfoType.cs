@@ -29,7 +29,7 @@ namespace XbimExchanger.DPoWToCOBieLite
                 var attrs = new List<AttributeType>();
                 foreach (var sAttr in source.RequiredAttributes)
                     attrs.Add(new AttributeType() { propertySetName = "RequiredAttributes", AttributeName = sAttr.AttributeName, AttributeDescription = sAttr.AttributeDescription});
-                target.AssetTypeAttributes.Add(attrs);
+                target.AssetTypeAttributes.AddRange(attrs);
             }
                 
 

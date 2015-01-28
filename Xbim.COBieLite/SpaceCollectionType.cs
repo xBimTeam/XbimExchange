@@ -18,7 +18,7 @@ namespace Xbim.COBieLite
             return this.Space.OfType<SpaceType>().GetEnumerator();
         }
 
-        [XmlIgnore]
+        [XmlIgnore][JsonIgnore]
         public List<SpaceType> InnerList
         {
             get { return Space; }

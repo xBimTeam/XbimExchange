@@ -647,7 +647,7 @@ namespace Xbim.COBieLite
             return definingType;
         }
 
-        public AttributeType[] GetAttributes(IfcObjectDefinition ifcObjectDefinition)
+        public List<AttributeType> GetAttributes(IfcObjectDefinition ifcObjectDefinition)
         {
             XbimAttributedObject attributedObject;
 
@@ -657,7 +657,7 @@ namespace Xbim.COBieLite
                 var keyValuePairs = properties as KeyValuePair<string, IfcProperty>[] ?? properties.ToArray();
                 if (keyValuePairs.Length>0)
                 {
-                    var attributeCollection = new AttributeType[keyValuePairs.Length];
+                    var attributeCollection = new List<AttributeType>(keyValuePairs.Length);
                     for (int i = 0; i < keyValuePairs.Length; i++)
                     {
                         
@@ -669,7 +669,7 @@ namespace Xbim.COBieLite
                         //var pSetDef = attributedObject.GetPropertySetDefinition(pSetName);
                         //if (pSetDef != null)
                         //    attributeType.externalID = ExternalEntityIdentity(pSetDef);
-                        attributeCollection[i] = attributeType;                   
+                        attributeCollection.Add(attributeType);                   
                     }
                     return attributeCollection;
                 }

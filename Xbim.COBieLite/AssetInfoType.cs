@@ -56,10 +56,10 @@ namespace Xbim.COBieLite
             List<IfcSpace> spaces;
             if (helper.SpaceAssetLookup.TryGetValue(ifcElement, out spaces))
             {
-                AssetSpaceAssignments = new SpaceAssignmentCollectionType { SpaceAssignment = new SpaceKeyType[spaces.Count] };
+                AssetSpaceAssignments = new SpaceAssignmentCollectionType { SpaceAssignment = new List<SpaceKeyType>(spaces.Count) };
                 for (int i = 0; i < spaces.Count; i++)
                 {
-                    AssetSpaceAssignments.SpaceAssignment[i] = new SpaceKeyType(spaces[i], helper);
+                    AssetSpaceAssignments.SpaceAssignment.Add(new SpaceKeyType(spaces[i], helper));
                 }
             }
             
