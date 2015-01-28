@@ -1608,12 +1608,13 @@ namespace Xbim.COBieLite {
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://docs.buildingsmartalliance.org/nbims03/cobie/core")]
     [System.Xml.Serialization.XmlRootAttribute("Zones", Namespace="http://docs.buildingsmartalliance.org/nbims03/cobie/core", IsNullable=false)]
     public partial class ZoneCollectionType : CobieWorksheetType {
-        
-        private ZoneTypeBase[] zoneField;
+
+        private List<ZoneType> zoneField = new List<ZoneType>();
         
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute("Zone")]
-        public ZoneTypeBase[] Zone {
+        public List<ZoneType> Zone
+        {
             get {
                 return this.zoneField;
             }
@@ -1666,11 +1667,12 @@ namespace Xbim.COBieLite {
     [System.Xml.Serialization.XmlRootAttribute("Systems", Namespace="http://docs.buildingsmartalliance.org/nbims03/cobie/core", IsNullable=false)]
     public partial class SystemCollectionType : CobieWorksheetType {
         
-        private SystemTypeBase[] systemField;
+        private List<SystemType>  systemField = new List<SystemType>();
         
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute("System")]
-        public SystemTypeBase[] System {
+        public List<SystemType> System
+        {
             get {
                 return this.systemField;
             }
@@ -1812,12 +1814,13 @@ namespace Xbim.COBieLite {
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://docs.buildingsmartalliance.org/nbims03/cobie/core")]
     [System.Xml.Serialization.XmlRootAttribute("Contacts", Namespace="http://docs.buildingsmartalliance.org/nbims03/cobie/core", IsNullable=false)]
     public partial class ContactCollectionType : CobieWorksheetType {
-        
-        private ContactTypeBase[] contactField;
+
+        private List<ContactType> contactField = new List<ContactType>();
         
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute("Contact")]
-        public ContactTypeBase[] Contact {
+        public List<ContactType> Contact
+        {
             get {
                 return this.contactField;
             }
@@ -1858,11 +1861,12 @@ namespace Xbim.COBieLite {
     [System.Xml.Serialization.XmlRootAttribute("Connections", Namespace="http://docs.buildingsmartalliance.org/nbims03/cobie/core", IsNullable=false)]
     public partial class ConnectionCollectionType : CobieWorksheetType {
         
-        private ConnectionTypeBase[] connectionField;
+        private List<ConnectionType> connectionField = new List<ConnectionType>();
         
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute("Connection")]
-        public ConnectionTypeBase[] Connection {
+        public List<ConnectionType> Connection
+        {
             get {
                 return this.connectionField;
             }
@@ -1915,11 +1919,11 @@ namespace Xbim.COBieLite {
     [System.Xml.Serialization.XmlRootAttribute("Resources", Namespace="http://docs.buildingsmartalliance.org/nbims03/cobie/core", IsNullable=false)]
     public partial class ResourceCollectionType : CobieWorksheetType {
         
-        private ResourceTypeBase[] resourceField;
+        private List<ResourceType> resourceField = new List<ResourceType>();
         
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute("Resource")]
-        public ResourceTypeBase[] Resource {
+        public List<ResourceType> Resource {
             get {
                 return this.resourceField;
             }
@@ -1959,12 +1963,13 @@ namespace Xbim.COBieLite {
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://docs.buildingsmartalliance.org/nbims03/cobie/core")]
     [System.Xml.Serialization.XmlRootAttribute("Jobs", Namespace="http://docs.buildingsmartalliance.org/nbims03/cobie/core", IsNullable=false)]
     public partial class JobCollectionType : CobieWorksheetType {
-        
-        private JobTypeBase[] jobField;
+
+        private List<JobType> jobField = new List<JobType>();
         
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute("Job")]
-        public JobTypeBase[] Job {
+        public List<JobType> Job
+        {
             get {
                 return this.jobField;
             }
@@ -2016,12 +2021,12 @@ namespace Xbim.COBieLite {
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://docs.buildingsmartalliance.org/nbims03/cobie/core")]
     [System.Xml.Serialization.XmlRootAttribute("Spares", Namespace="http://docs.buildingsmartalliance.org/nbims03/cobie/core", IsNullable=false)]
     public partial class SpareCollectionType : CobieWorksheetType {
-        
-        private SpareTypeBase[] spareField;
+
+        private List<SpareType> spareField = new List<SpareType>();
         
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute("Spare")]
-        public SpareTypeBase[] Spare {
+        public List<SpareType> Spare {
             get {
                 return this.spareField;
             }
@@ -2074,11 +2079,12 @@ namespace Xbim.COBieLite {
     [System.Xml.Serialization.XmlRootAttribute("AssetTypes", Namespace="http://docs.buildingsmartalliance.org/nbims03/cobie/core", IsNullable=false)]
     public partial class AssetTypeCollectionType : CobieWorksheetType {
         
-        private AssetTypeInfoType[] assetTypeField;
+        private List<AssetTypeInfoType> assetTypeField = new List<AssetTypeInfoType>();
         
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute("AssetType")]
-        public AssetTypeInfoType[] AssetType {
+        public List<AssetTypeInfoType> AssetType
+        {
             get {
                 return this.assetTypeField;
             }
@@ -2119,11 +2125,12 @@ namespace Xbim.COBieLite {
     [System.Xml.Serialization.XmlRootAttribute("Issues", Namespace="http://docs.buildingsmartalliance.org/nbims03/cobie/core", IsNullable=false)]
     public partial class IssueCollectionType : CobieWorksheetType {
         
-        private IssueTypeBase[] issueField;
+        private List<IssueType> issueField = new List<IssueType>();
         
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute("Issue")]
-        public IssueTypeBase[] Issue {
+        public List<IssueType> Issue
+        {
             get {
                 return this.issueField;
             }
@@ -2176,11 +2183,12 @@ namespace Xbim.COBieLite {
     [System.Xml.Serialization.XmlRootAttribute("Assets", Namespace="http://docs.buildingsmartalliance.org/nbims03/cobie/core", IsNullable=false)]
     public partial class AssetCollectionType : CobieWorksheetType {
         
-        private AssetInfoType[] assetField;
+        private List<AssetInfoType> assetField = new List<AssetInfoType>();
         
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute("Asset")]
-        public AssetInfoType[] Asset {
+        public List<AssetInfoType> Asset
+        {
             get {
                 return this.assetField;
             }

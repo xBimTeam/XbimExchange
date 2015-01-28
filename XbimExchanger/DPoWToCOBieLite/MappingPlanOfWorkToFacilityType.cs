@@ -63,18 +63,14 @@ namespace XbimExchanger.DPoWToCOBieLite
             {
                 var mappings = Exchanger.GetOrCreateMappings<MappingContactToContact>();
                 if (target.Contacts == null) target.Contacts = new ContactCollectionType();
-                var tContacts = target.Contacts.Contact != null ? target.Contacts.Contact.ToList() : new List<ContactTypeBase>();
-
+                
                 foreach (var sContact in source.Contacts)
                 {
                     var key = MappingContactToContact.GetKey(sContact);
                     var tContact = mappings.GetOrCreateTargetObject(key);
                     mappings.AddMapping(sContact, tContact);
-                    tContacts.Add(tContact);
+                    target.Contacts.Contact.Add(tContact);
                 }
-
-                //assign array back
-                target.Contacts.Contact = tContacts.ToArray();
             }
 
             //set attributes for client
@@ -182,7 +178,7 @@ namespace XbimExchanger.DPoWToCOBieLite
                                     var tAssetType = assetTypeMapping.GetOrCreateTargetObject(aKey);
                                     assetTypeMapping.AddMapping(assetType, tAssetType);
                                     tAssetType.Jobs = new JobCollectionType();
-                                    tAssetType.Jobs.Job = new[] { tJob };
+                                    tAssetType.Jobs.Add(tJob); 
                                     //don't have to add documents as they are defined within the job
                                     assetTypes.Add(tAssetType);
                                 }
@@ -194,15 +190,15 @@ namespace XbimExchanger.DPoWToCOBieLite
                                     var tAssetType = assetTypeMapping.GetOrCreateTargetObject(aKey);
                                     assemblyTypeMapping.AddMapping(assemblyType, tAssetType);
                                     tAssetType.Jobs = new JobCollectionType();
-                                    tAssetType.Jobs.Job = new[] { tJob };
+                                    tAssetType.Jobs.Add(tJob);
                                     //don't have to add documents as they are defined within the job
                                     assetTypes.Add(tAssetType);
                                 }
 
                             }
                             //assign object sets to facility
-                            target.Zones.Add(zones);
-                            target.AssetTypes.Add(assetTypes);
+                            target.Zones.AddRange(zones);
+                            target.AssetTypes.AddRange(assetTypes);
                         }
                         else
                         {
