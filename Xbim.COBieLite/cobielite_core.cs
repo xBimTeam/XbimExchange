@@ -1434,11 +1434,12 @@ namespace Xbim.COBieLite {
     [System.Xml.Serialization.XmlRootAttribute("SpaceZoneAssignments", Namespace="http://docs.buildingsmartalliance.org/nbims03/cobie/core", IsNullable=false)]
     public partial class ZoneAssignmentCollectionType : CobieRowAssignmentsType {
         
-        private ZoneKeyType[] zoneAssignmentField;
+        private List<ZoneKeyType> zoneAssignmentField = new List<ZoneKeyType>();
         
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute("ZoneAssignment")]
-        public ZoneKeyType[] ZoneAssignment {
+        public List<ZoneKeyType> ZoneAssignment
+        {
             get {
                 return this.zoneAssignmentField;
             }
@@ -1457,11 +1458,12 @@ namespace Xbim.COBieLite {
     [System.Xml.Serialization.XmlRootAttribute("AssetSystemAssignments", Namespace="http://docs.buildingsmartalliance.org/nbims03/cobie/core", IsNullable=false)]
     public partial class SystemAssignmentCollectionType : CobieRowAssignmentsType {
         
-        private SystemKeyType[] systemAssignmentField;
+        private List<SystemKeyType> systemAssignmentField;
         
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute("SystemAssignment")]
-        public SystemKeyType[] SystemAssignment {
+        public List<SystemKeyType> SystemAssignment
+        {
             get {
                 return this.systemAssignmentField;
             }
@@ -1480,11 +1482,12 @@ namespace Xbim.COBieLite {
     [System.Xml.Serialization.XmlRootAttribute("AssemblyAssignments", Namespace="http://docs.buildingsmartalliance.org/nbims03/cobie/core", IsNullable=false)]
     public partial class AssemblyAssignmentCollectionType : CobieRowAssignmentsType {
         
-        private AssemblyTypeBase[] assemblyAssignmentField;
+        private List<AssemblyType> assemblyAssignmentField = new List<AssemblyType>();
         
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute("AssemblyAssignment")]
-        public AssemblyTypeBase[] AssemblyAssignment {
+        public List<AssemblyType> AssemblyAssignment
+        {
             get {
                 return this.assemblyAssignmentField;
             }
@@ -1537,11 +1540,12 @@ namespace Xbim.COBieLite {
     [System.Xml.Serialization.XmlRootAttribute("Documents", Namespace="http://docs.buildingsmartalliance.org/nbims03/cobie/core", IsNullable=false)]
     public partial class DocumentCollectionType : CobieWorksheetType {
         
-        private DocumentTypeBase[] documentField;
+        private List<DocumentType> documentField = new List<DocumentType>();
         
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute("Document")]
-        public DocumentTypeBase[] Document {
+        public List<DocumentType> Document
+        {
             get {
                 return this.documentField;
             }

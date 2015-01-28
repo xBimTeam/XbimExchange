@@ -84,12 +84,14 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AllowedValueCollectionType.cs" />
+    <Compile Include="AssemblyAssignmentCollectionType.cs" />
     <Compile Include="AssetInfoType.cs" />
     <Compile Include="AssetTypeInfoType.cs" />
     <Compile Include="AttributeCollectionType.cs" />
     <Compile Include="COBieLiteHelper.cs" />
     <Compile Include="cobielite_core.cs" />
     <Compile Include="ContactAssignmentCollectionType.cs" />
+    <Compile Include="DocumentCollectionType.cs" />
     <Compile Include="ICollectionType.cs" />
     <Compile Include="ContactType.cs" />
     <Compile Include="FacilityType.cs" />
@@ -107,6 +109,7 @@
     <Compile Include="SpaceKeyType.cs" />
     <Compile Include="SpaceType.cs" />
     <Compile Include="SpaceCollectionType.cs" />
+    <Compile Include="SystemAssignmentCollectionType.cs" />
     <Compile Include="SystemKeyType.cs" />
     <Compile Include="SystemType.cs" />
     <Compile Include="WarrantyCollectionType.cs" />
@@ -115,6 +118,7 @@
     <Compile Include="XbimCOBieLiteToIfcConverter.cs" />
     <Compile Include="XbimCoBieLiteXmlWriter.cs" />
     <Compile Include="XbimCOBieValueHelper.cs" />
+    <Compile Include="ZoneAssignmentCollectionType.cs" />
     <Compile Include="ZoneType.cs" />
   </ItemGroup>
   <ItemGroup>

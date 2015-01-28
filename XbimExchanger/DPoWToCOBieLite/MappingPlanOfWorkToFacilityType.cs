@@ -169,7 +169,7 @@ namespace XbimExchanger.DPoWToCOBieLite
                                     var tZone = zoneMapping.GetOrCreateTargetObject(zKey);
                                     zoneMapping.AddMapping(zone, tZone);
                                     tZone.ZoneDocuments = new DocumentCollectionType();
-                                    tZone.ZoneDocuments.Add(tDocs);
+                                    tZone.ZoneDocuments.AddRange(tDocs);
                                     tZone.ZoneIssues = new IssueCollectionType();
                                     tZone.ZoneIssues.Add(tIssue);
                                     zones.Add(tZone);
@@ -207,7 +207,7 @@ namespace XbimExchanger.DPoWToCOBieLite
                         else
                         {
                             //assign documents and issues to the facility type (root)
-                            target.FacilityDocuments.Add(tDocs);
+                            target.FacilityDocuments.AddRange(tDocs);
                             target.FacilityIssues.Add(tIssue);
                         }
                    }

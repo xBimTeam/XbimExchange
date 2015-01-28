@@ -63,23 +63,6 @@ namespace XbimExchanger.DPoWToCOBieLite
             });
         }
 
-        public static void Add(this DocumentCollectionType self, DocumentType doc)
-        {
-            self.Add(new[] { doc });
-        }
-
-        public static void Add(this DocumentCollectionType self, IEnumerable<DocumentType> docs)
-        {
-            var exist = self.Document;
-            if (exist == null)
-                self.Document = docs.ToArray();
-            else
-            {
-                var newDocs = exist.ToList();
-                newDocs.AddRange(docs);
-                self.Document = newDocs.ToArray();
-            }
-        }
 
         public static void Add(this IssueCollectionType self, IssueType issue)
         {
