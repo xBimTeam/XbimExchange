@@ -197,7 +197,7 @@ namespace Xbim.COBieLite
 
         }
 
-        
+
         private void LoadCobieMaps()
         {
             Configuration config = null;
@@ -205,37 +205,47 @@ namespace Xbim.COBieLite
             _cobieFieldMap = new Dictionary<string, string[]>();
             try
             {
-                var configMap = new ExeConfigurationFileMap { ExeConfigFilename = "COBieAttributes.config" };
+                var configMap = new ExeConfigurationFileMap {ExeConfigFilename = "COBieAttributes.config"};
                 config = ConfigurationManager.OpenMappedExeConfiguration(configMap, ConfigurationUserLevel.None);
-                cobiePropertyMaps = (AppSettingsSection)config.GetSection("COBiePropertyMaps");
+                cobiePropertyMaps = (AppSettingsSection) config.GetSection("COBiePropertyMaps");
             }
             catch (Exception ex)
             {
                 var directory = new DirectoryInfo(".");
-                throw new Exception(@"Error loading configuration file ""COBieAttributes.config"". App folder is " + directory.FullName, ex);
+                throw new Exception(
+                    @"Error loading configuration file ""COBieAttributes.config"". App folder is " + directory.FullName,
+                    ex);
             }
-            
 
-            foreach (KeyValueConfigurationElement keyVal in cobiePropertyMaps.Settings)
+            if (cobiePropertyMaps != null)
             {
-                var values = keyVal.Value.Split(new[] {';'}, StringSplitOptions.RemoveEmptyEntries);
-                _cobieFieldMap.Add(keyVal.Key,values);
-                foreach (var cobieProperty in values) //used to keep a list of properties that are reserved for COBie and not written out as attributes
-                    _cobieProperties.Add(cobieProperty);
-            }
-            var ifcElementInclusion = (AppSettingsSection)config.GetSection("IfcElementInclusion");
-            
-            foreach (KeyValueConfigurationElement keyVal in ifcElementInclusion.Settings)
-            {
-                if (String.Compare(keyVal.Value, "YES", StringComparison.OrdinalIgnoreCase) == 0)
+                foreach (KeyValueConfigurationElement keyVal in cobiePropertyMaps.Settings)
                 {
-                    var includedType = IfcMetaData.IfcType(keyVal.Key.ToUpper());
-                    if (includedType != null) _includedTypes.Add(includedType);
+                    var values = keyVal.Value.Split(new[] {';'}, StringSplitOptions.RemoveEmptyEntries);
+                    _cobieFieldMap.Add(keyVal.Key, values);
+                    foreach (var cobieProperty in values)
+                        //used to keep a list of properties that are reserved for COBie and not written out as attributes
+                        _cobieProperties.Add(cobieProperty);
+                }
+            }
+
+
+            var ifcElementInclusion = (AppSettingsSection) config.GetSection("IfcElementInclusion");
+
+            if (ifcElementInclusion != null)
+            {
+                foreach (KeyValueConfigurationElement keyVal in ifcElementInclusion.Settings)
+                {
+                    if (String.Compare(keyVal.Value, "YES", StringComparison.OrdinalIgnoreCase) == 0)
+                    {
+                        var includedType = IfcMetaData.IfcType(keyVal.Key.ToUpper());
+                        if (includedType != null) _includedTypes.Add(includedType);
+                    }
                 }
             }
         }
 
-        
+
         private void GetPropertySets()
         {
             _attributedObjects = new Dictionary<IfcObjectDefinition, XbimAttributedObject>();
