@@ -200,12 +200,24 @@ namespace Xbim.COBieLite
 
         private void LoadCobieMaps()
         {
+            var ConfigFileName = "COBieAttributes.config";
             Configuration config = null;
             AppSettingsSection cobiePropertyMaps = null;
             _cobieFieldMap = new Dictionary<string, string[]>();
+
+            if (!File.Exists(ConfigFileName))
+            {
+                var directory = new DirectoryInfo(".");
+                throw new Exception(
+                    string.Format(
+                        @"Error loading configuration file ""{0}"". App folder is ""{1}""", ConfigFileName,
+                        directory.FullName)
+                    );
+            }
+
             try
             {
-                var configMap = new ExeConfigurationFileMap {ExeConfigFilename = "COBieAttributes.config"};
+                var configMap = new ExeConfigurationFileMap { ExeConfigFilename = ConfigFileName };
                 config = ConfigurationManager.OpenMappedExeConfiguration(configMap, ConfigurationUserLevel.None);
                 cobiePropertyMaps = (AppSettingsSection) config.GetSection("COBiePropertyMaps");
             }
