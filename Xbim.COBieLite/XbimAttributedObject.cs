@@ -496,13 +496,12 @@ namespace Xbim.COBieLite
                 {
                     var allowedValues = new AllowedValueCollectionType
                     {
-                        AttributeAllowedValue =
-                            new string[ifcPropertyEnumeratedValue.EnumerationReference.EnumerationValues.Count]
+                        AttributeAllowedValue = new List<string>(ifcPropertyEnumeratedValue.EnumerationReference.EnumerationValues.Count)
                     };
                     int i = 0;
                     foreach (var enumValue in ifcPropertyEnumeratedValue.EnumerationReference.EnumerationValues)
                     {
-                        allowedValues.AttributeAllowedValue[i] = enumValue.ToString();
+                        allowedValues.AttributeAllowedValue.Add(enumValue.ToString());
                         i++;
                     }
                 }

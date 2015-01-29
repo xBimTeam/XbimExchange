@@ -45,10 +45,10 @@ namespace Xbim.COBieLite
             List<IfcSystem> systems;
             if (helper.SystemLookup.TryGetValue(ifcElement, out systems))
             {
-                AssetSystemAssignments = new SystemAssignmentCollectionType { SystemAssignment = new SystemKeyType[systems.Count] };
+                AssetSystemAssignments = new SystemAssignmentCollectionType { SystemAssignment = new List<SystemKeyType>(systems.Count) };
                 for (int i = 0; i < systems.Count; i++)
                 {
-                    AssetSystemAssignments.SystemAssignment[i] = new SystemKeyType(systems[i], helper);
+                    AssetSystemAssignments.SystemAssignment.Add(new SystemKeyType(systems[i], helper));
                 }
             }
 
@@ -56,10 +56,10 @@ namespace Xbim.COBieLite
             List<IfcSpace> spaces;
             if (helper.SpaceAssetLookup.TryGetValue(ifcElement, out spaces))
             {
-                AssetSpaceAssignments = new SpaceAssignmentCollectionType { SpaceAssignment = new SpaceKeyType[spaces.Count] };
+                AssetSpaceAssignments = new SpaceAssignmentCollectionType { SpaceAssignment = new List<SpaceKeyType>(spaces.Count) };
                 for (int i = 0; i < spaces.Count; i++)
                 {
-                    AssetSpaceAssignments.SpaceAssignment[i] = new SpaceKeyType(spaces[i], helper);
+                    AssetSpaceAssignments.SpaceAssignment.Add(new SpaceKeyType(spaces[i], helper));
                 }
             }
             

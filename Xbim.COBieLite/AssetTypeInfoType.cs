@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Xbim.Ifc2x3.Kernel;
 using Xbim.Ifc2x3.ProductExtension;
 using Xbim.Ifc2x3.SharedFacilitiesElements;
@@ -61,10 +59,10 @@ namespace Xbim.COBieLite
             List<IfcElement> allAssetsofThisType;
             if (helper.DefiningTypeObjectMap.TryGetValue(ifcTypeObject, out allAssetsofThisType)) //should always work
             {
-                Assets = new AssetCollectionType { Asset = new AssetInfoType[allAssetsofThisType.Count] };
-                for (int i = 0; i < allAssetsofThisType.Count; i++)
+                Assets = new AssetCollectionType { Asset =  new List<AssetInfoType>(allAssetsofThisType.Count)};
+                foreach (IfcElement t in allAssetsofThisType)
                 {
-                    Assets.Asset[i] = new AssetInfoType(allAssetsofThisType[i], helper); ;
+                    Assets.Add(new AssetInfoType(t, helper));
                 }
             }
             else

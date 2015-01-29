@@ -39,14 +39,14 @@ namespace Xbim.COBieLite
             if (zones != null)
             {
                 var ifcZones = zones.ToArray();
-                SpaceZoneAssignments = new ZoneAssignmentCollectionType { ZoneAssignment = new ZoneKeyType[ifcZones.Length] };
+                SpaceZoneAssignments = new ZoneAssignmentCollectionType { ZoneAssignment = new List<ZoneKeyType>(ifcZones.Length) };
                 for (int i = 0; i < ifcZones.Length; i++)
                 {
                     var zoneAssignment = new ZoneKeyType();
-                    SpaceZoneAssignments.ZoneAssignment[i] = zoneAssignment;
                     zoneAssignment.ZoneCategory = helper.GetClassification(ifcZones[i]);
                     zoneAssignment.ZoneName = ifcZones[i].Name;
                     zoneAssignment.externalIDReference = helper.ExternalEntityIdentity(ifcZones[i]);
+                    SpaceZoneAssignments.Add(zoneAssignment);
                 }
             }
             //Attributes
