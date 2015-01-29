@@ -1,9 +1,6 @@
 ﻿using Newtonsoft.Json;
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Xml.Serialization;
 
 namespace Xbim.COBieLite
@@ -13,7 +10,7 @@ namespace Xbim.COBieLite
     {
         public IEnumerator<string> GetEnumerator()
         {
-            return this.AttributeAllowedValue.OfType<string>().GetEnumerator();
+            return AttributeAllowedValue.OfType<string>().GetEnumerator();
         }
 
         [XmlIgnore]
@@ -21,7 +18,6 @@ namespace Xbim.COBieLite
         public List<string> InnerList
         {
             get { return AttributeAllowedValue; }
-
         }
     }
 }

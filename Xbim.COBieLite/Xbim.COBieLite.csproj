@@ -85,18 +85,24 @@
   <ItemGroup>
     <Compile Include="AllowedValueCollectionType.cs" />
     <Compile Include="AssemblyAssignmentCollectionType.cs" />
+    <Compile Include="AssetCollectionType.cs" />
     <Compile Include="AssetInfoType.cs" />
+    <Compile Include="AssetTypeCollectionType.cs" />
     <Compile Include="AssetTypeInfoType.cs" />
     <Compile Include="AttributeCollectionType.cs" />
     <Compile Include="COBieLiteHelper.cs" />
     <Compile Include="cobielite_core.cs" />
+    <Compile Include="ConnectionCollectionType.cs" />
     <Compile Include="ContactAssignmentCollectionType.cs" />
+    <Compile Include="ContactCollectionType.cs" />
     <Compile Include="DocumentCollectionType.cs" />
     <Compile Include="ICollectionType.cs" />
     <Compile Include="ContactType.cs" />
     <Compile Include="FacilityType.cs" />
     <Compile Include="FloorType.cs" />
     <Compile Include="FloorCollectionType.cs" />
+    <Compile Include="IssueCollectionType.cs" />
+    <Compile Include="JobCollectionType.cs" />
     <Compile Include="ProjectType.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Properties\Settings.Designer.cs">
@@ -104,12 +110,15 @@
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
       <DependentUpon>Settings.settings</DependentUpon>
     </Compile>
+    <Compile Include="ResourceCollectionType.cs" />
     <Compile Include="SiteType.cs" />
     <Compile Include="SpaceAssignmentCollectionType.cs" />
     <Compile Include="SpaceKeyType.cs" />
     <Compile Include="SpaceType.cs" />
     <Compile Include="SpaceCollectionType.cs" />
+    <Compile Include="SpareCollectionType.cs" />
     <Compile Include="SystemAssignmentCollectionType.cs" />
+    <Compile Include="SystemCollectionType.cs" />
     <Compile Include="SystemKeyType.cs" />
     <Compile Include="SystemType.cs" />
     <Compile Include="WarrantyCollectionType.cs" />
@@ -119,6 +128,7 @@
     <Compile Include="XbimCoBieLiteXmlWriter.cs" />
     <Compile Include="XbimCOBieValueHelper.cs" />
     <Compile Include="ZoneAssignmentCollectionType.cs" />
+    <Compile Include="ZoneCollectionType.cs" />
     <Compile Include="ZoneType.cs" />
   </ItemGroup>
   <ItemGroup>
