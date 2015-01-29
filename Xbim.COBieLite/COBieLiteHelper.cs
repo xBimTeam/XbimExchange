@@ -4,6 +4,7 @@ using System.Configuration;
 using System.Globalization;
 using System.IO;
 using System.Linq;
+using System.Net.Mime;
 using System.Text.RegularExpressions;
 using System.Xml.Serialization;
 using Newtonsoft.Json;
@@ -199,10 +200,21 @@ namespace Xbim.COBieLite
         
         private void LoadCobieMaps()
         {
+            Configuration config = null;
+            AppSettingsSection cobiePropertyMaps = null;
             _cobieFieldMap = new Dictionary<string, string[]>();
-            var configMap = new ExeConfigurationFileMap {ExeConfigFilename = "COBieAttributes.config"};
-            var config = ConfigurationManager.OpenMappedExeConfiguration(configMap, ConfigurationUserLevel.None);
-            var cobiePropertyMaps = (AppSettingsSection)config.GetSection("COBiePropertyMaps");
+            try
+            {
+                var configMap = new ExeConfigurationFileMap { ExeConfigFilename = "COBieAttributes.config" };
+                config = ConfigurationManager.OpenMappedExeConfiguration(configMap, ConfigurationUserLevel.None);
+                cobiePropertyMaps = (AppSettingsSection)config.GetSection("COBiePropertyMaps");
+            }
+            catch (Exception ex)
+            {
+                var directory = new DirectoryInfo(".");
+                throw new Exception(@"Error loading configuration file ""COBieAttributes.config"". App folder is " + directory.FullName, ex);
+            }
+            
 
             foreach (KeyValueConfigurationElement keyVal in cobiePropertyMaps.Settings)
             {

@@ -32,6 +32,14 @@ namespace Xbim.Tests.COBie
             }
         }
 
+        [TestMethod]
+        public void CanOpenTemporaryModel()
+        {
+            var model = XbimModel.CreateTemporaryModel();
+            model.Initialise();
+            var helper = new CoBieLiteHelper(model, "UniClass");
+            var facilities = helper.GetFacilities();
+        }
 
         [TestMethod]
         public void ConvertCoBieLiteToJson()
