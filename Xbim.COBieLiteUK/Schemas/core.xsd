@@ -1,4 +1,9 @@
-<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns="http://docs.buildingsmartalliance.org/nbims03/cobie/core" xmlns:camed="http://jcam.org.uk/editor" targetNamespace="http://docs.buildingsmartalliance.org/nbims03/cobie/core" elementFormDefault="unqualified" attributeFormDefault="unqualified" version="RC4">
+<xs:schema 
+  xmlns:xs="http://www.w3.org/2001/XMLSchema" 
+  xmlns="http://docs.buildingsmartalliance.org/nbims03/cobie/core" 
+  xmlns:camed="http://jcam.org.uk/editor" 
+  targetNamespace="http://docs.buildingsmartalliance.org/nbims03/cobie/core" 
+  elementFormDefault="unqualified" attributeFormDefault="unqualified" version="RC4">
 	<xs:annotation>
 		<xs:documentation>
 			The Construction-Operations Building information exchange (COBie) is a United States Building Information Model Standard published by the buildingSMART alliance, a Council of the National Institute of Building Sciences.   COBie defines the information exchange requirements needed to capture required information needed to manage facility assets during the planning, design, construction, operations, management, renovation, and recycling of a facility.  COBie is a marketing name used by the buildingSMART alliance for the underlying internationally used format defined by the Facility Management Handover Model View Defintion, and internally used and recognized Model View of the STEP-based ISO 16739 standard.

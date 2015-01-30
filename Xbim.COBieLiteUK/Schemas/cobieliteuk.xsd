@@ -5,7 +5,82 @@
   targetNamespace="http://docs.buildingsmartalliance.org/nbims03/cobie/cobielite" 
   elementFormDefault="unqualified" attributeFormDefault="unqualified" version="RC1">
 	<xs:import namespace="http://docs.buildingsmartalliance.org/nbims03/cobie/core" schemaLocation="core.xsd"/>
-	<!--Begin Assembly related content-->
+  <!--Begin FacilityStages related content-->
+  <xs:element name="FacilityStages" type="cobielite:FacilityStageCollectionType">
+    <xs:annotation>
+      <xs:documentation>
+        Set of stages of facility. This is the root element of COBieLiteUK
+      </xs:documentation>
+    </xs:annotation>
+  </xs:element>
+  <!--End FacilityStages related content-->
+  <!--Begin FacilityStageCollectionType related content-->
+  <xs:complexType name="FacilityStageCollectionType">
+    <xs:sequence>
+      <xs:element name="FacilityStage" type="cobielite:FacilityStageType" minOccurs="0" maxOccurs="unbounded"/>
+    </xs:sequence>
+  </xs:complexType>
+  <!--End FacilityStageCollectionType related content-->
+  <!--Begin FacilityStageType related content-->
+  <xs:complexType name="FacilityStageType">
+    <xs:annotation>
+      <xs:documentation>
+        Stage of facility either as a process stage or as a state of a facility at certain point in time
+      </xs:documentation>
+    </xs:annotation>
+    <xs:sequence>
+      <xs:element name="FacilityStageName" type="xs:string"/>
+      <xs:element name="FacilityStageDescription" type="xs:string"/>
+      <xs:element name="FacilityStageCode" type="xs:string"/>
+      <xs:element name="FacilityStageStartDate" type="xs:date"/>
+      <xs:element name="FacilityStageEndDate" type="xs:date"/>
+      <xs:element name="FacilityStageAttributes" type="core:AttributeCollectionType"/>
+      <xs:element name="Facility" type="cobielite:FacilityType" />
+      <xs:element name="FacilityStagePrevious" type="cobielite:FacilityStageKeyType">
+        <xs:annotation>
+          <xs:documentation>
+            If this element is defined it refers to the previous stage of facility. This makes it
+            possible to model chain of sequential stages in order even if to dates and times
+            are specified.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="FacilityStageNext" type="cobielite:FacilityStageKeyType">
+        <xs:annotation>
+          <xs:documentation>
+            If this element is defined it refers to the next stage of facility. This makes it
+            possible to model chain of sequential stages in order even if to dates and times
+            are specified.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+    </xs:sequence>
+    <xs:attribute name="externalID" type="core:ExternalIdentifierSimpleType" use="required">
+      <xs:annotation>
+        <xs:documentation>
+          External ID of the facility stage. This attribute is required to be defined.
+        </xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+  </xs:complexType>
+  <!--End FacilityStageType related content-->
+  <!--Begin FacilityStageKeyType related content-->
+  <xs:complexType name="FacilityStageKeyType">
+    <xs:annotation>
+      <xs:documentation>
+        Facility Stage Key is to be used as a reference to facility stage defined on the top level.
+      </xs:documentation>
+    </xs:annotation>
+    <xs:attribute type="core:ExternalIdentifierSimpleType" name="externalIDRefer">
+      <xs:annotation>
+        <xs:documentation>
+          This is an external reference to facility stage where stage externalID equals to this externalIDRefer.
+        </xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+  </xs:complexType>
+  <!--End FacilityStageKeyType related content-->
+  <!--Begin Assembly related content-->
 	<xs:complexType name="AssemblyType">
 		<xs:annotation>
 			<xs:documentation>The Assembly to which this Asset belongs</xs:documentation>
