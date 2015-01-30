@@ -64,7 +64,7 @@ namespace Xbim.COBieLiteUK
 
         private AttributeCollectionType facilityStageAttributesField;
 
-        private FacilityType1 facilityField;
+        private FacilityType facilityField;
 
         private FacilityStageKeyType facilityStagePreviousField;
 
@@ -76,7 +76,7 @@ namespace Xbim.COBieLiteUK
         {
             this.facilityStageNextField = new FacilityStageKeyType();
             this.facilityStagePreviousField = new FacilityStageKeyType();
-            this.facilityField = new FacilityType1();
+            this.facilityField = new FacilityType();
             this.facilityStageAttributesField = new AttributeCollectionType();
         }
 
@@ -159,7 +159,7 @@ namespace Xbim.COBieLiteUK
         }
 
         [System.Xml.Serialization.XmlElementAttribute(Form = System.Xml.Schema.XmlSchemaForm.Unqualified, Order = 6)]
-        public FacilityType1 Facility
+        public FacilityType Facility
         {
             get
             {
@@ -308,8 +308,8 @@ namespace Xbim.COBieLiteUK
         }
     }
 
+    [System.Xml.Serialization.XmlIncludeAttribute(typeof(FacilityTypeBase))]
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(FacilityType))]
-    [System.Xml.Serialization.XmlIncludeAttribute(typeof(FacilityType1))]
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(ZoneType))]
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(ZoneType1))]
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(SystemType))]
@@ -352,8 +352,8 @@ namespace Xbim.COBieLiteUK
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(SpaceType1))]
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(WarrantyType))]
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(CobieRowType))]
+    [System.Xml.Serialization.XmlIncludeAttribute(typeof(FacilityTypeBase))]
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(FacilityType))]
-    [System.Xml.Serialization.XmlIncludeAttribute(typeof(FacilityType1))]
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(ZoneType))]
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(ZoneType1))]
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(SystemType))]
@@ -491,8 +491,8 @@ namespace Xbim.COBieLiteUK
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(SpaceType1))]
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(WarrantyType))]
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(CobieRowType))]
+    [System.Xml.Serialization.XmlIncludeAttribute(typeof(FacilityTypeBase))]
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(FacilityType))]
-    [System.Xml.Serialization.XmlIncludeAttribute(typeof(FacilityType1))]
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(ZoneType))]
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(ZoneType1))]
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(SystemType))]
@@ -5148,12 +5148,12 @@ namespace Xbim.COBieLiteUK
         }
     }
 
-    [System.Xml.Serialization.XmlIncludeAttribute(typeof(FacilityType1))]
+    [System.Xml.Serialization.XmlIncludeAttribute(typeof(FacilityType))]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.34234")]
     [System.SerializableAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://docs.buildingsmartalliance.org/nbims03/cobie/core")]
-    public partial class FacilityType : CobieRowType
+    public partial class FacilityTypeBase : CobieRowType
     {
 
         private string facilityNameField;
@@ -5177,7 +5177,7 @@ namespace Xbim.COBieLiteUK
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(TypeName = "FacilityType", Namespace = "http://docs.buildingsmartalliance.org/nbims03/cobie/cobielite")]
     [System.Xml.Serialization.XmlRootAttribute("Facility", Namespace = "http://docs.buildingsmartalliance.org/nbims03/cobie/cobielite", IsNullable = false)]
-    public partial class FacilityType1 : FacilityType
+    public partial class FacilityType : FacilityTypeBase
     {
 
         private string facilityCategoryField;
@@ -5226,7 +5226,7 @@ namespace Xbim.COBieLiteUK
 
         private IssueCollectionType facilityIssuesField;
 
-        public FacilityType1()
+        public FacilityType()
         {
             this.facilityIssuesField = new IssueCollectionType();
             this.facilityDocumentsField = new DocumentCollectionType();

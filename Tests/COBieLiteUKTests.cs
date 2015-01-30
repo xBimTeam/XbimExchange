@@ -41,7 +41,7 @@ namespace Tests
                             }
                         })
                     },
-                    Facility = new FacilityType1(){
+                    Facility = new FacilityType(){
                         externalID = Guid.NewGuid().ToString(),
                         FacilityDefaultAreaUnit = AreaUnitSimpleType.squaremeters,
                         FacilityDefaultAreaUnitSpecified = true,
@@ -92,7 +92,7 @@ namespace Tests
                             }
                         })
                     },
-                    Facility = new FacilityType1(){
+                    Facility = new FacilityType(){
                         externalID = Guid.NewGuid().ToString(),
                         FacilityDefaultAreaUnit = AreaUnitSimpleType.squaremeters,
                         FacilityDefaultAreaUnitSpecified = true,
@@ -147,7 +147,7 @@ namespace Tests
                             }
                         })
                     },
-                    Facility = new FacilityType1(){
+                    Facility = new FacilityType(){
                         externalID = Guid.NewGuid().ToString(),
                         FacilityDefaultAreaUnit = AreaUnitSimpleType.squaremeters,
                         FacilityDefaultAreaUnitSpecified = true,
