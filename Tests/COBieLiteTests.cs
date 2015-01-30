@@ -10,7 +10,6 @@ namespace Xbim.Tests.COBie
 {
     [TestClass] 
     [DeploymentItem(@"TestFiles\")]
-    [DeploymentItem(@"COBieAttributes.config")]
     public class CoBieLiteTests
     {
         [TestMethod]
