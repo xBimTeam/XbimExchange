@@ -5,38 +5,71 @@
   targetNamespace="http://docs.buildingsmartalliance.org/nbims03/cobie/cobielite" 
   elementFormDefault="unqualified" attributeFormDefault="unqualified" version="RC1">
 	<xs:import namespace="http://docs.buildingsmartalliance.org/nbims03/cobie/core" schemaLocation="core.xsd"/>
-  <!--Begin FacilityStages related content-->
-  <xs:element name="FacilityStages" type="cobielite:FacilityStageCollectionType">
+  <!--Begin ProjectStages related content-->
+  <xs:element name="Project" type="cobielite:ProjectType">
     <xs:annotation>
       <xs:documentation>
-        Set of stages of facility. This is the root element of COBieLiteUK
+        Project containing project stages and other related data. This is the root element of COBieLiteUK
       </xs:documentation>
     </xs:annotation>
   </xs:element>
-  <!--End FacilityStages related content-->
-  <!--Begin FacilityStageCollectionType related content-->
-  <xs:complexType name="FacilityStageCollectionType">
+  <!--End ProjectStages related content-->
+  <!--Begin ProjectType related content-->
+  <xs:complexType name="ProjectType">
+    <xs:complexContent>
+      <xs:extension base="core:ProjectType">
+        <xs:sequence>
+          <xs:element name="ProjectAddress" type="xs:string"/>
+          <xs:element name="ProjectFunction" type="xs:string"/>
+          <xs:element name="ProjectProcurement" type="xs:string"/>
+          <xs:element name="ProjectFunctionalUnit" type="core:DecimalValueType"/>
+          <xs:element name="ProjectExpectedLifeCycle" type="core:DecimalValueType"/>
+          <xs:element name="ProjectCost" type="core:DecimalValueType"/>
+          <xs:element name="ProjectConstructionStart" type="xs:date"/>
+          <xs:element name="ProjectConstructionEnd" type="xs:date"/>
+          <xs:element name="ProjectStages" type="cobielite:ProjectStageCollectionType"/>
+        </xs:sequence>
+        <xs:attribute name="externalID" type="core:ExternalIdentifierSimpleType" use="required">
+          <xs:annotation>
+            <xs:documentation>
+              External ID of the project. This attribute is required to be defined.
+            </xs:documentation>
+          </xs:annotation>
+        </xs:attribute>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <!--End ProjectType related content-->
+  <!--Begin ProjectKeyType related content-->
+  <xs:complexType name="ProjectKeyType">
+    <xs:attribute type="core:ExternalIdentifierSimpleType" name="externalIDRefer"/>
+  </xs:complexType>
+  <!--End ProjectKeyType related content-->
+  <!--Begin ProjectStageCollectionType related content-->
+  <xs:complexType name="ProjectStageCollectionType">
     <xs:sequence>
-      <xs:element name="FacilityStage" type="cobielite:FacilityStageType" minOccurs="0" maxOccurs="unbounded"/>
+      <xs:element name="ProjectStage" type="cobielite:ProjectStageType" minOccurs="0" maxOccurs="unbounded"/>
     </xs:sequence>
   </xs:complexType>
-  <!--End FacilityStageCollectionType related content-->
-  <!--Begin FacilityStageType related content-->
-  <xs:complexType name="FacilityStageType">
+  <!--End ProjectStageCollectionType related content-->
+  <!--Begin ProjectStageType related content-->
+  <xs:complexType name="ProjectStageType">
     <xs:annotation>
       <xs:documentation>
         Stage of facility either as a process stage or as a state of a facility at certain point in time
       </xs:documentation>
     </xs:annotation>
     <xs:sequence>
-      <xs:element name="FacilityStageName" type="xs:string"/>
-      <xs:element name="FacilityStageDescription" type="xs:string"/>
-      <xs:element name="FacilityStageCode" type="xs:string"/>
-      <xs:element name="FacilityStageStartDate" type="xs:date"/>
-      <xs:element name="FacilityStageEndDate" type="xs:date"/>
-      <xs:element name="FacilityStageAttributes" type="core:AttributeCollectionType"/>
+      <xs:element name="ProjectStageName" type="xs:string"/>
+      <xs:element name="ProjectStageDescription" type="xs:string"/>
+      <xs:element name="ProjectStageCode" type="xs:string"/>
+      <xs:element name="ProjectStageStartDate" type="xs:date"/>
+      <xs:element name="ProjectStageEndDate" type="xs:date"/>
+      <xs:element name="ProjectStageCost" type="core:DecimalValueType"/>
+      <xs:element name="ProjectStageEnvironmentalAssesmentRating" type="xs:string"/>
+      <xs:element name="ProjectStageAttributes" type="core:AttributeCollectionType"/>
       <xs:element name="Facility" type="cobielite:FacilityType" />
-      <xs:element name="FacilityStagePrevious" type="cobielite:FacilityStageKeyType">
+      <xs:element name="ProjectStagePrevious" type="cobielite:ProjectStageKeyType">
         <xs:annotation>
           <xs:documentation>
             If this element is defined it refers to the previous stage of facility. This makes it
@@ -45,7 +78,7 @@
           </xs:documentation>
         </xs:annotation>
       </xs:element>
-      <xs:element name="FacilityStageNext" type="cobielite:FacilityStageKeyType">
+      <xs:element name="ProjectStageNext" type="cobielite:ProjectStageKeyType">
         <xs:annotation>
           <xs:documentation>
             If this element is defined it refers to the next stage of facility. This makes it
@@ -58,14 +91,14 @@
     <xs:attribute name="externalID" type="core:ExternalIdentifierSimpleType" use="required">
       <xs:annotation>
         <xs:documentation>
-          External ID of the facility stage. This attribute is required to be defined.
+          External ID of the project stage. This attribute is required to be defined.
         </xs:documentation>
       </xs:annotation>
     </xs:attribute>
   </xs:complexType>
-  <!--End FacilityStageType related content-->
-  <!--Begin FacilityStageKeyType related content-->
-  <xs:complexType name="FacilityStageKeyType">
+  <!--End ProjectStageType related content-->
+  <!--Begin ProjectStageKeyType related content-->
+  <xs:complexType name="ProjectStageKeyType">
     <xs:annotation>
       <xs:documentation>
         Facility Stage Key is to be used as a reference to facility stage defined on the top level.

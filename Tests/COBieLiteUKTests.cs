@@ -13,17 +13,17 @@ namespace Tests
         [TestMethod]
         public void COBieLiteUKCreation()
         {
-            var model = new FacilityStageCollectionType();
-            model.FacilityStage = new List<FacilityStageType>();
-            model.FacilityStage.AddRange(new []{
-                new FacilityStageType(){
+            var model = new ProjectType1();
+            model.ProjectStages = new List<ProjectStageType>();
+            model.ProjectStages.AddRange(new[]{
+                new ProjectStageType(){
                     externalID = Guid.NewGuid().ToString(),
-                    FacilityStageCode = "A4",
-                    FacilityStageDescription = "Stage A4",
-                    FacilityStageName = "Preliminary design",
-                    FacilityStageStartDate = DateTime.Now,
-                    FacilityStageEndDate = DateTime.Now.AddDays(28),
-                    FacilityStageAttributes = new AttributeCollectionType(){
+                    ProjectStageCode = "A4",
+                    ProjectStageDescription = "Stage A4",
+                    ProjectStageName = "Preliminary design",
+                    ProjectStageStartDate = DateTime.Now,
+                    ProjectStageEndDate = DateTime.Now.AddDays(28),
+                    ProjectStageAttributes = new AttributeCollectionType(){
                         Attribute = new List<AttributeType>(new []{
                             new AttributeType1(){
                                 AttributeName = "New attribute 1",
@@ -41,7 +41,7 @@ namespace Tests
                             }
                         })
                     },
-                    Facility = new FacilityType(){
+                    Facility = new FacilityType1(){
                         externalID = Guid.NewGuid().ToString(),
                         FacilityDefaultAreaUnit = AreaUnitSimpleType.squaremeters,
                         FacilityDefaultAreaUnitSpecified = true,
@@ -67,14 +67,14 @@ namespace Tests
                         })}
                     }
                 },
-                new FacilityStageType(){
+                new ProjectStageType(){
                     externalID = Guid.NewGuid().ToString(),
-                    FacilityStageCode = "A4",
-                    FacilityStageDescription = "Stage A4",
-                    FacilityStageName = "Preliminary design",
-                    FacilityStageStartDate = DateTime.Now,
-                    FacilityStageEndDate = DateTime.Now.AddDays(28),
-                    FacilityStageAttributes = new AttributeCollectionType(){
+                    ProjectStageCode = "A4",
+                    ProjectStageDescription = "Stage A4",
+                    ProjectStageName = "Preliminary design",
+                    ProjectStageStartDate = DateTime.Now,
+                    ProjectStageEndDate = DateTime.Now.AddDays(28),
+                    ProjectStageAttributes = new AttributeCollectionType(){
                         Attribute = new List<AttributeType>(new []{
                             new AttributeType1(){
                                 AttributeName = "New attribute 1",
@@ -92,7 +92,7 @@ namespace Tests
                             }
                         })
                     },
-                    Facility = new FacilityType(){
+                    Facility = new FacilityType1(){
                         externalID = Guid.NewGuid().ToString(),
                         FacilityDefaultAreaUnit = AreaUnitSimpleType.squaremeters,
                         FacilityDefaultAreaUnitSpecified = true,
@@ -118,14 +118,14 @@ namespace Tests
                         })}
                     }
                 },
-                new FacilityStageType(){
+                new ProjectStageType(){
                     externalID = Guid.NewGuid().ToString(),
-                    FacilityStageCode = "A4",
-                    FacilityStageDescription = "Stage A4",
-                    FacilityStageName = "Preliminary design",
-                    FacilityStageStartDate = DateTime.Now,
-                    FacilityStageEndDate = DateTime.Now.AddDays(28),
-                    FacilityStageAttributes = new AttributeCollectionType(){
+                    ProjectStageCode = "A4",
+                    ProjectStageDescription = "Stage A4",
+                    ProjectStageName = "Preliminary design",
+                    ProjectStageStartDate = DateTime.Now,
+                    ProjectStageEndDate = DateTime.Now.AddDays(28),
+                    ProjectStageAttributes = new AttributeCollectionType(){
                         Attribute = new List<AttributeType>(new []{
                             new AttributeType1(){
                                 AttributeName = "New attribute 1",
@@ -147,7 +147,7 @@ namespace Tests
                             }
                         })
                     },
-                    Facility = new FacilityType(){
+                    Facility = new FacilityType1(){
                         externalID = Guid.NewGuid().ToString(),
                         FacilityDefaultAreaUnit = AreaUnitSimpleType.squaremeters,
                         FacilityDefaultAreaUnitSpecified = true,

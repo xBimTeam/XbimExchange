@@ -9,7 +9,7 @@ using System.Xml.Serialization;
 
 namespace Xbim.COBieLiteUK
 {
-    public partial class FacilityStageCollectionType
+    public partial class ProjectType1
     {
         public void Save(Stream stream)
         {
