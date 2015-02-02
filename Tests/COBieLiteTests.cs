@@ -4,15 +4,42 @@ using System.IO;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Xbim.COBieLite;
 using Xbim.IO;
+using System.Xml.Serialization;
 
 namespace Xbim.Tests.COBie
 {
     [TestClass] 
     [DeploymentItem(@"TestFiles\")]
-    [DeploymentItem(@"COBieAttributes.config")]
     public class CoBieLiteTests
     {
-       
+        [TestMethod]
+        public void CanReadSerialisedXml()
+        {
+            try
+            {
+                var fread = CoBieLiteHelper.ReadXml(@"Facility1.xml");
+            }
+            catch (Exception ex)
+            {
+                while (ex.InnerException != null)
+                {
+                    Debug.WriteLine(ex.Message);
+                    ex = ex.InnerException;
+                }
+                Debug.WriteLine(ex.Message);
+                throw ex;
+            }
+        }
+
+        [TestMethod]
+        public void CanOpenTemporaryModel()
+        {
+            var model = XbimModel.CreateTemporaryModel();
+            model.Initialise();
+            var helper = new CoBieLiteHelper(model, "UniClass");
+            var facilities = helper.GetFacilities();
+        }
+
         [TestMethod]
         public void ConvertCoBieLiteToJson()
         {
@@ -60,6 +87,9 @@ namespace Xbim.Tests.COBie
                         CoBieLiteHelper.WriteXml(writer, facilityType);
                     }
                     CoBieLiteHelper.WriteXml(Console.Out, facilityType);
+
+                    // attempt reading
+                    var fread = CoBieLiteHelper.ReadXml(outName);
                 }
             }
         } 

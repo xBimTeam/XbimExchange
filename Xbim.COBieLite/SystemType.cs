@@ -1,4 +1,5 @@
-﻿using Xbim.Ifc2x3.ProductExtension;
+﻿using System.Linq;
+using Xbim.Ifc2x3.ProductExtension;
 
 namespace Xbim.COBieLite
 {
@@ -19,8 +20,8 @@ namespace Xbim.COBieLite
             SystemCategory = helper.GetClassification(ifcSystem);
             
             //Attributes
-            AttributeType[] ifcAttributes = helper.GetAttributes(ifcSystem);
-            if (ifcAttributes != null && ifcAttributes.Length > 0)
+           var ifcAttributes = helper.GetAttributes(ifcSystem);
+            if (ifcAttributes != null && ifcAttributes.Any())
                 SystemAttributes = new AttributeCollectionType { Attribute = ifcAttributes };
 
              //TODO:

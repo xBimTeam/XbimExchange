@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using Microsoft.Xml.Serialization.GeneratedAssembly;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Xml;
@@ -13,13 +14,18 @@ namespace Xbim.COBieLite
 
     public partial class FacilityType
     {
-      
-       // private IfcBuilding _ifcBuilding;
-       
+        public static System.Xml.Serialization.XmlSerializer GetSerializer()
+        {
+            return new FacilityTypeSerializer();
+        }
+
+        // private IfcBuilding _ifcBuilding;
+
         public FacilityType()
         {
-           
+
         }
+
         public FacilityType(IfcBuilding ifcBuilding, CoBieLiteHelper helper)
             : this()
         {
@@ -43,19 +49,18 @@ namespace Xbim.COBieLite
                 var ifcBuildingStories = storeys as IList<IfcBuildingStorey> ?? storeys.ToList();
                 if (ifcBuildingStories.Any())
                 {
-                    Floors = new FloorCollectionType {Floor = new FloorType[ifcBuildingStories.Count]};
+                    Floors = new FloorCollectionType {Floor = new List<FloorType>(ifcBuildingStories.Count)};
                     for (int i = 0; i < ifcBuildingStories.Count; i++)
                     {
-                        Floors.Floor[i] = new FloorType(ifcBuildingStories[i], helper);
+                        Floors.Add(new FloorType(ifcBuildingStories[i], helper));
                     }
                 }
-
             }
             //Attributes
-            AttributeType[] ifcAttributes = helper.GetAttributes(ifcBuilding);
-            if (ifcAttributes != null && ifcAttributes.Length > 0)
-                FacilityAttributes = new AttributeCollectionType { Attribute = ifcAttributes };
-           
+            var ifcAttributes = helper.GetAttributes(ifcBuilding);
+            if (ifcAttributes != null && ifcAttributes.Any())
+                FacilityAttributes = new AttributeCollectionType {Attribute = ifcAttributes};
+
             //Zones
 
             var allSpaces = GetAllSpaces(ifcBuilding);
@@ -63,16 +68,16 @@ namespace Xbim.COBieLite
             var ifcZones = allZones.ToArray();
             if (ifcZones.Any())
             {
-                Zones = new ZoneCollectionType { Zone = new ZoneTypeBase[ifcZones.Length] };
+                Zones = new ZoneCollectionType {Zone = new List<ZoneType>(ifcZones.Length)};
                 for (int i = 0; i < ifcZones.Length; i++)
                 {
-                    Zones.Zone[i] = new ZoneType(ifcZones[i], helper);
+                    Zones.Add(new ZoneType(ifcZones[i], helper));
                 }
             }
-            
+
             //Assets
             var allAssetsinThisFacility = new HashSet<IfcElement>(helper.GetAllAssets(ifcBuilding));
-            
+
             //AssetTypes
             //Get all assets that are in this facility/building
             var allAssetTypesInThisFacility = AllAssetTypesInThisFacility(ifcBuilding, allAssetsinThisFacility, helper);
@@ -80,11 +85,11 @@ namespace Xbim.COBieLite
             {
                 AssetTypes = new AssetTypeCollectionType
                 {
-                    AssetType = new AssetTypeInfoType[allAssetTypesInThisFacility.Count]
+                    AssetType = new List<AssetTypeInfoType>(allAssetTypesInThisFacility.Count)
                 };
                 for (int i = 0; i < allAssetTypesInThisFacility.Count; i++)
                 {
-                    AssetTypes.AssetType[i] = new AssetTypeInfoType(allAssetTypesInThisFacility[i], helper); 
+                    AssetTypes.Add(new AssetTypeInfoType(allAssetTypesInThisFacility[i], helper));
                 }
             }
 
@@ -96,12 +101,12 @@ namespace Xbim.COBieLite
             {
                 Systems = new SystemCollectionType
                 {
-                    System = new SystemTypeBase[allSystemsInThisFacility.Length]
+                    System = new List<SystemType>(allSystemsInThisFacility.Length)
                 };
 
                 for (int i = 0; i < allSystemsInThisFacility.Length; i++)
                 {
-                    Systems.System[i] = new SystemType(allSystemsInThisFacility[i], helper);
+                    Systems.Add(new SystemType(allSystemsInThisFacility[i], helper));
                 }
             }
 
@@ -112,22 +117,23 @@ namespace Xbim.COBieLite
             {
                 Contacts = new ContactCollectionType
                 {
-                    Contact = new ContactTypeBase[ifcActors.Length]
+                    Contact = new List<ContactType>(ifcActors.Length)
                 };
 
                 for (int i = 0; i < ifcActors.Length; i++)
                 {
-                    Contacts.Contact[i] = new ContactType(ifcActors[i], helper);
+                    Contacts.Add(new ContactType(ifcActors[i], helper));
                 }
             }
 
         }
 
-        
 
-        private static List<IfcTypeObject> AllAssetTypesInThisFacility(IfcBuilding ifcBuilding, HashSet<IfcElement> allAssetsinThisFacility,  CoBieLiteHelper helper)
+
+        private static List<IfcTypeObject> AllAssetTypesInThisFacility(IfcBuilding ifcBuilding,
+            HashSet<IfcElement> allAssetsinThisFacility, CoBieLiteHelper helper)
         {
-           
+
             var allAssetTypes = helper.DefiningTypeObjectMap;
             var allAssetTypesInThisFacility = new List<IfcTypeObject>(allAssetTypes.Count);
             foreach (var assetTypeKeyValue in allAssetTypes)
@@ -176,8 +182,5 @@ namespace Xbim.COBieLite
             if ((FacilityDefaultCurrencyUnitSpecified = helper.HasCurrencyUnit) == true)
                 facilityDefaultCurrencyUnitField = helper.ModelCurrencyUnit;
         }
-
-       
-
     }
 }
