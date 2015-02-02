@@ -1,6 +1,7 @@
 ﻿using Xbim.COBieLite;
 using Xbim.Ifc2x3.ProductExtension;
 using Xbim.Ifc2x3.Extensions;
+using XbimExchanger.IfcHelpers;
 
 namespace XbimExchanger.COBieLiteToIfc
 {
@@ -9,13 +10,38 @@ namespace XbimExchanger.COBieLiteToIfc
 
         protected override IfcBuilding Mapping(FacilityType facility, IfcBuilding ifcBuilding)
         {
+            #region Properties
+
             ifcBuilding.Name = facility.FacilityName;
             ifcBuilding.Description = facility.FacilityDescription;
 
+            #endregion
+
+            #region Default units
+
+            Exchanger.DefaultLinearUnit = facility.FacilityDefaultLinearUnitSpecified
+                   ? new IfcUnitConverter(facility.FacilityDefaultLinearUnit.ToString())
+                   : default(IfcUnitConverter);
+            Exchanger.DefaultAreaUnit = facility.FacilityDefaultAreaUnitSpecified
+                ? new IfcUnitConverter(facility.FacilityDefaultAreaUnit.ToString())
+                : default(IfcUnitConverter);
+            Exchanger.DefaultVolumeUnit = facility.FacilityDefaultVolumeUnitSpecified
+                   ? new IfcUnitConverter(facility.FacilityDefaultVolumeUnit.ToString())
+                   : default(IfcUnitConverter);
+            Exchanger.DefaultCurrencyUnit = facility.FacilityDefaultCurrencyUnitSpecified
+                ? (CurrencyUnitSimpleType?)facility.FacilityDefaultCurrencyUnit
+                : null;
+
+            #endregion
+
+            #region Project
             var projectMapping = Exchanger.GetOrCreateMappings<MappingProjectTypeToIfcProject>();
             //COBie does nor require a project but Ifc does
             var ifcProject = facility.ProjectAssignment != null ? projectMapping.CreateTargetObject() : projectMapping.GetOrCreateTargetObject(facility.externalID);
-            projectMapping.AddMapping(facility.ProjectAssignment, ifcProject);
+            projectMapping.AddMapping(facility.ProjectAssignment, ifcProject); 
+            #endregion
+
+            #region Site
             //add the relationship between the site and the building if a site exists
             if (facility.SiteAssignment != null)
             {
@@ -27,8 +53,10 @@ namespace XbimExchanger.COBieLiteToIfc
                 ifcSite.AddBuilding(ifcBuilding);
             }
             else //relate the building to the project
-                ifcProject.AddBuilding(ifcBuilding);
+                ifcProject.AddBuilding(ifcBuilding); 
+            #endregion
 
+            #region Floors
             //write out the floors if we have any
             if (facility.Floors != null)
             {
@@ -38,10 +66,9 @@ namespace XbimExchanger.COBieLiteToIfc
                     var ifcFloor = floorMapping.AddMapping(floor, floorMapping.GetOrCreateTargetObject(floor.externalID));
                     ifcBuilding.AddToSpatialDecomposition(ifcFloor);
                 }
-            }
-
-            
-
+            } 
+            #endregion
+        
             return ifcBuilding;
         }
     }

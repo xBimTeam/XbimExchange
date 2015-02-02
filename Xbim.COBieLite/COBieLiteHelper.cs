@@ -5,6 +5,7 @@ using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Net.Mime;
+using System.Reflection;
 using System.Text.RegularExpressions;
 using System.Xml.Serialization;
 using Newtonsoft.Json;
@@ -117,10 +118,13 @@ namespace Xbim.COBieLite
 
         #endregion
 
-        public CoBieLiteHelper(XbimModel model, string classificationSystemName = null)
-        {
-            _model = model;
+        private string _ConfigFileName = null;
 
+        public CoBieLiteHelper(XbimModel model, string classificationSystemName = null, string configurationFile = null)
+        {
+            _ConfigFileName = configurationFile;
+
+            _model = model;
             _creatingApplication = model.Header.CreatingApplication;
             LoadCobieMaps();
             GetClassificationDictionary(classificationSystemName);
@@ -130,11 +134,8 @@ namespace Xbim.COBieLite
             GetPropertySets();
             GetSystems();
             GetSpaceAssetLookup();
-
         }
-
         
-
         private void GetSystems()
         {
             _systemAssignment = 
@@ -200,24 +201,38 @@ namespace Xbim.COBieLite
 
         private void LoadCobieMaps()
         {
-            var ConfigFileName = "COBieAttributes.config";
+            var tmpFile = _ConfigFileName;
+            if (_ConfigFileName == null)
+            {
+                tmpFile = System.IO.Path.GetTempPath() + Guid.NewGuid().ToString() + ".csv";
+
+                var asss = Assembly.GetExecutingAssembly();
+
+                using (var input = asss.GetManifestResourceStream("Xbim.COBieLite.COBieAttributes.config"))
+                using (var output = File.Create(tmpFile))
+                {
+                    input.CopyTo(output);
+                }
+            }
+
+
             Configuration config = null;
             AppSettingsSection cobiePropertyMaps = null;
             _cobieFieldMap = new Dictionary<string, string[]>();
 
-            if (!File.Exists(ConfigFileName))
+            if (!File.Exists(tmpFile))
             {
                 var directory = new DirectoryInfo(".");
                 throw new Exception(
                     string.Format(
-                        @"Error loading configuration file ""{0}"". App folder is ""{1}""", ConfigFileName,
+                        @"Error loading configuration file ""{0}"". App folder is ""{1}"".", tmpFile,
                         directory.FullName)
                     );
             }
 
             try
             {
-                var configMap = new ExeConfigurationFileMap { ExeConfigFilename = ConfigFileName };
+                var configMap = new ExeConfigurationFileMap { ExeConfigFilename = tmpFile };
                 config = ConfigurationManager.OpenMappedExeConfiguration(configMap, ConfigurationUserLevel.None);
                 cobiePropertyMaps = (AppSettingsSection) config.GetSection("COBiePropertyMaps");
             }
@@ -254,6 +269,11 @@ namespace Xbim.COBieLite
                         if (includedType != null) _includedTypes.Add(includedType);
                     }
                 }
+            }
+
+            if (_ConfigFileName == null)
+            {
+                File.Delete(tmpFile);
             }
         }
 
@@ -743,7 +763,7 @@ namespace Xbim.COBieLite
 
         public static FacilityType ReadXml(string cobieModelFileName)
         {
-            var x = new XmlSerializer(typeof(FacilityType));
+            var x = FacilityType.GetSerializer();
             var reader = new XmlTextReader(cobieModelFileName);
             var reqFacility = (FacilityType)x.Deserialize(reader);
             reader.Close();
@@ -760,7 +780,7 @@ namespace Xbim.COBieLite
                 new XmlQualifiedName("xsi", "http://www.w3.org/2001/XMLSchema-instance")
             });
 
-            var x = new XmlSerializer(theFacility.GetType());
+            var x = FacilityType.GetSerializer();
 
             using (var xtw = new XbimCoBieLiteXmlWriter(textWriter))
             {

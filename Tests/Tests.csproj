@@ -124,6 +124,11 @@
       <HintPath>..\packages\Xbim.Geometry.3.0.3-Prerelease\lib\net45\Xbim.ModelGeometry.Scene.dll</HintPath>
     </Reference>
   </ItemGroup>
+  <ItemGroup>
+    <Content Include="TestFiles\Facility1.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
   <Choose>
     <When Condition="'$(VisualStudioVersion)' == '10.0' And '$(IsCodedUITest)' == 'True'">
       <ItemGroup>
