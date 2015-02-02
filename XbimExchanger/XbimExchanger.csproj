@@ -85,6 +85,7 @@
     <Compile Include="DPoWToCOBieLite\MappingContactToContact.cs" />
     <Compile Include="DPoWToCOBieLite\MappingPlanOfWorkToFacilityType.cs" />
     <Compile Include="IfcHelpers\IfcMappings.cs" />
+    <Compile Include="IfcHelpers\IfcUnitConverter.cs" />
     <Compile Include="IXbimMappings.cs" />
     <Compile Include="XbimMappings.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

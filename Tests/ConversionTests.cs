@@ -1,13 +1,16 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using System;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Newtonsoft.Json;
 using System.IO;
 using Xbim.COBieLite;
 using Xbim.DPoW.Interfaces;
+using Xbim.Ifc2x3.MeasureResource;
 using Xbim.IO;
 using Xbim.XbimExtensions.Interfaces;
 using XbimExchanger;
 using XbimExchanger.COBieLiteToIfc;
 using XbimExchanger.DPoWToCOBieLite;
+using XbimExchanger.IfcHelpers;
 
 namespace Tests
 {
@@ -44,6 +47,25 @@ namespace Tests
             exchanger.Convert();
 
         }
+
+        [TestMethod]
+        public void UnitConversionTests()
+        {
+            var converter = new IfcUnitConverter("squaremetres");
+            var meterCubics = new string[] { " cubic-metres ", "cubicmetres", "cubicmeters", "m3", "cubic meters" };
+            foreach (var cubic in meterCubics)
+            {
+                converter.Convert(cubic);
+                Assert.IsTrue(converter.ConversionFactor == 1.0);
+                Assert.IsNotNull(converter.SiUnitName);
+                Assert.IsTrue(converter.SiUnitName.Value == IfcSIUnitName.CUBIC_METRE);
+                Assert.IsNull(converter.SiPrefix);
+            }
+            
+
+        }
+
+
 
     }
 
