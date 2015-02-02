@@ -1,11 +1,11 @@
-﻿using Newtonsoft.Json;
-using System;
+﻿using System.Collections;
+using Newtonsoft.Json;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Xml.Serialization;
+using Xbim.COBieLite.CollectionTypes;
 
+// ReSharper disable once CheckNamespace
 namespace Xbim.COBieLite
 {
     [JsonObject]
@@ -13,19 +13,19 @@ namespace Xbim.COBieLite
     {
         public IEnumerator<SystemKeyType> GetEnumerator()
         {
-            return this.SystemAssignment.OfType<SystemKeyType>().GetEnumerator();
+            return SystemAssignment.OfType<SystemKeyType>().GetEnumerator();
         }
 
         [XmlIgnore][JsonIgnore]
         public List<SystemKeyType> InnerList
         {
-            get { return this.SystemAssignment; }
+            get { return SystemAssignment; }
         }
 
 
-        System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator()
+        IEnumerator IEnumerable.GetEnumerator()
         {
-            return this.SystemAssignment.OfType<SystemKeyType>().GetEnumerator();
+            return SystemAssignment.OfType<SystemKeyType>().GetEnumerator();
         }
     }
 }

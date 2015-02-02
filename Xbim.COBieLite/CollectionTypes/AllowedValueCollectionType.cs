@@ -1,8 +1,11 @@
-﻿using Newtonsoft.Json;
+﻿using System.Collections;
+using Newtonsoft.Json;
 using System.Collections.Generic;
 using System.Linq;
 using System.Xml.Serialization;
+using Xbim.COBieLite.CollectionTypes;
 
+// ReSharper disable once CheckNamespace
 namespace Xbim.COBieLite
 {
     [JsonObject]
@@ -20,7 +23,7 @@ namespace Xbim.COBieLite
             get { return AttributeAllowedValue; }
         }
 
-        System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator()
+        IEnumerator IEnumerable.GetEnumerator()
         {
             return AttributeAllowedValue.OfType<string>().GetEnumerator();
         }

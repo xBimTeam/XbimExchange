@@ -1,9 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Xbim.COBieLite;
+using Xbim.COBieLite.CollectionTypes;
 using Xbim.DPoW.Interfaces;
 
 namespace XbimExchanger.DPoWToCOBieLite
@@ -27,21 +26,23 @@ namespace XbimExchanger.DPoWToCOBieLite
                 target.FacilityDescription = sFacility.FacilityDescription;
                 target.FacilityName = sFacility.FacilityName;
                 target.FacilityCategory = sFacility.FacilityCategory != null ? sFacility.FacilityCategory.ClassificationCode : null;
-            }
-            if (!String.IsNullOrWhiteSpace(sFacility.FacilitySiteName))
-            {
-                target.SiteAssignment = new SiteType()
+                if (!String.IsNullOrWhiteSpace(sFacility.FacilitySiteName))
                 {
-                    SiteName = sFacility.FacilitySiteName,
-                    SiteDescription = sFacility.FacilityDescription,
-                    externalID = Exchanger.GetStringIdentifier()
-                };
+                    target.SiteAssignment = new SiteType
+                    {
+                        SiteName = sFacility.FacilitySiteName,
+                        SiteDescription = sFacility.FacilityDescription,
+                        externalID = Exchanger.GetStringIdentifier()
+                    };
+                }
             }
+           
 
             var sProject = source.Project;
             if (sProject != null)
             {
-                target.ProjectAssignment = new ProjectType() { 
+                target.ProjectAssignment = new ProjectType
+                { 
                     externalID = Exchanger.GetStringIdentifier(),
                     ProjectDescription = sProject.ProjectDescription,
                     ProjectName = sProject.ProjectName
@@ -77,49 +78,48 @@ namespace XbimExchanger.DPoWToCOBieLite
             if (source.Client != null)
             {
                 target.FacilityAttributes.AddRange(
-                    new List<AttributeType>()
+                    new List<AttributeType>
                     {
-                    new AttributeType()
+                    new AttributeType
                     {
                         AttributeName = "ProjectClientFamilyName",
                         AttributeDescription = "Client of this project as defined in DPoW.",
-                        AttributeValue = new AttributeValueType() { Item = new AttributeStringValueType() { StringValue = source.Client.ContactFamilyName} },
+                        AttributeValue = new AttributeValueType { Item = new AttributeStringValueType { StringValue = source.Client.ContactFamilyName} },
                         propertySetName = "ProjectClient"
                     },
-                    new AttributeType()
+                    new AttributeType
                     {
                         AttributeName = "ProjectClientGivenName",
                         AttributeDescription = "Client of this project as defined in DPoW.",
-                        AttributeValue = new AttributeValueType() { Item = new AttributeStringValueType() { StringValue = source.Client.ContactGivenName} },
+                        AttributeValue = new AttributeValueType { Item = new AttributeStringValueType { StringValue = source.Client.ContactGivenName} },
                         propertySetName = "ProjectClient"
                     },
-                    new AttributeType()
+                    new AttributeType
                     {
                         AttributeName = "ProjectClientEmail",
                         AttributeDescription = "Client of this project as defined in DPoW.",
-                        AttributeValue = new AttributeValueType() { Item = new AttributeStringValueType() { StringValue = source.Client.ContactEmail} },
+                        AttributeValue = new AttributeValueType { Item = new AttributeStringValueType { StringValue = source.Client.ContactEmail} },
                         propertySetName = "ProjectClient"
                     },
-                    new AttributeType()
+                    new AttributeType
                     {
                         AttributeName = "ProjectClientCompanyName",
                         AttributeDescription = "Client of this project as defined in DPoW.",
-                        AttributeValue = new AttributeValueType() { Item = new AttributeStringValueType() { StringValue = source.Client.ContactCompanyName} },
+                        AttributeValue = new AttributeValueType { Item = new AttributeStringValueType { StringValue = source.Client.ContactCompanyName} },
                         propertySetName = "ProjectClient"
                     },
-                    new AttributeType()
+                    new AttributeType
                     {
                         AttributeName = "ProjectClientURL",
                         AttributeDescription = "Client of this project as defined in DPoW.",
-                        AttributeValue = new AttributeValueType() { Item = new AttributeStringValueType() { StringValue = source.Client.ContactURL} },
+                        AttributeValue = new AttributeValueType { Item = new AttributeStringValueType { StringValue = source.Client.ContactURL} },
                         propertySetName = "ProjectClient"
                     }
                 });
             }
             
             //convert DPoW objects and related jobs from the specified stage
-            var stage = Exchanger.Context as ProjectStage;
-            if (stage == null) stage = source.Project.CurrentProjectStage;
+            var stage = Exchanger.Context as ProjectStage ?? source.Project.CurrentProjectStage;
             if (stage != null)
             {
                 if (stage.Jobs != null)
