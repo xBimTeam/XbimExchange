@@ -9,7 +9,7 @@ using Newtonsoft.Json;
 namespace Xbim.COBieLite
 {
     [JsonObject]
-    public partial class ConnectionCollectionType : ICollectionType<ConnectionType>
+    public partial class ConnectionCollectionType : ICollectionType<ConnectionType>, IEnumerable<ConnectionType>
     {
         public IEnumerator<ConnectionType> GetEnumerator()
         {
@@ -21,6 +21,11 @@ namespace Xbim.COBieLite
         public List<ConnectionType> InnerList
         {
             get { return Connection; }
+        }
+
+        System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator()
+        {
+            return this.Connection.OfType<ConnectionType>().GetEnumerator();
         }
     }
 }

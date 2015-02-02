@@ -199,6 +199,7 @@ namespace XbimExchanger.DPoWToCOBieLite
                             //assign object sets to facility
                             target.Zones.AddRange(zones);
                             target.AssetTypes.AddRange(assetTypes);
+                            
                         }
                         else
                         {

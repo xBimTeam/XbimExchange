@@ -9,7 +9,7 @@ using System.Xml.Serialization;
 namespace Xbim.COBieLite
 {
     [JsonObject]
-    public partial class WarrantyCollectionType : ICollectionType<WarrantyType>
+    public partial class WarrantyCollectionType : ICollectionType<WarrantyType>, IEnumerable<WarrantyType>
     {
         public IEnumerator<WarrantyType> GetEnumerator()
         {
@@ -20,6 +20,11 @@ namespace Xbim.COBieLite
         public List<WarrantyType> InnerList
         {
             get { return Warranty; }
+        }
+
+        System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator()
+        {
+            return this.Warranty.OfType<WarrantyType>().GetEnumerator();            
         }
     }
 }

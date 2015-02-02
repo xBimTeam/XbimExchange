@@ -9,7 +9,7 @@ using System.Xml.Serialization;
 namespace Xbim.COBieLite
 {
     [JsonObject]
-    public partial class JobCollectionType : ICollectionType<JobType>
+    public partial class JobCollectionType : ICollectionType<JobType>, IEnumerable<JobType>
     {
         public IEnumerator<JobType> GetEnumerator()
         {
@@ -21,6 +21,11 @@ namespace Xbim.COBieLite
         public List<JobType> InnerList
         {
             get { return Job; }
+        }
+
+        System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator()
+        {
+            return this.Job.OfType<JobType>().GetEnumerator();
         }
     }
 }

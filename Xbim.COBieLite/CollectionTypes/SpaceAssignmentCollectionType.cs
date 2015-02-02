@@ -9,7 +9,7 @@ using Newtonsoft.Json;
 namespace Xbim.COBieLite
 {
     [JsonObject]
-    public partial class SpaceAssignmentCollectionType : ICollectionType<SpaceKeyType>
+    public partial class SpaceAssignmentCollectionType : ICollectionType<SpaceKeyType>, IEnumerable<SpaceKeyType>
     {
         public IEnumerator<SpaceKeyType> GetEnumerator()
         {
@@ -20,6 +20,11 @@ namespace Xbim.COBieLite
         public List<SpaceKeyType> InnerList
         {
             get { return SpaceAssignment; }
+        }
+
+        System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator()
+        {
+            return this.SpaceAssignment.OfType<SpaceKeyType>().GetEnumerator();
         }
     }
 }

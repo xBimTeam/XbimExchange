@@ -13,11 +13,11 @@ namespace Xbim.Tests.COBie
     public class CoBieLiteTests
     {
         [TestMethod]
-        public void CanSerialiseXml()
+        public void CanReadSerialisedXml()
         {
             try
             {
-                var x = new XmlSerializer(typeof(FacilityType));
+                var fread = CoBieLiteHelper.ReadXml(@"Facility1.xml");
             }
             catch (Exception ex)
             {

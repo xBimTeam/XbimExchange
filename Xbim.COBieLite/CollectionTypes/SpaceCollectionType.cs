@@ -11,7 +11,7 @@ using Xbim.XbimExtensions.Transactions.Extensions;
 namespace Xbim.COBieLite
 {
     [JsonObject]
-    public partial class SpaceCollectionType : ICollectionType<SpaceType>
+    public partial class SpaceCollectionType : ICollectionType<SpaceType>, IEnumerable<SpaceType>
     {
         public IEnumerator<SpaceType> GetEnumerator()
         {
@@ -23,6 +23,10 @@ namespace Xbim.COBieLite
         {
             get { return Space; }
         }
+
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            return this.Space.OfType<SpaceType>().GetEnumerator();
+        }
     }
-    
 }

@@ -17311,7 +17311,7 @@
       <core:AssetTypeNominalHeight />
       <core:Assets>
         <core:Asset core:externalID="11645">
-          <core:AssetName>Pipe Types:Mechanical Pipe:540160</core:AssetName>
+          <core:AssetName>General requirements</core:AssetName>
           <core:AssetAttributes>
             <core:Attribute core:propertySetName="PSet_Revit_Mechanical">
               <core:AttributeName>System Type</core:AttributeName>

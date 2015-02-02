@@ -9,7 +9,7 @@ using System.Xml.Serialization;
 namespace Xbim.COBieLite
 {
     [JsonObject]
-    public partial class SystemAssignmentCollectionType : ICollectionType<SystemKeyType>
+    public partial class SystemAssignmentCollectionType : ICollectionType<SystemKeyType>, IEnumerable<SystemKeyType>
     {
         public IEnumerator<SystemKeyType> GetEnumerator()
         {
@@ -21,6 +21,11 @@ namespace Xbim.COBieLite
         {
             get { return this.SystemAssignment; }
         }
-		
+
+
+        System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator()
+        {
+            return this.SystemAssignment.OfType<SystemKeyType>().GetEnumerator();
+        }
     }
 }

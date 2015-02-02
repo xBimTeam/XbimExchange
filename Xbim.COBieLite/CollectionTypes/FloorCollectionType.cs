@@ -7,7 +7,7 @@ using System.Xml.Serialization;
 namespace Xbim.COBieLite
 {
     [JsonObject]
-    public partial class FloorCollectionType : ICollectionType<FloorType>
+    public partial class FloorCollectionType : ICollectionType<FloorType>, IEnumerable<FloorType>
     {
         public IEnumerator<FloorType> GetEnumerator()
         {
@@ -18,6 +18,11 @@ namespace Xbim.COBieLite
         public List<FloorType> InnerList
         {
             get { return Floor; }
+        }
+
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            return this.Floor.OfType<FloorType>().GetEnumerator();
         }
     }
 }

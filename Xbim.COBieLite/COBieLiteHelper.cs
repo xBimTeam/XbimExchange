@@ -763,7 +763,7 @@ namespace Xbim.COBieLite
 
         public static FacilityType ReadXml(string cobieModelFileName)
         {
-            var x = new XmlSerializer(typeof(FacilityType));
+            var x = FacilityType.GetSerializer();
             var reader = new XmlTextReader(cobieModelFileName);
             var reqFacility = (FacilityType)x.Deserialize(reader);
             reader.Close();
@@ -780,7 +780,7 @@ namespace Xbim.COBieLite
                 new XmlQualifiedName("xsi", "http://www.w3.org/2001/XMLSchema-instance")
             });
 
-            var x = new XmlSerializer(theFacility.GetType());
+            var x = FacilityType.GetSerializer();
 
             using (var xtw = new XbimCoBieLiteXmlWriter(textWriter))
             {

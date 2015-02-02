@@ -9,7 +9,7 @@ using System.Xml.Serialization;
 namespace Xbim.COBieLite
 {
     [JsonObject]
-    public partial class DocumentCollectionType : ICollectionType<DocumentType>
+    public partial class DocumentCollectionType : ICollectionType<DocumentType>, IEnumerable<DocumentType>
     {
         public IEnumerator<DocumentType> GetEnumerator()
         {
@@ -22,6 +22,11 @@ namespace Xbim.COBieLite
         {
             get { return Document; }
         }
-		
+
+
+        System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator()
+        {
+            return this.Document.OfType<DocumentType>().GetEnumerator();
+        }
     }
 }

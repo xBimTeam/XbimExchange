@@ -9,7 +9,7 @@ using Newtonsoft.Json;
 namespace Xbim.COBieLite
 {
 
-    public partial class ResourceCollectionType : ICollectionType<ResourceType>
+    public partial class ResourceCollectionType : ICollectionType<ResourceType>, IEnumerable<ResourceType>
     {
         public IEnumerator<ResourceType> GetEnumerator()
         {
@@ -21,6 +21,11 @@ namespace Xbim.COBieLite
         public List<ResourceType> InnerList
         {
             get { return Resource; }
+        }
+
+        System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator()
+        {
+            return this.Resource.OfType<ResourceType>().GetEnumerator();
         }
     }
 }

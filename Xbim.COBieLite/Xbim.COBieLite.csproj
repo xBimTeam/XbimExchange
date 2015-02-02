@@ -57,6 +57,7 @@
     <Reference Include="System" />
     <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Data.Linq" />
     <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
@@ -83,26 +84,27 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AllowedValueCollectionType.cs" />
-    <Compile Include="AssemblyAssignmentCollectionType.cs" />
-    <Compile Include="AssetCollectionType.cs" />
+    <Compile Include="CollectionTypes\AllowedValueCollectionType.cs" />
+    <Compile Include="CollectionTypes\AssemblyAssignmentCollectionType.cs" />
+    <Compile Include="CollectionTypes\AssetCollectionType.cs" />
     <Compile Include="AssetInfoType.cs" />
-    <Compile Include="AssetTypeCollectionType.cs" />
+    <Compile Include="CollectionTypes\AssetTypeCollectionType.cs" />
     <Compile Include="AssetTypeInfoType.cs" />
-    <Compile Include="AttributeCollectionType.cs" />
+    <Compile Include="CollectionTypes\AttributeCollectionType.cs" />
+    <Compile Include="COBieLite Schema\XmlSerializationCode.cs" />
     <Compile Include="COBieLiteHelper.cs" />
-    <Compile Include="cobielite_core.cs" />
-    <Compile Include="ConnectionCollectionType.cs" />
-    <Compile Include="ContactAssignmentCollectionType.cs" />
-    <Compile Include="ContactCollectionType.cs" />
-    <Compile Include="DocumentCollectionType.cs" />
-    <Compile Include="ICollectionType.cs" />
+    <Compile Include="COBieLite Schema\cobielite_core.cs" />
+    <Compile Include="CollectionTypes\ConnectionCollectionType.cs" />
+    <Compile Include="CollectionTypes\ContactAssignmentCollectionType.cs" />
+    <Compile Include="CollectionTypes\ContactCollectionType.cs" />
+    <Compile Include="CollectionTypes\DocumentCollectionType.cs" />
+    <Compile Include="CollectionTypes\ICollectionType.cs" />
     <Compile Include="ContactType.cs" />
     <Compile Include="FacilityType.cs" />
     <Compile Include="FloorType.cs" />
-    <Compile Include="FloorCollectionType.cs" />
-    <Compile Include="IssueCollectionType.cs" />
-    <Compile Include="JobCollectionType.cs" />
+    <Compile Include="CollectionTypes\FloorCollectionType.cs" />
+    <Compile Include="CollectionTypes\IssueCollectionType.cs" />
+    <Compile Include="CollectionTypes\JobCollectionType.cs" />
     <Compile Include="ProjectType.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Properties\Settings.Designer.cs">
@@ -110,25 +112,25 @@
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
       <DependentUpon>Settings.settings</DependentUpon>
     </Compile>
-    <Compile Include="ResourceCollectionType.cs" />
+    <Compile Include="CollectionTypes\ResourceCollectionType.cs" />
     <Compile Include="SiteType.cs" />
-    <Compile Include="SpaceAssignmentCollectionType.cs" />
+    <Compile Include="CollectionTypes\SpaceAssignmentCollectionType.cs" />
     <Compile Include="SpaceKeyType.cs" />
     <Compile Include="SpaceType.cs" />
-    <Compile Include="SpaceCollectionType.cs" />
-    <Compile Include="SpareCollectionType.cs" />
-    <Compile Include="SystemAssignmentCollectionType.cs" />
-    <Compile Include="SystemCollectionType.cs" />
+    <Compile Include="CollectionTypes\SpaceCollectionType.cs" />
+    <Compile Include="CollectionTypes\SpareCollectionType.cs" />
+    <Compile Include="CollectionTypes\SystemAssignmentCollectionType.cs" />
+    <Compile Include="CollectionTypes\SystemCollectionType.cs" />
     <Compile Include="SystemKeyType.cs" />
     <Compile Include="SystemType.cs" />
-    <Compile Include="WarrantyCollectionType.cs" />
+    <Compile Include="CollectionTypes\WarrantyCollectionType.cs" />
     <Compile Include="XbimAssetType.cs" />
     <Compile Include="XbimAttributedObject.cs" />
     <Compile Include="XbimCOBieLiteToIfcConverter.cs" />
     <Compile Include="XbimCoBieLiteXmlWriter.cs" />
     <Compile Include="XbimCOBieValueHelper.cs" />
-    <Compile Include="ZoneAssignmentCollectionType.cs" />
-    <Compile Include="ZoneCollectionType.cs" />
+    <Compile Include="CollectionTypes\ZoneAssignmentCollectionType.cs" />
+    <Compile Include="CollectionTypes\ZoneCollectionType.cs" />
     <Compile Include="ZoneType.cs" />
   </ItemGroup>
   <ItemGroup>

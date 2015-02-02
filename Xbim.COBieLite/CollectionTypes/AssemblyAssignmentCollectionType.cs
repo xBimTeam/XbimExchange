@@ -9,7 +9,7 @@ using Newtonsoft.Json;
 namespace Xbim.COBieLite
 {
     [JsonObject]
-    public partial class AssemblyAssignmentCollectionType : ICollectionType<AssemblyType>
+    public partial class AssemblyAssignmentCollectionType : ICollectionType<AssemblyType>, IEnumerable<AssemblyType>
     {
         public IEnumerator<AssemblyType> GetEnumerator()
         {
@@ -21,6 +21,10 @@ namespace Xbim.COBieLite
         {
             get { return AssemblyAssignment; }
         }
-		
+        
+        System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator()
+        {
+            return this.AssemblyAssignment.OfType<AssemblyType>().GetEnumerator();
+        }
     }
 }

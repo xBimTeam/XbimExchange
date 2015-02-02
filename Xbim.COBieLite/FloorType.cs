@@ -54,7 +54,9 @@ namespace Xbim.COBieLite
             {
                 Spaces = new SpaceCollectionType {Space = new List<SpaceType>(ifcSpaces.Count)};
                 for (var i = 0; i < ifcSpaces.Count; i++)
+                {
                     Spaces.Add(new SpaceType(ifcSpaces[i], helper));
+                }
             }
 
             //Attributes

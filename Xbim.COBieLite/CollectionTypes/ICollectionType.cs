@@ -11,13 +11,9 @@ namespace Xbim.COBieLite
         List<T> InnerList { get; }
     }
 
+    
     public static class CollectionTypeExtensions
     {
-        public static bool Any<T>(this ICollectionType<T> basef)
-        {
-            return basef.InnerList.Any();
-        }
-
         public static void Add<T>(this ICollectionType<T> basef, T item)
         {
             basef.InnerList.Add(item);
@@ -27,6 +23,5 @@ namespace Xbim.COBieLite
         {
             basef.InnerList.AddRange(items);
         }
-        
     }
 }

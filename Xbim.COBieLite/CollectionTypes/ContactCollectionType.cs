@@ -9,7 +9,7 @@ using Newtonsoft.Json;
 namespace Xbim.COBieLite
 {
     [JsonObject]
-    public partial class ContactCollectionType : ICollectionType<ContactType>
+    public partial class ContactCollectionType : ICollectionType<ContactType>, IEnumerable<ContactType>
     {
         public IEnumerator<ContactType> GetEnumerator()
         {
@@ -21,6 +21,11 @@ namespace Xbim.COBieLite
         public List<ContactType> InnerList
         {
             get { return Contact; }
+        }
+
+        System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator()
+        {
+            return this.Contact.OfType<ContactType>().GetEnumerator();
         }
     }
 }
