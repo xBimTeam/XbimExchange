@@ -75,6 +75,7 @@
   <ItemGroup>
     <Compile Include="COBieLiteToDPoW\COBieLiteToDPoWExchanger.cs" />
     <Compile Include="COBieLiteToDPoW\COBieLiteToDPoWMapping.cs" />
+    <Compile Include="COBieLiteToDPoW\Helper.cs" />
     <Compile Include="COBieLiteToDPoW\MappingFacilityTypeToPlanOfWork.cs" />
     <Compile Include="COBieLiteToIfc\COBieLiteIfcMappings.cs" />
     <Compile Include="COBieLiteToIfc\COBieLiteToIfcExchanger.cs" />
