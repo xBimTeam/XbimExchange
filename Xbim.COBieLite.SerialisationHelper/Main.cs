@@ -51,7 +51,7 @@ namespace SerialisationHelper
         private static string SavegeTypeReplacement(string file, string classname, string oldType, string newType)
         {
             var code = getClassCode(classname, file);
-            string newcode = code.Replace(oldType, newType);
+            string newcode = code.Replace(" " + oldType + " ", " " + newType + " ");
             return file.Replace(code, newcode);
         }
 
