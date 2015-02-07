@@ -15,7 +15,7 @@
 using System.Collections.Generic;
 using Newtonsoft.Json;
 
-namespace Xbim.COBieLite {
+namespace Xbim.COBieLite.old {
     using System.Xml.Serialization;
     
     

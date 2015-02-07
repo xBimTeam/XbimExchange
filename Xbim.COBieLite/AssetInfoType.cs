@@ -10,10 +10,7 @@ namespace Xbim.COBieLite
 {
     public partial class AssetInfoType
     {
-        public AssetInfoType()
-        {
-            
-        }
+    
 
         public AssetInfoType(IfcElement ifcElement, CoBieLiteHelper helper)
             : this()

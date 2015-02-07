@@ -11,10 +11,7 @@ namespace Xbim.COBieLite
         //[System.Xml.Serialization.XmlIgnoreAttribute()]
         //private IfcBuildingStorey _ifcBuildingStorey;
 
-        public FloorType()
-        {
-            
-        }
+   
         public FloorType(IfcBuildingStorey ifcBuildingStorey, CoBieLiteHelper helper)
             : this()
         {

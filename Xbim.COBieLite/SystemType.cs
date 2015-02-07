@@ -5,10 +5,7 @@ namespace Xbim.COBieLite
 {
     public partial class SystemType
     {
-        public SystemType()
-        {
-
-        }
+      
         public SystemType(IfcSystem ifcSystem, CoBieLiteHelper helper)
             : this()
         {

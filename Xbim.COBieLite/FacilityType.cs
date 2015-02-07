@@ -20,13 +20,6 @@ namespace Xbim.COBieLite
             return new FacilityTypeSerializer();
         }
 
-        // private IfcBuilding _ifcBuilding;
-
-        public FacilityType()
-        {
-
-        }
-
         public FacilityType(IfcBuilding ifcBuilding, CoBieLiteHelper helper)
             : this()
         {

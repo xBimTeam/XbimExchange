@@ -16,10 +16,6 @@ namespace Xbim.COBieLite
         
         //private IfcSpace _ifcSpace;
 
-        public SpaceType()
-        {
-            
-        }
         public SpaceType(IfcSpace ifcSpace, CoBieLiteHelper helper)
             : this()
         {
