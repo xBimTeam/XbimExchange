@@ -66,6 +66,8 @@ namespace SerialisationHelper
 
             }
 
+            // Schema Alterations
+
             // changes of Lists from base types to Type types
             file = StandardListTypeReplace(file, @"ZoneCollectionType", @"ZoneType");
             file = StandardListTypeReplace(file, @"AttributeCollectionType", @"AttributeType");
@@ -90,9 +92,15 @@ namespace SerialisationHelper
             //file = StandardListTypeReplace(file, @"", @"");
             //file = StandardListTypeReplace(file, @"", @"");
 
+            // Schema Alterations (bug in schema?)
+            file = SavegeTypeReplacement(file, @"ZoneAssignmentCollectionType", @"ZoneKeyType", @"List<ZoneKeyType>");
+
             // type replacements
             file = SavegeTypeReplacement(file, @"AttributeIntegerValueType", @"string", @"int");
             file = SavegeTypeReplacement(file, @"IntegerValueType", @"string", @"int");
+
+            
+            // 
             // type attributes
             file = file.Replace("XmlElementAttribute(DataType = \"integer\")", "XmlElementAttribute(DataType = \"int\")");
             

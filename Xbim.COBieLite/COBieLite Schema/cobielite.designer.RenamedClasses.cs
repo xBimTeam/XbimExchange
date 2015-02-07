@@ -1161,7 +1161,6 @@ namespace Xbim.COBieLite
             this.zoneAssignmentField = new List<ZoneKeyType>();
         }
 
-        [System.Xml.Serialization.XmlElementAttribute("ZoneAssignment")]
         public List<ZoneKeyType> ZoneAssignment
         {
             get { return this.zoneAssignmentField; }

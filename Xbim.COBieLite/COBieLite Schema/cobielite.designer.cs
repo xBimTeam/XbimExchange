@@ -1154,15 +1154,14 @@ namespace Xbim.COBieLite.SerialisationHelper
     public partial class ZoneAssignmentCollectionType : CobieRowAssignmentsType
     {
 
-        private List<ZoneKeyType> zoneAssignmentField;
+        private ZoneKeyType zoneAssignmentField;
 
         public ZoneAssignmentCollectionType()
         {
-            this.zoneAssignmentField = new List<ZoneKeyType>();
+            this.zoneAssignmentField = new ZoneKeyType();
         }
 
-        [System.Xml.Serialization.XmlElementAttribute("ZoneAssignment")]
-        public List<ZoneKeyType> ZoneAssignment
+        public ZoneKeyType ZoneAssignment
         {
             get { return this.zoneAssignmentField; }
             set { this.zoneAssignmentField = value; }
