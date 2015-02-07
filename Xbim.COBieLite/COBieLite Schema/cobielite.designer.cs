@@ -18,8 +18,10 @@ namespace Xbim.COBieLite.SerialisationHelper
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.34234")]
     [System.SerializableAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(TypeName = "AssemblyType", Namespace = "http://docs.buildingsmartalliance.org/nbims03/cobie/cobielite")]
-    [System.Xml.Serialization.XmlRootAttribute("AssemblyAssignment", Namespace = "http://docs.buildingsmartalliance.org/nbims03/cobie/cobielite", IsNullable = false)]
+    [System.Xml.Serialization.XmlTypeAttribute(TypeName = "AssemblyType",
+        Namespace = "http://docs.buildingsmartalliance.org/nbims03/cobie/cobielite")]
+    [System.Xml.Serialization.XmlRootAttribute("AssemblyAssignment",
+        Namespace = "http://docs.buildingsmartalliance.org/nbims03/cobie/cobielite", IsNullable = false)]
     public partial class AssemblyType1 : AssemblyType
     {
 
@@ -40,69 +42,44 @@ namespace Xbim.COBieLite.SerialisationHelper
             this.assemblyAttributesField = new AttributeCollectionType();
         }
 
-        [System.Xml.Serialization.XmlElementAttribute(Namespace = "http://docs.buildingsmartalliance.org/nbims03/cobie/core")]
+        [System.Xml.Serialization.XmlElementAttribute(
+            Namespace = "http://docs.buildingsmartalliance.org/nbims03/cobie/core")]
         public string AssemblyCategory
         {
-            get
-            {
-                return this.assemblyCategoryField;
-            }
-            set
-            {
-                this.assemblyCategoryField = value;
-            }
+            get { return this.assemblyCategoryField; }
+            set { this.assemblyCategoryField = value; }
         }
 
-        [System.Xml.Serialization.XmlElementAttribute(Namespace = "http://docs.buildingsmartalliance.org/nbims03/cobie/core")]
+        [System.Xml.Serialization.XmlElementAttribute(
+            Namespace = "http://docs.buildingsmartalliance.org/nbims03/cobie/core")]
         public string AssemblyDescription
         {
-            get
-            {
-                return this.assemblyDescriptionField;
-            }
-            set
-            {
-                this.assemblyDescriptionField = value;
-            }
+            get { return this.assemblyDescriptionField; }
+            set { this.assemblyDescriptionField = value; }
         }
 
-        [System.Xml.Serialization.XmlElementAttribute(Namespace = "http://docs.buildingsmartalliance.org/nbims03/cobie/core")]
+        [System.Xml.Serialization.XmlElementAttribute(
+            Namespace = "http://docs.buildingsmartalliance.org/nbims03/cobie/core")]
         public AttributeCollectionType AssemblyAttributes
         {
-            get
-            {
-                return this.assemblyAttributesField;
-            }
-            set
-            {
-                this.assemblyAttributesField = value;
-            }
+            get { return this.assemblyAttributesField; }
+            set { this.assemblyAttributesField = value; }
         }
 
-        [System.Xml.Serialization.XmlElementAttribute(Namespace = "http://docs.buildingsmartalliance.org/nbims03/cobie/core")]
+        [System.Xml.Serialization.XmlElementAttribute(
+            Namespace = "http://docs.buildingsmartalliance.org/nbims03/cobie/core")]
         public DocumentCollectionType AssemblyDocuments
         {
-            get
-            {
-                return this.assemblyDocumentsField;
-            }
-            set
-            {
-                this.assemblyDocumentsField = value;
-            }
+            get { return this.assemblyDocumentsField; }
+            set { this.assemblyDocumentsField = value; }
         }
 
-        [System.Xml.Serialization.XmlElementAttribute(Namespace = "http://docs.buildingsmartalliance.org/nbims03/cobie/core")]
+        [System.Xml.Serialization.XmlElementAttribute(
+            Namespace = "http://docs.buildingsmartalliance.org/nbims03/cobie/core")]
         public IssueCollectionType AssemblyIssues
         {
-            get
-            {
-                return this.assemblyIssuesField;
-            }
-            set
-            {
-                this.assemblyIssuesField = value;
-            }
+            get { return this.assemblyIssuesField; }
+            set { this.assemblyIssuesField = value; }
         }
     }
 
@@ -123,18 +100,12 @@ namespace Xbim.COBieLite.SerialisationHelper
         [System.Xml.Serialization.XmlElementAttribute("Attribute")]
         public List<AttributeType> Attribute
         {
-            get
-            {
-                return this.attributeField;
-            }
-            set
-            {
-                this.attributeField = value;
-            }
+            get { return this.attributeField; }
+            set { this.attributeField = value; }
         }
     }
 
-    [System.Xml.Serialization.XmlIncludeAttribute(typeof(AttributeType1))]
+    [System.Xml.Serialization.XmlIncludeAttribute(typeof (AttributeType1))]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.34234")]
     [System.SerializableAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
@@ -152,85 +123,61 @@ namespace Xbim.COBieLite.SerialisationHelper
 
         public string AttributeName
         {
-            get
-            {
-                return this.attributeNameField;
-            }
-            set
-            {
-                this.attributeNameField = value;
-            }
+            get { return this.attributeNameField; }
+            set { this.attributeNameField = value; }
         }
 
         public string AttributeCategory
         {
-            get
-            {
-                return this.attributeCategoryField;
-            }
-            set
-            {
-                this.attributeCategoryField = value;
-            }
+            get { return this.attributeCategoryField; }
+            set { this.attributeCategoryField = value; }
         }
 
         [System.Xml.Serialization.XmlAttributeAttribute(Form = System.Xml.Schema.XmlSchemaForm.Qualified)]
         public string propertySetName
         {
-            get
-            {
-                return this.propertySetNameField;
-            }
-            set
-            {
-                this.propertySetNameField = value;
-            }
+            get { return this.propertySetNameField; }
+            set { this.propertySetNameField = value; }
         }
 
         [System.Xml.Serialization.XmlAttributeAttribute(Form = System.Xml.Schema.XmlSchemaForm.Qualified)]
         public string propertySetExternalIdentifier
         {
-            get
-            {
-                return this.propertySetExternalIdentifierField;
-            }
-            set
-            {
-                this.propertySetExternalIdentifierField = value;
-            }
+            get { return this.propertySetExternalIdentifierField; }
+            set { this.propertySetExternalIdentifierField = value; }
         }
     }
 
-    [System.Xml.Serialization.XmlIncludeAttribute(typeof(FacilityType))]
-    [System.Xml.Serialization.XmlIncludeAttribute(typeof(FacilityType1))]
-    [System.Xml.Serialization.XmlIncludeAttribute(typeof(ZoneType))]
-    [System.Xml.Serialization.XmlIncludeAttribute(typeof(ZoneType1))]
-    [System.Xml.Serialization.XmlIncludeAttribute(typeof(SystemType))]
-    [System.Xml.Serialization.XmlIncludeAttribute(typeof(SystemType1))]
-    [System.Xml.Serialization.XmlIncludeAttribute(typeof(FloorType))]
-    [System.Xml.Serialization.XmlIncludeAttribute(typeof(FloorType1))]
-    [System.Xml.Serialization.XmlIncludeAttribute(typeof(ContactType))]
-    [System.Xml.Serialization.XmlIncludeAttribute(typeof(ContactType1))]
-    [System.Xml.Serialization.XmlIncludeAttribute(typeof(ConnectionType))]
-    [System.Xml.Serialization.XmlIncludeAttribute(typeof(ConnectionType1))]
-    [System.Xml.Serialization.XmlIncludeAttribute(typeof(ResourceType))]
-    [System.Xml.Serialization.XmlIncludeAttribute(typeof(ResourceType1))]
-    [System.Xml.Serialization.XmlIncludeAttribute(typeof(JobType))]
-    [System.Xml.Serialization.XmlIncludeAttribute(typeof(JobType1))]
-    [System.Xml.Serialization.XmlIncludeAttribute(typeof(SpareType))]
-    [System.Xml.Serialization.XmlIncludeAttribute(typeof(SpareType1))]
-    [System.Xml.Serialization.XmlIncludeAttribute(typeof(AssetTypeInfoType))]
-    [System.Xml.Serialization.XmlIncludeAttribute(typeof(AssetTypeInfoType1))]
-    [System.Xml.Serialization.XmlIncludeAttribute(typeof(DocumentType))]
-    [System.Xml.Serialization.XmlIncludeAttribute(typeof(DocumentType1))]
-    [System.Xml.Serialization.XmlIncludeAttribute(typeof(IssueType))]
-    [System.Xml.Serialization.XmlIncludeAttribute(typeof(IssueType1))]
-    [System.Xml.Serialization.XmlIncludeAttribute(typeof(AttributeType))]
-    [System.Xml.Serialization.XmlIncludeAttribute(typeof(AttributeType1))]
-    [System.Xml.Serialization.XmlIncludeAttribute(typeof(AssetInfoType))]
-    [System.Xml.Serialization.XmlIncludeAttribute(typeof(AssetInfoType1))]
-    [System.Xml.Serialization.XmlIncludeAttribute(typeof(AssemblyType))]
-    [System.Xml.Serialization.XmlIncludeAttribute(typeof(AssemblyType1))]
+    [System.Xml.Serialization.XmlIncludeAttribute(typeof (FacilityType))]
+    [System.Xml.Serialization.XmlIncludeAttribute(typeof (FacilityType1))]
+    [System.Xml.Serialization.XmlIncludeAttribute(typeof (ZoneType))]
+    [System.Xml.Serialization.XmlIncludeAttribute(typeof (ZoneType1))]
+    [System.Xml.Serialization.XmlIncludeAttribute(typeof (SystemType))]
+    [System.Xml.Serialization.XmlIncludeAttribute(typeof (SystemType1))]
+    [System.Xml.Serialization.XmlIncludeAttribute(typeof (FloorType))]
+    [System.Xml.Serialization.XmlIncludeAttribute(typeof (FloorType1))]
+    [System.Xml.Serialization.XmlIncludeAttribute(typeof (ContactType))]
+    [System.Xml.Serialization.XmlIncludeAttribute(typeof (ContactType1))]
+    [System.Xml.Serialization.XmlIncludeAttribute(typeof (ConnectionType))]
+    [System.Xml.Serialization.XmlIncludeAttribute(typeof (ConnectionType1))]
+    [System.Xml.Serialization.XmlIncludeAttribute(typeof (ResourceType))]
+    [System.Xml.Serialization.XmlIncludeAttribute(typeof (ResourceType1))]
+    [System.Xml.Serialization.XmlIncludeAttribute(typeof (JobType))]
+    [System.Xml.Serialization.XmlIncludeAttribute(typeof (JobType1))]
+    [System.Xml.Serialization.XmlIncludeAttribute(typeof (SpareType))]
+    [System.Xml.Serialization.XmlIncludeAttribute(typeof (SpareType1))]
+    [System.Xml.Serialization.XmlIncludeAttribute(typeof (AssetTypeInfoType))]
+    [System.Xml.Serialization.XmlIncludeAttribute(typeof (AssetTypeInfoType1))]
+    [System.Xml.Serialization.XmlIncludeAttribute(typeof (DocumentType))]
+    [System.Xml.Serialization.XmlIncludeAttribute(typeof (DocumentType1))]
+    [System.Xml.Serialization.XmlIncludeAttribute(typeof (IssueType))]
+    [System.Xml.Serialization.XmlIncludeAttribute(typeof (IssueType1))]
+    [System.Xml.Serialization.XmlIncludeAttribute(typeof (AttributeType))]
+    [System.Xml.Serialization.XmlIncludeAttribute(typeof (AttributeType1))]
+    [System.Xml.Serialization.XmlIncludeAttribute(typeof (AssetInfoType))]
+    [System.Xml.Serialization.XmlIncludeAttribute(typeof (AssetInfoType1))]
+    [System.Xml.Serialization.XmlIncludeAttribute(typeof (AssemblyType))]
+    [System.Xml.Serialization.XmlIncludeAttribute(typeof (AssemblyType1))]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.34234")]
     [System.SerializableAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
@@ -239,42 +186,42 @@ namespace Xbim.COBieLite.SerialisationHelper
     {
     }
 
-    [System.Xml.Serialization.XmlIncludeAttribute(typeof(SiteType))]
-    [System.Xml.Serialization.XmlIncludeAttribute(typeof(ProjectType))]
-    [System.Xml.Serialization.XmlIncludeAttribute(typeof(SpaceType))]
-    [System.Xml.Serialization.XmlIncludeAttribute(typeof(SpaceType1))]
-    [System.Xml.Serialization.XmlIncludeAttribute(typeof(WarrantyType))]
-    [System.Xml.Serialization.XmlIncludeAttribute(typeof(CobieRowType))]
-    [System.Xml.Serialization.XmlIncludeAttribute(typeof(FacilityType))]
-    [System.Xml.Serialization.XmlIncludeAttribute(typeof(FacilityType1))]
-    [System.Xml.Serialization.XmlIncludeAttribute(typeof(ZoneType))]
-    [System.Xml.Serialization.XmlIncludeAttribute(typeof(ZoneType1))]
-    [System.Xml.Serialization.XmlIncludeAttribute(typeof(SystemType))]
-    [System.Xml.Serialization.XmlIncludeAttribute(typeof(SystemType1))]
-    [System.Xml.Serialization.XmlIncludeAttribute(typeof(FloorType))]
-    [System.Xml.Serialization.XmlIncludeAttribute(typeof(FloorType1))]
-    [System.Xml.Serialization.XmlIncludeAttribute(typeof(ContactType))]
-    [System.Xml.Serialization.XmlIncludeAttribute(typeof(ContactType1))]
-    [System.Xml.Serialization.XmlIncludeAttribute(typeof(ConnectionType))]
-    [System.Xml.Serialization.XmlIncludeAttribute(typeof(ConnectionType1))]
-    [System.Xml.Serialization.XmlIncludeAttribute(typeof(ResourceType))]
-    [System.Xml.Serialization.XmlIncludeAttribute(typeof(ResourceType1))]
-    [System.Xml.Serialization.XmlIncludeAttribute(typeof(JobType))]
-    [System.Xml.Serialization.XmlIncludeAttribute(typeof(JobType1))]
-    [System.Xml.Serialization.XmlIncludeAttribute(typeof(SpareType))]
-    [System.Xml.Serialization.XmlIncludeAttribute(typeof(SpareType1))]
-    [System.Xml.Serialization.XmlIncludeAttribute(typeof(AssetTypeInfoType))]
-    [System.Xml.Serialization.XmlIncludeAttribute(typeof(AssetTypeInfoType1))]
-    [System.Xml.Serialization.XmlIncludeAttribute(typeof(DocumentType))]
-    [System.Xml.Serialization.XmlIncludeAttribute(typeof(DocumentType1))]
-    [System.Xml.Serialization.XmlIncludeAttribute(typeof(IssueType))]
-    [System.Xml.Serialization.XmlIncludeAttribute(typeof(IssueType1))]
-    [System.Xml.Serialization.XmlIncludeAttribute(typeof(AttributeType))]
-    [System.Xml.Serialization.XmlIncludeAttribute(typeof(AttributeType1))]
-    [System.Xml.Serialization.XmlIncludeAttribute(typeof(AssetInfoType))]
-    [System.Xml.Serialization.XmlIncludeAttribute(typeof(AssetInfoType1))]
-    [System.Xml.Serialization.XmlIncludeAttribute(typeof(AssemblyType))]
-    [System.Xml.Serialization.XmlIncludeAttribute(typeof(AssemblyType1))]
+    [System.Xml.Serialization.XmlIncludeAttribute(typeof (SiteType))]
+    [System.Xml.Serialization.XmlIncludeAttribute(typeof (ProjectType))]
+    [System.Xml.Serialization.XmlIncludeAttribute(typeof (SpaceType))]
+    [System.Xml.Serialization.XmlIncludeAttribute(typeof (SpaceType1))]
+    [System.Xml.Serialization.XmlIncludeAttribute(typeof (WarrantyType))]
+    [System.Xml.Serialization.XmlIncludeAttribute(typeof (CobieRowType))]
+    [System.Xml.Serialization.XmlIncludeAttribute(typeof (FacilityType))]
+    [System.Xml.Serialization.XmlIncludeAttribute(typeof (FacilityType1))]
+    [System.Xml.Serialization.XmlIncludeAttribute(typeof (ZoneType))]
+    [System.Xml.Serialization.XmlIncludeAttribute(typeof (ZoneType1))]
+    [System.Xml.Serialization.XmlIncludeAttribute(typeof (SystemType))]
+    [System.Xml.Serialization.XmlIncludeAttribute(typeof (SystemType1))]
+    [System.Xml.Serialization.XmlIncludeAttribute(typeof (FloorType))]
+    [System.Xml.Serialization.XmlIncludeAttribute(typeof (FloorType1))]
+    [System.Xml.Serialization.XmlIncludeAttribute(typeof (ContactType))]
+    [System.Xml.Serialization.XmlIncludeAttribute(typeof (ContactType1))]
+    [System.Xml.Serialization.XmlIncludeAttribute(typeof (ConnectionType))]
+    [System.Xml.Serialization.XmlIncludeAttribute(typeof (ConnectionType1))]
+    [System.Xml.Serialization.XmlIncludeAttribute(typeof (ResourceType))]
+    [System.Xml.Serialization.XmlIncludeAttribute(typeof (ResourceType1))]
+    [System.Xml.Serialization.XmlIncludeAttribute(typeof (JobType))]
+    [System.Xml.Serialization.XmlIncludeAttribute(typeof (JobType1))]
+    [System.Xml.Serialization.XmlIncludeAttribute(typeof (SpareType))]
+    [System.Xml.Serialization.XmlIncludeAttribute(typeof (SpareType1))]
+    [System.Xml.Serialization.XmlIncludeAttribute(typeof (AssetTypeInfoType))]
+    [System.Xml.Serialization.XmlIncludeAttribute(typeof (AssetTypeInfoType1))]
+    [System.Xml.Serialization.XmlIncludeAttribute(typeof (DocumentType))]
+    [System.Xml.Serialization.XmlIncludeAttribute(typeof (DocumentType1))]
+    [System.Xml.Serialization.XmlIncludeAttribute(typeof (IssueType))]
+    [System.Xml.Serialization.XmlIncludeAttribute(typeof (IssueType1))]
+    [System.Xml.Serialization.XmlIncludeAttribute(typeof (AttributeType))]
+    [System.Xml.Serialization.XmlIncludeAttribute(typeof (AttributeType1))]
+    [System.Xml.Serialization.XmlIncludeAttribute(typeof (AssetInfoType))]
+    [System.Xml.Serialization.XmlIncludeAttribute(typeof (AssetInfoType1))]
+    [System.Xml.Serialization.XmlIncludeAttribute(typeof (AssemblyType))]
+    [System.Xml.Serialization.XmlIncludeAttribute(typeof (AssemblyType1))]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.34234")]
     [System.SerializableAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
@@ -291,129 +238,111 @@ namespace Xbim.COBieLite.SerialisationHelper
         [System.Xml.Serialization.XmlAttributeAttribute(Form = System.Xml.Schema.XmlSchemaForm.Qualified)]
         public string externalEntityName
         {
-            get
-            {
-                return this.externalEntityNameField;
-            }
-            set
-            {
-                this.externalEntityNameField = value;
-            }
+            get { return this.externalEntityNameField; }
+            set { this.externalEntityNameField = value; }
         }
 
         [System.Xml.Serialization.XmlAttributeAttribute(Form = System.Xml.Schema.XmlSchemaForm.Qualified)]
         public string externalID
         {
-            get
-            {
-                return this.externalIDField;
-            }
-            set
-            {
-                this.externalIDField = value;
-            }
+            get { return this.externalIDField; }
+            set { this.externalIDField = value; }
         }
 
         [System.Xml.Serialization.XmlAttributeAttribute(Form = System.Xml.Schema.XmlSchemaForm.Qualified)]
         public string externalSystemName
         {
-            get
-            {
-                return this.externalSystemNameField;
-            }
-            set
-            {
-                this.externalSystemNameField = value;
-            }
+            get { return this.externalSystemNameField; }
+            set { this.externalSystemNameField = value; }
         }
     }
 
-    [System.Xml.Serialization.XmlIncludeAttribute(typeof(WarrantyCollectionType))]
-    [System.Xml.Serialization.XmlIncludeAttribute(typeof(AllowedValueCollectionType))]
-    [System.Xml.Serialization.XmlIncludeAttribute(typeof(ValueBaseType))]
-    [System.Xml.Serialization.XmlIncludeAttribute(typeof(StringValueType))]
-    [System.Xml.Serialization.XmlIncludeAttribute(typeof(AttributeStringValueType))]
-    [System.Xml.Serialization.XmlIncludeAttribute(typeof(IntegerValueType))]
-    [System.Xml.Serialization.XmlIncludeAttribute(typeof(AttributeIntegerValueType))]
-    [System.Xml.Serialization.XmlIncludeAttribute(typeof(DecimalValueType))]
-    [System.Xml.Serialization.XmlIncludeAttribute(typeof(AttributeDecimalValueType))]
-    [System.Xml.Serialization.XmlIncludeAttribute(typeof(BooleanValueType))]
-    [System.Xml.Serialization.XmlIncludeAttribute(typeof(AttributeValueType))]
-    [System.Xml.Serialization.XmlIncludeAttribute(typeof(CobieRowAssignmentsType))]
-    [System.Xml.Serialization.XmlIncludeAttribute(typeof(ZoneAssignmentCollectionType))]
-    [System.Xml.Serialization.XmlIncludeAttribute(typeof(SystemAssignmentCollectionType))]
-    [System.Xml.Serialization.XmlIncludeAttribute(typeof(ContactAssignmentCollectionType))]
-    [System.Xml.Serialization.XmlIncludeAttribute(typeof(AssemblyAssignmentCollectionType))]
-    [System.Xml.Serialization.XmlIncludeAttribute(typeof(CobieKeyType))]
-    [System.Xml.Serialization.XmlIncludeAttribute(typeof(ZoneKeyType))]
-    [System.Xml.Serialization.XmlIncludeAttribute(typeof(SystemKeyType))]
-    [System.Xml.Serialization.XmlIncludeAttribute(typeof(IssueKeyType))]
-    [System.Xml.Serialization.XmlIncludeAttribute(typeof(FacilityKeyType))]
-    [System.Xml.Serialization.XmlIncludeAttribute(typeof(FloorKeyType))]
-    [System.Xml.Serialization.XmlIncludeAttribute(typeof(SpaceKeyType))]
-    [System.Xml.Serialization.XmlIncludeAttribute(typeof(DocumentKeyType))]
-    [System.Xml.Serialization.XmlIncludeAttribute(typeof(ContactKeyType))]
-    [System.Xml.Serialization.XmlIncludeAttribute(typeof(AttributeKeyType))]
-    [System.Xml.Serialization.XmlIncludeAttribute(typeof(AssetTypeKeyType))]
-    [System.Xml.Serialization.XmlIncludeAttribute(typeof(WarrantyKeyType))]
-    [System.Xml.Serialization.XmlIncludeAttribute(typeof(SpareKeyType))]
-    [System.Xml.Serialization.XmlIncludeAttribute(typeof(JobKeyType))]
-    [System.Xml.Serialization.XmlIncludeAttribute(typeof(ResourceKeyType))]
-    [System.Xml.Serialization.XmlIncludeAttribute(typeof(AssetKeyType))]
-    [System.Xml.Serialization.XmlIncludeAttribute(typeof(AssemblyKeyType))]
-    [System.Xml.Serialization.XmlIncludeAttribute(typeof(SpaceAssignmentCollectionType))]
-    [System.Xml.Serialization.XmlIncludeAttribute(typeof(CobieWorksheetType))]
-    [System.Xml.Serialization.XmlIncludeAttribute(typeof(ZoneCollectionType))]
-    [System.Xml.Serialization.XmlIncludeAttribute(typeof(SystemCollectionType))]
-    [System.Xml.Serialization.XmlIncludeAttribute(typeof(SpaceCollectionType))]
-    [System.Xml.Serialization.XmlIncludeAttribute(typeof(FloorCollectionType))]
-    [System.Xml.Serialization.XmlIncludeAttribute(typeof(ContactCollectionType))]
-    [System.Xml.Serialization.XmlIncludeAttribute(typeof(ConnectionCollectionType))]
-    [System.Xml.Serialization.XmlIncludeAttribute(typeof(ResourceCollectionType))]
-    [System.Xml.Serialization.XmlIncludeAttribute(typeof(JobCollectionType))]
-    [System.Xml.Serialization.XmlIncludeAttribute(typeof(SpareCollectionType))]
-    [System.Xml.Serialization.XmlIncludeAttribute(typeof(AssetTypeCollectionType))]
-    [System.Xml.Serialization.XmlIncludeAttribute(typeof(DocumentCollectionType))]
-    [System.Xml.Serialization.XmlIncludeAttribute(typeof(IssueCollectionType))]
-    [System.Xml.Serialization.XmlIncludeAttribute(typeof(AttributeCollectionType))]
-    [System.Xml.Serialization.XmlIncludeAttribute(typeof(AssetCollectionType))]
-    [System.Xml.Serialization.XmlIncludeAttribute(typeof(CobieBaseType))]
-    [System.Xml.Serialization.XmlIncludeAttribute(typeof(SiteType))]
-    [System.Xml.Serialization.XmlIncludeAttribute(typeof(ProjectType))]
-    [System.Xml.Serialization.XmlIncludeAttribute(typeof(SpaceType))]
-    [System.Xml.Serialization.XmlIncludeAttribute(typeof(SpaceType1))]
-    [System.Xml.Serialization.XmlIncludeAttribute(typeof(WarrantyType))]
-    [System.Xml.Serialization.XmlIncludeAttribute(typeof(CobieRowType))]
-    [System.Xml.Serialization.XmlIncludeAttribute(typeof(FacilityType))]
-    [System.Xml.Serialization.XmlIncludeAttribute(typeof(FacilityType1))]
-    [System.Xml.Serialization.XmlIncludeAttribute(typeof(ZoneType))]
-    [System.Xml.Serialization.XmlIncludeAttribute(typeof(ZoneType1))]
-    [System.Xml.Serialization.XmlIncludeAttribute(typeof(SystemType))]
-    [System.Xml.Serialization.XmlIncludeAttribute(typeof(SystemType1))]
-    [System.Xml.Serialization.XmlIncludeAttribute(typeof(FloorType))]
-    [System.Xml.Serialization.XmlIncludeAttribute(typeof(FloorType1))]
-    [System.Xml.Serialization.XmlIncludeAttribute(typeof(ContactType))]
-    [System.Xml.Serialization.XmlIncludeAttribute(typeof(ContactType1))]
-    [System.Xml.Serialization.XmlIncludeAttribute(typeof(ConnectionType))]
-    [System.Xml.Serialization.XmlIncludeAttribute(typeof(ConnectionType1))]
-    [System.Xml.Serialization.XmlIncludeAttribute(typeof(ResourceType))]
-    [System.Xml.Serialization.XmlIncludeAttribute(typeof(ResourceType1))]
-    [System.Xml.Serialization.XmlIncludeAttribute(typeof(JobType))]
-    [System.Xml.Serialization.XmlIncludeAttribute(typeof(JobType1))]
-    [System.Xml.Serialization.XmlIncludeAttribute(typeof(SpareType))]
-    [System.Xml.Serialization.XmlIncludeAttribute(typeof(SpareType1))]
-    [System.Xml.Serialization.XmlIncludeAttribute(typeof(AssetTypeInfoType))]
-    [System.Xml.Serialization.XmlIncludeAttribute(typeof(AssetTypeInfoType1))]
-    [System.Xml.Serialization.XmlIncludeAttribute(typeof(DocumentType))]
-    [System.Xml.Serialization.XmlIncludeAttribute(typeof(DocumentType1))]
-    [System.Xml.Serialization.XmlIncludeAttribute(typeof(IssueType))]
-    [System.Xml.Serialization.XmlIncludeAttribute(typeof(IssueType1))]
-    [System.Xml.Serialization.XmlIncludeAttribute(typeof(AttributeType))]
-    [System.Xml.Serialization.XmlIncludeAttribute(typeof(AttributeType1))]
-    [System.Xml.Serialization.XmlIncludeAttribute(typeof(AssetInfoType))]
-    [System.Xml.Serialization.XmlIncludeAttribute(typeof(AssetInfoType1))]
-    [System.Xml.Serialization.XmlIncludeAttribute(typeof(AssemblyType))]
-    [System.Xml.Serialization.XmlIncludeAttribute(typeof(AssemblyType1))]
+    [System.Xml.Serialization.XmlIncludeAttribute(typeof (WarrantyCollectionType))]
+    [System.Xml.Serialization.XmlIncludeAttribute(typeof (AllowedValueCollectionType))]
+    [System.Xml.Serialization.XmlIncludeAttribute(typeof (ValueBaseType))]
+    [System.Xml.Serialization.XmlIncludeAttribute(typeof (StringValueType))]
+    [System.Xml.Serialization.XmlIncludeAttribute(typeof (AttributeStringValueType))]
+    [System.Xml.Serialization.XmlIncludeAttribute(typeof (IntegerValueType))]
+    [System.Xml.Serialization.XmlIncludeAttribute(typeof (AttributeIntegerValueType))]
+    [System.Xml.Serialization.XmlIncludeAttribute(typeof (DecimalValueType))]
+    [System.Xml.Serialization.XmlIncludeAttribute(typeof (AttributeDecimalValueType))]
+    [System.Xml.Serialization.XmlIncludeAttribute(typeof (BooleanValueType))]
+    [System.Xml.Serialization.XmlIncludeAttribute(typeof (AttributeValueType))]
+    [System.Xml.Serialization.XmlIncludeAttribute(typeof (CobieRowAssignmentsType))]
+    [System.Xml.Serialization.XmlIncludeAttribute(typeof (ZoneAssignmentCollectionType))]
+    [System.Xml.Serialization.XmlIncludeAttribute(typeof (SystemAssignmentCollectionType))]
+    [System.Xml.Serialization.XmlIncludeAttribute(typeof (ContactAssignmentCollectionType))]
+    [System.Xml.Serialization.XmlIncludeAttribute(typeof (AssemblyAssignmentCollectionType))]
+    [System.Xml.Serialization.XmlIncludeAttribute(typeof (CobieKeyType))]
+    [System.Xml.Serialization.XmlIncludeAttribute(typeof (ZoneKeyType))]
+    [System.Xml.Serialization.XmlIncludeAttribute(typeof (SystemKeyType))]
+    [System.Xml.Serialization.XmlIncludeAttribute(typeof (IssueKeyType))]
+    [System.Xml.Serialization.XmlIncludeAttribute(typeof (FacilityKeyType))]
+    [System.Xml.Serialization.XmlIncludeAttribute(typeof (FloorKeyType))]
+    [System.Xml.Serialization.XmlIncludeAttribute(typeof (SpaceKeyType))]
+    [System.Xml.Serialization.XmlIncludeAttribute(typeof (DocumentKeyType))]
+    [System.Xml.Serialization.XmlIncludeAttribute(typeof (ContactKeyType))]
+    [System.Xml.Serialization.XmlIncludeAttribute(typeof (AttributeKeyType))]
+    [System.Xml.Serialization.XmlIncludeAttribute(typeof (AssetTypeKeyType))]
+    [System.Xml.Serialization.XmlIncludeAttribute(typeof (WarrantyKeyType))]
+    [System.Xml.Serialization.XmlIncludeAttribute(typeof (SpareKeyType))]
+    [System.Xml.Serialization.XmlIncludeAttribute(typeof (JobKeyType))]
+    [System.Xml.Serialization.XmlIncludeAttribute(typeof (ResourceKeyType))]
+    [System.Xml.Serialization.XmlIncludeAttribute(typeof (AssetKeyType))]
+    [System.Xml.Serialization.XmlIncludeAttribute(typeof (AssemblyKeyType))]
+    [System.Xml.Serialization.XmlIncludeAttribute(typeof (SpaceAssignmentCollectionType))]
+    [System.Xml.Serialization.XmlIncludeAttribute(typeof (CobieWorksheetType))]
+    [System.Xml.Serialization.XmlIncludeAttribute(typeof (ZoneCollectionType))]
+    [System.Xml.Serialization.XmlIncludeAttribute(typeof (SystemCollectionType))]
+    [System.Xml.Serialization.XmlIncludeAttribute(typeof (SpaceCollectionType))]
+    [System.Xml.Serialization.XmlIncludeAttribute(typeof (FloorCollectionType))]
+    [System.Xml.Serialization.XmlIncludeAttribute(typeof (ContactCollectionType))]
+    [System.Xml.Serialization.XmlIncludeAttribute(typeof (ConnectionCollectionType))]
+    [System.Xml.Serialization.XmlIncludeAttribute(typeof (ResourceCollectionType))]
+    [System.Xml.Serialization.XmlIncludeAttribute(typeof (JobCollectionType))]
+    [System.Xml.Serialization.XmlIncludeAttribute(typeof (SpareCollectionType))]
+    [System.Xml.Serialization.XmlIncludeAttribute(typeof (AssetTypeCollectionType))]
+    [System.Xml.Serialization.XmlIncludeAttribute(typeof (DocumentCollectionType))]
+    [System.Xml.Serialization.XmlIncludeAttribute(typeof (IssueCollectionType))]
+    [System.Xml.Serialization.XmlIncludeAttribute(typeof (AttributeCollectionType))]
+    [System.Xml.Serialization.XmlIncludeAttribute(typeof (AssetCollectionType))]
+    [System.Xml.Serialization.XmlIncludeAttribute(typeof (CobieBaseType))]
+    [System.Xml.Serialization.XmlIncludeAttribute(typeof (SiteType))]
+    [System.Xml.Serialization.XmlIncludeAttribute(typeof (ProjectType))]
+    [System.Xml.Serialization.XmlIncludeAttribute(typeof (SpaceType))]
+    [System.Xml.Serialization.XmlIncludeAttribute(typeof (SpaceType1))]
+    [System.Xml.Serialization.XmlIncludeAttribute(typeof (WarrantyType))]
+    [System.Xml.Serialization.XmlIncludeAttribute(typeof (CobieRowType))]
+    [System.Xml.Serialization.XmlIncludeAttribute(typeof (FacilityType))]
+    [System.Xml.Serialization.XmlIncludeAttribute(typeof (FacilityType1))]
+    [System.Xml.Serialization.XmlIncludeAttribute(typeof (ZoneType))]
+    [System.Xml.Serialization.XmlIncludeAttribute(typeof (ZoneType1))]
+    [System.Xml.Serialization.XmlIncludeAttribute(typeof (SystemType))]
+    [System.Xml.Serialization.XmlIncludeAttribute(typeof (SystemType1))]
+    [System.Xml.Serialization.XmlIncludeAttribute(typeof (FloorType))]
+    [System.Xml.Serialization.XmlIncludeAttribute(typeof (FloorType1))]
+    [System.Xml.Serialization.XmlIncludeAttribute(typeof (ContactType))]
+    [System.Xml.Serialization.XmlIncludeAttribute(typeof (ContactType1))]
+    [System.Xml.Serialization.XmlIncludeAttribute(typeof (ConnectionType))]
+    [System.Xml.Serialization.XmlIncludeAttribute(typeof (ConnectionType1))]
+    [System.Xml.Serialization.XmlIncludeAttribute(typeof (ResourceType))]
+    [System.Xml.Serialization.XmlIncludeAttribute(typeof (ResourceType1))]
+    [System.Xml.Serialization.XmlIncludeAttribute(typeof (JobType))]
+    [System.Xml.Serialization.XmlIncludeAttribute(typeof (JobType1))]
+    [System.Xml.Serialization.XmlIncludeAttribute(typeof (SpareType))]
+    [System.Xml.Serialization.XmlIncludeAttribute(typeof (SpareType1))]
+    [System.Xml.Serialization.XmlIncludeAttribute(typeof (AssetTypeInfoType))]
+    [System.Xml.Serialization.XmlIncludeAttribute(typeof (AssetTypeInfoType1))]
+    [System.Xml.Serialization.XmlIncludeAttribute(typeof (DocumentType))]
+    [System.Xml.Serialization.XmlIncludeAttribute(typeof (DocumentType1))]
+    [System.Xml.Serialization.XmlIncludeAttribute(typeof (IssueType))]
+    [System.Xml.Serialization.XmlIncludeAttribute(typeof (IssueType1))]
+    [System.Xml.Serialization.XmlIncludeAttribute(typeof (AttributeType))]
+    [System.Xml.Serialization.XmlIncludeAttribute(typeof (AttributeType1))]
+    [System.Xml.Serialization.XmlIncludeAttribute(typeof (AssetInfoType))]
+    [System.Xml.Serialization.XmlIncludeAttribute(typeof (AssetInfoType1))]
+    [System.Xml.Serialization.XmlIncludeAttribute(typeof (AssemblyType))]
+    [System.Xml.Serialization.XmlIncludeAttribute(typeof (AssemblyType1))]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.34234")]
     [System.SerializableAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
@@ -435,26 +364,14 @@ namespace Xbim.COBieLite.SerialisationHelper
 
         public decimal MonetaryValue
         {
-            get
-            {
-                return this.monetaryValueField;
-            }
-            set
-            {
-                this.monetaryValueField = value;
-            }
+            get { return this.monetaryValueField; }
+            set { this.monetaryValueField = value; }
         }
 
         public CurrencyUnitSimpleType MonetaryUnit
         {
-            get
-            {
-                return this.monetaryUnitField;
-            }
-            set
-            {
-                this.monetaryUnitField = value;
-            }
+            get { return this.monetaryUnitField; }
+            set { this.monetaryUnitField = value; }
         }
     }
 
@@ -465,8 +382,7 @@ namespace Xbim.COBieLite.SerialisationHelper
     {
 
         /// <remarks/>
-        [System.Xml.Serialization.XmlEnumAttribute("British Pounds")]
-        BritishPounds,
+        [System.Xml.Serialization.XmlEnumAttribute("British Pounds")] BritishPounds,
 
         /// <remarks/>
         Dollars,
@@ -475,8 +391,7 @@ namespace Xbim.COBieLite.SerialisationHelper
         Euros,
 
         /// <remarks/>
-        [System.Xml.Serialization.XmlEnumAttribute("")]
-        Item,
+        [System.Xml.Serialization.XmlEnumAttribute("")] Item,
     }
 
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.34234")]
@@ -496,14 +411,8 @@ namespace Xbim.COBieLite.SerialisationHelper
         [System.Xml.Serialization.XmlElementAttribute("Warranty")]
         public List<WarrantyType> Warranty
         {
-            get
-            {
-                return this.warrantyField;
-            }
-            set
-            {
-                this.warrantyField = value;
-            }
+            get { return this.warrantyField; }
+            set { this.warrantyField = value; }
         }
     }
 
@@ -539,90 +448,48 @@ namespace Xbim.COBieLite.SerialisationHelper
 
         public string WarrantyName
         {
-            get
-            {
-                return this.warrantyNameField;
-            }
-            set
-            {
-                this.warrantyNameField = value;
-            }
+            get { return this.warrantyNameField; }
+            set { this.warrantyNameField = value; }
         }
 
         public string WarrantyCategory
         {
-            get
-            {
-                return this.warrantyCategoryField;
-            }
-            set
-            {
-                this.warrantyCategoryField = value;
-            }
+            get { return this.warrantyCategoryField; }
+            set { this.warrantyCategoryField = value; }
         }
 
         public IntegerValueType WarrantyDuration
         {
-            get
-            {
-                return this.warrantyDurationField;
-            }
-            set
-            {
-                this.warrantyDurationField = value;
-            }
+            get { return this.warrantyDurationField; }
+            set { this.warrantyDurationField = value; }
         }
 
         public ContactAssignmentCollectionType WarrantyGaurantorContactAssignments
         {
-            get
-            {
-                return this.warrantyGaurantorContactAssignmentsField;
-            }
-            set
-            {
-                this.warrantyGaurantorContactAssignmentsField = value;
-            }
+            get { return this.warrantyGaurantorContactAssignmentsField; }
+            set { this.warrantyGaurantorContactAssignmentsField = value; }
         }
 
         public AttributeCollectionType WarrantyAttributes
         {
-            get
-            {
-                return this.warrantyAttributesField;
-            }
-            set
-            {
-                this.warrantyAttributesField = value;
-            }
+            get { return this.warrantyAttributesField; }
+            set { this.warrantyAttributesField = value; }
         }
 
         public DocumentCollectionType WarrantyDocuments
         {
-            get
-            {
-                return this.warrantyDocumentsField;
-            }
-            set
-            {
-                this.warrantyDocumentsField = value;
-            }
+            get { return this.warrantyDocumentsField; }
+            set { this.warrantyDocumentsField = value; }
         }
 
         public IssueCollectionType WarrantyIssues
         {
-            get
-            {
-                return this.warrantyIssuesField;
-            }
-            set
-            {
-                this.warrantyIssuesField = value;
-            }
+            get { return this.warrantyIssuesField; }
+            set { this.warrantyIssuesField = value; }
         }
     }
 
-    [System.Xml.Serialization.XmlIncludeAttribute(typeof(AttributeIntegerValueType))]
+    [System.Xml.Serialization.XmlIncludeAttribute(typeof (AttributeIntegerValueType))]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.34234")]
     [System.SerializableAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
@@ -635,24 +502,18 @@ namespace Xbim.COBieLite.SerialisationHelper
         [System.Xml.Serialization.XmlElementAttribute(DataType = "integer")]
         public string IntegerValue
         {
-            get
-            {
-                return this.integerValueField;
-            }
-            set
-            {
-                this.integerValueField = value;
-            }
+            get { return this.integerValueField; }
+            set { this.integerValueField = value; }
         }
     }
 
-    [System.Xml.Serialization.XmlIncludeAttribute(typeof(StringValueType))]
-    [System.Xml.Serialization.XmlIncludeAttribute(typeof(AttributeStringValueType))]
-    [System.Xml.Serialization.XmlIncludeAttribute(typeof(IntegerValueType))]
-    [System.Xml.Serialization.XmlIncludeAttribute(typeof(AttributeIntegerValueType))]
-    [System.Xml.Serialization.XmlIncludeAttribute(typeof(DecimalValueType))]
-    [System.Xml.Serialization.XmlIncludeAttribute(typeof(AttributeDecimalValueType))]
-    [System.Xml.Serialization.XmlIncludeAttribute(typeof(BooleanValueType))]
+    [System.Xml.Serialization.XmlIncludeAttribute(typeof (StringValueType))]
+    [System.Xml.Serialization.XmlIncludeAttribute(typeof (AttributeStringValueType))]
+    [System.Xml.Serialization.XmlIncludeAttribute(typeof (IntegerValueType))]
+    [System.Xml.Serialization.XmlIncludeAttribute(typeof (AttributeIntegerValueType))]
+    [System.Xml.Serialization.XmlIncludeAttribute(typeof (DecimalValueType))]
+    [System.Xml.Serialization.XmlIncludeAttribute(typeof (AttributeDecimalValueType))]
+    [System.Xml.Serialization.XmlIncludeAttribute(typeof (BooleanValueType))]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.34234")]
     [System.SerializableAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
@@ -664,18 +525,12 @@ namespace Xbim.COBieLite.SerialisationHelper
 
         public string UnitName
         {
-            get
-            {
-                return this.unitNameField;
-            }
-            set
-            {
-                this.unitNameField = value;
-            }
+            get { return this.unitNameField; }
+            set { this.unitNameField = value; }
         }
     }
 
-    [System.Xml.Serialization.XmlIncludeAttribute(typeof(AttributeStringValueType))]
+    [System.Xml.Serialization.XmlIncludeAttribute(typeof (AttributeStringValueType))]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.34234")]
     [System.SerializableAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
@@ -687,14 +542,8 @@ namespace Xbim.COBieLite.SerialisationHelper
 
         public string StringValue
         {
-            get
-            {
-                return this.stringValueField;
-            }
-            set
-            {
-                this.stringValueField = value;
-            }
+            get { return this.stringValueField; }
+            set { this.stringValueField = value; }
         }
     }
 
@@ -714,14 +563,8 @@ namespace Xbim.COBieLite.SerialisationHelper
 
         public AllowedValueCollectionType AllowedValues
         {
-            get
-            {
-                return this.allowedValuesField;
-            }
-            set
-            {
-                this.allowedValuesField = value;
-            }
+            get { return this.allowedValuesField; }
+            set { this.allowedValuesField = value; }
         }
     }
 
@@ -742,18 +585,12 @@ namespace Xbim.COBieLite.SerialisationHelper
         [System.Xml.Serialization.XmlElementAttribute("AttributeAllowedValue")]
         public List<string> AttributeAllowedValue
         {
-            get
-            {
-                return this.attributeAllowedValueField;
-            }
-            set
-            {
-                this.attributeAllowedValueField = value;
-            }
+            get { return this.attributeAllowedValueField; }
+            set { this.attributeAllowedValueField = value; }
         }
     }
 
-    [System.Xml.Serialization.XmlIncludeAttribute(typeof(AttributeDecimalValueType))]
+    [System.Xml.Serialization.XmlIncludeAttribute(typeof (AttributeDecimalValueType))]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.34234")]
     [System.SerializableAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
@@ -767,27 +604,15 @@ namespace Xbim.COBieLite.SerialisationHelper
 
         public double DecimalValue
         {
-            get
-            {
-                return this.decimalValueField;
-            }
-            set
-            {
-                this.decimalValueField = value;
-            }
+            get { return this.decimalValueField; }
+            set { this.decimalValueField = value; }
         }
 
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool DecimalValueSpecified
         {
-            get
-            {
-                return this.decimalValueFieldSpecified;
-            }
-            set
-            {
-                this.decimalValueFieldSpecified = value;
-            }
+            get { return this.decimalValueFieldSpecified; }
+            set { this.decimalValueFieldSpecified = value; }
         }
     }
 
@@ -808,52 +633,28 @@ namespace Xbim.COBieLite.SerialisationHelper
 
         public double MinValueDecimal
         {
-            get
-            {
-                return this.minValueDecimalField;
-            }
-            set
-            {
-                this.minValueDecimalField = value;
-            }
+            get { return this.minValueDecimalField; }
+            set { this.minValueDecimalField = value; }
         }
 
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool MinValueDecimalSpecified
         {
-            get
-            {
-                return this.minValueDecimalFieldSpecified;
-            }
-            set
-            {
-                this.minValueDecimalFieldSpecified = value;
-            }
+            get { return this.minValueDecimalFieldSpecified; }
+            set { this.minValueDecimalFieldSpecified = value; }
         }
 
         public double MaxValueDecimal
         {
-            get
-            {
-                return this.maxValueDecimalField;
-            }
-            set
-            {
-                this.maxValueDecimalField = value;
-            }
+            get { return this.maxValueDecimalField; }
+            set { this.maxValueDecimalField = value; }
         }
 
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool MaxValueDecimalSpecified
         {
-            get
-            {
-                return this.maxValueDecimalFieldSpecified;
-            }
-            set
-            {
-                this.maxValueDecimalFieldSpecified = value;
-            }
+            get { return this.maxValueDecimalFieldSpecified; }
+            set { this.maxValueDecimalFieldSpecified = value; }
         }
     }
 
@@ -870,27 +671,15 @@ namespace Xbim.COBieLite.SerialisationHelper
 
         public bool BooleanValue
         {
-            get
-            {
-                return this.booleanValueField;
-            }
-            set
-            {
-                this.booleanValueField = value;
-            }
+            get { return this.booleanValueField; }
+            set { this.booleanValueField = value; }
         }
 
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool BooleanValueSpecified
         {
-            get
-            {
-                return this.booleanValueFieldSpecified;
-            }
-            set
-            {
-                this.booleanValueFieldSpecified = value;
-            }
+            get { return this.booleanValueFieldSpecified; }
+            set { this.booleanValueFieldSpecified = value; }
         }
     }
 
@@ -908,27 +697,15 @@ namespace Xbim.COBieLite.SerialisationHelper
         [System.Xml.Serialization.XmlElementAttribute(DataType = "integer")]
         public string MinValueInteger
         {
-            get
-            {
-                return this.minValueIntegerField;
-            }
-            set
-            {
-                this.minValueIntegerField = value;
-            }
+            get { return this.minValueIntegerField; }
+            set { this.minValueIntegerField = value; }
         }
 
         [System.Xml.Serialization.XmlElementAttribute(DataType = "integer")]
         public string MaxValueInteger
         {
-            get
-            {
-                return this.maxValueIntegerField;
-            }
-            set
-            {
-                this.maxValueIntegerField = value;
-            }
+            get { return this.maxValueIntegerField; }
+            set { this.maxValueIntegerField = value; }
         }
     }
 
@@ -949,14 +726,8 @@ namespace Xbim.COBieLite.SerialisationHelper
         [System.Xml.Serialization.XmlElementAttribute("ContactAssignment")]
         public List<ContactKeyType> ContactAssignment
         {
-            get
-            {
-                return this.contactAssignmentField;
-            }
-            set
-            {
-                this.contactAssignmentField = value;
-            }
+            get { return this.contactAssignmentField; }
+            set { this.contactAssignmentField = value; }
         }
     }
 
@@ -971,33 +742,27 @@ namespace Xbim.COBieLite.SerialisationHelper
 
         public string ContactEmailReference
         {
-            get
-            {
-                return this.contactEmailReferenceField;
-            }
-            set
-            {
-                this.contactEmailReferenceField = value;
-            }
+            get { return this.contactEmailReferenceField; }
+            set { this.contactEmailReferenceField = value; }
         }
     }
 
-    [System.Xml.Serialization.XmlIncludeAttribute(typeof(ZoneKeyType))]
-    [System.Xml.Serialization.XmlIncludeAttribute(typeof(SystemKeyType))]
-    [System.Xml.Serialization.XmlIncludeAttribute(typeof(IssueKeyType))]
-    [System.Xml.Serialization.XmlIncludeAttribute(typeof(FacilityKeyType))]
-    [System.Xml.Serialization.XmlIncludeAttribute(typeof(FloorKeyType))]
-    [System.Xml.Serialization.XmlIncludeAttribute(typeof(SpaceKeyType))]
-    [System.Xml.Serialization.XmlIncludeAttribute(typeof(DocumentKeyType))]
-    [System.Xml.Serialization.XmlIncludeAttribute(typeof(ContactKeyType))]
-    [System.Xml.Serialization.XmlIncludeAttribute(typeof(AttributeKeyType))]
-    [System.Xml.Serialization.XmlIncludeAttribute(typeof(AssetTypeKeyType))]
-    [System.Xml.Serialization.XmlIncludeAttribute(typeof(WarrantyKeyType))]
-    [System.Xml.Serialization.XmlIncludeAttribute(typeof(SpareKeyType))]
-    [System.Xml.Serialization.XmlIncludeAttribute(typeof(JobKeyType))]
-    [System.Xml.Serialization.XmlIncludeAttribute(typeof(ResourceKeyType))]
-    [System.Xml.Serialization.XmlIncludeAttribute(typeof(AssetKeyType))]
-    [System.Xml.Serialization.XmlIncludeAttribute(typeof(AssemblyKeyType))]
+    [System.Xml.Serialization.XmlIncludeAttribute(typeof (ZoneKeyType))]
+    [System.Xml.Serialization.XmlIncludeAttribute(typeof (SystemKeyType))]
+    [System.Xml.Serialization.XmlIncludeAttribute(typeof (IssueKeyType))]
+    [System.Xml.Serialization.XmlIncludeAttribute(typeof (FacilityKeyType))]
+    [System.Xml.Serialization.XmlIncludeAttribute(typeof (FloorKeyType))]
+    [System.Xml.Serialization.XmlIncludeAttribute(typeof (SpaceKeyType))]
+    [System.Xml.Serialization.XmlIncludeAttribute(typeof (DocumentKeyType))]
+    [System.Xml.Serialization.XmlIncludeAttribute(typeof (ContactKeyType))]
+    [System.Xml.Serialization.XmlIncludeAttribute(typeof (AttributeKeyType))]
+    [System.Xml.Serialization.XmlIncludeAttribute(typeof (AssetTypeKeyType))]
+    [System.Xml.Serialization.XmlIncludeAttribute(typeof (WarrantyKeyType))]
+    [System.Xml.Serialization.XmlIncludeAttribute(typeof (SpareKeyType))]
+    [System.Xml.Serialization.XmlIncludeAttribute(typeof (JobKeyType))]
+    [System.Xml.Serialization.XmlIncludeAttribute(typeof (ResourceKeyType))]
+    [System.Xml.Serialization.XmlIncludeAttribute(typeof (AssetKeyType))]
+    [System.Xml.Serialization.XmlIncludeAttribute(typeof (AssemblyKeyType))]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.34234")]
     [System.SerializableAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
@@ -1021,39 +786,21 @@ namespace Xbim.COBieLite.SerialisationHelper
 
         public string ZoneName
         {
-            get
-            {
-                return this.zoneNameField;
-            }
-            set
-            {
-                this.zoneNameField = value;
-            }
+            get { return this.zoneNameField; }
+            set { this.zoneNameField = value; }
         }
 
         public string ZoneCategory
         {
-            get
-            {
-                return this.zoneCategoryField;
-            }
-            set
-            {
-                this.zoneCategoryField = value;
-            }
+            get { return this.zoneCategoryField; }
+            set { this.zoneCategoryField = value; }
         }
 
         [System.Xml.Serialization.XmlAttributeAttribute(Form = System.Xml.Schema.XmlSchemaForm.Qualified)]
         public string externalIDReference
         {
-            get
-            {
-                return this.externalIDReferenceField;
-            }
-            set
-            {
-                this.externalIDReferenceField = value;
-            }
+            get { return this.externalIDReferenceField; }
+            set { this.externalIDReferenceField = value; }
         }
     }
 
@@ -1072,39 +819,21 @@ namespace Xbim.COBieLite.SerialisationHelper
 
         public string SystemName
         {
-            get
-            {
-                return this.systemNameField;
-            }
-            set
-            {
-                this.systemNameField = value;
-            }
+            get { return this.systemNameField; }
+            set { this.systemNameField = value; }
         }
 
         public string SystemCategory
         {
-            get
-            {
-                return this.systemCategoryField;
-            }
-            set
-            {
-                this.systemCategoryField = value;
-            }
+            get { return this.systemCategoryField; }
+            set { this.systemCategoryField = value; }
         }
 
         [System.Xml.Serialization.XmlAttributeAttribute(Form = System.Xml.Schema.XmlSchemaForm.Qualified)]
         public string externalIDReference
         {
-            get
-            {
-                return this.externalIDReferenceField;
-            }
-            set
-            {
-                this.externalIDReferenceField = value;
-            }
+            get { return this.externalIDReferenceField; }
+            set { this.externalIDReferenceField = value; }
         }
     }
 
@@ -1121,26 +850,14 @@ namespace Xbim.COBieLite.SerialisationHelper
 
         public string IssueName
         {
-            get
-            {
-                return this.issueNameField;
-            }
-            set
-            {
-                this.issueNameField = value;
-            }
+            get { return this.issueNameField; }
+            set { this.issueNameField = value; }
         }
 
         public string IssueCategory
         {
-            get
-            {
-                return this.issueCategoryField;
-            }
-            set
-            {
-                this.issueCategoryField = value;
-            }
+            get { return this.issueCategoryField; }
+            set { this.issueCategoryField = value; }
         }
     }
 
@@ -1155,18 +872,12 @@ namespace Xbim.COBieLite.SerialisationHelper
 
         public string FacilityName
         {
-            get
-            {
-                return this.facilityNameField;
-            }
-            set
-            {
-                this.facilityNameField = value;
-            }
+            get { return this.facilityNameField; }
+            set { this.facilityNameField = value; }
         }
     }
 
-    [System.Xml.Serialization.XmlIncludeAttribute(typeof(SpaceKeyType))]
+    [System.Xml.Serialization.XmlIncludeAttribute(typeof (SpaceKeyType))]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.34234")]
     [System.SerializableAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
@@ -1178,14 +889,8 @@ namespace Xbim.COBieLite.SerialisationHelper
 
         public string FloorName
         {
-            get
-            {
-                return this.floorNameField;
-            }
-            set
-            {
-                this.floorNameField = value;
-            }
+            get { return this.floorNameField; }
+            set { this.floorNameField = value; }
         }
     }
 
@@ -1200,14 +905,8 @@ namespace Xbim.COBieLite.SerialisationHelper
 
         public string SpaceName
         {
-            get
-            {
-                return this.spaceNameField;
-            }
-            set
-            {
-                this.spaceNameField = value;
-            }
+            get { return this.spaceNameField; }
+            set { this.spaceNameField = value; }
         }
     }
 
@@ -1222,14 +921,8 @@ namespace Xbim.COBieLite.SerialisationHelper
 
         public string DocumentName
         {
-            get
-            {
-                return this.documentNameField;
-            }
-            set
-            {
-                this.documentNameField = value;
-            }
+            get { return this.documentNameField; }
+            set { this.documentNameField = value; }
         }
     }
 
@@ -1246,33 +939,21 @@ namespace Xbim.COBieLite.SerialisationHelper
 
         public string AttributeName
         {
-            get
-            {
-                return this.attributeNameField;
-            }
-            set
-            {
-                this.attributeNameField = value;
-            }
+            get { return this.attributeNameField; }
+            set { this.attributeNameField = value; }
         }
 
         public string AttributeCategory
         {
-            get
-            {
-                return this.attributeCategoryField;
-            }
-            set
-            {
-                this.attributeCategoryField = value;
-            }
+            get { return this.attributeCategoryField; }
+            set { this.attributeCategoryField = value; }
         }
     }
 
-    [System.Xml.Serialization.XmlIncludeAttribute(typeof(WarrantyKeyType))]
-    [System.Xml.Serialization.XmlIncludeAttribute(typeof(SpareKeyType))]
-    [System.Xml.Serialization.XmlIncludeAttribute(typeof(JobKeyType))]
-    [System.Xml.Serialization.XmlIncludeAttribute(typeof(ResourceKeyType))]
+    [System.Xml.Serialization.XmlIncludeAttribute(typeof (WarrantyKeyType))]
+    [System.Xml.Serialization.XmlIncludeAttribute(typeof (SpareKeyType))]
+    [System.Xml.Serialization.XmlIncludeAttribute(typeof (JobKeyType))]
+    [System.Xml.Serialization.XmlIncludeAttribute(typeof (ResourceKeyType))]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.34234")]
     [System.SerializableAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
@@ -1284,14 +965,8 @@ namespace Xbim.COBieLite.SerialisationHelper
 
         public string AssetTypeName
         {
-            get
-            {
-                return this.assetTypeNameField;
-            }
-            set
-            {
-                this.assetTypeNameField = value;
-            }
+            get { return this.assetTypeNameField; }
+            set { this.assetTypeNameField = value; }
         }
     }
 
@@ -1308,26 +983,14 @@ namespace Xbim.COBieLite.SerialisationHelper
 
         public string WarrantyName
         {
-            get
-            {
-                return this.warrantyNameField;
-            }
-            set
-            {
-                this.warrantyNameField = value;
-            }
+            get { return this.warrantyNameField; }
+            set { this.warrantyNameField = value; }
         }
 
         public string WarrantyCategory
         {
-            get
-            {
-                return this.warrantyCategoryField;
-            }
-            set
-            {
-                this.warrantyCategoryField = value;
-            }
+            get { return this.warrantyCategoryField; }
+            set { this.warrantyCategoryField = value; }
         }
     }
 
@@ -1342,18 +1005,12 @@ namespace Xbim.COBieLite.SerialisationHelper
 
         public string SpareName
         {
-            get
-            {
-                return this.spareNameField;
-            }
-            set
-            {
-                this.spareNameField = value;
-            }
+            get { return this.spareNameField; }
+            set { this.spareNameField = value; }
         }
     }
 
-    [System.Xml.Serialization.XmlIncludeAttribute(typeof(ResourceKeyType))]
+    [System.Xml.Serialization.XmlIncludeAttribute(typeof (ResourceKeyType))]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.34234")]
     [System.SerializableAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
@@ -1367,26 +1024,14 @@ namespace Xbim.COBieLite.SerialisationHelper
 
         public string JobName
         {
-            get
-            {
-                return this.jobNameField;
-            }
-            set
-            {
-                this.jobNameField = value;
-            }
+            get { return this.jobNameField; }
+            set { this.jobNameField = value; }
         }
 
         public string JobTaskID
         {
-            get
-            {
-                return this.jobTaskIDField;
-            }
-            set
-            {
-                this.jobTaskIDField = value;
-            }
+            get { return this.jobTaskIDField; }
+            set { this.jobTaskIDField = value; }
         }
     }
 
@@ -1401,14 +1046,8 @@ namespace Xbim.COBieLite.SerialisationHelper
 
         public string ResourceName
         {
-            get
-            {
-                return this.resourceNameField;
-            }
-            set
-            {
-                this.resourceNameField = value;
-            }
+            get { return this.resourceNameField; }
+            set { this.resourceNameField = value; }
         }
     }
 
@@ -1433,38 +1072,20 @@ namespace Xbim.COBieLite.SerialisationHelper
 
         public string AssetName
         {
-            get
-            {
-                return this.assetNameField;
-            }
-            set
-            {
-                this.assetNameField = value;
-            }
+            get { return this.assetNameField; }
+            set { this.assetNameField = value; }
         }
 
         public AssetTypeKeyType AssetTypeAssignment
         {
-            get
-            {
-                return this.assetTypeAssignmentField;
-            }
-            set
-            {
-                this.assetTypeAssignmentField = value;
-            }
+            get { return this.assetTypeAssignmentField; }
+            set { this.assetTypeAssignmentField = value; }
         }
 
         public SpaceAssignmentCollectionType AssetSpaceAssignments
         {
-            get
-            {
-                return this.assetSpaceAssignmentsField;
-            }
-            set
-            {
-                this.assetSpaceAssignmentsField = value;
-            }
+            get { return this.assetSpaceAssignmentsField; }
+            set { this.assetSpaceAssignmentsField = value; }
         }
     }
 
@@ -1485,14 +1106,8 @@ namespace Xbim.COBieLite.SerialisationHelper
         [System.Xml.Serialization.XmlElementAttribute("SpaceAssignment")]
         public List<SpaceKeyType> SpaceAssignment
         {
-            get
-            {
-                return this.spaceAssignmentField;
-            }
-            set
-            {
-                this.spaceAssignmentField = value;
-            }
+            get { return this.spaceAssignmentField; }
+            set { this.spaceAssignmentField = value; }
         }
     }
 
@@ -1509,33 +1124,21 @@ namespace Xbim.COBieLite.SerialisationHelper
 
         public string AssemblyName
         {
-            get
-            {
-                return this.assemblyNameField;
-            }
-            set
-            {
-                this.assemblyNameField = value;
-            }
+            get { return this.assemblyNameField; }
+            set { this.assemblyNameField = value; }
         }
 
         public string AssemblyCategory
         {
-            get
-            {
-                return this.assemblyCategoryField;
-            }
-            set
-            {
-                this.assemblyCategoryField = value;
-            }
+            get { return this.assemblyCategoryField; }
+            set { this.assemblyCategoryField = value; }
         }
     }
 
-    [System.Xml.Serialization.XmlIncludeAttribute(typeof(ZoneAssignmentCollectionType))]
-    [System.Xml.Serialization.XmlIncludeAttribute(typeof(SystemAssignmentCollectionType))]
-    [System.Xml.Serialization.XmlIncludeAttribute(typeof(ContactAssignmentCollectionType))]
-    [System.Xml.Serialization.XmlIncludeAttribute(typeof(AssemblyAssignmentCollectionType))]
+    [System.Xml.Serialization.XmlIncludeAttribute(typeof (ZoneAssignmentCollectionType))]
+    [System.Xml.Serialization.XmlIncludeAttribute(typeof (SystemAssignmentCollectionType))]
+    [System.Xml.Serialization.XmlIncludeAttribute(typeof (ContactAssignmentCollectionType))]
+    [System.Xml.Serialization.XmlIncludeAttribute(typeof (AssemblyAssignmentCollectionType))]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.34234")]
     [System.SerializableAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
@@ -1561,14 +1164,8 @@ namespace Xbim.COBieLite.SerialisationHelper
         [System.Xml.Serialization.XmlElementAttribute("ZoneAssignment")]
         public List<ZoneKeyType> ZoneAssignment
         {
-            get
-            {
-                return this.zoneAssignmentField;
-            }
-            set
-            {
-                this.zoneAssignmentField = value;
-            }
+            get { return this.zoneAssignmentField; }
+            set { this.zoneAssignmentField = value; }
         }
     }
 
@@ -1589,14 +1186,8 @@ namespace Xbim.COBieLite.SerialisationHelper
         [System.Xml.Serialization.XmlElementAttribute("SystemAssignment")]
         public List<SystemKeyType> SystemAssignment
         {
-            get
-            {
-                return this.systemAssignmentField;
-            }
-            set
-            {
-                this.systemAssignmentField = value;
-            }
+            get { return this.systemAssignmentField; }
+            set { this.systemAssignmentField = value; }
         }
     }
 
@@ -1617,18 +1208,12 @@ namespace Xbim.COBieLite.SerialisationHelper
         [System.Xml.Serialization.XmlElementAttribute("AssemblyAssignment")]
         public List<AssemblyType> AssemblyAssignment
         {
-            get
-            {
-                return this.assemblyAssignmentField;
-            }
-            set
-            {
-                this.assemblyAssignmentField = value;
-            }
+            get { return this.assemblyAssignmentField; }
+            set { this.assemblyAssignmentField = value; }
         }
     }
 
-    [System.Xml.Serialization.XmlIncludeAttribute(typeof(AssemblyType1))]
+    [System.Xml.Serialization.XmlIncludeAttribute(typeof (AssemblyType1))]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.34234")]
     [System.SerializableAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
@@ -1642,26 +1227,14 @@ namespace Xbim.COBieLite.SerialisationHelper
 
         public string AssemblyName
         {
-            get
-            {
-                return this.assemblyNameField;
-            }
-            set
-            {
-                this.assemblyNameField = value;
-            }
+            get { return this.assemblyNameField; }
+            set { this.assemblyNameField = value; }
         }
 
         public string AssemblyParentName
         {
-            get
-            {
-                return this.assemblyParentNameField;
-            }
-            set
-            {
-                this.assemblyParentNameField = value;
-            }
+            get { return this.assemblyParentNameField; }
+            set { this.assemblyParentNameField = value; }
         }
     }
 
@@ -1682,18 +1255,12 @@ namespace Xbim.COBieLite.SerialisationHelper
         [System.Xml.Serialization.XmlElementAttribute("Document")]
         public List<DocumentType> Document
         {
-            get
-            {
-                return this.documentField;
-            }
-            set
-            {
-                this.documentField = value;
-            }
+            get { return this.documentField; }
+            set { this.documentField = value; }
         }
     }
 
-    [System.Xml.Serialization.XmlIncludeAttribute(typeof(DocumentType1))]
+    [System.Xml.Serialization.XmlIncludeAttribute(typeof (DocumentType1))]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.34234")]
     [System.SerializableAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
@@ -1705,22 +1272,18 @@ namespace Xbim.COBieLite.SerialisationHelper
 
         public string DocumentName
         {
-            get
-            {
-                return this.documentNameField;
-            }
-            set
-            {
-                this.documentNameField = value;
-            }
+            get { return this.documentNameField; }
+            set { this.documentNameField = value; }
         }
     }
 
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.34234")]
     [System.SerializableAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(TypeName = "DocumentType", Namespace = "http://docs.buildingsmartalliance.org/nbims03/cobie/cobielite")]
-    [System.Xml.Serialization.XmlRootAttribute("Document", Namespace = "http://docs.buildingsmartalliance.org/nbims03/cobie/cobielite", IsNullable = false)]
+    [System.Xml.Serialization.XmlTypeAttribute(TypeName = "DocumentType",
+        Namespace = "http://docs.buildingsmartalliance.org/nbims03/cobie/cobielite")]
+    [System.Xml.Serialization.XmlRootAttribute("Document",
+        Namespace = "http://docs.buildingsmartalliance.org/nbims03/cobie/cobielite", IsNullable = false)]
     public partial class DocumentType1 : DocumentType
     {
 
@@ -1742,82 +1305,52 @@ namespace Xbim.COBieLite.SerialisationHelper
             this.documentAttributesField = new AttributeCollectionType();
         }
 
-        [System.Xml.Serialization.XmlElementAttribute(Namespace = "http://docs.buildingsmartalliance.org/nbims03/cobie/core")]
+        [System.Xml.Serialization.XmlElementAttribute(
+            Namespace = "http://docs.buildingsmartalliance.org/nbims03/cobie/core")]
         public string DocumentCategory
         {
-            get
-            {
-                return this.documentCategoryField;
-            }
-            set
-            {
-                this.documentCategoryField = value;
-            }
+            get { return this.documentCategoryField; }
+            set { this.documentCategoryField = value; }
         }
 
-        [System.Xml.Serialization.XmlElementAttribute(Namespace = "http://docs.buildingsmartalliance.org/nbims03/cobie/core")]
+        [System.Xml.Serialization.XmlElementAttribute(
+            Namespace = "http://docs.buildingsmartalliance.org/nbims03/cobie/core")]
         public string DocumentDescription
         {
-            get
-            {
-                return this.documentDescriptionField;
-            }
-            set
-            {
-                this.documentDescriptionField = value;
-            }
+            get { return this.documentDescriptionField; }
+            set { this.documentDescriptionField = value; }
         }
 
-        [System.Xml.Serialization.XmlElementAttribute(Namespace = "http://docs.buildingsmartalliance.org/nbims03/cobie/core")]
+        [System.Xml.Serialization.XmlElementAttribute(
+            Namespace = "http://docs.buildingsmartalliance.org/nbims03/cobie/core")]
         public string DocumentURI
         {
-            get
-            {
-                return this.documentURIField;
-            }
-            set
-            {
-                this.documentURIField = value;
-            }
+            get { return this.documentURIField; }
+            set { this.documentURIField = value; }
         }
 
-        [System.Xml.Serialization.XmlElementAttribute(Namespace = "http://docs.buildingsmartalliance.org/nbims03/cobie/core")]
+        [System.Xml.Serialization.XmlElementAttribute(
+            Namespace = "http://docs.buildingsmartalliance.org/nbims03/cobie/core")]
         public string DocumentReferenceURI
         {
-            get
-            {
-                return this.documentReferenceURIField;
-            }
-            set
-            {
-                this.documentReferenceURIField = value;
-            }
+            get { return this.documentReferenceURIField; }
+            set { this.documentReferenceURIField = value; }
         }
 
-        [System.Xml.Serialization.XmlElementAttribute(Namespace = "http://docs.buildingsmartalliance.org/nbims03/cobie/core")]
+        [System.Xml.Serialization.XmlElementAttribute(
+            Namespace = "http://docs.buildingsmartalliance.org/nbims03/cobie/core")]
         public AttributeCollectionType DocumentAttributes
         {
-            get
-            {
-                return this.documentAttributesField;
-            }
-            set
-            {
-                this.documentAttributesField = value;
-            }
+            get { return this.documentAttributesField; }
+            set { this.documentAttributesField = value; }
         }
 
-        [System.Xml.Serialization.XmlElementAttribute(Namespace = "http://docs.buildingsmartalliance.org/nbims03/cobie/core")]
+        [System.Xml.Serialization.XmlElementAttribute(
+            Namespace = "http://docs.buildingsmartalliance.org/nbims03/cobie/core")]
         public IssueCollectionType DocumentIssues
         {
-            get
-            {
-                return this.documentIssuesField;
-            }
-            set
-            {
-                this.documentIssuesField = value;
-            }
+            get { return this.documentIssuesField; }
+            set { this.documentIssuesField = value; }
         }
     }
 
@@ -1838,18 +1371,12 @@ namespace Xbim.COBieLite.SerialisationHelper
         [System.Xml.Serialization.XmlElementAttribute("Issue")]
         public List<IssueType> Issue
         {
-            get
-            {
-                return this.issueField;
-            }
-            set
-            {
-                this.issueField = value;
-            }
+            get { return this.issueField; }
+            set { this.issueField = value; }
         }
     }
 
-    [System.Xml.Serialization.XmlIncludeAttribute(typeof(IssueType1))]
+    [System.Xml.Serialization.XmlIncludeAttribute(typeof (IssueType1))]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.34234")]
     [System.SerializableAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
@@ -1863,34 +1390,24 @@ namespace Xbim.COBieLite.SerialisationHelper
 
         public string IssueName
         {
-            get
-            {
-                return this.issueNameField;
-            }
-            set
-            {
-                this.issueNameField = value;
-            }
+            get { return this.issueNameField; }
+            set { this.issueNameField = value; }
         }
 
         public string IssueCategory
         {
-            get
-            {
-                return this.issueCategoryField;
-            }
-            set
-            {
-                this.issueCategoryField = value;
-            }
+            get { return this.issueCategoryField; }
+            set { this.issueCategoryField = value; }
         }
     }
 
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.34234")]
     [System.SerializableAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(TypeName = "IssueType", Namespace = "http://docs.buildingsmartalliance.org/nbims03/cobie/cobielite")]
-    [System.Xml.Serialization.XmlRootAttribute("Issue", Namespace = "http://docs.buildingsmartalliance.org/nbims03/cobie/cobielite", IsNullable = false)]
+    [System.Xml.Serialization.XmlTypeAttribute(TypeName = "IssueType",
+        Namespace = "http://docs.buildingsmartalliance.org/nbims03/cobie/cobielite")]
+    [System.Xml.Serialization.XmlRootAttribute("Issue",
+        Namespace = "http://docs.buildingsmartalliance.org/nbims03/cobie/cobielite", IsNullable = false)]
     public partial class IssueType1 : IssueType
     {
 
@@ -1911,99 +1428,69 @@ namespace Xbim.COBieLite.SerialisationHelper
             this.contactAssignmentField = new ContactKeyType();
         }
 
-        [System.Xml.Serialization.XmlElementAttribute(Namespace = "http://docs.buildingsmartalliance.org/nbims03/cobie/core")]
+        [System.Xml.Serialization.XmlElementAttribute(
+            Namespace = "http://docs.buildingsmartalliance.org/nbims03/cobie/core")]
         public string IssueRiskText
         {
-            get
-            {
-                return this.issueRiskTextField;
-            }
-            set
-            {
-                this.issueRiskTextField = value;
-            }
+            get { return this.issueRiskTextField; }
+            set { this.issueRiskTextField = value; }
         }
 
-        [System.Xml.Serialization.XmlElementAttribute(Namespace = "http://docs.buildingsmartalliance.org/nbims03/cobie/core")]
+        [System.Xml.Serialization.XmlElementAttribute(
+            Namespace = "http://docs.buildingsmartalliance.org/nbims03/cobie/core")]
         public string IssueSeverityText
         {
-            get
-            {
-                return this.issueSeverityTextField;
-            }
-            set
-            {
-                this.issueSeverityTextField = value;
-            }
+            get { return this.issueSeverityTextField; }
+            set { this.issueSeverityTextField = value; }
         }
 
-        [System.Xml.Serialization.XmlElementAttribute(Namespace = "http://docs.buildingsmartalliance.org/nbims03/cobie/core")]
+        [System.Xml.Serialization.XmlElementAttribute(
+            Namespace = "http://docs.buildingsmartalliance.org/nbims03/cobie/core")]
         public string IssueImpactText
         {
-            get
-            {
-                return this.issueImpactTextField;
-            }
-            set
-            {
-                this.issueImpactTextField = value;
-            }
+            get { return this.issueImpactTextField; }
+            set { this.issueImpactTextField = value; }
         }
 
-        [System.Xml.Serialization.XmlElementAttribute(Namespace = "http://docs.buildingsmartalliance.org/nbims03/cobie/core")]
+        [System.Xml.Serialization.XmlElementAttribute(
+            Namespace = "http://docs.buildingsmartalliance.org/nbims03/cobie/core")]
         public string IssueDescription
         {
-            get
-            {
-                return this.issueDescriptionField;
-            }
-            set
-            {
-                this.issueDescriptionField = value;
-            }
+            get { return this.issueDescriptionField; }
+            set { this.issueDescriptionField = value; }
         }
 
-        [System.Xml.Serialization.XmlElementAttribute(Namespace = "http://docs.buildingsmartalliance.org/nbims03/cobie/core")]
+        [System.Xml.Serialization.XmlElementAttribute(
+            Namespace = "http://docs.buildingsmartalliance.org/nbims03/cobie/core")]
         public ContactKeyType ContactAssignment
         {
-            get
-            {
-                return this.contactAssignmentField;
-            }
-            set
-            {
-                this.contactAssignmentField = value;
-            }
+            get { return this.contactAssignmentField; }
+            set { this.contactAssignmentField = value; }
         }
 
-        [System.Xml.Serialization.XmlElementAttribute(Namespace = "http://docs.buildingsmartalliance.org/nbims03/cobie/core")]
+        [System.Xml.Serialization.XmlElementAttribute(
+            Namespace = "http://docs.buildingsmartalliance.org/nbims03/cobie/core")]
         public string IssueMitigationDescription
         {
-            get
-            {
-                return this.issueMitigationDescriptionField;
-            }
-            set
-            {
-                this.issueMitigationDescriptionField = value;
-            }
+            get { return this.issueMitigationDescriptionField; }
+            set { this.issueMitigationDescriptionField = value; }
         }
     }
 
-    [System.Xml.Serialization.XmlIncludeAttribute(typeof(ZoneCollectionType))]
-    [System.Xml.Serialization.XmlIncludeAttribute(typeof(SystemCollectionType))]
-    [System.Xml.Serialization.XmlIncludeAttribute(typeof(SpaceCollectionType))]
-    [System.Xml.Serialization.XmlIncludeAttribute(typeof(FloorCollectionType))]
-    [System.Xml.Serialization.XmlIncludeAttribute(typeof(ContactCollectionType))]
-    [System.Xml.Serialization.XmlIncludeAttribute(typeof(ConnectionCollectionType))]
-    [System.Xml.Serialization.XmlIncludeAttribute(typeof(ResourceCollectionType))]
-    [System.Xml.Serialization.XmlIncludeAttribute(typeof(JobCollectionType))]
-    [System.Xml.Serialization.XmlIncludeAttribute(typeof(SpareCollectionType))]
-    [System.Xml.Serialization.XmlIncludeAttribute(typeof(AssetTypeCollectionType))]
-    [System.Xml.Serialization.XmlIncludeAttribute(typeof(DocumentCollectionType))]
-    [System.Xml.Serialization.XmlIncludeAttribute(typeof(IssueCollectionType))]
-    [System.Xml.Serialization.XmlIncludeAttribute(typeof(AttributeCollectionType))]
-    [System.Xml.Serialization.XmlIncludeAttribute(typeof(AssetCollectionType))]
+    [System.Xml.Serialization.XmlIncludeAttribute(typeof (ZoneCollectionType))]
+    [System.Xml.Serialization.XmlIncludeAttribute(typeof (SystemCollectionType))]
+    [System.Xml.Serialization.XmlIncludeAttribute(typeof (SpaceCollectionType))]
+    [System.Xml.Serialization.XmlIncludeAttribute(typeof (FloorCollectionType))]
+    [System.Xml.Serialization.XmlIncludeAttribute(typeof (ContactCollectionType))]
+    [System.Xml.Serialization.XmlIncludeAttribute(typeof (ConnectionCollectionType))]
+    [System.Xml.Serialization.XmlIncludeAttribute(typeof (ResourceCollectionType))]
+    [System.Xml.Serialization.XmlIncludeAttribute(typeof (JobCollectionType))]
+    [System.Xml.Serialization.XmlIncludeAttribute(typeof (SpareCollectionType))]
+    [System.Xml.Serialization.XmlIncludeAttribute(typeof (AssetTypeCollectionType))]
+    [System.Xml.Serialization.XmlIncludeAttribute(typeof (DocumentCollectionType))]
+    [System.Xml.Serialization.XmlIncludeAttribute(typeof (IssueCollectionType))]
+    [System.Xml.Serialization.XmlIncludeAttribute(typeof (AttributeCollectionType))]
+    [System.Xml.Serialization.XmlIncludeAttribute(typeof (AssetCollectionType))]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.34234")]
     [System.SerializableAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
@@ -2029,18 +1516,12 @@ namespace Xbim.COBieLite.SerialisationHelper
         [System.Xml.Serialization.XmlElementAttribute("Zone")]
         public List<ZoneType> Zone
         {
-            get
-            {
-                return this.zoneField;
-            }
-            set
-            {
-                this.zoneField = value;
-            }
+            get { return this.zoneField; }
+            set { this.zoneField = value; }
         }
     }
 
-    [System.Xml.Serialization.XmlIncludeAttribute(typeof(ZoneType1))]
+    [System.Xml.Serialization.XmlIncludeAttribute(typeof (ZoneType1))]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.34234")]
     [System.SerializableAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
@@ -2054,34 +1535,24 @@ namespace Xbim.COBieLite.SerialisationHelper
 
         public string ZoneName
         {
-            get
-            {
-                return this.zoneNameField;
-            }
-            set
-            {
-                this.zoneNameField = value;
-            }
+            get { return this.zoneNameField; }
+            set { this.zoneNameField = value; }
         }
 
         public string ZoneCategory
         {
-            get
-            {
-                return this.zoneCategoryField;
-            }
-            set
-            {
-                this.zoneCategoryField = value;
-            }
+            get { return this.zoneCategoryField; }
+            set { this.zoneCategoryField = value; }
         }
     }
 
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.34234")]
     [System.SerializableAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(TypeName = "ZoneType", Namespace = "http://docs.buildingsmartalliance.org/nbims03/cobie/cobielite")]
-    [System.Xml.Serialization.XmlRootAttribute("Zone", Namespace = "http://docs.buildingsmartalliance.org/nbims03/cobie/cobielite", IsNullable = false)]
+    [System.Xml.Serialization.XmlTypeAttribute(TypeName = "ZoneType",
+        Namespace = "http://docs.buildingsmartalliance.org/nbims03/cobie/cobielite")]
+    [System.Xml.Serialization.XmlRootAttribute("Zone",
+        Namespace = "http://docs.buildingsmartalliance.org/nbims03/cobie/cobielite", IsNullable = false)]
     public partial class ZoneType1 : ZoneType
     {
 
@@ -2100,56 +1571,36 @@ namespace Xbim.COBieLite.SerialisationHelper
             this.zoneAttributesField = new AttributeCollectionType();
         }
 
-        [System.Xml.Serialization.XmlElementAttribute(Namespace = "http://docs.buildingsmartalliance.org/nbims03/cobie/core")]
+        [System.Xml.Serialization.XmlElementAttribute(
+            Namespace = "http://docs.buildingsmartalliance.org/nbims03/cobie/core")]
         public string ZoneDescription
         {
-            get
-            {
-                return this.zoneDescriptionField;
-            }
-            set
-            {
-                this.zoneDescriptionField = value;
-            }
+            get { return this.zoneDescriptionField; }
+            set { this.zoneDescriptionField = value; }
         }
 
-        [System.Xml.Serialization.XmlElementAttribute(Namespace = "http://docs.buildingsmartalliance.org/nbims03/cobie/core")]
+        [System.Xml.Serialization.XmlElementAttribute(
+            Namespace = "http://docs.buildingsmartalliance.org/nbims03/cobie/core")]
         public AttributeCollectionType ZoneAttributes
         {
-            get
-            {
-                return this.zoneAttributesField;
-            }
-            set
-            {
-                this.zoneAttributesField = value;
-            }
+            get { return this.zoneAttributesField; }
+            set { this.zoneAttributesField = value; }
         }
 
-        [System.Xml.Serialization.XmlElementAttribute(Namespace = "http://docs.buildingsmartalliance.org/nbims03/cobie/core")]
+        [System.Xml.Serialization.XmlElementAttribute(
+            Namespace = "http://docs.buildingsmartalliance.org/nbims03/cobie/core")]
         public DocumentCollectionType ZoneDocuments
         {
-            get
-            {
-                return this.zoneDocumentsField;
-            }
-            set
-            {
-                this.zoneDocumentsField = value;
-            }
+            get { return this.zoneDocumentsField; }
+            set { this.zoneDocumentsField = value; }
         }
 
-        [System.Xml.Serialization.XmlElementAttribute(Namespace = "http://docs.buildingsmartalliance.org/nbims03/cobie/core")]
+        [System.Xml.Serialization.XmlElementAttribute(
+            Namespace = "http://docs.buildingsmartalliance.org/nbims03/cobie/core")]
         public IssueCollectionType ZoneIssues
         {
-            get
-            {
-                return this.zoneIssuesField;
-            }
-            set
-            {
-                this.zoneIssuesField = value;
-            }
+            get { return this.zoneIssuesField; }
+            set { this.zoneIssuesField = value; }
         }
     }
 
@@ -2170,18 +1621,12 @@ namespace Xbim.COBieLite.SerialisationHelper
         [System.Xml.Serialization.XmlElementAttribute("System")]
         public List<SystemType> System
         {
-            get
-            {
-                return this.systemField;
-            }
-            set
-            {
-                this.systemField = value;
-            }
+            get { return this.systemField; }
+            set { this.systemField = value; }
         }
     }
 
-    [System.Xml.Serialization.XmlIncludeAttribute(typeof(SystemType1))]
+    [System.Xml.Serialization.XmlIncludeAttribute(typeof (SystemType1))]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.34234")]
     [System.SerializableAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
@@ -2195,34 +1640,24 @@ namespace Xbim.COBieLite.SerialisationHelper
 
         public string SystemName
         {
-            get
-            {
-                return this.systemNameField;
-            }
-            set
-            {
-                this.systemNameField = value;
-            }
+            get { return this.systemNameField; }
+            set { this.systemNameField = value; }
         }
 
         public string SystemCategory
         {
-            get
-            {
-                return this.systemCategoryField;
-            }
-            set
-            {
-                this.systemCategoryField = value;
-            }
+            get { return this.systemCategoryField; }
+            set { this.systemCategoryField = value; }
         }
     }
 
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.34234")]
     [System.SerializableAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(TypeName = "SystemType", Namespace = "http://docs.buildingsmartalliance.org/nbims03/cobie/cobielite")]
-    [System.Xml.Serialization.XmlRootAttribute("System", Namespace = "http://docs.buildingsmartalliance.org/nbims03/cobie/cobielite", IsNullable = false)]
+    [System.Xml.Serialization.XmlTypeAttribute(TypeName = "SystemType",
+        Namespace = "http://docs.buildingsmartalliance.org/nbims03/cobie/cobielite")]
+    [System.Xml.Serialization.XmlRootAttribute("System",
+        Namespace = "http://docs.buildingsmartalliance.org/nbims03/cobie/cobielite", IsNullable = false)]
     public partial class SystemType1 : SystemType
     {
 
@@ -2241,56 +1676,36 @@ namespace Xbim.COBieLite.SerialisationHelper
             this.systemAttributesField = new AttributeCollectionType();
         }
 
-        [System.Xml.Serialization.XmlElementAttribute(Namespace = "http://docs.buildingsmartalliance.org/nbims03/cobie/core")]
+        [System.Xml.Serialization.XmlElementAttribute(
+            Namespace = "http://docs.buildingsmartalliance.org/nbims03/cobie/core")]
         public string SystemDescription
         {
-            get
-            {
-                return this.systemDescriptionField;
-            }
-            set
-            {
-                this.systemDescriptionField = value;
-            }
+            get { return this.systemDescriptionField; }
+            set { this.systemDescriptionField = value; }
         }
 
-        [System.Xml.Serialization.XmlElementAttribute(Namespace = "http://docs.buildingsmartalliance.org/nbims03/cobie/core")]
+        [System.Xml.Serialization.XmlElementAttribute(
+            Namespace = "http://docs.buildingsmartalliance.org/nbims03/cobie/core")]
         public AttributeCollectionType SystemAttributes
         {
-            get
-            {
-                return this.systemAttributesField;
-            }
-            set
-            {
-                this.systemAttributesField = value;
-            }
+            get { return this.systemAttributesField; }
+            set { this.systemAttributesField = value; }
         }
 
-        [System.Xml.Serialization.XmlElementAttribute(Namespace = "http://docs.buildingsmartalliance.org/nbims03/cobie/core")]
+        [System.Xml.Serialization.XmlElementAttribute(
+            Namespace = "http://docs.buildingsmartalliance.org/nbims03/cobie/core")]
         public DocumentCollectionType SystemDocuments
         {
-            get
-            {
-                return this.systemDocumentsField;
-            }
-            set
-            {
-                this.systemDocumentsField = value;
-            }
+            get { return this.systemDocumentsField; }
+            set { this.systemDocumentsField = value; }
         }
 
-        [System.Xml.Serialization.XmlElementAttribute(Namespace = "http://docs.buildingsmartalliance.org/nbims03/cobie/core")]
+        [System.Xml.Serialization.XmlElementAttribute(
+            Namespace = "http://docs.buildingsmartalliance.org/nbims03/cobie/core")]
         public IssueCollectionType SystemIssues
         {
-            get
-            {
-                return this.systemIssuesField;
-            }
-            set
-            {
-                this.systemIssuesField = value;
-            }
+            get { return this.systemIssuesField; }
+            set { this.systemIssuesField = value; }
         }
     }
 
@@ -2311,18 +1726,12 @@ namespace Xbim.COBieLite.SerialisationHelper
         [System.Xml.Serialization.XmlElementAttribute("Space")]
         public List<SpaceType> Space
         {
-            get
-            {
-                return this.spaceField;
-            }
-            set
-            {
-                this.spaceField = value;
-            }
+            get { return this.spaceField; }
+            set { this.spaceField = value; }
         }
     }
 
-    [System.Xml.Serialization.XmlIncludeAttribute(typeof(SpaceType1))]
+    [System.Xml.Serialization.XmlIncludeAttribute(typeof (SpaceType1))]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.34234")]
     [System.SerializableAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
@@ -2334,22 +1743,18 @@ namespace Xbim.COBieLite.SerialisationHelper
 
         public string SpaceName
         {
-            get
-            {
-                return this.spaceNameField;
-            }
-            set
-            {
-                this.spaceNameField = value;
-            }
+            get { return this.spaceNameField; }
+            set { this.spaceNameField = value; }
         }
     }
 
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.34234")]
     [System.SerializableAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(TypeName = "SpaceType", Namespace = "http://docs.buildingsmartalliance.org/nbims03/cobie/cobielite")]
-    [System.Xml.Serialization.XmlRootAttribute("Space", Namespace = "http://docs.buildingsmartalliance.org/nbims03/cobie/cobielite", IsNullable = false)]
+    [System.Xml.Serialization.XmlTypeAttribute(TypeName = "SpaceType",
+        Namespace = "http://docs.buildingsmartalliance.org/nbims03/cobie/cobielite")]
+    [System.Xml.Serialization.XmlRootAttribute("Space",
+        Namespace = "http://docs.buildingsmartalliance.org/nbims03/cobie/cobielite", IsNullable = false)]
     public partial class SpaceType1 : SpaceType
     {
 
@@ -2384,134 +1789,84 @@ namespace Xbim.COBieLite.SerialisationHelper
             this.spaceUsableHeightValueField = new DecimalValueType();
         }
 
-        [System.Xml.Serialization.XmlElementAttribute(Namespace = "http://docs.buildingsmartalliance.org/nbims03/cobie/core")]
+        [System.Xml.Serialization.XmlElementAttribute(
+            Namespace = "http://docs.buildingsmartalliance.org/nbims03/cobie/core")]
         public string SpaceCategory
         {
-            get
-            {
-                return this.spaceCategoryField;
-            }
-            set
-            {
-                this.spaceCategoryField = value;
-            }
+            get { return this.spaceCategoryField; }
+            set { this.spaceCategoryField = value; }
         }
 
-        [System.Xml.Serialization.XmlElementAttribute(Namespace = "http://docs.buildingsmartalliance.org/nbims03/cobie/core")]
+        [System.Xml.Serialization.XmlElementAttribute(
+            Namespace = "http://docs.buildingsmartalliance.org/nbims03/cobie/core")]
         public string SpaceDescription
         {
-            get
-            {
-                return this.spaceDescriptionField;
-            }
-            set
-            {
-                this.spaceDescriptionField = value;
-            }
+            get { return this.spaceDescriptionField; }
+            set { this.spaceDescriptionField = value; }
         }
 
-        [System.Xml.Serialization.XmlElementAttribute(Namespace = "http://docs.buildingsmartalliance.org/nbims03/cobie/core")]
+        [System.Xml.Serialization.XmlElementAttribute(
+            Namespace = "http://docs.buildingsmartalliance.org/nbims03/cobie/core")]
         public string SpaceSignageName
         {
-            get
-            {
-                return this.spaceSignageNameField;
-            }
-            set
-            {
-                this.spaceSignageNameField = value;
-            }
+            get { return this.spaceSignageNameField; }
+            set { this.spaceSignageNameField = value; }
         }
 
-        [System.Xml.Serialization.XmlElementAttribute(Namespace = "http://docs.buildingsmartalliance.org/nbims03/cobie/core")]
+        [System.Xml.Serialization.XmlElementAttribute(
+            Namespace = "http://docs.buildingsmartalliance.org/nbims03/cobie/core")]
         public DecimalValueType SpaceUsableHeightValue
         {
-            get
-            {
-                return this.spaceUsableHeightValueField;
-            }
-            set
-            {
-                this.spaceUsableHeightValueField = value;
-            }
+            get { return this.spaceUsableHeightValueField; }
+            set { this.spaceUsableHeightValueField = value; }
         }
 
-        [System.Xml.Serialization.XmlElementAttribute(Namespace = "http://docs.buildingsmartalliance.org/nbims03/cobie/core")]
+        [System.Xml.Serialization.XmlElementAttribute(
+            Namespace = "http://docs.buildingsmartalliance.org/nbims03/cobie/core")]
         public DecimalValueType SpaceGrossAreaValue
         {
-            get
-            {
-                return this.spaceGrossAreaValueField;
-            }
-            set
-            {
-                this.spaceGrossAreaValueField = value;
-            }
+            get { return this.spaceGrossAreaValueField; }
+            set { this.spaceGrossAreaValueField = value; }
         }
 
-        [System.Xml.Serialization.XmlElementAttribute(Namespace = "http://docs.buildingsmartalliance.org/nbims03/cobie/core")]
+        [System.Xml.Serialization.XmlElementAttribute(
+            Namespace = "http://docs.buildingsmartalliance.org/nbims03/cobie/core")]
         public DecimalValueType SpaceNetAreaValue
         {
-            get
-            {
-                return this.spaceNetAreaValueField;
-            }
-            set
-            {
-                this.spaceNetAreaValueField = value;
-            }
+            get { return this.spaceNetAreaValueField; }
+            set { this.spaceNetAreaValueField = value; }
         }
 
-        [System.Xml.Serialization.XmlElementAttribute(Namespace = "http://docs.buildingsmartalliance.org/nbims03/cobie/core")]
+        [System.Xml.Serialization.XmlElementAttribute(
+            Namespace = "http://docs.buildingsmartalliance.org/nbims03/cobie/core")]
         public ZoneAssignmentCollectionType SpaceZoneAssignments
         {
-            get
-            {
-                return this.spaceZoneAssignmentsField;
-            }
-            set
-            {
-                this.spaceZoneAssignmentsField = value;
-            }
+            get { return this.spaceZoneAssignmentsField; }
+            set { this.spaceZoneAssignmentsField = value; }
         }
 
-        [System.Xml.Serialization.XmlElementAttribute(Namespace = "http://docs.buildingsmartalliance.org/nbims03/cobie/core")]
+        [System.Xml.Serialization.XmlElementAttribute(
+            Namespace = "http://docs.buildingsmartalliance.org/nbims03/cobie/core")]
         public AttributeCollectionType SpaceAttributes
         {
-            get
-            {
-                return this.spaceAttributesField;
-            }
-            set
-            {
-                this.spaceAttributesField = value;
-            }
+            get { return this.spaceAttributesField; }
+            set { this.spaceAttributesField = value; }
         }
 
-        [System.Xml.Serialization.XmlElementAttribute(Namespace = "http://docs.buildingsmartalliance.org/nbims03/cobie/core")]
+        [System.Xml.Serialization.XmlElementAttribute(
+            Namespace = "http://docs.buildingsmartalliance.org/nbims03/cobie/core")]
         public DocumentCollectionType SpaceDocuments
         {
-            get
-            {
-                return this.spaceDocumentsField;
-            }
-            set
-            {
-                this.spaceDocumentsField = value;
-            }
+            get { return this.spaceDocumentsField; }
+            set { this.spaceDocumentsField = value; }
         }
 
-        [System.Xml.Serialization.XmlElementAttribute(Namespace = "http://docs.buildingsmartalliance.org/nbims03/cobie/core")]
+        [System.Xml.Serialization.XmlElementAttribute(
+            Namespace = "http://docs.buildingsmartalliance.org/nbims03/cobie/core")]
         public IssueCollectionType SpaceIssues
         {
-            get
-            {
-                return this.spaceIssuesField;
-            }
-            set
-            {
-                this.spaceIssuesField = value;
-            }
+            get { return this.spaceIssuesField; }
+            set { this.spaceIssuesField = value; }
         }
     }
 
@@ -2532,18 +1887,12 @@ namespace Xbim.COBieLite.SerialisationHelper
         [System.Xml.Serialization.XmlElementAttribute("Floor")]
         public List<FloorType> Floor
         {
-            get
-            {
-                return this.floorField;
-            }
-            set
-            {
-                this.floorField = value;
-            }
+            get { return this.floorField; }
+            set { this.floorField = value; }
         }
     }
 
-    [System.Xml.Serialization.XmlIncludeAttribute(typeof(FloorType1))]
+    [System.Xml.Serialization.XmlIncludeAttribute(typeof (FloorType1))]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.34234")]
     [System.SerializableAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
@@ -2555,22 +1904,18 @@ namespace Xbim.COBieLite.SerialisationHelper
 
         public string FloorName
         {
-            get
-            {
-                return this.floorNameField;
-            }
-            set
-            {
-                this.floorNameField = value;
-            }
+            get { return this.floorNameField; }
+            set { this.floorNameField = value; }
         }
     }
 
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.34234")]
     [System.SerializableAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(TypeName = "FloorType", Namespace = "http://docs.buildingsmartalliance.org/nbims03/cobie/cobielite")]
-    [System.Xml.Serialization.XmlRootAttribute("Floor", Namespace = "http://docs.buildingsmartalliance.org/nbims03/cobie/cobielite", IsNullable = false)]
+    [System.Xml.Serialization.XmlTypeAttribute(TypeName = "FloorType",
+        Namespace = "http://docs.buildingsmartalliance.org/nbims03/cobie/cobielite")]
+    [System.Xml.Serialization.XmlRootAttribute("Floor",
+        Namespace = "http://docs.buildingsmartalliance.org/nbims03/cobie/cobielite", IsNullable = false)]
     public partial class FloorType1 : FloorType
     {
 
@@ -2600,108 +1945,68 @@ namespace Xbim.COBieLite.SerialisationHelper
             this.floorElevationValueField = new DecimalValueType();
         }
 
-        [System.Xml.Serialization.XmlElementAttribute(Namespace = "http://docs.buildingsmartalliance.org/nbims03/cobie/core")]
+        [System.Xml.Serialization.XmlElementAttribute(
+            Namespace = "http://docs.buildingsmartalliance.org/nbims03/cobie/core")]
         public string FloorCategory
         {
-            get
-            {
-                return this.floorCategoryField;
-            }
-            set
-            {
-                this.floorCategoryField = value;
-            }
+            get { return this.floorCategoryField; }
+            set { this.floorCategoryField = value; }
         }
 
-        [System.Xml.Serialization.XmlElementAttribute(Namespace = "http://docs.buildingsmartalliance.org/nbims03/cobie/core")]
+        [System.Xml.Serialization.XmlElementAttribute(
+            Namespace = "http://docs.buildingsmartalliance.org/nbims03/cobie/core")]
         public string FloorDescription
         {
-            get
-            {
-                return this.floorDescriptionField;
-            }
-            set
-            {
-                this.floorDescriptionField = value;
-            }
+            get { return this.floorDescriptionField; }
+            set { this.floorDescriptionField = value; }
         }
 
-        [System.Xml.Serialization.XmlElementAttribute(Namespace = "http://docs.buildingsmartalliance.org/nbims03/cobie/core")]
+        [System.Xml.Serialization.XmlElementAttribute(
+            Namespace = "http://docs.buildingsmartalliance.org/nbims03/cobie/core")]
         public DecimalValueType FloorElevationValue
         {
-            get
-            {
-                return this.floorElevationValueField;
-            }
-            set
-            {
-                this.floorElevationValueField = value;
-            }
+            get { return this.floorElevationValueField; }
+            set { this.floorElevationValueField = value; }
         }
 
-        [System.Xml.Serialization.XmlElementAttribute(Namespace = "http://docs.buildingsmartalliance.org/nbims03/cobie/core")]
+        [System.Xml.Serialization.XmlElementAttribute(
+            Namespace = "http://docs.buildingsmartalliance.org/nbims03/cobie/core")]
         public DecimalValueType FloorHeightValue
         {
-            get
-            {
-                return this.floorHeightValueField;
-            }
-            set
-            {
-                this.floorHeightValueField = value;
-            }
+            get { return this.floorHeightValueField; }
+            set { this.floorHeightValueField = value; }
         }
 
-        [System.Xml.Serialization.XmlElementAttribute(Namespace = "http://docs.buildingsmartalliance.org/nbims03/cobie/core")]
+        [System.Xml.Serialization.XmlElementAttribute(
+            Namespace = "http://docs.buildingsmartalliance.org/nbims03/cobie/core")]
         public SpaceCollectionType Spaces
         {
-            get
-            {
-                return this.spacesField;
-            }
-            set
-            {
-                this.spacesField = value;
-            }
+            get { return this.spacesField; }
+            set { this.spacesField = value; }
         }
 
-        [System.Xml.Serialization.XmlElementAttribute(Namespace = "http://docs.buildingsmartalliance.org/nbims03/cobie/core")]
+        [System.Xml.Serialization.XmlElementAttribute(
+            Namespace = "http://docs.buildingsmartalliance.org/nbims03/cobie/core")]
         public AttributeCollectionType FloorAttributes
         {
-            get
-            {
-                return this.floorAttributesField;
-            }
-            set
-            {
-                this.floorAttributesField = value;
-            }
+            get { return this.floorAttributesField; }
+            set { this.floorAttributesField = value; }
         }
 
-        [System.Xml.Serialization.XmlElementAttribute(Namespace = "http://docs.buildingsmartalliance.org/nbims03/cobie/core")]
+        [System.Xml.Serialization.XmlElementAttribute(
+            Namespace = "http://docs.buildingsmartalliance.org/nbims03/cobie/core")]
         public DocumentCollectionType FloorDocuments
         {
-            get
-            {
-                return this.floorDocumentsField;
-            }
-            set
-            {
-                this.floorDocumentsField = value;
-            }
+            get { return this.floorDocumentsField; }
+            set { this.floorDocumentsField = value; }
         }
 
-        [System.Xml.Serialization.XmlElementAttribute(Namespace = "http://docs.buildingsmartalliance.org/nbims03/cobie/core")]
+        [System.Xml.Serialization.XmlElementAttribute(
+            Namespace = "http://docs.buildingsmartalliance.org/nbims03/cobie/core")]
         public IssueCollectionType FloorIssues
         {
-            get
-            {
-                return this.floorIssuesField;
-            }
-            set
-            {
-                this.floorIssuesField = value;
-            }
+            get { return this.floorIssuesField; }
+            set { this.floorIssuesField = value; }
         }
     }
 
@@ -2722,18 +2027,12 @@ namespace Xbim.COBieLite.SerialisationHelper
         [System.Xml.Serialization.XmlElementAttribute("Contact")]
         public List<ContactType> Contact
         {
-            get
-            {
-                return this.contactField;
-            }
-            set
-            {
-                this.contactField = value;
-            }
+            get { return this.contactField; }
+            set { this.contactField = value; }
         }
     }
 
-    [System.Xml.Serialization.XmlIncludeAttribute(typeof(ContactType1))]
+    [System.Xml.Serialization.XmlIncludeAttribute(typeof (ContactType1))]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.34234")]
     [System.SerializableAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
@@ -2745,22 +2044,18 @@ namespace Xbim.COBieLite.SerialisationHelper
 
         public string ContactEmail
         {
-            get
-            {
-                return this.contactEmailField;
-            }
-            set
-            {
-                this.contactEmailField = value;
-            }
+            get { return this.contactEmailField; }
+            set { this.contactEmailField = value; }
         }
     }
 
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.34234")]
     [System.SerializableAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(TypeName = "ContactType", Namespace = "http://docs.buildingsmartalliance.org/nbims03/cobie/cobielite")]
-    [System.Xml.Serialization.XmlRootAttribute("Contact", Namespace = "http://docs.buildingsmartalliance.org/nbims03/cobie/cobielite", IsNullable = false)]
+    [System.Xml.Serialization.XmlTypeAttribute(TypeName = "ContactType",
+        Namespace = "http://docs.buildingsmartalliance.org/nbims03/cobie/cobielite")]
+    [System.Xml.Serialization.XmlRootAttribute("Contact",
+        Namespace = "http://docs.buildingsmartalliance.org/nbims03/cobie/cobielite", IsNullable = false)]
     public partial class ContactType1 : ContactType
     {
 
@@ -2803,212 +2098,132 @@ namespace Xbim.COBieLite.SerialisationHelper
             this.contactAttributesField = new AttributeCollectionType();
         }
 
-        [System.Xml.Serialization.XmlElementAttribute(Namespace = "http://docs.buildingsmartalliance.org/nbims03/cobie/core")]
+        [System.Xml.Serialization.XmlElementAttribute(
+            Namespace = "http://docs.buildingsmartalliance.org/nbims03/cobie/core")]
         public string ContactCategory
         {
-            get
-            {
-                return this.contactCategoryField;
-            }
-            set
-            {
-                this.contactCategoryField = value;
-            }
+            get { return this.contactCategoryField; }
+            set { this.contactCategoryField = value; }
         }
 
-        [System.Xml.Serialization.XmlElementAttribute(Namespace = "http://docs.buildingsmartalliance.org/nbims03/cobie/core")]
+        [System.Xml.Serialization.XmlElementAttribute(
+            Namespace = "http://docs.buildingsmartalliance.org/nbims03/cobie/core")]
         public string ContactCompanyName
         {
-            get
-            {
-                return this.contactCompanyNameField;
-            }
-            set
-            {
-                this.contactCompanyNameField = value;
-            }
+            get { return this.contactCompanyNameField; }
+            set { this.contactCompanyNameField = value; }
         }
 
-        [System.Xml.Serialization.XmlElementAttribute(Namespace = "http://docs.buildingsmartalliance.org/nbims03/cobie/core")]
+        [System.Xml.Serialization.XmlElementAttribute(
+            Namespace = "http://docs.buildingsmartalliance.org/nbims03/cobie/core")]
         public string ContactPhoneNumber
         {
-            get
-            {
-                return this.contactPhoneNumberField;
-            }
-            set
-            {
-                this.contactPhoneNumberField = value;
-            }
+            get { return this.contactPhoneNumberField; }
+            set { this.contactPhoneNumberField = value; }
         }
 
-        [System.Xml.Serialization.XmlElementAttribute(Namespace = "http://docs.buildingsmartalliance.org/nbims03/cobie/core")]
+        [System.Xml.Serialization.XmlElementAttribute(
+            Namespace = "http://docs.buildingsmartalliance.org/nbims03/cobie/core")]
         public string ContactDepartmentName
         {
-            get
-            {
-                return this.contactDepartmentNameField;
-            }
-            set
-            {
-                this.contactDepartmentNameField = value;
-            }
+            get { return this.contactDepartmentNameField; }
+            set { this.contactDepartmentNameField = value; }
         }
 
-        [System.Xml.Serialization.XmlElementAttribute(Namespace = "http://docs.buildingsmartalliance.org/nbims03/cobie/core")]
+        [System.Xml.Serialization.XmlElementAttribute(
+            Namespace = "http://docs.buildingsmartalliance.org/nbims03/cobie/core")]
         public string ContactGivenName
         {
-            get
-            {
-                return this.contactGivenNameField;
-            }
-            set
-            {
-                this.contactGivenNameField = value;
-            }
+            get { return this.contactGivenNameField; }
+            set { this.contactGivenNameField = value; }
         }
 
-        [System.Xml.Serialization.XmlElementAttribute(Namespace = "http://docs.buildingsmartalliance.org/nbims03/cobie/core")]
+        [System.Xml.Serialization.XmlElementAttribute(
+            Namespace = "http://docs.buildingsmartalliance.org/nbims03/cobie/core")]
         public string ContactFamilyName
         {
-            get
-            {
-                return this.contactFamilyNameField;
-            }
-            set
-            {
-                this.contactFamilyNameField = value;
-            }
+            get { return this.contactFamilyNameField; }
+            set { this.contactFamilyNameField = value; }
         }
 
-        [System.Xml.Serialization.XmlElementAttribute(Namespace = "http://docs.buildingsmartalliance.org/nbims03/cobie/core")]
+        [System.Xml.Serialization.XmlElementAttribute(
+            Namespace = "http://docs.buildingsmartalliance.org/nbims03/cobie/core")]
         public string ContactStreet
         {
-            get
-            {
-                return this.contactStreetField;
-            }
-            set
-            {
-                this.contactStreetField = value;
-            }
+            get { return this.contactStreetField; }
+            set { this.contactStreetField = value; }
         }
 
-        [System.Xml.Serialization.XmlElementAttribute(Namespace = "http://docs.buildingsmartalliance.org/nbims03/cobie/core")]
+        [System.Xml.Serialization.XmlElementAttribute(
+            Namespace = "http://docs.buildingsmartalliance.org/nbims03/cobie/core")]
         public string ContactPostalBoxNumber
         {
-            get
-            {
-                return this.contactPostalBoxNumberField;
-            }
-            set
-            {
-                this.contactPostalBoxNumberField = value;
-            }
+            get { return this.contactPostalBoxNumberField; }
+            set { this.contactPostalBoxNumberField = value; }
         }
 
-        [System.Xml.Serialization.XmlElementAttribute(Namespace = "http://docs.buildingsmartalliance.org/nbims03/cobie/core")]
+        [System.Xml.Serialization.XmlElementAttribute(
+            Namespace = "http://docs.buildingsmartalliance.org/nbims03/cobie/core")]
         public string ContactTownName
         {
-            get
-            {
-                return this.contactTownNameField;
-            }
-            set
-            {
-                this.contactTownNameField = value;
-            }
+            get { return this.contactTownNameField; }
+            set { this.contactTownNameField = value; }
         }
 
-        [System.Xml.Serialization.XmlElementAttribute(Namespace = "http://docs.buildingsmartalliance.org/nbims03/cobie/core")]
+        [System.Xml.Serialization.XmlElementAttribute(
+            Namespace = "http://docs.buildingsmartalliance.org/nbims03/cobie/core")]
         public string ContactRegionCode
         {
-            get
-            {
-                return this.contactRegionCodeField;
-            }
-            set
-            {
-                this.contactRegionCodeField = value;
-            }
+            get { return this.contactRegionCodeField; }
+            set { this.contactRegionCodeField = value; }
         }
 
-        [System.Xml.Serialization.XmlElementAttribute(Namespace = "http://docs.buildingsmartalliance.org/nbims03/cobie/core")]
+        [System.Xml.Serialization.XmlElementAttribute(
+            Namespace = "http://docs.buildingsmartalliance.org/nbims03/cobie/core")]
         public string ContactCountryName
         {
-            get
-            {
-                return this.contactCountryNameField;
-            }
-            set
-            {
-                this.contactCountryNameField = value;
-            }
+            get { return this.contactCountryNameField; }
+            set { this.contactCountryNameField = value; }
         }
 
-        [System.Xml.Serialization.XmlElementAttribute(Namespace = "http://docs.buildingsmartalliance.org/nbims03/cobie/core")]
+        [System.Xml.Serialization.XmlElementAttribute(
+            Namespace = "http://docs.buildingsmartalliance.org/nbims03/cobie/core")]
         public string ContactPostalCode
         {
-            get
-            {
-                return this.contactPostalCodeField;
-            }
-            set
-            {
-                this.contactPostalCodeField = value;
-            }
+            get { return this.contactPostalCodeField; }
+            set { this.contactPostalCodeField = value; }
         }
 
-        [System.Xml.Serialization.XmlElementAttribute(Namespace = "http://docs.buildingsmartalliance.org/nbims03/cobie/core")]
+        [System.Xml.Serialization.XmlElementAttribute(
+            Namespace = "http://docs.buildingsmartalliance.org/nbims03/cobie/core")]
         public string ContactURL
         {
-            get
-            {
-                return this.contactURLField;
-            }
-            set
-            {
-                this.contactURLField = value;
-            }
+            get { return this.contactURLField; }
+            set { this.contactURLField = value; }
         }
 
-        [System.Xml.Serialization.XmlElementAttribute(Namespace = "http://docs.buildingsmartalliance.org/nbims03/cobie/core")]
+        [System.Xml.Serialization.XmlElementAttribute(
+            Namespace = "http://docs.buildingsmartalliance.org/nbims03/cobie/core")]
         public AttributeCollectionType ContactAttributes
         {
-            get
-            {
-                return this.contactAttributesField;
-            }
-            set
-            {
-                this.contactAttributesField = value;
-            }
+            get { return this.contactAttributesField; }
+            set { this.contactAttributesField = value; }
         }
 
-        [System.Xml.Serialization.XmlElementAttribute(Namespace = "http://docs.buildingsmartalliance.org/nbims03/cobie/core")]
+        [System.Xml.Serialization.XmlElementAttribute(
+            Namespace = "http://docs.buildingsmartalliance.org/nbims03/cobie/core")]
         public DocumentCollectionType ContactDocuments
         {
-            get
-            {
-                return this.contactDocumentsField;
-            }
-            set
-            {
-                this.contactDocumentsField = value;
-            }
+            get { return this.contactDocumentsField; }
+            set { this.contactDocumentsField = value; }
         }
 
-        [System.Xml.Serialization.XmlElementAttribute(Namespace = "http://docs.buildingsmartalliance.org/nbims03/cobie/core")]
+        [System.Xml.Serialization.XmlElementAttribute(
+            Namespace = "http://docs.buildingsmartalliance.org/nbims03/cobie/core")]
         public IssueCollectionType ContactIssues
         {
-            get
-            {
-                return this.contactIssuesField;
-            }
-            set
-            {
-                this.contactIssuesField = value;
-            }
+            get { return this.contactIssuesField; }
+            set { this.contactIssuesField = value; }
         }
     }
 
@@ -3029,18 +2244,12 @@ namespace Xbim.COBieLite.SerialisationHelper
         [System.Xml.Serialization.XmlElementAttribute("Connection")]
         public List<ConnectionType> Connection
         {
-            get
-            {
-                return this.connectionField;
-            }
-            set
-            {
-                this.connectionField = value;
-            }
+            get { return this.connectionField; }
+            set { this.connectionField = value; }
         }
     }
 
-    [System.Xml.Serialization.XmlIncludeAttribute(typeof(ConnectionType1))]
+    [System.Xml.Serialization.XmlIncludeAttribute(typeof (ConnectionType1))]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.34234")]
     [System.SerializableAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
@@ -3054,34 +2263,24 @@ namespace Xbim.COBieLite.SerialisationHelper
 
         public string ConnectionName
         {
-            get
-            {
-                return this.connectionNameField;
-            }
-            set
-            {
-                this.connectionNameField = value;
-            }
+            get { return this.connectionNameField; }
+            set { this.connectionNameField = value; }
         }
 
         public string ConnectionCategory
         {
-            get
-            {
-                return this.connectionCategoryField;
-            }
-            set
-            {
-                this.connectionCategoryField = value;
-            }
+            get { return this.connectionCategoryField; }
+            set { this.connectionCategoryField = value; }
         }
     }
 
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.34234")]
     [System.SerializableAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(TypeName = "ConnectionType", Namespace = "http://docs.buildingsmartalliance.org/nbims03/cobie/cobielite")]
-    [System.Xml.Serialization.XmlRootAttribute("Connection", Namespace = "http://docs.buildingsmartalliance.org/nbims03/cobie/cobielite", IsNullable = false)]
+    [System.Xml.Serialization.XmlTypeAttribute(TypeName = "ConnectionType",
+        Namespace = "http://docs.buildingsmartalliance.org/nbims03/cobie/cobielite")]
+    [System.Xml.Serialization.XmlRootAttribute("Connection",
+        Namespace = "http://docs.buildingsmartalliance.org/nbims03/cobie/cobielite", IsNullable = false)]
     public partial class ConnectionType1 : ConnectionType
     {
 
@@ -3108,108 +2307,68 @@ namespace Xbim.COBieLite.SerialisationHelper
             this.connectionAttributesField = new AttributeCollectionType();
         }
 
-        [System.Xml.Serialization.XmlElementAttribute(Namespace = "http://docs.buildingsmartalliance.org/nbims03/cobie/core")]
+        [System.Xml.Serialization.XmlElementAttribute(
+            Namespace = "http://docs.buildingsmartalliance.org/nbims03/cobie/core")]
         public string ConnectionAsset1Name
         {
-            get
-            {
-                return this.connectionAsset1NameField;
-            }
-            set
-            {
-                this.connectionAsset1NameField = value;
-            }
+            get { return this.connectionAsset1NameField; }
+            set { this.connectionAsset1NameField = value; }
         }
 
-        [System.Xml.Serialization.XmlElementAttribute(Namespace = "http://docs.buildingsmartalliance.org/nbims03/cobie/core")]
+        [System.Xml.Serialization.XmlElementAttribute(
+            Namespace = "http://docs.buildingsmartalliance.org/nbims03/cobie/core")]
         public string ConnectionAsset1PortName
         {
-            get
-            {
-                return this.connectionAsset1PortNameField;
-            }
-            set
-            {
-                this.connectionAsset1PortNameField = value;
-            }
+            get { return this.connectionAsset1PortNameField; }
+            set { this.connectionAsset1PortNameField = value; }
         }
 
-        [System.Xml.Serialization.XmlElementAttribute(Namespace = "http://docs.buildingsmartalliance.org/nbims03/cobie/core")]
+        [System.Xml.Serialization.XmlElementAttribute(
+            Namespace = "http://docs.buildingsmartalliance.org/nbims03/cobie/core")]
         public string ConnectionAsset2Name
         {
-            get
-            {
-                return this.connectionAsset2NameField;
-            }
-            set
-            {
-                this.connectionAsset2NameField = value;
-            }
+            get { return this.connectionAsset2NameField; }
+            set { this.connectionAsset2NameField = value; }
         }
 
-        [System.Xml.Serialization.XmlElementAttribute(Namespace = "http://docs.buildingsmartalliance.org/nbims03/cobie/core")]
+        [System.Xml.Serialization.XmlElementAttribute(
+            Namespace = "http://docs.buildingsmartalliance.org/nbims03/cobie/core")]
         public string ConnectionAsset2PortName
         {
-            get
-            {
-                return this.connectionAsset2PortNameField;
-            }
-            set
-            {
-                this.connectionAsset2PortNameField = value;
-            }
+            get { return this.connectionAsset2PortNameField; }
+            set { this.connectionAsset2PortNameField = value; }
         }
 
-        [System.Xml.Serialization.XmlElementAttribute(Namespace = "http://docs.buildingsmartalliance.org/nbims03/cobie/core")]
+        [System.Xml.Serialization.XmlElementAttribute(
+            Namespace = "http://docs.buildingsmartalliance.org/nbims03/cobie/core")]
         public string ConnectionDescription
         {
-            get
-            {
-                return this.connectionDescriptionField;
-            }
-            set
-            {
-                this.connectionDescriptionField = value;
-            }
+            get { return this.connectionDescriptionField; }
+            set { this.connectionDescriptionField = value; }
         }
 
-        [System.Xml.Serialization.XmlElementAttribute(Namespace = "http://docs.buildingsmartalliance.org/nbims03/cobie/core")]
+        [System.Xml.Serialization.XmlElementAttribute(
+            Namespace = "http://docs.buildingsmartalliance.org/nbims03/cobie/core")]
         public AttributeCollectionType ConnectionAttributes
         {
-            get
-            {
-                return this.connectionAttributesField;
-            }
-            set
-            {
-                this.connectionAttributesField = value;
-            }
+            get { return this.connectionAttributesField; }
+            set { this.connectionAttributesField = value; }
         }
 
-        [System.Xml.Serialization.XmlElementAttribute(Namespace = "http://docs.buildingsmartalliance.org/nbims03/cobie/core")]
+        [System.Xml.Serialization.XmlElementAttribute(
+            Namespace = "http://docs.buildingsmartalliance.org/nbims03/cobie/core")]
         public DocumentCollectionType ConnectionDocuments
         {
-            get
-            {
-                return this.connectionDocumentsField;
-            }
-            set
-            {
-                this.connectionDocumentsField = value;
-            }
+            get { return this.connectionDocumentsField; }
+            set { this.connectionDocumentsField = value; }
         }
 
-        [System.Xml.Serialization.XmlElementAttribute(Namespace = "http://docs.buildingsmartalliance.org/nbims03/cobie/core")]
+        [System.Xml.Serialization.XmlElementAttribute(
+            Namespace = "http://docs.buildingsmartalliance.org/nbims03/cobie/core")]
         public IssueCollectionType ConnectionIssues
         {
-            get
-            {
-                return this.connectionIssuesField;
-            }
-            set
-            {
-                this.connectionIssuesField = value;
-            }
+            get { return this.connectionIssuesField; }
+            set { this.connectionIssuesField = value; }
         }
     }
 
@@ -3230,18 +2389,12 @@ namespace Xbim.COBieLite.SerialisationHelper
         [System.Xml.Serialization.XmlElementAttribute("Resource")]
         public List<ResourceType> Resource
         {
-            get
-            {
-                return this.resourceField;
-            }
-            set
-            {
-                this.resourceField = value;
-            }
+            get { return this.resourceField; }
+            set { this.resourceField = value; }
         }
     }
 
-    [System.Xml.Serialization.XmlIncludeAttribute(typeof(ResourceType1))]
+    [System.Xml.Serialization.XmlIncludeAttribute(typeof (ResourceType1))]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.34234")]
     [System.SerializableAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
@@ -3253,22 +2406,18 @@ namespace Xbim.COBieLite.SerialisationHelper
 
         public string ResourceName
         {
-            get
-            {
-                return this.resourceNameField;
-            }
-            set
-            {
-                this.resourceNameField = value;
-            }
+            get { return this.resourceNameField; }
+            set { this.resourceNameField = value; }
         }
     }
 
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.34234")]
     [System.SerializableAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(TypeName = "ResourceType", Namespace = "http://docs.buildingsmartalliance.org/nbims03/cobie/cobielite")]
-    [System.Xml.Serialization.XmlRootAttribute("Resource", Namespace = "http://docs.buildingsmartalliance.org/nbims03/cobie/cobielite", IsNullable = false)]
+    [System.Xml.Serialization.XmlTypeAttribute(TypeName = "ResourceType",
+        Namespace = "http://docs.buildingsmartalliance.org/nbims03/cobie/cobielite")]
+    [System.Xml.Serialization.XmlRootAttribute("Resource",
+        Namespace = "http://docs.buildingsmartalliance.org/nbims03/cobie/cobielite", IsNullable = false)]
     public partial class ResourceType1 : ResourceType
     {
 
@@ -3289,69 +2438,44 @@ namespace Xbim.COBieLite.SerialisationHelper
             this.resourceAttributesField = new AttributeCollectionType();
         }
 
-        [System.Xml.Serialization.XmlElementAttribute(Namespace = "http://docs.buildingsmartalliance.org/nbims03/cobie/core")]
+        [System.Xml.Serialization.XmlElementAttribute(
+            Namespace = "http://docs.buildingsmartalliance.org/nbims03/cobie/core")]
         public string ResourceCategory
         {
-            get
-            {
-                return this.resourceCategoryField;
-            }
-            set
-            {
-                this.resourceCategoryField = value;
-            }
+            get { return this.resourceCategoryField; }
+            set { this.resourceCategoryField = value; }
         }
 
-        [System.Xml.Serialization.XmlElementAttribute(Namespace = "http://docs.buildingsmartalliance.org/nbims03/cobie/core")]
+        [System.Xml.Serialization.XmlElementAttribute(
+            Namespace = "http://docs.buildingsmartalliance.org/nbims03/cobie/core")]
         public string ResourceDescription
         {
-            get
-            {
-                return this.resourceDescriptionField;
-            }
-            set
-            {
-                this.resourceDescriptionField = value;
-            }
+            get { return this.resourceDescriptionField; }
+            set { this.resourceDescriptionField = value; }
         }
 
-        [System.Xml.Serialization.XmlElementAttribute(Namespace = "http://docs.buildingsmartalliance.org/nbims03/cobie/core")]
+        [System.Xml.Serialization.XmlElementAttribute(
+            Namespace = "http://docs.buildingsmartalliance.org/nbims03/cobie/core")]
         public AttributeCollectionType ResourceAttributes
         {
-            get
-            {
-                return this.resourceAttributesField;
-            }
-            set
-            {
-                this.resourceAttributesField = value;
-            }
+            get { return this.resourceAttributesField; }
+            set { this.resourceAttributesField = value; }
         }
 
-        [System.Xml.Serialization.XmlElementAttribute(Namespace = "http://docs.buildingsmartalliance.org/nbims03/cobie/core")]
+        [System.Xml.Serialization.XmlElementAttribute(
+            Namespace = "http://docs.buildingsmartalliance.org/nbims03/cobie/core")]
         public DocumentCollectionType ResourceDocuments
         {
-            get
-            {
-                return this.resourceDocumentsField;
-            }
-            set
-            {
-                this.resourceDocumentsField = value;
-            }
+            get { return this.resourceDocumentsField; }
+            set { this.resourceDocumentsField = value; }
         }
 
-        [System.Xml.Serialization.XmlElementAttribute(Namespace = "http://docs.buildingsmartalliance.org/nbims03/cobie/core")]
+        [System.Xml.Serialization.XmlElementAttribute(
+            Namespace = "http://docs.buildingsmartalliance.org/nbims03/cobie/core")]
         public IssueCollectionType ResourceIssues
         {
-            get
-            {
-                return this.resourceIssuesField;
-            }
-            set
-            {
-                this.resourceIssuesField = value;
-            }
+            get { return this.resourceIssuesField; }
+            set { this.resourceIssuesField = value; }
         }
     }
 
@@ -3372,18 +2496,12 @@ namespace Xbim.COBieLite.SerialisationHelper
         [System.Xml.Serialization.XmlElementAttribute("Job")]
         public List<JobType> Job
         {
-            get
-            {
-                return this.jobField;
-            }
-            set
-            {
-                this.jobField = value;
-            }
+            get { return this.jobField; }
+            set { this.jobField = value; }
         }
     }
 
-    [System.Xml.Serialization.XmlIncludeAttribute(typeof(JobType1))]
+    [System.Xml.Serialization.XmlIncludeAttribute(typeof (JobType1))]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.34234")]
     [System.SerializableAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
@@ -3397,34 +2515,24 @@ namespace Xbim.COBieLite.SerialisationHelper
 
         public string JobName
         {
-            get
-            {
-                return this.jobNameField;
-            }
-            set
-            {
-                this.jobNameField = value;
-            }
+            get { return this.jobNameField; }
+            set { this.jobNameField = value; }
         }
 
         public string JobTaskID
         {
-            get
-            {
-                return this.jobTaskIDField;
-            }
-            set
-            {
-                this.jobTaskIDField = value;
-            }
+            get { return this.jobTaskIDField; }
+            set { this.jobTaskIDField = value; }
         }
     }
 
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.34234")]
     [System.SerializableAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(TypeName = "JobType", Namespace = "http://docs.buildingsmartalliance.org/nbims03/cobie/cobielite")]
-    [System.Xml.Serialization.XmlRootAttribute("Job", Namespace = "http://docs.buildingsmartalliance.org/nbims03/cobie/cobielite", IsNullable = false)]
+    [System.Xml.Serialization.XmlTypeAttribute(TypeName = "JobType",
+        Namespace = "http://docs.buildingsmartalliance.org/nbims03/cobie/cobielite")]
+    [System.Xml.Serialization.XmlRootAttribute("Job",
+        Namespace = "http://docs.buildingsmartalliance.org/nbims03/cobie/cobielite", IsNullable = false)]
     public partial class JobType1 : JobType
     {
 
@@ -3464,173 +2572,107 @@ namespace Xbim.COBieLite.SerialisationHelper
             this.jobDurationField = new IntegerValueType();
         }
 
-        [System.Xml.Serialization.XmlElementAttribute(Namespace = "http://docs.buildingsmartalliance.org/nbims03/cobie/core")]
+        [System.Xml.Serialization.XmlElementAttribute(
+            Namespace = "http://docs.buildingsmartalliance.org/nbims03/cobie/core")]
         public string JobCategory
         {
-            get
-            {
-                return this.jobCategoryField;
-            }
-            set
-            {
-                this.jobCategoryField = value;
-            }
+            get { return this.jobCategoryField; }
+            set { this.jobCategoryField = value; }
         }
 
-        [System.Xml.Serialization.XmlElementAttribute(Namespace = "http://docs.buildingsmartalliance.org/nbims03/cobie/core")]
+        [System.Xml.Serialization.XmlElementAttribute(
+            Namespace = "http://docs.buildingsmartalliance.org/nbims03/cobie/core")]
         public string JobStatus
         {
-            get
-            {
-                return this.jobStatusField;
-            }
-            set
-            {
-                this.jobStatusField = value;
-            }
+            get { return this.jobStatusField; }
+            set { this.jobStatusField = value; }
         }
 
-        [System.Xml.Serialization.XmlElementAttribute(Namespace = "http://docs.buildingsmartalliance.org/nbims03/cobie/core")]
+        [System.Xml.Serialization.XmlElementAttribute(
+            Namespace = "http://docs.buildingsmartalliance.org/nbims03/cobie/core")]
         public string JobDescription
         {
-            get
-            {
-                return this.jobDescriptionField;
-            }
-            set
-            {
-                this.jobDescriptionField = value;
-            }
+            get { return this.jobDescriptionField; }
+            set { this.jobDescriptionField = value; }
         }
 
-        [System.Xml.Serialization.XmlElementAttribute(Namespace = "http://docs.buildingsmartalliance.org/nbims03/cobie/core")]
+        [System.Xml.Serialization.XmlElementAttribute(
+            Namespace = "http://docs.buildingsmartalliance.org/nbims03/cobie/core")]
         public IntegerValueType JobDuration
         {
-            get
-            {
-                return this.jobDurationField;
-            }
-            set
-            {
-                this.jobDurationField = value;
-            }
+            get { return this.jobDurationField; }
+            set { this.jobDurationField = value; }
         }
 
-        [System.Xml.Serialization.XmlElementAttribute(Namespace = "http://docs.buildingsmartalliance.org/nbims03/cobie/core", DataType = "date")]
+        [System.Xml.Serialization.XmlElementAttribute(
+            Namespace = "http://docs.buildingsmartalliance.org/nbims03/cobie/core", DataType = "date")]
         public System.DateTime JobStartDate
         {
-            get
-            {
-                return this.jobStartDateField;
-            }
-            set
-            {
-                this.jobStartDateField = value;
-            }
+            get { return this.jobStartDateField; }
+            set { this.jobStartDateField = value; }
         }
 
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool JobStartDateSpecified
         {
-            get
-            {
-                return this.jobStartDateFieldSpecified;
-            }
-            set
-            {
-                this.jobStartDateFieldSpecified = value;
-            }
+            get { return this.jobStartDateFieldSpecified; }
+            set { this.jobStartDateFieldSpecified = value; }
         }
 
-        [System.Xml.Serialization.XmlElementAttribute(Namespace = "http://docs.buildingsmartalliance.org/nbims03/cobie/core")]
+        [System.Xml.Serialization.XmlElementAttribute(
+            Namespace = "http://docs.buildingsmartalliance.org/nbims03/cobie/core")]
         public string JobStartConditionDescription
         {
-            get
-            {
-                return this.jobStartConditionDescriptionField;
-            }
-            set
-            {
-                this.jobStartConditionDescriptionField = value;
-            }
+            get { return this.jobStartConditionDescriptionField; }
+            set { this.jobStartConditionDescriptionField = value; }
         }
 
-        [System.Xml.Serialization.XmlElementAttribute(Namespace = "http://docs.buildingsmartalliance.org/nbims03/cobie/core")]
+        [System.Xml.Serialization.XmlElementAttribute(
+            Namespace = "http://docs.buildingsmartalliance.org/nbims03/cobie/core")]
         public DecimalValueType JobFrequencyValue
         {
-            get
-            {
-                return this.jobFrequencyValueField;
-            }
-            set
-            {
-                this.jobFrequencyValueField = value;
-            }
+            get { return this.jobFrequencyValueField; }
+            set { this.jobFrequencyValueField = value; }
         }
 
-        [System.Xml.Serialization.XmlElementAttribute(Namespace = "http://docs.buildingsmartalliance.org/nbims03/cobie/core")]
+        [System.Xml.Serialization.XmlElementAttribute(
+            Namespace = "http://docs.buildingsmartalliance.org/nbims03/cobie/core")]
         public string JobPriorTaskID
         {
-            get
-            {
-                return this.jobPriorTaskIDField;
-            }
-            set
-            {
-                this.jobPriorTaskIDField = value;
-            }
+            get { return this.jobPriorTaskIDField; }
+            set { this.jobPriorTaskIDField = value; }
         }
 
-        [System.Xml.Serialization.XmlElementAttribute(Namespace = "http://docs.buildingsmartalliance.org/nbims03/cobie/core")]
+        [System.Xml.Serialization.XmlElementAttribute(
+            Namespace = "http://docs.buildingsmartalliance.org/nbims03/cobie/core")]
         public ResourceCollectionType Resources
         {
-            get
-            {
-                return this.resourcesField;
-            }
-            set
-            {
-                this.resourcesField = value;
-            }
+            get { return this.resourcesField; }
+            set { this.resourcesField = value; }
         }
 
-        [System.Xml.Serialization.XmlElementAttribute(Namespace = "http://docs.buildingsmartalliance.org/nbims03/cobie/core")]
+        [System.Xml.Serialization.XmlElementAttribute(
+            Namespace = "http://docs.buildingsmartalliance.org/nbims03/cobie/core")]
         public AttributeCollectionType JobAttributes
         {
-            get
-            {
-                return this.jobAttributesField;
-            }
-            set
-            {
-                this.jobAttributesField = value;
-            }
+            get { return this.jobAttributesField; }
+            set { this.jobAttributesField = value; }
         }
 
-        [System.Xml.Serialization.XmlElementAttribute(Namespace = "http://docs.buildingsmartalliance.org/nbims03/cobie/core")]
+        [System.Xml.Serialization.XmlElementAttribute(
+            Namespace = "http://docs.buildingsmartalliance.org/nbims03/cobie/core")]
         public DocumentCollectionType JobDocuments
         {
-            get
-            {
-                return this.jobDocumentsField;
-            }
-            set
-            {
-                this.jobDocumentsField = value;
-            }
+            get { return this.jobDocumentsField; }
+            set { this.jobDocumentsField = value; }
         }
 
-        [System.Xml.Serialization.XmlElementAttribute(Namespace = "http://docs.buildingsmartalliance.org/nbims03/cobie/core")]
+        [System.Xml.Serialization.XmlElementAttribute(
+            Namespace = "http://docs.buildingsmartalliance.org/nbims03/cobie/core")]
         public IssueCollectionType JobIssues
         {
-            get
-            {
-                return this.jobIssuesField;
-            }
-            set
-            {
-                this.jobIssuesField = value;
-            }
+            get { return this.jobIssuesField; }
+            set { this.jobIssuesField = value; }
         }
     }
 
@@ -3651,18 +2693,12 @@ namespace Xbim.COBieLite.SerialisationHelper
         [System.Xml.Serialization.XmlElementAttribute("Spare")]
         public List<SpareType> Spare
         {
-            get
-            {
-                return this.spareField;
-            }
-            set
-            {
-                this.spareField = value;
-            }
+            get { return this.spareField; }
+            set { this.spareField = value; }
         }
     }
 
-    [System.Xml.Serialization.XmlIncludeAttribute(typeof(SpareType1))]
+    [System.Xml.Serialization.XmlIncludeAttribute(typeof (SpareType1))]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.34234")]
     [System.SerializableAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
@@ -3676,34 +2712,24 @@ namespace Xbim.COBieLite.SerialisationHelper
 
         public string SpareName
         {
-            get
-            {
-                return this.spareNameField;
-            }
-            set
-            {
-                this.spareNameField = value;
-            }
+            get { return this.spareNameField; }
+            set { this.spareNameField = value; }
         }
 
         public string SpareCategory
         {
-            get
-            {
-                return this.spareCategoryField;
-            }
-            set
-            {
-                this.spareCategoryField = value;
-            }
+            get { return this.spareCategoryField; }
+            set { this.spareCategoryField = value; }
         }
     }
 
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.34234")]
     [System.SerializableAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(TypeName = "SpareType", Namespace = "http://docs.buildingsmartalliance.org/nbims03/cobie/cobielite")]
-    [System.Xml.Serialization.XmlRootAttribute("Spare", Namespace = "http://docs.buildingsmartalliance.org/nbims03/cobie/cobielite", IsNullable = false)]
+    [System.Xml.Serialization.XmlTypeAttribute(TypeName = "SpareType",
+        Namespace = "http://docs.buildingsmartalliance.org/nbims03/cobie/cobielite")]
+    [System.Xml.Serialization.XmlRootAttribute("Spare",
+        Namespace = "http://docs.buildingsmartalliance.org/nbims03/cobie/cobielite", IsNullable = false)]
     public partial class SpareType1 : SpareType
     {
 
@@ -3729,95 +2755,60 @@ namespace Xbim.COBieLite.SerialisationHelper
             this.spareSupplierContactAssignmentsField = new ContactAssignmentCollectionType();
         }
 
-        [System.Xml.Serialization.XmlElementAttribute(Namespace = "http://docs.buildingsmartalliance.org/nbims03/cobie/core")]
+        [System.Xml.Serialization.XmlElementAttribute(
+            Namespace = "http://docs.buildingsmartalliance.org/nbims03/cobie/core")]
         public string SpareDescription
         {
-            get
-            {
-                return this.spareDescriptionField;
-            }
-            set
-            {
-                this.spareDescriptionField = value;
-            }
+            get { return this.spareDescriptionField; }
+            set { this.spareDescriptionField = value; }
         }
 
-        [System.Xml.Serialization.XmlElementAttribute(Namespace = "http://docs.buildingsmartalliance.org/nbims03/cobie/core")]
+        [System.Xml.Serialization.XmlElementAttribute(
+            Namespace = "http://docs.buildingsmartalliance.org/nbims03/cobie/core")]
         public string SpareSetNumber
         {
-            get
-            {
-                return this.spareSetNumberField;
-            }
-            set
-            {
-                this.spareSetNumberField = value;
-            }
+            get { return this.spareSetNumberField; }
+            set { this.spareSetNumberField = value; }
         }
 
-        [System.Xml.Serialization.XmlElementAttribute(Namespace = "http://docs.buildingsmartalliance.org/nbims03/cobie/core")]
+        [System.Xml.Serialization.XmlElementAttribute(
+            Namespace = "http://docs.buildingsmartalliance.org/nbims03/cobie/core")]
         public string SparePartNumber
         {
-            get
-            {
-                return this.sparePartNumberField;
-            }
-            set
-            {
-                this.sparePartNumberField = value;
-            }
+            get { return this.sparePartNumberField; }
+            set { this.sparePartNumberField = value; }
         }
 
-        [System.Xml.Serialization.XmlElementAttribute(Namespace = "http://docs.buildingsmartalliance.org/nbims03/cobie/core")]
+        [System.Xml.Serialization.XmlElementAttribute(
+            Namespace = "http://docs.buildingsmartalliance.org/nbims03/cobie/core")]
         public ContactAssignmentCollectionType SpareSupplierContactAssignments
         {
-            get
-            {
-                return this.spareSupplierContactAssignmentsField;
-            }
-            set
-            {
-                this.spareSupplierContactAssignmentsField = value;
-            }
+            get { return this.spareSupplierContactAssignmentsField; }
+            set { this.spareSupplierContactAssignmentsField = value; }
         }
 
-        [System.Xml.Serialization.XmlElementAttribute(Namespace = "http://docs.buildingsmartalliance.org/nbims03/cobie/core")]
+        [System.Xml.Serialization.XmlElementAttribute(
+            Namespace = "http://docs.buildingsmartalliance.org/nbims03/cobie/core")]
         public AttributeCollectionType SpareAttributes
         {
-            get
-            {
-                return this.spareAttributesField;
-            }
-            set
-            {
-                this.spareAttributesField = value;
-            }
+            get { return this.spareAttributesField; }
+            set { this.spareAttributesField = value; }
         }
 
-        [System.Xml.Serialization.XmlElementAttribute(Namespace = "http://docs.buildingsmartalliance.org/nbims03/cobie/core")]
+        [System.Xml.Serialization.XmlElementAttribute(
+            Namespace = "http://docs.buildingsmartalliance.org/nbims03/cobie/core")]
         public DocumentCollectionType SpareDocuments
         {
-            get
-            {
-                return this.spareDocumentsField;
-            }
-            set
-            {
-                this.spareDocumentsField = value;
-            }
+            get { return this.spareDocumentsField; }
+            set { this.spareDocumentsField = value; }
         }
 
-        [System.Xml.Serialization.XmlElementAttribute(Namespace = "http://docs.buildingsmartalliance.org/nbims03/cobie/core")]
+        [System.Xml.Serialization.XmlElementAttribute(
+            Namespace = "http://docs.buildingsmartalliance.org/nbims03/cobie/core")]
         public IssueCollectionType SpareIssues
         {
-            get
-            {
-                return this.spareIssuesField;
-            }
-            set
-            {
-                this.spareIssuesField = value;
-            }
+            get { return this.spareIssuesField; }
+            set { this.spareIssuesField = value; }
         }
     }
 
@@ -3838,18 +2829,12 @@ namespace Xbim.COBieLite.SerialisationHelper
         [System.Xml.Serialization.XmlElementAttribute("AssetType")]
         public List<AssetTypeInfoType> AssetType
         {
-            get
-            {
-                return this.assetTypeField;
-            }
-            set
-            {
-                this.assetTypeField = value;
-            }
+            get { return this.assetTypeField; }
+            set { this.assetTypeField = value; }
         }
     }
 
-    [System.Xml.Serialization.XmlIncludeAttribute(typeof(AssetTypeInfoType1))]
+    [System.Xml.Serialization.XmlIncludeAttribute(typeof (AssetTypeInfoType1))]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.34234")]
     [System.SerializableAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
@@ -3861,22 +2846,18 @@ namespace Xbim.COBieLite.SerialisationHelper
 
         public string AssetTypeName
         {
-            get
-            {
-                return this.assetTypeNameField;
-            }
-            set
-            {
-                this.assetTypeNameField = value;
-            }
+            get { return this.assetTypeNameField; }
+            set { this.assetTypeNameField = value; }
         }
     }
 
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.34234")]
     [System.SerializableAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(TypeName = "AssetTypeInfoType", Namespace = "http://docs.buildingsmartalliance.org/nbims03/cobie/cobielite")]
-    [System.Xml.Serialization.XmlRootAttribute("AssetType", Namespace = "http://docs.buildingsmartalliance.org/nbims03/cobie/cobielite", IsNullable = false)]
+    [System.Xml.Serialization.XmlTypeAttribute(TypeName = "AssetTypeInfoType",
+        Namespace = "http://docs.buildingsmartalliance.org/nbims03/cobie/cobielite")]
+    [System.Xml.Serialization.XmlRootAttribute("AssetType",
+        Namespace = "http://docs.buildingsmartalliance.org/nbims03/cobie/cobielite", IsNullable = false)]
     public partial class AssetTypeInfoType1 : AssetTypeInfoType
     {
 
@@ -3958,394 +2939,243 @@ namespace Xbim.COBieLite.SerialisationHelper
             this.assetTypeReplacementCostValueField = new DecimalValueType();
         }
 
-        [System.Xml.Serialization.XmlElementAttribute(Namespace = "http://docs.buildingsmartalliance.org/nbims03/cobie/core")]
+        [System.Xml.Serialization.XmlElementAttribute(
+            Namespace = "http://docs.buildingsmartalliance.org/nbims03/cobie/core")]
         public string AssetTypeCategory
         {
-            get
-            {
-                return this.assetTypeCategoryField;
-            }
-            set
-            {
-                this.assetTypeCategoryField = value;
-            }
+            get { return this.assetTypeCategoryField; }
+            set { this.assetTypeCategoryField = value; }
         }
 
-        [System.Xml.Serialization.XmlElementAttribute(Namespace = "http://docs.buildingsmartalliance.org/nbims03/cobie/core")]
+        [System.Xml.Serialization.XmlElementAttribute(
+            Namespace = "http://docs.buildingsmartalliance.org/nbims03/cobie/core")]
         public string AssetTypeDescription
         {
-            get
-            {
-                return this.assetTypeDescriptionField;
-            }
-            set
-            {
-                this.assetTypeDescriptionField = value;
-            }
+            get { return this.assetTypeDescriptionField; }
+            set { this.assetTypeDescriptionField = value; }
         }
 
-        [System.Xml.Serialization.XmlElementAttribute(Namespace = "http://docs.buildingsmartalliance.org/nbims03/cobie/core")]
+        [System.Xml.Serialization.XmlElementAttribute(
+            Namespace = "http://docs.buildingsmartalliance.org/nbims03/cobie/core")]
         public AssetPortabilitySimpleType AssetTypeAccountingCategory
         {
-            get
-            {
-                return this.assetTypeAccountingCategoryField;
-            }
-            set
-            {
-                this.assetTypeAccountingCategoryField = value;
-            }
+            get { return this.assetTypeAccountingCategoryField; }
+            set { this.assetTypeAccountingCategoryField = value; }
         }
 
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool AssetTypeAccountingCategorySpecified
         {
-            get
-            {
-                return this.assetTypeAccountingCategoryFieldSpecified;
-            }
-            set
-            {
-                this.assetTypeAccountingCategoryFieldSpecified = value;
-            }
+            get { return this.assetTypeAccountingCategoryFieldSpecified; }
+            set { this.assetTypeAccountingCategoryFieldSpecified = value; }
         }
 
-        [System.Xml.Serialization.XmlElementAttribute(Namespace = "http://docs.buildingsmartalliance.org/nbims03/cobie/core")]
+        [System.Xml.Serialization.XmlElementAttribute(
+            Namespace = "http://docs.buildingsmartalliance.org/nbims03/cobie/core")]
         public string AssetTypeModelNumber
         {
-            get
-            {
-                return this.assetTypeModelNumberField;
-            }
-            set
-            {
-                this.assetTypeModelNumberField = value;
-            }
+            get { return this.assetTypeModelNumberField; }
+            set { this.assetTypeModelNumberField = value; }
         }
 
-        [System.Xml.Serialization.XmlElementAttribute(Namespace = "http://docs.buildingsmartalliance.org/nbims03/cobie/core")]
+        [System.Xml.Serialization.XmlElementAttribute(
+            Namespace = "http://docs.buildingsmartalliance.org/nbims03/cobie/core")]
         public DecimalValueType AssetTypeReplacementCostValue
         {
-            get
-            {
-                return this.assetTypeReplacementCostValueField;
-            }
-            set
-            {
-                this.assetTypeReplacementCostValueField = value;
-            }
+            get { return this.assetTypeReplacementCostValueField; }
+            set { this.assetTypeReplacementCostValueField = value; }
         }
 
-        [System.Xml.Serialization.XmlElementAttribute(Namespace = "http://docs.buildingsmartalliance.org/nbims03/cobie/core")]
+        [System.Xml.Serialization.XmlElementAttribute(
+            Namespace = "http://docs.buildingsmartalliance.org/nbims03/cobie/core")]
         public IntegerValueType AssetTypeExpectedLifeValue
         {
-            get
-            {
-                return this.assetTypeExpectedLifeValueField;
-            }
-            set
-            {
-                this.assetTypeExpectedLifeValueField = value;
-            }
+            get { return this.assetTypeExpectedLifeValueField; }
+            set { this.assetTypeExpectedLifeValueField = value; }
         }
 
-        [System.Xml.Serialization.XmlElementAttribute(Namespace = "http://docs.buildingsmartalliance.org/nbims03/cobie/core")]
+        [System.Xml.Serialization.XmlElementAttribute(
+            Namespace = "http://docs.buildingsmartalliance.org/nbims03/cobie/core")]
         public DecimalValueType AssetTypeNominalLength
         {
-            get
-            {
-                return this.assetTypeNominalLengthField;
-            }
-            set
-            {
-                this.assetTypeNominalLengthField = value;
-            }
+            get { return this.assetTypeNominalLengthField; }
+            set { this.assetTypeNominalLengthField = value; }
         }
 
-        [System.Xml.Serialization.XmlElementAttribute(Namespace = "http://docs.buildingsmartalliance.org/nbims03/cobie/core")]
+        [System.Xml.Serialization.XmlElementAttribute(
+            Namespace = "http://docs.buildingsmartalliance.org/nbims03/cobie/core")]
         public DecimalValueType AssetTypeNominalWidth
         {
-            get
-            {
-                return this.assetTypeNominalWidthField;
-            }
-            set
-            {
-                this.assetTypeNominalWidthField = value;
-            }
+            get { return this.assetTypeNominalWidthField; }
+            set { this.assetTypeNominalWidthField = value; }
         }
 
-        [System.Xml.Serialization.XmlElementAttribute(Namespace = "http://docs.buildingsmartalliance.org/nbims03/cobie/core")]
+        [System.Xml.Serialization.XmlElementAttribute(
+            Namespace = "http://docs.buildingsmartalliance.org/nbims03/cobie/core")]
         public DecimalValueType AssetTypeNominalHeight
         {
-            get
-            {
-                return this.assetTypeNominalHeightField;
-            }
-            set
-            {
-                this.assetTypeNominalHeightField = value;
-            }
+            get { return this.assetTypeNominalHeightField; }
+            set { this.assetTypeNominalHeightField = value; }
         }
 
-        [System.Xml.Serialization.XmlElementAttribute(Namespace = "http://docs.buildingsmartalliance.org/nbims03/cobie/core")]
+        [System.Xml.Serialization.XmlElementAttribute(
+            Namespace = "http://docs.buildingsmartalliance.org/nbims03/cobie/core")]
         public string AssetTypeAccessibilityText
         {
-            get
-            {
-                return this.assetTypeAccessibilityTextField;
-            }
-            set
-            {
-                this.assetTypeAccessibilityTextField = value;
-            }
+            get { return this.assetTypeAccessibilityTextField; }
+            set { this.assetTypeAccessibilityTextField = value; }
         }
 
-        [System.Xml.Serialization.XmlElementAttribute(Namespace = "http://docs.buildingsmartalliance.org/nbims03/cobie/core")]
+        [System.Xml.Serialization.XmlElementAttribute(
+            Namespace = "http://docs.buildingsmartalliance.org/nbims03/cobie/core")]
         public string AssetTypeCodePerformance
         {
-            get
-            {
-                return this.assetTypeCodePerformanceField;
-            }
-            set
-            {
-                this.assetTypeCodePerformanceField = value;
-            }
+            get { return this.assetTypeCodePerformanceField; }
+            set { this.assetTypeCodePerformanceField = value; }
         }
 
-        [System.Xml.Serialization.XmlElementAttribute(Namespace = "http://docs.buildingsmartalliance.org/nbims03/cobie/core")]
+        [System.Xml.Serialization.XmlElementAttribute(
+            Namespace = "http://docs.buildingsmartalliance.org/nbims03/cobie/core")]
         public string AssetTypeColorCode
         {
-            get
-            {
-                return this.assetTypeColorCodeField;
-            }
-            set
-            {
-                this.assetTypeColorCodeField = value;
-            }
+            get { return this.assetTypeColorCodeField; }
+            set { this.assetTypeColorCodeField = value; }
         }
 
-        [System.Xml.Serialization.XmlElementAttribute(Namespace = "http://docs.buildingsmartalliance.org/nbims03/cobie/core")]
+        [System.Xml.Serialization.XmlElementAttribute(
+            Namespace = "http://docs.buildingsmartalliance.org/nbims03/cobie/core")]
         public string AssetTypeConstituentsDescription
         {
-            get
-            {
-                return this.assetTypeConstituentsDescriptionField;
-            }
-            set
-            {
-                this.assetTypeConstituentsDescriptionField = value;
-            }
+            get { return this.assetTypeConstituentsDescriptionField; }
+            set { this.assetTypeConstituentsDescriptionField = value; }
         }
 
-        [System.Xml.Serialization.XmlElementAttribute(Namespace = "http://docs.buildingsmartalliance.org/nbims03/cobie/core")]
+        [System.Xml.Serialization.XmlElementAttribute(
+            Namespace = "http://docs.buildingsmartalliance.org/nbims03/cobie/core")]
         public string AssetTypeFeaturesDescription
         {
-            get
-            {
-                return this.assetTypeFeaturesDescriptionField;
-            }
-            set
-            {
-                this.assetTypeFeaturesDescriptionField = value;
-            }
+            get { return this.assetTypeFeaturesDescriptionField; }
+            set { this.assetTypeFeaturesDescriptionField = value; }
         }
 
-        [System.Xml.Serialization.XmlElementAttribute(Namespace = "http://docs.buildingsmartalliance.org/nbims03/cobie/core")]
+        [System.Xml.Serialization.XmlElementAttribute(
+            Namespace = "http://docs.buildingsmartalliance.org/nbims03/cobie/core")]
         public string AssetTypeFinishDescription
         {
-            get
-            {
-                return this.assetTypeFinishDescriptionField;
-            }
-            set
-            {
-                this.assetTypeFinishDescriptionField = value;
-            }
+            get { return this.assetTypeFinishDescriptionField; }
+            set { this.assetTypeFinishDescriptionField = value; }
         }
 
-        [System.Xml.Serialization.XmlElementAttribute(Namespace = "http://docs.buildingsmartalliance.org/nbims03/cobie/core")]
+        [System.Xml.Serialization.XmlElementAttribute(
+            Namespace = "http://docs.buildingsmartalliance.org/nbims03/cobie/core")]
         public string AssetTypeGradeDescription
         {
-            get
-            {
-                return this.assetTypeGradeDescriptionField;
-            }
-            set
-            {
-                this.assetTypeGradeDescriptionField = value;
-            }
+            get { return this.assetTypeGradeDescriptionField; }
+            set { this.assetTypeGradeDescriptionField = value; }
         }
 
-        [System.Xml.Serialization.XmlElementAttribute(Namespace = "http://docs.buildingsmartalliance.org/nbims03/cobie/core")]
+        [System.Xml.Serialization.XmlElementAttribute(
+            Namespace = "http://docs.buildingsmartalliance.org/nbims03/cobie/core")]
         public string AssetTypeMaterialDescription
         {
-            get
-            {
-                return this.assetTypeMaterialDescriptionField;
-            }
-            set
-            {
-                this.assetTypeMaterialDescriptionField = value;
-            }
+            get { return this.assetTypeMaterialDescriptionField; }
+            set { this.assetTypeMaterialDescriptionField = value; }
         }
 
-        [System.Xml.Serialization.XmlElementAttribute(Namespace = "http://docs.buildingsmartalliance.org/nbims03/cobie/core")]
+        [System.Xml.Serialization.XmlElementAttribute(
+            Namespace = "http://docs.buildingsmartalliance.org/nbims03/cobie/core")]
         public string AssetTypeShapeDescription
         {
-            get
-            {
-                return this.assetTypeShapeDescriptionField;
-            }
-            set
-            {
-                this.assetTypeShapeDescriptionField = value;
-            }
+            get { return this.assetTypeShapeDescriptionField; }
+            set { this.assetTypeShapeDescriptionField = value; }
         }
 
-        [System.Xml.Serialization.XmlElementAttribute(Namespace = "http://docs.buildingsmartalliance.org/nbims03/cobie/core")]
+        [System.Xml.Serialization.XmlElementAttribute(
+            Namespace = "http://docs.buildingsmartalliance.org/nbims03/cobie/core")]
         public string AssetTypeSizeDescription
         {
-            get
-            {
-                return this.assetTypeSizeDescriptionField;
-            }
-            set
-            {
-                this.assetTypeSizeDescriptionField = value;
-            }
+            get { return this.assetTypeSizeDescriptionField; }
+            set { this.assetTypeSizeDescriptionField = value; }
         }
 
-        [System.Xml.Serialization.XmlElementAttribute(Namespace = "http://docs.buildingsmartalliance.org/nbims03/cobie/core")]
+        [System.Xml.Serialization.XmlElementAttribute(
+            Namespace = "http://docs.buildingsmartalliance.org/nbims03/cobie/core")]
         public string AssetTypeSustainabilityPerformanceDescription
         {
-            get
-            {
-                return this.assetTypeSustainabilityPerformanceDescriptionField;
-            }
-            set
-            {
-                this.assetTypeSustainabilityPerformanceDescriptionField = value;
-            }
+            get { return this.assetTypeSustainabilityPerformanceDescriptionField; }
+            set { this.assetTypeSustainabilityPerformanceDescriptionField = value; }
         }
 
-        [System.Xml.Serialization.XmlElementAttribute(Namespace = "http://docs.buildingsmartalliance.org/nbims03/cobie/core")]
+        [System.Xml.Serialization.XmlElementAttribute(
+            Namespace = "http://docs.buildingsmartalliance.org/nbims03/cobie/core")]
         public AssetCollectionType Assets
         {
-            get
-            {
-                return this.assetsField;
-            }
-            set
-            {
-                this.assetsField = value;
-            }
+            get { return this.assetsField; }
+            set { this.assetsField = value; }
         }
 
-        [System.Xml.Serialization.XmlElementAttribute(Namespace = "http://docs.buildingsmartalliance.org/nbims03/cobie/core")]
+        [System.Xml.Serialization.XmlElementAttribute(
+            Namespace = "http://docs.buildingsmartalliance.org/nbims03/cobie/core")]
         public ContactAssignmentCollectionType AssetTypeManufacturerContactAssignments
         {
-            get
-            {
-                return this.assetTypeManufacturerContactAssignmentsField;
-            }
-            set
-            {
-                this.assetTypeManufacturerContactAssignmentsField = value;
-            }
+            get { return this.assetTypeManufacturerContactAssignmentsField; }
+            set { this.assetTypeManufacturerContactAssignmentsField = value; }
         }
 
-        [System.Xml.Serialization.XmlElementAttribute(Namespace = "http://docs.buildingsmartalliance.org/nbims03/cobie/core")]
+        [System.Xml.Serialization.XmlElementAttribute(
+            Namespace = "http://docs.buildingsmartalliance.org/nbims03/cobie/core")]
         public WarrantyCollectionType Warranties
         {
-            get
-            {
-                return this.warrantiesField;
-            }
-            set
-            {
-                this.warrantiesField = value;
-            }
+            get { return this.warrantiesField; }
+            set { this.warrantiesField = value; }
         }
 
-        [System.Xml.Serialization.XmlElementAttribute(Namespace = "http://docs.buildingsmartalliance.org/nbims03/cobie/core")]
+        [System.Xml.Serialization.XmlElementAttribute(
+            Namespace = "http://docs.buildingsmartalliance.org/nbims03/cobie/core")]
         public SpareCollectionType Spares
         {
-            get
-            {
-                return this.sparesField;
-            }
-            set
-            {
-                this.sparesField = value;
-            }
+            get { return this.sparesField; }
+            set { this.sparesField = value; }
         }
 
-        [System.Xml.Serialization.XmlElementAttribute(Namespace = "http://docs.buildingsmartalliance.org/nbims03/cobie/core")]
+        [System.Xml.Serialization.XmlElementAttribute(
+            Namespace = "http://docs.buildingsmartalliance.org/nbims03/cobie/core")]
         public JobCollectionType Jobs
         {
-            get
-            {
-                return this.jobsField;
-            }
-            set
-            {
-                this.jobsField = value;
-            }
+            get { return this.jobsField; }
+            set { this.jobsField = value; }
         }
 
-        [System.Xml.Serialization.XmlElementAttribute(Namespace = "http://docs.buildingsmartalliance.org/nbims03/cobie/core")]
+        [System.Xml.Serialization.XmlElementAttribute(
+            Namespace = "http://docs.buildingsmartalliance.org/nbims03/cobie/core")]
         public AssemblyAssignmentCollectionType AssemblyAssignments
         {
-            get
-            {
-                return this.assemblyAssignmentsField;
-            }
-            set
-            {
-                this.assemblyAssignmentsField = value;
-            }
+            get { return this.assemblyAssignmentsField; }
+            set { this.assemblyAssignmentsField = value; }
         }
 
-        [System.Xml.Serialization.XmlElementAttribute(Namespace = "http://docs.buildingsmartalliance.org/nbims03/cobie/core")]
+        [System.Xml.Serialization.XmlElementAttribute(
+            Namespace = "http://docs.buildingsmartalliance.org/nbims03/cobie/core")]
         public AttributeCollectionType AssetTypeAttributes
         {
-            get
-            {
-                return this.assetTypeAttributesField;
-            }
-            set
-            {
-                this.assetTypeAttributesField = value;
-            }
+            get { return this.assetTypeAttributesField; }
+            set { this.assetTypeAttributesField = value; }
         }
 
-        [System.Xml.Serialization.XmlElementAttribute(Namespace = "http://docs.buildingsmartalliance.org/nbims03/cobie/core")]
+        [System.Xml.Serialization.XmlElementAttribute(
+            Namespace = "http://docs.buildingsmartalliance.org/nbims03/cobie/core")]
         public DocumentCollectionType AssetTypeDocuments
         {
-            get
-            {
-                return this.assetTypeDocumentsField;
-            }
-            set
-            {
-                this.assetTypeDocumentsField = value;
-            }
+            get { return this.assetTypeDocumentsField; }
+            set { this.assetTypeDocumentsField = value; }
         }
 
-        [System.Xml.Serialization.XmlElementAttribute(Namespace = "http://docs.buildingsmartalliance.org/nbims03/cobie/core")]
+        [System.Xml.Serialization.XmlElementAttribute(
+            Namespace = "http://docs.buildingsmartalliance.org/nbims03/cobie/core")]
         public IssueCollectionType AssetTypeIssues
         {
-            get
-            {
-                return this.assetTypeIssuesField;
-            }
-            set
-            {
-                this.assetTypeIssuesField = value;
-            }
+            get { return this.assetTypeIssuesField; }
+            set { this.assetTypeIssuesField = value; }
         }
     }
 
@@ -4362,8 +3192,7 @@ namespace Xbim.COBieLite.SerialisationHelper
         Moveable,
 
         /// <remarks/>
-        [System.Xml.Serialization.XmlEnumAttribute("")]
-        Item,
+        [System.Xml.Serialization.XmlEnumAttribute("")] Item,
     }
 
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.34234")]
@@ -4383,18 +3212,12 @@ namespace Xbim.COBieLite.SerialisationHelper
         [System.Xml.Serialization.XmlElementAttribute("Asset")]
         public List<AssetInfoType> Asset
         {
-            get
-            {
-                return this.assetField;
-            }
-            set
-            {
-                this.assetField = value;
-            }
+            get { return this.assetField; }
+            set { this.assetField = value; }
         }
     }
 
-    [System.Xml.Serialization.XmlIncludeAttribute(typeof(AssetInfoType1))]
+    [System.Xml.Serialization.XmlIncludeAttribute(typeof (AssetInfoType1))]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.34234")]
     [System.SerializableAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
@@ -4413,34 +3236,24 @@ namespace Xbim.COBieLite.SerialisationHelper
 
         public string AssetName
         {
-            get
-            {
-                return this.assetNameField;
-            }
-            set
-            {
-                this.assetNameField = value;
-            }
+            get { return this.assetNameField; }
+            set { this.assetNameField = value; }
         }
 
         public SpaceAssignmentCollectionType AssetSpaceAssignments
         {
-            get
-            {
-                return this.assetSpaceAssignmentsField;
-            }
-            set
-            {
-                this.assetSpaceAssignmentsField = value;
-            }
+            get { return this.assetSpaceAssignmentsField; }
+            set { this.assetSpaceAssignmentsField = value; }
         }
     }
 
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.34234")]
     [System.SerializableAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(TypeName = "AssetInfoType", Namespace = "http://docs.buildingsmartalliance.org/nbims03/cobie/cobielite")]
-    [System.Xml.Serialization.XmlRootAttribute("Asset", Namespace = "http://docs.buildingsmartalliance.org/nbims03/cobie/cobielite", IsNullable = false)]
+    [System.Xml.Serialization.XmlTypeAttribute(TypeName = "AssetInfoType",
+        Namespace = "http://docs.buildingsmartalliance.org/nbims03/cobie/cobielite")]
+    [System.Xml.Serialization.XmlRootAttribute("Asset",
+        Namespace = "http://docs.buildingsmartalliance.org/nbims03/cobie/cobielite", IsNullable = false)]
     public partial class AssetInfoType1 : AssetInfoType
     {
 
@@ -4487,225 +3300,138 @@ namespace Xbim.COBieLite.SerialisationHelper
             this.assetSystemAssignmentsField = new SystemAssignmentCollectionType();
         }
 
-        [System.Xml.Serialization.XmlElementAttribute(Namespace = "http://docs.buildingsmartalliance.org/nbims03/cobie/core")]
+        [System.Xml.Serialization.XmlElementAttribute(
+            Namespace = "http://docs.buildingsmartalliance.org/nbims03/cobie/core")]
         public string AssetDescription
         {
-            get
-            {
-                return this.assetDescriptionField;
-            }
-            set
-            {
-                this.assetDescriptionField = value;
-            }
+            get { return this.assetDescriptionField; }
+            set { this.assetDescriptionField = value; }
         }
 
-        [System.Xml.Serialization.XmlElementAttribute(Namespace = "http://docs.buildingsmartalliance.org/nbims03/cobie/core")]
+        [System.Xml.Serialization.XmlElementAttribute(
+            Namespace = "http://docs.buildingsmartalliance.org/nbims03/cobie/core")]
         public string AssetSerialNumber
         {
-            get
-            {
-                return this.assetSerialNumberField;
-            }
-            set
-            {
-                this.assetSerialNumberField = value;
-            }
+            get { return this.assetSerialNumberField; }
+            set { this.assetSerialNumberField = value; }
         }
 
-        [System.Xml.Serialization.XmlElementAttribute(Namespace = "http://docs.buildingsmartalliance.org/nbims03/cobie/core", DataType = "date")]
+        [System.Xml.Serialization.XmlElementAttribute(
+            Namespace = "http://docs.buildingsmartalliance.org/nbims03/cobie/core", DataType = "date")]
         public System.DateTime AssetInstallationDate
         {
-            get
-            {
-                return this.assetInstallationDateField;
-            }
-            set
-            {
-                this.assetInstallationDateField = value;
-            }
+            get { return this.assetInstallationDateField; }
+            set { this.assetInstallationDateField = value; }
         }
 
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool AssetInstallationDateSpecified
         {
-            get
-            {
-                return this.assetInstallationDateFieldSpecified;
-            }
-            set
-            {
-                this.assetInstallationDateFieldSpecified = value;
-            }
+            get { return this.assetInstallationDateFieldSpecified; }
+            set { this.assetInstallationDateFieldSpecified = value; }
         }
 
-        [System.Xml.Serialization.XmlElementAttribute(Namespace = "http://docs.buildingsmartalliance.org/nbims03/cobie/core")]
+        [System.Xml.Serialization.XmlElementAttribute(
+            Namespace = "http://docs.buildingsmartalliance.org/nbims03/cobie/core")]
         public string AssetInstalledModelNumber
         {
-            get
-            {
-                return this.assetInstalledModelNumberField;
-            }
-            set
-            {
-                this.assetInstalledModelNumberField = value;
-            }
+            get { return this.assetInstalledModelNumberField; }
+            set { this.assetInstalledModelNumberField = value; }
         }
 
-        [System.Xml.Serialization.XmlElementAttribute(Namespace = "http://docs.buildingsmartalliance.org/nbims03/cobie/core", DataType = "date")]
+        [System.Xml.Serialization.XmlElementAttribute(
+            Namespace = "http://docs.buildingsmartalliance.org/nbims03/cobie/core", DataType = "date")]
         public System.DateTime AssetWarrantyStartDate
         {
-            get
-            {
-                return this.assetWarrantyStartDateField;
-            }
-            set
-            {
-                this.assetWarrantyStartDateField = value;
-            }
+            get { return this.assetWarrantyStartDateField; }
+            set { this.assetWarrantyStartDateField = value; }
         }
 
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool AssetWarrantyStartDateSpecified
         {
-            get
-            {
-                return this.assetWarrantyStartDateFieldSpecified;
-            }
-            set
-            {
-                this.assetWarrantyStartDateFieldSpecified = value;
-            }
+            get { return this.assetWarrantyStartDateFieldSpecified; }
+            set { this.assetWarrantyStartDateFieldSpecified = value; }
         }
 
-        [System.Xml.Serialization.XmlElementAttribute(Namespace = "http://docs.buildingsmartalliance.org/nbims03/cobie/core")]
+        [System.Xml.Serialization.XmlElementAttribute(
+            Namespace = "http://docs.buildingsmartalliance.org/nbims03/cobie/core")]
         public string AssetStartDate
         {
-            get
-            {
-                return this.assetStartDateField;
-            }
-            set
-            {
-                this.assetStartDateField = value;
-            }
+            get { return this.assetStartDateField; }
+            set { this.assetStartDateField = value; }
         }
 
-        [System.Xml.Serialization.XmlElementAttribute(Namespace = "http://docs.buildingsmartalliance.org/nbims03/cobie/core")]
+        [System.Xml.Serialization.XmlElementAttribute(
+            Namespace = "http://docs.buildingsmartalliance.org/nbims03/cobie/core")]
         public string AssetTagNumber
         {
-            get
-            {
-                return this.assetTagNumberField;
-            }
-            set
-            {
-                this.assetTagNumberField = value;
-            }
+            get { return this.assetTagNumberField; }
+            set { this.assetTagNumberField = value; }
         }
 
-        [System.Xml.Serialization.XmlElementAttribute(Namespace = "http://docs.buildingsmartalliance.org/nbims03/cobie/core")]
+        [System.Xml.Serialization.XmlElementAttribute(
+            Namespace = "http://docs.buildingsmartalliance.org/nbims03/cobie/core")]
         public string AssetBarCode
         {
-            get
-            {
-                return this.assetBarCodeField;
-            }
-            set
-            {
-                this.assetBarCodeField = value;
-            }
+            get { return this.assetBarCodeField; }
+            set { this.assetBarCodeField = value; }
         }
 
-        [System.Xml.Serialization.XmlElementAttribute(Namespace = "http://docs.buildingsmartalliance.org/nbims03/cobie/core")]
+        [System.Xml.Serialization.XmlElementAttribute(
+            Namespace = "http://docs.buildingsmartalliance.org/nbims03/cobie/core")]
         public string AssetIdentifier
         {
-            get
-            {
-                return this.assetIdentifierField;
-            }
-            set
-            {
-                this.assetIdentifierField = value;
-            }
+            get { return this.assetIdentifierField; }
+            set { this.assetIdentifierField = value; }
         }
 
-        [System.Xml.Serialization.XmlElementAttribute(Namespace = "http://docs.buildingsmartalliance.org/nbims03/cobie/core")]
+        [System.Xml.Serialization.XmlElementAttribute(
+            Namespace = "http://docs.buildingsmartalliance.org/nbims03/cobie/core")]
         public string AssetLocationDescription
         {
-            get
-            {
-                return this.assetLocationDescriptionField;
-            }
-            set
-            {
-                this.assetLocationDescriptionField = value;
-            }
+            get { return this.assetLocationDescriptionField; }
+            set { this.assetLocationDescriptionField = value; }
         }
 
-        [System.Xml.Serialization.XmlElementAttribute(Namespace = "http://docs.buildingsmartalliance.org/nbims03/cobie/core")]
+        [System.Xml.Serialization.XmlElementAttribute(
+            Namespace = "http://docs.buildingsmartalliance.org/nbims03/cobie/core")]
         public SystemAssignmentCollectionType AssetSystemAssignments
         {
-            get
-            {
-                return this.assetSystemAssignmentsField;
-            }
-            set
-            {
-                this.assetSystemAssignmentsField = value;
-            }
+            get { return this.assetSystemAssignmentsField; }
+            set { this.assetSystemAssignmentsField = value; }
         }
 
-        [System.Xml.Serialization.XmlElementAttribute(Namespace = "http://docs.buildingsmartalliance.org/nbims03/cobie/core")]
+        [System.Xml.Serialization.XmlElementAttribute(
+            Namespace = "http://docs.buildingsmartalliance.org/nbims03/cobie/core")]
         public AssemblyAssignmentCollectionType AssemblyAssignments
         {
-            get
-            {
-                return this.assemblyAssignmentsField;
-            }
-            set
-            {
-                this.assemblyAssignmentsField = value;
-            }
+            get { return this.assemblyAssignmentsField; }
+            set { this.assemblyAssignmentsField = value; }
         }
 
-        [System.Xml.Serialization.XmlElementAttribute(Namespace = "http://docs.buildingsmartalliance.org/nbims03/cobie/core")]
+        [System.Xml.Serialization.XmlElementAttribute(
+            Namespace = "http://docs.buildingsmartalliance.org/nbims03/cobie/core")]
         public AttributeCollectionType AssetAttributes
         {
-            get
-            {
-                return this.assetAttributesField;
-            }
-            set
-            {
-                this.assetAttributesField = value;
-            }
+            get { return this.assetAttributesField; }
+            set { this.assetAttributesField = value; }
         }
 
-        [System.Xml.Serialization.XmlElementAttribute(Namespace = "http://docs.buildingsmartalliance.org/nbims03/cobie/core")]
+        [System.Xml.Serialization.XmlElementAttribute(
+            Namespace = "http://docs.buildingsmartalliance.org/nbims03/cobie/core")]
         public DocumentCollectionType AssetDocuments
         {
-            get
-            {
-                return this.assetDocumentsField;
-            }
-            set
-            {
-                this.assetDocumentsField = value;
-            }
+            get { return this.assetDocumentsField; }
+            set { this.assetDocumentsField = value; }
         }
 
-        [System.Xml.Serialization.XmlElementAttribute(Namespace = "http://docs.buildingsmartalliance.org/nbims03/cobie/core")]
+        [System.Xml.Serialization.XmlElementAttribute(
+            Namespace = "http://docs.buildingsmartalliance.org/nbims03/cobie/core")]
         public IssueCollectionType AssetIssues
         {
-            get
-            {
-                return this.assetIssuesField;
-            }
-            set
-            {
-                this.assetIssuesField = value;
-            }
+            get { return this.assetIssuesField; }
+            set { this.assetIssuesField = value; }
         }
     }
 
@@ -4720,44 +3446,35 @@ namespace Xbim.COBieLite.SerialisationHelper
 
         private ItemChoiceType itemElementNameField;
 
-        [System.Xml.Serialization.XmlElementAttribute("AttributeBooleanValue", typeof(BooleanValueType))]
-        [System.Xml.Serialization.XmlElementAttribute("AttributeDateTimeValue", typeof(System.DateTime))]
-        [System.Xml.Serialization.XmlElementAttribute("AttributeDateValue", typeof(System.DateTime), DataType = "date")]
-        [System.Xml.Serialization.XmlElementAttribute("AttributeDecimalValue", typeof(AttributeDecimalValueType))]
-        [System.Xml.Serialization.XmlElementAttribute("AttributeIntegerValue", typeof(AttributeIntegerValueType))]
-        [System.Xml.Serialization.XmlElementAttribute("AttributeMonetaryValue", typeof(AttributeMonetaryValueType))]
-        [System.Xml.Serialization.XmlElementAttribute("AttributeStringValue", typeof(AttributeStringValueType))]
-        [System.Xml.Serialization.XmlElementAttribute("AttributeTimeValue", typeof(System.DateTime), DataType = "time")]
+        [System.Xml.Serialization.XmlElementAttribute("AttributeBooleanValue", typeof (BooleanValueType))]
+        [System.Xml.Serialization.XmlElementAttribute("AttributeDateTimeValue", typeof (System.DateTime))]
+        [System.Xml.Serialization.XmlElementAttribute("AttributeDateValue", typeof (System.DateTime), DataType = "date")
+        ]
+        [System.Xml.Serialization.XmlElementAttribute("AttributeDecimalValue", typeof (AttributeDecimalValueType))]
+        [System.Xml.Serialization.XmlElementAttribute("AttributeIntegerValue", typeof (AttributeIntegerValueType))]
+        [System.Xml.Serialization.XmlElementAttribute("AttributeMonetaryValue", typeof (AttributeMonetaryValueType))]
+        [System.Xml.Serialization.XmlElementAttribute("AttributeStringValue", typeof (AttributeStringValueType))]
+        [System.Xml.Serialization.XmlElementAttribute("AttributeTimeValue", typeof (System.DateTime), DataType = "time")
+        ]
         [System.Xml.Serialization.XmlChoiceIdentifierAttribute("ItemElementName")]
         public object Item
         {
-            get
-            {
-                return this.itemField;
-            }
-            set
-            {
-                this.itemField = value;
-            }
+            get { return this.itemField; }
+            set { this.itemField = value; }
         }
 
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public ItemChoiceType ItemElementName
         {
-            get
-            {
-                return this.itemElementNameField;
-            }
-            set
-            {
-                this.itemElementNameField = value;
-            }
+            get { return this.itemElementNameField; }
+            set { this.itemElementNameField = value; }
         }
     }
 
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.34234")]
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://docs.buildingsmartalliance.org/nbims03/cobie/core", IncludeInSchema = false)]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://docs.buildingsmartalliance.org/nbims03/cobie/core",
+        IncludeInSchema = false)]
     public enum ItemChoiceType
     {
 
@@ -4799,26 +3516,14 @@ namespace Xbim.COBieLite.SerialisationHelper
 
         public string SiteName
         {
-            get
-            {
-                return this.siteNameField;
-            }
-            set
-            {
-                this.siteNameField = value;
-            }
+            get { return this.siteNameField; }
+            set { this.siteNameField = value; }
         }
 
         public string SiteDescription
         {
-            get
-            {
-                return this.siteDescriptionField;
-            }
-            set
-            {
-                this.siteDescriptionField = value;
-            }
+            get { return this.siteDescriptionField; }
+            set { this.siteDescriptionField = value; }
         }
     }
 
@@ -4835,30 +3540,18 @@ namespace Xbim.COBieLite.SerialisationHelper
 
         public string ProjectName
         {
-            get
-            {
-                return this.projectNameField;
-            }
-            set
-            {
-                this.projectNameField = value;
-            }
+            get { return this.projectNameField; }
+            set { this.projectNameField = value; }
         }
 
         public string ProjectDescription
         {
-            get
-            {
-                return this.projectDescriptionField;
-            }
-            set
-            {
-                this.projectDescriptionField = value;
-            }
+            get { return this.projectDescriptionField; }
+            set { this.projectDescriptionField = value; }
         }
     }
 
-    [System.Xml.Serialization.XmlIncludeAttribute(typeof(FacilityType1))]
+    [System.Xml.Serialization.XmlIncludeAttribute(typeof (FacilityType1))]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.34234")]
     [System.SerializableAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
@@ -4870,22 +3563,18 @@ namespace Xbim.COBieLite.SerialisationHelper
 
         public string FacilityName
         {
-            get
-            {
-                return this.facilityNameField;
-            }
-            set
-            {
-                this.facilityNameField = value;
-            }
+            get { return this.facilityNameField; }
+            set { this.facilityNameField = value; }
         }
     }
 
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.34234")]
     [System.SerializableAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(TypeName = "FacilityType", Namespace = "http://docs.buildingsmartalliance.org/nbims03/cobie/cobielite")]
-    [System.Xml.Serialization.XmlRootAttribute("Facility", Namespace = "http://docs.buildingsmartalliance.org/nbims03/cobie/cobielite", IsNullable = false)]
+    [System.Xml.Serialization.XmlTypeAttribute(TypeName = "FacilityType",
+        Namespace = "http://docs.buildingsmartalliance.org/nbims03/cobie/cobielite")]
+    [System.Xml.Serialization.XmlRootAttribute("Facility",
+        Namespace = "http://docs.buildingsmartalliance.org/nbims03/cobie/cobielite", IsNullable = false)]
     public partial class FacilityType1 : FacilityType
     {
 
@@ -4950,303 +3639,184 @@ namespace Xbim.COBieLite.SerialisationHelper
             this.projectAssignmentField = new ProjectType();
         }
 
-        [System.Xml.Serialization.XmlElementAttribute(Namespace = "http://docs.buildingsmartalliance.org/nbims03/cobie/core")]
+        [System.Xml.Serialization.XmlElementAttribute(
+            Namespace = "http://docs.buildingsmartalliance.org/nbims03/cobie/core")]
         public string FacilityCategory
         {
-            get
-            {
-                return this.facilityCategoryField;
-            }
-            set
-            {
-                this.facilityCategoryField = value;
-            }
+            get { return this.facilityCategoryField; }
+            set { this.facilityCategoryField = value; }
         }
 
-        [System.Xml.Serialization.XmlElementAttribute(Namespace = "http://docs.buildingsmartalliance.org/nbims03/cobie/core")]
+        [System.Xml.Serialization.XmlElementAttribute(
+            Namespace = "http://docs.buildingsmartalliance.org/nbims03/cobie/core")]
         public ProjectType ProjectAssignment
         {
-            get
-            {
-                return this.projectAssignmentField;
-            }
-            set
-            {
-                this.projectAssignmentField = value;
-            }
+            get { return this.projectAssignmentField; }
+            set { this.projectAssignmentField = value; }
         }
 
-        [System.Xml.Serialization.XmlElementAttribute(Namespace = "http://docs.buildingsmartalliance.org/nbims03/cobie/core")]
+        [System.Xml.Serialization.XmlElementAttribute(
+            Namespace = "http://docs.buildingsmartalliance.org/nbims03/cobie/core")]
         public SiteType SiteAssignment
         {
-            get
-            {
-                return this.siteAssignmentField;
-            }
-            set
-            {
-                this.siteAssignmentField = value;
-            }
+            get { return this.siteAssignmentField; }
+            set { this.siteAssignmentField = value; }
         }
 
-        [System.Xml.Serialization.XmlElementAttribute(Namespace = "http://docs.buildingsmartalliance.org/nbims03/cobie/core")]
+        [System.Xml.Serialization.XmlElementAttribute(
+            Namespace = "http://docs.buildingsmartalliance.org/nbims03/cobie/core")]
         public LinearUnitSimpleType FacilityDefaultLinearUnit
         {
-            get
-            {
-                return this.facilityDefaultLinearUnitField;
-            }
-            set
-            {
-                this.facilityDefaultLinearUnitField = value;
-            }
+            get { return this.facilityDefaultLinearUnitField; }
+            set { this.facilityDefaultLinearUnitField = value; }
         }
 
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool FacilityDefaultLinearUnitSpecified
         {
-            get
-            {
-                return this.facilityDefaultLinearUnitFieldSpecified;
-            }
-            set
-            {
-                this.facilityDefaultLinearUnitFieldSpecified = value;
-            }
+            get { return this.facilityDefaultLinearUnitFieldSpecified; }
+            set { this.facilityDefaultLinearUnitFieldSpecified = value; }
         }
 
-        [System.Xml.Serialization.XmlElementAttribute(Namespace = "http://docs.buildingsmartalliance.org/nbims03/cobie/core")]
+        [System.Xml.Serialization.XmlElementAttribute(
+            Namespace = "http://docs.buildingsmartalliance.org/nbims03/cobie/core")]
         public AreaUnitSimpleType FacilityDefaultAreaUnit
         {
-            get
-            {
-                return this.facilityDefaultAreaUnitField;
-            }
-            set
-            {
-                this.facilityDefaultAreaUnitField = value;
-            }
+            get { return this.facilityDefaultAreaUnitField; }
+            set { this.facilityDefaultAreaUnitField = value; }
         }
 
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool FacilityDefaultAreaUnitSpecified
         {
-            get
-            {
-                return this.facilityDefaultAreaUnitFieldSpecified;
-            }
-            set
-            {
-                this.facilityDefaultAreaUnitFieldSpecified = value;
-            }
+            get { return this.facilityDefaultAreaUnitFieldSpecified; }
+            set { this.facilityDefaultAreaUnitFieldSpecified = value; }
         }
 
-        [System.Xml.Serialization.XmlElementAttribute(Namespace = "http://docs.buildingsmartalliance.org/nbims03/cobie/core")]
+        [System.Xml.Serialization.XmlElementAttribute(
+            Namespace = "http://docs.buildingsmartalliance.org/nbims03/cobie/core")]
         public VolumeUnitSimpleType FacilityDefaultVolumeUnit
         {
-            get
-            {
-                return this.facilityDefaultVolumeUnitField;
-            }
-            set
-            {
-                this.facilityDefaultVolumeUnitField = value;
-            }
+            get { return this.facilityDefaultVolumeUnitField; }
+            set { this.facilityDefaultVolumeUnitField = value; }
         }
 
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool FacilityDefaultVolumeUnitSpecified
         {
-            get
-            {
-                return this.facilityDefaultVolumeUnitFieldSpecified;
-            }
-            set
-            {
-                this.facilityDefaultVolumeUnitFieldSpecified = value;
-            }
+            get { return this.facilityDefaultVolumeUnitFieldSpecified; }
+            set { this.facilityDefaultVolumeUnitFieldSpecified = value; }
         }
 
-        [System.Xml.Serialization.XmlElementAttribute(Namespace = "http://docs.buildingsmartalliance.org/nbims03/cobie/core")]
+        [System.Xml.Serialization.XmlElementAttribute(
+            Namespace = "http://docs.buildingsmartalliance.org/nbims03/cobie/core")]
         public CurrencyUnitSimpleType FacilityDefaultCurrencyUnit
         {
-            get
-            {
-                return this.facilityDefaultCurrencyUnitField;
-            }
-            set
-            {
-                this.facilityDefaultCurrencyUnitField = value;
-            }
+            get { return this.facilityDefaultCurrencyUnitField; }
+            set { this.facilityDefaultCurrencyUnitField = value; }
         }
 
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool FacilityDefaultCurrencyUnitSpecified
         {
-            get
-            {
-                return this.facilityDefaultCurrencyUnitFieldSpecified;
-            }
-            set
-            {
-                this.facilityDefaultCurrencyUnitFieldSpecified = value;
-            }
+            get { return this.facilityDefaultCurrencyUnitFieldSpecified; }
+            set { this.facilityDefaultCurrencyUnitFieldSpecified = value; }
         }
 
-        [System.Xml.Serialization.XmlElementAttribute(Namespace = "http://docs.buildingsmartalliance.org/nbims03/cobie/core")]
+        [System.Xml.Serialization.XmlElementAttribute(
+            Namespace = "http://docs.buildingsmartalliance.org/nbims03/cobie/core")]
         public string FacilityDefaultMeasurementStandard
         {
-            get
-            {
-                return this.facilityDefaultMeasurementStandardField;
-            }
-            set
-            {
-                this.facilityDefaultMeasurementStandardField = value;
-            }
+            get { return this.facilityDefaultMeasurementStandardField; }
+            set { this.facilityDefaultMeasurementStandardField = value; }
         }
 
-        [System.Xml.Serialization.XmlElementAttribute(Namespace = "http://docs.buildingsmartalliance.org/nbims03/cobie/core")]
+        [System.Xml.Serialization.XmlElementAttribute(
+            Namespace = "http://docs.buildingsmartalliance.org/nbims03/cobie/core")]
         public string FacilityDescription
         {
-            get
-            {
-                return this.facilityDescriptionField;
-            }
-            set
-            {
-                this.facilityDescriptionField = value;
-            }
+            get { return this.facilityDescriptionField; }
+            set { this.facilityDescriptionField = value; }
         }
 
-        [System.Xml.Serialization.XmlElementAttribute(Namespace = "http://docs.buildingsmartalliance.org/nbims03/cobie/core")]
+        [System.Xml.Serialization.XmlElementAttribute(
+            Namespace = "http://docs.buildingsmartalliance.org/nbims03/cobie/core")]
         public string FacilityDeliverablePhaseName
         {
-            get
-            {
-                return this.facilityDeliverablePhaseNameField;
-            }
-            set
-            {
-                this.facilityDeliverablePhaseNameField = value;
-            }
+            get { return this.facilityDeliverablePhaseNameField; }
+            set { this.facilityDeliverablePhaseNameField = value; }
         }
 
-        [System.Xml.Serialization.XmlElementAttribute(Namespace = "http://docs.buildingsmartalliance.org/nbims03/cobie/core")]
+        [System.Xml.Serialization.XmlElementAttribute(
+            Namespace = "http://docs.buildingsmartalliance.org/nbims03/cobie/core")]
         public FloorCollectionType Floors
         {
-            get
-            {
-                return this.floorsField;
-            }
-            set
-            {
-                this.floorsField = value;
-            }
+            get { return this.floorsField; }
+            set { this.floorsField = value; }
         }
 
-        [System.Xml.Serialization.XmlElementAttribute(Namespace = "http://docs.buildingsmartalliance.org/nbims03/cobie/core")]
+        [System.Xml.Serialization.XmlElementAttribute(
+            Namespace = "http://docs.buildingsmartalliance.org/nbims03/cobie/core")]
         public ZoneCollectionType Zones
         {
-            get
-            {
-                return this.zonesField;
-            }
-            set
-            {
-                this.zonesField = value;
-            }
+            get { return this.zonesField; }
+            set { this.zonesField = value; }
         }
 
-        [System.Xml.Serialization.XmlElementAttribute(Namespace = "http://docs.buildingsmartalliance.org/nbims03/cobie/core")]
+        [System.Xml.Serialization.XmlElementAttribute(
+            Namespace = "http://docs.buildingsmartalliance.org/nbims03/cobie/core")]
         public AssetTypeCollectionType AssetTypes
         {
-            get
-            {
-                return this.assetTypesField;
-            }
-            set
-            {
-                this.assetTypesField = value;
-            }
+            get { return this.assetTypesField; }
+            set { this.assetTypesField = value; }
         }
 
-        [System.Xml.Serialization.XmlElementAttribute(Namespace = "http://docs.buildingsmartalliance.org/nbims03/cobie/core")]
+        [System.Xml.Serialization.XmlElementAttribute(
+            Namespace = "http://docs.buildingsmartalliance.org/nbims03/cobie/core")]
         public SystemCollectionType Systems
         {
-            get
-            {
-                return this.systemsField;
-            }
-            set
-            {
-                this.systemsField = value;
-            }
+            get { return this.systemsField; }
+            set { this.systemsField = value; }
         }
 
-        [System.Xml.Serialization.XmlElementAttribute(Namespace = "http://docs.buildingsmartalliance.org/nbims03/cobie/core")]
+        [System.Xml.Serialization.XmlElementAttribute(
+            Namespace = "http://docs.buildingsmartalliance.org/nbims03/cobie/core")]
         public ConnectionCollectionType Connections
         {
-            get
-            {
-                return this.connectionsField;
-            }
-            set
-            {
-                this.connectionsField = value;
-            }
+            get { return this.connectionsField; }
+            set { this.connectionsField = value; }
         }
 
-        [System.Xml.Serialization.XmlElementAttribute(Namespace = "http://docs.buildingsmartalliance.org/nbims03/cobie/core")]
+        [System.Xml.Serialization.XmlElementAttribute(
+            Namespace = "http://docs.buildingsmartalliance.org/nbims03/cobie/core")]
         public ContactCollectionType Contacts
         {
-            get
-            {
-                return this.contactsField;
-            }
-            set
-            {
-                this.contactsField = value;
-            }
+            get { return this.contactsField; }
+            set { this.contactsField = value; }
         }
 
-        [System.Xml.Serialization.XmlElementAttribute(Namespace = "http://docs.buildingsmartalliance.org/nbims03/cobie/core")]
+        [System.Xml.Serialization.XmlElementAttribute(
+            Namespace = "http://docs.buildingsmartalliance.org/nbims03/cobie/core")]
         public AttributeCollectionType FacilityAttributes
         {
-            get
-            {
-                return this.facilityAttributesField;
-            }
-            set
-            {
-                this.facilityAttributesField = value;
-            }
+            get { return this.facilityAttributesField; }
+            set { this.facilityAttributesField = value; }
         }
 
-        [System.Xml.Serialization.XmlElementAttribute(Namespace = "http://docs.buildingsmartalliance.org/nbims03/cobie/core")]
+        [System.Xml.Serialization.XmlElementAttribute(
+            Namespace = "http://docs.buildingsmartalliance.org/nbims03/cobie/core")]
         public DocumentCollectionType FacilityDocuments
         {
-            get
-            {
-                return this.facilityDocumentsField;
-            }
-            set
-            {
-                this.facilityDocumentsField = value;
-            }
+            get { return this.facilityDocumentsField; }
+            set { this.facilityDocumentsField = value; }
         }
 
-        [System.Xml.Serialization.XmlElementAttribute(Namespace = "http://docs.buildingsmartalliance.org/nbims03/cobie/core")]
+        [System.Xml.Serialization.XmlElementAttribute(
+            Namespace = "http://docs.buildingsmartalliance.org/nbims03/cobie/core")]
         public IssueCollectionType FacilityIssues
         {
-            get
-            {
-                return this.facilityIssuesField;
-            }
-            set
-            {
-                this.facilityIssuesField = value;
-            }
+            get { return this.facilityIssuesField; }
+            set { this.facilityIssuesField = value; }
         }
     }
 
@@ -5288,40 +3858,31 @@ namespace Xbim.COBieLite.SerialisationHelper
     {
 
         /// <remarks/>
-        [System.Xml.Serialization.XmlEnumAttribute("square centimeters")]
-        squarecentimeters,
+        [System.Xml.Serialization.XmlEnumAttribute("square centimeters")] squarecentimeters,
 
         /// <remarks/>
-        [System.Xml.Serialization.XmlEnumAttribute("square feet")]
-        squarefeet,
+        [System.Xml.Serialization.XmlEnumAttribute("square feet")] squarefeet,
 
         /// <remarks/>
-        [System.Xml.Serialization.XmlEnumAttribute("square inches")]
-        squareinches,
+        [System.Xml.Serialization.XmlEnumAttribute("square inches")] squareinches,
 
         /// <remarks/>
-        [System.Xml.Serialization.XmlEnumAttribute("square kilometers")]
-        squarekilometers,
+        [System.Xml.Serialization.XmlEnumAttribute("square kilometers")] squarekilometers,
 
         /// <remarks/>
-        [System.Xml.Serialization.XmlEnumAttribute("square meters")]
-        squaremeters,
+        [System.Xml.Serialization.XmlEnumAttribute("square meters")] squaremeters,
 
         /// <remarks/>
-        [System.Xml.Serialization.XmlEnumAttribute("square miles")]
-        squaremiles,
+        [System.Xml.Serialization.XmlEnumAttribute("square miles")] squaremiles,
 
         /// <remarks/>
-        [System.Xml.Serialization.XmlEnumAttribute("square millimeters")]
-        squaremillimeters,
+        [System.Xml.Serialization.XmlEnumAttribute("square millimeters")] squaremillimeters,
 
         /// <remarks/>
-        [System.Xml.Serialization.XmlEnumAttribute("square yards")]
-        squareyards,
+        [System.Xml.Serialization.XmlEnumAttribute("square yards")] squareyards,
 
         /// <remarks/>
-        [System.Xml.Serialization.XmlEnumAttribute("")]
-        Item,
+        [System.Xml.Serialization.XmlEnumAttribute("")] Item,
     }
 
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.34234")]
@@ -5331,35 +3892,31 @@ namespace Xbim.COBieLite.SerialisationHelper
     {
 
         /// <remarks/>
-        [System.Xml.Serialization.XmlEnumAttribute("cubic centimeters")]
-        cubiccentimeters,
+        [System.Xml.Serialization.XmlEnumAttribute("cubic centimeters")] cubiccentimeters,
 
         /// <remarks/>
-        [System.Xml.Serialization.XmlEnumAttribute("cubic feet")]
-        cubicfeet,
+        [System.Xml.Serialization.XmlEnumAttribute("cubic feet")] cubicfeet,
 
         /// <remarks/>
-        [System.Xml.Serialization.XmlEnumAttribute("cubic inches")]
-        cubicinches,
+        [System.Xml.Serialization.XmlEnumAttribute("cubic inches")] cubicinches,
 
         /// <remarks/>
-        [System.Xml.Serialization.XmlEnumAttribute("cubic meters")]
-        cubicmeters,
+        [System.Xml.Serialization.XmlEnumAttribute("cubic meters")] cubicmeters,
 
         /// <remarks/>
-        [System.Xml.Serialization.XmlEnumAttribute("cubic millimeters")]
-        cubicmillimeters,
+        [System.Xml.Serialization.XmlEnumAttribute("cubic millimeters")] cubicmillimeters,
 
         /// <remarks/>
-        [System.Xml.Serialization.XmlEnumAttribute("cubic yards")]
-        cubicyards,
+        [System.Xml.Serialization.XmlEnumAttribute("cubic yards")] cubicyards,
     }
 
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.34234")]
     [System.SerializableAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(TypeName = "AttributeType", Namespace = "http://docs.buildingsmartalliance.org/nbims03/cobie/cobielite")]
-    [System.Xml.Serialization.XmlRootAttribute("Attribute", Namespace = "http://docs.buildingsmartalliance.org/nbims03/cobie/cobielite", IsNullable = false)]
+    [System.Xml.Serialization.XmlTypeAttribute(TypeName = "AttributeType",
+        Namespace = "http://docs.buildingsmartalliance.org/nbims03/cobie/cobielite")]
+    [System.Xml.Serialization.XmlRootAttribute("Attribute",
+        Namespace = "http://docs.buildingsmartalliance.org/nbims03/cobie/cobielite", IsNullable = false)]
     public partial class AttributeType1 : AttributeType
     {
 
@@ -5375,43 +3932,28 @@ namespace Xbim.COBieLite.SerialisationHelper
             this.attributeValueField = new AttributeValueType();
         }
 
-        [System.Xml.Serialization.XmlElementAttribute(Namespace = "http://docs.buildingsmartalliance.org/nbims03/cobie/core")]
+        [System.Xml.Serialization.XmlElementAttribute(
+            Namespace = "http://docs.buildingsmartalliance.org/nbims03/cobie/core")]
         public string AttributeDescription
         {
-            get
-            {
-                return this.attributeDescriptionField;
-            }
-            set
-            {
-                this.attributeDescriptionField = value;
-            }
+            get { return this.attributeDescriptionField; }
+            set { this.attributeDescriptionField = value; }
         }
 
-        [System.Xml.Serialization.XmlElementAttribute(Namespace = "http://docs.buildingsmartalliance.org/nbims03/cobie/core")]
+        [System.Xml.Serialization.XmlElementAttribute(
+            Namespace = "http://docs.buildingsmartalliance.org/nbims03/cobie/core")]
         public AttributeValueType AttributeValue
         {
-            get
-            {
-                return this.attributeValueField;
-            }
-            set
-            {
-                this.attributeValueField = value;
-            }
+            get { return this.attributeValueField; }
+            set { this.attributeValueField = value; }
         }
 
-        [System.Xml.Serialization.XmlElementAttribute(Namespace = "http://docs.buildingsmartalliance.org/nbims03/cobie/core")]
+        [System.Xml.Serialization.XmlElementAttribute(
+            Namespace = "http://docs.buildingsmartalliance.org/nbims03/cobie/core")]
         public IssueCollectionType AttributeIssues
         {
-            get
-            {
-                return this.attributeIssuesField;
-            }
-            set
-            {
-                this.attributeIssuesField = value;
-            }
+            get { return this.attributeIssuesField; }
+            set { this.attributeIssuesField = value; }
         }
     }
 }
