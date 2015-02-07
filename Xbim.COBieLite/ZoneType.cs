@@ -5,10 +5,7 @@ namespace Xbim.COBieLite
 {
     public partial class ZoneType
     {
-        public ZoneType()
-        {
-            
-        }
+    
 
         public ZoneType(IfcZone ifcZone, CoBieLiteHelper helper)
             : this()

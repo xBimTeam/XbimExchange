@@ -11,10 +11,7 @@ namespace Xbim.COBieLite
 {
     public partial class ContactType
     {
-        public ContactType()
-        {
-            
-        }
+    
 
 
         /// <summary>

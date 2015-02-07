@@ -69,11 +69,11 @@ namespace XbimExchanger.DPoWToCOBieLite
             switch (units)
             {
                 case CurrencyUnits.USD:
-                    return CurrencyUnitSimpleType.USD;
+                    return CurrencyUnitSimpleType.Dollars;
                 case CurrencyUnits.EUR:
-                    return CurrencyUnitSimpleType.EUR;
+                    return CurrencyUnitSimpleType.Euros;
                 case CurrencyUnits.GBP:
-                    return CurrencyUnitSimpleType.GBP;
+                    return CurrencyUnitSimpleType.BritishPounds;
                 default:
                     throw new ArgumentException("Unexpected unit");
             }

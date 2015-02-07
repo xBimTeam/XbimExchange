@@ -11,10 +11,7 @@ namespace Xbim.COBieLite
     public partial class AssetTypeInfoType
     {
        
-        public AssetTypeInfoType()
-        {
-            
-        }
+     
 
         public AssetTypeInfoType(IfcTypeObject ifcTypeObject, CoBieLiteHelper helper)
             : this()
