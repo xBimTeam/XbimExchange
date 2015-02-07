@@ -13,7 +13,7 @@ namespace Tests
         [TestMethod]
         public void COBieLiteUKCreation()
         {
-            var model = new ProjectType1();
+            var model = new ProjectType();
             model.ProjectStages = new List<ProjectStageType>();
             model.ProjectStages.AddRange(new[]{
                 new ProjectStageType(){
@@ -25,14 +25,14 @@ namespace Tests
                     ProjectStageEndDate = DateTime.Now.AddDays(28),
                     ProjectStageAttributes = new AttributeCollectionType(){
                         Attribute = new List<AttributeType>(new []{
-                            new AttributeType1(){
+                            new AttributeType(){
                                 AttributeName = "New attribute 1",
                                 externalID = Guid.NewGuid().ToString(),
                                 AttributeCategory = "Requirement",
                                 AttributeValue = new AttributeValueType(){Item = new AttributeStringValueType(){StringValue = "Value AAA"},
                                     ItemElementName = ItemChoiceType.AttributeStringValue}
                             },
-                            new AttributeType1(){
+                            new AttributeType(){
                                 AttributeName = "New attribute 2",
                                 externalID = Guid.NewGuid().ToString(),
                                 AttributeCategory = "Requirement",
@@ -41,7 +41,7 @@ namespace Tests
                             }
                         })
                     },
-                    Facility = new FacilityType1(){
+                    Facility = new FacilityType(){
                         externalID = Guid.NewGuid().ToString(),
                         FacilityDefaultAreaUnit = AreaUnitSimpleType.squaremeters,
                         FacilityDefaultAreaUnitSpecified = true,
@@ -58,7 +58,7 @@ namespace Tests
                         ProjectAssignment = new ProjectType(){externalID = Guid.NewGuid().ToString(), ProjectName = "Project A"},
                         SiteAssignment = new SiteType(){externalID = Guid.NewGuid().ToString(), SiteName = "Site A"},
                         Zones = new ZoneCollectionType(){Zone = new List<ZoneType>(new []{
-                            new ZoneType1(){
+                            new ZoneType(){
                                 externalID = Guid.NewGuid().ToString(),
                                 ZoneName = "Zone A",
                                 ZoneCategory = "45.789.78",
@@ -76,14 +76,14 @@ namespace Tests
                     ProjectStageEndDate = DateTime.Now.AddDays(28),
                     ProjectStageAttributes = new AttributeCollectionType(){
                         Attribute = new List<AttributeType>(new []{
-                            new AttributeType1(){
+                            new AttributeType(){
                                 AttributeName = "New attribute 1",
                                 externalID = Guid.NewGuid().ToString(),
                                 AttributeCategory = "Requirement",
                                 AttributeValue = new AttributeValueType(){Item = new AttributeStringValueType(){StringValue = "Value AAA"},
                                     ItemElementName = ItemChoiceType.AttributeStringValue}
                             },
-                            new AttributeType1(){
+                            new AttributeType(){
                                 AttributeName = "New attribute 2",
                                 externalID = Guid.NewGuid().ToString(),
                                 AttributeCategory = "Requirement",
@@ -92,7 +92,7 @@ namespace Tests
                             }
                         })
                     },
-                    Facility = new FacilityType1(){
+                    Facility = new FacilityType(){
                         externalID = Guid.NewGuid().ToString(),
                         FacilityDefaultAreaUnit = AreaUnitSimpleType.squaremeters,
                         FacilityDefaultAreaUnitSpecified = true,
@@ -109,7 +109,7 @@ namespace Tests
                         ProjectAssignment = new ProjectType(){externalID = Guid.NewGuid().ToString(), ProjectName = "Project A"},
                         SiteAssignment = new SiteType(){externalID = Guid.NewGuid().ToString(), SiteName = "Site A"},
                         Zones = new ZoneCollectionType(){Zone = new List<ZoneType>(new []{
-                            new ZoneType1(){
+                            new ZoneType(){
                                 externalID = Guid.NewGuid().ToString(),
                                 ZoneName = "Zone A",
                                 ZoneCategory = "45.789.78",
@@ -127,7 +127,7 @@ namespace Tests
                     ProjectStageEndDate = DateTime.Now.AddDays(28),
                     ProjectStageAttributes = new AttributeCollectionType(){
                         Attribute = new List<AttributeType>(new []{
-                            new AttributeType1(){
+                            new AttributeType(){
                                 AttributeName = "New attribute 1",
                                 externalID = Guid.NewGuid().ToString(),
                                 AttributeCategory = "Requirement",
@@ -136,7 +136,7 @@ namespace Tests
                                     ItemElementName = ItemChoiceType.AttributeStringValue
                                 }
                             },
-                            new AttributeType1(){
+                            new AttributeType(){
                                 AttributeName = "New attribute 2",
                                 externalID = Guid.NewGuid().ToString(),
                                 AttributeCategory = "Requirement",
@@ -147,7 +147,7 @@ namespace Tests
                             }
                         })
                     },
-                    Facility = new FacilityType1(){
+                    Facility = new FacilityType(){
                         externalID = Guid.NewGuid().ToString(),
                         FacilityDefaultAreaUnit = AreaUnitSimpleType.squaremeters,
                         FacilityDefaultAreaUnitSpecified = true,
@@ -164,7 +164,7 @@ namespace Tests
                         ProjectAssignment = new ProjectType(){externalID = Guid.NewGuid().ToString(), ProjectName = "Project A"},
                         SiteAssignment = new SiteType(){externalID = Guid.NewGuid().ToString(), SiteName = "Site A"},
                         Zones = new ZoneCollectionType(){Zone = new List<ZoneType>(new []{
-                            new ZoneType1(){
+                            new ZoneType(){
                                 externalID = Guid.NewGuid().ToString(),
                                 ZoneName = "Zone A",
                                 ZoneCategory = "45.789.78",

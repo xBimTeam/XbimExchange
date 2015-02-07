@@ -4,7 +4,7 @@
 //    <NameSpace>Xbim.COBieLiteUK.SerialisationHelper</NameSpace><Collection>List</Collection><codeType>CSharp</codeType><EnableDataBinding>False</EnableDataBinding><EnableLazyLoading>False</EnableLazyLoading><TrackingChangesEnable>False</TrackingChangesEnable><GenTrackingClasses>False</GenTrackingClasses><HidePrivateFieldInIDE>False</HidePrivateFieldInIDE><EnableSummaryComment>False</EnableSummaryComment><VirtualProp>False</VirtualProp><IncludeSerializeMethod>False</IncludeSerializeMethod><UseBaseClass>False</UseBaseClass><GenBaseClass>False</GenBaseClass><GenerateCloneMethod>False</GenerateCloneMethod><GenerateDataContracts>False</GenerateDataContracts><CodeBaseTag>Net40</CodeBaseTag><SerializeMethodName>Serialize</SerializeMethodName><DeserializeMethodName>Deserialize</DeserializeMethodName><SaveToFileMethodName>SaveToFile</SaveToFileMethodName><LoadFromFileMethodName>LoadFromFile</LoadFromFileMethodName><GenerateXMLAttributes>True</GenerateXMLAttributes><OrderXMLAttrib>True</OrderXMLAttrib><EnableEncoding>False</EnableEncoding><AutomaticProperties>False</AutomaticProperties><GenerateShouldSerialize>False</GenerateShouldSerialize><DisableDebug>False</DisableDebug><PropNameSpecified>Default</PropNameSpecified><Encoder>UTF8</Encoder><CustomUsings></CustomUsings><ExcludeIncludedTypes>False</ExcludeIncludedTypes><EnableInitializeFields>True</EnableInitializeFields>
 //  </auto-generated>
 // ------------------------------------------------------------------------------
-namespace Xbim.COBieLiteUK.SerialisationHelper
+namespace Xbim.COBieLiteUK
 {
     using System;
     using System.Diagnostics;
@@ -18,11 +18,11 @@ namespace Xbim.COBieLiteUK.SerialisationHelper
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.34234")]
     [System.SerializableAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(TypeName = "ProjectType",
+    [System.Xml.Serialization.XmlTypeAttribute(TypeName = "ProjectTypeBase",
         Namespace = "http://docs.buildingsmartalliance.org/nbims03/cobie/cobielite")]
     [System.Xml.Serialization.XmlRootAttribute("Project",
         Namespace = "http://docs.buildingsmartalliance.org/nbims03/cobie/cobielite", IsNullable = false)]
-    public partial class ProjectType1 : ProjectType
+    public partial class ProjectType : ProjectTypeBase
     {
 
         private string projectAddressField;
@@ -45,7 +45,7 @@ namespace Xbim.COBieLiteUK.SerialisationHelper
 
         private string externalID1Field;
 
-        public ProjectType1()
+        public ProjectType()
         {
             this.projectStagesField = new List<ProjectStageType>();
             this.projectCostField = new DecimalValueType();
@@ -230,42 +230,42 @@ namespace Xbim.COBieLiteUK.SerialisationHelper
     [System.Xml.Serialization.XmlIncludeAttribute(typeof (AssetCollectionType))]
     [System.Xml.Serialization.XmlIncludeAttribute(typeof (CobieBaseType))]
     [System.Xml.Serialization.XmlIncludeAttribute(typeof (SiteType))]
+    [System.Xml.Serialization.XmlIncludeAttribute(typeof (ProjectTypeBase))]
     [System.Xml.Serialization.XmlIncludeAttribute(typeof (ProjectType))]
-    [System.Xml.Serialization.XmlIncludeAttribute(typeof (ProjectType1))]
+    [System.Xml.Serialization.XmlIncludeAttribute(typeof (SpaceTypeBase))]
     [System.Xml.Serialization.XmlIncludeAttribute(typeof (SpaceType))]
-    [System.Xml.Serialization.XmlIncludeAttribute(typeof (SpaceType1))]
     [System.Xml.Serialization.XmlIncludeAttribute(typeof (WarrantyType))]
     [System.Xml.Serialization.XmlIncludeAttribute(typeof (CobieRowType))]
+    [System.Xml.Serialization.XmlIncludeAttribute(typeof (FacilityTypeBase))]
     [System.Xml.Serialization.XmlIncludeAttribute(typeof (FacilityType))]
-    [System.Xml.Serialization.XmlIncludeAttribute(typeof (FacilityType1))]
+    [System.Xml.Serialization.XmlIncludeAttribute(typeof (ZoneTypeBase))]
     [System.Xml.Serialization.XmlIncludeAttribute(typeof (ZoneType))]
-    [System.Xml.Serialization.XmlIncludeAttribute(typeof (ZoneType1))]
+    [System.Xml.Serialization.XmlIncludeAttribute(typeof (SystemTypeBase))]
     [System.Xml.Serialization.XmlIncludeAttribute(typeof (SystemType))]
-    [System.Xml.Serialization.XmlIncludeAttribute(typeof (SystemType1))]
+    [System.Xml.Serialization.XmlIncludeAttribute(typeof (FloorTypeBase))]
     [System.Xml.Serialization.XmlIncludeAttribute(typeof (FloorType))]
-    [System.Xml.Serialization.XmlIncludeAttribute(typeof (FloorType1))]
+    [System.Xml.Serialization.XmlIncludeAttribute(typeof (ContactTypeBase))]
     [System.Xml.Serialization.XmlIncludeAttribute(typeof (ContactType))]
-    [System.Xml.Serialization.XmlIncludeAttribute(typeof (ContactType1))]
+    [System.Xml.Serialization.XmlIncludeAttribute(typeof (ConnectionTypeBase))]
     [System.Xml.Serialization.XmlIncludeAttribute(typeof (ConnectionType))]
-    [System.Xml.Serialization.XmlIncludeAttribute(typeof (ConnectionType1))]
+    [System.Xml.Serialization.XmlIncludeAttribute(typeof (ResourceTypeBase))]
     [System.Xml.Serialization.XmlIncludeAttribute(typeof (ResourceType))]
-    [System.Xml.Serialization.XmlIncludeAttribute(typeof (ResourceType1))]
+    [System.Xml.Serialization.XmlIncludeAttribute(typeof (JobTypeBase))]
     [System.Xml.Serialization.XmlIncludeAttribute(typeof (JobType))]
-    [System.Xml.Serialization.XmlIncludeAttribute(typeof (JobType1))]
+    [System.Xml.Serialization.XmlIncludeAttribute(typeof (SpareTypeBase))]
     [System.Xml.Serialization.XmlIncludeAttribute(typeof (SpareType))]
-    [System.Xml.Serialization.XmlIncludeAttribute(typeof (SpareType1))]
+    [System.Xml.Serialization.XmlIncludeAttribute(typeof (AssetTypeInfoTypeBase))]
     [System.Xml.Serialization.XmlIncludeAttribute(typeof (AssetTypeInfoType))]
-    [System.Xml.Serialization.XmlIncludeAttribute(typeof (AssetTypeInfoType1))]
+    [System.Xml.Serialization.XmlIncludeAttribute(typeof (DocumentTypeBase))]
     [System.Xml.Serialization.XmlIncludeAttribute(typeof (DocumentType))]
-    [System.Xml.Serialization.XmlIncludeAttribute(typeof (DocumentType1))]
+    [System.Xml.Serialization.XmlIncludeAttribute(typeof (IssueTypeBase))]
     [System.Xml.Serialization.XmlIncludeAttribute(typeof (IssueType))]
-    [System.Xml.Serialization.XmlIncludeAttribute(typeof (IssueType1))]
+    [System.Xml.Serialization.XmlIncludeAttribute(typeof (AttributeTypeBase))]
     [System.Xml.Serialization.XmlIncludeAttribute(typeof (AttributeType))]
-    [System.Xml.Serialization.XmlIncludeAttribute(typeof (AttributeType1))]
+    [System.Xml.Serialization.XmlIncludeAttribute(typeof (AssetInfoTypeBase))]
     [System.Xml.Serialization.XmlIncludeAttribute(typeof (AssetInfoType))]
-    [System.Xml.Serialization.XmlIncludeAttribute(typeof (AssetInfoType1))]
+    [System.Xml.Serialization.XmlIncludeAttribute(typeof (AssemblyTypeBase))]
     [System.Xml.Serialization.XmlIncludeAttribute(typeof (AssemblyType))]
-    [System.Xml.Serialization.XmlIncludeAttribute(typeof (AssemblyType1))]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.34234")]
     [System.SerializableAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
@@ -320,7 +320,7 @@ namespace Xbim.COBieLiteUK.SerialisationHelper
 
         private AttributeCollectionType projectStageAttributesField;
 
-        private FacilityType1 facilityField;
+        private FacilityType facilityField;
 
         private ProjectStageKeyType projectStagePreviousField;
 
@@ -332,7 +332,7 @@ namespace Xbim.COBieLiteUK.SerialisationHelper
         {
             this.projectStageNextField = new ProjectStageKeyType();
             this.projectStagePreviousField = new ProjectStageKeyType();
-            this.facilityField = new FacilityType1();
+            this.facilityField = new FacilityType();
             this.projectStageAttributesField = new AttributeCollectionType();
             this.projectStageCostField = new DecimalValueType();
         }
@@ -396,7 +396,7 @@ namespace Xbim.COBieLiteUK.SerialisationHelper
         }
 
         [System.Xml.Serialization.XmlElementAttribute(Form = System.Xml.Schema.XmlSchemaForm.Unqualified, Order = 8)]
-        public FacilityType1 Facility
+        public FacilityType Facility
         {
             get { return this.facilityField; }
             set { this.facilityField = value; }
@@ -446,12 +446,12 @@ namespace Xbim.COBieLiteUK.SerialisationHelper
         }
     }
 
-    [System.Xml.Serialization.XmlIncludeAttribute(typeof (AttributeType1))]
+    [System.Xml.Serialization.XmlIncludeAttribute(typeof (AttributeType))]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.34234")]
     [System.SerializableAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://docs.buildingsmartalliance.org/nbims03/cobie/core")]
-    public partial class AttributeType : CobieRowType
+    public partial class AttributeTypeBase : CobieRowType
     {
 
         private string attributeNameField;
@@ -491,36 +491,36 @@ namespace Xbim.COBieLiteUK.SerialisationHelper
         }
     }
 
+    [System.Xml.Serialization.XmlIncludeAttribute(typeof (FacilityTypeBase))]
     [System.Xml.Serialization.XmlIncludeAttribute(typeof (FacilityType))]
-    [System.Xml.Serialization.XmlIncludeAttribute(typeof (FacilityType1))]
+    [System.Xml.Serialization.XmlIncludeAttribute(typeof (ZoneTypeBase))]
     [System.Xml.Serialization.XmlIncludeAttribute(typeof (ZoneType))]
-    [System.Xml.Serialization.XmlIncludeAttribute(typeof (ZoneType1))]
+    [System.Xml.Serialization.XmlIncludeAttribute(typeof (SystemTypeBase))]
     [System.Xml.Serialization.XmlIncludeAttribute(typeof (SystemType))]
-    [System.Xml.Serialization.XmlIncludeAttribute(typeof (SystemType1))]
+    [System.Xml.Serialization.XmlIncludeAttribute(typeof (FloorTypeBase))]
     [System.Xml.Serialization.XmlIncludeAttribute(typeof (FloorType))]
-    [System.Xml.Serialization.XmlIncludeAttribute(typeof (FloorType1))]
+    [System.Xml.Serialization.XmlIncludeAttribute(typeof (ContactTypeBase))]
     [System.Xml.Serialization.XmlIncludeAttribute(typeof (ContactType))]
-    [System.Xml.Serialization.XmlIncludeAttribute(typeof (ContactType1))]
+    [System.Xml.Serialization.XmlIncludeAttribute(typeof (ConnectionTypeBase))]
     [System.Xml.Serialization.XmlIncludeAttribute(typeof (ConnectionType))]
-    [System.Xml.Serialization.XmlIncludeAttribute(typeof (ConnectionType1))]
+    [System.Xml.Serialization.XmlIncludeAttribute(typeof (ResourceTypeBase))]
     [System.Xml.Serialization.XmlIncludeAttribute(typeof (ResourceType))]
-    [System.Xml.Serialization.XmlIncludeAttribute(typeof (ResourceType1))]
+    [System.Xml.Serialization.XmlIncludeAttribute(typeof (JobTypeBase))]
     [System.Xml.Serialization.XmlIncludeAttribute(typeof (JobType))]
-    [System.Xml.Serialization.XmlIncludeAttribute(typeof (JobType1))]
+    [System.Xml.Serialization.XmlIncludeAttribute(typeof (SpareTypeBase))]
     [System.Xml.Serialization.XmlIncludeAttribute(typeof (SpareType))]
-    [System.Xml.Serialization.XmlIncludeAttribute(typeof (SpareType1))]
+    [System.Xml.Serialization.XmlIncludeAttribute(typeof (AssetTypeInfoTypeBase))]
     [System.Xml.Serialization.XmlIncludeAttribute(typeof (AssetTypeInfoType))]
-    [System.Xml.Serialization.XmlIncludeAttribute(typeof (AssetTypeInfoType1))]
+    [System.Xml.Serialization.XmlIncludeAttribute(typeof (DocumentTypeBase))]
     [System.Xml.Serialization.XmlIncludeAttribute(typeof (DocumentType))]
-    [System.Xml.Serialization.XmlIncludeAttribute(typeof (DocumentType1))]
+    [System.Xml.Serialization.XmlIncludeAttribute(typeof (IssueTypeBase))]
     [System.Xml.Serialization.XmlIncludeAttribute(typeof (IssueType))]
-    [System.Xml.Serialization.XmlIncludeAttribute(typeof (IssueType1))]
+    [System.Xml.Serialization.XmlIncludeAttribute(typeof (AttributeTypeBase))]
     [System.Xml.Serialization.XmlIncludeAttribute(typeof (AttributeType))]
-    [System.Xml.Serialization.XmlIncludeAttribute(typeof (AttributeType1))]
+    [System.Xml.Serialization.XmlIncludeAttribute(typeof (AssetInfoTypeBase))]
     [System.Xml.Serialization.XmlIncludeAttribute(typeof (AssetInfoType))]
-    [System.Xml.Serialization.XmlIncludeAttribute(typeof (AssetInfoType1))]
+    [System.Xml.Serialization.XmlIncludeAttribute(typeof (AssemblyTypeBase))]
     [System.Xml.Serialization.XmlIncludeAttribute(typeof (AssemblyType))]
-    [System.Xml.Serialization.XmlIncludeAttribute(typeof (AssemblyType1))]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.34234")]
     [System.SerializableAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
@@ -530,42 +530,42 @@ namespace Xbim.COBieLiteUK.SerialisationHelper
     }
 
     [System.Xml.Serialization.XmlIncludeAttribute(typeof (SiteType))]
+    [System.Xml.Serialization.XmlIncludeAttribute(typeof (ProjectTypeBase))]
     [System.Xml.Serialization.XmlIncludeAttribute(typeof (ProjectType))]
-    [System.Xml.Serialization.XmlIncludeAttribute(typeof (ProjectType1))]
+    [System.Xml.Serialization.XmlIncludeAttribute(typeof (SpaceTypeBase))]
     [System.Xml.Serialization.XmlIncludeAttribute(typeof (SpaceType))]
-    [System.Xml.Serialization.XmlIncludeAttribute(typeof (SpaceType1))]
     [System.Xml.Serialization.XmlIncludeAttribute(typeof (WarrantyType))]
     [System.Xml.Serialization.XmlIncludeAttribute(typeof (CobieRowType))]
+    [System.Xml.Serialization.XmlIncludeAttribute(typeof (FacilityTypeBase))]
     [System.Xml.Serialization.XmlIncludeAttribute(typeof (FacilityType))]
-    [System.Xml.Serialization.XmlIncludeAttribute(typeof (FacilityType1))]
+    [System.Xml.Serialization.XmlIncludeAttribute(typeof (ZoneTypeBase))]
     [System.Xml.Serialization.XmlIncludeAttribute(typeof (ZoneType))]
-    [System.Xml.Serialization.XmlIncludeAttribute(typeof (ZoneType1))]
+    [System.Xml.Serialization.XmlIncludeAttribute(typeof (SystemTypeBase))]
     [System.Xml.Serialization.XmlIncludeAttribute(typeof (SystemType))]
-    [System.Xml.Serialization.XmlIncludeAttribute(typeof (SystemType1))]
+    [System.Xml.Serialization.XmlIncludeAttribute(typeof (FloorTypeBase))]
     [System.Xml.Serialization.XmlIncludeAttribute(typeof (FloorType))]
-    [System.Xml.Serialization.XmlIncludeAttribute(typeof (FloorType1))]
+    [System.Xml.Serialization.XmlIncludeAttribute(typeof (ContactTypeBase))]
     [System.Xml.Serialization.XmlIncludeAttribute(typeof (ContactType))]
-    [System.Xml.Serialization.XmlIncludeAttribute(typeof (ContactType1))]
+    [System.Xml.Serialization.XmlIncludeAttribute(typeof (ConnectionTypeBase))]
     [System.Xml.Serialization.XmlIncludeAttribute(typeof (ConnectionType))]
-    [System.Xml.Serialization.XmlIncludeAttribute(typeof (ConnectionType1))]
+    [System.Xml.Serialization.XmlIncludeAttribute(typeof (ResourceTypeBase))]
     [System.Xml.Serialization.XmlIncludeAttribute(typeof (ResourceType))]
-    [System.Xml.Serialization.XmlIncludeAttribute(typeof (ResourceType1))]
+    [System.Xml.Serialization.XmlIncludeAttribute(typeof (JobTypeBase))]
     [System.Xml.Serialization.XmlIncludeAttribute(typeof (JobType))]
-    [System.Xml.Serialization.XmlIncludeAttribute(typeof (JobType1))]
+    [System.Xml.Serialization.XmlIncludeAttribute(typeof (SpareTypeBase))]
     [System.Xml.Serialization.XmlIncludeAttribute(typeof (SpareType))]
-    [System.Xml.Serialization.XmlIncludeAttribute(typeof (SpareType1))]
+    [System.Xml.Serialization.XmlIncludeAttribute(typeof (AssetTypeInfoTypeBase))]
     [System.Xml.Serialization.XmlIncludeAttribute(typeof (AssetTypeInfoType))]
-    [System.Xml.Serialization.XmlIncludeAttribute(typeof (AssetTypeInfoType1))]
+    [System.Xml.Serialization.XmlIncludeAttribute(typeof (DocumentTypeBase))]
     [System.Xml.Serialization.XmlIncludeAttribute(typeof (DocumentType))]
-    [System.Xml.Serialization.XmlIncludeAttribute(typeof (DocumentType1))]
+    [System.Xml.Serialization.XmlIncludeAttribute(typeof (IssueTypeBase))]
     [System.Xml.Serialization.XmlIncludeAttribute(typeof (IssueType))]
-    [System.Xml.Serialization.XmlIncludeAttribute(typeof (IssueType1))]
+    [System.Xml.Serialization.XmlIncludeAttribute(typeof (AttributeTypeBase))]
     [System.Xml.Serialization.XmlIncludeAttribute(typeof (AttributeType))]
-    [System.Xml.Serialization.XmlIncludeAttribute(typeof (AttributeType1))]
+    [System.Xml.Serialization.XmlIncludeAttribute(typeof (AssetInfoTypeBase))]
     [System.Xml.Serialization.XmlIncludeAttribute(typeof (AssetInfoType))]
-    [System.Xml.Serialization.XmlIncludeAttribute(typeof (AssetInfoType1))]
+    [System.Xml.Serialization.XmlIncludeAttribute(typeof (AssemblyTypeBase))]
     [System.Xml.Serialization.XmlIncludeAttribute(typeof (AssemblyType))]
-    [System.Xml.Serialization.XmlIncludeAttribute(typeof (AssemblyType1))]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.34234")]
     [System.SerializableAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
@@ -627,12 +627,12 @@ namespace Xbim.COBieLiteUK.SerialisationHelper
         }
     }
 
-    [System.Xml.Serialization.XmlIncludeAttribute(typeof (ProjectType1))]
+    [System.Xml.Serialization.XmlIncludeAttribute(typeof (ProjectType))]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.34234")]
     [System.SerializableAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://docs.buildingsmartalliance.org/nbims03/cobie/core")]
-    public partial class ProjectType : CobieBaseType
+    public partial class ProjectTypeBase : CobieBaseType
     {
 
         private string projectNameField;
@@ -654,12 +654,12 @@ namespace Xbim.COBieLiteUK.SerialisationHelper
         }
     }
 
-    [System.Xml.Serialization.XmlIncludeAttribute(typeof (SpaceType1))]
+    [System.Xml.Serialization.XmlIncludeAttribute(typeof (SpaceType))]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.34234")]
     [System.SerializableAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://docs.buildingsmartalliance.org/nbims03/cobie/core")]
-    public partial class SpaceType : CobieBaseType
+    public partial class SpaceTypeBase : CobieBaseType
     {
 
         private string spaceNameField;
@@ -675,11 +675,11 @@ namespace Xbim.COBieLiteUK.SerialisationHelper
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.34234")]
     [System.SerializableAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(TypeName = "SpaceType",
+    [System.Xml.Serialization.XmlTypeAttribute(TypeName = "SpaceTypeBase",
         Namespace = "http://docs.buildingsmartalliance.org/nbims03/cobie/cobielite")]
     [System.Xml.Serialization.XmlRootAttribute("Space",
         Namespace = "http://docs.buildingsmartalliance.org/nbims03/cobie/cobielite", IsNullable = false)]
-    public partial class SpaceType1 : SpaceType
+    public partial class SpaceType : SpaceTypeBase
     {
 
         private string spaceCategoryField;
@@ -702,7 +702,7 @@ namespace Xbim.COBieLiteUK.SerialisationHelper
 
         private IssueCollectionType spaceIssuesField;
 
-        public SpaceType1()
+        public SpaceType()
         {
             this.spaceIssuesField = new IssueCollectionType();
             this.spaceDocumentsField = new DocumentCollectionType();
@@ -801,15 +801,15 @@ namespace Xbim.COBieLiteUK.SerialisationHelper
     public partial class ZoneAssignmentCollectionType : CobieRowAssignmentsType
     {
 
-        private ZoneKeyType zoneAssignmentField;
+        private List<ZoneKeyType> zoneAssignmentField;
 
         public ZoneAssignmentCollectionType()
         {
-            this.zoneAssignmentField = new ZoneKeyType();
+            this.zoneAssignmentField = new List<ZoneKeyType>();
         }
 
         [System.Xml.Serialization.XmlElementAttribute(Order = 0)]
-        public ZoneKeyType ZoneAssignment
+        public List<ZoneKeyType> ZoneAssignment
         {
             get { return this.zoneAssignmentField; }
             set { this.zoneAssignmentField = value; }
@@ -1323,12 +1323,12 @@ namespace Xbim.COBieLiteUK.SerialisationHelper
         }
     }
 
-    [System.Xml.Serialization.XmlIncludeAttribute(typeof (AssemblyType1))]
+    [System.Xml.Serialization.XmlIncludeAttribute(typeof (AssemblyType))]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.34234")]
     [System.SerializableAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://docs.buildingsmartalliance.org/nbims03/cobie/core")]
-    public partial class AssemblyType : CobieRowType
+    public partial class AssemblyTypeBase : CobieRowType
     {
 
         private string assemblyNameField;
@@ -1353,11 +1353,11 @@ namespace Xbim.COBieLiteUK.SerialisationHelper
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.34234")]
     [System.SerializableAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(TypeName = "AssemblyType",
+    [System.Xml.Serialization.XmlTypeAttribute(TypeName = "AssemblyTypeBase",
         Namespace = "http://docs.buildingsmartalliance.org/nbims03/cobie/cobielite")]
     [System.Xml.Serialization.XmlRootAttribute("AssemblyAssignment",
         Namespace = "http://docs.buildingsmartalliance.org/nbims03/cobie/cobielite", IsNullable = false)]
-    public partial class AssemblyType1 : AssemblyType
+    public partial class AssemblyType : AssemblyTypeBase
     {
 
         private string assemblyCategoryField;
@@ -1370,7 +1370,7 @@ namespace Xbim.COBieLiteUK.SerialisationHelper
 
         private IssueCollectionType assemblyIssuesField;
 
-        public AssemblyType1()
+        public AssemblyType()
         {
             this.assemblyIssuesField = new IssueCollectionType();
             this.assemblyDocumentsField = new DocumentCollectionType();
@@ -1440,12 +1440,12 @@ namespace Xbim.COBieLiteUK.SerialisationHelper
         }
     }
 
-    [System.Xml.Serialization.XmlIncludeAttribute(typeof (DocumentType1))]
+    [System.Xml.Serialization.XmlIncludeAttribute(typeof (DocumentType))]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.34234")]
     [System.SerializableAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://docs.buildingsmartalliance.org/nbims03/cobie/core")]
-    public partial class DocumentType : CobieRowType
+    public partial class DocumentTypeBase : CobieRowType
     {
 
         private string documentNameField;
@@ -1461,11 +1461,11 @@ namespace Xbim.COBieLiteUK.SerialisationHelper
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.34234")]
     [System.SerializableAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(TypeName = "DocumentType",
+    [System.Xml.Serialization.XmlTypeAttribute(TypeName = "DocumentTypeBase",
         Namespace = "http://docs.buildingsmartalliance.org/nbims03/cobie/cobielite")]
     [System.Xml.Serialization.XmlRootAttribute("Document",
         Namespace = "http://docs.buildingsmartalliance.org/nbims03/cobie/cobielite", IsNullable = false)]
-    public partial class DocumentType1 : DocumentType
+    public partial class DocumentType : DocumentTypeBase
     {
 
         private string documentCategoryField;
@@ -1480,7 +1480,7 @@ namespace Xbim.COBieLiteUK.SerialisationHelper
 
         private IssueCollectionType documentIssuesField;
 
-        public DocumentType1()
+        public DocumentType()
         {
             this.documentIssuesField = new IssueCollectionType();
             this.documentAttributesField = new AttributeCollectionType();
@@ -1557,12 +1557,12 @@ namespace Xbim.COBieLiteUK.SerialisationHelper
         }
     }
 
-    [System.Xml.Serialization.XmlIncludeAttribute(typeof (IssueType1))]
+    [System.Xml.Serialization.XmlIncludeAttribute(typeof (IssueType))]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.34234")]
     [System.SerializableAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://docs.buildingsmartalliance.org/nbims03/cobie/core")]
-    public partial class IssueType : CobieRowType
+    public partial class IssueTypeBase : CobieRowType
     {
 
         private string issueNameField;
@@ -1587,11 +1587,11 @@ namespace Xbim.COBieLiteUK.SerialisationHelper
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.34234")]
     [System.SerializableAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(TypeName = "IssueType",
+    [System.Xml.Serialization.XmlTypeAttribute(TypeName = "IssueTypeBase",
         Namespace = "http://docs.buildingsmartalliance.org/nbims03/cobie/cobielite")]
     [System.Xml.Serialization.XmlRootAttribute("Issue",
         Namespace = "http://docs.buildingsmartalliance.org/nbims03/cobie/cobielite", IsNullable = false)]
-    public partial class IssueType1 : IssueType
+    public partial class IssueType : IssueTypeBase
     {
 
         private string issueRiskTextField;
@@ -1606,7 +1606,7 @@ namespace Xbim.COBieLiteUK.SerialisationHelper
 
         private string issueMitigationDescriptionField;
 
-        public IssueType1()
+        public IssueType()
         {
             this.contactAssignmentField = new ContactKeyType();
         }
@@ -1704,12 +1704,12 @@ namespace Xbim.COBieLiteUK.SerialisationHelper
         }
     }
 
-    [System.Xml.Serialization.XmlIncludeAttribute(typeof (ZoneType1))]
+    [System.Xml.Serialization.XmlIncludeAttribute(typeof (ZoneType))]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.34234")]
     [System.SerializableAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://docs.buildingsmartalliance.org/nbims03/cobie/core")]
-    public partial class ZoneType : CobieRowType
+    public partial class ZoneTypeBase : CobieRowType
     {
 
         private string zoneNameField;
@@ -1734,11 +1734,11 @@ namespace Xbim.COBieLiteUK.SerialisationHelper
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.34234")]
     [System.SerializableAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(TypeName = "ZoneType",
+    [System.Xml.Serialization.XmlTypeAttribute(TypeName = "ZoneTypeBase",
         Namespace = "http://docs.buildingsmartalliance.org/nbims03/cobie/cobielite")]
     [System.Xml.Serialization.XmlRootAttribute("Zone",
         Namespace = "http://docs.buildingsmartalliance.org/nbims03/cobie/cobielite", IsNullable = false)]
-    public partial class ZoneType1 : ZoneType
+    public partial class ZoneType : ZoneTypeBase
     {
 
         private string zoneDescriptionField;
@@ -1749,7 +1749,7 @@ namespace Xbim.COBieLiteUK.SerialisationHelper
 
         private IssueCollectionType zoneIssuesField;
 
-        public ZoneType1()
+        public ZoneType()
         {
             this.zoneIssuesField = new IssueCollectionType();
             this.zoneDocumentsField = new DocumentCollectionType();
@@ -1811,12 +1811,12 @@ namespace Xbim.COBieLiteUK.SerialisationHelper
         }
     }
 
-    [System.Xml.Serialization.XmlIncludeAttribute(typeof (SystemType1))]
+    [System.Xml.Serialization.XmlIncludeAttribute(typeof (SystemType))]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.34234")]
     [System.SerializableAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://docs.buildingsmartalliance.org/nbims03/cobie/core")]
-    public partial class SystemType : CobieRowType
+    public partial class SystemTypeBase : CobieRowType
     {
 
         private string systemNameField;
@@ -1841,11 +1841,11 @@ namespace Xbim.COBieLiteUK.SerialisationHelper
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.34234")]
     [System.SerializableAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(TypeName = "SystemType",
+    [System.Xml.Serialization.XmlTypeAttribute(TypeName = "SystemTypeBase",
         Namespace = "http://docs.buildingsmartalliance.org/nbims03/cobie/cobielite")]
     [System.Xml.Serialization.XmlRootAttribute("System",
         Namespace = "http://docs.buildingsmartalliance.org/nbims03/cobie/cobielite", IsNullable = false)]
-    public partial class SystemType1 : SystemType
+    public partial class SystemType : SystemTypeBase
     {
 
         private string systemDescriptionField;
@@ -1856,7 +1856,7 @@ namespace Xbim.COBieLiteUK.SerialisationHelper
 
         private IssueCollectionType systemIssuesField;
 
-        public SystemType1()
+        public SystemType()
         {
             this.systemIssuesField = new IssueCollectionType();
             this.systemDocumentsField = new DocumentCollectionType();
@@ -1940,12 +1940,12 @@ namespace Xbim.COBieLiteUK.SerialisationHelper
         }
     }
 
-    [System.Xml.Serialization.XmlIncludeAttribute(typeof (FloorType1))]
+    [System.Xml.Serialization.XmlIncludeAttribute(typeof (FloorType))]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.34234")]
     [System.SerializableAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://docs.buildingsmartalliance.org/nbims03/cobie/core")]
-    public partial class FloorType : CobieRowType
+    public partial class FloorTypeBase : CobieRowType
     {
 
         private string floorNameField;
@@ -1961,11 +1961,11 @@ namespace Xbim.COBieLiteUK.SerialisationHelper
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.34234")]
     [System.SerializableAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(TypeName = "FloorType",
+    [System.Xml.Serialization.XmlTypeAttribute(TypeName = "FloorTypeBase",
         Namespace = "http://docs.buildingsmartalliance.org/nbims03/cobie/cobielite")]
     [System.Xml.Serialization.XmlRootAttribute("Floor",
         Namespace = "http://docs.buildingsmartalliance.org/nbims03/cobie/cobielite", IsNullable = false)]
-    public partial class FloorType1 : FloorType
+    public partial class FloorType : FloorTypeBase
     {
 
         private string floorCategoryField;
@@ -1984,7 +1984,7 @@ namespace Xbim.COBieLiteUK.SerialisationHelper
 
         private IssueCollectionType floorIssuesField;
 
-        public FloorType1()
+        public FloorType()
         {
             this.floorIssuesField = new IssueCollectionType();
             this.floorDocumentsField = new DocumentCollectionType();
@@ -2081,12 +2081,12 @@ namespace Xbim.COBieLiteUK.SerialisationHelper
         }
     }
 
-    [System.Xml.Serialization.XmlIncludeAttribute(typeof (ContactType1))]
+    [System.Xml.Serialization.XmlIncludeAttribute(typeof (ContactType))]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.34234")]
     [System.SerializableAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://docs.buildingsmartalliance.org/nbims03/cobie/core")]
-    public partial class ContactType : CobieRowType
+    public partial class ContactTypeBase : CobieRowType
     {
 
         private string contactEmailField;
@@ -2102,11 +2102,11 @@ namespace Xbim.COBieLiteUK.SerialisationHelper
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.34234")]
     [System.SerializableAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(TypeName = "ContactType",
+    [System.Xml.Serialization.XmlTypeAttribute(TypeName = "ContactTypeBase",
         Namespace = "http://docs.buildingsmartalliance.org/nbims03/cobie/cobielite")]
     [System.Xml.Serialization.XmlRootAttribute("Contact",
         Namespace = "http://docs.buildingsmartalliance.org/nbims03/cobie/cobielite", IsNullable = false)]
-    public partial class ContactType1 : ContactType
+    public partial class ContactType : ContactTypeBase
     {
 
         private string contactCategoryField;
@@ -2141,7 +2141,7 @@ namespace Xbim.COBieLiteUK.SerialisationHelper
 
         private IssueCollectionType contactIssuesField;
 
-        public ContactType1()
+        public ContactType()
         {
             this.contactIssuesField = new IssueCollectionType();
             this.contactDocumentsField = new DocumentCollectionType();
@@ -2299,12 +2299,12 @@ namespace Xbim.COBieLiteUK.SerialisationHelper
         }
     }
 
-    [System.Xml.Serialization.XmlIncludeAttribute(typeof (ConnectionType1))]
+    [System.Xml.Serialization.XmlIncludeAttribute(typeof (ConnectionType))]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.34234")]
     [System.SerializableAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://docs.buildingsmartalliance.org/nbims03/cobie/core")]
-    public partial class ConnectionType : CobieRowType
+    public partial class ConnectionTypeBase : CobieRowType
     {
 
         private string connectionNameField;
@@ -2329,11 +2329,11 @@ namespace Xbim.COBieLiteUK.SerialisationHelper
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.34234")]
     [System.SerializableAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(TypeName = "ConnectionType",
+    [System.Xml.Serialization.XmlTypeAttribute(TypeName = "ConnectionTypeBase",
         Namespace = "http://docs.buildingsmartalliance.org/nbims03/cobie/cobielite")]
     [System.Xml.Serialization.XmlRootAttribute("Connection",
         Namespace = "http://docs.buildingsmartalliance.org/nbims03/cobie/cobielite", IsNullable = false)]
-    public partial class ConnectionType1 : ConnectionType
+    public partial class ConnectionType : ConnectionTypeBase
     {
 
         private string connectionAsset1NameField;
@@ -2352,7 +2352,7 @@ namespace Xbim.COBieLiteUK.SerialisationHelper
 
         private IssueCollectionType connectionIssuesField;
 
-        public ConnectionType1()
+        public ConnectionType()
         {
             this.connectionIssuesField = new IssueCollectionType();
             this.connectionDocumentsField = new DocumentCollectionType();
@@ -2446,12 +2446,12 @@ namespace Xbim.COBieLiteUK.SerialisationHelper
         }
     }
 
-    [System.Xml.Serialization.XmlIncludeAttribute(typeof (ResourceType1))]
+    [System.Xml.Serialization.XmlIncludeAttribute(typeof (ResourceType))]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.34234")]
     [System.SerializableAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://docs.buildingsmartalliance.org/nbims03/cobie/core")]
-    public partial class ResourceType : CobieRowType
+    public partial class ResourceTypeBase : CobieRowType
     {
 
         private string resourceNameField;
@@ -2467,11 +2467,11 @@ namespace Xbim.COBieLiteUK.SerialisationHelper
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.34234")]
     [System.SerializableAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(TypeName = "ResourceType",
+    [System.Xml.Serialization.XmlTypeAttribute(TypeName = "ResourceTypeBase",
         Namespace = "http://docs.buildingsmartalliance.org/nbims03/cobie/cobielite")]
     [System.Xml.Serialization.XmlRootAttribute("Resource",
         Namespace = "http://docs.buildingsmartalliance.org/nbims03/cobie/cobielite", IsNullable = false)]
-    public partial class ResourceType1 : ResourceType
+    public partial class ResourceType : ResourceTypeBase
     {
 
         private string resourceCategoryField;
@@ -2484,7 +2484,7 @@ namespace Xbim.COBieLiteUK.SerialisationHelper
 
         private IssueCollectionType resourceIssuesField;
 
-        public ResourceType1()
+        public ResourceType()
         {
             this.resourceIssuesField = new IssueCollectionType();
             this.resourceDocumentsField = new DocumentCollectionType();
@@ -2554,12 +2554,12 @@ namespace Xbim.COBieLiteUK.SerialisationHelper
         }
     }
 
-    [System.Xml.Serialization.XmlIncludeAttribute(typeof (JobType1))]
+    [System.Xml.Serialization.XmlIncludeAttribute(typeof (JobType))]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.34234")]
     [System.SerializableAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://docs.buildingsmartalliance.org/nbims03/cobie/core")]
-    public partial class JobType : CobieRowType
+    public partial class JobTypeBase : CobieRowType
     {
 
         private string jobNameField;
@@ -2584,11 +2584,11 @@ namespace Xbim.COBieLiteUK.SerialisationHelper
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.34234")]
     [System.SerializableAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(TypeName = "JobType",
+    [System.Xml.Serialization.XmlTypeAttribute(TypeName = "JobTypeBase",
         Namespace = "http://docs.buildingsmartalliance.org/nbims03/cobie/cobielite")]
     [System.Xml.Serialization.XmlRootAttribute("Job",
         Namespace = "http://docs.buildingsmartalliance.org/nbims03/cobie/cobielite", IsNullable = false)]
-    public partial class JobType1 : JobType
+    public partial class JobType : JobTypeBase
     {
 
         private string jobCategoryField;
@@ -2617,7 +2617,7 @@ namespace Xbim.COBieLiteUK.SerialisationHelper
 
         private IssueCollectionType jobIssuesField;
 
-        public JobType1()
+        public JobType()
         {
             this.jobIssuesField = new IssueCollectionType();
             this.jobDocumentsField = new DocumentCollectionType();
@@ -2739,13 +2739,13 @@ namespace Xbim.COBieLiteUK.SerialisationHelper
     public partial class IntegerValueType : ValueBaseType
     {
 
-        private string integerValueField;
+        private string intValueField;
 
-        [System.Xml.Serialization.XmlElementAttribute(DataType = "integer", Order = 0)]
+        [System.Xml.Serialization.XmlElementAttribute(DataType = "int", Order = 0)]
         public string IntegerValue
         {
-            get { return this.integerValueField; }
-            set { this.integerValueField = value; }
+            get { return this.intValueField; }
+            set { this.intValueField = value; }
         }
     }
 
@@ -2756,19 +2756,19 @@ namespace Xbim.COBieLiteUK.SerialisationHelper
     public partial class AttributeIntegerValueType : IntegerValueType
     {
 
-        private string minValueIntegerField;
+        private int minValueIntegerField;
 
-        private string maxValueIntegerField;
+        private int maxValueIntegerField;
 
         [System.Xml.Serialization.XmlElementAttribute(DataType = "integer", Order = 0)]
-        public string MinValueInteger
+        public int MinValueInteger
         {
             get { return this.minValueIntegerField; }
             set { this.minValueIntegerField = value; }
         }
 
         [System.Xml.Serialization.XmlElementAttribute(DataType = "integer", Order = 1)]
-        public string MaxValueInteger
+        public int MaxValueInteger
         {
             get { return this.maxValueIntegerField; }
             set { this.maxValueIntegerField = value; }
@@ -2797,12 +2797,12 @@ namespace Xbim.COBieLiteUK.SerialisationHelper
         }
     }
 
-    [System.Xml.Serialization.XmlIncludeAttribute(typeof (SpareType1))]
+    [System.Xml.Serialization.XmlIncludeAttribute(typeof (SpareType))]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.34234")]
     [System.SerializableAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://docs.buildingsmartalliance.org/nbims03/cobie/core")]
-    public partial class SpareType : CobieRowType
+    public partial class SpareTypeBase : CobieRowType
     {
 
         private string spareNameField;
@@ -2827,11 +2827,11 @@ namespace Xbim.COBieLiteUK.SerialisationHelper
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.34234")]
     [System.SerializableAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(TypeName = "SpareType",
+    [System.Xml.Serialization.XmlTypeAttribute(TypeName = "SpareTypeBase",
         Namespace = "http://docs.buildingsmartalliance.org/nbims03/cobie/cobielite")]
     [System.Xml.Serialization.XmlRootAttribute("Spare",
         Namespace = "http://docs.buildingsmartalliance.org/nbims03/cobie/cobielite", IsNullable = false)]
-    public partial class SpareType1 : SpareType
+    public partial class SpareType : SpareTypeBase
     {
 
         private string spareDescriptionField;
@@ -2848,7 +2848,7 @@ namespace Xbim.COBieLiteUK.SerialisationHelper
 
         private IssueCollectionType spareIssuesField;
 
-        public SpareType1()
+        public SpareType()
         {
             this.spareIssuesField = new IssueCollectionType();
             this.spareDocumentsField = new DocumentCollectionType();
@@ -2935,12 +2935,12 @@ namespace Xbim.COBieLiteUK.SerialisationHelper
         }
     }
 
-    [System.Xml.Serialization.XmlIncludeAttribute(typeof (AssetTypeInfoType1))]
+    [System.Xml.Serialization.XmlIncludeAttribute(typeof (AssetTypeInfoType))]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.34234")]
     [System.SerializableAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://docs.buildingsmartalliance.org/nbims03/cobie/core")]
-    public partial class AssetTypeInfoType : CobieRowType
+    public partial class AssetTypeInfoTypeBase : CobieRowType
     {
 
         private string assetTypeNameField;
@@ -2956,11 +2956,11 @@ namespace Xbim.COBieLiteUK.SerialisationHelper
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.34234")]
     [System.SerializableAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(TypeName = "AssetTypeInfoType",
+    [System.Xml.Serialization.XmlTypeAttribute(TypeName = "AssetTypeInfoTypeBase",
         Namespace = "http://docs.buildingsmartalliance.org/nbims03/cobie/cobielite")]
     [System.Xml.Serialization.XmlRootAttribute("AssetType",
         Namespace = "http://docs.buildingsmartalliance.org/nbims03/cobie/cobielite", IsNullable = false)]
-    public partial class AssetTypeInfoType1 : AssetTypeInfoType
+    public partial class AssetTypeInfoType : AssetTypeInfoTypeBase
     {
 
         private string assetTypeCategoryField;
@@ -3023,7 +3023,7 @@ namespace Xbim.COBieLiteUK.SerialisationHelper
 
         private IssueCollectionType assetTypeIssuesField;
 
-        public AssetTypeInfoType1()
+        public AssetTypeInfoType()
         {
             this.assetTypeIssuesField = new IssueCollectionType();
             this.assetTypeDocumentsField = new DocumentCollectionType();
@@ -3319,19 +3319,19 @@ namespace Xbim.COBieLiteUK.SerialisationHelper
         }
     }
 
-    [System.Xml.Serialization.XmlIncludeAttribute(typeof (AssetInfoType1))]
+    [System.Xml.Serialization.XmlIncludeAttribute(typeof (AssetInfoType))]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.34234")]
     [System.SerializableAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://docs.buildingsmartalliance.org/nbims03/cobie/core")]
-    public partial class AssetInfoType : CobieRowType
+    public partial class AssetInfoTypeBase : CobieRowType
     {
 
         private string assetNameField;
 
         private SpaceAssignmentCollectionType assetSpaceAssignmentsField;
 
-        public AssetInfoType()
+        public AssetInfoTypeBase()
         {
             this.assetSpaceAssignmentsField = new SpaceAssignmentCollectionType();
         }
@@ -3354,11 +3354,11 @@ namespace Xbim.COBieLiteUK.SerialisationHelper
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.34234")]
     [System.SerializableAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(TypeName = "AssetInfoType",
+    [System.Xml.Serialization.XmlTypeAttribute(TypeName = "AssetInfoTypeBase",
         Namespace = "http://docs.buildingsmartalliance.org/nbims03/cobie/cobielite")]
     [System.Xml.Serialization.XmlRootAttribute("Asset",
         Namespace = "http://docs.buildingsmartalliance.org/nbims03/cobie/cobielite", IsNullable = false)]
-    public partial class AssetInfoType1 : AssetInfoType
+    public partial class AssetInfoType : AssetInfoTypeBase
     {
 
         private string assetDescriptionField;
@@ -3395,7 +3395,7 @@ namespace Xbim.COBieLiteUK.SerialisationHelper
 
         private IssueCollectionType assetIssuesField;
 
-        public AssetInfoType1()
+        public AssetInfoType()
         {
             this.assetIssuesField = new IssueCollectionType();
             this.assetDocumentsField = new DocumentCollectionType();
@@ -3641,12 +3641,12 @@ namespace Xbim.COBieLiteUK.SerialisationHelper
         }
     }
 
-    [System.Xml.Serialization.XmlIncludeAttribute(typeof (FacilityType1))]
+    [System.Xml.Serialization.XmlIncludeAttribute(typeof (FacilityType))]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.34234")]
     [System.SerializableAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://docs.buildingsmartalliance.org/nbims03/cobie/core")]
-    public partial class FacilityType : CobieRowType
+    public partial class FacilityTypeBase : CobieRowType
     {
 
         private string facilityNameField;
@@ -3662,16 +3662,16 @@ namespace Xbim.COBieLiteUK.SerialisationHelper
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.34234")]
     [System.SerializableAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(TypeName = "FacilityType",
+    [System.Xml.Serialization.XmlTypeAttribute(TypeName = "FacilityTypeBase",
         Namespace = "http://docs.buildingsmartalliance.org/nbims03/cobie/cobielite")]
     [System.Xml.Serialization.XmlRootAttribute("Facility",
         Namespace = "http://docs.buildingsmartalliance.org/nbims03/cobie/cobielite", IsNullable = false)]
-    public partial class FacilityType1 : FacilityType
+    public partial class FacilityType : FacilityTypeBase
     {
 
         private string facilityCategoryField;
 
-        private ProjectType projectAssignmentField;
+        private ProjectTypeBase projectAssignmentField;
 
         private SiteType siteAssignmentField;
 
@@ -3715,7 +3715,7 @@ namespace Xbim.COBieLiteUK.SerialisationHelper
 
         private IssueCollectionType facilityIssuesField;
 
-        public FacilityType1()
+        public FacilityType()
         {
             this.facilityIssuesField = new IssueCollectionType();
             this.facilityDocumentsField = new DocumentCollectionType();
@@ -3727,7 +3727,7 @@ namespace Xbim.COBieLiteUK.SerialisationHelper
             this.zonesField = new ZoneCollectionType();
             this.floorsField = new FloorCollectionType();
             this.siteAssignmentField = new SiteType();
-            this.projectAssignmentField = new ProjectType();
+            this.projectAssignmentField = new ProjectTypeBase();
         }
 
         [System.Xml.Serialization.XmlElementAttribute(
@@ -3740,7 +3740,7 @@ namespace Xbim.COBieLiteUK.SerialisationHelper
 
         [System.Xml.Serialization.XmlElementAttribute(
             Namespace = "http://docs.buildingsmartalliance.org/nbims03/cobie/core", Order = 1)]
-        public ProjectType ProjectAssignment
+        public ProjectTypeBase ProjectAssignment
         {
             get { return this.projectAssignmentField; }
             set { this.projectAssignmentField = value; }
@@ -4023,11 +4023,11 @@ namespace Xbim.COBieLiteUK.SerialisationHelper
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.34234")]
     [System.SerializableAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(TypeName = "AttributeType",
+    [System.Xml.Serialization.XmlTypeAttribute(TypeName = "AttributeTypeBase",
         Namespace = "http://docs.buildingsmartalliance.org/nbims03/cobie/cobielite")]
     [System.Xml.Serialization.XmlRootAttribute("Attribute",
         Namespace = "http://docs.buildingsmartalliance.org/nbims03/cobie/cobielite", IsNullable = false)]
-    public partial class AttributeType1 : AttributeType
+    public partial class AttributeType : AttributeTypeBase
     {
 
         private string attributeDescriptionField;
@@ -4036,7 +4036,7 @@ namespace Xbim.COBieLiteUK.SerialisationHelper
 
         private IssueCollectionType attributeIssuesField;
 
-        public AttributeType1()
+        public AttributeType()
         {
             this.attributeIssuesField = new IssueCollectionType();
             this.attributeValueField = new AttributeValueType();
