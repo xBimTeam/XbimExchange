@@ -18,7 +18,7 @@ namespace SerialisationHelper
             {
                 try
                 {
-                    XmlSerializer s = new XmlSerializer(typeof (Xbim.COBieLite.FacilityType));
+                    var s = new XmlSerializer(typeof (Xbim.COBieLite.FacilityType));
                     s = new XmlSerializer(typeof (Xbim.COBieLiteUK.FacilityType));
                 }
                 catch (Exception exception)
@@ -50,8 +50,9 @@ namespace SerialisationHelper
 
         private static string SavegeTypeReplacement(string file, string classname, string oldType, string newType)
         {
+            var re = new Regex(@"\b" + oldType + @"\b");
             var code = getClassCode(classname, file);
-            string newcode = code.Replace(" " + oldType + " ", " " + newType + " ");
+            var newcode = re.Replace(code, newType);
             return file.Replace(code, newcode);
         }
 
@@ -71,7 +72,6 @@ namespace SerialisationHelper
             string rep = string.Format("List<{0}>", newType);
             return classcode.Replace(srch, rep);
         }
-        
 
         static private string getClassCode(string classname, string sourcestring)
         {

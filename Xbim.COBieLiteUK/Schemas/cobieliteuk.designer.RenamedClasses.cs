@@ -2739,13 +2739,13 @@ namespace Xbim.COBieLiteUK
     public partial class IntegerValueType : ValueBaseType
     {
 
-        private string intValueField;
+        private int integerValueField;
 
         [System.Xml.Serialization.XmlElementAttribute(DataType = "int", Order = 0)]
-        public string IntegerValue
+        public int IntegerValue
         {
-            get { return this.intValueField; }
-            set { this.intValueField = value; }
+            get { return this.integerValueField; }
+            set { this.integerValueField = value; }
         }
     }
 
@@ -2760,14 +2760,14 @@ namespace Xbim.COBieLiteUK
 
         private int maxValueIntegerField;
 
-        [System.Xml.Serialization.XmlElementAttribute(DataType = "integer", Order = 0)]
+        [System.Xml.Serialization.XmlElementAttribute(DataType = "int", Order = 0)]
         public int MinValueInteger
         {
             get { return this.minValueIntegerField; }
             set { this.minValueIntegerField = value; }
         }
 
-        [System.Xml.Serialization.XmlElementAttribute(DataType = "integer", Order = 1)]
+        [System.Xml.Serialization.XmlElementAttribute(DataType = "int", Order = 1)]
         public int MaxValueInteger
         {
             get { return this.maxValueIntegerField; }

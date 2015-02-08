@@ -74,12 +74,12 @@ namespace SerialisationHelper
 
             // type replacements
             file = SavegeTypeReplacement(file, @"AttributeIntegerValueType", @"string", @"int");
-            file = SavegeTypeReplacement(file, @"IntegerValueType", @"integer", @"int");
+            file = SavegeTypeReplacement(file, @"IntegerValueType", @"string", @"int");
 
 
             // 
             // type attributes
-            file = file.Replace("XmlElementAttribute(DataType = \"integer\")", "XmlElementAttribute(DataType = \"int\")");
+            file = file.Replace("XmlElementAttribute(DataType = \"integer\"", "XmlElementAttribute(DataType = \"int\"");
 
 
             // fix namespace

@@ -79,7 +79,7 @@ namespace SerialisationHelper
 
             // 
             // type attributes
-            file = file.Replace("XmlElementAttribute(DataType = \"integer\")", "XmlElementAttribute(DataType = \"int\")");
+            file = file.Replace("XmlElementAttribute(DataType = \"integer\"", "XmlElementAttribute(DataType = \"int\"");
 
 
             // fix namespace

@@ -6,11 +6,17 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Xml;
 using System.Xml.Serialization;
+using Microsoft.Xml.Serialization.GeneratedAssembly;
 
 namespace Xbim.COBieLiteUK
 {
     public partial class ProjectType
     {
+        public static System.Xml.Serialization.XmlSerializer GetSerializer()
+        {
+            return new ProjectTypeSerializer();
+        }
+
         public void Save(Stream stream)
         {
             var serializer = new XmlSerializer(this.GetType());
