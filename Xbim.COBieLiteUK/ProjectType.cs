@@ -19,7 +19,7 @@ namespace Xbim.COBieLiteUK
 
         public void Save(Stream stream)
         {
-            var serializer = new XmlSerializer(this.GetType());
+            var serializer = ProjectType.GetSerializer();
             serializer.Serialize(stream, this, 
                 new XmlSerializerNamespaces(new []{
                     new XmlQualifiedName("cobielite", "http://docs.buildingsmartalliance.org/nbims03/cobie/cobielite"),
