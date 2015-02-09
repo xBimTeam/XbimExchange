@@ -12,6 +12,36 @@ namespace SerialisationHelper
 {
     partial class MainApp
     {
+
+        private static string InitCollectionClass(string currCode)
+        {
+            var re = new Regex("private List<(\\w*)> (\\w*)Field;");
+            foreach (Match mtc in re.Matches(currCode))
+            {
+                var sType = mtc.Groups[1].Value;
+                var sName = mtc.Groups[1].Value;
+                string newInit = string.Format("private List<{0}> {1}Field = new List<{0}>();", sType, sName);
+                currCode = currCode.Replace(mtc.Value, newInit);
+            }
+            return currCode;
+        }
+
+        private static HashSet<string> GetClassesByPattern(string pattern, string file)
+        {
+            var reClassList = new Regex(pattern);
+            var m = reClassList.Matches(file);
+            HashSet<string> Classes = new HashSet<string>();
+            foreach (Match match in m)
+            {
+                var cname = match.Groups[1].Value;
+                if (!Classes.Contains(cname))
+                {
+                    Classes.Add(cname);
+                }
+            }
+            return Classes;
+        }
+
         private static void Main()
         {
             if (true)

@@ -14,19 +14,8 @@ namespace SerialisationHelper
         {
             var file = File.ReadAllText(fread);
 
-            HashSet<string> Classes = new HashSet<string>();
 
-            var reClassList = new Regex(@"\b(\w+)Type1\b");
-            var m = reClassList.Matches(file);
-            foreach (Match match in m)
-            {
-                var cname = match.Groups[1].Value;
-                if (!Classes.Contains(cname))
-                {
-                    Classes.Add(cname);
-                }
-            }
-
+            var Classes = GetClassesByPattern(@"\b(\w+)Type1\b", file);
             Console.WriteLine("Classes found:");
             foreach (var @class in Classes)
             {
@@ -80,6 +69,15 @@ namespace SerialisationHelper
             // 
             // type attributes
             file = file.Replace("XmlElementAttribute(DataType = \"integer\"", "XmlElementAttribute(DataType = \"int\"");
+
+            //var CollectionClasses = GetClassesByPattern(@"\b(\w+)CollectionType\b", file);
+            //foreach (var collectionClass in CollectionClasses)
+            //{
+            //    var fullCName = collectionClass + "CollectionType";
+            //    var currCode = getClassCode(fullCName, file);
+            //    var newCode = InitCollectionClass(currCode);
+            //    file = file.Replace(currCode, newCode);
+            //}
 
 
             // fix namespace
