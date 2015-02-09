@@ -7,11 +7,13 @@ using Xbim.COBieLite;
 using Xbim.DPoW.Interfaces;
 using Xbim.Ifc2x3.MeasureResource;
 using Xbim.IO;
+using Xbim.ModelGeometry.Scene;
 using Xbim.XbimExtensions.Interfaces;
 using XbimExchanger;
 using XbimExchanger.COBieLiteToIfc;
 using XbimExchanger.DPoWToCOBieLite;
 using XbimExchanger.IfcHelpers;
+using XbimGeometry.Interfaces;
 
 namespace Tests
 {
@@ -20,6 +22,52 @@ namespace Tests
     [TestClass]
     public class ConversionTests
     {
+        [TestMethod]
+        public void ConverIfcToWexBim()
+        {
+            const string ifcFileFullName = @"D:\Users\steve\My Documents\DPoW\001 NBS Lakeside Restaurant 2014.ifc";
+
+            var fileName = Path.GetFileName(ifcFileFullName);
+            var fileNameWithoutExtension = Path.GetFileNameWithoutExtension(fileName);
+            var workingDir = Directory.GetCurrentDirectory();
+            var coreFileName = Path.Combine(workingDir, fileNameWithoutExtension);
+            var wexBimFileName = Path.ChangeExtension(coreFileName, "wexbim");
+            var xbimFile = Path.ChangeExtension(coreFileName, "xbim");
+            try
+            {
+
+                using (var wexBimFile = new FileStream(wexBimFileName, FileMode.Create))
+                {
+                    using (var binaryWriter = new BinaryWriter(wexBimFile))
+                    {
+
+                        using (var model = new XbimModel())
+                        {
+                            try
+                            {
+                                model.CreateFrom(ifcFileFullName, xbimFile, null, true);
+                                var geomContext = new Xbim3DModelContext(model);
+                                geomContext.CreateContext(XbimGeometryType.PolyhedronBinary);
+                                geomContext.Write(binaryWriter);
+                            }
+                            finally
+                            {
+                                model.Close();
+                                binaryWriter.Flush();
+                                wexBimFile.Close();
+                            }
+
+                        }
+                    }
+                }
+            }
+            catch (Exception e)
+            {
+                Assert.Fail("Failed to process " + ifcFileFullName + " - " + e.Message);
+            }
+        }
+
+
         [TestMethod]
         public void ConvertCobieLiteToIfc()
         {
