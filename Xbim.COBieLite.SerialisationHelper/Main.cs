@@ -6,102 +6,43 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Xml.Serialization;
-using Xbim.COBieLite;
+
 
 namespace SerialisationHelper
 {
-    class MainApp
+    partial class MainApp
     {
         private static void Main()
         {
-            try
+            if (true)
             {
-                XmlSerializer s = new XmlSerializer(typeof(FacilityType));
-                
-            }
-            catch (Exception exception)
-            {
-                List<Exception> exs = new List<Exception>();
-                while (exception.InnerException != null)
+                try
                 {
-                    exs.Add(exception);
-                    exception = exception.InnerException;
+                    var s = new XmlSerializer(typeof (Xbim.COBieLite.FacilityType));
+                    s = new XmlSerializer(typeof (Xbim.COBieLiteUK.FacilityType));
                 }
-                Console.WriteLine(exception.Message);
+                catch (Exception exception)
+                {
+                    List<Exception> exs = new List<Exception>();
+                    while (exception.InnerException != null)
+                    {
+                        exs.Add(exception);
+                        exception = exception.InnerException;
+                    }
+                    Console.ForegroundColor = ConsoleColor.Red;
+                    Console.WriteLine(exception.Message);
+                    Console.ResetColor();
+                    Console.ReadKey();
+                }
             }
 
-            //File.Copy(@"..\..\..\Xbim.COBieLite\COBieLite Schema\cobielite.designer.cs", @"..\..\..\Xbim.COBieLite\COBieLite Schema\cobielite.designer.2.cs");
             var fread = @"..\..\..\Xbim.COBieLite\COBieLite Schema\cobielite.designer.cs";
             var fwrite = @"..\..\..\Xbim.COBieLite\COBieLite Schema\cobielite.designer.RenamedClasses.cs";
-            var file = File.ReadAllText(fread);
+            ProcessCobieLite(fread, fwrite);
 
-            HashSet<string> Classes = new HashSet<string>();
-
-            var reClassList = new Regex(@"\b(\w+)Type1\b");
-            var m = reClassList.Matches(file);
-            foreach (Match match in m)
-            {
-                var cname = match.Groups[1].Value;
-                if (!Classes.Contains(cname))
-                {
-                    Classes.Add(cname);
-                }
-            }
-
-            Console.WriteLine("Classes found:");
-            foreach (var @class in Classes)
-            {
-                
-                Console.WriteLine(" - " + @class);
-                var srch = @"\b"  + @class + @"Type\b";
-                var replace = @"" + @class + "TypeBase";
-                var reMoveToBase = new Regex(srch);
-                var m2 = reMoveToBase.Matches(file);
-                file = reMoveToBase.Replace(file, replace);
-
-                srch = @"\b" + @class + @"Type1\b";
-                replace = @"" + @class + "Type";
-                var reMoveToType = new Regex(srch);
-                file = reMoveToType.Replace(file, replace);
-
-            }
-
-            // changes of Lists from base types to Type types
-            file = StandardListTypeReplace(file, @"ZoneCollectionType", @"ZoneType");
-            file = StandardListTypeReplace(file, @"AttributeCollectionType", @"AttributeType");
-            file = StandardListTypeReplace(file, @"FloorCollectionType");
-            file = StandardListTypeReplace(file, @"SpaceCollectionType");
-            file = StandardListTypeReplace(file, @"AssetCollectionType", @"AssetInfoType");
-            file = StandardListTypeReplace(file, @"AssetTypeCollectionType", @"AssetTypeInfoType");
-            file = StandardListTypeReplace(file, @"SpareCollectionType");
-            file = StandardListTypeReplace(file, @"JobCollectionType");
-            file = StandardListTypeReplace(file, @"ResourceCollectionType");
-            file = StandardListTypeReplace(file, @"ConnectionCollectionType");
-            file = StandardListTypeReplace(file, @"ContactCollectionType");
-            file = StandardListTypeReplace(file, @"SystemCollectionType");
-            file = StandardListTypeReplace(file, @"IssueCollectionType");
-            file = StandardListTypeReplace(file, @"DocumentCollectionType");
-            //file = StandardListTypeReplace(file, @"");
-            //file = StandardListTypeReplace(file, @"");
-            //file = StandardListTypeReplace(file, @"");
-            //file = StandardListTypeReplace(file, @"");
-            file = StandardListTypeReplace(file, @"AssemblyAssignmentCollectionType", @"AssemblyType");
-            //file = StandardListTypeReplace(file, @"", @"");
-            //file = StandardListTypeReplace(file, @"", @"");
-            //file = StandardListTypeReplace(file, @"", @"");
-
-            // type replacements
-            file = SavegeTypeReplacement(file, @"AttributeIntegerValueType", @"string", @"int");
-            file = SavegeTypeReplacement(file, @"IntegerValueType", @"string", @"int");
-            // type attributes
-            file = file.Replace("XmlElementAttribute(DataType = \"integer\")", "XmlElementAttribute(DataType = \"int\")");
-            
-
-            // fix namespace
-            file = file.Replace(@"namespace Xbim.COBieLite.SerialisationHelper", "namespace Xbim.COBieLite");
-
-            File.Delete(fwrite);
-            File.WriteAllText(fwrite, file);
+            fread = @"..\..\..\Xbim.COBieLiteUK\Schemas\cobieliteuk.designer.cs";
+            fwrite = @"..\..\..\Xbim.COBieLiteUK\Schemas\cobieliteuk.designer.RenamedClasses.cs";
+            ProcessCobieLiteUK(fread, fwrite);
 
             Console.WriteLine("Press any key.");
             Console.ReadKey();
@@ -109,8 +50,9 @@ namespace SerialisationHelper
 
         private static string SavegeTypeReplacement(string file, string classname, string oldType, string newType)
         {
+            var re = new Regex(@"\b" + oldType + @"\b");
             var code = getClassCode(classname, file);
-            string newcode = code.Replace(oldType, newType);
+            var newcode = re.Replace(code, newType);
             return file.Replace(code, newcode);
         }
 
@@ -130,7 +72,6 @@ namespace SerialisationHelper
             string rep = string.Format("List<{0}>", newType);
             return classcode.Replace(srch, rep);
         }
-        
 
         static private string getClassCode(string classname, string sourcestring)
         {

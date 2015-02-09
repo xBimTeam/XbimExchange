@@ -29,6 +29,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XbimExchanger", "XbimExchan
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SerialisationHelper", "Xbim.COBieLite.SerialisationHelper\SerialisationHelper.csproj", "{B7628DBA-72BF-4831-B744-84D445A11704}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Xbim.COBieLiteUK", "Xbim.COBieLiteUK\Xbim.COBieLiteUK.csproj", "{90DEF072-96C7-4972-835E-909C41169CB4}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -40,6 +42,7 @@ Global
 		{7DA8C61A-ACCA-45CB-B688-93A4982FA44C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7DA8C61A-ACCA-45CB-B688-93A4982FA44C}.Release|Any CPU.Build.0 = Release|Any CPU
 		{FB5A1829-7B34-4DE9-94A9-AF3AD36320BB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FB5A1829-7B34-4DE9-94A9-AF3AD36320BB}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{FB5A1829-7B34-4DE9-94A9-AF3AD36320BB}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{FB5A1829-7B34-4DE9-94A9-AF3AD36320BB}.Release|Any CPU.Build.0 = Release|Any CPU
 		{E550C721-50AF-4AD0-998E-0C61F305EEC8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
@@ -51,6 +54,7 @@ Global
 		{65C0C5FF-70D7-49CC-ACCF-057C91F382CC}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{65C0C5FF-70D7-49CC-ACCF-057C91F382CC}.Release|Any CPU.Build.0 = Release|Any CPU
 		{D2D0B192-93B2-409F-AAA0-47BD3038C87E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D2D0B192-93B2-409F-AAA0-47BD3038C87E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D2D0B192-93B2-409F-AAA0-47BD3038C87E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D2D0B192-93B2-409F-AAA0-47BD3038C87E}.Release|Any CPU.Build.0 = Release|Any CPU
 		{2CD02B40-A823-4959-874B-E212569F8080}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
@@ -69,6 +73,10 @@ Global
 		{B7628DBA-72BF-4831-B744-84D445A11704}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B7628DBA-72BF-4831-B744-84D445A11704}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B7628DBA-72BF-4831-B744-84D445A11704}.Release|Any CPU.Build.0 = Release|Any CPU
+		{90DEF072-96C7-4972-835E-909C41169CB4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{90DEF072-96C7-4972-835E-909C41169CB4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{90DEF072-96C7-4972-835E-909C41169CB4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{90DEF072-96C7-4972-835E-909C41169CB4}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
