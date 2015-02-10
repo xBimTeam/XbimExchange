@@ -62,6 +62,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="..\Xbim.COBieLite\COBieLite Schema\cobielite.designer.RenamedClasses.cs" />
+	<Compile Include="..\Xbim.COBieLiteUK\Schemas\cobieliteuk.designer.RenamedClasses.cs" />
     <Compile Include="..\Xbim.COBieLite\Properties\AssemblyInfo.cs" />
     <Compile Include="Main.cs" />
   </ItemGroup>
@@ -78,6 +79,20 @@
       <Link>Schema\core.xsd</Link>
       <SubType>Designer</SubType>
     </None>
+    <None Include="..\Xbim.COBieLiteUK\Schemas\cobieliteuk.xsd">
+      <Link>SchemaUK\cobieliteuk.xsd</Link>
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="..\Xbim.COBieLiteUK\Schemas\core.xsd">
+      <Link>SchemaUK\core.xsd</Link>
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="..\Xbim.COBieLiteUK\Schemas\cobieliteuk.designer.cs">
+      <Link>SchemaUK\core.xsd</Link>
+      <SubType>Designer</SubType>
+    </None>
+    <Compile Include="MainApp.CobieLiteUK.cs" />
+    <Compile Include="MainApp.CobieLite.cs" />
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>

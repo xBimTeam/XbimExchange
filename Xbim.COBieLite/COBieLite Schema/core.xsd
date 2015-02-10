@@ -965,7 +965,7 @@
 		<xs:complexContent>
 			<xs:extension base="CobieRowAssignmentsType">
 				<xs:sequence>
-					<xs:element ref="ZoneAssignment" minOccurs="0" maxOccurs="unbounded"/> <!-- did not have maxOccurs -->
+					<xs:element ref="ZoneAssignment" minOccurs="0" />
 				</xs:sequence>
 			</xs:extension>
 		</xs:complexContent>
