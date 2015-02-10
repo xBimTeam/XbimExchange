@@ -18,6 +18,7 @@ namespace XbimExchanger.DPoWToCOBieLite
             if (source.RequiredLOD != null)
             {
                 var lod = source.RequiredLOD;
+                target.AssetTypeShapeDescription = lod.RequiredLODCode;
                 target.AssetTypeAttributes.Add("RequiredLODCode", "Required LOD Code", lod.RequiredLODCode, "RequiredLOD");
                 target.AssetTypeAttributes.Add("RequiredLODDescription", "Required LOD Description", lod.RequiredLODDescription, "RequiredLOD");
                 target.AssetTypeAttributes.Add("RequiredLODURI", "Required LOD URI", lod.RequiredLODURI, "RequiredLOD");

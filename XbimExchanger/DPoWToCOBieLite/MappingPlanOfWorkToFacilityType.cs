@@ -132,11 +132,6 @@ namespace XbimExchanger.DPoWToCOBieLite
                         var tIssue = jiMap.GetOrCreateTargetObject(MappingJobToIssueType.GetKey(job));
                         jiMap.AddMapping(job, tIssue);
 
-                        //create job which can be assigned to asset type. JobType also contains related documents
-                        var jjMap = Exchanger.GetOrCreateMappings<MappingJobToJobType>();
-                        var tJob = jjMap.GetOrCreateTargetObject(MappingJobToJobType.GetKey(job));
-                        jjMap.AddMapping(job, tJob);
-
                         //convert related documents and add them to documents of DPoW object
                         var dMap = Exchanger.GetOrCreateMappings<MappingDocumentToDocumentType>();
                         var tDocs = new List<DocumentType>();
@@ -171,15 +166,17 @@ namespace XbimExchanger.DPoWToCOBieLite
                                     zones.Add(tZone);
                                 }
 
+                                //TODO: AssetType.AssetTypeModelNumber for design variants 'A', 'B', ...
                                 var assetType = dObject as AssetType;
                                 if (assetType != null)
                                 {
                                     var aKey = MappingAssetTypeToAssetTypeInfoType.GetKey(assetType);
                                     var tAssetType = assetTypeMapping.GetOrCreateTargetObject(aKey);
                                     assetTypeMapping.AddMapping(assetType, tAssetType);
-                                    tAssetType.Jobs = new JobCollectionType();
-                                    tAssetType.Jobs.Add(tJob); 
-                                    //don't have to add documents as they are defined within the job
+                                    tAssetType.AssetTypeIssues = new IssueCollectionType();
+                                    tAssetType.AssetTypeIssues.Add(tIssue);
+                                    tAssetType.AssetTypeDocuments = new DocumentCollectionType();
+                                    tAssetType.AssetTypeDocuments.AddRange(tDocs);
                                     assetTypes.Add(tAssetType);
                                 }
 
@@ -189,9 +186,10 @@ namespace XbimExchanger.DPoWToCOBieLite
                                     var aKey = MappingAssemblyTypeToAssetTypeInfoType.GetKey(assemblyType);
                                     var tAssetType = assetTypeMapping.GetOrCreateTargetObject(aKey);
                                     assemblyTypeMapping.AddMapping(assemblyType, tAssetType);
-                                    tAssetType.Jobs = new JobCollectionType();
-                                    tAssetType.Jobs.Add(tJob);
-                                    //don't have to add documents as they are defined within the job
+                                    tAssetType.AssetTypeIssues = new IssueCollectionType();
+                                    tAssetType.AssetTypeIssues.Add(tIssue);
+                                    tAssetType.AssetTypeDocuments = new DocumentCollectionType();
+                                    tAssetType.AssetTypeDocuments.AddRange(tDocs);
                                     assetTypes.Add(tAssetType);
                                 }
 
