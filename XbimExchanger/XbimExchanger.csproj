@@ -78,6 +78,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="COBieLiteHelpers\ValueBaseTypeExtensions.cs" />
     <Compile Include="COBieLiteToDPoW\COBieLiteToDPoWExchanger.cs" />
     <Compile Include="COBieLiteToDPoW\COBieLiteToDPoWMapping.cs" />
     <Compile Include="COBieLiteToDPoW\Helper.cs" />

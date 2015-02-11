@@ -22,7 +22,7 @@ namespace Tests
         [TestMethod]
         public void ConvertCobieLiteToIfc()
         {
-            var data = File.ReadAllText("NewtownHighSchool.COBieLite.json");
+            var data = File.ReadAllText("COBieLite.json");
             var facility = JsonConvert.DeserializeObject<FacilityType>(data);
 
             using (var model = XbimModel.CreateTemporaryModel())
@@ -43,7 +43,7 @@ namespace Tests
         {
             var dpow = PlanOfWork.Open("NewtownHighSchool.dpow");
             var facility = new FacilityType();
-            var exchanger = new DPoWToCOBieLiteExchanger(dpow, facility);
+            var exchanger = new DpoWtoCoBieLiteExchanger(dpow, facility);
             exchanger.Convert();
 
             using (var tw = File.CreateText("NewtownHighSchool.COBieLite.json"))
@@ -61,7 +61,7 @@ namespace Tests
             var facility = new FacilityType();
             var stage = dpow.ProjectStages.FirstOrDefault(s => s.Jobs.Any(j => j.DPoWObjects != null && j.DPoWObjects.Any()));
             Assert.IsNotNull(stage);
-            var exchanger = new DPoWToCOBieLiteExchanger(dpow, facility, stage);
+            var exchanger = new DpoWtoCoBieLiteExchanger(dpow, facility, stage);
             exchanger.Convert();
 
             using (var tw = File.CreateText("NewtownHighSchool.COBieLite.json"))

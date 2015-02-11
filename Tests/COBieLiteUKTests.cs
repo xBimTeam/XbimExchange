@@ -206,5 +206,12 @@ namespace Tests
                 file.Close();                
             }
         }
+
+        [TestMethod]
+        public void DpoWToCoBieLiteUk()
+        {
+
+        }
+
     }
 }
