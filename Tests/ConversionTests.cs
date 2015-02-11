@@ -8,7 +8,6 @@ using Xbim.DPoW.Interfaces;
 using Xbim.Ifc2x3.MeasureResource;
 using Xbim.IO;
 using Xbim.XbimExtensions.Interfaces;
-using XbimExchanger;
 using XbimExchanger.COBieLiteToIfc;
 using XbimExchanger.DPoWToCOBieLite;
 using XbimExchanger.IfcHelpers;
@@ -23,7 +22,7 @@ namespace Tests
         [TestMethod]
         public void ConvertCobieLiteToIfc()
         {
-            var data = File.ReadAllText("COBieLite.json");
+            var data = File.ReadAllText("NewtownHighSchool.COBieLite.json");
             var facility = JsonConvert.DeserializeObject<FacilityType>(data);
 
             using (var model = XbimModel.CreateTemporaryModel())
@@ -40,7 +39,7 @@ namespace Tests
         }
 
         [TestMethod]
-        public void ConvertDPoWToCOBieLite()
+        public void ConvertDpoWtoCoBieLite()
         {
             var dpow = PlanOfWork.Open("NewtownHighSchool.dpow");
             var facility = new FacilityType();
@@ -56,7 +55,7 @@ namespace Tests
         }
 
         [TestMethod]
-        public void ConvertDPoWToCOBieLiteDPoWObjects()
+        public void ConvertDpoWtoCoBieLiteDpoWObjects()
         {
             var dpow = PlanOfWork.Open("NewtownHighSchool.dpow");
             var facility = new FacilityType();
@@ -71,18 +70,18 @@ namespace Tests
                 tw.Close();
             }
 
-            Assert.IsTrue(facility.AssetTypes.AssetType.Count() > 0);
+            Assert.IsTrue(facility.AssetTypes.AssetType.Any());
         }
 
         [TestMethod]
         public void UnitConversionTests()
         {
             var converter = new IfcUnitConverter("squaremetres");
-            var meterCubics = new string[] { " cubic-metres ", "cubicmetres", "cubicmeters", "m3", "cubic meters" };
+            var meterCubics = new[] { " cubic-metres ", "cubicmetres", "cubicmeters", "m3", "cubic meters" };
             foreach (var cubic in meterCubics)
             {
                 converter.Convert(cubic);
-                Assert.IsTrue(converter.ConversionFactor == 1.0);
+                Assert.IsTrue(Math.Abs(converter.ConversionFactor - 1.0) < 1e-9);
                 Assert.IsNotNull(converter.SiUnitName);
                 Assert.IsTrue(converter.SiUnitName.Value == IfcSIUnitName.CUBIC_METRE);
                 Assert.IsNull(converter.SiPrefix);

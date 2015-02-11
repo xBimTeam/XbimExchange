@@ -1,5 +1,4 @@
-﻿using System;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Newtonsoft.Json;
 using Xbim.DPoW.Interfaces;
 using System.IO;
@@ -10,16 +9,14 @@ namespace Tests
 {
     [TestClass]
     [DeploymentItem(@"TestFiles\")]
-    public class DPoWSerializationTests
+    public class DpoWSerializationTests
     {
         [TestMethod]
-        public void LoadDPoWFromString()
+        public void LoadDpoWFromString()
         {
             //var data = File.ReadAllText("dpowData.json");
             var data = File.ReadAllText("NewtownHighSchool.dpow");
-            var settings = new JsonSerializerSettings()
-            {
-            };
+            var settings = new JsonSerializerSettings();
             var dpc = new DPoWObjectConverter();
             settings.Converters.Add(dpc);
             var dpow = JsonConvert.DeserializeObject<PlanOfWork>(data, settings);
@@ -28,11 +25,11 @@ namespace Tests
             Assert.AreEqual("dPOW Document Numbering", dpow.ClassificationSystem[0].ClassificationName);
             Assert.IsTrue(dpow.ProjectStages.Any(ps => ps.Jobs.Any(j => j.DPoWObjects.Any(t => t.GetType() == typeof(AssemblyType)))));
 
-            var data2 = JsonConvert.SerializeObject(dpow, settings);
+            JsonConvert.SerializeObject(dpow, settings);
 
             //create ZONE and AssetType
-            dpow.ProjectStages[1].Jobs[0].DPoWObjects.Add(new Zone() { DPoWObjectCategory = new ClassificationReference() { ClassificationCode = "A" }, DPoWObjectName = "Zone A", RequiredLOD = new RequiredLOD() { RequiredLODCode = "123" } });
-            dpow.ProjectStages[1].Jobs[0].DPoWObjects.Add(new AssetType() { DPoWObjectCategory = new ClassificationReference() { ClassificationCode = "A" }, DPoWObjectName = "Zone A", RequiredLOD = new RequiredLOD() { RequiredLODCode = "123" } });
+            dpow.ProjectStages[1].Jobs[0].DPoWObjects.Add(new Zone { DPoWObjectCategory = new ClassificationReference { ClassificationCode = "A" }, DPoWObjectName = "Zone A", RequiredLOD = new RequiredLOD { RequiredLODCode = "123" } });
+            dpow.ProjectStages[1].Jobs[0].DPoWObjects.Add(new AssetType { DPoWObjectCategory = new ClassificationReference { ClassificationCode = "A" }, DPoWObjectName = "Zone A", RequiredLOD = new RequiredLOD { RequiredLODCode = "123" } });
 
             dpow.Save("test1.dpow");
             dpow = PlanOfWork.Open("test1.dpow");

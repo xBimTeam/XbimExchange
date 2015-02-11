@@ -3,45 +3,51 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Xbim.COBieLiteUK;
 using System.Collections.Generic;
 using System.IO;
-using System.Xml;
 
 namespace Tests
 {
     [TestClass]
-    public class COBieLiteUKTests
+    public class CoBieLiteUkTests
     {
         [TestMethod]
-        public void COBieLiteUKCreation()
+        public void CoBieLiteUkCreation()
         {
             var model = new ProjectType();
             model.ProjectStages = new List<ProjectStageType>();
             model.ProjectStages.AddRange(new[]{
-                new ProjectStageType(){
+                new ProjectStageType
+                {
                     externalID = Guid.NewGuid().ToString(),
                     ProjectStageCode = "A4",
                     ProjectStageDescription = "Stage A4",
                     ProjectStageName = "Preliminary design",
                     ProjectStageStartDate = DateTime.Now,
                     ProjectStageEndDate = DateTime.Now.AddDays(28),
-                    ProjectStageAttributes = new AttributeCollectionType(){
+                    ProjectStageAttributes = new AttributeCollectionType
+                    {
                         Attribute = new List<AttributeType>(new []{
-                            new AttributeType(){
+                            new AttributeType
+                            {
                                 AttributeName = "New attribute 1",
                                 externalID = Guid.NewGuid().ToString(),
                                 AttributeCategory = "Requirement",
-                                AttributeValue = new AttributeValueType(){Item = new AttributeStringValueType(){StringValue = "Value AAA"},
+                                AttributeValue = new AttributeValueType
+                                {Item = new AttributeStringValueType {StringValue = "Value AAA"},
                                     ItemElementName = ItemChoiceType.AttributeStringValue}
                             },
-                            new AttributeType(){
+                            new AttributeType
+                            {
                                 AttributeName = "New attribute 2",
                                 externalID = Guid.NewGuid().ToString(),
                                 AttributeCategory = "Requirement",
-                                AttributeValue = new AttributeValueType(){Item = new AttributeStringValueType(){StringValue = "Value BBB"},
+                                AttributeValue = new AttributeValueType
+                                {Item = new AttributeStringValueType {StringValue = "Value BBB"},
                                     ItemElementName = ItemChoiceType.AttributeStringValue}
                             }
                         })
                     },
-                    Facility = new FacilityType(){
+                    Facility = new FacilityType
+                    {
                         externalID = Guid.NewGuid().ToString(),
                         FacilityDefaultAreaUnit = AreaUnitSimpleType.squaremeters,
                         FacilityDefaultAreaUnitSpecified = true,
@@ -55,10 +61,12 @@ namespace Tests
                         FacilityDeliverablePhaseName = "Phase A",
                         FacilityDescription = "New facility description",
                         FacilityName = "Ellison Building",
-                        ProjectAssignment = new ProjectType(){externalID = Guid.NewGuid().ToString(), ProjectName = "Project A"},
-                        SiteAssignment = new SiteType(){externalID = Guid.NewGuid().ToString(), SiteName = "Site A"},
-                        Zones = new ZoneCollectionType(){Zone = new List<ZoneType>(new []{
-                            new ZoneType(){
+                        ProjectAssignment = new ProjectType {externalID = Guid.NewGuid().ToString(), ProjectName = "Project A"},
+                        SiteAssignment = new SiteType {externalID = Guid.NewGuid().ToString(), SiteName = "Site A"},
+                        Zones = new ZoneCollectionType
+                        {Zone = new List<ZoneType>(new []{
+                            new ZoneType
+                            {
                                 externalID = Guid.NewGuid().ToString(),
                                 ZoneName = "Zone A",
                                 ZoneCategory = "45.789.78",
@@ -67,32 +75,39 @@ namespace Tests
                         })}
                     }
                 },
-                new ProjectStageType(){
+                new ProjectStageType
+                {
                     externalID = Guid.NewGuid().ToString(),
                     ProjectStageCode = "A4",
                     ProjectStageDescription = "Stage A4",
                     ProjectStageName = "Preliminary design",
                     ProjectStageStartDate = DateTime.Now,
                     ProjectStageEndDate = DateTime.Now.AddDays(28),
-                    ProjectStageAttributes = new AttributeCollectionType(){
+                    ProjectStageAttributes = new AttributeCollectionType
+                    {
                         Attribute = new List<AttributeType>(new []{
-                            new AttributeType(){
+                            new AttributeType
+                            {
                                 AttributeName = "New attribute 1",
                                 externalID = Guid.NewGuid().ToString(),
                                 AttributeCategory = "Requirement",
-                                AttributeValue = new AttributeValueType(){Item = new AttributeStringValueType(){StringValue = "Value AAA"},
+                                AttributeValue = new AttributeValueType
+                                {Item = new AttributeStringValueType {StringValue = "Value AAA"},
                                     ItemElementName = ItemChoiceType.AttributeStringValue}
                             },
-                            new AttributeType(){
+                            new AttributeType
+                            {
                                 AttributeName = "New attribute 2",
                                 externalID = Guid.NewGuid().ToString(),
                                 AttributeCategory = "Requirement",
-                                AttributeValue = new AttributeValueType(){Item = new AttributeStringValueType(){StringValue = "Value BBB"},
+                                AttributeValue = new AttributeValueType
+                                {Item = new AttributeStringValueType {StringValue = "Value BBB"},
                                     ItemElementName = ItemChoiceType.AttributeStringValue}
                             }
                         })
                     },
-                    Facility = new FacilityType(){
+                    Facility = new FacilityType
+                    {
                         externalID = Guid.NewGuid().ToString(),
                         FacilityDefaultAreaUnit = AreaUnitSimpleType.squaremeters,
                         FacilityDefaultAreaUnitSpecified = true,
@@ -106,10 +121,12 @@ namespace Tests
                         FacilityDeliverablePhaseName = "Phase A",
                         FacilityDescription = "New facility description",
                         FacilityName = "Ellison Building",
-                        ProjectAssignment = new ProjectType(){externalID = Guid.NewGuid().ToString(), ProjectName = "Project A"},
-                        SiteAssignment = new SiteType(){externalID = Guid.NewGuid().ToString(), SiteName = "Site A"},
-                        Zones = new ZoneCollectionType(){Zone = new List<ZoneType>(new []{
-                            new ZoneType(){
+                        ProjectAssignment = new ProjectType {externalID = Guid.NewGuid().ToString(), ProjectName = "Project A"},
+                        SiteAssignment = new SiteType {externalID = Guid.NewGuid().ToString(), SiteName = "Site A"},
+                        Zones = new ZoneCollectionType
+                        {Zone = new List<ZoneType>(new []{
+                            new ZoneType
+                            {
                                 externalID = Guid.NewGuid().ToString(),
                                 ZoneName = "Zone A",
                                 ZoneCategory = "45.789.78",
@@ -118,36 +135,43 @@ namespace Tests
                         })}
                     }
                 },
-                new ProjectStageType(){
+                new ProjectStageType
+                {
                     externalID = Guid.NewGuid().ToString(),
                     ProjectStageCode = "A4",
                     ProjectStageDescription = "Stage A4",
                     ProjectStageName = "Preliminary design",
                     ProjectStageStartDate = DateTime.Now,
                     ProjectStageEndDate = DateTime.Now.AddDays(28),
-                    ProjectStageAttributes = new AttributeCollectionType(){
+                    ProjectStageAttributes = new AttributeCollectionType
+                    {
                         Attribute = new List<AttributeType>(new []{
-                            new AttributeType(){
+                            new AttributeType
+                            {
                                 AttributeName = "New attribute 1",
                                 externalID = Guid.NewGuid().ToString(),
                                 AttributeCategory = "Requirement",
-                                AttributeValue = new AttributeValueType(){
-                                    Item = new AttributeStringValueType(){StringValue = "Value AAA"},
+                                AttributeValue = new AttributeValueType
+                                {
+                                    Item = new AttributeStringValueType {StringValue = "Value AAA"},
                                     ItemElementName = ItemChoiceType.AttributeStringValue
                                 }
                             },
-                            new AttributeType(){
+                            new AttributeType
+                            {
                                 AttributeName = "New attribute 2",
                                 externalID = Guid.NewGuid().ToString(),
                                 AttributeCategory = "Requirement",
-                                AttributeValue = new AttributeValueType(){
-                                    Item = new AttributeStringValueType(){StringValue = "Value BBB"},
+                                AttributeValue = new AttributeValueType
+                                {
+                                    Item = new AttributeStringValueType {StringValue = "Value BBB"},
                                     ItemElementName = ItemChoiceType.AttributeStringValue
                                 }
                             }
                         })
                     },
-                    Facility = new FacilityType(){
+                    Facility = new FacilityType
+                    {
                         externalID = Guid.NewGuid().ToString(),
                         FacilityDefaultAreaUnit = AreaUnitSimpleType.squaremeters,
                         FacilityDefaultAreaUnitSpecified = true,
@@ -161,10 +185,12 @@ namespace Tests
                         FacilityDeliverablePhaseName = "Phase A",
                         FacilityDescription = "New facility description",
                         FacilityName = "Ellison Building",
-                        ProjectAssignment = new ProjectType(){externalID = Guid.NewGuid().ToString(), ProjectName = "Project A"},
-                        SiteAssignment = new SiteType(){externalID = Guid.NewGuid().ToString(), SiteName = "Site A"},
-                        Zones = new ZoneCollectionType(){Zone = new List<ZoneType>(new []{
-                            new ZoneType(){
+                        ProjectAssignment = new ProjectType {externalID = Guid.NewGuid().ToString(), ProjectName = "Project A"},
+                        SiteAssignment = new SiteType {externalID = Guid.NewGuid().ToString(), SiteName = "Site A"},
+                        Zones = new ZoneCollectionType
+                        {Zone = new List<ZoneType>(new []{
+                            new ZoneType
+                            {
                                 externalID = Guid.NewGuid().ToString(),
                                 ZoneName = "Zone A",
                                 ZoneCategory = "45.789.78",

@@ -75,6 +75,9 @@
     <None Include="TestFiles\COBieLite.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+    <None Include="TestFiles\NewtownHighSchool.COBieLite.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Include="TestFiles\NewtownHighSchool.dpow">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
