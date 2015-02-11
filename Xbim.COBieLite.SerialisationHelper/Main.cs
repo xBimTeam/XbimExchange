@@ -1,10 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Text;
 using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 using System.Xml.Serialization;
 
 
@@ -18,12 +14,14 @@ namespace SerialisationHelper
             {
                 try
                 {
-                    var s = new XmlSerializer(typeof (Xbim.COBieLite.FacilityType));
-                    s = new XmlSerializer(typeof (Xbim.COBieLiteUK.FacilityType));
+// ReSharper disable UnusedVariable
+                    var a = new XmlSerializer(typeof (Xbim.COBieLite.FacilityType));
+                    var b = new XmlSerializer(typeof (Xbim.COBieLiteUK.FacilityType));
+// ReSharper restore UnusedVariable  
                 }
                 catch (Exception exception)
                 {
-                    List<Exception> exs = new List<Exception>();
+                    var exs = new List<Exception>();
                     while (exception.InnerException != null)
                     {
                         exs.Add(exception);
@@ -42,7 +40,7 @@ namespace SerialisationHelper
 
             fread = @"..\..\..\Xbim.COBieLiteUK\Schemas\cobieliteuk.designer.cs";
             fwrite = @"..\..\..\Xbim.COBieLiteUK\Schemas\cobieliteuk.designer.RenamedClasses.cs";
-            ProcessCobieLiteUK(fread, fwrite);
+            ProcessCobieLiteUk(fread, fwrite);
 
             Console.WriteLine("Press any key.");
             Console.ReadKey();
@@ -51,7 +49,7 @@ namespace SerialisationHelper
         private static string SavegeTypeReplacement(string file, string classname, string oldType, string newType)
         {
             var re = new Regex(@"\b" + oldType + @"\b");
-            var code = getClassCode(classname, file);
+            var code = GetClassCode(classname, file);
             var newcode = re.Replace(code, newType);
             return file.Replace(code, newcode);
         }
@@ -60,23 +58,23 @@ namespace SerialisationHelper
         {
             if (destType == "")
                 destType = className.Replace("Collection", "");
-            var ccode = getClassCode(className, file);
-            var ccodeRep = replaceList(ccode, destType + "Base", destType);
+            var ccode = GetClassCode(className, file);
+            var ccodeRep = ReplaceList(ccode, destType + "Base", destType);
             file = file.Replace(ccode, ccodeRep);
             return file;
         }
 
-        static private string replaceList(string classcode, string currentType, string newType)
+        static private string ReplaceList(string classcode, string currentType, string newType)
         {
             string srch = string.Format("List<{0}>", currentType);
             string rep = string.Format("List<{0}>", newType);
             return classcode.Replace(srch, rep);
         }
 
-        static private string getClassCode(string classname, string sourcestring)
+        static private string GetClassCode(string classname, string sourcestring)
         {
             var mS = string.Format(@"public partial class {0} ", classname);
-            var start = sourcestring.IndexOf(mS);
+            var start = sourcestring.IndexOf(mS, StringComparison.Ordinal);
 
             var pos = start + mS.Length;
             int countBrace = 0;

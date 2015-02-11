@@ -10,7 +10,7 @@ namespace SerialisationHelper
 {
     partial class MainApp
     {
-        private static void ProcessCobieLiteUK(string fread, string fwrite)
+        private static void ProcessCobieLiteUk(string fread, string fwrite)
         {
             var file = File.ReadAllText(fread);
 
