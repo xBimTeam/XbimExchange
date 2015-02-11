@@ -7,7 +7,7 @@
     </Compartments>
     <TypeIdentifier>
       <HashCode>EAACACAggAGJMAAACAmAAAGEAoFQAgQCQBBQACAAAkA=</HashCode>
-      <FileName>cobielite_core.cs</FileName>
+      <FileName>COBieLite Schema\cobielite.designer.RenamedClasses.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="Xbim.COBieLite.FloorType">
@@ -17,7 +17,7 @@
     </Compartments>
     <TypeIdentifier>
       <HashCode>AAAEgSAACQEAYAAAAEAIAAAAgAIBAAAAAAAAAAAAgAA=</HashCode>
-      <FileName>cobielite_core.cs</FileName>
+      <FileName>COBieLite Schema\cobielite.designer.RenamedClasses.cs</FileName>
     </TypeIdentifier>
     <ShowAsAssociation>
       <Property Name="Spaces" />
@@ -33,8 +33,8 @@
       <Compartment Name="Methods" Collapsed="true" />
     </Compartments>
     <TypeIdentifier>
-      <HashCode>BAAYQAKECACQAAoIAAAgAigyoiAwAQQEUYIAJGjAAcA=</HashCode>
-      <FileName>cobielite_core.cs</FileName>
+      <HashCode>BAAYQAKECACQAAoKAAAgAigyoiAwAQQEUYIAJGjAAcA=</HashCode>
+      <FileName>COBieLite Schema\cobielite.designer.RenamedClasses.cs</FileName>
     </TypeIdentifier>
     <ShowAsAssociation>
       <Property Name="ProjectAssignment" />
@@ -53,32 +53,32 @@
   <Class Name="Xbim.COBieLite.AssetTypeCollectionType" Collapsed="true">
     <Position X="5" Y="0.5" Width="2.25" />
     <TypeIdentifier>
-      <HashCode>AAAAAAAgAAAAQBAAAAAAAAAAAAAAAAAAAEAAAAAAAAA=</HashCode>
-      <FileName>AssetTypeCollectionType.cs</FileName>
+      <HashCode>AAAAAAAgAAAAQBAAAAAAAAAAAAAAAAAEAEAAAAAAAAA=</HashCode>
+      <FileName>COBieLite Schema\cobielite.designer.RenamedClasses.cs</FileName>
     </TypeIdentifier>
     <Lollipop Position="0.2" />
   </Class>
   <Class Name="Xbim.COBieLite.FloorCollectionType" Collapsed="true">
     <Position X="5" Y="2.25" Width="2.25" />
     <TypeIdentifier>
-      <HashCode>AAAAAAAAAAAAABgAAACAAAAAAAAAAAAAAEAAAAAAAAA=</HashCode>
-      <FileName>cobielite_core.cs</FileName>
+      <HashCode>AAAAAAAAAAAAABgAAACAAAAAAAAAAAAEAEAAAAAAAAA=</HashCode>
+      <FileName>COBieLite Schema\cobielite.designer.RenamedClasses.cs</FileName>
     </TypeIdentifier>
     <Lollipop Position="0.2" />
   </Class>
   <Class Name="Xbim.COBieLite.SystemCollectionType" Collapsed="true">
     <Position X="5" Y="3.25" Width="2" />
     <TypeIdentifier>
-      <HashCode>AAAAAAAAAIAAABAAAAAAAAAAAAAAEAAAAEAAAAAAAAA=</HashCode>
-      <FileName>cobielite_core.cs</FileName>
+      <HashCode>AAAAAAAAAIAAABAAAAAAAAAAAAAAEAAEAEAAAAAAAAA=</HashCode>
+      <FileName>COBieLite Schema\cobielite.designer.RenamedClasses.cs</FileName>
     </TypeIdentifier>
     <Lollipop Position="0.2" />
   </Class>
   <Class Name="Xbim.COBieLite.ZoneCollectionType" Collapsed="true">
     <Position X="5" Y="4.25" Width="2" />
     <TypeIdentifier>
-      <HashCode>AAAAAAAAAAAAABAAAhAAAAAAAAAAAAAAAEAAAAAAAAA=</HashCode>
-      <FileName>cobielite_core.cs</FileName>
+      <HashCode>AAAAAAAAAAAAABAAAhAAAAAAAAAAAAAEAEAAAAAAAAA=</HashCode>
+      <FileName>COBieLite Schema\cobielite.designer.RenamedClasses.cs</FileName>
     </TypeIdentifier>
     <Lollipop Position="0.2" />
   </Class>
@@ -86,61 +86,61 @@
     <Position X="5" Y="5.25" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAAAAAAAAAAAAgAAAAAAAAAgAgAAABAAAAA=</HashCode>
-      <FileName>cobielite_core.cs</FileName>
+      <FileName>COBieLite Schema\cobielite.designer.RenamedClasses.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="Xbim.COBieLite.ProjectType" Collapsed="true">
     <Position X="5" Y="6.25" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAAAAAAACAAAAAAAoAAAAAAAAABAAAAAAAA=</HashCode>
-      <FileName>cobielite_core.cs</FileName>
+      <FileName>COBieLite Schema\cobielite.designer.RenamedClasses.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="Xbim.COBieLite.DocumentCollectionType" Collapsed="true">
     <Position X="5" Y="1.5" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAAAAAAAAAAAABAAAAAAAAAAAAgAAAACAEAAAAAAAAA=</HashCode>
-      <FileName>cobielite_core.cs</FileName>
+      <HashCode>AAAAAAAAAAAAABAAAAAAAAAAAAgAAAAGAEAAAAAAAAA=</HashCode>
+      <FileName>COBieLite Schema\cobielite.designer.RenamedClasses.cs</FileName>
     </TypeIdentifier>
     <Lollipop Position="0.2" />
   </Class>
   <Class Name="Xbim.COBieLite.IssueCollectionType" Collapsed="true">
     <Position X="3" Y="7" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAEAAAAAAAAAABAAAAAAAAAAAAAEAAAAAEAAAAAAAAA=</HashCode>
-      <FileName>cobielite_core.cs</FileName>
+      <HashCode>AAEAAAAAAAAAABAAAAAAAAAAAAAEAAAEAEAAAAAAAAA=</HashCode>
+      <FileName>COBieLite Schema\cobielite.designer.RenamedClasses.cs</FileName>
     </TypeIdentifier>
     <Lollipop Position="0.2" />
   </Class>
   <Class Name="Xbim.COBieLite.ContactCollectionType" Collapsed="true">
     <Position X="0.5" Y="7" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAAAAAAAAAAAABAACAAAAAAAAAAAAAAAAEAAAAAAAAE=</HashCode>
-      <FileName>cobielite_core.cs</FileName>
+      <HashCode>AAAAAAAAAAAAABAACAAAAAAAAAAAAAAEAEAAAAAAAAE=</HashCode>
+      <FileName>COBieLite Schema\cobielite.designer.RenamedClasses.cs</FileName>
     </TypeIdentifier>
     <Lollipop Position="0.2" />
   </Class>
   <Class Name="Xbim.COBieLite.ConnectionCollectionType" Collapsed="true">
     <Position X="0.5" Y="5" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAAAAAAAAAAAABEAAAAAAAAAAAAAIAAAAEAAAAAAAAA=</HashCode>
-      <FileName>cobielite_core.cs</FileName>
+      <HashCode>AAAAAAAAAAAAABEAAAAAAAAAAAAAIAAEAEAAAAAAAAA=</HashCode>
+      <FileName>COBieLite Schema\cobielite.designer.RenamedClasses.cs</FileName>
     </TypeIdentifier>
     <Lollipop Position="0.2" />
   </Class>
   <Class Name="Xbim.COBieLite.AttributeCollectionType" Collapsed="true">
     <Position X="5" Y="7.25" Width="2.5" />
     <TypeIdentifier>
-      <HashCode>AAAAAAAAAAACABAAAAAAAAAAAAAAAAQAAEAAAAAAAAA=</HashCode>
-      <FileName>AttributeCollectionType.cs</FileName>
+      <HashCode>AAAAAAAAAAACABAAAAAAAAAAAAAAAAQEAEAAAAAAAAA=</HashCode>
+      <FileName>COBieLite Schema\cobielite.designer.RenamedClasses.cs</FileName>
     </TypeIdentifier>
     <Lollipop Position="0.2" />
   </Class>
-  <Class Name="Xbim.COBieLite.SpaceCollectionType">
+  <Class Name="Xbim.COBieLite.SpaceCollectionType" Collapsed="true">
     <Position X="10.75" Y="0.5" Width="2" />
     <TypeIdentifier>
-      <HashCode>AAAAACAAAAACABAAAAAAAAAAAAAAAAAAAEAAAAAAAAA=</HashCode>
-      <FileName>cobielite_core.cs</FileName>
+      <HashCode>AAAAACAAAAACABAAAAAAAAAAAAAAAAAEAEAAAAAAAAA=</HashCode>
+      <FileName>COBieLite Schema\cobielite.designer.RenamedClasses.cs</FileName>
     </TypeIdentifier>
     <Lollipop Position="0.2" />
   </Class>
@@ -148,14 +148,14 @@
     <Position X="8.5" Y="0.5" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAAAAAAAAAAEAAAAAAAAAAAAAAAAAAAAAAg=</HashCode>
-      <FileName>cobielite_core.cs</FileName>
+      <FileName>COBieLite Schema\cobielite.designer.RenamedClasses.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="Xbim.COBieLite.SpaceTypeBase" Collapsed="true">
     <Position X="13" Y="0.5" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAgAAAAAAAAAAABAAAA=</HashCode>
-      <FileName>cobielite_core.cs</FileName>
+      <FileName>COBieLite Schema\cobielite.designer.RenamedClasses.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="Xbim.COBieLite.SpaceType">
@@ -165,7 +165,7 @@
     </Compartments>
     <TypeIdentifier>
       <HashCode>CggIBADQEBAACAAQEAAQAAAAAACABAAAAACAAEAAiAA=</HashCode>
-      <FileName>cobielite_core.cs</FileName>
+      <FileName>COBieLite Schema\cobielite.designer.RenamedClasses.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Font Name="Segoe UI" Size="9" />

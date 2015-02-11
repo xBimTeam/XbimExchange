@@ -1,0 +1,210 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Class Name="Xbim.DPoW.Project">
+    <Position X="2.25" Y="0.75" Width="2" />
+    <TypeIdentifier>
+      <HashCode>AAACAAAAAAAgAgAgCAAAAAAAAAAAIAAEAABAIBAAAAA=</HashCode>
+      <FileName>Project.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Xbim.DPoW.ProjectStage">
+    <Position X="4.75" Y="0.75" Width="2.25" />
+    <AssociationLine Name="Documents" Type="Xbim.DPoW.Document" FixedFromPoint="true" FixedToPoint="true">
+      <Path>
+        <Point X="6.625" Y="2.882" />
+        <Point X="6.625" Y="3.844" />
+        <Point X="8.5" Y="3.844" />
+      </Path>
+    </AssociationLine>
+    <TypeIdentifier>
+      <HashCode>AAACEAAAAAAAAAAAAACAgCACAAAAAAACAAAAAIAAAAA=</HashCode>
+      <FileName>ProjectStage.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsCollectionAssociation>
+      <Property Name="Documents" />
+      <Property Name="Zones" />
+      <Property Name="AssetTypes" />
+      <Property Name="AssemblyTypes" />
+    </ShowAsCollectionAssociation>
+  </Class>
+  <Class Name="Xbim.DPoW.PlanOfWork">
+    <Position X="5" Y="4" Width="2" />
+    <AssociationLine Name="Project" Type="Xbim.DPoW.Project" FixedFromPoint="true" FixedToPoint="true">
+      <Path>
+        <Point X="5" Y="4.375" />
+        <Point X="3.25" Y="4.375" />
+        <Point X="3.25" Y="4.036" />
+      </Path>
+    </AssociationLine>
+    <TypeIdentifier>
+      <HashCode>BAAKAAAAAAAAABAAgAAAGAAAoAAAAAAAAQIAAAAAAAA=</HashCode>
+      <FileName>PlanOfWork.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Property Name="Project" />
+      <Property Name="Facility" />
+    </ShowAsAssociation>
+    <ShowAsCollectionAssociation>
+      <Property Name="ProjectStages" />
+      <Property Name="Contacts" />
+      <Property Name="ClassificationSystems" />
+    </ShowAsCollectionAssociation>
+  </Class>
+  <Class Name="Xbim.DPoW.Contact">
+    <Position X="5" Y="7.25" Width="2" />
+    <TypeIdentifier>
+      <HashCode>AABCAAAAAAAJAAAAAAAAAAWEAAAQBAAQAAAAAAIAAkA=</HashCode>
+      <FileName>Contact.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Xbim.DPoW.Classification">
+    <Position X="2.25" Y="4.75" Width="2" />
+    <AssociationLine Name="ClassificationReferences" Type="Xbim.DPoW.ClassificationReference">
+      <MemberNameLabel ManuallyPlaced="true">
+        <Position X="-0.74" Y="0.352" />
+      </MemberNameLabel>
+    </AssociationLine>
+    <TypeIdentifier>
+      <HashCode>AAQDACACAAAAAAAAAAACAAAAAAAAAAAAAAAAAAAQAAA=</HashCode>
+      <FileName>Classification.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsCollectionAssociation>
+      <Property Name="ClassificationReferences" />
+    </ShowAsCollectionAssociation>
+  </Class>
+  <Class Name="Xbim.DPoW.ClassificationReference">
+    <Position X="2.25" Y="8" Width="2.25" />
+    <TypeIdentifier>
+      <HashCode>AAACAAAAAAAAAAAAAAAYAAAABAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>ClassificationReference.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Xbim.DPoW.Facility">
+    <Position X="7.75" Y="7.25" Width="2" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAACAAAAAAAAAAAAAAAAAAAAAAAAAgAAAgCAQA=</HashCode>
+      <FileName>Facility.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Xbim.DPoW.Job">
+    <Position X="11.5" Y="3.75" Width="2" />
+    <TypeIdentifier>
+      <HashCode>IAACAAAAAAAAAAAAAAAAAEAAAAAAAABAAAAAAAAAAAA=</HashCode>
+      <FileName>Job.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Xbim.DPoW.DPoWObject">
+    <Position X="11.5" Y="1" Width="2.25" />
+    <TypeIdentifier>
+      <HashCode>AAACAAAAAAAgAAAAAEEAAAQAABAAACAAAAAAAAAAAAA=</HashCode>
+      <FileName>DPoWObject.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Property Name="RequiredLOD" />
+    </ShowAsAssociation>
+    <ShowAsCollectionAssociation>
+      <Property Name="Jobs" />
+    </ShowAsCollectionAssociation>
+  </Class>
+  <Class Name="Xbim.DPoW.Zone" Collapsed="true">
+    <Position X="8.5" Y="0.5" Width="2.25" />
+    <InheritanceLine Type="Xbim.DPoW.DPoWObject" FixedFromPoint="true">
+      <Path>
+        <Point X="11.5" Y="2.188" />
+        <Point X="11.125" Y="2.188" />
+        <Point X="11.125" Y="0.846" />
+        <Point X="10.75" Y="0.846" />
+      </Path>
+    </InheritanceLine>
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Zone.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Xbim.DPoW.AssetType" Collapsed="true">
+    <Position X="8.5" Y="1.25" Width="2.25" />
+    <InheritanceLine Type="Xbim.DPoW.DPoWObject" FixedFromPoint="true">
+      <Path>
+        <Point X="11.5" Y="2.188" />
+        <Point X="11.125" Y="2.188" />
+        <Point X="11.125" Y="1.596" />
+        <Point X="10.75" Y="1.596" />
+      </Path>
+    </InheritanceLine>
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>AssetType.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Xbim.DPoW.AssemblyType">
+    <Position X="8.5" Y="2" Width="2.25" />
+    <Compartments>
+      <Compartment Name="Methods" Collapsed="true" />
+    </Compartments>
+    <InheritanceLine Type="Xbim.DPoW.DPoWObject" FixedFromPoint="true">
+      <Path>
+        <Point X="11.5" Y="2.188" />
+        <Point X="11.125" Y="2.188" />
+        <Point X="11.125" Y="2.84" />
+        <Point X="10.75" Y="2.84" />
+      </Path>
+    </InheritanceLine>
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAIAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>AssemblyType.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Xbim.DPoW.Document">
+    <Position X="8.5" Y="3.75" Width="2.25" />
+    <TypeIdentifier>
+      <HashCode>AAAiAAAAgAAAACAAAEAAAAAEAAAAAAAAAAAAAAAAAgA=</HashCode>
+      <FileName>Document.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsCollectionAssociation>
+      <Property Name="Jobs" />
+    </ShowAsCollectionAssociation>
+  </Class>
+  <Class Name="Xbim.DPoW.RequiredLOD">
+    <Position X="14" Y="1" Width="2" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAEAAAAAAAAAAAAAQAAAAAAAIAAAAA=</HashCode>
+      <FileName>RequiredLOD.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Enum Name="Xbim.DPoW.CurrencyUnits">
+    <Position X="0.5" Y="0.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAAEg=</HashCode>
+      <FileName>CurrencyUnits.cs</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="Xbim.DPoW.LinearUnits">
+    <Position X="0.5" Y="4" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAEAAAAAAAAIAQAAAAAAAAAAIAAAAA=</HashCode>
+      <FileName>LinearUnits.cs</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="Xbim.DPoW.AreaUnits">
+    <Position X="0.5" Y="2.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAARAAAAAAAAAAAAAAACAAAAAAAAAAIAAAAAAAA=</HashCode>
+      <FileName>AreaUnits.cs</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="Xbim.DPoW.VolumeUnits">
+    <Position X="0.5" Y="5.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAEAAAAABAIAAAAAAAAAAAAAAAAAAAAAQAAAAAAAA=</HashCode>
+      <FileName>VolumeUnits.cs</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="Xbim.DPoW.ScopeOfDocument">
+    <Position X="0.5" Y="7.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAIACAAAIAAQAAAABAAAAAAAAAAAIAAAAAgAAAAAAA=</HashCode>
+      <FileName>ScopeOfDocument.cs</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>
