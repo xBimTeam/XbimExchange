@@ -3,7 +3,7 @@
   <Class Name="Xbim.DPoW.Project">
     <Position X="2.25" Y="0.75" Width="2" />
     <TypeIdentifier>
-      <HashCode>AAACAAAAAAAgAgAgCAAAAAAAAAAAIAAEAABAIBAAAAA=</HashCode>
+      <HashCode>AAACAAAAAAAgAgAgAAAgAAQAAAAAAAAEAAAAIBAAAAA=</HashCode>
       <FileName>Project.cs</FileName>
     </TypeIdentifier>
   </Class>
@@ -12,8 +12,8 @@
     <AssociationLine Name="Documents" Type="Xbim.DPoW.Document" FixedFromPoint="true" FixedToPoint="true">
       <Path>
         <Point X="6.625" Y="2.882" />
-        <Point X="6.625" Y="3.844" />
-        <Point X="8.5" Y="3.844" />
+        <Point X="6.625" Y="3.837" />
+        <Point X="8.5" Y="3.837" />
       </Path>
     </AssociationLine>
     <TypeIdentifier>
@@ -21,10 +21,10 @@
       <FileName>ProjectStage.cs</FileName>
     </TypeIdentifier>
     <ShowAsCollectionAssociation>
-      <Property Name="Documents" />
       <Property Name="Zones" />
       <Property Name="AssetTypes" />
       <Property Name="AssemblyTypes" />
+      <Property Name="Documents" />
     </ShowAsCollectionAssociation>
   </Class>
   <Class Name="Xbim.DPoW.PlanOfWork">
@@ -37,7 +37,7 @@
       </Path>
     </AssociationLine>
     <TypeIdentifier>
-      <HashCode>BAAKAAAAAAAAABAAgAAAGAAAoAAAAAAAAQIAAAAAAAA=</HashCode>
+      <HashCode>BAAKAAAAAAAAABAAAQAAGAAAoAAAAAAAAQIAAAAAAAA=</HashCode>
       <FileName>PlanOfWork.cs</FileName>
     </TypeIdentifier>
     <ShowAsAssociation>
@@ -45,9 +45,9 @@
       <Property Name="Facility" />
     </ShowAsAssociation>
     <ShowAsCollectionAssociation>
+      <Property Name="ClassificationSystems" />
       <Property Name="ProjectStages" />
       <Property Name="Contacts" />
-      <Property Name="ClassificationSystems" />
     </ShowAsCollectionAssociation>
   </Class>
   <Class Name="Xbim.DPoW.Contact">
@@ -65,7 +65,7 @@
       </MemberNameLabel>
     </AssociationLine>
     <TypeIdentifier>
-      <HashCode>AAQDACACAAAAAAAAAAACAAAAAAAAAAAAAAAAAAAQAAA=</HashCode>
+      <HashCode>IAACAAAAAAAAAAAACAAAAAQAACAAAAAAAAAAQAAQAAA=</HashCode>
       <FileName>Classification.cs</FileName>
     </TypeIdentifier>
     <ShowAsCollectionAssociation>
@@ -96,7 +96,7 @@
   <Class Name="Xbim.DPoW.DPoWObject">
     <Position X="11.5" Y="1" Width="2.25" />
     <TypeIdentifier>
-      <HashCode>AAACAAAAAAAgAAAAAEEAAAQAABAAACAAAAAAAAAAAAA=</HashCode>
+      <HashCode>AAACAAAAAACgAAAAAEAAAAQAABAAACAAAAAAAAAAAAA=</HashCode>
       <FileName>DPoWObject.cs</FileName>
     </TypeIdentifier>
     <ShowAsAssociation>
@@ -157,9 +157,12 @@
   <Class Name="Xbim.DPoW.Document">
     <Position X="8.5" Y="3.75" Width="2.25" />
     <TypeIdentifier>
-      <HashCode>AAAiAAAAgAAAACAAAEAAAAAEAAAAAAAAAAAAAAAAAgA=</HashCode>
+      <HashCode>AAACAAAAAACgACAAAEAAAAQAACAAAAAAAAAAAAAAAAA=</HashCode>
       <FileName>Document.cs</FileName>
     </TypeIdentifier>
+    <ShowAsAssociation>
+      <Property Name="Scope" />
+    </ShowAsAssociation>
     <ShowAsCollectionAssociation>
       <Property Name="Jobs" />
     </ShowAsCollectionAssociation>
@@ -200,7 +203,7 @@
     </TypeIdentifier>
   </Enum>
   <Enum Name="Xbim.DPoW.ScopeOfDocument">
-    <Position X="0.5" Y="7.5" Width="1.5" />
+    <Position X="10.25" Y="6.5" Width="1.75" />
     <TypeIdentifier>
       <HashCode>AAAIACAAAIAAQAAAABAAAAAAAAAAAIAAAAAgAAAAAAA=</HashCode>
       <FileName>ScopeOfDocument.cs</FileName>

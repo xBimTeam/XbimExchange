@@ -5,11 +5,11 @@ namespace Xbim.DPoW
 {
     public class Classification 
     {
-        public string ClassificationURI { get; set; }
-        public string ClassificationEditionDate { get; set; }
-        public string ClassificationName { get; set; }
-        public string ClassificationEdition { get; set; }
-        public string ClassificationPublisher { get; set; }
+        public string URI { get; set; }
+        public string EditionDate { get; set; }
+        public string Name { get; set; }
+        public string Edition { get; set; }
+        public string Publisher { get; set; }
         public List<ClassificationReference> ClassificationReferences { get; set; }
 
         public Guid Id { get; set; }

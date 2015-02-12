@@ -12,7 +12,7 @@ namespace Xbim.DPoW
         public Project Project { get; set; }
         public Facility Facility { get; set; }
         public List<ProjectStage> ProjectStages { get; set; }
-        public Guid ClientId { get; set; }
+        public Guid ClientContactId { get; set; }
         public List<Contact> Contacts { get; set; }
 
         public Guid Id { get; set;}

@@ -6,10 +6,10 @@ namespace Xbim.DPoW
     public class Document
     {
         public ScopeOfDocument Scope { get; set; }
-        public string DocumentDescription { get; set; }
-        public string DocumentURI { get; set; }
-        public Guid DocumentClassificationReferenceId { get; set; }
-        public string DocumentName { get; set; }
+        public string Description { get; set; }
+        public string URI { get; set; }
+        public List<Guid> ClassificationReferenceIds { get; set; }
+        public string Name { get; set; }
 
         public Guid Id { get; set; }
 
@@ -20,6 +20,7 @@ namespace Xbim.DPoW
 
         public Document()
         {
+            ClassificationReferenceIds = new List<Guid>();
             Jobs = new List<Job>();
             Id=Guid.NewGuid();
         }
