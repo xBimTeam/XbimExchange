@@ -10,6 +10,6 @@ namespace Xbim.DPoW
         squarecentimeters,
         squarekilometers,
         squaremeters,
-        squaremilimeters,
+        squaremillimeters,
     }
 }
