@@ -10,6 +10,6 @@ namespace Xbim.DPoW
         centimeters,
         kilometers,
         meters,
-        milimeters,
+        millimeters,
     }
 }

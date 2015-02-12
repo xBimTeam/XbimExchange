@@ -14,7 +14,7 @@ namespace Xbim.DPoW
 
         public Guid Id { get; set; }
 
-        public List<Zone> Zones { get; set; }
+        public List<SpaceTypes> SpaceTypes { get; set; }
 
         public List<AssetType> AssetTypes { get; set; }
 
@@ -24,7 +24,7 @@ namespace Xbim.DPoW
         public ProjectStage()
         {
             Documents = new List<Document>();
-            Zones = new List<Zone>();
+            SpaceTypes = new List<SpaceTypes>();
             AssetTypes = new List<AssetType>();
             AssemblyTypes = new List<AssemblyType>();
             Id = Guid.NewGuid();
