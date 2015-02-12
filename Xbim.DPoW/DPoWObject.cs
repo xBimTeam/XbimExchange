@@ -4,7 +4,7 @@ using System.Xml.Serialization;
 
 namespace Xbim.DPoW
 {
-    [XmlInclude(typeof(Zone))]
+    [XmlInclude(typeof(SpaceTypes))]
     [XmlInclude( typeof(AssemblyType))]
     [XmlInclude(typeof(AssetType))]
     public abstract class DPoWObject 
