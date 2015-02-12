@@ -73,9 +73,9 @@ namespace SerialisationHelper
             file = SavegeTypeReplacement(file, @"ZoneAssignmentCollectionType", @"ZoneKeyType", @"List<ZoneKeyType>");
 
             // type replacements
-            file = SavegeTypeReplacement(file, @"AttributeIntegerValueType", @"string", @"int");
-            file = SavegeTypeReplacement(file, @"IntegerValueType", @"string", @"int");
-
+            file = StringToNullableType(file, @"IntegerValueType", "IntegerValue", @"int");
+            file = StringToNullableType(file, @"AttributeIntegerValueType", @"MinValueInteger", @"int");
+            file = StringToNullableType(file, @"AttributeIntegerValueType", @"MaxValueInteger", @"int");
 
             // 
             // type attributes
@@ -84,6 +84,8 @@ namespace SerialisationHelper
 
             // fix namespace
             file = file.Replace(@"namespace Xbim.COBieLiteUK.SerialisationHelper", "namespace Xbim.COBieLiteUK");
+
+            file = file.Replace(@"[System.Xml.Serialization.XmlIgnoreAttribute()]", "[System.Xml.Serialization.XmlIgnoreAttribute()][Newtonsoft.Json.JsonIgnore]");
 
             File.Delete(fwrite);
             File.WriteAllText(fwrite, file);

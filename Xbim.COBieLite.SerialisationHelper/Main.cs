@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
+using System.Security.Cryptography;
 using System.Text.RegularExpressions;
 using System.Xml.Serialization;
 
@@ -10,6 +12,13 @@ namespace SerialisationHelper
     {
         private static void Main()
         {
+            var f = new FileInfo("XmlSerializationCode.tcs");
+            FixSerialisation(f, @"..\..\..\Xbim.COBieLite\COBieLite Schema\");
+
+            f = new FileInfo("XmlSerializationCode.tcs");
+            FixSerialisation(f, @"..\..\..\Xbim.COBieLiteUK\Schemas\");
+
+
             if (true)
             {
                 try
@@ -29,10 +38,19 @@ namespace SerialisationHelper
                     }
                     Console.ForegroundColor = ConsoleColor.Red;
                     Console.WriteLine(exception.Message);
+                    Console.ForegroundColor = ConsoleColor.Yellow;
+                    foreach (var ec in exs)
+                    {
+                        Console.WriteLine(ec.Message);
+                    }
                     Console.ResetColor();
                     Console.ReadKey();
                 }
             }
+            
+            DirectoryInfo d = new DirectoryInfo(".");
+            Console.WriteLine("Current folder: " + d.FullName);
+
 
             var fread = @"..\..\..\Xbim.COBieLite\COBieLite Schema\cobielite.designer.cs";
             var fwrite = @"..\..\..\Xbim.COBieLite\COBieLite Schema\cobielite.designer.RenamedClasses.cs";
@@ -46,11 +64,86 @@ namespace SerialisationHelper
             Console.ReadKey();
         }
 
+        private static void FixSerialisation(FileInfo f, string p)
+        {
+            if (!f.Exists)
+                return;
+            var d = new DirectoryInfo(p);
+            if (!d.Exists)
+                return;
+
+
+            string fName = Path.ChangeExtension(f.Name, "cs");
+
+            var destF = new FileInfo(Path.Combine(d.FullName, fName));
+            if (destF.Exists)
+                destF.Delete();
+            var destStream = destF.CreateText();
+
+            using (var rd = f.OpenText())
+            {
+                while (!rd.EndOfStream)
+                {
+                    var r = rd.ReadLine();
+                    if (r==null)
+                        break;
+                    if (r.StartsWith("[assembly:System.Reflection.AssemblyVersionAttribute"))
+                        continue;
+                    destStream.WriteLine(r);
+                }
+            }
+            destStream.Close();
+            f.Delete();
+        }
+
         private static string SavegeTypeReplacement(string file, string classname, string oldType, string newType)
         {
             var re = new Regex(@"\b" + oldType + @"\b");
             var code = GetClassCode(classname, file);
             var newcode = re.Replace(code, newType);
+            return file.Replace(code, newcode);
+        }
+
+
+        private static string StringToNullableType(string file, string classname, string fieldName, string newType)
+        {
+            var code = GetClassCode(classname, file);
+            var fld = new Regex("private string (" + fieldName + ")Field;", RegexOptions.IgnoreCase);
+            var ms = fld.Matches(code);
+            if (ms.Count == 0)
+                return code;
+            var m = ms[0];
+            var replace = string.Format(
+@"private {0}? {1}Field;
+        [XmlIgnore][Newtonsoft.Json.JsonIgnore]
+        public bool {2}Specified
+        {{
+            get {{ return this.{1}Field.HasValue; }}
+        }}
+", 
+                newType,
+                 m.Groups[1].Value,
+                 fieldName
+                 );
+
+            var newcode = fld.Replace(code, replace);
+
+            // property
+            string pattern = @"\[System.Xml.Serialization.XmlElementAttribute\(DataType = ""\w*""(, Order = (\d+))*\)].*?public string " + fieldName;
+            var regexOptions = RegexOptions.Multiline | RegexOptions.Singleline;
+            var regex = new Regex(pattern, regexOptions);
+
+            replace = string.Format("public {0}? {1}", newType, fieldName);
+
+            var tst = regex.Match(newcode);
+            var order = tst.Groups[2].Value;
+            if (order != "")
+            {
+                replace = "[System.Xml.Serialization.XmlElementAttribute(Order = " + order + ")]\r\n" + replace;
+            }
+            newcode = regex.Replace(newcode, replace);
+
+
             return file.Replace(code, newcode);
         }
 
