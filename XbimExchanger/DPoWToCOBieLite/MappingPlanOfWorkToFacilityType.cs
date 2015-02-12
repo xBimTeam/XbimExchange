@@ -49,13 +49,13 @@ namespace XbimExchanger.DPoWToCOBieLite
                 };
 
                 //get project attributes which are convertable to COBieLite facility
-                target.FacilityDefaultAreaUnit = DPoWToCOBieLiteExchanger.GetAreaUnit(sProject.AreaUnits);
+                target.FacilityDefaultAreaUnit = DpoWtoCoBieLiteExchanger.GetAreaUnit(sProject.AreaUnits);
                 target.FacilityDefaultAreaUnitSpecified = true;
-                target.FacilityDefaultCurrencyUnit = DPoWToCOBieLiteExchanger.GetCurrency(sProject.CurrencyUnits);
+                target.FacilityDefaultCurrencyUnit = DpoWtoCoBieLiteExchanger.GetCurrency(sProject.CurrencyUnits);
                 target.FacilityDefaultCurrencyUnitSpecified = true;
-                target.FacilityDefaultLinearUnit = DPoWToCOBieLiteExchanger.GetLinearUnit(sProject.LinearUnits);
+                target.FacilityDefaultLinearUnit = DpoWtoCoBieLiteExchanger.GetLinearUnit(sProject.LinearUnits);
                 target.FacilityDefaultLinearUnitSpecified = true;
-                target.FacilityDefaultVolumeUnit = DPoWToCOBieLiteExchanger.GetVolumeUnit(sProject.VolumeUnits);
+                target.FacilityDefaultVolumeUnit = DpoWtoCoBieLiteExchanger.GetVolumeUnit(sProject.VolumeUnits);
                 target.FacilityDefaultVolumeUnitSpecified = true;
             }
 

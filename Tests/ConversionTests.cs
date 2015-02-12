@@ -8,7 +8,6 @@ using Xbim.DPoW.Interfaces;
 using Xbim.Ifc2x3.MeasureResource;
 using Xbim.IO;
 using Xbim.XbimExtensions.Interfaces;
-using XbimExchanger;
 using XbimExchanger.COBieLiteToIfc;
 using XbimExchanger.DPoWToCOBieLite;
 using XbimExchanger.IfcHelpers;
@@ -40,11 +39,11 @@ namespace Tests
         }
 
         [TestMethod]
-        public void ConvertDPoWToCOBieLite()
+        public void ConvertDpoWtoCoBieLite()
         {
             var dpow = PlanOfWork.Open("NewtownHighSchool.dpow");
             var facility = new FacilityType();
-            var exchanger = new DPoWToCOBieLiteExchanger(dpow, facility);
+            var exchanger = new DpoWtoCoBieLiteExchanger(dpow, facility);
             exchanger.Convert();
 
             using (var tw = File.CreateText("NewtownHighSchool.COBieLite.json"))
@@ -56,13 +55,13 @@ namespace Tests
         }
 
         [TestMethod]
-        public void ConvertDPoWToCOBieLiteDPoWObjects()
+        public void ConvertDpoWtoCoBieLiteDpoWObjects()
         {
             var dpow = PlanOfWork.Open("NewtownHighSchool.dpow");
             var facility = new FacilityType();
             var stage = dpow.ProjectStages.FirstOrDefault(s => s.Jobs.Any(j => j.DPoWObjects != null && j.DPoWObjects.Any()));
             Assert.IsNotNull(stage);
-            var exchanger = new DPoWToCOBieLiteExchanger(dpow, facility, stage);
+            var exchanger = new DpoWtoCoBieLiteExchanger(dpow, facility, stage);
             exchanger.Convert();
 
             using (var tw = File.CreateText("NewtownHighSchool.COBieLite.json"))
@@ -71,18 +70,18 @@ namespace Tests
                 tw.Close();
             }
 
-            Assert.IsTrue(facility.AssetTypes.AssetType.Count() > 0);
+            Assert.IsTrue(facility.AssetTypes.AssetType.Any());
         }
 
         [TestMethod]
         public void UnitConversionTests()
         {
             var converter = new IfcUnitConverter("squaremetres");
-            var meterCubics = new string[] { " cubic-metres ", "cubicmetres", "cubicmeters", "m3", "cubic meters" };
+            var meterCubics = new[] { " cubic-metres ", "cubicmetres", "cubicmeters", "m3", "cubic meters" };
             foreach (var cubic in meterCubics)
             {
                 converter.Convert(cubic);
-                Assert.IsTrue(converter.ConversionFactor == 1.0);
+                Assert.IsTrue(Math.Abs(converter.ConversionFactor - 1.0) < 1e-9);
                 Assert.IsNotNull(converter.SiUnitName);
                 Assert.IsTrue(converter.SiUnitName.Value == IfcSIUnitName.CUBIC_METRE);
                 Assert.IsNull(converter.SiPrefix);

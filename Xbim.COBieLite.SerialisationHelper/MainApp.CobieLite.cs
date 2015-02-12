@@ -1,10 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
 using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 
 namespace SerialisationHelper
 {
@@ -14,27 +11,27 @@ namespace SerialisationHelper
         {
             var file = File.ReadAllText(fread);
 
-            HashSet<string> Classes = new HashSet<string>();
+            var classes = new HashSet<string>();
 
             var reClassList = new Regex(@"\b(\w+)Type1\b");
             var m = reClassList.Matches(file);
             foreach (Match match in m)
             {
                 var cname = match.Groups[1].Value;
-                if (!Classes.Contains(cname))
+                if (!classes.Contains(cname))
                 {
-                    Classes.Add(cname);
+                    classes.Add(cname);
                 }
             }
 
             Console.WriteLine("Classes found:");
-            foreach (var @class in Classes)
+            foreach (var @class in classes)
             {
                 Console.WriteLine(" - " + @class);
                 var srch = @"\b" + @class + @"Type\b";
                 var replace = @"" + @class + "TypeBase";
                 var reMoveToBase = new Regex(srch);
-                var m2 = reMoveToBase.Matches(file);
+                reMoveToBase.Matches(file);
                 file = reMoveToBase.Replace(file, replace);
 
                 srch = @"\b" + @class + @"Type1\b";

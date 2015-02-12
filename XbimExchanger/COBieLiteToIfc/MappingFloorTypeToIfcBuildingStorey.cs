@@ -3,6 +3,7 @@ using Xbim.COBieLite;
 using Xbim.Ifc2x3.Extensions;
 using Xbim.Ifc2x3.MeasureResource;
 using Xbim.Ifc2x3.ProductExtension;
+using XbimExchanger.COBieLiteHelpers;
 
 namespace XbimExchanger.COBieLiteToIfc
 {
@@ -13,10 +14,11 @@ namespace XbimExchanger.COBieLiteToIfc
         {
             buildingStory.Name = floorType.FloorName;
             buildingStory.Description = floorType.FloorDescription;
-            if (floorType.FloorElevationValue != null && floorType.FloorElevationValue.DecimalValueSpecified)
+            if (floorType.FloorElevationValue != null && floorType.FloorElevationValue.HasValue())
                 buildingStory.Elevation = floorType.FloorElevationValue.DecimalValue;
-            Exchanger.CreatePropertySingleValue(buildingStory,  floorType.FloorHeightValue,"FloorHeightValue", Exchanger.DefaultLinearUnit);
-
+            
+            Exchanger.TryCreatePropertySingleValue(buildingStory, floorType.FloorHeightValue, "FloorHeightValue", Exchanger.DefaultLinearUnit);
+           
             //write out the spaces
             if (floorType.Spaces != null)
             {
