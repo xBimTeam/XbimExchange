@@ -1,6 +1,6 @@
 ﻿namespace Xbim.DPoW
 {
-    public class Zone : DPoWObject
+    public class SpaceTypes : DPoWObject
     {
     }
 }

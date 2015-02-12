@@ -17,11 +17,11 @@
       </Path>
     </AssociationLine>
     <TypeIdentifier>
-      <HashCode>AAACEAAAAAAAAAAAAACAgCACAAAAAAACAAAAAIAAAAA=</HashCode>
+      <HashCode>AAACEAIAAAAAAAAAAACAgCAAAAAAAAACAAAAAIAAAAA=</HashCode>
       <FileName>ProjectStage.cs</FileName>
     </TypeIdentifier>
     <ShowAsCollectionAssociation>
-      <Property Name="Zones" />
+      <Property Name="SpaceTypes" />
       <Property Name="AssetTypes" />
       <Property Name="AssemblyTypes" />
       <Property Name="Documents" />
@@ -106,7 +106,7 @@
       <Property Name="Jobs" />
     </ShowAsCollectionAssociation>
   </Class>
-  <Class Name="Xbim.DPoW.Zone" Collapsed="true">
+  <Class Name="Xbim.DPoW.SpaceTypes" Collapsed="true">
     <Position X="8.5" Y="0.5" Width="2.25" />
     <InheritanceLine Type="Xbim.DPoW.DPoWObject" FixedFromPoint="true">
       <Path>
@@ -174,31 +174,31 @@
       <FileName>RequiredLOD.cs</FileName>
     </TypeIdentifier>
   </Class>
-  <Enum Name="Xbim.DPoW.CurrencyUnits">
+  <Enum Name="Xbim.DPoW.CurrencyUnits" Collapsed="true">
     <Position X="0.5" Y="0.75" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAAEg=</HashCode>
+      <HashCode>jiRCwcEjACCS0EgkgIXExIAAMfPKXAAAgIIMGABA4Mw=</HashCode>
       <FileName>CurrencyUnits.cs</FileName>
     </TypeIdentifier>
   </Enum>
   <Enum Name="Xbim.DPoW.LinearUnits">
-    <Position X="0.5" Y="4" Width="1.5" />
+    <Position X="0.5" Y="3.25" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAAAAAAAAAAAAAAEAAAAAAAAIAQAAAAAAAAAAIAAAAA=</HashCode>
+      <HashCode>CAAAAAAAAAAAAAAAAAAAAAAAIAQAAAAAAAAAAIAAAAA=</HashCode>
       <FileName>LinearUnits.cs</FileName>
     </TypeIdentifier>
   </Enum>
   <Enum Name="Xbim.DPoW.AreaUnits">
-    <Position X="0.5" Y="2.25" Width="1.5" />
+    <Position X="0.5" Y="1.5" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAAAAAARAAAAAAAAAAAAAAACAAAAAAAAAAIAAAAAAAA=</HashCode>
+      <HashCode>AAAAAAARAAQAAAAAAAAAAAAAAAAAAAAAAAIAAAAAAAA=</HashCode>
       <FileName>AreaUnits.cs</FileName>
     </TypeIdentifier>
   </Enum>
   <Enum Name="Xbim.DPoW.VolumeUnits">
-    <Position X="0.5" Y="5.75" Width="1.5" />
+    <Position X="0.5" Y="5" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAAAEAAAAABAIAAAAAAAAAAAAAAAAAAAAAQAAAAAAAA=</HashCode>
+      <HashCode>AAAAEAAAAAAAIAAAIAAAAAAAAAAAAAAAAAQAAAAAAAA=</HashCode>
       <FileName>VolumeUnits.cs</FileName>
     </TypeIdentifier>
   </Enum>

@@ -8,8 +8,8 @@ namespace Xbim.DPoW
     public enum VolumeUnits
     {
         cubiccentimeters,
-        cubuckilometers,
+        cubickilometers,
         cubicmeters,
-        cubicmilimeters,
+        cubicmillimeters,
     }
 }

@@ -4,11 +4,14 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Xml;
 using System.Xml.Serialization;
+using Newtonsoft.Json;
 using Xbim.COBieLite.CollectionTypes;
 using Xbim.Ifc2x3.Extensions;
 using Xbim.Ifc2x3.Kernel;
 using Xbim.Ifc2x3.ProductExtension;
 using Xbim.XbimExtensions.SelectTypes;
+using Xbim.COBieLite.Converters;
+using Newtonsoft.Json.Converters;
 
 namespace Xbim.COBieLite
 {
@@ -18,6 +21,20 @@ namespace Xbim.COBieLite
         public static System.Xml.Serialization.XmlSerializer GetSerializer()
         {
             return new FacilityTypeSerializer();
+        }
+
+        public static JsonSerializer GetJsonSerializer()
+        {
+            var serializerSettings = new JsonSerializerSettings
+            {
+                NullValueHandling = NullValueHandling.Ignore,
+                Formatting = Newtonsoft.Json.Formatting.Indented,
+                DateFormatHandling = DateFormatHandling.IsoDateFormat
+            };
+            serializerSettings.Converters.Add(new StringEnumConverter());
+            serializerSettings.Converters.Add(new AttributeValueTypeConverter());
+            var serialiser = JsonSerializer.Create(serializerSettings);
+            return serialiser;
         }
 
         public FacilityType(IfcBuilding ifcBuilding, CoBieLiteHelper helper)
