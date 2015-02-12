@@ -23,6 +23,7 @@ using Xbim.Ifc2x3.QuantityResource;
 using Xbim.Ifc2x3.SharedFacilitiesElements;
 using Xbim.IO;
 using System.Xml;
+using Xbim.COBieLite.Converters;
 using Xbim.XbimExtensions.SelectTypes;
 using Formatting = System.Xml.Formatting;
 
@@ -749,16 +750,27 @@ namespace Xbim.COBieLite
 
         static public void WriteJson(TextWriter textWriter, FacilityType theFacility)
         {
-            var serializerSettings = new JsonSerializerSettings
-            {
-                NullValueHandling = NullValueHandling.Ignore,
-                Formatting = Newtonsoft.Json.Formatting.Indented,
-                DateFormatHandling = DateFormatHandling.IsoDateFormat
-            };
-            serializerSettings.Converters.Add(new StringEnumConverter());
-            var serialiser = JsonSerializer.Create(serializerSettings);
+            var serialiser = FacilityType.GetJsonSerializer();
             serialiser.Serialize(textWriter, theFacility);
 
+        }
+
+        static public FacilityType ReadJson(TextReader textReader)
+        {
+            var serialiser = FacilityType.GetJsonSerializer();
+            return (FacilityType)serialiser.Deserialize(textReader, typeof(FacilityType));
+        }
+
+        static public FacilityType ReadJson(string path)
+        {
+            using (var textReader = File.OpenText(path))
+            {
+                var serialiser = FacilityType.GetJsonSerializer();
+                var facility = (FacilityType)serialiser.Deserialize(textReader, typeof(FacilityType));    
+                textReader.Close();
+                return facility;
+            }
+            
         }
 
         public static FacilityType ReadXml(string cobieModelFileName)
