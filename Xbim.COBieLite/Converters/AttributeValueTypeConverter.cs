@@ -114,8 +114,8 @@ namespace Xbim.COBieLite.Converters
             var item = attrValue.Item;
             if (item == null)
             {
-                var nullToken = JToken.Parse("null");
-                nullToken.WriteTo(writer);
+                var nullResult = new JObject { { attrValue.ItemElementName.ToString(), JToken.Parse("null") } };
+                nullResult.WriteTo(writer);
                 return;
             }
 
