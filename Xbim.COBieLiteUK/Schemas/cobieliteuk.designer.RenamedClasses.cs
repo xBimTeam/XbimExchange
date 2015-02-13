@@ -147,7 +147,7 @@ namespace Xbim.COBieLiteUK
             set { this.decimalValueField = value; }
         }
 
-        [System.Xml.Serialization.XmlIgnoreAttribute()]
+        [System.Xml.Serialization.XmlIgnoreAttribute()][Newtonsoft.Json.JsonIgnore]
         public bool DecimalValueSpecified
         {
             get { return this.decimalValueFieldSpecified; }
@@ -2667,7 +2667,7 @@ namespace Xbim.COBieLiteUK
             set { this.jobStartDateField = value; }
         }
 
-        [System.Xml.Serialization.XmlIgnoreAttribute()]
+        [System.Xml.Serialization.XmlIgnoreAttribute()][Newtonsoft.Json.JsonIgnore]
         public bool JobStartDateSpecified
         {
             get { return this.jobStartDateFieldSpecified; }
@@ -2739,10 +2739,16 @@ namespace Xbim.COBieLiteUK
     public partial class IntegerValueType : ValueBaseType
     {
 
-        private int integerValueField;
+        private int? integerValueField;
+        [XmlIgnore][Newtonsoft.Json.JsonIgnore]
+        public bool IntegerValueSpecified
+        {
+            get { return this.integerValueField.HasValue; }
+        }
 
-        [System.Xml.Serialization.XmlElementAttribute(DataType = "int", Order = 0)]
-        public int IntegerValue
+
+        [System.Xml.Serialization.XmlElementAttribute(Order = 0)]
+public int? IntegerValue
         {
             get { return this.integerValueField; }
             set { this.integerValueField = value; }
@@ -2756,19 +2762,31 @@ namespace Xbim.COBieLiteUK
     public partial class AttributeIntegerValueType : IntegerValueType
     {
 
-        private int minValueIntegerField;
+        private int? minValueIntegerField;
+        [XmlIgnore][Newtonsoft.Json.JsonIgnore]
+        public bool MinValueIntegerSpecified
+        {
+            get { return this.minValueIntegerField.HasValue; }
+        }
 
-        private int maxValueIntegerField;
 
-        [System.Xml.Serialization.XmlElementAttribute(DataType = "int", Order = 0)]
-        public int MinValueInteger
+        private int? maxValueIntegerField;
+        [XmlIgnore][Newtonsoft.Json.JsonIgnore]
+        public bool MaxValueIntegerSpecified
+        {
+            get { return this.maxValueIntegerField.HasValue; }
+        }
+
+
+        [System.Xml.Serialization.XmlElementAttribute(Order = 0)]
+public int? MinValueInteger
         {
             get { return this.minValueIntegerField; }
             set { this.minValueIntegerField = value; }
         }
 
-        [System.Xml.Serialization.XmlElementAttribute(DataType = "int", Order = 1)]
-        public int MaxValueInteger
+        [System.Xml.Serialization.XmlElementAttribute(Order = 1)]
+public int? MaxValueInteger
         {
             get { return this.maxValueIntegerField; }
             set { this.maxValueIntegerField = value; }
@@ -3065,7 +3083,7 @@ namespace Xbim.COBieLiteUK
             set { this.assetTypeAccountingCategoryField = value; }
         }
 
-        [System.Xml.Serialization.XmlIgnoreAttribute()]
+        [System.Xml.Serialization.XmlIgnoreAttribute()][Newtonsoft.Json.JsonIgnore]
         public bool AssetTypeAccountingCategorySpecified
         {
             get { return this.assetTypeAccountingCategoryFieldSpecified; }
@@ -3428,7 +3446,7 @@ namespace Xbim.COBieLiteUK
             set { this.assetInstallationDateField = value; }
         }
 
-        [System.Xml.Serialization.XmlIgnoreAttribute()]
+        [System.Xml.Serialization.XmlIgnoreAttribute()][Newtonsoft.Json.JsonIgnore]
         public bool AssetInstallationDateSpecified
         {
             get { return this.assetInstallationDateFieldSpecified; }
@@ -3451,7 +3469,7 @@ namespace Xbim.COBieLiteUK
             set { this.assetWarrantyStartDateField = value; }
         }
 
-        [System.Xml.Serialization.XmlIgnoreAttribute()]
+        [System.Xml.Serialization.XmlIgnoreAttribute()][Newtonsoft.Json.JsonIgnore]
         public bool AssetWarrantyStartDateSpecified
         {
             get { return this.assetWarrantyStartDateFieldSpecified; }
@@ -3762,7 +3780,7 @@ namespace Xbim.COBieLiteUK
             set { this.facilityDefaultLinearUnitField = value; }
         }
 
-        [System.Xml.Serialization.XmlIgnoreAttribute()]
+        [System.Xml.Serialization.XmlIgnoreAttribute()][Newtonsoft.Json.JsonIgnore]
         public bool FacilityDefaultLinearUnitSpecified
         {
             get { return this.facilityDefaultLinearUnitFieldSpecified; }
@@ -3777,7 +3795,7 @@ namespace Xbim.COBieLiteUK
             set { this.facilityDefaultAreaUnitField = value; }
         }
 
-        [System.Xml.Serialization.XmlIgnoreAttribute()]
+        [System.Xml.Serialization.XmlIgnoreAttribute()][Newtonsoft.Json.JsonIgnore]
         public bool FacilityDefaultAreaUnitSpecified
         {
             get { return this.facilityDefaultAreaUnitFieldSpecified; }
@@ -3792,7 +3810,7 @@ namespace Xbim.COBieLiteUK
             set { this.facilityDefaultVolumeUnitField = value; }
         }
 
-        [System.Xml.Serialization.XmlIgnoreAttribute()]
+        [System.Xml.Serialization.XmlIgnoreAttribute()][Newtonsoft.Json.JsonIgnore]
         public bool FacilityDefaultVolumeUnitSpecified
         {
             get { return this.facilityDefaultVolumeUnitFieldSpecified; }
@@ -3807,7 +3825,7 @@ namespace Xbim.COBieLiteUK
             set { this.facilityDefaultCurrencyUnitField = value; }
         }
 
-        [System.Xml.Serialization.XmlIgnoreAttribute()]
+        [System.Xml.Serialization.XmlIgnoreAttribute()][Newtonsoft.Json.JsonIgnore]
         public bool FacilityDefaultCurrencyUnitSpecified
         {
             get { return this.facilityDefaultCurrencyUnitFieldSpecified; }
@@ -4100,7 +4118,7 @@ namespace Xbim.COBieLiteUK
         }
 
         [System.Xml.Serialization.XmlElementAttribute(Order = 1)]
-        [System.Xml.Serialization.XmlIgnoreAttribute()]
+        [System.Xml.Serialization.XmlIgnoreAttribute()][Newtonsoft.Json.JsonIgnore]
         public ItemChoiceType ItemElementName
         {
             get { return this.itemElementNameField; }
@@ -4126,7 +4144,7 @@ namespace Xbim.COBieLiteUK
             set { this.booleanValueField = value; }
         }
 
-        [System.Xml.Serialization.XmlIgnoreAttribute()]
+        [System.Xml.Serialization.XmlIgnoreAttribute()][Newtonsoft.Json.JsonIgnore]
         public bool BooleanValueSpecified
         {
             get { return this.booleanValueFieldSpecified; }
@@ -4156,7 +4174,7 @@ namespace Xbim.COBieLiteUK
             set { this.minValueDecimalField = value; }
         }
 
-        [System.Xml.Serialization.XmlIgnoreAttribute()]
+        [System.Xml.Serialization.XmlIgnoreAttribute()][Newtonsoft.Json.JsonIgnore]
         public bool MinValueDecimalSpecified
         {
             get { return this.minValueDecimalFieldSpecified; }
@@ -4170,7 +4188,7 @@ namespace Xbim.COBieLiteUK
             set { this.maxValueDecimalField = value; }
         }
 
-        [System.Xml.Serialization.XmlIgnoreAttribute()]
+        [System.Xml.Serialization.XmlIgnoreAttribute()][Newtonsoft.Json.JsonIgnore]
         public bool MaxValueDecimalSpecified
         {
             get { return this.maxValueDecimalFieldSpecified; }

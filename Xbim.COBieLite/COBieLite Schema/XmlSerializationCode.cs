@@ -1,10 +1,9 @@
-﻿#if _DYNAMIC_XMLSERIALIZER_COMPILATION
+#if _DYNAMIC_XMLSERIALIZER_COMPILATION
 [assembly:System.Security.AllowPartiallyTrustedCallers()]
 [assembly:System.Security.SecurityTransparent()]
 [assembly:System.Security.SecurityRules(System.Security.SecurityRuleSet.Level1)]
 #endif
-
-[assembly:System.Xml.Serialization.XmlSerializerVersionAttribute(ParentAssemblyId=@"73d3c3c1-8173-43da-ade9-78136269fec4,", Version=@"4.0.0.0")]
+[assembly:System.Xml.Serialization.XmlSerializerVersionAttribute(ParentAssemblyId=@"9611d1dc-521c-4e89-b211-43ab7b206ec9,", Version=@"4.0.0.0")]
 namespace Microsoft.Xml.Serialization.GeneratedAssembly {
 
     public class XmlSerializationWriterFacilityType : System.Xml.Serialization.XmlSerializationWriter {
@@ -270,25 +269,25 @@ namespace Microsoft.Xml.Serialization.GeneratedAssembly {
                     if (((object)o.@Item) != null && !(o.@Item is global::Xbim.COBieLite.AttributeStringValueType)) throw CreateMismatchChoiceException(@"Xbim.COBieLite.AttributeStringValueType", @"ItemElementName", @"Xbim.COBieLite.ItemChoiceType.@AttributeStringValue");
                     Write35_AttributeStringValueType(@"AttributeStringValue", @"http://docs.buildingsmartalliance.org/nbims03/cobie/core", ((global::Xbim.COBieLite.AttributeStringValueType)o.@Item), false, false);
                 }
-                else if (o.@ItemElementName == Xbim.COBieLite.ItemChoiceType.@AttributeIntegerValue && ((object)(o.@Item) != null)) {
-                    if (((object)o.@Item) != null && !(o.@Item is global::Xbim.COBieLite.AttributeIntegerValueType)) throw CreateMismatchChoiceException(@"Xbim.COBieLite.AttributeIntegerValueType", @"ItemElementName", @"Xbim.COBieLite.ItemChoiceType.@AttributeIntegerValue");
-                    Write36_AttributeIntegerValueType(@"AttributeIntegerValue", @"http://docs.buildingsmartalliance.org/nbims03/cobie/core", ((global::Xbim.COBieLite.AttributeIntegerValueType)o.@Item), false, false);
-                }
                 else if (o.@ItemElementName == Xbim.COBieLite.ItemChoiceType.@AttributeDecimalValue && ((object)(o.@Item) != null)) {
                     if (((object)o.@Item) != null && !(o.@Item is global::Xbim.COBieLite.AttributeDecimalValueType)) throw CreateMismatchChoiceException(@"Xbim.COBieLite.AttributeDecimalValueType", @"ItemElementName", @"Xbim.COBieLite.ItemChoiceType.@AttributeDecimalValue");
                     Write38_AttributeDecimalValueType(@"AttributeDecimalValue", @"http://docs.buildingsmartalliance.org/nbims03/cobie/core", ((global::Xbim.COBieLite.AttributeDecimalValueType)o.@Item), false, false);
+                }
+                else if (o.@ItemElementName == Xbim.COBieLite.ItemChoiceType.@AttributeIntegerValue && ((object)(o.@Item) != null)) {
+                    if (((object)o.@Item) != null && !(o.@Item is global::Xbim.COBieLite.AttributeIntegerValueType)) throw CreateMismatchChoiceException(@"Xbim.COBieLite.AttributeIntegerValueType", @"ItemElementName", @"Xbim.COBieLite.ItemChoiceType.@AttributeIntegerValue");
+                    Write36_AttributeIntegerValueType(@"AttributeIntegerValue", @"http://docs.buildingsmartalliance.org/nbims03/cobie/core", ((global::Xbim.COBieLite.AttributeIntegerValueType)o.@Item), false, false);
                 }
                 else if (o.@ItemElementName == Xbim.COBieLite.ItemChoiceType.@AttributeBooleanValue && ((object)(o.@Item) != null)) {
                     if (((object)o.@Item) != null && !(o.@Item is global::Xbim.COBieLite.BooleanValueType)) throw CreateMismatchChoiceException(@"Xbim.COBieLite.BooleanValueType", @"ItemElementName", @"Xbim.COBieLite.ItemChoiceType.@AttributeBooleanValue");
                     Write39_BooleanValueType(@"AttributeBooleanValue", @"http://docs.buildingsmartalliance.org/nbims03/cobie/core", ((global::Xbim.COBieLite.BooleanValueType)o.@Item), false, false);
                 }
-                else if (o.@ItemElementName == Xbim.COBieLite.ItemChoiceType.@AttributeDateValue && ((object)(o.@Item) != null)) {
-                    if (((object)o.@Item) != null && !(o.@Item is global::System.DateTime)) throw CreateMismatchChoiceException(@"System.DateTime", @"ItemElementName", @"Xbim.COBieLite.ItemChoiceType.@AttributeDateValue");
-                    WriteElementStringRaw(@"AttributeDateValue", @"http://docs.buildingsmartalliance.org/nbims03/cobie/core", FromDate(((global::System.DateTime)o.@Item)));
-                }
                 else if (o.@ItemElementName == Xbim.COBieLite.ItemChoiceType.@AttributeTimeValue && ((object)(o.@Item) != null)) {
                     if (((object)o.@Item) != null && !(o.@Item is global::System.DateTime)) throw CreateMismatchChoiceException(@"System.DateTime", @"ItemElementName", @"Xbim.COBieLite.ItemChoiceType.@AttributeTimeValue");
                     WriteElementStringRaw(@"AttributeTimeValue", @"http://docs.buildingsmartalliance.org/nbims03/cobie/core", FromTime(((global::System.DateTime)o.@Item)));
+                }
+                else if (o.@ItemElementName == Xbim.COBieLite.ItemChoiceType.@AttributeDateValue && ((object)(o.@Item) != null)) {
+                    if (((object)o.@Item) != null && !(o.@Item is global::System.DateTime)) throw CreateMismatchChoiceException(@"System.DateTime", @"ItemElementName", @"Xbim.COBieLite.ItemChoiceType.@AttributeDateValue");
+                    WriteElementStringRaw(@"AttributeDateValue", @"http://docs.buildingsmartalliance.org/nbims03/cobie/core", FromDate(((global::System.DateTime)o.@Item)));
                 }
                 else if (o.@ItemElementName == Xbim.COBieLite.ItemChoiceType.@AttributeDateTimeValue && ((object)(o.@Item) != null)) {
                     if (((object)o.@Item) != null && !(o.@Item is global::System.DateTime)) throw CreateMismatchChoiceException(@"System.DateTime", @"ItemElementName", @"Xbim.COBieLite.ItemChoiceType.@AttributeDateTimeValue");
@@ -359,6 +358,28 @@ namespace Microsoft.Xml.Serialization.GeneratedAssembly {
             WriteEndElement(o);
         }
 
+        void Write36_AttributeIntegerValueType(string n, string ns, global::Xbim.COBieLite.AttributeIntegerValueType o, bool isNullable, bool needType) {
+            if ((object)o == null) {
+                if (isNullable) WriteNullTagLiteral(n, ns);
+                return;
+            }
+            if (!needType) {
+                System.Type t = o.GetType();
+                if (t == typeof(global::Xbim.COBieLite.AttributeIntegerValueType)) {
+                }
+                else {
+                    throw CreateUnknownTypeException(o);
+                }
+            }
+            WriteStartElement(n, ns, o, false, null);
+            if (needType) WriteXsiType(@"AttributeIntegerValueType", @"http://docs.buildingsmartalliance.org/nbims03/cobie/core");
+            WriteElementString(@"UnitName", @"http://docs.buildingsmartalliance.org/nbims03/cobie/core", ((global::System.String)o.@UnitName));
+            WriteElementStringRaw(@"IntegerValue", @"http://docs.buildingsmartalliance.org/nbims03/cobie/core", System.Xml.XmlConvert.ToString((global::System.Int32)((global::System.Int32)o.@IntegerValue)));
+            WriteElementStringRaw(@"MinValueInteger", @"http://docs.buildingsmartalliance.org/nbims03/cobie/core", System.Xml.XmlConvert.ToString((global::System.Int32)((global::System.Int32)o.@MinValueInteger)));
+            WriteElementStringRaw(@"MaxValueInteger", @"http://docs.buildingsmartalliance.org/nbims03/cobie/core", System.Xml.XmlConvert.ToString((global::System.Int32)((global::System.Int32)o.@MaxValueInteger)));
+            WriteEndElement(o);
+        }
+
         void Write38_AttributeDecimalValueType(string n, string ns, global::Xbim.COBieLite.AttributeDecimalValueType o, bool isNullable, bool needType) {
             if ((object)o == null) {
                 if (isNullable) WriteNullTagLiteral(n, ns);
@@ -384,28 +405,6 @@ namespace Microsoft.Xml.Serialization.GeneratedAssembly {
             if (o.@MaxValueDecimalSpecified) {
                 WriteElementStringRaw(@"MaxValueDecimal", @"http://docs.buildingsmartalliance.org/nbims03/cobie/core", System.Xml.XmlConvert.ToString((global::System.Double)((global::System.Double)o.@MaxValueDecimal)));
             }
-            WriteEndElement(o);
-        }
-
-        void Write36_AttributeIntegerValueType(string n, string ns, global::Xbim.COBieLite.AttributeIntegerValueType o, bool isNullable, bool needType) {
-            if ((object)o == null) {
-                if (isNullable) WriteNullTagLiteral(n, ns);
-                return;
-            }
-            if (!needType) {
-                System.Type t = o.GetType();
-                if (t == typeof(global::Xbim.COBieLite.AttributeIntegerValueType)) {
-                }
-                else {
-                    throw CreateUnknownTypeException(o);
-                }
-            }
-            WriteStartElement(n, ns, o, false, null);
-            if (needType) WriteXsiType(@"AttributeIntegerValueType", @"http://docs.buildingsmartalliance.org/nbims03/cobie/core");
-            WriteElementString(@"UnitName", @"http://docs.buildingsmartalliance.org/nbims03/cobie/core", ((global::System.String)o.@UnitName));
-            WriteElementStringRaw(@"IntegerValue", @"http://docs.buildingsmartalliance.org/nbims03/cobie/core", System.Xml.XmlConvert.ToString((global::System.Int32)((global::System.Int32)o.@IntegerValue)));
-            WriteElementStringRaw(@"MinValueInteger", @"http://docs.buildingsmartalliance.org/nbims03/cobie/core", System.Xml.XmlConvert.ToString((global::System.Int32)((global::System.Int32)o.@MinValueInteger)));
-            WriteElementStringRaw(@"MaxValueInteger", @"http://docs.buildingsmartalliance.org/nbims03/cobie/core", System.Xml.XmlConvert.ToString((global::System.Int32)((global::System.Int32)o.@MaxValueInteger)));
             WriteEndElement(o);
         }
 
@@ -2240,16 +2239,14 @@ namespace Microsoft.Xml.Serialization.GeneratedAssembly {
             int readerCount8 = ReaderCount;
             while (Reader.NodeType != System.Xml.XmlNodeType.EndElement && Reader.NodeType != System.Xml.XmlNodeType.None) {
                 if (Reader.NodeType == System.Xml.XmlNodeType.Element) {
-                    if (!paramsRead[0] && ((object) Reader.LocalName == (object)id62_AttributeDateTimeValue && (object) Reader.NamespaceURI == (object)id5_Item)) {
-                        {
-                            o.@Item = ToDateTime(Reader.ReadElementString());
-                        }
-                        o.@ItemElementName = global::Xbim.COBieLite.ItemChoiceType.@AttributeDateTimeValue;
-                        paramsRead[0] = true;
-                    }
-                    else if (!paramsRead[0] && ((object) Reader.LocalName == (object)id63_AttributeIntegerValue && (object) Reader.NamespaceURI == (object)id5_Item)) {
+                    if (!paramsRead[0] && ((object) Reader.LocalName == (object)id62_AttributeIntegerValue && (object) Reader.NamespaceURI == (object)id5_Item)) {
                         o.@Item = Read36_AttributeIntegerValueType(false, true);
                         o.@ItemElementName = global::Xbim.COBieLite.ItemChoiceType.@AttributeIntegerValue;
+                        paramsRead[0] = true;
+                    }
+                    else if (!paramsRead[0] && ((object) Reader.LocalName == (object)id63_AttributeMonetaryValue && (object) Reader.NamespaceURI == (object)id5_Item)) {
+                        o.@Item = Read76_AttributeMonetaryValueType(false, true);
+                        o.@ItemElementName = global::Xbim.COBieLite.ItemChoiceType.@AttributeMonetaryValue;
                         paramsRead[0] = true;
                     }
                     else if (!paramsRead[0] && ((object) Reader.LocalName == (object)id64_AttributeStringValue && (object) Reader.NamespaceURI == (object)id5_Item)) {
@@ -2262,9 +2259,11 @@ namespace Microsoft.Xml.Serialization.GeneratedAssembly {
                         o.@ItemElementName = global::Xbim.COBieLite.ItemChoiceType.@AttributeDecimalValue;
                         paramsRead[0] = true;
                     }
-                    else if (!paramsRead[0] && ((object) Reader.LocalName == (object)id66_AttributeMonetaryValue && (object) Reader.NamespaceURI == (object)id5_Item)) {
-                        o.@Item = Read76_AttributeMonetaryValueType(false, true);
-                        o.@ItemElementName = global::Xbim.COBieLite.ItemChoiceType.@AttributeMonetaryValue;
+                    else if (!paramsRead[0] && ((object) Reader.LocalName == (object)id66_AttributeDateValue && (object) Reader.NamespaceURI == (object)id5_Item)) {
+                        {
+                            o.@Item = ToDate(Reader.ReadElementString());
+                        }
+                        o.@ItemElementName = global::Xbim.COBieLite.ItemChoiceType.@AttributeDateValue;
                         paramsRead[0] = true;
                     }
                     else if (!paramsRead[0] && ((object) Reader.LocalName == (object)id67_AttributeTimeValue && (object) Reader.NamespaceURI == (object)id5_Item)) {
@@ -2279,19 +2278,19 @@ namespace Microsoft.Xml.Serialization.GeneratedAssembly {
                         o.@ItemElementName = global::Xbim.COBieLite.ItemChoiceType.@AttributeBooleanValue;
                         paramsRead[0] = true;
                     }
-                    else if (!paramsRead[0] && ((object) Reader.LocalName == (object)id69_AttributeDateValue && (object) Reader.NamespaceURI == (object)id5_Item)) {
+                    else if (!paramsRead[0] && ((object) Reader.LocalName == (object)id69_AttributeDateTimeValue && (object) Reader.NamespaceURI == (object)id5_Item)) {
                         {
-                            o.@Item = ToDate(Reader.ReadElementString());
+                            o.@Item = ToDateTime(Reader.ReadElementString());
                         }
-                        o.@ItemElementName = global::Xbim.COBieLite.ItemChoiceType.@AttributeDateValue;
+                        o.@ItemElementName = global::Xbim.COBieLite.ItemChoiceType.@AttributeDateTimeValue;
                         paramsRead[0] = true;
                     }
                     else {
-                        UnknownNode((object)o, @"http://docs.buildingsmartalliance.org/nbims03/cobie/core:AttributeDateTimeValue, http://docs.buildingsmartalliance.org/nbims03/cobie/core:AttributeIntegerValue, http://docs.buildingsmartalliance.org/nbims03/cobie/core:AttributeStringValue, http://docs.buildingsmartalliance.org/nbims03/cobie/core:AttributeDecimalValue, http://docs.buildingsmartalliance.org/nbims03/cobie/core:AttributeMonetaryValue, http://docs.buildingsmartalliance.org/nbims03/cobie/core:AttributeTimeValue, http://docs.buildingsmartalliance.org/nbims03/cobie/core:AttributeBooleanValue, http://docs.buildingsmartalliance.org/nbims03/cobie/core:AttributeDateValue");
+                        UnknownNode((object)o, @"http://docs.buildingsmartalliance.org/nbims03/cobie/core:AttributeIntegerValue, http://docs.buildingsmartalliance.org/nbims03/cobie/core:AttributeMonetaryValue, http://docs.buildingsmartalliance.org/nbims03/cobie/core:AttributeStringValue, http://docs.buildingsmartalliance.org/nbims03/cobie/core:AttributeDecimalValue, http://docs.buildingsmartalliance.org/nbims03/cobie/core:AttributeDateValue, http://docs.buildingsmartalliance.org/nbims03/cobie/core:AttributeTimeValue, http://docs.buildingsmartalliance.org/nbims03/cobie/core:AttributeBooleanValue, http://docs.buildingsmartalliance.org/nbims03/cobie/core:AttributeDateTimeValue");
                     }
                 }
                 else {
-                    UnknownNode((object)o, @"http://docs.buildingsmartalliance.org/nbims03/cobie/core:AttributeDateTimeValue, http://docs.buildingsmartalliance.org/nbims03/cobie/core:AttributeIntegerValue, http://docs.buildingsmartalliance.org/nbims03/cobie/core:AttributeStringValue, http://docs.buildingsmartalliance.org/nbims03/cobie/core:AttributeDecimalValue, http://docs.buildingsmartalliance.org/nbims03/cobie/core:AttributeMonetaryValue, http://docs.buildingsmartalliance.org/nbims03/cobie/core:AttributeTimeValue, http://docs.buildingsmartalliance.org/nbims03/cobie/core:AttributeBooleanValue, http://docs.buildingsmartalliance.org/nbims03/cobie/core:AttributeDateValue");
+                    UnknownNode((object)o, @"http://docs.buildingsmartalliance.org/nbims03/cobie/core:AttributeIntegerValue, http://docs.buildingsmartalliance.org/nbims03/cobie/core:AttributeMonetaryValue, http://docs.buildingsmartalliance.org/nbims03/cobie/core:AttributeStringValue, http://docs.buildingsmartalliance.org/nbims03/cobie/core:AttributeDecimalValue, http://docs.buildingsmartalliance.org/nbims03/cobie/core:AttributeDateValue, http://docs.buildingsmartalliance.org/nbims03/cobie/core:AttributeTimeValue, http://docs.buildingsmartalliance.org/nbims03/cobie/core:AttributeBooleanValue, http://docs.buildingsmartalliance.org/nbims03/cobie/core:AttributeDateTimeValue");
                 }
                 Reader.MoveToContent();
                 CheckReaderCount(ref whileIterations8, ref readerCount8);
@@ -2357,20 +2356,20 @@ namespace Microsoft.Xml.Serialization.GeneratedAssembly {
             return o;
         }
 
-        global::Xbim.COBieLite.AttributeMonetaryValueType Read76_AttributeMonetaryValueType(bool isNullable, bool checkType) {
+        global::Xbim.COBieLite.AttributeDecimalValueType Read38_AttributeDecimalValueType(bool isNullable, bool checkType) {
             System.Xml.XmlQualifiedName xsiType = checkType ? GetXsiType() : null;
             bool isNull = false;
             if (isNullable) isNull = ReadNull();
             if (checkType) {
-            if (xsiType == null || ((object) ((System.Xml.XmlQualifiedName)xsiType).Name == (object)id73_AttributeMonetaryValueType && (object) ((System.Xml.XmlQualifiedName)xsiType).Namespace == (object)id5_Item)) {
+            if (xsiType == null || ((object) ((System.Xml.XmlQualifiedName)xsiType).Name == (object)id73_AttributeDecimalValueType && (object) ((System.Xml.XmlQualifiedName)xsiType).Namespace == (object)id5_Item)) {
             }
             else
                 throw CreateUnknownTypeException((System.Xml.XmlQualifiedName)xsiType);
             }
             if (isNull) return null;
-            global::Xbim.COBieLite.AttributeMonetaryValueType o;
-            o = new global::Xbim.COBieLite.AttributeMonetaryValueType();
-            bool[] paramsRead = new bool[2];
+            global::Xbim.COBieLite.AttributeDecimalValueType o;
+            o = new global::Xbim.COBieLite.AttributeDecimalValueType();
+            bool[] paramsRead = new bool[4];
             while (Reader.MoveToNextAttribute()) {
                 if (!IsXmlnsAttribute(Reader.Name)) {
                     UnknownNode((object)o);
@@ -2387,24 +2386,39 @@ namespace Microsoft.Xml.Serialization.GeneratedAssembly {
             int readerCount10 = ReaderCount;
             while (Reader.NodeType != System.Xml.XmlNodeType.EndElement && Reader.NodeType != System.Xml.XmlNodeType.None) {
                 if (Reader.NodeType == System.Xml.XmlNodeType.Element) {
-                    if (!paramsRead[0] && ((object) Reader.LocalName == (object)id74_MonetaryValue && (object) Reader.NamespaceURI == (object)id5_Item)) {
+                    if (!paramsRead[0] && ((object) Reader.LocalName == (object)id71_UnitName && (object) Reader.NamespaceURI == (object)id5_Item)) {
                         {
-                            o.@MonetaryValue = System.Xml.XmlConvert.ToDecimal(Reader.ReadElementString());
+                            o.@UnitName = Reader.ReadElementString();
                         }
                         paramsRead[0] = true;
                     }
-                    else if (!paramsRead[1] && ((object) Reader.LocalName == (object)id75_MonetaryUnit && (object) Reader.NamespaceURI == (object)id5_Item)) {
+                    else if (!paramsRead[1] && ((object) Reader.LocalName == (object)id74_DecimalValue && (object) Reader.NamespaceURI == (object)id5_Item)) {
+                        o.@DecimalValueSpecified = true;
                         {
-                            o.@MonetaryUnit = Read75_CurrencyUnitSimpleType(Reader.ReadElementString());
+                            o.@DecimalValue = System.Xml.XmlConvert.ToDouble(Reader.ReadElementString());
                         }
                         paramsRead[1] = true;
                     }
+                    else if (!paramsRead[2] && ((object) Reader.LocalName == (object)id75_MinValueDecimal && (object) Reader.NamespaceURI == (object)id5_Item)) {
+                        o.@MinValueDecimalSpecified = true;
+                        {
+                            o.@MinValueDecimal = System.Xml.XmlConvert.ToDouble(Reader.ReadElementString());
+                        }
+                        paramsRead[2] = true;
+                    }
+                    else if (!paramsRead[3] && ((object) Reader.LocalName == (object)id76_MaxValueDecimal && (object) Reader.NamespaceURI == (object)id5_Item)) {
+                        o.@MaxValueDecimalSpecified = true;
+                        {
+                            o.@MaxValueDecimal = System.Xml.XmlConvert.ToDouble(Reader.ReadElementString());
+                        }
+                        paramsRead[3] = true;
+                    }
                     else {
-                        UnknownNode((object)o, @"http://docs.buildingsmartalliance.org/nbims03/cobie/core:MonetaryValue, http://docs.buildingsmartalliance.org/nbims03/cobie/core:MonetaryUnit");
+                        UnknownNode((object)o, @"http://docs.buildingsmartalliance.org/nbims03/cobie/core:UnitName, http://docs.buildingsmartalliance.org/nbims03/cobie/core:DecimalValue, http://docs.buildingsmartalliance.org/nbims03/cobie/core:MinValueDecimal, http://docs.buildingsmartalliance.org/nbims03/cobie/core:MaxValueDecimal");
                     }
                 }
                 else {
-                    UnknownNode((object)o, @"http://docs.buildingsmartalliance.org/nbims03/cobie/core:MonetaryValue, http://docs.buildingsmartalliance.org/nbims03/cobie/core:MonetaryUnit");
+                    UnknownNode((object)o, @"http://docs.buildingsmartalliance.org/nbims03/cobie/core:UnitName, http://docs.buildingsmartalliance.org/nbims03/cobie/core:DecimalValue, http://docs.buildingsmartalliance.org/nbims03/cobie/core:MinValueDecimal, http://docs.buildingsmartalliance.org/nbims03/cobie/core:MaxValueDecimal");
                 }
                 Reader.MoveToContent();
                 CheckReaderCount(ref whileIterations10, ref readerCount10);
@@ -2413,30 +2427,20 @@ namespace Microsoft.Xml.Serialization.GeneratedAssembly {
             return o;
         }
 
-        global::Xbim.COBieLite.CurrencyUnitSimpleType Read75_CurrencyUnitSimpleType(string s) {
-            switch (s) {
-                case @"British Pounds": return global::Xbim.COBieLite.CurrencyUnitSimpleType.@BritishPounds;
-                case @"Dollars": return global::Xbim.COBieLite.CurrencyUnitSimpleType.@Dollars;
-                case @"Euros": return global::Xbim.COBieLite.CurrencyUnitSimpleType.@Euros;
-                case @"": return global::Xbim.COBieLite.CurrencyUnitSimpleType.@Item;
-                default: throw CreateUnknownConstantException(s, typeof(global::Xbim.COBieLite.CurrencyUnitSimpleType));
-            }
-        }
-
-        global::Xbim.COBieLite.AttributeDecimalValueType Read38_AttributeDecimalValueType(bool isNullable, bool checkType) {
+        global::Xbim.COBieLite.AttributeStringValueType Read35_AttributeStringValueType(bool isNullable, bool checkType) {
             System.Xml.XmlQualifiedName xsiType = checkType ? GetXsiType() : null;
             bool isNull = false;
             if (isNullable) isNull = ReadNull();
             if (checkType) {
-            if (xsiType == null || ((object) ((System.Xml.XmlQualifiedName)xsiType).Name == (object)id76_AttributeDecimalValueType && (object) ((System.Xml.XmlQualifiedName)xsiType).Namespace == (object)id5_Item)) {
+            if (xsiType == null || ((object) ((System.Xml.XmlQualifiedName)xsiType).Name == (object)id77_AttributeStringValueType && (object) ((System.Xml.XmlQualifiedName)xsiType).Namespace == (object)id5_Item)) {
             }
             else
                 throw CreateUnknownTypeException((System.Xml.XmlQualifiedName)xsiType);
             }
             if (isNull) return null;
-            global::Xbim.COBieLite.AttributeDecimalValueType o;
-            o = new global::Xbim.COBieLite.AttributeDecimalValueType();
-            bool[] paramsRead = new bool[4];
+            global::Xbim.COBieLite.AttributeStringValueType o;
+            o = new global::Xbim.COBieLite.AttributeStringValueType();
+            bool[] paramsRead = new bool[3];
             while (Reader.MoveToNextAttribute()) {
                 if (!IsXmlnsAttribute(Reader.Name)) {
                     UnknownNode((object)o);
@@ -2459,84 +2463,13 @@ namespace Microsoft.Xml.Serialization.GeneratedAssembly {
                         }
                         paramsRead[0] = true;
                     }
-                    else if (!paramsRead[1] && ((object) Reader.LocalName == (object)id77_DecimalValue && (object) Reader.NamespaceURI == (object)id5_Item)) {
-                        o.@DecimalValueSpecified = true;
-                        {
-                            o.@DecimalValue = System.Xml.XmlConvert.ToDouble(Reader.ReadElementString());
-                        }
-                        paramsRead[1] = true;
-                    }
-                    else if (!paramsRead[2] && ((object) Reader.LocalName == (object)id78_MinValueDecimal && (object) Reader.NamespaceURI == (object)id5_Item)) {
-                        o.@MinValueDecimalSpecified = true;
-                        {
-                            o.@MinValueDecimal = System.Xml.XmlConvert.ToDouble(Reader.ReadElementString());
-                        }
-                        paramsRead[2] = true;
-                    }
-                    else if (!paramsRead[3] && ((object) Reader.LocalName == (object)id79_MaxValueDecimal && (object) Reader.NamespaceURI == (object)id5_Item)) {
-                        o.@MaxValueDecimalSpecified = true;
-                        {
-                            o.@MaxValueDecimal = System.Xml.XmlConvert.ToDouble(Reader.ReadElementString());
-                        }
-                        paramsRead[3] = true;
-                    }
-                    else {
-                        UnknownNode((object)o, @"http://docs.buildingsmartalliance.org/nbims03/cobie/core:UnitName, http://docs.buildingsmartalliance.org/nbims03/cobie/core:DecimalValue, http://docs.buildingsmartalliance.org/nbims03/cobie/core:MinValueDecimal, http://docs.buildingsmartalliance.org/nbims03/cobie/core:MaxValueDecimal");
-                    }
-                }
-                else {
-                    UnknownNode((object)o, @"http://docs.buildingsmartalliance.org/nbims03/cobie/core:UnitName, http://docs.buildingsmartalliance.org/nbims03/cobie/core:DecimalValue, http://docs.buildingsmartalliance.org/nbims03/cobie/core:MinValueDecimal, http://docs.buildingsmartalliance.org/nbims03/cobie/core:MaxValueDecimal");
-                }
-                Reader.MoveToContent();
-                CheckReaderCount(ref whileIterations11, ref readerCount11);
-            }
-            ReadEndElement();
-            return o;
-        }
-
-        global::Xbim.COBieLite.AttributeStringValueType Read35_AttributeStringValueType(bool isNullable, bool checkType) {
-            System.Xml.XmlQualifiedName xsiType = checkType ? GetXsiType() : null;
-            bool isNull = false;
-            if (isNullable) isNull = ReadNull();
-            if (checkType) {
-            if (xsiType == null || ((object) ((System.Xml.XmlQualifiedName)xsiType).Name == (object)id80_AttributeStringValueType && (object) ((System.Xml.XmlQualifiedName)xsiType).Namespace == (object)id5_Item)) {
-            }
-            else
-                throw CreateUnknownTypeException((System.Xml.XmlQualifiedName)xsiType);
-            }
-            if (isNull) return null;
-            global::Xbim.COBieLite.AttributeStringValueType o;
-            o = new global::Xbim.COBieLite.AttributeStringValueType();
-            bool[] paramsRead = new bool[3];
-            while (Reader.MoveToNextAttribute()) {
-                if (!IsXmlnsAttribute(Reader.Name)) {
-                    UnknownNode((object)o);
-                }
-            }
-            Reader.MoveToElement();
-            if (Reader.IsEmptyElement) {
-                Reader.Skip();
-                return o;
-            }
-            Reader.ReadStartElement();
-            Reader.MoveToContent();
-            int whileIterations12 = 0;
-            int readerCount12 = ReaderCount;
-            while (Reader.NodeType != System.Xml.XmlNodeType.EndElement && Reader.NodeType != System.Xml.XmlNodeType.None) {
-                if (Reader.NodeType == System.Xml.XmlNodeType.Element) {
-                    if (!paramsRead[0] && ((object) Reader.LocalName == (object)id71_UnitName && (object) Reader.NamespaceURI == (object)id5_Item)) {
-                        {
-                            o.@UnitName = Reader.ReadElementString();
-                        }
-                        paramsRead[0] = true;
-                    }
-                    else if (!paramsRead[1] && ((object) Reader.LocalName == (object)id81_StringValue && (object) Reader.NamespaceURI == (object)id5_Item)) {
+                    else if (!paramsRead[1] && ((object) Reader.LocalName == (object)id78_StringValue && (object) Reader.NamespaceURI == (object)id5_Item)) {
                         {
                             o.@StringValue = Reader.ReadElementString();
                         }
                         paramsRead[1] = true;
                     }
-                    else if (!paramsRead[2] && ((object) Reader.LocalName == (object)id82_AllowedValues && (object) Reader.NamespaceURI == (object)id5_Item)) {
+                    else if (!paramsRead[2] && ((object) Reader.LocalName == (object)id79_AllowedValues && (object) Reader.NamespaceURI == (object)id5_Item)) {
                         o.@AllowedValues = Read34_AllowedValueCollectionType(false, true);
                         paramsRead[2] = true;
                     }
@@ -2548,7 +2481,7 @@ namespace Microsoft.Xml.Serialization.GeneratedAssembly {
                     UnknownNode((object)o, @"http://docs.buildingsmartalliance.org/nbims03/cobie/core:UnitName, http://docs.buildingsmartalliance.org/nbims03/cobie/core:StringValue, http://docs.buildingsmartalliance.org/nbims03/cobie/core:AllowedValues");
                 }
                 Reader.MoveToContent();
-                CheckReaderCount(ref whileIterations12, ref readerCount12);
+                CheckReaderCount(ref whileIterations11, ref readerCount11);
             }
             ReadEndElement();
             return o;
@@ -2559,7 +2492,7 @@ namespace Microsoft.Xml.Serialization.GeneratedAssembly {
             bool isNull = false;
             if (isNullable) isNull = ReadNull();
             if (checkType) {
-            if (xsiType == null || ((object) ((System.Xml.XmlQualifiedName)xsiType).Name == (object)id83_AllowedValueCollectionType && (object) ((System.Xml.XmlQualifiedName)xsiType).Namespace == (object)id5_Item)) {
+            if (xsiType == null || ((object) ((System.Xml.XmlQualifiedName)xsiType).Name == (object)id80_AllowedValueCollectionType && (object) ((System.Xml.XmlQualifiedName)xsiType).Namespace == (object)id5_Item)) {
             }
             else
                 throw CreateUnknownTypeException((System.Xml.XmlQualifiedName)xsiType);
@@ -2582,11 +2515,11 @@ namespace Microsoft.Xml.Serialization.GeneratedAssembly {
             }
             Reader.ReadStartElement();
             Reader.MoveToContent();
-            int whileIterations13 = 0;
-            int readerCount13 = ReaderCount;
+            int whileIterations12 = 0;
+            int readerCount12 = ReaderCount;
             while (Reader.NodeType != System.Xml.XmlNodeType.EndElement && Reader.NodeType != System.Xml.XmlNodeType.None) {
                 if (Reader.NodeType == System.Xml.XmlNodeType.Element) {
-                    if (((object) Reader.LocalName == (object)id84_AttributeAllowedValue && (object) Reader.NamespaceURI == (object)id5_Item)) {
+                    if (((object) Reader.LocalName == (object)id81_AttributeAllowedValue && (object) Reader.NamespaceURI == (object)id5_Item)) {
                         {
                             a_0.Add(Reader.ReadElementString());
                         }
@@ -2599,10 +2532,76 @@ namespace Microsoft.Xml.Serialization.GeneratedAssembly {
                     UnknownNode((object)o, @"http://docs.buildingsmartalliance.org/nbims03/cobie/core:AttributeAllowedValue");
                 }
                 Reader.MoveToContent();
+                CheckReaderCount(ref whileIterations12, ref readerCount12);
+            }
+            ReadEndElement();
+            return o;
+        }
+
+        global::Xbim.COBieLite.AttributeMonetaryValueType Read76_AttributeMonetaryValueType(bool isNullable, bool checkType) {
+            System.Xml.XmlQualifiedName xsiType = checkType ? GetXsiType() : null;
+            bool isNull = false;
+            if (isNullable) isNull = ReadNull();
+            if (checkType) {
+            if (xsiType == null || ((object) ((System.Xml.XmlQualifiedName)xsiType).Name == (object)id82_AttributeMonetaryValueType && (object) ((System.Xml.XmlQualifiedName)xsiType).Namespace == (object)id5_Item)) {
+            }
+            else
+                throw CreateUnknownTypeException((System.Xml.XmlQualifiedName)xsiType);
+            }
+            if (isNull) return null;
+            global::Xbim.COBieLite.AttributeMonetaryValueType o;
+            o = new global::Xbim.COBieLite.AttributeMonetaryValueType();
+            bool[] paramsRead = new bool[2];
+            while (Reader.MoveToNextAttribute()) {
+                if (!IsXmlnsAttribute(Reader.Name)) {
+                    UnknownNode((object)o);
+                }
+            }
+            Reader.MoveToElement();
+            if (Reader.IsEmptyElement) {
+                Reader.Skip();
+                return o;
+            }
+            Reader.ReadStartElement();
+            Reader.MoveToContent();
+            int whileIterations13 = 0;
+            int readerCount13 = ReaderCount;
+            while (Reader.NodeType != System.Xml.XmlNodeType.EndElement && Reader.NodeType != System.Xml.XmlNodeType.None) {
+                if (Reader.NodeType == System.Xml.XmlNodeType.Element) {
+                    if (!paramsRead[0] && ((object) Reader.LocalName == (object)id83_MonetaryValue && (object) Reader.NamespaceURI == (object)id5_Item)) {
+                        {
+                            o.@MonetaryValue = System.Xml.XmlConvert.ToDecimal(Reader.ReadElementString());
+                        }
+                        paramsRead[0] = true;
+                    }
+                    else if (!paramsRead[1] && ((object) Reader.LocalName == (object)id84_MonetaryUnit && (object) Reader.NamespaceURI == (object)id5_Item)) {
+                        {
+                            o.@MonetaryUnit = Read75_CurrencyUnitSimpleType(Reader.ReadElementString());
+                        }
+                        paramsRead[1] = true;
+                    }
+                    else {
+                        UnknownNode((object)o, @"http://docs.buildingsmartalliance.org/nbims03/cobie/core:MonetaryValue, http://docs.buildingsmartalliance.org/nbims03/cobie/core:MonetaryUnit");
+                    }
+                }
+                else {
+                    UnknownNode((object)o, @"http://docs.buildingsmartalliance.org/nbims03/cobie/core:MonetaryValue, http://docs.buildingsmartalliance.org/nbims03/cobie/core:MonetaryUnit");
+                }
+                Reader.MoveToContent();
                 CheckReaderCount(ref whileIterations13, ref readerCount13);
             }
             ReadEndElement();
             return o;
+        }
+
+        global::Xbim.COBieLite.CurrencyUnitSimpleType Read75_CurrencyUnitSimpleType(string s) {
+            switch (s) {
+                case @"British Pounds": return global::Xbim.COBieLite.CurrencyUnitSimpleType.@BritishPounds;
+                case @"Dollars": return global::Xbim.COBieLite.CurrencyUnitSimpleType.@Dollars;
+                case @"Euros": return global::Xbim.COBieLite.CurrencyUnitSimpleType.@Euros;
+                case @"": return global::Xbim.COBieLite.CurrencyUnitSimpleType.@Item;
+                default: throw CreateUnknownConstantException(s, typeof(global::Xbim.COBieLite.CurrencyUnitSimpleType));
+            }
         }
 
         global::Xbim.COBieLite.AttributeIntegerValueType Read36_AttributeIntegerValueType(bool isNullable, bool checkType) {
@@ -3887,7 +3886,7 @@ namespace Microsoft.Xml.Serialization.GeneratedAssembly {
             if (checkType) {
             if (xsiType == null || ((object) ((System.Xml.XmlQualifiedName)xsiType).Name == (object)id200_DecimalValueType && (object) ((System.Xml.XmlQualifiedName)xsiType).Namespace == (object)id5_Item)) {
             }
-            else if (((object) ((System.Xml.XmlQualifiedName)xsiType).Name == (object)id76_AttributeDecimalValueType && (object) ((System.Xml.XmlQualifiedName)xsiType).Namespace == (object)id5_Item))
+            else if (((object) ((System.Xml.XmlQualifiedName)xsiType).Name == (object)id73_AttributeDecimalValueType && (object) ((System.Xml.XmlQualifiedName)xsiType).Namespace == (object)id5_Item))
                 return Read38_AttributeDecimalValueType(isNullable, false);
             else
                 throw CreateUnknownTypeException((System.Xml.XmlQualifiedName)xsiType);
@@ -3918,7 +3917,7 @@ namespace Microsoft.Xml.Serialization.GeneratedAssembly {
                         }
                         paramsRead[0] = true;
                     }
-                    else if (!paramsRead[1] && ((object) Reader.LocalName == (object)id77_DecimalValue && (object) Reader.NamespaceURI == (object)id5_Item)) {
+                    else if (!paramsRead[1] && ((object) Reader.LocalName == (object)id74_DecimalValue && (object) Reader.NamespaceURI == (object)id5_Item)) {
                         o.@DecimalValueSpecified = true;
                         {
                             o.@DecimalValue = System.Xml.XmlConvert.ToDouble(Reader.ReadElementString());
@@ -5517,20 +5516,20 @@ namespace Microsoft.Xml.Serialization.GeneratedAssembly {
         string id223_WarrantyDocuments;
         string id91_ContactTypeBase;
         string id197_ResourceAttributes;
-        string id80_AttributeStringValueType;
+        string id77_AttributeStringValueType;
         string id34_IssueSeverityText;
         string id213_SpareIssues;
         string id292_ProjectType;
         string id130_SystemIssues;
         string id58_AttributeDescription;
-        string id84_AttributeAllowedValue;
+        string id81_AttributeAllowedValue;
         string id259_ZoneAttributes;
-        string id69_AttributeDateValue;
+        string id66_AttributeDateValue;
         string id288_ZoneKeyType;
-        string id78_MinValueDecimal;
+        string id75_MinValueDecimal;
         string id199_ResourceIssues;
         string id1_Facility;
-        string id66_AttributeMonetaryValue;
+        string id63_AttributeMonetaryValue;
         string id5_Item;
         string id232_AssetInstallationDate;
         string id24_Contacts;
@@ -5561,7 +5560,7 @@ namespace Microsoft.Xml.Serialization.GeneratedAssembly {
         string id283_SpaceAttributes;
         string id156_Item;
         string id60_AttributeIssues;
-        string id74_MonetaryValue;
+        string id83_MonetaryValue;
         string id155_Assets;
         string id32_IssueCategory;
         string id26_FacilityDocuments;
@@ -5570,7 +5569,7 @@ namespace Microsoft.Xml.Serialization.GeneratedAssembly {
         string id97_ContactGivenName;
         string id174_JobCollectionType;
         string id208_SpareSetNumber;
-        string id73_AttributeMonetaryValueType;
+        string id82_AttributeMonetaryValueType;
         string id89_ContactCollectionType;
         string id182_JobDuration;
         string id3_FacilityTypeBase;
@@ -5593,7 +5592,7 @@ namespace Microsoft.Xml.Serialization.GeneratedAssembly {
         string id59_AttributeValue;
         string id90_Contact;
         string id190_JobIssues;
-        string id75_MonetaryUnit;
+        string id84_MonetaryUnit;
         string id106_ContactAttributes;
         string id39_ContactKeyType;
         string id171_AssemblyAttributes;
@@ -5609,7 +5608,7 @@ namespace Microsoft.Xml.Serialization.GeneratedAssembly {
         string id126_SystemCategory;
         string id105_ContactURL;
         string id30_IssueTypeBase;
-        string id82_AllowedValues;
+        string id79_AllowedValues;
         string id25_FacilityAttributes;
         string id166_AssemblyTypeBase;
         string id40_ContactEmailReference;
@@ -5630,7 +5629,7 @@ namespace Microsoft.Xml.Serialization.GeneratedAssembly {
         string id265_FloorCategory;
         string id246_SystemKeyType;
         string id159_Jobs;
-        string id77_DecimalValue;
+        string id74_DecimalValue;
         string id211_SpareAttributes;
         string id68_AttributeBooleanValue;
         string id137_AssetTypeAccountingCategory;
@@ -5646,10 +5645,10 @@ namespace Microsoft.Xml.Serialization.GeneratedAssembly {
         string id278_SpaceSignageName;
         string id178_JobTaskID;
         string id118_ConnectionDescription;
-        string id76_AttributeDecimalValueType;
+        string id73_AttributeDecimalValueType;
         string id267_FloorElevationValue;
         string id23_Connections;
-        string id81_StringValue;
+        string id78_StringValue;
         string id261_ZoneIssues;
         string id293_ProjectName;
         string id260_ZoneDocuments;
@@ -5657,7 +5656,7 @@ namespace Microsoft.Xml.Serialization.GeneratedAssembly {
         string id92_ContactEmail;
         string id22_Systems;
         string id176_JobTypeBase;
-        string id83_AllowedValueCollectionType;
+        string id80_AllowedValueCollectionType;
         string id38_IssueMitigationDescription;
         string id167_AssemblyName;
         string id85_AttributeIntegerValueType;
@@ -5673,7 +5672,7 @@ namespace Microsoft.Xml.Serialization.GeneratedAssembly {
         string id274_Space;
         string id71_UnitName;
         string id238_AssetIdentifier;
-        string id79_MaxValueDecimal;
+        string id76_MaxValueDecimal;
         string id282_SpaceZoneAssignments;
         string id256_ZoneName;
         string id289_SiteType;
@@ -5710,7 +5709,7 @@ namespace Microsoft.Xml.Serialization.GeneratedAssembly {
         string id170_AssemblyDescription;
         string id18_FacilityDeliverablePhaseName;
         string id116_ConnectionAsset2Name;
-        string id62_AttributeDateTimeValue;
+        string id69_AttributeDateTimeValue;
         string id41_DocumentCollectionType;
         string id175_Job;
         string id54_propertySetName;
@@ -5770,7 +5769,7 @@ namespace Microsoft.Xml.Serialization.GeneratedAssembly {
         string id253_ZoneCollectionType;
         string id65_AttributeDecimalValue;
         string id158_Spares;
-        string id63_AttributeIntegerValue;
+        string id62_AttributeIntegerValue;
         string id179_JobCategory;
         string id205_SpareName;
         string id123_System;
@@ -5813,20 +5812,20 @@ namespace Microsoft.Xml.Serialization.GeneratedAssembly {
             id223_WarrantyDocuments = Reader.NameTable.Add(@"WarrantyDocuments");
             id91_ContactTypeBase = Reader.NameTable.Add(@"ContactTypeBase");
             id197_ResourceAttributes = Reader.NameTable.Add(@"ResourceAttributes");
-            id80_AttributeStringValueType = Reader.NameTable.Add(@"AttributeStringValueType");
+            id77_AttributeStringValueType = Reader.NameTable.Add(@"AttributeStringValueType");
             id34_IssueSeverityText = Reader.NameTable.Add(@"IssueSeverityText");
             id213_SpareIssues = Reader.NameTable.Add(@"SpareIssues");
             id292_ProjectType = Reader.NameTable.Add(@"ProjectType");
             id130_SystemIssues = Reader.NameTable.Add(@"SystemIssues");
             id58_AttributeDescription = Reader.NameTable.Add(@"AttributeDescription");
-            id84_AttributeAllowedValue = Reader.NameTable.Add(@"AttributeAllowedValue");
+            id81_AttributeAllowedValue = Reader.NameTable.Add(@"AttributeAllowedValue");
             id259_ZoneAttributes = Reader.NameTable.Add(@"ZoneAttributes");
-            id69_AttributeDateValue = Reader.NameTable.Add(@"AttributeDateValue");
+            id66_AttributeDateValue = Reader.NameTable.Add(@"AttributeDateValue");
             id288_ZoneKeyType = Reader.NameTable.Add(@"ZoneKeyType");
-            id78_MinValueDecimal = Reader.NameTable.Add(@"MinValueDecimal");
+            id75_MinValueDecimal = Reader.NameTable.Add(@"MinValueDecimal");
             id199_ResourceIssues = Reader.NameTable.Add(@"ResourceIssues");
             id1_Facility = Reader.NameTable.Add(@"Facility");
-            id66_AttributeMonetaryValue = Reader.NameTable.Add(@"AttributeMonetaryValue");
+            id63_AttributeMonetaryValue = Reader.NameTable.Add(@"AttributeMonetaryValue");
             id5_Item = Reader.NameTable.Add(@"http://docs.buildingsmartalliance.org/nbims03/cobie/core");
             id232_AssetInstallationDate = Reader.NameTable.Add(@"AssetInstallationDate");
             id24_Contacts = Reader.NameTable.Add(@"Contacts");
@@ -5857,7 +5856,7 @@ namespace Microsoft.Xml.Serialization.GeneratedAssembly {
             id283_SpaceAttributes = Reader.NameTable.Add(@"SpaceAttributes");
             id156_Item = Reader.NameTable.Add(@"AssetTypeManufacturerContactAssignments");
             id60_AttributeIssues = Reader.NameTable.Add(@"AttributeIssues");
-            id74_MonetaryValue = Reader.NameTable.Add(@"MonetaryValue");
+            id83_MonetaryValue = Reader.NameTable.Add(@"MonetaryValue");
             id155_Assets = Reader.NameTable.Add(@"Assets");
             id32_IssueCategory = Reader.NameTable.Add(@"IssueCategory");
             id26_FacilityDocuments = Reader.NameTable.Add(@"FacilityDocuments");
@@ -5866,7 +5865,7 @@ namespace Microsoft.Xml.Serialization.GeneratedAssembly {
             id97_ContactGivenName = Reader.NameTable.Add(@"ContactGivenName");
             id174_JobCollectionType = Reader.NameTable.Add(@"JobCollectionType");
             id208_SpareSetNumber = Reader.NameTable.Add(@"SpareSetNumber");
-            id73_AttributeMonetaryValueType = Reader.NameTable.Add(@"AttributeMonetaryValueType");
+            id82_AttributeMonetaryValueType = Reader.NameTable.Add(@"AttributeMonetaryValueType");
             id89_ContactCollectionType = Reader.NameTable.Add(@"ContactCollectionType");
             id182_JobDuration = Reader.NameTable.Add(@"JobDuration");
             id3_FacilityTypeBase = Reader.NameTable.Add(@"FacilityTypeBase");
@@ -5889,7 +5888,7 @@ namespace Microsoft.Xml.Serialization.GeneratedAssembly {
             id59_AttributeValue = Reader.NameTable.Add(@"AttributeValue");
             id90_Contact = Reader.NameTable.Add(@"Contact");
             id190_JobIssues = Reader.NameTable.Add(@"JobIssues");
-            id75_MonetaryUnit = Reader.NameTable.Add(@"MonetaryUnit");
+            id84_MonetaryUnit = Reader.NameTable.Add(@"MonetaryUnit");
             id106_ContactAttributes = Reader.NameTable.Add(@"ContactAttributes");
             id39_ContactKeyType = Reader.NameTable.Add(@"ContactKeyType");
             id171_AssemblyAttributes = Reader.NameTable.Add(@"AssemblyAttributes");
@@ -5905,7 +5904,7 @@ namespace Microsoft.Xml.Serialization.GeneratedAssembly {
             id126_SystemCategory = Reader.NameTable.Add(@"SystemCategory");
             id105_ContactURL = Reader.NameTable.Add(@"ContactURL");
             id30_IssueTypeBase = Reader.NameTable.Add(@"IssueTypeBase");
-            id82_AllowedValues = Reader.NameTable.Add(@"AllowedValues");
+            id79_AllowedValues = Reader.NameTable.Add(@"AllowedValues");
             id25_FacilityAttributes = Reader.NameTable.Add(@"FacilityAttributes");
             id166_AssemblyTypeBase = Reader.NameTable.Add(@"AssemblyTypeBase");
             id40_ContactEmailReference = Reader.NameTable.Add(@"ContactEmailReference");
@@ -5926,7 +5925,7 @@ namespace Microsoft.Xml.Serialization.GeneratedAssembly {
             id265_FloorCategory = Reader.NameTable.Add(@"FloorCategory");
             id246_SystemKeyType = Reader.NameTable.Add(@"SystemKeyType");
             id159_Jobs = Reader.NameTable.Add(@"Jobs");
-            id77_DecimalValue = Reader.NameTable.Add(@"DecimalValue");
+            id74_DecimalValue = Reader.NameTable.Add(@"DecimalValue");
             id211_SpareAttributes = Reader.NameTable.Add(@"SpareAttributes");
             id68_AttributeBooleanValue = Reader.NameTable.Add(@"AttributeBooleanValue");
             id137_AssetTypeAccountingCategory = Reader.NameTable.Add(@"AssetTypeAccountingCategory");
@@ -5942,10 +5941,10 @@ namespace Microsoft.Xml.Serialization.GeneratedAssembly {
             id278_SpaceSignageName = Reader.NameTable.Add(@"SpaceSignageName");
             id178_JobTaskID = Reader.NameTable.Add(@"JobTaskID");
             id118_ConnectionDescription = Reader.NameTable.Add(@"ConnectionDescription");
-            id76_AttributeDecimalValueType = Reader.NameTable.Add(@"AttributeDecimalValueType");
+            id73_AttributeDecimalValueType = Reader.NameTable.Add(@"AttributeDecimalValueType");
             id267_FloorElevationValue = Reader.NameTable.Add(@"FloorElevationValue");
             id23_Connections = Reader.NameTable.Add(@"Connections");
-            id81_StringValue = Reader.NameTable.Add(@"StringValue");
+            id78_StringValue = Reader.NameTable.Add(@"StringValue");
             id261_ZoneIssues = Reader.NameTable.Add(@"ZoneIssues");
             id293_ProjectName = Reader.NameTable.Add(@"ProjectName");
             id260_ZoneDocuments = Reader.NameTable.Add(@"ZoneDocuments");
@@ -5953,7 +5952,7 @@ namespace Microsoft.Xml.Serialization.GeneratedAssembly {
             id92_ContactEmail = Reader.NameTable.Add(@"ContactEmail");
             id22_Systems = Reader.NameTable.Add(@"Systems");
             id176_JobTypeBase = Reader.NameTable.Add(@"JobTypeBase");
-            id83_AllowedValueCollectionType = Reader.NameTable.Add(@"AllowedValueCollectionType");
+            id80_AllowedValueCollectionType = Reader.NameTable.Add(@"AllowedValueCollectionType");
             id38_IssueMitigationDescription = Reader.NameTable.Add(@"IssueMitigationDescription");
             id167_AssemblyName = Reader.NameTable.Add(@"AssemblyName");
             id85_AttributeIntegerValueType = Reader.NameTable.Add(@"AttributeIntegerValueType");
@@ -5969,7 +5968,7 @@ namespace Microsoft.Xml.Serialization.GeneratedAssembly {
             id274_Space = Reader.NameTable.Add(@"Space");
             id71_UnitName = Reader.NameTable.Add(@"UnitName");
             id238_AssetIdentifier = Reader.NameTable.Add(@"AssetIdentifier");
-            id79_MaxValueDecimal = Reader.NameTable.Add(@"MaxValueDecimal");
+            id76_MaxValueDecimal = Reader.NameTable.Add(@"MaxValueDecimal");
             id282_SpaceZoneAssignments = Reader.NameTable.Add(@"SpaceZoneAssignments");
             id256_ZoneName = Reader.NameTable.Add(@"ZoneName");
             id289_SiteType = Reader.NameTable.Add(@"SiteType");
@@ -6006,7 +6005,7 @@ namespace Microsoft.Xml.Serialization.GeneratedAssembly {
             id170_AssemblyDescription = Reader.NameTable.Add(@"AssemblyDescription");
             id18_FacilityDeliverablePhaseName = Reader.NameTable.Add(@"FacilityDeliverablePhaseName");
             id116_ConnectionAsset2Name = Reader.NameTable.Add(@"ConnectionAsset2Name");
-            id62_AttributeDateTimeValue = Reader.NameTable.Add(@"AttributeDateTimeValue");
+            id69_AttributeDateTimeValue = Reader.NameTable.Add(@"AttributeDateTimeValue");
             id41_DocumentCollectionType = Reader.NameTable.Add(@"DocumentCollectionType");
             id175_Job = Reader.NameTable.Add(@"Job");
             id54_propertySetName = Reader.NameTable.Add(@"propertySetName");
@@ -6066,7 +6065,7 @@ namespace Microsoft.Xml.Serialization.GeneratedAssembly {
             id253_ZoneCollectionType = Reader.NameTable.Add(@"ZoneCollectionType");
             id65_AttributeDecimalValue = Reader.NameTable.Add(@"AttributeDecimalValue");
             id158_Spares = Reader.NameTable.Add(@"Spares");
-            id63_AttributeIntegerValue = Reader.NameTable.Add(@"AttributeIntegerValue");
+            id62_AttributeIntegerValue = Reader.NameTable.Add(@"AttributeIntegerValue");
             id179_JobCategory = Reader.NameTable.Add(@"JobCategory");
             id205_SpareName = Reader.NameTable.Add(@"SpareName");
             id123_System = Reader.NameTable.Add(@"System");

@@ -68,7 +68,19 @@ namespace XbimExchanger.COBieLiteToIfc
                 }
             } 
             #endregion
-        
+
+            #region Attributes
+
+            if (facility.FacilityAttributes != null)
+            {
+               
+                foreach (var attribute in facility.FacilityAttributes)
+                {
+                    var ifcSimpleProperty = Exchanger.ConvertAttributeTypeToIfcSimpleProperty(attribute);
+
+                }
+            } 
+            #endregion
             return ifcBuilding;
         }
     }

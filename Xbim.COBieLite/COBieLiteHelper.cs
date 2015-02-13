@@ -4,7 +4,6 @@ using System.Configuration;
 using System.Globalization;
 using System.IO;
 using System.Linq;
-using System.Net.Mime;
 using System.Reflection;
 using System.Text.RegularExpressions;
 using System.Xml.Serialization;
@@ -23,7 +22,6 @@ using Xbim.Ifc2x3.QuantityResource;
 using Xbim.Ifc2x3.SharedFacilitiesElements;
 using Xbim.IO;
 using System.Xml;
-using Xbim.COBieLite.Converters;
 using Xbim.XbimExtensions.SelectTypes;
 using Formatting = System.Xml.Formatting;
 
@@ -119,11 +117,11 @@ namespace Xbim.COBieLite
 
         #endregion
 
-        private string _ConfigFileName = null;
+        private readonly string _configFileName;
 
         public CoBieLiteHelper(XbimModel model, string classificationSystemName = null, string configurationFile = null)
         {
-            _ConfigFileName = configurationFile;
+            _configFileName = configurationFile;
 
             _model = model;
             _creatingApplication = model.Header.CreatingApplication;
@@ -202,23 +200,23 @@ namespace Xbim.COBieLite
 
         private void LoadCobieMaps()
         {
-            var tmpFile = _ConfigFileName;
-            if (_ConfigFileName == null)
+            var tmpFile = _configFileName;
+            if (_configFileName == null)
             {
-                tmpFile = System.IO.Path.GetTempPath() + Guid.NewGuid().ToString() + ".csv";
+                tmpFile = Path.GetTempPath() + Guid.NewGuid().ToString() + ".csv";
 
                 var asss = Assembly.GetExecutingAssembly();
 
                 using (var input = asss.GetManifestResourceStream("Xbim.COBieLite.COBieAttributes.config"))
                 using (var output = File.Create(tmpFile))
                 {
-                    input.CopyTo(output);
+                    if (input != null) input.CopyTo(output);
                 }
             }
 
 
-            Configuration config = null;
-            AppSettingsSection cobiePropertyMaps = null;
+            Configuration config;
+            AppSettingsSection cobiePropertyMaps;
             _cobieFieldMap = new Dictionary<string, string[]>();
 
             if (!File.Exists(tmpFile))
@@ -272,7 +270,7 @@ namespace Xbim.COBieLite
                 }
             }
 
-            if (_ConfigFileName == null)
+            if (_configFileName == null)
             {
                 File.Delete(tmpFile);
             }
@@ -550,7 +548,7 @@ namespace Xbim.COBieLite
             if (classifiedObject is IfcSpace)
             {
                 var val = _attributedObjects[(IfcSpace)classifiedObject];
-                string classificationName = "";
+                string classificationName;
                 val.GetSimplePropertyValue("PSet_Revit_Identity Data.OmniClass Table 13 Category", out classificationName);
 
                 if (classificationName != null)
@@ -568,7 +566,7 @@ namespace Xbim.COBieLite
                     {
                         // PSet_Revit_Type_Other.Classification Code
                         var cfg =
-                            new string[]
+                            new[]
                             {
                                 "SimpleProp(PSet_Revit_Type_Other.Classification Code): SimpleProp(PSet_Revit_Type_Other.Classification Description)",
                                 "SimpleProp(PSet_Revit_Type_Identity Data.OmniClass Number): SimpleProp(PSet_Revit_Type_Identity Data.OmniClass Title)"
@@ -578,22 +576,22 @@ namespace Xbim.COBieLite
                         string pattern = @"SimpleProp\(([^\)]*)\)";
                         Regex regex = new Regex(pattern);
 
-                        foreach (var ClassificationRule in cfg)
+                        foreach (var classificationRule in cfg)
                         {
                             bool ok = true;
-                            string result = ClassificationRule;
-                            var mts = regex.Matches(ClassificationRule);
+                            string result = classificationRule;
+                            var mts = regex.Matches(classificationRule);
                             foreach (Match mt in mts)
                             {
-                                string PropName = mt.Groups[1].Value;
-                                string PropVal = "";
-                                val.GetSimplePropertyValue(PropName, out PropVal);
-                                if (PropVal == null)
+                                string propName = mt.Groups[1].Value;
+                                string propVal;
+                                val.GetSimplePropertyValue(propName, out propVal);
+                                if (propVal == null)
                                 {
                                     ok = false;
                                     break;
                                 }
-                                result = result.Replace("SimpleProp(" + PropName + ")", PropVal);
+                                result = result.Replace("SimpleProp(" + propName + ")", propVal);
                             }
                             if (ok)
                                 return result;

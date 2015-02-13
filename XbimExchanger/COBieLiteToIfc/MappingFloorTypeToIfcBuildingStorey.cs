@@ -29,6 +29,19 @@ namespace XbimExchanger.COBieLiteToIfc
                     buildingStory.AddToSpatialDecomposition(ifcSpace);
                 }
             }
+
+            #region Attributes
+
+            if (floorType.FloorAttributes != null)
+            {
+
+                foreach (var attribute in floorType.FloorAttributes)
+                {
+                    //just create the property it must be unique
+                    var ifcSimpleProperty = Exchanger.ConvertAttributeTypeToIfcSimpleProperty(attribute);
+                }
+            }
+            #endregion
             return buildingStory;
         }
     }

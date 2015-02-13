@@ -27,9 +27,9 @@ namespace Xbim.COBieLite
             SpaceCategory = helper.GetClassification(ifcSpace);
             SpaceDescription = ifcSpace.Description;
             SpaceSignageName = helper.GetCoBieAttribute<StringValueType>("SpaceSignageName", ifcSpace).StringValue;
-            SpaceUsableHeightValue = helper.GetCoBieAttribute<DecimalValueType>("SpaceUsableHeight", ifcSpace);
-            SpaceGrossAreaValue = helper.GetCoBieAttribute<DecimalValueType>("SpaceGrossFloorArea", ifcSpace);
-            SpaceNetAreaValue = helper.GetCoBieAttribute<DecimalValueType>("SpaceNetFloorArea", ifcSpace);
+            SpaceUsableHeightValue = helper.GetCoBieAttribute<DecimalValueType>("SpaceUsableHeightValue", ifcSpace);
+            SpaceGrossAreaValue = helper.GetCoBieAttribute<DecimalValueType>("SpaceGrossAreaValue", ifcSpace);
+            SpaceNetAreaValue = helper.GetCoBieAttribute<DecimalValueType>("SpaceNetAreaValue", ifcSpace);
 
             //Zone Assignment
             var zones = helper.GetZones(ifcSpace);
