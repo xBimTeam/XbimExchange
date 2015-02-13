@@ -2,7 +2,7 @@
 
 namespace Xbim.DPoW
 {
-    public class Project 
+    public class Project :DPoWAttributableObject
     {
         public string Code { get; private set; }
         public LinearUnits LinearUnits { get; set; }

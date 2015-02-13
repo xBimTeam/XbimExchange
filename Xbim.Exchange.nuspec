@@ -22,16 +22,24 @@ IOS and Android versions are under development.</description>
       <tags>BIM, IFC, IfcXml, IfcZip, COBie, COBieLite, .Net, C#, BuildingSmart</tags>
       <dependencies>
         <dependency id="NPOI" version="2.1.3" />
-        <dependency id="Xbim.Geometry" version="3.0.3-Prerelease" />
+        <dependency id="Xbim.Geometry" version="3.0.4-Prerelease" />
       </dependencies>
     </metadata>
     <files>
       <file src="Output\Release\Xbim.COBie.dll" target="lib\net45\Xbim.COBie.dll" />
       <file src="Output\Release\Xbim.COBieLite.dll" target="lib\net45\Xbim.COBieLite.dll" />
+      <file src="Output\Release\Xbim.DPoW.dll" target="lib\net45\Xbim.DPoW.dll" />
+      <file src="Output\Release\Xbim.Exchanger.dll" target="lib\net45\Xbim.Exchanger.dll" />
+      
       <file src="Output\Release\Xbim.COBie.xml" target="lib\net45\Xbim.COBie.xml" />
       <file src="Output\Release\Xbim.COBieLite.xml" target="lib\net45\Xbim.COBieLite.xml" />
+      <file src="Output\Release\Xbim.DPoW.xml" target="lib\net45\Xbim.DPoW.xml" />
+      <file src="Output\Release\Xbim.Exchanger.xml" target="lib\net45\Xbim.Exchanger.xml" />
+      
       <file src="Output\Release\Xbim.COBie.pdb" target="lib\net45\Xbim.COBie.pdb" />
       <file src="Output\Release\Xbim.COBieLite.pdb" target="lib\net45\Xbim.COBieLite.pdb" />
+      <file src="Output\Release\Xbim.DPoW.pdb" target="lib\net45\Xbim.DPoW.pdb" />
+      <file src="Output\Release\Xbim.Exchanger.pdb" target="lib\net45\Xbim.Exchanger.pdb" />
     </files>
 
   </package>

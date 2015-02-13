@@ -2,7 +2,10 @@
 {
     public class RequiredAttribute 
     {
-        public string AttributeName { get; set; }
-        public string AttributeDescription { get; set; }
+        public string Name { get; set; }
+        public string Description { get; set; }
+
+        public string PropertySetName { get; set; }
+        
     }
 }

@@ -2,8 +2,8 @@
 {
     public class RequiredLOD
     {
-        public string RequiredLODCode { get; set; }
-        public string RequiredLODURI { get; set; }
-        public string RequiredLODDescription { get; set; }
+        public string Code { get; set; }
+        public string URI { get; set; }
+        public string Description { get; set; }
     }
 }

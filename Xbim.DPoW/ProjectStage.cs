@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Xbim.DPoW
 {
-    public class ProjectStage
+    public class ProjectStage: DPoWAttributableObject
     {
         public string ProjectStageName { get; set; }
         public string ProjectStageCode { get; set; }
@@ -20,10 +20,10 @@ namespace Xbim.DPoW
 
         public List<AssemblyType> AssemblyTypes { get; set; }
 
-        public List<Document> Documents { get; set; }
+        public List<Documentation> Documentation { get; set; }
         public ProjectStage()
         {
-            Documents = new List<Document>();
+            Documentation = new List<Documentation>();
             SpaceTypes = new List<SpaceTypes>();
             AssetTypes = new List<AssetType>();
             AssemblyTypes = new List<AssemblyType>();

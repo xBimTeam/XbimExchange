@@ -6,7 +6,7 @@ using Newtonsoft.Json;
 
 namespace Xbim.DPoW
 {
-    public class PlanOfWork 
+    public class PlanOfWork :DPoWAttributableObject
     {
         public List<Classification> ClassificationSystems { get; set; }
         public Project Project { get; set; }
@@ -16,6 +16,8 @@ namespace Xbim.DPoW
         public List<Contact> Contacts { get; set; }
 
         public Guid Id { get; set;}
+
+        public List<Role> Roles { get; set; }
 
         public PlanOfWork()
         {
