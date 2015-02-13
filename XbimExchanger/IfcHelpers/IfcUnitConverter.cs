@@ -306,15 +306,6 @@ namespace XbimExchanger.IfcHelpers
             ConversionFactor = 1;
         }
 
-        internal IfcUnit IfcUnit(XbimModel model)
-        {
-            if (SiUnitName.HasValue)
-            {               
-                var siUnit = model.Instances.New<IfcSIUnit>();
-                siUnit.Name = SiUnitName.Value;
-                if (SiPrefix.HasValue) siUnit.Prefix = SiPrefix.Value;
-                siUnit.UnitType = this.UnitName;
-            }
-        }
+       
     }
 }

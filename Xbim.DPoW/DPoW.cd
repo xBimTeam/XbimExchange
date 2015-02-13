@@ -9,19 +9,11 @@
   </Class>
   <Class Name="Xbim.DPoW.ProjectStage">
     <Position X="4.75" Y="0.75" Width="2.25" />
-    <AssociationLine Name="Documents" Type="Xbim.DPoW.Document" FixedFromPoint="true" FixedToPoint="true">
-      <Path>
-        <Point X="6.625" Y="2.882" />
-        <Point X="6.625" Y="3.837" />
-        <Point X="8.5" Y="3.837" />
-      </Path>
-    </AssociationLine>
     <TypeIdentifier>
       <HashCode>AAACEAIAAAAAAAAAAACAgCAAAAAAAAACAAAAAIAAAAA=</HashCode>
       <FileName>ProjectStage.cs</FileName>
     </TypeIdentifier>
     <ShowAsCollectionAssociation>
-      <Property Name="SpaceTypes" />
       <Property Name="AssetTypes" />
       <Property Name="AssemblyTypes" />
       <Property Name="Documents" />
@@ -106,21 +98,6 @@
       <Property Name="Jobs" />
     </ShowAsCollectionAssociation>
   </Class>
-  <Class Name="Xbim.DPoW.SpaceTypes" Collapsed="true">
-    <Position X="8.5" Y="0.5" Width="2.25" />
-    <InheritanceLine Type="Xbim.DPoW.DPoWObject" FixedFromPoint="true">
-      <Path>
-        <Point X="11.5" Y="2.188" />
-        <Point X="11.125" Y="2.188" />
-        <Point X="11.125" Y="0.846" />
-        <Point X="10.75" Y="0.846" />
-      </Path>
-    </InheritanceLine>
-    <TypeIdentifier>
-      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
-      <FileName>Zone.cs</FileName>
-    </TypeIdentifier>
-  </Class>
   <Class Name="Xbim.DPoW.AssetType" Collapsed="true">
     <Position X="8.5" Y="1.25" Width="2.25" />
     <InheritanceLine Type="Xbim.DPoW.DPoWObject" FixedFromPoint="true">
@@ -172,6 +149,21 @@
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAAAAAAEAAAAAAAAAAAAAQAAAAAAAIAAAAA=</HashCode>
       <FileName>RequiredLOD.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Xbim.DPoW.SpaceTypes" Collapsed="true">
+    <Position X="8.5" Y="0.5" Width="2.25" />
+    <InheritanceLine Type="Xbim.DPoW.DPoWObject" FixedFromPoint="true">
+      <Path>
+        <Point X="11.5" Y="2.188" />
+        <Point X="11.125" Y="2.188" />
+        <Point X="11.125" Y="0.846" />
+        <Point X="10.75" Y="0.846" />
+      </Path>
+    </InheritanceLine>
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Zone.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Enum Name="Xbim.DPoW.CurrencyUnits" Collapsed="true">

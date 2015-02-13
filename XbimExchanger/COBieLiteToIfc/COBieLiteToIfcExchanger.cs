@@ -5,7 +5,6 @@ using System.Diagnostics;
 using System.Globalization;
 using System.Linq;
 using Xbim.COBieLite;
-using Xbim.Ifc2x3.Extensions;
 using Xbim.Ifc2x3.Kernel;
 using Xbim.Ifc2x3.MeasureResource;
 using Xbim.Ifc2x3.ProductExtension;
@@ -65,7 +64,7 @@ namespace XbimExchanger.COBieLiteToIfc
 
         private readonly Dictionary<IfcObject, List<IfcPropertySetDefinition>> _objectsToPropertySets = new Dictionary<IfcObject, List<IfcPropertySetDefinition>>();
 
-        private readonly Dictionary<string, IfcUnit> _units = new Dictionary<string, IfcUnit>();
+       // private readonly Dictionary<string, IfcUnit> _units = new Dictionary<string, IfcUnit>();
 
         #endregion
 
@@ -109,7 +108,7 @@ namespace XbimExchanger.COBieLiteToIfc
 
         private void LoadUnits()
         {
-            var units = TargetRepository.Instances.OfType<IfcUnit>().ToDictionary(k => k.GetName());
+           //var units = TargetRepository.Instances.OfType<IfcUnit>().ToDictionary(k => k.GetName());
         }
 
         private void LoadPropertySetDefinitions()
@@ -207,7 +206,7 @@ namespace XbimExchanger.COBieLiteToIfc
                             var relDef = TargetRepository.Instances.New<IfcRelDefinesByProperties>();
                             relDef.RelatingPropertyDefinition = quantitySet;
                             relDef.RelatedObjects.Add(ifcObject);
-                            AddQuantity(ifcObject, valueBaseType, cobiePropertyName, actualUnits, quantitySet,
+                            AddQuantity(valueBaseType, cobiePropertyName, actualUnits, quantitySet,
                                 namedProperty);
                         }
                         else //it is a normal property set
@@ -230,7 +229,7 @@ namespace XbimExchanger.COBieLiteToIfc
                         if (namedProperty.PropertySetName.StartsWith("qto_", true, CultureInfo.InvariantCulture) ||
                             namedProperty.PropertySetName.StartsWith("basequantities", true,
                                 CultureInfo.InvariantCulture))
-                            AddQuantity(ifcObject, valueBaseType, cobiePropertyName, actualUnits,
+                            AddQuantity(valueBaseType, cobiePropertyName, actualUnits,
                                 (IfcElementQuantity)propertySetDef,
                                 namedProperty);
                         else //it is a normal property set
@@ -273,7 +272,7 @@ namespace XbimExchanger.COBieLiteToIfc
             }
         }
 
-        private void AddQuantity(IfcObject ifcObject, ValueBaseType valueBaseType, string cobiePropertyName,
+        private void AddQuantity(ValueBaseType valueBaseType, string cobiePropertyName,
             IfcUnitConverter actualUnits, IfcElementQuantity propertySetDefinition, NamedProperty namedProperty)
         {
             try
@@ -354,12 +353,12 @@ namespace XbimExchanger.COBieLiteToIfc
                     if (decimalValue.HasValue) simpleProperty.NominalValue = new IfcReal(decimalValue.Value);
                     simpleProperty.Name = attributeType.AttributeName;
                     simpleProperty.Description = attributeType.AttributeDescription;
-                    if (attributeDecimalValueType != null)
-                    {
-                        var unitConverter = new IfcUnitConverter(attributeDecimalValueType.UnitName);
-                        if (!unitConverter.IsUndefined)
-                            simpleProperty.Unit = unitConverter.IfcUnit(TargetRepository);
-                    }
+                    //if (attributeDecimalValueType != null)
+                    //{
+                    //    var unitConverter = new IfcUnitConverter(attributeDecimalValueType.UnitName);
+                    //    if (!unitConverter.IsUndefined)
+                    //        simpleProperty.Unit = unitConverter.IfcUnit(TargetRepository);
+                    //}
                     return simpleProperty;
                 case XbimSimplePropertyType.BoundedDecimal:
                     var attributeBoundedDecimalValueType = attributeValueType.Item as AttributeDecimalValueType;
@@ -384,8 +383,8 @@ namespace XbimExchanger.COBieLiteToIfc
                 case XbimSimplePropertyType.SimpleInteger:
                     var attributeSimpleIntegerValueType = attributeValueType.Item as AttributeIntegerValueType;
                     var simpleIntProperty = TargetRepository.Instances.New<IfcPropertySingleValue>();
-                    if (attributeSimpleIntegerValueType != null)
-                        simpleIntProperty.NominalValue = new IfcInteger(attributeSimpleIntegerValueType.IntegerValue);
+                    if (attributeSimpleIntegerValueType != null && attributeSimpleIntegerValueType.IntegerValue.HasValue)
+                        simpleIntProperty.NominalValue = new IfcInteger(attributeSimpleIntegerValueType.IntegerValue.Value);
                     simpleIntProperty.Name = attributeType.AttributeName;
                     simpleIntProperty.Description = attributeType.AttributeDescription;
                     return simpleIntProperty;
@@ -394,10 +393,12 @@ namespace XbimExchanger.COBieLiteToIfc
                     var boundedIntegerProperty = TargetRepository.Instances.New<IfcPropertyBoundedValue>();
                     if (attributeBoundedIntegerValueType != null)
                     {
+                        if (attributeBoundedIntegerValueType.MaxValueInteger.HasValue)
                         boundedIntegerProperty.UpperBoundValue =
-                            new IfcInteger(attributeBoundedIntegerValueType.MaxValueInteger);
-                        boundedIntegerProperty.LowerBoundValue =
-                            new IfcInteger(attributeBoundedIntegerValueType.MinValueInteger);
+                            new IfcInteger(attributeBoundedIntegerValueType.MaxValueInteger.Value);
+                        if (attributeBoundedIntegerValueType.MinValueInteger.HasValue) 
+                            boundedIntegerProperty.LowerBoundValue =
+                            new IfcInteger(attributeBoundedIntegerValueType.MinValueInteger.Value);
                     }
                     boundedIntegerProperty.Name = attributeType.AttributeName;
                     boundedIntegerProperty.Description = attributeType.AttributeDescription;
