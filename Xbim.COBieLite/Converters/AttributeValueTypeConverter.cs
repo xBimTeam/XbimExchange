@@ -113,7 +113,11 @@ namespace Xbim.COBieLite.Converters
                 return;
             var item = attrValue.Item;
             if (item == null)
+            {
+                var nullToken = JToken.Parse("null");
+                nullToken.WriteTo(writer);
                 return;
+            }
 
             //handle datetime in a specific manner
             if (attrValue.ItemElementName == ItemChoiceType.AttributeDateValue)

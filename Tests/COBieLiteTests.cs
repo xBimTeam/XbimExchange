@@ -155,6 +155,20 @@ namespace Xbim.Tests.COBie
                     {
                         new AttributeType()
                         {
+                            AttributeName = "Null value",
+                            AttributeValue = null
+                        },
+                        new AttributeType()
+                        {
+                            AttributeName = "Null item value",
+                            AttributeValue = new AttributeValueType()
+                            {
+                                Item = null,
+                                ItemElementName = ItemChoiceType.AttributeStringValue
+                            }
+                        },
+                        new AttributeType()
+                        {
                             AttributeName = "AttributeBooleanValue",
                             AttributeValue = new AttributeValueType()
                             {
@@ -239,14 +253,14 @@ namespace Xbim.Tests.COBie
             //read it back and check the values
             var facility2 = CoBieLiteHelper.ReadJson("facility.json");
             var attrs = facility2.FacilityAttributes.Attribute;
-            var bAttr = attrs.FirstOrDefault(a => a.AttributeValue.ItemElementName == ItemChoiceType.AttributeBooleanValue);
-            var dAttr = attrs.FirstOrDefault(a => a.AttributeValue.ItemElementName == ItemChoiceType.AttributeDateValue);
-            var dtAttr = attrs.FirstOrDefault(a => a.AttributeValue.ItemElementName == ItemChoiceType.AttributeDateTimeValue);
-            var decAttr = attrs.FirstOrDefault(a => a.AttributeValue.ItemElementName == ItemChoiceType.AttributeDecimalValue);
-            var iAttr = attrs.FirstOrDefault(a => a.AttributeValue.ItemElementName == ItemChoiceType.AttributeIntegerValue);
-            var mAttr = attrs.FirstOrDefault(a => a.AttributeValue.ItemElementName == ItemChoiceType.AttributeMonetaryValue);
-            var sAttr = attrs.FirstOrDefault(a => a.AttributeValue.ItemElementName == ItemChoiceType.AttributeStringValue);
-            var tAttr = attrs.FirstOrDefault(a => a.AttributeValue.ItemElementName == ItemChoiceType.AttributeTimeValue);
+            var bAttr = attrs.FirstOrDefault(a => a.AttributeValue.ItemElementName == ItemChoiceType.AttributeBooleanValue && a.AttributeValue.Item != null);
+            var dAttr = attrs.FirstOrDefault(a => a.AttributeValue.ItemElementName == ItemChoiceType.AttributeDateValue && a.AttributeValue.Item != null);
+            var dtAttr = attrs.FirstOrDefault(a => a.AttributeValue.ItemElementName == ItemChoiceType.AttributeDateTimeValue && a.AttributeValue.Item != null);
+            var decAttr = attrs.FirstOrDefault(a => a.AttributeValue.ItemElementName == ItemChoiceType.AttributeDecimalValue && a.AttributeValue.Item != null);
+            var iAttr = attrs.FirstOrDefault(a => a.AttributeValue.ItemElementName == ItemChoiceType.AttributeIntegerValue && a.AttributeValue.Item != null);
+            var mAttr = attrs.FirstOrDefault(a => a.AttributeValue.ItemElementName == ItemChoiceType.AttributeMonetaryValue && a.AttributeValue.Item != null);
+            var sAttr = attrs.FirstOrDefault(a => a.AttributeValue.ItemElementName == ItemChoiceType.AttributeStringValue && a.AttributeValue.Item != null);
+            var tAttr = attrs.FirstOrDefault(a => a.AttributeValue.ItemElementName == ItemChoiceType.AttributeTimeValue && a.AttributeValue.Item != null);
 
             Assert.IsNotNull(bAttr);
             Assert.IsNotNull(dAttr);
