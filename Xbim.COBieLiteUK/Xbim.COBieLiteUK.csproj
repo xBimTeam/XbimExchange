@@ -1,0 +1,120 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{90DEF072-96C7-4972-835E-909C41169CB4}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Xbim.COBieLiteUK</RootNamespace>
+    <AssemblyName>Xbim.COBieLiteUK</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>..\..\..\..\..\..\Output\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>..\..\..\..\..\..\Output\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Esent.Interop">
+      <HintPath>..\packages\ManagedEsent.1.9.2.0\lib\net40\Esent.Interop.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="ICSharpCode.SharpZipLib">
+      <HintPath>..\packages\SharpZipLib.0.86.0\lib\20\ICSharpCode.SharpZipLib.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="log4net">
+      <HintPath>..\packages\log4net.2.0.3\lib\net40-full\log4net.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Newtonsoft.Json">
+      <HintPath>..\packages\Newtonsoft.Json.6.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+    <Reference Include="Xbim.Common">
+      <HintPath>..\packages\Xbim.Essentials.3.0.3\lib\net45\Xbim.Common.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Xbim.Ifc.Extensions">
+      <HintPath>..\packages\Xbim.Essentials.3.0.3\lib\net45\Xbim.Ifc.Extensions.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Xbim.Ifc2x3">
+      <HintPath>..\packages\Xbim.Essentials.3.0.3\lib\net45\Xbim.Ifc2x3.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Xbim.IO">
+      <HintPath>..\packages\Xbim.Essentials.3.0.3\lib\net45\Xbim.IO.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="CollectionTypes\AllowedValueCollectionType.cs" />
+    <Compile Include="CollectionTypes\AssemblyAssignmentCollectionType.cs" />
+    <Compile Include="CollectionTypes\AssetCollectionType.cs" />
+    <Compile Include="CollectionTypes\AssetTypeCollectionType.cs" />
+    <Compile Include="CollectionTypes\AttributeCollectionType.cs" />
+    <Compile Include="CollectionTypes\ConnectionCollectionType.cs" />
+    <Compile Include="CollectionTypes\ContactAssignmentCollectionType.cs" />
+    <Compile Include="CollectionTypes\ContactCollectionType.cs" />
+    <Compile Include="CollectionTypes\DocumentCollectionType.cs" />
+    <Compile Include="CollectionTypes\FloorCollectionType.cs" />
+    <Compile Include="CollectionTypes\ICollectionType.cs" />
+    <Compile Include="CollectionTypes\IssueCollectionType.cs" />
+    <Compile Include="CollectionTypes\JobCollectionType.cs" />
+    <Compile Include="CollectionTypes\ResourceCollectionType.cs" />
+    <Compile Include="CollectionTypes\SpaceAssignmentCollectionType.cs" />
+    <Compile Include="CollectionTypes\SpaceCollectionType.cs" />
+    <Compile Include="CollectionTypes\SpareCollectionType.cs" />
+    <Compile Include="CollectionTypes\SystemAssignmentCollectionType.cs" />
+    <Compile Include="CollectionTypes\SystemCollectionType.cs" />
+    <Compile Include="CollectionTypes\WarrantyCollectionType.cs" />
+    <Compile Include="CollectionTypes\ZoneAssignmentCollectionType.cs" />
+    <Compile Include="CollectionTypes\ZoneCollectionType.cs" />
+    <Compile Include="ProjectType.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Schemas\cobieliteuk.designer.RenamedClasses.cs" />
+    <Compile Include="Schemas\XmlSerializationCodeCobieUK.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="COBieLiteUK.cd" />
+    <None Include="packages.config" />
+    <None Include="Schemas\cobieliteuk.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Schemas\core.xsd">
+      <SubType>Designer</SubType>
+    </None>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

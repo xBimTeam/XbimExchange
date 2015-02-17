@@ -1,14 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Xbim.COBieLite;
 using Xbim.DPoW.Interfaces;
 
 namespace XbimExchanger.DPoWToCOBieLite
 {
-    public class DPoWToCOBieLiteExchanger : XbimExchanger<PlanOfWork, FacilityType>
+    public class DpoWtoCoBieLiteExchanger : XbimExchanger<PlanOfWork, FacilityType>
     {
         /// <summary>
         /// Constructs new exchanger. When converting data from DPoW to COBieLite it is possible to convert only one stage to COBieLite
@@ -18,7 +15,7 @@ namespace XbimExchanger.DPoWToCOBieLite
         /// <param name="source">Source DPoW model</param>
         /// <param name="target">Target COBieLite model</param>
         /// <param name="stage">Specific project stage</param>
-        public DPoWToCOBieLiteExchanger(PlanOfWork source, FacilityType target, ProjectStage stage) : base(source, target)
+        public DpoWtoCoBieLiteExchanger(PlanOfWork source, FacilityType target, ProjectStage stage) : base(source, target)
         {
             Context = stage;
         }
@@ -30,7 +27,7 @@ namespace XbimExchanger.DPoWToCOBieLite
         /// </summary>
         /// <param name="source">Source DPoW model</param>
         /// <param name="target">Target COBieLite model</param>
-        public DPoWToCOBieLiteExchanger(PlanOfWork source, FacilityType target)
+        public DpoWtoCoBieLiteExchanger(PlanOfWork source, FacilityType target)
             : base(source, target)
         {
             Context = source.Project.CurrentProjectStage;
@@ -69,11 +66,11 @@ namespace XbimExchanger.DPoWToCOBieLite
             switch (units)
             {
                 case CurrencyUnits.USD:
-                    return CurrencyUnitSimpleType.USD;
+                    return CurrencyUnitSimpleType.Dollars;
                 case CurrencyUnits.EUR:
-                    return CurrencyUnitSimpleType.EUR;
+                    return CurrencyUnitSimpleType.Euros;
                 case CurrencyUnits.GBP:
-                    return CurrencyUnitSimpleType.GBP;
+                    return CurrencyUnitSimpleType.BritishPounds;
                 default:
                     throw new ArgumentException("Unexpected unit");
             }

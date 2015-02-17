@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Xbim.COBieLite.CollectionTypes;
 using Xbim.Ifc2x3.Extensions;
 using Xbim.Ifc2x3.MeasureResource;
 using Xbim.Ifc2x3.ProductExtension;
@@ -15,10 +16,6 @@ namespace Xbim.COBieLite
         
         //private IfcSpace _ifcSpace;
 
-        public SpaceType()
-        {
-            
-        }
         public SpaceType(IfcSpace ifcSpace, CoBieLiteHelper helper)
             : this()
         {
@@ -30,9 +27,9 @@ namespace Xbim.COBieLite
             SpaceCategory = helper.GetClassification(ifcSpace);
             SpaceDescription = ifcSpace.Description;
             SpaceSignageName = helper.GetCoBieAttribute<StringValueType>("SpaceSignageName", ifcSpace).StringValue;
-            SpaceUsableHeightValue = helper.GetCoBieAttribute<DecimalValueType>("SpaceUsableHeight", ifcSpace);
-            SpaceGrossAreaValue = helper.GetCoBieAttribute<DecimalValueType>("SpaceGrossFloorArea", ifcSpace);
-            SpaceNetAreaValue = helper.GetCoBieAttribute<DecimalValueType>("SpaceNetFloorArea", ifcSpace);
+            SpaceUsableHeightValue = helper.GetCoBieAttribute<DecimalValueType>("SpaceUsableHeightValue", ifcSpace);
+            SpaceGrossAreaValue = helper.GetCoBieAttribute<DecimalValueType>("SpaceGrossAreaValue", ifcSpace);
+            SpaceNetAreaValue = helper.GetCoBieAttribute<DecimalValueType>("SpaceNetAreaValue", ifcSpace);
 
             //Zone Assignment
             var zones = helper.GetZones(ifcSpace);

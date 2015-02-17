@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -38,25 +38,26 @@
     <NoWarn>1591;1572;1573;1574</NoWarn>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Esent.Interop, Version=1.9.2.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
+    <Reference Include="Esent.Interop">
       <HintPath>..\packages\ManagedEsent.1.9.2.0\lib\net40\Esent.Interop.dll</HintPath>
+      <Private>True</Private>
     </Reference>
-    <Reference Include="ICSharpCode.SharpZipLib, Version=0.86.0.518, Culture=neutral, PublicKeyToken=1b03e6acf1164f73, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
+    <Reference Include="ICSharpCode.SharpZipLib">
       <HintPath>..\packages\SharpZipLib.0.86.0\lib\20\ICSharpCode.SharpZipLib.dll</HintPath>
+      <Private>True</Private>
     </Reference>
-    <Reference Include="log4net, Version=1.2.13.0, Culture=neutral, PublicKeyToken=669e0ddf0bb1aa2a, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
+    <Reference Include="log4net">
       <HintPath>..\packages\log4net.2.0.3\lib\net40-full\log4net.dll</HintPath>
+      <Private>True</Private>
     </Reference>
-    <Reference Include="Newtonsoft.Json, Version=6.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
+    <Reference Include="Newtonsoft.Json">
       <HintPath>..\packages\Newtonsoft.Json.6.0.8\lib\net45\Newtonsoft.Json.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Data.Linq" />
     <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
@@ -69,6 +70,8 @@
     </Reference>
     <Reference Include="Xbim.Ifc.Extensions">
       <HintPath>..\packages\Xbim.Essentials.3.0.6\lib\net45\Xbim.Ifc.Extensions.dll</HintPath>
+      <Private>True</Private>
+      <Private>True</Private>
     </Reference>
     <Reference Include="Xbim.Ifc2x3, Version=3.0.5519.30534, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -77,29 +80,31 @@
     <Reference Include="Xbim.IO, Version=3.0.5519.30535, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\Xbim.Essentials.3.0.6\lib\net45\Xbim.IO.dll</HintPath>
-    </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AllowedValueCollectionType.cs" />
-    <Compile Include="AssemblyAssignmentCollectionType.cs" />
-    <Compile Include="AssetCollectionType.cs" />
+    <Compile Include="COBieLite Schema\cobielite.designer.RenamedClasses.cs" />
+    <Compile Include="CollectionTypes\AllowedValueCollectionType.cs" />
+    <Compile Include="CollectionTypes\AssemblyAssignmentCollectionType.cs" />
+    <Compile Include="CollectionTypes\AssetCollectionType.cs" />
     <Compile Include="AssetInfoType.cs" />
-    <Compile Include="AssetTypeCollectionType.cs" />
+    <Compile Include="CollectionTypes\AssetTypeCollectionType.cs" />
     <Compile Include="AssetTypeInfoType.cs" />
-    <Compile Include="AttributeCollectionType.cs" />
+    <Compile Include="CollectionTypes\AttributeCollectionType.cs" />
+    <Compile Include="COBieLite Schema\XmlSerializationCode.cs" />
     <Compile Include="COBieLiteHelper.cs" />
-    <Compile Include="cobielite_core.cs" />
-    <Compile Include="ConnectionCollectionType.cs" />
-    <Compile Include="ContactAssignmentCollectionType.cs" />
-    <Compile Include="ContactCollectionType.cs" />
-    <Compile Include="DocumentCollectionType.cs" />
-    <Compile Include="ICollectionType.cs" />
+    <Compile Include="COBieLite Schema\cobielite_core.cs" />
+    <Compile Include="CollectionTypes\ConnectionCollectionType.cs" />
+    <Compile Include="CollectionTypes\ContactAssignmentCollectionType.cs" />
+    <Compile Include="CollectionTypes\ContactCollectionType.cs" />
+    <Compile Include="CollectionTypes\DocumentCollectionType.cs" />
+    <Compile Include="CollectionTypes\ICollectionType.cs" />
     <Compile Include="ContactType.cs" />
+    <Compile Include="Converters\AttributeValueTypeConverter.cs" />
     <Compile Include="FacilityType.cs" />
     <Compile Include="FloorType.cs" />
-    <Compile Include="FloorCollectionType.cs" />
-    <Compile Include="IssueCollectionType.cs" />
-    <Compile Include="JobCollectionType.cs" />
+    <Compile Include="CollectionTypes\FloorCollectionType.cs" />
+    <Compile Include="CollectionTypes\IssueCollectionType.cs" />
+    <Compile Include="CollectionTypes\JobCollectionType.cs" />
     <Compile Include="ProjectType.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Properties\Settings.Designer.cs">
@@ -107,32 +112,30 @@
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
       <DependentUpon>Settings.settings</DependentUpon>
     </Compile>
-    <Compile Include="ResourceCollectionType.cs" />
+    <Compile Include="CollectionTypes\ResourceCollectionType.cs" />
     <Compile Include="SiteType.cs" />
-    <Compile Include="SpaceAssignmentCollectionType.cs" />
+    <Compile Include="CollectionTypes\SpaceAssignmentCollectionType.cs" />
     <Compile Include="SpaceKeyType.cs" />
     <Compile Include="SpaceType.cs" />
-    <Compile Include="SpaceCollectionType.cs" />
-    <Compile Include="SpareCollectionType.cs" />
-    <Compile Include="SystemAssignmentCollectionType.cs" />
-    <Compile Include="SystemCollectionType.cs" />
+    <Compile Include="CollectionTypes\SpaceCollectionType.cs" />
+    <Compile Include="CollectionTypes\SpareCollectionType.cs" />
+    <Compile Include="CollectionTypes\SystemAssignmentCollectionType.cs" />
+    <Compile Include="CollectionTypes\SystemCollectionType.cs" />
     <Compile Include="SystemKeyType.cs" />
     <Compile Include="SystemType.cs" />
-    <Compile Include="WarrantyCollectionType.cs" />
+    <Compile Include="CollectionTypes\WarrantyCollectionType.cs" />
     <Compile Include="XbimAssetType.cs" />
     <Compile Include="XbimAttributedObject.cs" />
     <Compile Include="XbimCOBieLiteToIfcConverter.cs" />
     <Compile Include="XbimCoBieLiteXmlWriter.cs" />
-    <Compile Include="XbimCOBieValueHelper.cs" />
-    <Compile Include="ZoneAssignmentCollectionType.cs" />
-    <Compile Include="ZoneCollectionType.cs" />
+    <Compile Include="CollectionTypes\ZoneAssignmentCollectionType.cs" />
+    <Compile Include="CollectionTypes\ZoneCollectionType.cs" />
     <Compile Include="ZoneType.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="COBieAttributes.config">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    <EmbeddedResource Include="COBieAttributes.config">
       <SubType>Designer</SubType>
-    </None>
+    </EmbeddedResource>
     <None Include="COBieLite Schema\cobielite.xsd">
       <SubType>Designer</SubType>
     </None>

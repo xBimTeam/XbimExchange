@@ -4,6 +4,7 @@ using System.Configuration;
 using System.Globalization;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Text.RegularExpressions;
 using System.Xml.Serialization;
 using Newtonsoft.Json;
@@ -116,10 +117,13 @@ namespace Xbim.COBieLite
 
         #endregion
 
-        public CoBieLiteHelper(XbimModel model, string classificationSystemName = null)
-        {
-            _model = model;
+        private readonly string _configFileName;
 
+        public CoBieLiteHelper(XbimModel model, string classificationSystemName = null, string configurationFile = null)
+        {
+            _configFileName = configurationFile;
+
+            _model = model;
             _creatingApplication = model.Header.CreatingApplication;
             LoadCobieMaps();
             GetClassificationDictionary(classificationSystemName);
@@ -129,11 +133,8 @@ namespace Xbim.COBieLite
             GetPropertySets();
             GetSystems();
             GetSpaceAssetLookup();
-
         }
-
         
-
         private void GetSystems()
         {
             _systemAssignment = 
@@ -196,34 +197,86 @@ namespace Xbim.COBieLite
 
         }
 
-        
+
         private void LoadCobieMaps()
         {
-            _cobieFieldMap = new Dictionary<string, string[]>();
-            var configMap = new ExeConfigurationFileMap {ExeConfigFilename = "COBieAttributes.config"};
-            var config = ConfigurationManager.OpenMappedExeConfiguration(configMap, ConfigurationUserLevel.None);
-            var cobiePropertyMaps = (AppSettingsSection)config.GetSection("COBiePropertyMaps");
+            var tmpFile = _configFileName;
+            if (_configFileName == null)
+            {
+                tmpFile = Path.GetTempPath() + Guid.NewGuid().ToString() + ".csv";
 
-            foreach (KeyValueConfigurationElement keyVal in cobiePropertyMaps.Settings)
-            {
-                var values = keyVal.Value.Split(new[] {';'}, StringSplitOptions.RemoveEmptyEntries);
-                _cobieFieldMap.Add(keyVal.Key,values);
-                foreach (var cobieProperty in values) //used to keep a list of properties that are reserved for COBie and not written out as attributes
-                    _cobieProperties.Add(cobieProperty);
-            }
-            var ifcElementInclusion = (AppSettingsSection)config.GetSection("IfcElementInclusion");
-            
-            foreach (KeyValueConfigurationElement keyVal in ifcElementInclusion.Settings)
-            {
-                if (String.Compare(keyVal.Value, "YES", StringComparison.OrdinalIgnoreCase) == 0)
+                var asss = Assembly.GetExecutingAssembly();
+
+                using (var input = asss.GetManifestResourceStream("Xbim.COBieLite.COBieAttributes.config"))
+                using (var output = File.Create(tmpFile))
                 {
-                    var includedType = IfcMetaData.IfcType(keyVal.Key.ToUpper());
-                    if (includedType != null) _includedTypes.Add(includedType);
+                    if (input != null) input.CopyTo(output);
                 }
+            }
+
+
+            Configuration config;
+            AppSettingsSection cobiePropertyMaps;
+            _cobieFieldMap = new Dictionary<string, string[]>();
+
+            if (!File.Exists(tmpFile))
+            {
+                var directory = new DirectoryInfo(".");
+                throw new Exception(
+                    string.Format(
+                        @"Error loading configuration file ""{0}"". App folder is ""{1}"".", tmpFile,
+                        directory.FullName)
+                    );
+            }
+
+            try
+            {
+                var configMap = new ExeConfigurationFileMap { ExeConfigFilename = tmpFile };
+                config = ConfigurationManager.OpenMappedExeConfiguration(configMap, ConfigurationUserLevel.None);
+                cobiePropertyMaps = (AppSettingsSection) config.GetSection("COBiePropertyMaps");
+            }
+            catch (Exception ex)
+            {
+                var directory = new DirectoryInfo(".");
+                throw new Exception(
+                    @"Error loading configuration file ""COBieAttributes.config"". App folder is " + directory.FullName,
+                    ex);
+            }
+
+            if (cobiePropertyMaps != null)
+            {
+                foreach (KeyValueConfigurationElement keyVal in cobiePropertyMaps.Settings)
+                {
+                    var values = keyVal.Value.Split(new[] {';'}, StringSplitOptions.RemoveEmptyEntries);
+                    _cobieFieldMap.Add(keyVal.Key, values);
+                    foreach (var cobieProperty in values)
+                        //used to keep a list of properties that are reserved for COBie and not written out as attributes
+                        _cobieProperties.Add(cobieProperty);
+                }
+            }
+
+
+            var ifcElementInclusion = (AppSettingsSection) config.GetSection("IfcElementInclusion");
+
+            if (ifcElementInclusion != null)
+            {
+                foreach (KeyValueConfigurationElement keyVal in ifcElementInclusion.Settings)
+                {
+                    if (String.Compare(keyVal.Value, "YES", StringComparison.OrdinalIgnoreCase) == 0)
+                    {
+                        var includedType = IfcMetaData.IfcType(keyVal.Key.ToUpper());
+                        if (includedType != null) _includedTypes.Add(includedType);
+                    }
+                }
+            }
+
+            if (_configFileName == null)
+            {
+                File.Delete(tmpFile);
             }
         }
 
-        
+
         private void GetPropertySets()
         {
             _attributedObjects = new Dictionary<IfcObjectDefinition, XbimAttributedObject>();
@@ -495,7 +548,7 @@ namespace Xbim.COBieLite
             if (classifiedObject is IfcSpace)
             {
                 var val = _attributedObjects[(IfcSpace)classifiedObject];
-                string classificationName = "";
+                string classificationName;
                 val.GetSimplePropertyValue("PSet_Revit_Identity Data.OmniClass Table 13 Category", out classificationName);
 
                 if (classificationName != null)
@@ -513,7 +566,7 @@ namespace Xbim.COBieLite
                     {
                         // PSet_Revit_Type_Other.Classification Code
                         var cfg =
-                            new string[]
+                            new[]
                             {
                                 "SimpleProp(PSet_Revit_Type_Other.Classification Code): SimpleProp(PSet_Revit_Type_Other.Classification Description)",
                                 "SimpleProp(PSet_Revit_Type_Identity Data.OmniClass Number): SimpleProp(PSet_Revit_Type_Identity Data.OmniClass Title)"
@@ -523,22 +576,22 @@ namespace Xbim.COBieLite
                         string pattern = @"SimpleProp\(([^\)]*)\)";
                         Regex regex = new Regex(pattern);
 
-                        foreach (var ClassificationRule in cfg)
+                        foreach (var classificationRule in cfg)
                         {
                             bool ok = true;
-                            string result = ClassificationRule;
-                            var mts = regex.Matches(ClassificationRule);
+                            string result = classificationRule;
+                            var mts = regex.Matches(classificationRule);
                             foreach (Match mt in mts)
                             {
-                                string PropName = mt.Groups[1].Value;
-                                string PropVal = "";
-                                val.GetSimplePropertyValue(PropName, out PropVal);
-                                if (PropVal == null)
+                                string propName = mt.Groups[1].Value;
+                                string propVal;
+                                val.GetSimplePropertyValue(propName, out propVal);
+                                if (propVal == null)
                                 {
                                     ok = false;
                                     break;
                                 }
-                                result = result.Replace("SimpleProp(" + PropName + ")", PropVal);
+                                result = result.Replace("SimpleProp(" + propName + ")", propVal);
                             }
                             if (ok)
                                 return result;
@@ -695,21 +748,32 @@ namespace Xbim.COBieLite
 
         static public void WriteJson(TextWriter textWriter, FacilityType theFacility)
         {
-            var serializerSettings = new JsonSerializerSettings
-            {
-                NullValueHandling = NullValueHandling.Ignore,
-                Formatting = Newtonsoft.Json.Formatting.Indented,
-                DateFormatHandling = DateFormatHandling.IsoDateFormat
-            };
-            serializerSettings.Converters.Add(new StringEnumConverter());
-            var serialiser = JsonSerializer.Create(serializerSettings);
+            var serialiser = FacilityType.GetJsonSerializer();
             serialiser.Serialize(textWriter, theFacility);
 
         }
 
+        static public FacilityType ReadJson(TextReader textReader)
+        {
+            var serialiser = FacilityType.GetJsonSerializer();
+            return (FacilityType)serialiser.Deserialize(textReader, typeof(FacilityType));
+        }
+
+        static public FacilityType ReadJson(string path)
+        {
+            using (var textReader = File.OpenText(path))
+            {
+                var serialiser = FacilityType.GetJsonSerializer();
+                var facility = (FacilityType)serialiser.Deserialize(textReader, typeof(FacilityType));    
+                textReader.Close();
+                return facility;
+            }
+            
+        }
+
         public static FacilityType ReadXml(string cobieModelFileName)
         {
-            var x = new XmlSerializer(typeof(FacilityType));
+            var x = FacilityType.GetSerializer();
             var reader = new XmlTextReader(cobieModelFileName);
             var reqFacility = (FacilityType)x.Deserialize(reader);
             reader.Close();
@@ -726,7 +790,7 @@ namespace Xbim.COBieLite
                 new XmlQualifiedName("xsi", "http://www.w3.org/2001/XMLSchema-instance")
             });
 
-            var x = new XmlSerializer(theFacility.GetType());
+            var x = FacilityType.GetSerializer();
 
             using (var xtw = new XbimCoBieLiteXmlWriter(textWriter))
             {

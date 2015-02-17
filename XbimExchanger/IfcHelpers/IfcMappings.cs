@@ -1,5 +1,6 @@
 ﻿using Xbim.IO;
 using Xbim.XbimExtensions.Interfaces;
+using XbimExchanger.COBieLiteToIfc;
 
 namespace XbimExchanger.IfcHelpers
 {
@@ -9,5 +10,6 @@ namespace XbimExchanger.IfcHelpers
         {
             return Exchanger.TargetRepository.Instances.New<TToObject>();
         }
+
     }
 }

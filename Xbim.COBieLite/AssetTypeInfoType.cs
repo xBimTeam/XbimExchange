@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Xbim.COBieLite.CollectionTypes;
 using Xbim.Ifc2x3.Kernel;
 using Xbim.Ifc2x3.ProductExtension;
 using Xbim.Ifc2x3.SharedFacilitiesElements;
@@ -10,10 +11,7 @@ namespace Xbim.COBieLite
     public partial class AssetTypeInfoType
     {
        
-        public AssetTypeInfoType()
-        {
-            
-        }
+     
 
         public AssetTypeInfoType(IfcTypeObject ifcTypeObject, CoBieLiteHelper helper)
             : this()

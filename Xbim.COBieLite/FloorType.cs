@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using Xbim.COBieLite.CollectionTypes;
 using Xbim.Ifc2x3.Extensions;
 using Xbim.Ifc2x3.ProductExtension;
 
@@ -10,10 +11,7 @@ namespace Xbim.COBieLite
         //[System.Xml.Serialization.XmlIgnoreAttribute()]
         //private IfcBuildingStorey _ifcBuildingStorey;
 
-        public FloorType()
-        {
-            
-        }
+   
         public FloorType(IfcBuildingStorey ifcBuildingStorey, CoBieLiteHelper helper)
             : this()
         {
@@ -54,7 +52,9 @@ namespace Xbim.COBieLite
             {
                 Spaces = new SpaceCollectionType {Space = new List<SpaceType>(ifcSpaces.Count)};
                 for (var i = 0; i < ifcSpaces.Count; i++)
+                {
                     Spaces.Add(new SpaceType(ifcSpaces[i], helper));
+                }
             }
 
             //Attributes
