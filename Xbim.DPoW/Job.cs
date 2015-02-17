@@ -5,6 +5,9 @@ using Newtonsoft.Json;
 
 namespace Xbim.DPoW
 {
+    /// <summary>
+    /// Job is used to represent required action with responsibility and other related information.
+    /// </summary>
     public class Job
     {
         /// <summary>
