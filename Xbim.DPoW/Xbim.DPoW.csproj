@@ -72,7 +72,7 @@
     <Compile Include="Roles.cs" />
     <Compile Include="ValueTypeEnum.cs" />
     <Compile Include="VolumeUnits.cs" />
-    <Compile Include="Zone.cs" />
+    <Compile Include="SpaceType.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="DPoW.cd" />

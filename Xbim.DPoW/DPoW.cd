@@ -9,7 +9,7 @@
   </Class>
   <Class Name="Xbim.DPoW.ProjectStage">
     <Position X="4.75" Y="0.75" Width="2.25" />
-    <AssociationLine Name="Documentation" Type="Xbim.DPoW.Documentation" FixedFromPoint="true" FixedToPoint="true">
+    <AssociationLine Name="DocumentationSet" Type="Xbim.DPoW.Documentation" FixedFromPoint="true" FixedToPoint="true">
       <Path>
         <Point X="6.625" Y="3.011" />
         <Point X="6.625" Y="3.844" />
@@ -17,14 +17,14 @@
       </Path>
     </AssociationLine>
     <TypeIdentifier>
-      <HashCode>AAACEAIAAAAAAAAAAACAgCAAAAAEAAAAAAAAAIAAAAA=</HashCode>
+      <HashCode>AAACEAIAAAAAAAAAAACAgCAAAAAAAAAAAAAAAIIAAAA=</HashCode>
       <FileName>ProjectStage.cs</FileName>
     </TypeIdentifier>
     <ShowAsCollectionAssociation>
       <Property Name="SpaceTypes" />
       <Property Name="AssetTypes" />
       <Property Name="AssemblyTypes" />
-      <Property Name="Documentation" />
+      <Property Name="DocumentationSet" />
     </ShowAsCollectionAssociation>
   </Class>
   <Class Name="Xbim.DPoW.PlanOfWork">
@@ -153,14 +153,14 @@
       </Path>
     </InheritanceLine>
     <TypeIdentifier>
-      <HashCode>AAAAAAAAAAAAAAAAIAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <HashCode>AAAAAAAAAAAAAAAAIAAAAAAAAAAAAAAAAAAAAAACAAA=</HashCode>
       <FileName>AssemblyType.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="Xbim.DPoW.Documentation">
     <Position X="8.5" Y="3.75" Width="2.25" />
     <TypeIdentifier>
-      <HashCode>AAACAAAAAACgAAAAAEAAAAQAACAAAAAAAAAAAAAAAAA=</HashCode>
+      <HashCode>AAACAAAAAAChAAAAAEAAAAQAACAAAAAAAAAAAAAAAAA=</HashCode>
       <FileName>Document.cs</FileName>
     </TypeIdentifier>
     <ShowAsCollectionAssociation>

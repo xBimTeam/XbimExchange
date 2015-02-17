@@ -7,6 +7,9 @@ using System.Threading.Tasks;
 
 namespace Xbim.DPoW
 {
+    /// <summary>
+    /// Basic value types
+    /// </summary>
     public enum ValueTypeEnum
     {
         /// <summary>
