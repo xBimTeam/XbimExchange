@@ -16,7 +16,7 @@
         public string Description { get; set; }
 
         /// <summary>
-        /// Property set name. This helps to convert data between DPoW, IFC and COBie
+        /// Variant set name. This helps to convert data between DPoW, IFC and COBie
         /// </summary>
         public string PropertySetName { get; set; }
         
