@@ -14,7 +14,7 @@ namespace XbimExchanger.COBieLiteToIfc
 
             ifcBuilding.Name = facility.FacilityName;
             ifcBuilding.Description = facility.FacilityDescription;
-
+            
             #endregion
 
             #region Default units
@@ -69,18 +69,27 @@ namespace XbimExchanger.COBieLiteToIfc
             } 
             #endregion
 
-            #region Attributes
+            #region AssetTypes
+            //write out the floors if we have any
+            if (facility.AssetTypes != null)
+            {
+                var assetTypeMapping = Exchanger.GetOrCreateMappings<MappingAssetTypeInfoTypeToIfcTypeObject>();
+                foreach (var assetType in facility.AssetTypes)
+                {
+                    var ifcFloor = assetTypeMapping.AddMapping(assetType, assetTypeMapping.GetOrCreateTargetObject(assetType.externalID));
+                   
+                }
+            }
+            #endregion
 
+            #region Attributes
             if (facility.FacilityAttributes != null)
             {
-               
                 foreach (var attribute in facility.FacilityAttributes)
-                {
-                    var ifcSimpleProperty = Exchanger.ConvertAttributeTypeToIfcSimpleProperty(attribute);
-
-                }
-            } 
+                    Exchanger.ConvertAttributeTypeToIfcObjectProperty(ifcBuilding, attribute);
+            }
             #endregion
+
             return ifcBuilding;
         }
     }

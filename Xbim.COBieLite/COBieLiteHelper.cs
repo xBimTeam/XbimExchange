@@ -48,7 +48,7 @@ namespace Xbim.COBieLite
         /// <summary>
         /// Does not write out the External Entity Type Name or the External System Name
         /// </summary>
-        IgnoreSystemAndEntityName = 0,
+        IgnoreSystemAndEntityName = 3,
         /// <summary>
         /// Does not write out the External System Name but does write out the External Entity Type Name
         /// </summary>

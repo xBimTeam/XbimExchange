@@ -87,6 +87,8 @@
     <Compile Include="COBieLiteToDPoW\MappingFacilityTypeToPlanOfWork.cs" />
     <Compile Include="COBieLiteToIfc\COBieLiteIfcMappings.cs" />
     <Compile Include="COBieLiteToIfc\COBieLiteToIfcExchanger.cs" />
+    <Compile Include="COBieLiteToIfc\MappingAssetInfoTypeToIfcElement.cs" />
+    <Compile Include="COBieLiteToIfc\MappingAssetTypeInfoTypeToIfcTypeObject.cs" />
     <Compile Include="COBieLiteToIfc\MappingFacilityTypeToIfcBuilding.cs" />
     <Compile Include="COBieLiteToIfc\MappingFloorTypeToIfcBuildingStorey.cs" />
     <Compile Include="COBieLiteToIfc\MappingProjectTypeToIfcProject.cs" />
@@ -104,6 +106,7 @@
     <Compile Include="DPoWToCOBieLite\MappingPlanOfWorkToFacilityType.cs" />
     <Compile Include="DPoWToCOBieLite\MappingZoneToZoneType.cs" />
     <Compile Include="IfcHelpers\IfcMappings.cs" />
+    <Compile Include="IfcHelpers\IfcPropertySetDefinitionExtensions.cs" />
     <Compile Include="IfcHelpers\IfcUnitComparer.cs" />
     <Compile Include="IfcHelpers\IfcUnitConverter.cs" />
     <Compile Include="IXbimMappings.cs" />

@@ -15,6 +15,17 @@ namespace XbimExchanger.COBieLiteToIfc
             Exchanger.TryCreatePropertySingleValue(ifcSpace, spaceType.SpaceNetAreaValue, "SpaceNetAreaValue", Exchanger.DefaultAreaUnit);
             Exchanger.TryCreatePropertySingleValue(ifcSpace, spaceType.SpaceSignageName, "SpaceSignageName");
             Exchanger.TryCreatePropertySingleValue(ifcSpace, spaceType.SpaceUsableHeightValue, "SpaceUsableHeightValue", Exchanger.DefaultAreaUnit);
+
+            #region Attributes
+            if (spaceType.SpaceAttributes != null)
+            {
+                foreach (var attribute in spaceType.SpaceAttributes)
+                    Exchanger.ConvertAttributeTypeToIfcObjectProperty(ifcSpace, attribute);
+            }
+            #endregion
+
+
+           
             return ifcSpace;
         }
     }

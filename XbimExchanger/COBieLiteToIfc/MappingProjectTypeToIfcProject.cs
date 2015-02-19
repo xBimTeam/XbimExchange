@@ -6,11 +6,12 @@ namespace XbimExchanger.COBieLiteToIfc
     class MappingProjectTypeToIfcProject : CoBieLiteIfcMappings<string, ProjectType, IfcProject>
     {
 
-        protected override IfcProject Mapping(ProjectType @from, IfcProject to)
+        protected override IfcProject Mapping(ProjectType projectType, IfcProject ifcProject)
         {
-            to.Name = from.ProjectName;
-            to.Description = from.ProjectDescription;
-            return to;
+            ifcProject.Name = projectType.ProjectName;
+            ifcProject.Description = projectType.ProjectDescription;
+           
+            return ifcProject;
         }
     }
 }

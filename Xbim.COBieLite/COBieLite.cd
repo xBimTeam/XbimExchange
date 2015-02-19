@@ -159,7 +159,7 @@
     </TypeIdentifier>
   </Class>
   <Class Name="Xbim.COBieLite.SpaceType">
-    <Position X="13" Y="1.75" Width="1.5" />
+    <Position X="13" Y="1.75" Width="2.5" />
     <Compartments>
       <Compartment Name="Fields" Collapsed="true" />
     </Compartments>

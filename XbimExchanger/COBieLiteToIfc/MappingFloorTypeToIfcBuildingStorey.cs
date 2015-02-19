@@ -4,6 +4,7 @@ using Xbim.Ifc2x3.Extensions;
 using Xbim.Ifc2x3.MeasureResource;
 using Xbim.Ifc2x3.ProductExtension;
 using XbimExchanger.COBieLiteHelpers;
+using XbimExchanger.IfcHelpers;
 
 namespace XbimExchanger.COBieLiteToIfc
 {
@@ -37,8 +38,7 @@ namespace XbimExchanger.COBieLiteToIfc
 
                 foreach (var attribute in floorType.FloorAttributes)
                 {
-                    //just create the property it must be unique
-                    var ifcSimpleProperty = Exchanger.ConvertAttributeTypeToIfcSimpleProperty(attribute);
+                   Exchanger.ConvertAttributeTypeToIfcObjectProperty(buildingStory, attribute);
                 }
             }
             #endregion

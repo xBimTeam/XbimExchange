@@ -62,8 +62,8 @@ namespace XbimExchanger.COBieLiteToIfc
 
         #region Fields
 
-        private readonly Dictionary<IfcObject, List<IfcPropertySetDefinition>> _objectsToPropertySets = new Dictionary<IfcObject, List<IfcPropertySetDefinition>>();
-
+        private readonly Dictionary<IfcObjectDefinition, List<IfcPropertySetDefinition>> _objectsToPropertySets =
+            new Dictionary<IfcObjectDefinition, List<IfcPropertySetDefinition>>();
        // private readonly Dictionary<string, IfcUnit> _units = new Dictionary<string, IfcUnit>();
 
         #endregion
@@ -106,6 +106,67 @@ namespace XbimExchanger.COBieLiteToIfc
 
         #region Methods
 
+        public IfcPropertySetDefinition GetOrCreatePropertySetDefinition(IfcObjectDefinition ifcObjectDefinition, string propertySetName)
+        {
+            List<IfcPropertySetDefinition> propertySetDefinitionList;
+            if (!_objectsToPropertySets.TryGetValue(ifcObjectDefinition, out propertySetDefinitionList))
+            {
+                propertySetDefinitionList = new List<IfcPropertySetDefinition>();
+                _objectsToPropertySets.Add(ifcObjectDefinition, propertySetDefinitionList);
+            }
+            var propertySet = propertySetDefinitionList.Find(p => p.Name == propertySetName);
+            if (propertySet == null)
+            {
+                //simplistic way to decide if this should be a quantity, IFC 4 specifies the name starts with QTO, under 2x3 most vendors have gone for BaseQuantities
+                if (propertySetName.StartsWith("qto_", true, CultureInfo.InvariantCulture) ||
+                    propertySetName.StartsWith("basequantities", true,
+                        CultureInfo.InvariantCulture))
+                {
+                    var quantitySet = TargetRepository.Instances.New<IfcElementQuantity>();
+                    propertySetDefinitionList.Add(quantitySet);
+                    quantitySet.Name = propertySetName;
+                    var ifcObject = ifcObjectDefinition as IfcObject;
+                    var ifcTypeObject = ifcObjectDefinition as IfcTypeObject;
+                    if (ifcObject != null)
+                    {
+                        var relDef = TargetRepository.Instances.New<IfcRelDefinesByProperties>();
+                        relDef.RelatingPropertyDefinition = quantitySet;
+                        relDef.RelatedObjects.Add(ifcObject);
+                    }
+                    else if (ifcTypeObject != null)
+                    {
+                        if (ifcTypeObject.HasPropertySets == null) ifcTypeObject.CreateHasPropertySets();
+                        ifcTypeObject.HasPropertySets.Add(quantitySet);
+                    }
+                    else
+                        throw new Exception("Invalid object type " + ifcObjectDefinition.GetType().Name);
+
+                    propertySet = quantitySet;
+                }
+                else //it is a normal property set
+                {
+                    propertySet = TargetRepository.Instances.New<IfcPropertySet>();
+                    propertySetDefinitionList.Add(propertySet);
+                    propertySet.Name = propertySetName;
+                    var ifcObject = ifcObjectDefinition as IfcObject;
+                    var ifcTypeObject = ifcObjectDefinition as IfcTypeObject;
+                    if (ifcObject != null)
+                    {
+                        var relDef = TargetRepository.Instances.New<IfcRelDefinesByProperties>();
+                        relDef.RelatingPropertyDefinition = propertySet;
+                        relDef.RelatedObjects.Add(ifcObject);
+                    }
+                    else if (ifcTypeObject != null)
+                    {
+                        if (ifcTypeObject.HasPropertySets == null) ifcTypeObject.CreateHasPropertySets();
+                        ifcTypeObject.HasPropertySets.Add(propertySet);
+                    }
+                    else
+                        throw new Exception("Invalid object type " + ifcObjectDefinition.GetType().Name);
+                }
+            }
+            return propertySet;
+        }
         private void LoadUnits()
         {
            //var units = TargetRepository.Instances.OfType<IfcUnit>().ToDictionary(k => k.GetName());
@@ -125,6 +186,20 @@ namespace XbimExchanger.COBieLiteToIfc
                         _objectsToPropertySets.Add(ifcObject, propDefinitionList);
                     }
                     propDefinitionList.Add(relProp.RelatingPropertyDefinition);
+                }
+            }
+            var typeObjects = TargetRepository.Instances.OfType<IfcTypeObject>().ToList();
+            foreach (var typeObject in typeObjects)
+            {
+                List<IfcPropertySetDefinition> propDefinitionList;
+                if (!_objectsToPropertySets.TryGetValue(typeObject, out propDefinitionList)) //if it hasn't got any, add an empty list
+                {
+                    propDefinitionList = new List<IfcPropertySetDefinition>();
+                    _objectsToPropertySets.Add(typeObject, propDefinitionList);
+                }
+                foreach (var propertySetDef in typeObject.HasPropertySets)
+                {
+                    propDefinitionList.Add(propertySetDef);
                 }
             }
         }
@@ -331,6 +406,15 @@ namespace XbimExchanger.COBieLiteToIfc
             }
         }
 
+       
+        internal void ConvertAttributeTypeToIfcObjectProperty(IfcObjectDefinition ifcObjectDefinition, AttributeType attributeType)
+        {
+            //need to add in consideration for quantities not just properties
+            var ifcSimpleProperty = ConvertAttributeTypeToIfcSimpleProperty(attributeType);
+            var propertySet = GetOrCreatePropertySetDefinition(ifcObjectDefinition, attributeType.propertySetName);
+            propertySet.Add(ifcSimpleProperty);
+        }
+
         /// <summary>
         /// Converts an attribute in to an Ifc Property, still needs support for units adding
         /// </summary>
@@ -339,7 +423,8 @@ namespace XbimExchanger.COBieLiteToIfc
         internal IfcSimpleProperty ConvertAttributeTypeToIfcSimpleProperty(AttributeType attributeType)
         {
             var attributeValueType = attributeType.AttributeValue;
-            if (attributeValueType == null) throw new Exception("AttributeType has a null AttributeValue");
+            if (attributeValueType == null)
+                throw new Exception("AttributeType has a null AttributeValue");
 
             switch (attributeValueType.SimplePropertyType())
             {
@@ -449,6 +534,7 @@ namespace XbimExchanger.COBieLiteToIfc
                     simpleEnumStringProperty.Description = attributeType.AttributeDescription;
                     return simpleEnumStringProperty;
                 case XbimSimplePropertyType.SimpleString:
+                case XbimSimplePropertyType.Null:
                     var attributeStringValueType = attributeValueType.Item as AttributeStringValueType;
                     var simpleStringProperty = TargetRepository.Instances.New<IfcPropertySingleValue>();
                     if (attributeStringValueType != null)
@@ -466,6 +552,8 @@ namespace XbimExchanger.COBieLiteToIfc
                     simpleDateTimeProperty.Name = attributeType.AttributeName;
                     simpleDateTimeProperty.Description = attributeType.AttributeDescription;
                     return simpleDateTimeProperty;
+                    
+                    break;
                 default:
                     throw new ArgumentOutOfRangeException("attributeType", "Invalid attribute value type");
             }
