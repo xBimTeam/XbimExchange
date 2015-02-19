@@ -3,7 +3,7 @@
   <Class Name="Xbim.DPoW.Project">
     <Position X="2.25" Y="1.25" Width="2" />
     <TypeIdentifier>
-      <HashCode>AAACAAAAAAAgAgAgAAAgAAQAAAAAAAAEEAAAIBAAAAA=</HashCode>
+      <HashCode>AAACAAAAAAAgAiAgAAAgAAQAAAAAAAAEAAAAIBAAAAA=</HashCode>
       <FileName>Project.cs</FileName>
     </TypeIdentifier>
   </Class>
@@ -21,10 +21,10 @@
       <FileName>ProjectStage.cs</FileName>
     </TypeIdentifier>
     <ShowAsCollectionAssociation>
+      <Property Name="SpaceTypes" />
       <Property Name="AssetTypes" />
       <Property Name="AssemblyTypes" />
       <Property Name="DocumentationSet" />
-      <Property Name="SpaceTypes" />
     </ShowAsCollectionAssociation>
   </Class>
   <Class Name="Xbim.DPoW.PlanOfWork">
@@ -244,24 +244,24 @@
       <FileName>CurrencyUnits.cs</FileName>
     </TypeIdentifier>
   </Enum>
-  <Enum Name="Xbim.DPoW.LinearUnits">
-    <Position X="0.5" Y="3.75" Width="1.5" />
+  <Enum Name="Xbim.DPoW.LinearUnits" Collapsed="true">
+    <Position X="0.5" Y="2.75" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>CAAAAAAAAAAAAAAAAAAAAAAAIAQAAAAAAAAAAIAAAAA=</HashCode>
+      <HashCode>CAAgAAAAAAAAAAAgAAAAAQAAIAQAAAAAAAAAAIAGAAA=</HashCode>
       <FileName>LinearUnits.cs</FileName>
     </TypeIdentifier>
   </Enum>
-  <Enum Name="Xbim.DPoW.AreaUnits">
+  <Enum Name="Xbim.DPoW.AreaUnits" Collapsed="true">
     <Position X="0.5" Y="2" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAAAAAARAAQAAAAAAAAAAAAAAAAAAAAAAAIAAAAAAAA=</HashCode>
+      <HashCode>AAAEAAARAAQAADAgAAIAAAAAAAAAAAAAAAIAAAAAAAA=</HashCode>
       <FileName>AreaUnits.cs</FileName>
     </TypeIdentifier>
   </Enum>
-  <Enum Name="Xbim.DPoW.VolumeUnits">
-    <Position X="0.5" Y="5.5" Width="1.5" />
+  <Enum Name="Xbim.DPoW.VolumeUnits" Collapsed="true">
+    <Position X="0.5" Y="3.5" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAAAEAAAAAAAIAAAIAAAAAAAAAAAAAAAAAQAAAAAAAA=</HashCode>
+      <HashCode>AAAAEAAgAAEAIAAgIAAAAAAAAEAAAAAAAAQAAAAAAAA=</HashCode>
       <FileName>VolumeUnits.cs</FileName>
     </TypeIdentifier>
   </Enum>

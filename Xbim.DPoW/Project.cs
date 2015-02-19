@@ -49,7 +49,7 @@ namespace Xbim.DPoW
         /// </summary>
         /// <param name="pow">Plan of work</param>
         /// <returns>Current project stage</returns>
-        public ProjectStage GetProjectStage(PlanOfWork pow)
+        public ProjectStage GetCurrentProjectStage(PlanOfWork pow)
         {
             return pow.ProjectStages != null ? pow.ProjectStages.FirstOrDefault(ps => ps.Id == CurrentProjectStageId) :
             null;

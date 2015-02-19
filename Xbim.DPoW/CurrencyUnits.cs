@@ -4,6 +4,7 @@ namespace Xbim.DPoW
 {
     public enum CurrencyUnits
     {
+        UNDEFINED,
         AED,
         AES,
         ATS,
