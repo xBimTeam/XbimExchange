@@ -10,9 +10,13 @@ namespace Xbim.DPoW
     /// </summary>
     public enum VolumeUnits
     {
+        UNDEFINED,
         cubiccentimeters,
         cubickilometers,
         cubicmeters,
         cubicmillimeters,
+        cubicfeet,
+        cubicinches,
+        cubicyards
     }
 }
