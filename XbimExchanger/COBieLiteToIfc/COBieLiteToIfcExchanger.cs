@@ -426,7 +426,9 @@ namespace XbimExchanger.COBieLiteToIfc
             if (attributeValueType == null)
                 throw new Exception("AttributeType has a null AttributeValue");
 
-            switch (attributeValueType.SimplePropertyType())
+            var a = XbimSimplePropertyType.SimpleString;
+            switch (a)
+            //switch (attributeValueType.SimplePropertyType())
             {
                 case XbimSimplePropertyType.SimpleDecimal:
                     var attributeDecimalValueType = attributeValueType.Item as AttributeDecimalValueType;

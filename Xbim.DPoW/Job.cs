@@ -7,14 +7,25 @@ namespace Xbim.DPoW
 {
     public class Job
     {
-        public string JobName { get; set; }
-        public string JobDescription { get; set; }
-
-        //[JsonConverter(typeof(DPoWObjectConverter<DPoWObject>))]
-        public Guid ContactIdResponsibleFor { get; set; }
-
+        /// <summary>
+        /// Name of the job
+        /// </summary>
+        public string Name { get; set; }
+        /// <summary>
+        /// Description of the job
+        /// </summary>
+        public string Description { get; set; }
+        /// <summary>
+        /// Responsibility assignment
+        /// </summary>
+        public Responsibility Responsibility { get; set; }
+        /// <summary>
+        /// Unique ID
+        /// </summary>
         public Guid Id { get; set; }
-
+        /// <summary>
+        /// ID initialized to unique value
+        /// </summary>
         public Job()
         {
             Id = Guid.NewGuid();

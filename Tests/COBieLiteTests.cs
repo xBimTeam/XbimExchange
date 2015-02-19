@@ -160,11 +160,74 @@ namespace Xbim.Tests.COBie
                         },
                         new AttributeType()
                         {
-                            AttributeName = "Null item value",
+                            AttributeName = "Null boolean item value",
+                            AttributeValue = new AttributeValueType()
+                            {
+                                Item = null,
+                                ItemElementName = ItemChoiceType.AttributeBooleanValue
+                            }
+                        },
+                        new AttributeType()
+                        {
+                            AttributeName = "Null datetime item value",
+                            AttributeValue = new AttributeValueType()
+                            {
+                                Item = null,
+                                ItemElementName = ItemChoiceType.AttributeDateTimeValue
+                            }
+                        },
+                        new AttributeType()
+                        {
+                            AttributeName = "Null date item value",
+                            AttributeValue = new AttributeValueType()
+                            {
+                                Item = null,
+                                ItemElementName = ItemChoiceType.AttributeDateValue
+                            }
+                        },
+                        new AttributeType()
+                        {
+                            AttributeName = "Null decimal item value",
+                            AttributeValue = new AttributeValueType()
+                            {
+                                Item = null,
+                                ItemElementName = ItemChoiceType.AttributeDecimalValue
+                            }
+                        },
+                        new AttributeType()
+                        {
+                            AttributeName = "Null int item value",
+                            AttributeValue = new AttributeValueType()
+                            {
+                                Item = null,
+                                ItemElementName = ItemChoiceType.AttributeIntegerValue
+                            }
+                        },
+                        new AttributeType()
+                        {
+                            AttributeName = "Null monetary item value",
+                            AttributeValue = new AttributeValueType()
+                            {
+                                Item = null,
+                                ItemElementName = ItemChoiceType.AttributeMonetaryValue
+                            }
+                        },
+                        new AttributeType()
+                        {
+                            AttributeName = "Null string item value",
                             AttributeValue = new AttributeValueType()
                             {
                                 Item = null,
                                 ItemElementName = ItemChoiceType.AttributeStringValue
+                            }
+                        },
+                        new AttributeType()
+                        {
+                            AttributeName = "Null time item value",
+                            AttributeValue = new AttributeValueType()
+                            {
+                                Item = null,
+                                ItemElementName = ItemChoiceType.AttributeTimeValue
                             }
                         },
                         new AttributeType()
