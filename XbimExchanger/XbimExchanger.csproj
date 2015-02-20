@@ -92,12 +92,15 @@
     <Compile Include="DPoW2ToCOBieLite\ClassificationMappings.cs" />
     <Compile Include="DPoW2ToCOBieLite\DPoWToCOBieLiteExchanger.cs" />
     <Compile Include="DPoW2ToCOBieLite\DPoWToCOBieLiteMapping.cs" />
-    <Compile Include="DPoW2ToCOBieLite\Helper.cs" />
+    <Compile Include="DPoW2ToCOBieLite\Extensions.cs" />
     <Compile Include="DPoW2ToCOBieLite\MappingAssemblyTypeToAssemblyType.cs" />
     <Compile Include="DPoW2ToCOBieLite\MappingAssetTypeToAssetType.cs" />
     <Compile Include="DPoW2ToCOBieLite\MappingContactToContact.cs" />
     <Compile Include="DPoW2ToCOBieLite\MappingDocumentToDocumentType.cs" />
+    <Compile Include="DPoW2ToCOBieLite\MappingDPoWObjectToCOBieObject.cs" />
+    <Compile Include="DPoW2ToCOBieLite\MappingJobToIssueType.cs" />
     <Compile Include="DPoW2ToCOBieLite\MappingPlanOfWorkToFacilityType.cs" />
+    <Compile Include="DPoW2ToCOBieLite\MappingRoleToContact.cs" />
     <Compile Include="DPoW2ToCOBieLite\MappingSpaceTypeToSpaceType.cs" />
     <Compile Include="DPoWToCOBieLite\DPoWToCOBieLiteExchanger.cs" />
     <Compile Include="DPoWToCOBieLite\DPoWToCOBieLiteMapping.cs" />
@@ -144,6 +147,9 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="IfcToCOBieLite\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="DPoW2ToCOBieLite\Conventions.txt" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

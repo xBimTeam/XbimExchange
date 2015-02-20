@@ -8,7 +8,7 @@ using Xbim.DPoW;
 
 namespace XbimExchanger.DPoW2ToCOBieLite
 {
-    public class MappingContactToContact : DPoWToCOBieLiteMapping<Contact, ContactType>
+    class MappingContactToContact : DPoWToCOBieLiteMapping<Contact, ContactType>
     {
         public override ContactType CreateTargetObject()
         {
@@ -22,6 +22,7 @@ namespace XbimExchanger.DPoW2ToCOBieLite
             target.ContactCompanyName = source.CompanyName;
             target.ContactCountryName = source.Country;
             target.ContactDepartmentName = source.DepartmentName;
+            //email has to be defined because it is a key for ContactKey references. It might be made up from available information
             target.ContactEmail = source.Email ?? String.Format("{0}.{1}@{2}.com", source.GivenName ?? "noname", source.FamilyName ?? "nosurname", source.CompanyName ?? "nocompany").ToLower();
             target.ContactFamilyName = source.FamilyName;
             target.ContactGivenName = source.GivenName;

@@ -1,0 +1,10 @@
+﻿Required LOD descriptive attributes are saved in 'RequiredLOD' property set. As an addition to that AssetType.AssetTypeShapeDescription is used to store sObject.RequiredLOD.Code;
+Required LOI descriptive attributes are saved in 'RequiredLOI' property set
+Required attributes are saved in property sets with '[required]' prefix
+
+Client of the project is defined as ContactCategory 'Client' of the ContactType which describes the client.
+Roles are saved as ContactTypes with ContactCategory set to 'Role'.
+
+Variant of AssetType from DPoW is saved as AssetType.AssetTypeModelNumber in COBieLite.
+
+For DPoW objects and Documentation classification references are saved in COBieLite equivalents as a single string in 'Category' property where classification references are separated by '|' character.

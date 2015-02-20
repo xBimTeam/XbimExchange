@@ -7,11 +7,25 @@ using Xbim.DPoW;
 
 namespace XbimExchanger.DPoW2ToCOBieLite
 {
-    public class MappingAssetTypeToAssetType: DPoWToCOBieLiteMapping<AssetType, AssetTypeInfoType>
+    class MappingAssetTypeToAssetType: MappingDPoWObjectToCOBieObject<AssetType, AssetTypeInfoType>
     {
-        protected override AssetTypeInfoType Mapping(AssetType source, AssetTypeInfoType target)
+        protected override AssetTypeInfoType Mapping(AssetType sObject, AssetTypeInfoType tObject)
         {
-            throw new NotImplementedException();
+            //perform base mapping on the level of objects
+            base.Mapping(sObject, tObject);
+
+            //------------------ mappings specific to asset type ----------------------
+            if (!String.IsNullOrEmpty(sObject.Variant))
+            {
+                //set variant of the object as a model number
+                tObject.AssetTypeModelNumber = sObject.Variant;
+            }
+
+            if (sObject.RequiredLOD != null)
+                tObject.AssetTypeShapeDescription = sObject.RequiredLOD.Code;
+
+
+            return tObject;
         }
     }
 }

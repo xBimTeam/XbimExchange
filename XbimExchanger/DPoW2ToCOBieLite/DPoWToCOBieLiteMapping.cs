@@ -8,7 +8,7 @@ using Xbim.DPoW;
 
 namespace XbimExchanger.DPoW2ToCOBieLite
 {
-    public abstract class DPoWToCOBieLiteMapping<TSourceType, TTargetType> : XbimMappings<PlanOfWork, FacilityType, string, TSourceType, TTargetType> where TTargetType : new()
+    abstract class DPoWToCOBieLiteMapping<TSourceType, TTargetType> : XbimMappings<PlanOfWork, FacilityType, string, TSourceType, TTargetType> where TTargetType : new()
     {
 
     }

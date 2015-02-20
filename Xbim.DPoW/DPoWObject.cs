@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Xml.Serialization;
 
 namespace Xbim.DPoW
@@ -43,9 +44,19 @@ namespace Xbim.DPoW
         /// <summary>
         /// Constructor initializes ID to new unique value
         /// </summary>
-        public DPoWObject()
+        protected DPoWObject()
         {
             Id = Guid.NewGuid();
+        }
+
+        public IEnumerable<ClassificationReference> GetClassificationReferences(PlanOfWork pow)
+        {
+            if(ClassificationReferenceIds == null || !ClassificationReferenceIds.Any()) yield break;
+            if (pow.ClassificationSystems == null || !pow.ClassificationSystems.Any()) yield break;
+            foreach (var reference in from system in pow.ClassificationSystems where system.ClassificationReferences != null && system.ClassificationReferences.Any() from reference in system.ClassificationReferences where ClassificationReferenceIds.Contains(reference.Id) select reference)
+            {
+                yield return reference;
+            }
         }
     }
 }

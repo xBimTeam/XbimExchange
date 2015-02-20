@@ -118,7 +118,7 @@
   <Class Name="Xbim.DPoW.DPoWObject">
     <Position X="11.5" Y="1.5" Width="2.25" />
     <TypeIdentifier>
-      <HashCode>AAACAAAAAACwAAAAAEAAAAQAAAAAACAAAAAAAAAAAAA=</HashCode>
+      <HashCode>AAACAAAAAACxAAAAAEAAAAQAAAAAACAAAAAAAAAAAAA=</HashCode>
       <FileName>DPoWObject.cs</FileName>
     </TypeIdentifier>
     <ShowAsAssociation>
@@ -133,8 +133,8 @@
     <Position X="8.5" Y="1.25" Width="2.25" />
     <InheritanceLine Type="Xbim.DPoW.DPoWObject" FixedFromPoint="true">
       <Path>
-        <Point X="11.5" Y="2.625" />
-        <Point X="11.125" Y="2.625" />
+        <Point X="11.5" Y="2.721" />
+        <Point X="11.125" Y="2.721" />
         <Point X="11.125" Y="1.866" />
         <Point X="10.75" Y="1.866" />
       </Path>
@@ -151,10 +151,10 @@
     </Compartments>
     <InheritanceLine Type="Xbim.DPoW.DPoWObject" FixedFromPoint="true">
       <Path>
-        <Point X="11.5" Y="2.625" />
-        <Point X="11.125" Y="2.625" />
-        <Point X="11.125" Y="3.309" />
-        <Point X="10.75" Y="3.309" />
+        <Point X="11.5" Y="2.721" />
+        <Point X="11.125" Y="2.721" />
+        <Point X="11.125" Y="3.356" />
+        <Point X="10.75" Y="3.356" />
       </Path>
     </InheritanceLine>
     <TypeIdentifier>
@@ -226,8 +226,8 @@
     <Position X="8.5" Y="0.5" Width="2.25" />
     <InheritanceLine Type="Xbim.DPoW.DPoWObject" FixedFromPoint="true">
       <Path>
-        <Point X="11.5" Y="2.625" />
-        <Point X="11.125" Y="2.625" />
+        <Point X="11.5" Y="2.721" />
+        <Point X="11.125" Y="2.721" />
         <Point X="11.125" Y="0.846" />
         <Point X="10.75" Y="0.846" />
       </Path>

@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Xml.Serialization;
+using Newtonsoft.Json;
 using Xbim.COBieLite.CollectionTypes;
 using Xbim.Ifc2x3.Extensions;
 using Xbim.Ifc2x3.MeasureResource;
@@ -11,7 +13,7 @@ using Xbim.Ifc2x3.QuantityResource;
 
 namespace Xbim.COBieLite
 {
-    public partial class SpaceType
+    public partial class SpaceType: ICOBieObject
     {
         
         //private IfcSpace _ifcSpace;
@@ -54,6 +56,56 @@ namespace Xbim.COBieLite
             //TODO:
             //Space Issues
             //Space Documents
+        }
+
+        [XmlIgnore, JsonIgnore]
+        DocumentCollectionType ICOBieObject.Documents
+        {
+            get { return SpaceDocuments; }
+            set { SpaceDocuments = value; }
+        }
+
+        [XmlIgnore, JsonIgnore]
+        IssueCollectionType ICOBieObject.Issues
+        {
+            get { return SpaceIssues; }
+            set { SpaceIssues = value; }
+        }
+
+        [XmlIgnore, JsonIgnore]
+        AttributeCollectionType ICOBieObject.Attributes
+        {
+            get { return SpaceAttributes; }
+            set { SpaceAttributes = value; }
+        }
+
+        [XmlIgnore, JsonIgnore]
+        string ICOBieObject.Name
+        {
+            get { return SpaceName; }
+            set { SpaceName = value; }
+        }
+
+        [XmlIgnore, JsonIgnore]
+        string ICOBieObject.Description
+        {
+            get { return SpaceDescription; }
+            set { SpaceDescription = value; }
+        }
+
+        [XmlIgnore, JsonIgnore]
+        string ICOBieObject.Category
+        {
+            get { return SpaceCategory; }
+            set { SpaceCategory = value; }
+        }
+
+
+        [XmlIgnore, JsonIgnore]
+        string ICOBieObject.Id
+        {
+            get { return externalID; }
+            set { externalID = value; }
         }
     }
 }

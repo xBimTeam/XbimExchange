@@ -8,7 +8,7 @@ using Xbim.DPoW;
 
 namespace XbimExchanger.DPoW2ToCOBieLite
 {
-    class DPoWToCOBieLiteExchanger: XbimExchanger<PlanOfWork, FacilityType>
+    public class DPoWToCOBieLiteExchanger: XbimExchanger<PlanOfWork, FacilityType>
     {
        /// <summary>
         /// Constructs new exchanger. When converting data from DPoW to COBieLite it is possible to convert only one stage to COBieLite

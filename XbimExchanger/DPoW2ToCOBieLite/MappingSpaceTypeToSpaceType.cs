@@ -7,11 +7,8 @@ using Space = Xbim.COBieLite.SpaceType;
 
 namespace XbimExchanger.DPoW2ToCOBieLite
 {
-    class MappingSpaceTypeToSpaceType : DPoWToCOBieLiteMapping<SpaceType, Space>
+    class MappingSpaceTypeToSpaceType : MappingDPoWObjectToCOBieObject<SpaceType, Space>
     {
-        protected override Space Mapping(SpaceType source, Space target)
-        {
-            throw new NotImplementedException();
-        }
+        //implement any eventual specialities here
     }
 }

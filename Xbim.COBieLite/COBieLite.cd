@@ -17,13 +17,14 @@
       <Compartment Name="Fields" Collapsed="true" />
     </Compartments>
     <TypeIdentifier>
-      <HashCode>AAAEgSAACQEAYAAAAEAIAAAAgAIBAAAAAAAAAAAAgAA=</HashCode>
+      <HashCode>AAAEgSAACQERYAAAAEAIAAEggAIBAAAAAAAAAgAAkAA=</HashCode>
       <FileName>COBieLite Schema\cobielite.designer.RenamedClasses.cs</FileName>
     </TypeIdentifier>
     <ShowAsAssociation>
       <Property Name="Spaces" />
       <Property Name="FloorAttributes" />
     </ShowAsAssociation>
+    <Lollipop Position="0.2" />
   </Class>
   <Class Name="Xbim.COBieLite.FacilityType">
     <Position X="1.25" Y="3.25" Width="2.25" />
@@ -32,7 +33,7 @@
       <Compartment Name="Methods" Collapsed="true" />
     </Compartments>
     <TypeIdentifier>
-      <HashCode>BAAYQAKECACQAAoKAAAgAigyoiAwAQQEUYIAJGjAAcA=</HashCode>
+      <HashCode>BAAYQAKECACRAAoKAAAgAikyoiAwAQQEUYIAJmjAEcA=</HashCode>
       <FileName>COBieLite Schema\cobielite.designer.RenamedClasses.cs</FileName>
     </TypeIdentifier>
     <ShowAsAssociation>
@@ -48,6 +49,7 @@
       <Property Name="FacilityDocuments" />
       <Property Name="FacilityIssues" />
     </ShowAsAssociation>
+    <Lollipop Position="0.2" />
   </Class>
   <Class Name="Xbim.COBieLite.AssetTypeCollectionType">
     <Position X="5" Y="1.75" Width="2.25" />
@@ -159,9 +161,10 @@
       <Compartment Name="Fields" Collapsed="true" />
     </Compartments>
     <TypeIdentifier>
-      <HashCode>CggIBADQEBAACAAQEAAQAAAAAACABAAAAACAAEAAiAA=</HashCode>
+      <HashCode>CggIBADQEBARCAAQEAAQAAEgAACABAAAAACAAkAAmAA=</HashCode>
       <FileName>COBieLite Schema\cobielite.designer.RenamedClasses.cs</FileName>
     </TypeIdentifier>
+    <Lollipop Position="0.2" />
   </Class>
   <Class Name="Xbim.COBieLite.AssetTypeInfoType">
     <Position X="7.75" Y="0.5" Width="2.25" />
@@ -171,12 +174,13 @@
       <Compartment Name="Properties" Collapsed="true" />
     </Compartments>
     <TypeIdentifier>
-      <HashCode>MAIQBewBQDAhBQAACFAOCgSSBgOccAACI0AgjIAAAiI=</HashCode>
+      <HashCode>MAIQBewBQDAxBQAACFAOCgWyBgOccAACI0AgjoAAEiI=</HashCode>
       <FileName>AssetTypeInfoType.cs</FileName>
     </TypeIdentifier>
     <ShowAsAssociation>
       <Property Name="AssemblyAssignments" />
     </ShowAsAssociation>
+    <Lollipop Position="0.2" />
   </Class>
   <Class Name="Xbim.COBieLite.AssemblyAssignmentCollectionType">
     <Position X="11.75" Y="0.5" Width="2.25" />
@@ -200,9 +204,10 @@
       <Compartment Name="Methods" Collapsed="true" />
     </Compartments>
     <TypeIdentifier>
-      <HashCode>AAAABABAAAAAGAIAAAAAAAAAAAKAAAEIAAAAAAAAQAA=</HashCode>
+      <HashCode>AAAABABAAAARGAIAAAAAAAEgAAKAAAEIAAAAAgAAUAA=</HashCode>
       <FileName>COBieLite Schema\cobielite.designer.RenamedClasses.cs</FileName>
     </TypeIdentifier>
+    <Lollipop Position="0.2" />
   </Class>
   <Font Name="Segoe UI" Size="9" />
 </ClassDiagram>
