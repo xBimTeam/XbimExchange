@@ -17,6 +17,17 @@ namespace XbimExchanger.COBieLiteToIfc
         {
             ifcElement.Name = assetInfoType.AssetName;
             ifcElement.Description = assetInfoType.AssetDescription;
+            #region Attributes
+
+            if (assetInfoType.AssetAttributes != null)
+            {
+
+                foreach (var attribute in assetInfoType.AssetAttributes)
+                {
+                    Exchanger.ConvertAttributeTypeToIfcObjectProperty(ifcElement, attribute);
+                }
+            }
+            #endregion
             return ifcElement;
         }
     }
