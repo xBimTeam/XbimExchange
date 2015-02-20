@@ -16,7 +16,7 @@ using Newtonsoft.Json.Converters;
 namespace Xbim.COBieLite
 {
 
-    public partial class FacilityType
+    public partial class FacilityType: ICOBieObject
     {
         public static System.Xml.Serialization.XmlSerializer GetSerializer()
         {
@@ -192,6 +192,55 @@ namespace Xbim.COBieLite
                 facilityDefaultVolumeUnitField = helper.ModelVolumeUnit;
             if ((FacilityDefaultCurrencyUnitSpecified = helper.HasCurrencyUnit) == true)
                 facilityDefaultCurrencyUnitField = helper.ModelCurrencyUnit;
+        }
+
+        [XmlIgnore, JsonIgnore]
+        DocumentCollectionType ICOBieObject.Documents
+        {
+            get { return FacilityDocuments; }
+            set { FacilityDocuments = value; }
+        }
+
+        [XmlIgnore, JsonIgnore]
+        IssueCollectionType ICOBieObject.Issues
+        {
+            get { return FacilityIssues; }
+            set { FacilityIssues = value; }
+        }
+
+        [XmlIgnore, JsonIgnore]
+        AttributeCollectionType ICOBieObject.Attributes
+        {
+            get { return FacilityAttributes; }
+            set { FacilityAttributes = value; }
+        }
+
+        [XmlIgnore, JsonIgnore]
+        string ICOBieObject.Name
+        {
+            get { return FacilityName; }
+            set { FacilityName = value; }
+        }
+
+        [XmlIgnore, JsonIgnore]
+        string ICOBieObject.Description
+        {
+            get { return FacilityDescription; }
+            set { FacilityDescription = value; }
+        }
+
+        [XmlIgnore, JsonIgnore]
+        string ICOBieObject.Category
+        {
+            get { return FacilityCategory; }
+            set { FacilityCategory = value; }
+        }
+
+        [XmlIgnore, JsonIgnore]
+        string ICOBieObject.Id
+        {
+            get { return externalID; }
+            set { externalID = value; }
         }
     }
 }

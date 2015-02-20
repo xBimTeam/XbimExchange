@@ -89,6 +89,19 @@
     <Compile Include="COBieLiteToIfc\MappingProjectTypeToIfcProject.cs" />
     <Compile Include="COBieLiteToIfc\MappingSiteTypeToIfcSite.cs" />
     <Compile Include="COBieLiteToIfc\MappingSpaceTypeToIfcSpace.cs" />
+    <Compile Include="DPoW2ToCOBieLite\ClassificationMappings.cs" />
+    <Compile Include="DPoW2ToCOBieLite\DPoWToCOBieLiteExchanger.cs" />
+    <Compile Include="DPoW2ToCOBieLite\DPoWToCOBieLiteMapping.cs" />
+    <Compile Include="DPoW2ToCOBieLite\Extensions.cs" />
+    <Compile Include="DPoW2ToCOBieLite\MappingAssemblyTypeToAssemblyType.cs" />
+    <Compile Include="DPoW2ToCOBieLite\MappingAssetTypeToAssetType.cs" />
+    <Compile Include="DPoW2ToCOBieLite\MappingContactToContact.cs" />
+    <Compile Include="DPoW2ToCOBieLite\MappingDocumentToDocumentType.cs" />
+    <Compile Include="DPoW2ToCOBieLite\MappingDPoWObjectToCOBieObject.cs" />
+    <Compile Include="DPoW2ToCOBieLite\MappingJobToIssueType.cs" />
+    <Compile Include="DPoW2ToCOBieLite\MappingPlanOfWorkToFacilityType.cs" />
+    <Compile Include="DPoW2ToCOBieLite\MappingRoleToContact.cs" />
+    <Compile Include="DPoW2ToCOBieLite\MappingSpaceTypeToSpaceType.cs" />
     <Compile Include="DPoWToCOBieLite\DPoWToCOBieLiteExchanger.cs" />
     <Compile Include="DPoWToCOBieLite\DPoWToCOBieLiteMapping.cs" />
     <Compile Include="DPoWToCOBieLite\Extensions.cs" />
@@ -113,6 +126,9 @@
       <Link>COBieAttributes.config</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+    <EmbeddedResource Include="DPoW2ToCOBieLite\ClassificationMappings.config">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </EmbeddedResource>
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
@@ -124,9 +140,16 @@
       <Project>{2cd02b40-a823-4959-874b-e212569f8080}</Project>
       <Name>Xbim.DPoW.Interfaces</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Xbim.DPoW\Xbim.DPoW.csproj">
+      <Project>{79e7f597-f509-49ec-a606-fdc8326e72f5}</Project>
+      <Name>Xbim.DPoW</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <Folder Include="IfcToCOBieLite\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="DPoW2ToCOBieLite\Conventions.txt" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

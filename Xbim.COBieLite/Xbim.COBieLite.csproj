@@ -83,6 +83,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AssemblyType.cs" />
     <Compile Include="COBieLite Schema\cobielite.designer.RenamedClasses.cs" />
     <Compile Include="CollectionTypes\AllowedValueCollectionType.cs" />
     <Compile Include="CollectionTypes\AssemblyAssignmentCollectionType.cs" />
@@ -106,6 +107,7 @@
     <Compile Include="CollectionTypes\FloorCollectionType.cs" />
     <Compile Include="CollectionTypes\IssueCollectionType.cs" />
     <Compile Include="CollectionTypes\JobCollectionType.cs" />
+    <Compile Include="ICOBieObject.cs" />
     <Compile Include="ProjectType.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Properties\Settings.Designer.cs">
