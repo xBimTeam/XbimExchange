@@ -9,6 +9,7 @@ using Xbim.Ifc2x3.ProductExtension;
 using Xbim.Ifc2x3.SharedBldgElements;
 using Xbim.Ifc2x3.SharedBldgServiceElements;
 using Xbim.IO;
+using XbimExchanger.COBieLiteHelpers;
 
 namespace XbimExchanger.COBieLiteToIfc
 {

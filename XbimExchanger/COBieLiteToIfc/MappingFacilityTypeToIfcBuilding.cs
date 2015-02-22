@@ -1,9 +1,11 @@
 ﻿using System;
+using System.Linq;
 using Xbim.COBieLite;
 using Xbim.Ifc2x3.Kernel;
 using Xbim.Ifc2x3.MeasureResource;
 using Xbim.Ifc2x3.ProductExtension;
 using Xbim.Ifc2x3.Extensions;
+using XbimExchanger.COBieLiteHelpers;
 using XbimExchanger.IfcHelpers;
 
 namespace XbimExchanger.COBieLiteToIfc
@@ -79,7 +81,7 @@ namespace XbimExchanger.COBieLiteToIfc
             if (facility.AssetTypes != null)
             {
                 var assetTypeMapping = Exchanger.GetOrCreateMappings<MappingAssetTypeInfoTypeToIfcTypeObject>();
-                foreach (var assetType in facility.AssetTypes)
+                foreach (var assetType in facility.AssetTypes.OrderBy(a=>a.externalEntityName))
                 {
                     Exchanger.BeginAssetTypeInfoType();
                     assetTypeMapping.AddMapping(assetType, assetTypeMapping.GetOrCreateTargetObject(assetType.externalID));

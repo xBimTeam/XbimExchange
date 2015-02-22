@@ -74,6 +74,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="COBieLiteHelpers\AssetTypeInfoTypeComparer.cs" />
     <Compile Include="COBieLiteHelpers\ValueBaseTypeExtensions.cs" />
     <Compile Include="COBieLiteHelpers\XbimSimplePropertyType.cs" />
     <Compile Include="COBieLiteToDPoW\COBieLiteToDPoWExchanger.cs" />
