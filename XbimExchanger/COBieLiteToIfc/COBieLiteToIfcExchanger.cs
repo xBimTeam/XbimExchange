@@ -5,11 +5,17 @@ using System.Diagnostics;
 using System.Globalization;
 using System.Linq;
 using Xbim.COBieLite;
+using Xbim.Ifc2x3.Extensions;
+using Xbim.Ifc2x3.GeometricConstraintResource;
+using Xbim.Ifc2x3.GeometricModelResource;
+using Xbim.Ifc2x3.GeometryResource;
 using Xbim.Ifc2x3.Kernel;
 using Xbim.Ifc2x3.MeasureResource;
 using Xbim.Ifc2x3.ProductExtension;
+using Xbim.Ifc2x3.ProfileResource;
 using Xbim.Ifc2x3.PropertyResource;
 using Xbim.Ifc2x3.QuantityResource;
+using Xbim.Ifc2x3.RepresentationResource;
 using Xbim.IO;
 using Xbim.XbimExtensions.SelectTypes;
 using XbimExchanger.COBieLiteHelpers;
@@ -17,14 +23,31 @@ using XbimExchanger.IfcHelpers;
 
 namespace XbimExchanger.COBieLiteToIfc
 {
+    /// <summary>
+    /// Constructs the exchanger
+    /// </summary>
     public class CoBieLiteToIfcExchanger : XbimExchanger<FacilityType, XbimModel>
     {
         #region Nested Structures
+        /// <summary>
+        /// A helper struct to handle property sets and their proper property names
+        /// </summary>
         public struct NamedProperty
         {
+            /// <summary>
+            /// The name of the Property Set
+            /// </summary>
             public string PropertySetName;
+            /// <summary>
+            /// The name of the Property Name
+            /// </summary>
             public string PropertyName;
 
+            /// <summary>
+            /// Constructs the named property
+            /// </summary>
+            /// <param name="propertySetName"></param>
+            /// <param name="propertyName"></param>
             public NamedProperty(string propertySetName, string propertyName )
                 : this()
             {
@@ -65,30 +88,107 @@ namespace XbimExchanger.COBieLiteToIfc
         private readonly Dictionary<IfcObjectDefinition, List<IfcPropertySetDefinition>> _objectsToPropertySets =
             new Dictionary<IfcObjectDefinition, List<IfcPropertySetDefinition>>();
        // private readonly Dictionary<string, IfcUnit> _units = new Dictionary<string, IfcUnit>();
-
+        private Dictionary<string, IfcSpace> _spaceLookup = new Dictionary<string, IfcSpace>();
         #endregion
 
         #region Properties
 
+        /// <summary>
+        /// The default units of length
+        /// </summary>
         public IfcUnitConverter? DefaultLinearUnit;
+        /// <summary>
+        /// The default units of area
+        /// </summary>
         public IfcUnitConverter? DefaultAreaUnit;
+        /// <summary>
+        /// The default units of volume
+        /// </summary>
         public IfcUnitConverter? DefaultVolumeUnit;
+        /// <summary>
+        /// The default currency
+        /// </summary>
         public CurrencyUnitSimpleType? DefaultCurrencyUnit;
-
+        private int _assetTypeInfoTypeNumber;
+        private IfcCartesianPoint _origin3D;
+        private IfcCartesianPoint _origin2D;
+        private IfcDirection _downDirection;
+        private IfcGeometricRepresentationContext _model3DContext;
         #endregion
 
         #region Constructors
+        /// <summary>
+        /// Constructs the exchanger
+        /// </summary>
+        /// <param name="facility"></param>
+        /// <param name="repository"></param>
         public CoBieLiteToIfcExchanger(FacilityType facility, XbimModel repository)
             : base(facility, repository)
         {
             LoadPropertySetDefinitions();
             LoadUnits();
+            //set up geometry
+            InitialiseGeometry();
         }
 
-       
-        #endregion
+        private void InitialiseGeometry()
+        {
+            var modelInstances = TargetRepository.Instances;
+            _origin3D = modelInstances.New<IfcCartesianPoint>(c => c.SetXYZ(0, 0, 0));
+            _origin2D = modelInstances.New<IfcCartesianPoint>(c => c.SetXY(0, 0));
+            _downDirection = modelInstances.New<IfcDirection>(d => d.SetXYZ(0, 0, -1));
+            var mainContext = TargetRepository.IfcProject.ModelContext();
+            mainContext.ContextIdentifier = null; //balnk of the main context
+            _model3DContext = modelInstances.New<IfcGeometricRepresentationSubContext>(c =>
+            {
+                c.ContextType = "Model";
+                c.ContextIdentifier = "Body";
+                c.ParentContext = TargetRepository.IfcProject.ModelContext();
+                c.TargetView=IfcGeometricProjectionEnum.MODEL_VIEW;
+            }
+            );
+        }
 
+        #endregion
+        #region Poperties
+        /// <summary>
+        /// Returns the origin for world coordinate system
+        /// </summary>
+        public IfcCartesianPoint Origin3D
+        {
+            get
+            {
+                return _origin3D;
+
+            }
+        }
+        /// <summary>
+        /// The 2D origin
+        /// </summary>
+        public IfcCartesianPoint Origin2D
+        {
+            get
+            {
+                return _origin2D;
+
+            }
+        }
+
+        /// <summary>
+        /// The Geometric Representation sub context for this exchange
+        /// </summary>
+        public IfcGeometricRepresentationContext Model3DContext
+        {
+            get { return _model3DContext; }
+        }
+
+        #endregion
         #region Converters
+        /// <summary>
+        /// Converts the facility to an IfcBuilding
+        /// </summary>
+        /// <param name="facility"></param>
+        /// <returns></returns>
         public IfcBuilding Convert(FacilityType facility)
         {
             var mapping = GetOrCreateMappings<MappingFacilityTypeToIfcBuilding>();
@@ -97,16 +197,20 @@ namespace XbimExchanger.COBieLiteToIfc
 
         }
 
+        /// <summary>
+        /// Converts the facility to an IfcBuilding
+        /// </summary>
+        /// <returns></returns>
         public override XbimModel Convert()
         {
-            Convert(SourceRepository);
+            Convert(SourceRepository);         
             return TargetRepository;
         }
         #endregion
 
         #region Methods
 
-        public IfcPropertySetDefinition GetOrCreatePropertySetDefinition(IfcObjectDefinition ifcObjectDefinition, string propertySetName)
+        internal IfcPropertySetDefinition GetOrCreatePropertySetDefinition(IfcObjectDefinition ifcObjectDefinition, string propertySetName)
         {
             List<IfcPropertySetDefinition> propertySetDefinitionList;
             if (!_objectsToPropertySets.TryGetValue(ifcObjectDefinition, out propertySetDefinitionList))
@@ -237,8 +341,8 @@ namespace XbimExchanger.COBieLiteToIfc
             {
                 Debug.WriteLine("Incorrect property map, " + e.Message);
                 Debug.Assert(false);
-                return false;
             }
+            return false;
         }
 
         /// <summary>
@@ -554,11 +658,112 @@ namespace XbimExchanger.COBieLiteToIfc
                     simpleDateTimeProperty.Name = attributeType.AttributeName;
                     simpleDateTimeProperty.Description = attributeType.AttributeDescription;
                     return simpleDateTimeProperty;
-                    
-                    break;
+
                 default:
                     throw new ArgumentOutOfRangeException("attributeType", "Invalid attribute value type");
             }
+        }
+
+        /// <summary>
+        /// Creates a number in ifc geometry representing the element, the next number is incremented
+        /// </summary>
+        /// <param name="ifcElement"></param>
+        /// <param name="index">The index of the element in the type collection</param>
+        internal void CreateObjectGeometry(IfcElement ifcElement, int index)
+        {
+            var rectProfile = TargetRepository.Instances.New<IfcRectangleProfileDef>();
+            var dims = TargetRepository.ModelFactors.OneMilliMeter*100;
+            rectProfile.Position = MakeAxis2Placement2D();
+            rectProfile.XDim = dims;
+            rectProfile.YDim = dims;
+            rectProfile.ProfileType=IfcProfileTypeEnum.AREA;
+            //extrude it
+            var extrusion = TargetRepository.Instances.New<IfcExtrudedAreaSolid>();
+            extrusion.Depth = dims;
+            extrusion.ExtrudedDirection = _downDirection;
+            extrusion.Position = MakeAxis2Placement3D();      
+            extrusion.SweptArea = rectProfile;
+            //locate it
+            ifcElement.ObjectPlacement = MakeLocalPlacement(_assetTypeInfoTypeNumber * dims * 1.2, 0, index * dims * 1.2);
+            ifcElement.Representation = MakeSweptSolidRepresentation(extrusion);
+        }
+
+        private IfcProductRepresentation MakeSweptSolidRepresentation(IfcExtrudedAreaSolid extrusion)
+        {
+            //Create a Definition shape to hold the geometry
+            var shape = TargetRepository.Instances.New<IfcShapeRepresentation>();
+            shape.ContextOfItems = Model3DContext;
+            shape.RepresentationType = "SweptSolid";
+            shape.RepresentationIdentifier = "Body";
+            shape.Items.Add(extrusion);
+
+            //Create a Product Definition and add the model geometry to the wall
+            var rep = TargetRepository.Instances.New<IfcProductDefinitionShape>();
+            rep.Representations.Add(shape);
+            return rep;
+        }
+
+        private IfcLocalPlacement MakeLocalPlacement(double xDisplacement, double yDisplacement, double zDisplacement)
+        {
+            var localPlacement = TargetRepository.Instances.New<IfcLocalPlacement>();
+            var axisPlacement3D = MakeAxis2Placement3D();
+            localPlacement.RelativePlacement = axisPlacement3D;
+            axisPlacement3D.Location = TargetRepository.Instances.New <IfcCartesianPoint>(c=>c.SetXYZ(xDisplacement, yDisplacement, zDisplacement));
+            return localPlacement;
+        }
+
+        private IfcAxis2Placement2D MakeAxis2Placement2D()
+        {
+            var p = TargetRepository.Instances.New<IfcAxis2Placement2D>();
+            p.Location = _origin2D;
+            return p;
+        }
+
+        private IfcAxis2Placement3D MakeAxis2Placement3D()
+        {
+            var p = TargetRepository.Instances.New<IfcAxis2Placement3D>();
+            p.Location = _origin3D;
+            return p;
+        }
+
+        /// <summary>
+        /// Increments counters and state for processing an AssetTypeInfoType
+        /// </summary>
+        internal void BeginAssetTypeInfoType()
+        {
+            
+        }
+
+        internal void EndAssetTypeInfoType()
+        {
+            _assetTypeInfoTypeNumber++;
+        }
+
+        /// <summary>
+        /// Adds the space to the space map if the storey name plus the space name is not unique returns false
+        /// </summary>
+        /// <param name="storey"></param>
+        /// <param name="space"></param>
+        /// <returns></returns>
+        public bool AddToSpaceMap(IfcBuildingStorey storey, IfcSpace space)
+        {
+            var key = storey.Name + "&" + space.Name;
+            if (_spaceLookup.ContainsKey(key)) return false;
+            _spaceLookup.Add(key,space);
+            return true;
+        }
+
+        /// <summary>
+        /// Returns the IfcSpace created for this key
+        /// </summary>
+        /// <param name="spacekey"></param>
+        /// <returns></returns>
+        public IfcSpace GetIfcSpace(SpaceKeyType spacekey)
+        {
+            var key = spacekey.FloorName + "&" + spacekey.SpaceName;
+            IfcSpace ifcSpace=null;
+            _spaceLookup.TryGetValue(key, out ifcSpace);
+            return ifcSpace;
         }
     }
 }

@@ -30,13 +30,15 @@ namespace XbimExchanger.COBieLiteToIfc
                 }
             }
             #endregion
-
+            
+            
             if (assetTypeInfoType.Assets != null && assetTypeInfoType.Assets.Any())
             {
                 var relDefinesType = Exchanger.TargetRepository.Instances.New<IfcRelDefinesByType>();
                 relDefinesType.RelatingType = ifcTypeObject;
                 relDefinesType.Name = assetTypeInfoType.AssetTypeName;
                 relDefinesType.Description = assetTypeInfoType.AssetTypeDescription;
+                var index = 0;
                 foreach (var assetInfoType in assetTypeInfoType.Assets)
                 {
                     IfcElement ifcElement;
@@ -79,10 +81,13 @@ namespace XbimExchanger.COBieLiteToIfc
                     else
                     {
                         var assetInfoTypeMapping = Exchanger.GetOrCreateMappings<MappingAssetInfoTypeToIfcElement<IfcBuildingElementProxy>>();
-                        ifcElement = assetInfoTypeMapping.AddMapping(assetInfoType, assetInfoTypeMapping.GetOrCreateTargetObject(assetInfoType.externalID));
+                        ifcElement = assetInfoTypeMapping.AddMapping(assetInfoType, 
+                            assetInfoTypeMapping.GetOrCreateTargetObject(assetInfoType.externalID));
                     }
                     //add the relationship                 
                     relDefinesType.RelatedObjects.Add(ifcElement);
+                    //create symbolic geometry
+                    Exchanger.CreateObjectGeometry(ifcElement, index++);
                 }
             }
 

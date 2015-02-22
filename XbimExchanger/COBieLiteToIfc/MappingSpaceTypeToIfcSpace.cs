@@ -11,6 +11,7 @@ namespace XbimExchanger.COBieLiteToIfc
         {
             ifcSpace.Name = spaceType.SpaceName;
             ifcSpace.Description = spaceType.SpaceDescription;
+            ifcSpace.CompositionType=IfcElementCompositionEnum.ELEMENT;
             Exchanger.TryCreatePropertySingleValue(ifcSpace, spaceType.SpaceGrossAreaValue, "SpaceGrossAreaValue", Exchanger.DefaultAreaUnit);
             Exchanger.TryCreatePropertySingleValue(ifcSpace, spaceType.SpaceNetAreaValue, "SpaceNetAreaValue", Exchanger.DefaultAreaUnit);
             Exchanger.TryCreatePropertySingleValue(ifcSpace, spaceType.SpaceSignageName, "SpaceSignageName");

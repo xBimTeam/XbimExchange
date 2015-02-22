@@ -706,14 +706,34 @@ namespace Xbim.COBieLite
 
             if (_attributedObjects.TryGetValue(ifcObjectDefinition, out attributedObject))
             {
-                var properties = attributedObject.Properties.Where(kv=>!_cobieProperties.Contains(kv.Key)); //exclude the properties we have written as COBie value
-                var keyValuePairs = properties as KeyValuePair<string, IfcProperty>[] ?? properties.ToArray();
-                if (keyValuePairs.Length>0)
+                //var properties = attributedObject.Properties.Where(kv=>!_cobieProperties.Contains(kv.Key)); //exclude the properties we have written as COBie value
+                //var keyValuePairs = properties as KeyValuePair<string, IfcProperty>[] ?? properties.ToArray();
+                //if (keyValuePairs.Length>0)
+                //{
+                //    var attributeCollection = new List<AttributeType>(keyValuePairs.Length);
+                //    for (int i = 0; i < keyValuePairs.Length; i++)
+                //    {
+                        
+                //        var property = keyValuePairs[i].Value;
+                //        var splitName = keyValuePairs[i].Key.Split('.');
+                //        var pSetName = splitName[0];
+                //        var attributeType = XbimAttributedObject.ConvertToAttributeType(property);
+                //        attributeType.propertySetName = pSetName;
+                //        //var pSetDef = attributedObject.GetPropertySetDefinition(pSetName);
+                //        //if (pSetDef != null)
+                //        //    attributeType.externalID = ExternalEntityIdentity(pSetDef);
+                //        attributeCollection.Add(attributeType);                   
+                //    }
+                //    return attributeCollection;
+                //}
+                var properties = attributedObject.Properties;
+                var keyValuePairs = properties.ToArray();
+                if (keyValuePairs.Length > 0)
                 {
                     var attributeCollection = new List<AttributeType>(keyValuePairs.Length);
                     for (int i = 0; i < keyValuePairs.Length; i++)
                     {
-                        
+
                         var property = keyValuePairs[i].Value;
                         var splitName = keyValuePairs[i].Key.Split('.');
                         var pSetName = splitName[0];
@@ -722,7 +742,7 @@ namespace Xbim.COBieLite
                         //var pSetDef = attributedObject.GetPropertySetDefinition(pSetName);
                         //if (pSetDef != null)
                         //    attributeType.externalID = ExternalEntityIdentity(pSetDef);
-                        attributeCollection.Add(attributeType);                   
+                        attributeCollection.Add(attributeType);
                     }
                     return attributeCollection;
                 }

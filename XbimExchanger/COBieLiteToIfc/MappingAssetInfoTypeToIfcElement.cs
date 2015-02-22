@@ -1,12 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Xbim.COBieLite;
-using Xbim.DPoW.Interfaces;
+using Xbim.Ifc2x3.Extensions;
 using Xbim.Ifc2x3.ProductExtension;
-using Xbim.XbimExtensions.Interfaces;
 
 namespace XbimExchanger.COBieLiteToIfc
 {
@@ -17,6 +13,7 @@ namespace XbimExchanger.COBieLiteToIfc
         {
             ifcElement.Name = assetInfoType.AssetName;
             ifcElement.Description = assetInfoType.AssetDescription;
+            
             #region Attributes
 
             if (assetInfoType.AssetAttributes != null)
@@ -28,7 +25,23 @@ namespace XbimExchanger.COBieLiteToIfc
                 }
             }
             #endregion
+
+            #region Space Assignments
+
+            if (assetInfoType.AssetSpaceAssignments != null && assetInfoType.AssetSpaceAssignments.Any())
+            {
+                foreach (var spaceAssignment in assetInfoType.AssetSpaceAssignments)
+                {
+                    var ifcSpace = Exchanger.GetIfcSpace(spaceAssignment);
+                    if (ifcSpace == null) throw new Exception("Space " + spaceAssignment.FloorName + " - " + spaceAssignment.SpaceName+" cannot be found");
+
+                    ifcSpace.AddElement(ifcElement);
+                }
+            }
+            #endregion
+
             return ifcElement;
         }
     }
+
 }
