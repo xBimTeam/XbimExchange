@@ -95,6 +95,7 @@
     <Compile Include="DPoW2ToCOBieLite\Extensions.cs" />
     <Compile Include="DPoW2ToCOBieLite\MappingAssemblyTypeToAssemblyType.cs" />
     <Compile Include="DPoW2ToCOBieLite\MappingAssetTypeToAssetType.cs" />
+    <Compile Include="DPoW2ToCOBieLite\MappingAttributableObjectToCOBieObject.cs" />
     <Compile Include="DPoW2ToCOBieLite\MappingContactToContact.cs" />
     <Compile Include="DPoW2ToCOBieLite\MappingDocumentToDocumentType.cs" />
     <Compile Include="DPoW2ToCOBieLite\MappingDPoWObjectToCOBieObject.cs" />

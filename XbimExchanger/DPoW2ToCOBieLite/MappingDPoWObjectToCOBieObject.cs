@@ -9,20 +9,35 @@ using Xbim.DPoW;
 
 namespace XbimExchanger.DPoW2ToCOBieLite
 {
-    class MappingDPoWObjectToCOBieObject<TFrom, TTo> : DPoWToCOBieLiteMapping<TFrom, TTo> where TFrom: DPoWObject where TTo : ICOBieObject, new() 
+    class MappingDPoWObjectToCOBieObject<TFrom, TTo> : MappingAttributableObjectToCOBieObject<TFrom, TTo>
+        where TFrom : DPoWObject
+        where TTo : ICOBieObject, new() 
     {
         protected override TTo Mapping(TFrom sObject, TTo tObject)
         {
+            //perform base mapping where free attributes are converted
+            base.Mapping(sObject, tObject);
+
             tObject.Id = sObject.Id.ToString();
             tObject.Name = sObject.Name;
             tObject.Description = sObject.Description;
 
-            //classification codes encoded with '|' separator
+            ////classification codes encoded with '|' separator
+            //if (sObject.ClassificationReferenceIds != null && sObject.ClassificationReferenceIds.Any())
+            //{
+            //    var references = sObject.GetClassificationReferences(Exchanger.SourceRepository);
+            //    var encodedReferences = references.Aggregate("", (current, reference) => current + (reference.ClassificationCode + "|")).Trim('|');
+            //    tObject.Category = encodedReferences;
+            //}
+
+            //classification and classification code encoded with ';' separator
             if (sObject.ClassificationReferenceIds != null && sObject.ClassificationReferenceIds.Any())
             {
-                var references = sObject.GetClassificationReferences(Exchanger.SourceRepository);
-                var encodedReferences = references.Aggregate("", (current, reference) => current + (reference.ClassificationCode + "|")).Trim('|');
-                tObject.Category = encodedReferences;
+                var reference = sObject.GetClassificationReferences(Exchanger.SourceRepository).FirstOrDefault();
+                var classification =
+                    Exchanger.SourceRepository.ClassificationSystems.FirstOrDefault(c => c.ClassificationReferences.Contains(reference));
+                if (reference != null && classification != null)
+                    tObject.Category = String.Format("{0};{1}", classification.Name, reference.ClassificationCode);
             }
             
             //LOD
@@ -40,15 +55,17 @@ namespace XbimExchanger.DPoW2ToCOBieLite
             {
                 if (tObject.Attributes == null) tObject.Attributes = new AttributeCollectionType();
                 var loi = sObject.RequiredLOI;
-                tObject.Attributes.Add("RequiredLOICode", "Required LOD Code", loi.Code, "RequiredLOI");
-                tObject.Attributes.Add("RequiredLOIDescription", "Required LOD Description", loi.Description, "RequiredLOI");
+                tObject.Attributes.Add("RequiredLOICode", "Required LOI Code", loi.Code, "RequiredLOI");
+                tObject.Attributes.Add("RequiredLOIDescription", "Required LOI Description", loi.Description, "RequiredLOI");
                 //required attributes with encoded property set name
                 foreach (var sAttr in loi.RequiredAttributes)
                     tObject.Attributes.Add(new AttributeType
                     {
                         propertySetName = "[required]" + (sAttr.PropertySetName ?? ""), 
                         AttributeName = sAttr.Name, 
-                        AttributeDescription = sAttr.Description
+                        AttributeDescription = sAttr.Description,
+                        AttributeValue = null,
+                        AttributeIssues = null
                     });
             }
             

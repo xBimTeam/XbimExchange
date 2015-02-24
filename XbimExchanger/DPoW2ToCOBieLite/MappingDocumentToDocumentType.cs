@@ -8,21 +8,34 @@ using Xbim.DPoW;
 
 namespace XbimExchanger.DPoW2ToCOBieLite
 {
-    class MappingDocumentToDocumentType: DPoWToCOBieLiteMapping<Documentation, DocumentType>
+    class MappingDocumentToDocumentType : MappingAttributableObjectToCOBieObject<Documentation, DocumentType>
     {
         protected override DocumentType Mapping(Documentation sObject, DocumentType tObject)
         {
+            //perform base mapping where free attributes are converted
+            base.Mapping(sObject, tObject);
+
             tObject.externalID = sObject.Id.ToString();
             tObject.DocumentName = sObject.Name;
             tObject.DocumentDescription = sObject.Description;
             tObject.DocumentURI = sObject.URI;
 
-            //classification codes encoded with '|' separator
+            ////classification codes encoded with '|' separator
+            //if (sObject.ClassificationReferenceIds != null && sObject.ClassificationReferenceIds.Any())
+            //{
+            //    var references = sObject.GetClassificationReferences(Exchanger.SourceRepository);
+            //    var encodedReferences = references.Aggregate("", (current, reference) => current + (reference.ClassificationCode + "|")).Trim('|');
+            //    tObject.DocumentCategory = encodedReferences;
+            //}
+
+            //classification and classification code encoded with ';' separator
             if (sObject.ClassificationReferenceIds != null && sObject.ClassificationReferenceIds.Any())
             {
-                var references = sObject.GetClassificationReferences(Exchanger.SourceRepository);
-                var encodedReferences = references.Aggregate("", (current, reference) => current + (reference.ClassificationCode + "|")).Trim('|');
-                tObject.DocumentCategory = encodedReferences;
+                var reference = sObject.GetClassificationReferences(Exchanger.SourceRepository).FirstOrDefault();
+                var classification =
+                    Exchanger.SourceRepository.ClassificationSystems.FirstOrDefault(c => c.ClassificationReferences.Contains(reference));
+                if (reference != null && classification != null)
+                    tObject.DocumentCategory = String.Format("{0};{1}", classification.Name, reference.ClassificationCode);
             }
 
 

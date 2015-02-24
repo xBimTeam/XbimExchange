@@ -100,25 +100,78 @@ namespace Xbim.COBieLite.Converters
                 return;
             }
 
-            //handle datetime in a specific manner
-            if (attrValue.ItemElementName == ItemChoiceType.AttributeDateValue)
+            //try to guess the name of the type ruther than getting it from the enum as it might not be set correctly
+            string typeName;
+            if (_typeStringDictionary.TryGetValue(item.GetType(), out typeName))
             {
+                //if it is not DateTime it is straightforward
+                if (item.GetType() != typeof(DateTime))
+                {
+                    //use type name
+                    var result = new JObject { { typeName, JToken.FromObject(item, serializer) } };
+                    result.WriteTo(writer);
+                    return;    
+                }
+
+                //if it is datetime, try to get specific type from enumeration
+                var dtVal = "";
                 var date = (DateTime)item;
-                item = date.ToUniversalTime().ToString("yyyy-MM-ddZ");
-            }
-            if (attrValue.ItemElementName == ItemChoiceType.AttributeTimeValue)
-            {
-                var date = (DateTime)item;
-                item = date.ToUniversalTime().ToString("HH:mm:ssZ");
-            }
-            if (attrValue.ItemElementName == ItemChoiceType.AttributeDateTimeValue)
-            {
-                var date = (DateTime)item;
-                item = date.ToUniversalTime().ToString("yyyy-MM-ddTHH:mm:ssZ");
+                switch (attrValue.ItemElementName)
+                {
+                    case ItemChoiceType.AttributeDateValue:
+                    {
+                        dtVal = date.ToUniversalTime().ToString("yyyy-MM-ddZ");
+                        typeName = "AttributeDateValue";
+                    }
+                        break;
+                    case ItemChoiceType.AttributeTimeValue:
+                    {
+                        dtVal = date.ToUniversalTime().ToString("HH:mm:ssZ");
+                        typeName = "AttributeTimeValue";
+                    }
+                        break;
+                    case ItemChoiceType.AttributeDateTimeValue:
+                    {
+                        dtVal = date.ToUniversalTime().ToString("yyyy-MM-ddTHH:mm:ssZ");
+                        typeName = "AttributeDateTimeValue";
+                    }
+                        break;
+                    default:
+                    {
+                        //if none of these enumeration values are specified it should be saved as AttributeDateTimeValue which will be all right for roundtripping
+                        dtVal = date.ToUniversalTime().ToString("yyyy-MM-ddTHH:mm:ssZ");
+                        typeName = "AttributeDateTimeValue";
+                    }
+                        break;
+                }
+                //create new object and write it to writer
+                (new JObject { { typeName, dtVal } }).WriteTo(writer);
+                return;   
             }
 
-            var result = new JObject {{attrValue.ItemElementName.ToString(), JToken.FromObject(item, serializer)}};
-            result.WriteTo(writer);
+            throw new Exception("Unexpected value type " + item.GetType().Name);
         }
+
+        private Dictionary<string, Type> StringTypeDictionary = new Dictionary<string, Type>()
+        {
+            {"AttributeBooleanValue", typeof (BooleanValueType)},
+            {"AttributeDateTimeValue", typeof (System.DateTime)},
+            {"AttributeDateValue", typeof (System.DateTime)},
+            {"AttributeDecimalValue", typeof (AttributeDecimalValueType)},
+            {"AttributeIntegerValue", typeof (AttributeIntegerValueType)},
+            {"AttributeMonetaryValue", typeof (AttributeMonetaryValueType)},
+            {"AttributeStringValue", typeof (AttributeStringValueType)},
+            {"AttributeTimeValue", typeof (System.DateTime)}
+        };
+
+        private readonly Dictionary<Type, string> _typeStringDictionary = new Dictionary<Type, string>()
+        {
+            {typeof (BooleanValueType), "AttributeBooleanValue"},
+            {typeof (System.DateTime), "AttributeDateTimeValue"},
+            {typeof (AttributeDecimalValueType), "AttributeDecimalValue"},
+            {typeof (AttributeIntegerValueType), "AttributeIntegerValue"},
+            {typeof (AttributeMonetaryValueType), "AttributeMonetaryValue"},
+            {typeof (AttributeStringValueType), "AttributeStringValue"},
+        };
     }
 }

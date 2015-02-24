@@ -1,10 +1,12 @@
 ﻿using Microsoft.Xml.Serialization.GeneratedAssembly;
 using System.Collections;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Xml;
 using System.Xml.Serialization;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Bson;
 using Xbim.COBieLite.CollectionTypes;
 using Xbim.Ifc2x3.Extensions;
 using Xbim.Ifc2x3.Kernel;
@@ -242,5 +244,81 @@ namespace Xbim.COBieLite
             get { return externalID; }
             set { externalID = value; }
         }
+
+        #region Exporters
+
+        public void WriteBson(BinaryWriter binaryWriter)
+        {
+            var serialiser = GetJsonSerializer();
+            var writer = new BsonWriter(binaryWriter);
+            serialiser.Serialize(writer, this);
+        }
+
+        public void WriteJson(TextWriter textWriter)
+        {
+            var serialiser = GetJsonSerializer();
+            serialiser.Serialize(textWriter, this);
+        }
+
+        public void WriteJson(string path)
+        {
+            using (var writer = File.CreateText(path))
+            {
+                var serialiser = GetJsonSerializer();
+                serialiser.Serialize(writer, this);
+                writer.Close();
+            }
+        }
+
+
+        static public FacilityType ReadJson(TextReader textReader)
+        {
+            var serialiser = GetJsonSerializer();
+            return (FacilityType)serialiser.Deserialize(textReader, typeof(FacilityType));
+        }
+
+        static public FacilityType ReadJson(string path)
+        {
+            using (var textReader = File.OpenText(path))
+            {
+                var serialiser = GetJsonSerializer();
+                var facility = (FacilityType)serialiser.Deserialize(textReader, typeof(FacilityType));
+                textReader.Close();
+                return facility;
+            }
+
+        }
+
+        public static FacilityType ReadXml(string cobieModelFileName)
+        {
+            var x = GetSerializer();
+            var reader = new XmlTextReader(cobieModelFileName);
+            var reqFacility = (FacilityType)x.Deserialize(reader);
+            reader.Close();
+            return reqFacility;
+        }
+
+
+        public void WriteXml(TextWriter textWriter)
+        {
+            var namespaces = new XmlSerializerNamespaces(new[]
+            {
+                new XmlQualifiedName("cobielite", "http://docs.buildingsmartalliance.org/nbims03/cobie/cobielite"),
+                new XmlQualifiedName("core", "http://docs.buildingsmartalliance.org/nbims03/cobie/core"),
+                new XmlQualifiedName("xsi", "http://www.w3.org/2001/XMLSchema-instance")
+            });
+
+            var x = FacilityType.GetSerializer();
+
+            using (var xtw = new XbimCoBieLiteXmlWriter(textWriter))
+            {
+                xtw.Formatting = System.Xml.Formatting.Indented;
+                // Now serialize our object.
+                x.Serialize(xtw, this, namespaces);
+            }
+
+        }
+
+        #endregion
     }
 }

@@ -11,10 +11,12 @@ using SpaceType = Xbim.DPoW.SpaceType;
 
 namespace XbimExchanger.DPoW2ToCOBieLite
 {
-    internal class MappingPlanOfWorkToFacilityType : DPoWToCOBieLiteMapping<PlanOfWork, FacilityType>
+    internal class MappingPlanOfWorkToFacilityType : MappingAttributableObjectToCOBieObject<PlanOfWork, FacilityType>
     {
         protected override FacilityType Mapping(PlanOfWork source, FacilityType target)
         {
+            
+
             target.externalID = source.Id.ToString();
             
             //convert fafility related information
@@ -42,7 +44,22 @@ namespace XbimExchanger.DPoW2ToCOBieLite
 
                 //convert all spaces into default floor
                 ConvertSpaces(stage.SpaceTypes, target);
+
+                //convert free stage attributes
+                //add project free attributes to facility
+                var stageAttrs = stage.GetCOBieAttributes();
+                var attrs = stageAttrs as AttributeType[] ?? stageAttrs.ToArray();
+                if (attrs.Any())
+                {
+                    foreach (var attr in attrs)
+                        attr.propertySetName = "ProjectStageAttributes";
+                    if (target.FacilityAttributes == null) target.FacilityAttributes = new AttributeCollectionType();
+                    target.FacilityAttributes.AddRange(attrs);
+                }
             }
+
+            //convert attributes
+            base.Mapping(source, target);
 
             return target;
         }
@@ -86,6 +103,18 @@ namespace XbimExchanger.DPoW2ToCOBieLite
             target.FacilityDefaultVolumeUnit = ConvertIdentEnum(sProject.VolumeUnits,
                 VolumeUnitSimpleType.cubicmeters, out converted);
             target.FacilityDefaultVolumeUnitSpecified = converted;
+
+            //add project free attributes to facility
+            var projAttrs = sProject.GetCOBieAttributes();
+            var attrs = projAttrs as AttributeType[] ?? projAttrs.ToArray();
+            foreach (var attr in attrs)
+                attr.propertySetName = "ProjectAttributes";
+            if (attrs.Any())
+            {
+                if (target.FacilityAttributes == null) target.FacilityAttributes = new AttributeCollectionType();
+                target.FacilityAttributes.AddRange(attrs);
+            }
+            
         }
 
         private void ConvertRoles(PlanOfWork source, FacilityType target)

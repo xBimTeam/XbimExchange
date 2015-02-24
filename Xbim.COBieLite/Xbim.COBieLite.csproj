@@ -102,6 +102,7 @@
     <Compile Include="CollectionTypes\ICollectionType.cs" />
     <Compile Include="ContactType.cs" />
     <Compile Include="Converters\AttributeValueTypeConverter.cs" />
+    <Compile Include="DocumentType.cs" />
     <Compile Include="FacilityType.cs" />
     <Compile Include="FloorType.cs" />
     <Compile Include="CollectionTypes\FloorCollectionType.cs" />
