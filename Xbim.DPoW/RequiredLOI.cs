@@ -17,7 +17,7 @@ namespace Xbim.DPoW
         /// <summary>
         /// LOI description
         /// </summary>
-        public int Description { get; set; }
+        public string Description { get; set; }
         /// <summary>
         /// Required attributes
         /// </summary>

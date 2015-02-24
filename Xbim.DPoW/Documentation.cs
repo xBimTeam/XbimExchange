@@ -4,7 +4,7 @@ using System.Linq;
 
 namespace Xbim.DPoW
 {
-    public class Documentation
+    public class Documentation: DPoWAttributableObject
     {
         /// <summary>
         /// Description of documentation
