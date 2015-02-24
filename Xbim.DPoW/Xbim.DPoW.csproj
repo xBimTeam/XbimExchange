@@ -52,7 +52,7 @@
     <Compile Include="ClassificationReference.cs" />
     <Compile Include="Contact.cs" />
     <Compile Include="CurrencyUnits.cs" />
-    <Compile Include="Document.cs" />
+    <Compile Include="Documentation.cs" />
     <Compile Include="DPoWAttributableObject.cs" />
     <Compile Include="DPoWObject.cs" />
     <Compile Include="Facility.cs" />
