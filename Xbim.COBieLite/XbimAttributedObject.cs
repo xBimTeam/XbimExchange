@@ -48,12 +48,13 @@ namespace Xbim.COBieLite
             {
                 foreach (var prop in propertySet.HasProperties)
                 {
-                    if (_properties.ContainsKey(pSetDef.Name + "." + prop.Name))
+                    var uniquePropertyName = pSetDef.Name + "." + prop.Name;
+                    if (_properties.ContainsKey(uniquePropertyName))
                     {
                         CoBieLiteHelper.Logger.WarnFormat("Property: #{0}={1}.{2}, is duplicated in Entity #{3}={4}. Duplicate ignored", prop.EntityLabel, pSetDef.Name, prop.Name, _ifcObject.EntityLabel, _ifcObject.GetType().Name);
                         continue;
                     }
-                    _properties[pSetDef.Name + "." + prop.Name]= prop;
+                    _properties[uniquePropertyName] = prop;
                 }
             }
             else if (quantitySet != null)
@@ -457,6 +458,7 @@ namespace Xbim.COBieLite
                  AttributeDescription = ifcProperty.Description,
                  AttributeName = ifcProperty.Name,
                  AttributeCategory = "Submitted"  
+
                  //srl we need to define categories, the schema proposes "As Built|Submitted|Approved|Exact Requirement|Maximum Requirement|Minimum Requirement|Requirement", should DPoW set requirements?
              };
 
@@ -474,8 +476,10 @@ namespace Xbim.COBieLite
             }
             else if (ifcPropertyEnumeratedValue != null)
             {
-                attributeType.AttributeValue = new AttributeValueType();
-                attributeType.AttributeValue.ItemElementName = ItemChoiceType.AttributeStringValue;
+                attributeType.AttributeValue = new AttributeValueType
+                {
+                    ItemElementName = ItemChoiceType.AttributeStringValue
+                };
                 var valueItem = new AttributeStringValueType();
                 attributeType.AttributeValue.Item = valueItem;
                 if (ifcPropertyEnumeratedValue.EnumerationReference != null && ifcPropertyEnumeratedValue.EnumerationReference.Unit!= null)
@@ -492,17 +496,17 @@ namespace Xbim.COBieLite
                     valueItem.StringValue = valueItem.StringValue.TrimEnd(new[] { ';', ' ' });
                 }
                 //add in the allowed values
+               
                 if (ifcPropertyEnumeratedValue.EnumerationReference != null && ifcPropertyEnumeratedValue.EnumerationReference.EnumerationValues.Count>0)
                 {
                     var allowedValues = new AllowedValueCollectionType
                     {
                         AttributeAllowedValue = new List<string>(ifcPropertyEnumeratedValue.EnumerationReference.EnumerationValues.Count)
                     };
-                    int i = 0;
                     foreach (var enumValue in ifcPropertyEnumeratedValue.EnumerationReference.EnumerationValues)
                     {
                         allowedValues.AttributeAllowedValue.Add(enumValue.ToString());
-                        i++;
+                       
                     }
                 }
             }
@@ -636,7 +640,7 @@ namespace Xbim.COBieLite
             IfcValue ifcValue = ifcProperty.NominalValue;
             var attributeValueType = new AttributeValueType();
             if (ifcValue == null) 
-                return attributeValueType;
+                return null;
             if (ifcValue is IfcMonetaryMeasure)
             {
                 attributeValueType.ItemElementName = ItemChoiceType.AttributeMonetaryValue;

@@ -4,20 +4,22 @@ using Xbim.Ifc2x3.Extensions;
 using Xbim.Ifc2x3.MeasureResource;
 using Xbim.Ifc2x3.ProductExtension;
 using XbimExchanger.COBieLiteHelpers;
+using XbimExchanger.IfcHelpers;
 
 namespace XbimExchanger.COBieLiteToIfc
 {
     
     public class MappingFloorTypeToIfcBuildingStorey : CoBieLiteIfcMappings<string, FloorType, IfcBuildingStorey>
     {
-        protected override IfcBuildingStorey Mapping(FloorType floorType, IfcBuildingStorey buildingStory)
+        protected override IfcBuildingStorey Mapping(FloorType floorType, IfcBuildingStorey buildingStorey)
         {
-            buildingStory.Name = floorType.FloorName;
-            buildingStory.Description = floorType.FloorDescription;
+            buildingStorey.Name = floorType.FloorName;
+            buildingStorey.Description = floorType.FloorDescription;
+            buildingStorey.CompositionType = IfcElementCompositionEnum.ELEMENT;
             if (floorType.FloorElevationValue != null && floorType.FloorElevationValue.HasValue())
-                buildingStory.Elevation = floorType.FloorElevationValue.DecimalValue;
+                buildingStorey.Elevation = floorType.FloorElevationValue.DecimalValue;
             
-            Exchanger.TryCreatePropertySingleValue(buildingStory, floorType.FloorHeightValue, "FloorHeightValue", Exchanger.DefaultLinearUnit);
+            Exchanger.TryCreatePropertySingleValue(buildingStorey, floorType.FloorHeightValue, "FloorHeightValue", Exchanger.DefaultLinearUnit);
            
             //write out the spaces
             if (floorType.Spaces != null)
@@ -26,7 +28,8 @@ namespace XbimExchanger.COBieLiteToIfc
                 foreach (var space in floorType.Spaces)
                 {
                     var ifcSpace = spaceMapping.AddMapping(space, spaceMapping.GetOrCreateTargetObject(space.externalID));
-                    buildingStory.AddToSpatialDecomposition(ifcSpace);
+                    buildingStorey.AddToSpatialDecomposition(ifcSpace);
+                    Exchanger.AddToSpaceMap(buildingStorey, ifcSpace);
                 }
             }
 
@@ -37,12 +40,11 @@ namespace XbimExchanger.COBieLiteToIfc
 
                 foreach (var attribute in floorType.FloorAttributes)
                 {
-                    //just create the property it must be unique
-                    var ifcSimpleProperty = Exchanger.ConvertAttributeTypeToIfcSimpleProperty(attribute);
+                   Exchanger.ConvertAttributeTypeToIfcObjectProperty(buildingStorey, attribute);
                 }
             }
             #endregion
-            return buildingStory;
+            return buildingStorey;
         }
     }
 }

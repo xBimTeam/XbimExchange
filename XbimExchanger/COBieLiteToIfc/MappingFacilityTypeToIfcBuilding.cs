@@ -1,6 +1,11 @@
-﻿using Xbim.COBieLite;
+﻿using System;
+using System.Linq;
+using Xbim.COBieLite;
+using Xbim.Ifc2x3.Kernel;
+using Xbim.Ifc2x3.MeasureResource;
 using Xbim.Ifc2x3.ProductExtension;
 using Xbim.Ifc2x3.Extensions;
+using XbimExchanger.COBieLiteHelpers;
 using XbimExchanger.IfcHelpers;
 
 namespace XbimExchanger.COBieLiteToIfc
@@ -14,7 +19,7 @@ namespace XbimExchanger.COBieLiteToIfc
 
             ifcBuilding.Name = facility.FacilityName;
             ifcBuilding.Description = facility.FacilityDescription;
-
+            ifcBuilding.CompositionType=IfcElementCompositionEnum.ELEMENT;
             #endregion
 
             #region Default units
@@ -31,14 +36,15 @@ namespace XbimExchanger.COBieLiteToIfc
             Exchanger.DefaultCurrencyUnit = facility.FacilityDefaultCurrencyUnitSpecified
                 ? (CurrencyUnitSimpleType?)facility.FacilityDefaultCurrencyUnit
                 : null;
-
+            
             #endregion
 
             #region Project
             var projectMapping = Exchanger.GetOrCreateMappings<MappingProjectTypeToIfcProject>();
             //COBie does nor require a project but Ifc does
-            var ifcProject = facility.ProjectAssignment != null ? projectMapping.CreateTargetObject() : projectMapping.GetOrCreateTargetObject(facility.externalID);
-            projectMapping.AddMapping(facility.ProjectAssignment, ifcProject); 
+            var ifcProject = Exchanger.TargetRepository.IfcProject;
+            projectMapping.AddMapping(facility.ProjectAssignment, ifcProject);
+            InitialiseUnits(ifcProject);
             #endregion
 
             #region Site
@@ -69,19 +75,103 @@ namespace XbimExchanger.COBieLiteToIfc
             } 
             #endregion
 
-            #region Attributes
 
+            #region AssetTypes
+            //write out the floors if we have any
+            if (facility.AssetTypes != null)
+            {
+                var assetTypeMapping = Exchanger.GetOrCreateMappings<MappingAssetTypeInfoTypeToIfcTypeObject>();
+                foreach (var assetType in facility.AssetTypes.OrderBy(a=>a.externalEntityName))
+                {
+                    Exchanger.BeginAssetTypeInfoType();
+                    assetTypeMapping.AddMapping(assetType, assetTypeMapping.GetOrCreateTargetObject(assetType.externalID));
+                    Exchanger.EndAssetTypeInfoType();
+                   
+                }
+            }
+            #endregion
+
+            #region Attributes
             if (facility.FacilityAttributes != null)
             {
-               
                 foreach (var attribute in facility.FacilityAttributes)
-                {
-                    var ifcSimpleProperty = Exchanger.ConvertAttributeTypeToIfcSimpleProperty(attribute);
-
-                }
-            } 
+                    Exchanger.ConvertAttributeTypeToIfcObjectProperty(ifcBuilding, attribute);
+            }
             #endregion
+
             return ifcBuilding;
+        }
+
+        private void InitialiseUnits(IfcProject ifcProject)
+        {      
+            var model = Exchanger.TargetRepository;
+            //Area
+            var areaUnit = ifcProject.UnitsInContext.GetAreaUnit() as IfcSIUnit; //they always are as we are initialising to this
+            if (areaUnit!=null && Exchanger.DefaultAreaUnit.HasValue)
+            {
+                var defaultAreaUnit = Exchanger.DefaultAreaUnit.Value;
+                areaUnit.UnitType = defaultAreaUnit.UnitName;
+                areaUnit.Prefix = defaultAreaUnit.SiPrefix;
+                if (defaultAreaUnit.SiUnitName != null) areaUnit.Name = defaultAreaUnit.SiUnitName.Value;
+                if (Math.Abs(defaultAreaUnit.ConversionFactor - 1) > 1e-9) //need to create conversion units
+                {
+                    var convBasedUnit = Exchanger.TargetRepository.Instances.New<IfcConversionBasedUnit>();
+                    var measureWithUnit = Exchanger.TargetRepository.Instances.New<IfcMeasureWithUnit>();
+                    var dimensionalUnits = Exchanger.TargetRepository.Instances.New<IfcDimensionalExponents>();
+                    dimensionalUnits.LengthExponent = 2;
+                    convBasedUnit.Dimensions = dimensionalUnits;
+                    measureWithUnit.ValueComponent = new IfcRatioMeasure(defaultAreaUnit.ConversionFactor);
+                    measureWithUnit.UnitComponent = areaUnit;
+                    convBasedUnit.ConversionFactor = measureWithUnit;
+                    convBasedUnit.UnitType = areaUnit.UnitType;
+                    convBasedUnit.Name = defaultAreaUnit.UserDefinedSiUnitName;
+                }
+            }
+
+            //Length
+            var linearUnit = ifcProject.UnitsInContext.GetLengthUnit() as IfcSIUnit; //they always are as we are initialising to this
+            if (linearUnit != null && Exchanger.DefaultLinearUnit.HasValue)
+            {
+                var defaultLinearUnit = Exchanger.DefaultLinearUnit.Value;
+                linearUnit.UnitType = defaultLinearUnit.UnitName;
+                linearUnit.Prefix = defaultLinearUnit.SiPrefix;
+                if (defaultLinearUnit.SiUnitName != null) linearUnit.Name = defaultLinearUnit.SiUnitName.Value;
+                if (Math.Abs(defaultLinearUnit.ConversionFactor - 1) > 1e-9) //need to create conversion units
+                {
+                    var convBasedUnit = Exchanger.TargetRepository.Instances.New<IfcConversionBasedUnit>();
+                    var dimensionalUnits = Exchanger.TargetRepository.Instances.New<IfcDimensionalExponents>();
+                    dimensionalUnits.LengthExponent = 1;
+                    convBasedUnit.Dimensions = dimensionalUnits;
+                    var measureWithUnit = Exchanger.TargetRepository.Instances.New<IfcMeasureWithUnit>();
+                    measureWithUnit.ValueComponent = new IfcRatioMeasure(defaultLinearUnit.ConversionFactor);
+                    measureWithUnit.UnitComponent = linearUnit;
+                    convBasedUnit.ConversionFactor = measureWithUnit;
+                    convBasedUnit.UnitType = linearUnit.UnitType;
+                    convBasedUnit.Name = defaultLinearUnit.UserDefinedSiUnitName;
+                }
+            }
+            //Volume
+            var volumeUnit = ifcProject.UnitsInContext.GetVolumeUnit() as IfcSIUnit; //they always are as we are initialising to this
+            if (volumeUnit != null && Exchanger.DefaultVolumeUnit.HasValue)
+            {
+                var defaultVolumeUnit = Exchanger.DefaultVolumeUnit.Value;
+                volumeUnit.UnitType = defaultVolumeUnit.UnitName;
+                volumeUnit.Prefix = defaultVolumeUnit.SiPrefix;
+                if (defaultVolumeUnit.SiUnitName != null) volumeUnit.Name = defaultVolumeUnit.SiUnitName.Value;
+                if (Math.Abs(defaultVolumeUnit.ConversionFactor - 1) > 1e-9) //need to create conversion units
+                {
+                    var convBasedUnit = Exchanger.TargetRepository.Instances.New<IfcConversionBasedUnit>();
+                    var dimensionalUnits = Exchanger.TargetRepository.Instances.New<IfcDimensionalExponents>();
+                    dimensionalUnits.LengthExponent = 3;
+                    convBasedUnit.Dimensions = dimensionalUnits;
+                    var measureWithUnit = Exchanger.TargetRepository.Instances.New<IfcMeasureWithUnit>();
+                    measureWithUnit.ValueComponent = new IfcRatioMeasure(defaultVolumeUnit.ConversionFactor);
+                    measureWithUnit.UnitComponent = volumeUnit;
+                    convBasedUnit.ConversionFactor = measureWithUnit;
+                    convBasedUnit.UnitType = volumeUnit.UnitType;
+                    convBasedUnit.Name = defaultVolumeUnit.UserDefinedSiUnitName;
+                }
+            }
         }
     }
 }

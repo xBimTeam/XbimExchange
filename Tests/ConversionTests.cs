@@ -3,7 +3,9 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Newtonsoft.Json;
 using System.IO;
 using System.Linq;
+using Newtonsoft.Json.Converters;
 using Xbim.COBieLite;
+using Xbim.COBieLite.Converters;
 using Xbim.DPoW.Interfaces;
 using Xbim.Ifc2x3.MeasureResource;
 using Xbim.IO;
@@ -19,18 +21,24 @@ namespace Tests
     [TestClass]
     public class ConversionTests
     {
+       
         [TestMethod]
         public void ConvertCobieLiteToIfc()
         {
-            var facility = FacilityType.ReadJson("COBieLite.json");
 
+            var textReader = new StreamReader("COBieLite.json");
+            var facility = CoBieLiteHelper.ReadJson(textReader);
             using (var model = XbimModel.CreateTemporaryModel())
-            {
+            { 
+                model.Initialise("Xbim Tester","XbimTeam","Xbim.Exchanger","Xbim Development Team", "3.0");
+                model.ReloadModelFactors();
                 using (var txn = model.BeginTransaction("Convert from COBieLite"))
                 {
+                   
                     var exchanger = new CoBieLiteToIfcExchanger(facility, model);
-                    exchanger.Convert();
+                    exchanger.Convert();                    
                     txn.Commit();
+                    //var err = model.Validate(model.Instances, Console.Out);
                 }
                 model.SaveAs(@"ConvertedFromCOBieLite.ifc", XbimStorageType.IFC);
             }

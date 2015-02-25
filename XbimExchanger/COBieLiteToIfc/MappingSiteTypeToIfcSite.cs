@@ -6,12 +6,13 @@ namespace XbimExchanger.COBieLiteToIfc
     class MappingSiteTypeToIfcSite : CoBieLiteIfcMappings<string, SiteType, IfcSite>
     {
 
-        protected override IfcSite Mapping(SiteType source, IfcSite target)
+        protected override IfcSite Mapping(SiteType siteType, IfcSite ifcSite)
         {
            
-            target.Name = source.SiteName;
-            target.Description = source.SiteDescription;
-            return target;
+            ifcSite.Name = siteType.SiteName;
+            ifcSite.Description = siteType.SiteDescription;
+            ifcSite.CompositionType=IfcElementCompositionEnum.ELEMENT;
+            return ifcSite;
         }
     }
 }
