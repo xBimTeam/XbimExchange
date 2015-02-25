@@ -88,7 +88,7 @@ namespace XbimExchanger.COBieLiteToIfc
         private readonly Dictionary<IfcObjectDefinition, List<IfcPropertySetDefinition>> _objectsToPropertySets =
             new Dictionary<IfcObjectDefinition, List<IfcPropertySetDefinition>>();
        // private readonly Dictionary<string, IfcUnit> _units = new Dictionary<string, IfcUnit>();
-        private Dictionary<string, IfcSpace> _spaceLookup = new Dictionary<string, IfcSpace>();
+        private readonly Dictionary<string, IfcSpace> _spaceLookup = new Dictionary<string, IfcSpace>();
         #endregion
 
         #region Properties
@@ -114,6 +114,7 @@ namespace XbimExchanger.COBieLiteToIfc
         private IfcCartesianPoint _origin2D;
         private IfcDirection _downDirection;
         private IfcGeometricRepresentationContext _model3DContext;
+
         #endregion
 
         #region Constructors
@@ -180,6 +181,14 @@ namespace XbimExchanger.COBieLiteToIfc
         public IfcGeometricRepresentationContext Model3DContext
         {
             get { return _model3DContext; }
+        }
+
+        /// <summary>
+        /// Returns the spaces successfully added to the model
+        /// </summary>
+        public IEnumerable<IfcSpace> Spaces
+        {
+            get { return _spaceLookup.Values; }
         }
 
         #endregion
@@ -748,8 +757,8 @@ namespace XbimExchanger.COBieLiteToIfc
         public bool AddToSpaceMap(IfcBuildingStorey storey, IfcSpace space)
         {
             var key = storey.Name + "&" + space.Name;
-            if (_spaceLookup.ContainsKey(key)) return false;
-            _spaceLookup.Add(key,space);
+            if (SpaceLookup.ContainsKey(key)) return false;
+            SpaceLookup.Add(key,space);
             return true;
         }
 
@@ -761,9 +770,14 @@ namespace XbimExchanger.COBieLiteToIfc
         public IfcSpace GetIfcSpace(SpaceKeyType spacekey)
         {
             var key = spacekey.FloorName + "&" + spacekey.SpaceName;
-            IfcSpace ifcSpace=null;
-            _spaceLookup.TryGetValue(key, out ifcSpace);
+            IfcSpace ifcSpace;
+            SpaceLookup.TryGetValue(key, out ifcSpace);
             return ifcSpace;
+        }
+
+        public void ConvertCategoryToClassification()
+        {
+            
         }
     }
 }
