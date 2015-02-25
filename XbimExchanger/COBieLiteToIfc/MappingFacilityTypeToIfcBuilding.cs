@@ -53,7 +53,7 @@ namespace XbimExchanger.COBieLiteToIfc
             {
                 var siteMapping = Exchanger.GetOrCreateMappings<MappingSiteTypeToIfcSite>();
                 var ifcSite = siteMapping.AddMapping(facility.SiteAssignment,
-                    siteMapping.GetOrCreateTargetObject(facility.SiteAssignment.externalID));
+                    siteMapping.GetOrCreateTargetObject(facility.SiteAssignment.externalID ?? Guid.NewGuid().ToString()));
                 //add the relationship between the site and the project and the building
                 ifcProject.AddSite(ifcSite);
                 ifcSite.AddBuilding(ifcBuilding);

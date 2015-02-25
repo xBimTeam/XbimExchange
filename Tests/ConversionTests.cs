@@ -21,28 +21,23 @@ namespace Tests
     [TestClass]
     public class ConversionTests
     {
-       
         [TestMethod]
         public void ConvertCobieLiteToIfc()
         {
-
-            var textReader = new StreamReader("COBieLite.json");
-            var facility = CoBieLiteHelper.ReadJson(textReader);
+            var facility = FacilityType.ReadJson("COBieLite.json");
             using (var model = XbimModel.CreateTemporaryModel())
-            { 
-                model.Initialise("Xbim Tester","XbimTeam","Xbim.Exchanger","Xbim Development Team", "3.0");
+            {
+                model.Initialise("Xbim Tester", "XbimTeam", "Xbim.Exchanger", "Xbim Development Team", "3.0");
                 model.ReloadModelFactors();
                 using (var txn = model.BeginTransaction("Convert from COBieLite"))
                 {
-                   
                     var exchanger = new CoBieLiteToIfcExchanger(facility, model);
-                    exchanger.Convert();                    
+                    exchanger.Convert();
                     txn.Commit();
                     //var err = model.Validate(model.Instances, Console.Out);
                 }
                 model.SaveAs(@"ConvertedFromCOBieLite.ifc", XbimStorageType.IFC);
             }
-
         }
 
         [TestMethod]
@@ -52,13 +47,7 @@ namespace Tests
             var facility = new FacilityType();
             var exchanger = new DpoWtoCoBieLiteExchanger(dpow, facility);
             exchanger.Convert();
-
-            using (var tw = File.CreateText("NewtownHighSchool.COBieLite.json"))
-            {
-                CoBieLiteHelper.WriteJson(tw, facility);
-                tw.Close();
-            }
-
+            facility.WriteJson("NewtownHighSchool.COBieLite.json");
         }
 
         [TestMethod]
@@ -66,16 +55,12 @@ namespace Tests
         {
             var dpow = PlanOfWork.Open("NewtownHighSchool.dpow");
             var facility = new FacilityType();
-            var stage = dpow.ProjectStages.FirstOrDefault(s => s.Jobs.Any(j => j.DPoWObjects != null && j.DPoWObjects.Any()));
+            var stage =
+                dpow.ProjectStages.FirstOrDefault(s => s.Jobs.Any(j => j.DPoWObjects != null && j.DPoWObjects.Any()));
             Assert.IsNotNull(stage);
             var exchanger = new DpoWtoCoBieLiteExchanger(dpow, facility, stage);
             exchanger.Convert();
-
-            using (var tw = File.CreateText("NewtownHighSchool.COBieLite.json"))
-            {
-                CoBieLiteHelper.WriteJson(tw, facility);
-                tw.Close();
-            }
+            facility.WriteJson("NewtownHighSchool.COBieLite.json");
 
             Assert.IsTrue(facility.AssetTypes.AssetType.Any());
         }
@@ -84,7 +69,7 @@ namespace Tests
         public void UnitConversionTests()
         {
             var converter = new IfcUnitConverter("squaremetres");
-            var meterCubics = new[] { " cubic-metres ", "cubicmetres", "cubicmeters", "m3", "cubic meters" };
+            var meterCubics = new[] {" cubic-metres ", "cubicmetres", "cubicmeters", "m3", "cubic meters"};
             foreach (var cubic in meterCubics)
             {
                 converter.Convert(cubic);
@@ -93,12 +78,6 @@ namespace Tests
                 Assert.IsTrue(converter.SiUnitName.Value == IfcSIUnitName.CUBIC_METRE);
                 Assert.IsNull(converter.SiPrefix);
             }
-            
-
         }
-
-
-
     }
-
 }

@@ -75,7 +75,8 @@ namespace XbimExchanger.DPoW2ToCOBieLite
             if (!String.IsNullOrWhiteSpace(sFacility.SiteName))
                 target.SiteAssignment = new SiteType
                 {
-                    SiteName = sFacility.SiteName
+                    SiteName = sFacility.SiteName,
+                    externalID = Guid.NewGuid().ToString()
                 };
         }
         private void ConvertProject(PlanOfWork source, FacilityType target)
@@ -191,7 +192,8 @@ namespace XbimExchanger.DPoW2ToCOBieLite
             var tFloor = new FloorType
             {
                 FloorName = "Default floor",
-                Spaces = new SpaceCollectionType()
+                Spaces = new SpaceCollectionType(),
+                externalID = Guid.NewGuid().ToString()
             };
             target.Floors = new FloorCollectionType();
             target.Floors.Add(tFloor);

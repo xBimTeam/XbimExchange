@@ -222,9 +222,9 @@ namespace XbimExchanger.COBieLiteToIfc
             if (propertySet == null)
             {
                 //simplistic way to decide if this should be a quantity, IFC 4 specifies the name starts with QTO, under 2x3 most vendors have gone for BaseQuantities
-                if (propertySetName.StartsWith("qto_", true, CultureInfo.InvariantCulture) ||
+                if (propertySetName != null && (propertySetName.StartsWith("qto_", true, CultureInfo.InvariantCulture) ||
                     propertySetName.StartsWith("basequantities", true,
-                        CultureInfo.InvariantCulture))
+                        CultureInfo.InvariantCulture)))
                 {
                     var quantitySet = TargetRepository.Instances.New<IfcElementQuantity>();
                     propertySetDefinitionList.Add(quantitySet);
