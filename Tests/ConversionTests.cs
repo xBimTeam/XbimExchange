@@ -22,8 +22,7 @@ namespace Tests
         [TestMethod]
         public void ConvertCobieLiteToIfc()
         {
-            var data = File.ReadAllText("COBieLite.json");
-            var facility = JsonConvert.DeserializeObject<FacilityType>(data);
+            var facility = FacilityType.ReadJson("COBieLite.json");
 
             using (var model = XbimModel.CreateTemporaryModel())
             {

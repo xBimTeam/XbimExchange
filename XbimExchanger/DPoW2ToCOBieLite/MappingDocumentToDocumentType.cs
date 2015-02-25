@@ -20,13 +20,9 @@ namespace XbimExchanger.DPoW2ToCOBieLite
             tObject.DocumentDescription = sObject.Description;
             tObject.DocumentURI = sObject.URI;
 
-            ////classification codes encoded with '|' separator
-            //if (sObject.ClassificationReferenceIds != null && sObject.ClassificationReferenceIds.Any())
-            //{
-            //    var references = sObject.GetClassificationReferences(Exchanger.SourceRepository);
-            //    var encodedReferences = references.Aggregate("", (current, reference) => current + (reference.ClassificationCode + "|")).Trim('|');
-            //    tObject.DocumentCategory = encodedReferences;
-            //}
+
+            tObject.DocumentCategory =
+                Exchanger.SourceRepository.GetEncodedClassification(sObject.ClassificationReferenceIds);
 
             //classification and classification code encoded with ';' separator
             if (sObject.ClassificationReferenceIds != null && sObject.ClassificationReferenceIds.Any())

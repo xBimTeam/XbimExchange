@@ -13,6 +13,33 @@ namespace XbimExchanger.DPoW2ToCOBieLite
     public static class Extensions
     {
 
+        public static string GetEncodedClassification(this PlanOfWork pow, IEnumerable<Guid> classificationReferenceIds, string suffix = "")
+        {
+            var ids = classificationReferenceIds != null ? classificationReferenceIds.ToArray() : new Guid[]{};
+            var idsNum = ids.Length;
+            if (idsNum == 0)
+                return null;
+            
+            var result = "";
+            var processedCount = 0;
+
+            //itterate over ids and get it all together
+            foreach (var classification in pow.ClassificationSystems)
+            {
+                foreach (var reference in classification.ClassificationReferences)
+                {
+                    if (!ids.Contains(reference.Id)) continue;
+
+                    result += String.Format("{0}:{1}:{2}|", classification.Name, reference.ClassificationCode,
+                        suffix);
+
+                    processedCount++;
+                    if (processedCount == ids.Length) break;
+                }
+            }
+            return result.Trim('|');
+        }
+
         public static void Add(this AttributeCollectionType act, string name, string description, string value, string pset = null)
         {
             act.Add(new AttributeType()

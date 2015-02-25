@@ -22,23 +22,9 @@ namespace XbimExchanger.DPoW2ToCOBieLite
             tObject.Name = sObject.Name;
             tObject.Description = sObject.Description;
 
-            ////classification codes encoded with '|' separator
-            //if (sObject.ClassificationReferenceIds != null && sObject.ClassificationReferenceIds.Any())
-            //{
-            //    var references = sObject.GetClassificationReferences(Exchanger.SourceRepository);
-            //    var encodedReferences = references.Aggregate("", (current, reference) => current + (reference.ClassificationCode + "|")).Trim('|');
-            //    tObject.Category = encodedReferences;
-            //}
+            var suffix = sObject is AssetType ? ((sObject as AssetType).Variant ?? "") : "";
+            tObject.Category = Exchanger.SourceRepository.GetEncodedClassification(sObject.ClassificationReferenceIds, suffix);
 
-            //classification and classification code encoded with ';' separator
-            if (sObject.ClassificationReferenceIds != null && sObject.ClassificationReferenceIds.Any())
-            {
-                var reference = sObject.GetClassificationReferences(Exchanger.SourceRepository).FirstOrDefault();
-                var classification =
-                    Exchanger.SourceRepository.ClassificationSystems.FirstOrDefault(c => c.ClassificationReferences.Contains(reference));
-                if (reference != null && classification != null)
-                    tObject.Category = String.Format("{0};{1}", classification.Name, reference.ClassificationCode);
-            }
             
             //LOD
             if (sObject.RequiredLOD != null)
