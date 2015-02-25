@@ -757,8 +757,8 @@ namespace XbimExchanger.COBieLiteToIfc
         public bool AddToSpaceMap(IfcBuildingStorey storey, IfcSpace space)
         {
             var key = storey.Name + "&" + space.Name;
-            if (SpaceLookup.ContainsKey(key)) return false;
-            SpaceLookup.Add(key,space);
+            if (_spaceLookup.ContainsKey(key)) return false;
+            _spaceLookup.Add(key,space);
             return true;
         }
 
@@ -771,7 +771,7 @@ namespace XbimExchanger.COBieLiteToIfc
         {
             var key = spacekey.FloorName + "&" + spacekey.SpaceName;
             IfcSpace ifcSpace;
-            SpaceLookup.TryGetValue(key, out ifcSpace);
+            _spaceLookup.TryGetValue(key, out ifcSpace);
             return ifcSpace;
         }
 
