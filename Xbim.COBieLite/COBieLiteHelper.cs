@@ -4,7 +4,6 @@ using System.Configuration;
 using System.Globalization;
 using System.IO;
 using System.Linq;
-using System.Net.Mime;
 using System.Reflection;
 using System.Text.RegularExpressions;
 using System.Xml.Serialization;
@@ -49,7 +48,7 @@ namespace Xbim.COBieLite
         /// <summary>
         /// Does not write out the External Entity Type Name or the External System Name
         /// </summary>
-        IgnoreSystemAndEntityName = 0,
+        IgnoreSystemAndEntityName = 3,
         /// <summary>
         /// Does not write out the External System Name but does write out the External Entity Type Name
         /// </summary>
@@ -118,11 +117,11 @@ namespace Xbim.COBieLite
 
         #endregion
 
-        private string _ConfigFileName = null;
+        private readonly string _configFileName;
 
         public CoBieLiteHelper(XbimModel model, string classificationSystemName = null, string configurationFile = null)
         {
-            _ConfigFileName = configurationFile;
+            _configFileName = configurationFile;
 
             _model = model;
             _creatingApplication = model.Header.CreatingApplication;
@@ -201,23 +200,23 @@ namespace Xbim.COBieLite
 
         private void LoadCobieMaps()
         {
-            var tmpFile = _ConfigFileName;
-            if (_ConfigFileName == null)
+            var tmpFile = _configFileName;
+            if (_configFileName == null)
             {
-                tmpFile = System.IO.Path.GetTempPath() + Guid.NewGuid().ToString() + ".csv";
+                tmpFile = Path.GetTempPath() + Guid.NewGuid().ToString() + ".csv";
 
                 var asss = Assembly.GetExecutingAssembly();
 
                 using (var input = asss.GetManifestResourceStream("Xbim.COBieLite.COBieAttributes.config"))
                 using (var output = File.Create(tmpFile))
                 {
-                    input.CopyTo(output);
+                    if (input != null) input.CopyTo(output);
                 }
             }
 
 
-            Configuration config = null;
-            AppSettingsSection cobiePropertyMaps = null;
+            Configuration config;
+            AppSettingsSection cobiePropertyMaps;
             _cobieFieldMap = new Dictionary<string, string[]>();
 
             if (!File.Exists(tmpFile))
@@ -271,7 +270,7 @@ namespace Xbim.COBieLite
                 }
             }
 
-            if (_ConfigFileName == null)
+            if (_configFileName == null)
             {
                 File.Delete(tmpFile);
             }
@@ -549,7 +548,7 @@ namespace Xbim.COBieLite
             if (classifiedObject is IfcSpace)
             {
                 var val = _attributedObjects[(IfcSpace)classifiedObject];
-                string classificationName = "";
+                string classificationName;
                 val.GetSimplePropertyValue("PSet_Revit_Identity Data.OmniClass Table 13 Category", out classificationName);
 
                 if (classificationName != null)
@@ -567,7 +566,7 @@ namespace Xbim.COBieLite
                     {
                         // PSet_Revit_Type_Other.Classification Code
                         var cfg =
-                            new string[]
+                            new[]
                             {
                                 "SimpleProp(PSet_Revit_Type_Other.Classification Code): SimpleProp(PSet_Revit_Type_Other.Classification Description)",
                                 "SimpleProp(PSet_Revit_Type_Identity Data.OmniClass Number): SimpleProp(PSet_Revit_Type_Identity Data.OmniClass Title)"
@@ -577,22 +576,22 @@ namespace Xbim.COBieLite
                         string pattern = @"SimpleProp\(([^\)]*)\)";
                         Regex regex = new Regex(pattern);
 
-                        foreach (var ClassificationRule in cfg)
+                        foreach (var classificationRule in cfg)
                         {
                             bool ok = true;
-                            string result = ClassificationRule;
-                            var mts = regex.Matches(ClassificationRule);
+                            string result = classificationRule;
+                            var mts = regex.Matches(classificationRule);
                             foreach (Match mt in mts)
                             {
-                                string PropName = mt.Groups[1].Value;
-                                string PropVal = "";
-                                val.GetSimplePropertyValue(PropName, out PropVal);
-                                if (PropVal == null)
+                                string propName = mt.Groups[1].Value;
+                                string propVal;
+                                val.GetSimplePropertyValue(propName, out propVal);
+                                if (propVal == null)
                                 {
                                     ok = false;
                                     break;
                                 }
-                                result = result.Replace("SimpleProp(" + PropName + ")", PropVal);
+                                result = result.Replace("SimpleProp(" + propName + ")", propVal);
                             }
                             if (ok)
                                 return result;
@@ -707,14 +706,34 @@ namespace Xbim.COBieLite
 
             if (_attributedObjects.TryGetValue(ifcObjectDefinition, out attributedObject))
             {
-                var properties = attributedObject.Properties.Where(kv=>!_cobieProperties.Contains(kv.Key)); //exclude the properties we have written as COBie value
-                var keyValuePairs = properties as KeyValuePair<string, IfcProperty>[] ?? properties.ToArray();
-                if (keyValuePairs.Length>0)
+                //var properties = attributedObject.Properties.Where(kv=>!_cobieProperties.Contains(kv.Key)); //exclude the properties we have written as COBie value
+                //var keyValuePairs = properties as KeyValuePair<string, IfcProperty>[] ?? properties.ToArray();
+                //if (keyValuePairs.Length>0)
+                //{
+                //    var attributeCollection = new List<AttributeType>(keyValuePairs.Length);
+                //    for (int i = 0; i < keyValuePairs.Length; i++)
+                //    {
+                        
+                //        var property = keyValuePairs[i].Value;
+                //        var splitName = keyValuePairs[i].Key.Split('.');
+                //        var pSetName = splitName[0];
+                //        var attributeType = XbimAttributedObject.ConvertToAttributeType(property);
+                //        attributeType.propertySetName = pSetName;
+                //        //var pSetDef = attributedObject.GetPropertySetDefinition(pSetName);
+                //        //if (pSetDef != null)
+                //        //    attributeType.externalID = ExternalEntityIdentity(pSetDef);
+                //        attributeCollection.Add(attributeType);                   
+                //    }
+                //    return attributeCollection;
+                //}
+                var properties = attributedObject.Properties;
+                var keyValuePairs = properties.ToArray();
+                if (keyValuePairs.Length > 0)
                 {
                     var attributeCollection = new List<AttributeType>(keyValuePairs.Length);
                     for (int i = 0; i < keyValuePairs.Length; i++)
                     {
-                        
+
                         var property = keyValuePairs[i].Value;
                         var splitName = keyValuePairs[i].Key.Split('.');
                         var pSetName = splitName[0];
@@ -723,7 +742,7 @@ namespace Xbim.COBieLite
                         //var pSetDef = attributedObject.GetPropertySetDefinition(pSetName);
                         //if (pSetDef != null)
                         //    attributeType.externalID = ExternalEntityIdentity(pSetDef);
-                        attributeCollection.Add(attributeType);                   
+                        attributeCollection.Add(attributeType);
                     }
                     return attributeCollection;
                 }
@@ -749,16 +768,27 @@ namespace Xbim.COBieLite
 
         static public void WriteJson(TextWriter textWriter, FacilityType theFacility)
         {
-            var serializerSettings = new JsonSerializerSettings
-            {
-                NullValueHandling = NullValueHandling.Ignore,
-                Formatting = Newtonsoft.Json.Formatting.Indented,
-                DateFormatHandling = DateFormatHandling.IsoDateFormat
-            };
-            serializerSettings.Converters.Add(new StringEnumConverter());
-            var serialiser = JsonSerializer.Create(serializerSettings);
+            var serialiser = FacilityType.GetJsonSerializer();
             serialiser.Serialize(textWriter, theFacility);
 
+        }
+
+        static public FacilityType ReadJson(TextReader textReader)
+        {
+            var serialiser = FacilityType.GetJsonSerializer();
+            return (FacilityType)serialiser.Deserialize(textReader, typeof(FacilityType));
+        }
+
+        static public FacilityType ReadJson(string path)
+        {
+            using (var textReader = File.OpenText(path))
+            {
+                var serialiser = FacilityType.GetJsonSerializer();
+                var facility = (FacilityType)serialiser.Deserialize(textReader, typeof(FacilityType));    
+                textReader.Close();
+                return facility;
+            }
+            
         }
 
         public static FacilityType ReadXml(string cobieModelFileName)

@@ -31,6 +31,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SerialisationHelper", "Xbim
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Xbim.COBieLiteUK", "Xbim.COBieLiteUK\Xbim.COBieLiteUK.csproj", "{90DEF072-96C7-4972-835E-909C41169CB4}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Xbim.DPoW", "Xbim.DPoW\Xbim.DPoW.csproj", "{79E7F597-F509-49EC-A606-FDC8326E72F5}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -77,6 +79,10 @@ Global
 		{90DEF072-96C7-4972-835E-909C41169CB4}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{90DEF072-96C7-4972-835E-909C41169CB4}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{90DEF072-96C7-4972-835E-909C41169CB4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{79E7F597-F509-49EC-A606-FDC8326E72F5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{79E7F597-F509-49EC-A606-FDC8326E72F5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{79E7F597-F509-49EC-A606-FDC8326E72F5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{79E7F597-F509-49EC-A606-FDC8326E72F5}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -3,7 +3,8 @@
 [assembly:System.Security.SecurityTransparent()]
 [assembly:System.Security.SecurityRules(System.Security.SecurityRuleSet.Level1)]
 #endif
-[assembly:System.Xml.Serialization.XmlSerializerVersionAttribute(ParentAssemblyId=@"73d3c3c1-8173-43da-ade9-78136269fec4,", Version=@"4.0.0.0")]
+
+[assembly:System.Xml.Serialization.XmlSerializerVersionAttribute(ParentAssemblyId=@"3ac5bcb8-6621-4f93-b12f-076ce099a5c0,", Version=@"4.0.0.0")]
 namespace Microsoft.Xml.Serialization.GeneratedAssembly {
 
     public class XmlSerializationWriterProjectType : System.Xml.Serialization.XmlSerializationWriter {
@@ -42,9 +43,9 @@ namespace Microsoft.Xml.Serialization.GeneratedAssembly {
             WriteElementString(@"ProjectAddress", @"", ((global::System.String)o.@ProjectAddress));
             WriteElementString(@"ProjectFunction", @"", ((global::System.String)o.@ProjectFunction));
             WriteElementString(@"ProjectProcurement", @"", ((global::System.String)o.@ProjectProcurement));
-            Write45_DecimalValueType(@"ProjectFunctionalUnit", @"", ((global::Xbim.COBieLiteUK.DecimalValueType)o.@ProjectFunctionalUnit), false, false);
-            Write45_DecimalValueType(@"ProjectExpectedLifeCycle", @"", ((global::Xbim.COBieLiteUK.DecimalValueType)o.@ProjectExpectedLifeCycle), false, false);
-            Write45_DecimalValueType(@"ProjectCost", @"", ((global::Xbim.COBieLiteUK.DecimalValueType)o.@ProjectCost), false, false);
+            Write41_DecimalValueType(@"ProjectFunctionalUnit", @"", ((global::Xbim.COBieLiteUK.DecimalValueType)o.@ProjectFunctionalUnit), false, false);
+            Write41_DecimalValueType(@"ProjectExpectedLifeCycle", @"", ((global::Xbim.COBieLiteUK.DecimalValueType)o.@ProjectExpectedLifeCycle), false, false);
+            Write41_DecimalValueType(@"ProjectCost", @"", ((global::Xbim.COBieLiteUK.DecimalValueType)o.@ProjectCost), false, false);
             WriteElementStringRaw(@"ProjectConstructionStart", @"", FromDate(((global::System.DateTime)o.@ProjectConstructionStart)));
             WriteElementStringRaw(@"ProjectConstructionEnd", @"", FromDate(((global::System.DateTime)o.@ProjectConstructionEnd)));
             {
@@ -81,10 +82,10 @@ namespace Microsoft.Xml.Serialization.GeneratedAssembly {
             WriteElementString(@"ProjectStageCode", @"", ((global::System.String)o.@ProjectStageCode));
             WriteElementStringRaw(@"ProjectStageStartDate", @"", FromDate(((global::System.DateTime)o.@ProjectStageStartDate)));
             WriteElementStringRaw(@"ProjectStageEndDate", @"", FromDate(((global::System.DateTime)o.@ProjectStageEndDate)));
-            Write45_DecimalValueType(@"ProjectStageCost", @"", ((global::Xbim.COBieLiteUK.DecimalValueType)o.@ProjectStageCost), false, false);
+            Write41_DecimalValueType(@"ProjectStageCost", @"", ((global::Xbim.COBieLiteUK.DecimalValueType)o.@ProjectStageCost), false, false);
             WriteElementString(@"ProjectStageEnvironmentalAssesmentRating", @"", ((global::System.String)o.@ProjectStageEnvironmentalAssesmentRating));
-            Write78_AttributeCollectionType(@"ProjectStageAttributes", @"", ((global::Xbim.COBieLiteUK.AttributeCollectionType)o.@ProjectStageAttributes), false, false);
-            Write89_FacilityType(@"Facility", @"", ((global::Xbim.COBieLiteUK.FacilityType)o.@Facility), false, false);
+            Write77_AttributeCollectionType(@"ProjectStageAttributes", @"", ((global::Xbim.COBieLiteUK.AttributeCollectionType)o.@ProjectStageAttributes), false, false);
+            Write88_FacilityType(@"Facility", @"", ((global::Xbim.COBieLiteUK.FacilityType)o.@Facility), false, false);
             Write96_ProjectStageKeyType(@"ProjectStagePrevious", @"", ((global::Xbim.COBieLiteUK.ProjectStageKeyType)o.@ProjectStagePrevious), false, false);
             Write96_ProjectStageKeyType(@"ProjectStageNext", @"", ((global::Xbim.COBieLiteUK.ProjectStageKeyType)o.@ProjectStageNext), false, false);
             WriteEndElement(o);
@@ -109,7 +110,7 @@ namespace Microsoft.Xml.Serialization.GeneratedAssembly {
             WriteEndElement(o);
         }
 
-        void Write89_FacilityType(string n, string ns, global::Xbim.COBieLiteUK.FacilityType o, bool isNullable, bool needType) {
+        void Write88_FacilityType(string n, string ns, global::Xbim.COBieLiteUK.FacilityType o, bool isNullable, bool needType) {
             if ((object)o == null) {
                 if (isNullable) WriteNullTagLiteral(n, ns);
                 return;
@@ -130,29 +131,29 @@ namespace Microsoft.Xml.Serialization.GeneratedAssembly {
             WriteElementString(@"FacilityName", @"http://docs.buildingsmartalliance.org/nbims03/cobie/core", ((global::System.String)o.@FacilityName));
             WriteElementString(@"FacilityCategory", @"http://docs.buildingsmartalliance.org/nbims03/cobie/core", ((global::System.String)o.@FacilityCategory));
             Write95_ProjectTypeBase(@"ProjectAssignment", @"http://docs.buildingsmartalliance.org/nbims03/cobie/core", ((global::Xbim.COBieLiteUK.ProjectTypeBase)o.@ProjectAssignment), false, false);
-            Write85_SiteType(@"SiteAssignment", @"http://docs.buildingsmartalliance.org/nbims03/cobie/core", ((global::Xbim.COBieLiteUK.SiteType)o.@SiteAssignment), false, false);
+            Write84_SiteType(@"SiteAssignment", @"http://docs.buildingsmartalliance.org/nbims03/cobie/core", ((global::Xbim.COBieLiteUK.SiteType)o.@SiteAssignment), false, false);
             if (o.@FacilityDefaultLinearUnitSpecified) {
-                WriteElementString(@"FacilityDefaultLinearUnit", @"http://docs.buildingsmartalliance.org/nbims03/cobie/core", Write86_LinearUnitSimpleType(((global::Xbim.COBieLiteUK.LinearUnitSimpleType)o.@FacilityDefaultLinearUnit)));
+                WriteElementString(@"FacilityDefaultLinearUnit", @"http://docs.buildingsmartalliance.org/nbims03/cobie/core", Write85_LinearUnitSimpleType(((global::Xbim.COBieLiteUK.LinearUnitSimpleType)o.@FacilityDefaultLinearUnit)));
             }
             if (o.@FacilityDefaultAreaUnitSpecified) {
-                WriteElementString(@"FacilityDefaultAreaUnit", @"http://docs.buildingsmartalliance.org/nbims03/cobie/core", Write87_AreaUnitSimpleType(((global::Xbim.COBieLiteUK.AreaUnitSimpleType)o.@FacilityDefaultAreaUnit)));
+                WriteElementString(@"FacilityDefaultAreaUnit", @"http://docs.buildingsmartalliance.org/nbims03/cobie/core", Write86_AreaUnitSimpleType(((global::Xbim.COBieLiteUK.AreaUnitSimpleType)o.@FacilityDefaultAreaUnit)));
             }
             if (o.@FacilityDefaultVolumeUnitSpecified) {
-                WriteElementString(@"FacilityDefaultVolumeUnit", @"http://docs.buildingsmartalliance.org/nbims03/cobie/core", Write88_VolumeUnitSimpleType(((global::Xbim.COBieLiteUK.VolumeUnitSimpleType)o.@FacilityDefaultVolumeUnit)));
+                WriteElementString(@"FacilityDefaultVolumeUnit", @"http://docs.buildingsmartalliance.org/nbims03/cobie/core", Write87_VolumeUnitSimpleType(((global::Xbim.COBieLiteUK.VolumeUnitSimpleType)o.@FacilityDefaultVolumeUnit)));
             }
             if (o.@FacilityDefaultCurrencyUnitSpecified) {
-                WriteElementString(@"FacilityDefaultCurrencyUnit", @"http://docs.buildingsmartalliance.org/nbims03/cobie/core", Write74_CurrencyUnitSimpleType(((global::Xbim.COBieLiteUK.CurrencyUnitSimpleType)o.@FacilityDefaultCurrencyUnit)));
+                WriteElementString(@"FacilityDefaultCurrencyUnit", @"http://docs.buildingsmartalliance.org/nbims03/cobie/core", Write73_CurrencyUnitSimpleType(((global::Xbim.COBieLiteUK.CurrencyUnitSimpleType)o.@FacilityDefaultCurrencyUnit)));
             }
             WriteElementString(@"FacilityDefaultMeasurementStandard", @"http://docs.buildingsmartalliance.org/nbims03/cobie/core", ((global::System.String)o.@FacilityDefaultMeasurementStandard));
             WriteElementString(@"FacilityDescription", @"http://docs.buildingsmartalliance.org/nbims03/cobie/core", ((global::System.String)o.@FacilityDescription));
             WriteElementString(@"FacilityDeliverablePhaseName", @"http://docs.buildingsmartalliance.org/nbims03/cobie/core", ((global::System.String)o.@FacilityDeliverablePhaseName));
             Write65_FloorCollectionType(@"Floors", @"http://docs.buildingsmartalliance.org/nbims03/cobie/core", ((global::Xbim.COBieLiteUK.FloorCollectionType)o.@Floors), false, false);
-            Write34_ZoneCollectionType(@"Zones", @"http://docs.buildingsmartalliance.org/nbims03/cobie/core", ((global::Xbim.COBieLiteUK.ZoneCollectionType)o.@Zones), false, false);
-            Write59_AssetTypeCollectionType(@"AssetTypes", @"http://docs.buildingsmartalliance.org/nbims03/cobie/core", ((global::Xbim.COBieLiteUK.AssetTypeCollectionType)o.@AssetTypes), false, false);
-            Write30_SystemCollectionType(@"Systems", @"http://docs.buildingsmartalliance.org/nbims03/cobie/core", ((global::Xbim.COBieLiteUK.SystemCollectionType)o.@Systems), false, false);
-            Write70_ConnectionCollectionType(@"Connections", @"http://docs.buildingsmartalliance.org/nbims03/cobie/core", ((global::Xbim.COBieLiteUK.ConnectionCollectionType)o.@Connections), false, false);
-            Write68_ContactCollectionType(@"Contacts", @"http://docs.buildingsmartalliance.org/nbims03/cobie/core", ((global::Xbim.COBieLiteUK.ContactCollectionType)o.@Contacts), false, false);
-            Write78_AttributeCollectionType(@"FacilityAttributes", @"http://docs.buildingsmartalliance.org/nbims03/cobie/core", ((global::Xbim.COBieLiteUK.AttributeCollectionType)o.@FacilityAttributes), false, false);
+            Write59_ZoneCollectionType(@"Zones", @"http://docs.buildingsmartalliance.org/nbims03/cobie/core", ((global::Xbim.COBieLiteUK.ZoneCollectionType)o.@Zones), false, false);
+            Write56_AssetTypeCollectionType(@"AssetTypes", @"http://docs.buildingsmartalliance.org/nbims03/cobie/core", ((global::Xbim.COBieLiteUK.AssetTypeCollectionType)o.@AssetTypes), false, false);
+            Write68_SystemCollectionType(@"Systems", @"http://docs.buildingsmartalliance.org/nbims03/cobie/core", ((global::Xbim.COBieLiteUK.SystemCollectionType)o.@Systems), false, false);
+            Write69_ConnectionCollectionType(@"Connections", @"http://docs.buildingsmartalliance.org/nbims03/cobie/core", ((global::Xbim.COBieLiteUK.ConnectionCollectionType)o.@Connections), false, false);
+            Write30_ContactCollectionType(@"Contacts", @"http://docs.buildingsmartalliance.org/nbims03/cobie/core", ((global::Xbim.COBieLiteUK.ContactCollectionType)o.@Contacts), false, false);
+            Write77_AttributeCollectionType(@"FacilityAttributes", @"http://docs.buildingsmartalliance.org/nbims03/cobie/core", ((global::Xbim.COBieLiteUK.AttributeCollectionType)o.@FacilityAttributes), false, false);
             Write28_DocumentCollectionType(@"FacilityDocuments", @"http://docs.buildingsmartalliance.org/nbims03/cobie/core", ((global::Xbim.COBieLiteUK.DocumentCollectionType)o.@FacilityDocuments), false, false);
             Write26_IssueCollectionType(@"FacilityIssues", @"http://docs.buildingsmartalliance.org/nbims03/cobie/core", ((global::Xbim.COBieLiteUK.IssueCollectionType)o.@FacilityIssues), false, false);
             WriteEndElement(o);
@@ -208,12 +209,12 @@ namespace Microsoft.Xml.Serialization.GeneratedAssembly {
             WriteElementString(@"IssueSeverityText", @"http://docs.buildingsmartalliance.org/nbims03/cobie/core", ((global::System.String)o.@IssueSeverityText));
             WriteElementString(@"IssueImpactText", @"http://docs.buildingsmartalliance.org/nbims03/cobie/core", ((global::System.String)o.@IssueImpactText));
             WriteElementString(@"IssueDescription", @"http://docs.buildingsmartalliance.org/nbims03/cobie/core", ((global::System.String)o.@IssueDescription));
-            Write2_ContactKeyType(@"ContactAssignment", @"http://docs.buildingsmartalliance.org/nbims03/cobie/core", ((global::Xbim.COBieLiteUK.ContactKeyType)o.@ContactAssignment), false, false);
+            Write13_ContactKeyType(@"ContactAssignment", @"http://docs.buildingsmartalliance.org/nbims03/cobie/core", ((global::Xbim.COBieLiteUK.ContactKeyType)o.@ContactAssignment), false, false);
             WriteElementString(@"IssueMitigationDescription", @"http://docs.buildingsmartalliance.org/nbims03/cobie/core", ((global::System.String)o.@IssueMitigationDescription));
             WriteEndElement(o);
         }
 
-        void Write2_ContactKeyType(string n, string ns, global::Xbim.COBieLiteUK.ContactKeyType o, bool isNullable, bool needType) {
+        void Write13_ContactKeyType(string n, string ns, global::Xbim.COBieLiteUK.ContactKeyType o, bool isNullable, bool needType) {
             if ((object)o == null) {
                 if (isNullable) WriteNullTagLiteral(n, ns);
                 return;
@@ -281,12 +282,12 @@ namespace Microsoft.Xml.Serialization.GeneratedAssembly {
             WriteElementString(@"DocumentDescription", @"http://docs.buildingsmartalliance.org/nbims03/cobie/core", ((global::System.String)o.@DocumentDescription));
             WriteElementString(@"DocumentURI", @"http://docs.buildingsmartalliance.org/nbims03/cobie/core", ((global::System.String)o.@DocumentURI));
             WriteElementString(@"DocumentReferenceURI", @"http://docs.buildingsmartalliance.org/nbims03/cobie/core", ((global::System.String)o.@DocumentReferenceURI));
-            Write78_AttributeCollectionType(@"DocumentAttributes", @"http://docs.buildingsmartalliance.org/nbims03/cobie/core", ((global::Xbim.COBieLiteUK.AttributeCollectionType)o.@DocumentAttributes), false, false);
+            Write77_AttributeCollectionType(@"DocumentAttributes", @"http://docs.buildingsmartalliance.org/nbims03/cobie/core", ((global::Xbim.COBieLiteUK.AttributeCollectionType)o.@DocumentAttributes), false, false);
             Write26_IssueCollectionType(@"DocumentIssues", @"http://docs.buildingsmartalliance.org/nbims03/cobie/core", ((global::Xbim.COBieLiteUK.IssueCollectionType)o.@DocumentIssues), false, false);
             WriteEndElement(o);
         }
 
-        void Write78_AttributeCollectionType(string n, string ns, global::Xbim.COBieLiteUK.AttributeCollectionType o, bool isNullable, bool needType) {
+        void Write77_AttributeCollectionType(string n, string ns, global::Xbim.COBieLiteUK.AttributeCollectionType o, bool isNullable, bool needType) {
             if ((object)o == null) {
                 if (isNullable) WriteNullTagLiteral(n, ns);
                 return;
@@ -305,14 +306,14 @@ namespace Microsoft.Xml.Serialization.GeneratedAssembly {
                 global::System.Collections.Generic.List<global::Xbim.COBieLiteUK.AttributeType> a = (global::System.Collections.Generic.List<global::Xbim.COBieLiteUK.AttributeType>)o.@Attribute;
                 if (a != null) {
                     for (int ia = 0; ia < ((System.Collections.ICollection)a).Count; ia++) {
-                        Write77_AttributeType(@"Attribute", @"http://docs.buildingsmartalliance.org/nbims03/cobie/core", ((global::Xbim.COBieLiteUK.AttributeType)a[ia]), false, false);
+                        Write76_AttributeType(@"Attribute", @"http://docs.buildingsmartalliance.org/nbims03/cobie/core", ((global::Xbim.COBieLiteUK.AttributeType)a[ia]), false, false);
                     }
                 }
             }
             WriteEndElement(o);
         }
 
-        void Write77_AttributeType(string n, string ns, global::Xbim.COBieLiteUK.AttributeType o, bool isNullable, bool needType) {
+        void Write76_AttributeType(string n, string ns, global::Xbim.COBieLiteUK.AttributeType o, bool isNullable, bool needType) {
             if ((object)o == null) {
                 if (isNullable) WriteNullTagLiteral(n, ns);
                 return;
@@ -335,12 +336,12 @@ namespace Microsoft.Xml.Serialization.GeneratedAssembly {
             WriteElementString(@"AttributeName", @"http://docs.buildingsmartalliance.org/nbims03/cobie/core", ((global::System.String)o.@AttributeName));
             WriteElementString(@"AttributeCategory", @"http://docs.buildingsmartalliance.org/nbims03/cobie/core", ((global::System.String)o.@AttributeCategory));
             WriteElementString(@"AttributeDescription", @"http://docs.buildingsmartalliance.org/nbims03/cobie/core", ((global::System.String)o.@AttributeDescription));
-            Write76_AttributeValueType(@"AttributeValue", @"http://docs.buildingsmartalliance.org/nbims03/cobie/core", ((global::Xbim.COBieLiteUK.AttributeValueType)o.@AttributeValue), false, false);
+            Write75_AttributeValueType(@"AttributeValue", @"http://docs.buildingsmartalliance.org/nbims03/cobie/core", ((global::Xbim.COBieLiteUK.AttributeValueType)o.@AttributeValue), false, false);
             Write26_IssueCollectionType(@"AttributeIssues", @"http://docs.buildingsmartalliance.org/nbims03/cobie/core", ((global::Xbim.COBieLiteUK.IssueCollectionType)o.@AttributeIssues), false, false);
             WriteEndElement(o);
         }
 
-        void Write76_AttributeValueType(string n, string ns, global::Xbim.COBieLiteUK.AttributeValueType o, bool isNullable, bool needType) {
+        void Write75_AttributeValueType(string n, string ns, global::Xbim.COBieLiteUK.AttributeValueType o, bool isNullable, bool needType) {
             if ((object)o == null) {
                 if (isNullable) WriteNullTagLiteral(n, ns);
                 return;
@@ -356,37 +357,37 @@ namespace Microsoft.Xml.Serialization.GeneratedAssembly {
             WriteStartElement(n, ns, o, false, null);
             if (needType) WriteXsiType(@"AttributeValueType", @"http://docs.buildingsmartalliance.org/nbims03/cobie/core");
             {
-                if (o.@ItemElementName == Xbim.COBieLiteUK.ItemChoiceType.@AttributeDecimalValue && ((object)(o.@Item) != null)) {
-                    if (((object)o.@Item) != null && !(o.@Item is global::Xbim.COBieLiteUK.AttributeDecimalValueType)) throw CreateMismatchChoiceException(@"Xbim.COBieLiteUK.AttributeDecimalValueType", @"ItemElementName", @"Xbim.COBieLiteUK.ItemChoiceType.@AttributeDecimalValue");
-                    Write43_AttributeDecimalValueType(@"AttributeDecimalValue", @"http://docs.buildingsmartalliance.org/nbims03/cobie/core", ((global::Xbim.COBieLiteUK.AttributeDecimalValueType)o.@Item), false, false);
+                if (o.@ItemElementName == Xbim.COBieLiteUK.ItemChoiceType.@AttributeIntegerValue && ((object)(o.@Item) != null)) {
+                    if (((object)o.@Item) != null && !(o.@Item is global::Xbim.COBieLiteUK.AttributeIntegerValueType)) throw CreateMismatchChoiceException(@"Xbim.COBieLiteUK.AttributeIntegerValueType", @"ItemElementName", @"Xbim.COBieLiteUK.ItemChoiceType.@AttributeIntegerValue");
+                    Write39_AttributeIntegerValueType(@"AttributeIntegerValue", @"http://docs.buildingsmartalliance.org/nbims03/cobie/core", ((global::Xbim.COBieLiteUK.AttributeIntegerValueType)o.@Item), false, false);
                 }
                 else if (o.@ItemElementName == Xbim.COBieLiteUK.ItemChoiceType.@AttributeStringValue && ((object)(o.@Item) != null)) {
                     if (((object)o.@Item) != null && !(o.@Item is global::Xbim.COBieLiteUK.AttributeStringValueType)) throw CreateMismatchChoiceException(@"Xbim.COBieLiteUK.AttributeStringValueType", @"ItemElementName", @"Xbim.COBieLiteUK.ItemChoiceType.@AttributeStringValue");
-                    Write39_AttributeStringValueType(@"AttributeStringValue", @"http://docs.buildingsmartalliance.org/nbims03/cobie/core", ((global::Xbim.COBieLiteUK.AttributeStringValueType)o.@Item), false, false);
+                    Write34_AttributeStringValueType(@"AttributeStringValue", @"http://docs.buildingsmartalliance.org/nbims03/cobie/core", ((global::Xbim.COBieLiteUK.AttributeStringValueType)o.@Item), false, false);
                 }
-                else if (o.@ItemElementName == Xbim.COBieLiteUK.ItemChoiceType.@AttributeIntegerValue && ((object)(o.@Item) != null)) {
-                    if (((object)o.@Item) != null && !(o.@Item is global::Xbim.COBieLiteUK.AttributeIntegerValueType)) throw CreateMismatchChoiceException(@"Xbim.COBieLiteUK.AttributeIntegerValueType", @"ItemElementName", @"Xbim.COBieLiteUK.ItemChoiceType.@AttributeIntegerValue");
-                    Write40_AttributeIntegerValueType(@"AttributeIntegerValue", @"http://docs.buildingsmartalliance.org/nbims03/cobie/core", ((global::Xbim.COBieLiteUK.AttributeIntegerValueType)o.@Item), false, false);
+                else if (o.@ItemElementName == Xbim.COBieLiteUK.ItemChoiceType.@AttributeDecimalValue && ((object)(o.@Item) != null)) {
+                    if (((object)o.@Item) != null && !(o.@Item is global::Xbim.COBieLiteUK.AttributeDecimalValueType)) throw CreateMismatchChoiceException(@"Xbim.COBieLiteUK.AttributeDecimalValueType", @"ItemElementName", @"Xbim.COBieLiteUK.ItemChoiceType.@AttributeDecimalValue");
+                    Write36_AttributeDecimalValueType(@"AttributeDecimalValue", @"http://docs.buildingsmartalliance.org/nbims03/cobie/core", ((global::Xbim.COBieLiteUK.AttributeDecimalValueType)o.@Item), false, false);
                 }
                 else if (o.@ItemElementName == Xbim.COBieLiteUK.ItemChoiceType.@AttributeBooleanValue && ((object)(o.@Item) != null)) {
                     if (((object)o.@Item) != null && !(o.@Item is global::Xbim.COBieLiteUK.BooleanValueType)) throw CreateMismatchChoiceException(@"Xbim.COBieLiteUK.BooleanValueType", @"ItemElementName", @"Xbim.COBieLiteUK.ItemChoiceType.@AttributeBooleanValue");
-                    Write42_BooleanValueType(@"AttributeBooleanValue", @"http://docs.buildingsmartalliance.org/nbims03/cobie/core", ((global::Xbim.COBieLiteUK.BooleanValueType)o.@Item), false, false);
+                    Write37_BooleanValueType(@"AttributeBooleanValue", @"http://docs.buildingsmartalliance.org/nbims03/cobie/core", ((global::Xbim.COBieLiteUK.BooleanValueType)o.@Item), false, false);
                 }
                 else if (o.@ItemElementName == Xbim.COBieLiteUK.ItemChoiceType.@AttributeDateTimeValue && ((object)(o.@Item) != null)) {
                     if (((object)o.@Item) != null && !(o.@Item is global::System.DateTime)) throw CreateMismatchChoiceException(@"System.DateTime", @"ItemElementName", @"Xbim.COBieLiteUK.ItemChoiceType.@AttributeDateTimeValue");
                     WriteElementStringRaw(@"AttributeDateTimeValue", @"http://docs.buildingsmartalliance.org/nbims03/cobie/core", FromDateTime(((global::System.DateTime)o.@Item)));
                 }
-                else if (o.@ItemElementName == Xbim.COBieLiteUK.ItemChoiceType.@AttributeTimeValue && ((object)(o.@Item) != null)) {
-                    if (((object)o.@Item) != null && !(o.@Item is global::System.DateTime)) throw CreateMismatchChoiceException(@"System.DateTime", @"ItemElementName", @"Xbim.COBieLiteUK.ItemChoiceType.@AttributeTimeValue");
-                    WriteElementStringRaw(@"AttributeTimeValue", @"http://docs.buildingsmartalliance.org/nbims03/cobie/core", FromTime(((global::System.DateTime)o.@Item)));
-                }
                 else if (o.@ItemElementName == Xbim.COBieLiteUK.ItemChoiceType.@AttributeDateValue && ((object)(o.@Item) != null)) {
                     if (((object)o.@Item) != null && !(o.@Item is global::System.DateTime)) throw CreateMismatchChoiceException(@"System.DateTime", @"ItemElementName", @"Xbim.COBieLiteUK.ItemChoiceType.@AttributeDateValue");
                     WriteElementStringRaw(@"AttributeDateValue", @"http://docs.buildingsmartalliance.org/nbims03/cobie/core", FromDate(((global::System.DateTime)o.@Item)));
                 }
+                else if (o.@ItemElementName == Xbim.COBieLiteUK.ItemChoiceType.@AttributeTimeValue && ((object)(o.@Item) != null)) {
+                    if (((object)o.@Item) != null && !(o.@Item is global::System.DateTime)) throw CreateMismatchChoiceException(@"System.DateTime", @"ItemElementName", @"Xbim.COBieLiteUK.ItemChoiceType.@AttributeTimeValue");
+                    WriteElementStringRaw(@"AttributeTimeValue", @"http://docs.buildingsmartalliance.org/nbims03/cobie/core", FromTime(((global::System.DateTime)o.@Item)));
+                }
                 else if (o.@ItemElementName == Xbim.COBieLiteUK.ItemChoiceType.@AttributeMonetaryValue && ((object)(o.@Item) != null)) {
                     if (((object)o.@Item) != null && !(o.@Item is global::Xbim.COBieLiteUK.AttributeMonetaryValueType)) throw CreateMismatchChoiceException(@"Xbim.COBieLiteUK.AttributeMonetaryValueType", @"ItemElementName", @"Xbim.COBieLiteUK.ItemChoiceType.@AttributeMonetaryValue");
-                    Write75_AttributeMonetaryValueType(@"AttributeMonetaryValue", @"http://docs.buildingsmartalliance.org/nbims03/cobie/core", ((global::Xbim.COBieLiteUK.AttributeMonetaryValueType)o.@Item), false, false);
+                    Write74_AttributeMonetaryValueType(@"AttributeMonetaryValue", @"http://docs.buildingsmartalliance.org/nbims03/cobie/core", ((global::Xbim.COBieLiteUK.AttributeMonetaryValueType)o.@Item), false, false);
                 }
                 else  if ((object)(o.@Item) != null){
                     throw CreateUnknownTypeException(o.@Item);
@@ -395,7 +396,7 @@ namespace Microsoft.Xml.Serialization.GeneratedAssembly {
             WriteEndElement(o);
         }
 
-        void Write75_AttributeMonetaryValueType(string n, string ns, global::Xbim.COBieLiteUK.AttributeMonetaryValueType o, bool isNullable, bool needType) {
+        void Write74_AttributeMonetaryValueType(string n, string ns, global::Xbim.COBieLiteUK.AttributeMonetaryValueType o, bool isNullable, bool needType) {
             if ((object)o == null) {
                 if (isNullable) WriteNullTagLiteral(n, ns);
                 return;
@@ -411,11 +412,11 @@ namespace Microsoft.Xml.Serialization.GeneratedAssembly {
             WriteStartElement(n, ns, o, false, null);
             if (needType) WriteXsiType(@"AttributeMonetaryValueType", @"http://docs.buildingsmartalliance.org/nbims03/cobie/core");
             WriteElementStringRaw(@"MonetaryValue", @"http://docs.buildingsmartalliance.org/nbims03/cobie/core", System.Xml.XmlConvert.ToString((global::System.Decimal)((global::System.Decimal)o.@MonetaryValue)));
-            WriteElementString(@"MonetaryUnit", @"http://docs.buildingsmartalliance.org/nbims03/cobie/core", Write74_CurrencyUnitSimpleType(((global::Xbim.COBieLiteUK.CurrencyUnitSimpleType)o.@MonetaryUnit)));
+            WriteElementString(@"MonetaryUnit", @"http://docs.buildingsmartalliance.org/nbims03/cobie/core", Write73_CurrencyUnitSimpleType(((global::Xbim.COBieLiteUK.CurrencyUnitSimpleType)o.@MonetaryUnit)));
             WriteEndElement(o);
         }
 
-        string Write74_CurrencyUnitSimpleType(global::Xbim.COBieLiteUK.CurrencyUnitSimpleType v) {
+        string Write73_CurrencyUnitSimpleType(global::Xbim.COBieLiteUK.CurrencyUnitSimpleType v) {
             string s = null;
             switch (v) {
                 case global::Xbim.COBieLiteUK.CurrencyUnitSimpleType.@BritishPounds: s = @"British Pounds"; break;
@@ -427,7 +428,7 @@ namespace Microsoft.Xml.Serialization.GeneratedAssembly {
             return s;
         }
 
-        void Write42_BooleanValueType(string n, string ns, global::Xbim.COBieLiteUK.BooleanValueType o, bool isNullable, bool needType) {
+        void Write37_BooleanValueType(string n, string ns, global::Xbim.COBieLiteUK.BooleanValueType o, bool isNullable, bool needType) {
             if ((object)o == null) {
                 if (isNullable) WriteNullTagLiteral(n, ns);
                 return;
@@ -449,76 +450,7 @@ namespace Microsoft.Xml.Serialization.GeneratedAssembly {
             WriteEndElement(o);
         }
 
-        void Write40_AttributeIntegerValueType(string n, string ns, global::Xbim.COBieLiteUK.AttributeIntegerValueType o, bool isNullable, bool needType) {
-            if ((object)o == null) {
-                if (isNullable) WriteNullTagLiteral(n, ns);
-                return;
-            }
-            if (!needType) {
-                System.Type t = o.GetType();
-                if (t == typeof(global::Xbim.COBieLiteUK.AttributeIntegerValueType)) {
-                }
-                else {
-                    throw CreateUnknownTypeException(o);
-                }
-            }
-            WriteStartElement(n, ns, o, false, null);
-            if (needType) WriteXsiType(@"AttributeIntegerValueType", @"http://docs.buildingsmartalliance.org/nbims03/cobie/core");
-            WriteElementString(@"UnitName", @"http://docs.buildingsmartalliance.org/nbims03/cobie/core", ((global::System.String)o.@UnitName));
-            WriteElementStringRaw(@"IntegerValue", @"http://docs.buildingsmartalliance.org/nbims03/cobie/core", System.Xml.XmlConvert.ToString((global::System.Int32)((global::System.Int32)o.@IntegerValue)));
-            WriteElementStringRaw(@"MinValueInteger", @"http://docs.buildingsmartalliance.org/nbims03/cobie/core", System.Xml.XmlConvert.ToString((global::System.Int32)((global::System.Int32)o.@MinValueInteger)));
-            WriteElementStringRaw(@"MaxValueInteger", @"http://docs.buildingsmartalliance.org/nbims03/cobie/core", System.Xml.XmlConvert.ToString((global::System.Int32)((global::System.Int32)o.@MaxValueInteger)));
-            WriteEndElement(o);
-        }
-
-        void Write39_AttributeStringValueType(string n, string ns, global::Xbim.COBieLiteUK.AttributeStringValueType o, bool isNullable, bool needType) {
-            if ((object)o == null) {
-                if (isNullable) WriteNullTagLiteral(n, ns);
-                return;
-            }
-            if (!needType) {
-                System.Type t = o.GetType();
-                if (t == typeof(global::Xbim.COBieLiteUK.AttributeStringValueType)) {
-                }
-                else {
-                    throw CreateUnknownTypeException(o);
-                }
-            }
-            WriteStartElement(n, ns, o, false, null);
-            if (needType) WriteXsiType(@"AttributeStringValueType", @"http://docs.buildingsmartalliance.org/nbims03/cobie/core");
-            WriteElementString(@"UnitName", @"http://docs.buildingsmartalliance.org/nbims03/cobie/core", ((global::System.String)o.@UnitName));
-            WriteElementString(@"StringValue", @"http://docs.buildingsmartalliance.org/nbims03/cobie/core", ((global::System.String)o.@StringValue));
-            Write38_AllowedValueCollectionType(@"AllowedValues", @"http://docs.buildingsmartalliance.org/nbims03/cobie/core", ((global::Xbim.COBieLiteUK.AllowedValueCollectionType)o.@AllowedValues), false, false);
-            WriteEndElement(o);
-        }
-
-        void Write38_AllowedValueCollectionType(string n, string ns, global::Xbim.COBieLiteUK.AllowedValueCollectionType o, bool isNullable, bool needType) {
-            if ((object)o == null) {
-                if (isNullable) WriteNullTagLiteral(n, ns);
-                return;
-            }
-            if (!needType) {
-                System.Type t = o.GetType();
-                if (t == typeof(global::Xbim.COBieLiteUK.AllowedValueCollectionType)) {
-                }
-                else {
-                    throw CreateUnknownTypeException(o);
-                }
-            }
-            WriteStartElement(n, ns, o, false, null);
-            if (needType) WriteXsiType(@"AllowedValueCollectionType", @"http://docs.buildingsmartalliance.org/nbims03/cobie/core");
-            {
-                global::System.Collections.Generic.List<global::System.String> a = (global::System.Collections.Generic.List<global::System.String>)o.@AttributeAllowedValue;
-                if (a != null) {
-                    for (int ia = 0; ia < ((System.Collections.ICollection)a).Count; ia++) {
-                        WriteElementString(@"AttributeAllowedValue", @"http://docs.buildingsmartalliance.org/nbims03/cobie/core", ((global::System.String)a[ia]));
-                    }
-                }
-            }
-            WriteEndElement(o);
-        }
-
-        void Write43_AttributeDecimalValueType(string n, string ns, global::Xbim.COBieLiteUK.AttributeDecimalValueType o, bool isNullable, bool needType) {
+        void Write36_AttributeDecimalValueType(string n, string ns, global::Xbim.COBieLiteUK.AttributeDecimalValueType o, bool isNullable, bool needType) {
             if ((object)o == null) {
                 if (isNullable) WriteNullTagLiteral(n, ns);
                 return;
@@ -546,7 +478,91 @@ namespace Microsoft.Xml.Serialization.GeneratedAssembly {
             WriteEndElement(o);
         }
 
-        void Write68_ContactCollectionType(string n, string ns, global::Xbim.COBieLiteUK.ContactCollectionType o, bool isNullable, bool needType) {
+        void Write34_AttributeStringValueType(string n, string ns, global::Xbim.COBieLiteUK.AttributeStringValueType o, bool isNullable, bool needType) {
+            if ((object)o == null) {
+                if (isNullable) WriteNullTagLiteral(n, ns);
+                return;
+            }
+            if (!needType) {
+                System.Type t = o.GetType();
+                if (t == typeof(global::Xbim.COBieLiteUK.AttributeStringValueType)) {
+                }
+                else {
+                    throw CreateUnknownTypeException(o);
+                }
+            }
+            WriteStartElement(n, ns, o, false, null);
+            if (needType) WriteXsiType(@"AttributeStringValueType", @"http://docs.buildingsmartalliance.org/nbims03/cobie/core");
+            WriteElementString(@"UnitName", @"http://docs.buildingsmartalliance.org/nbims03/cobie/core", ((global::System.String)o.@UnitName));
+            WriteElementString(@"StringValue", @"http://docs.buildingsmartalliance.org/nbims03/cobie/core", ((global::System.String)o.@StringValue));
+            Write33_AllowedValueCollectionType(@"AllowedValues", @"http://docs.buildingsmartalliance.org/nbims03/cobie/core", ((global::Xbim.COBieLiteUK.AllowedValueCollectionType)o.@AllowedValues), false, false);
+            WriteEndElement(o);
+        }
+
+        void Write33_AllowedValueCollectionType(string n, string ns, global::Xbim.COBieLiteUK.AllowedValueCollectionType o, bool isNullable, bool needType) {
+            if ((object)o == null) {
+                if (isNullable) WriteNullTagLiteral(n, ns);
+                return;
+            }
+            if (!needType) {
+                System.Type t = o.GetType();
+                if (t == typeof(global::Xbim.COBieLiteUK.AllowedValueCollectionType)) {
+                }
+                else {
+                    throw CreateUnknownTypeException(o);
+                }
+            }
+            WriteStartElement(n, ns, o, false, null);
+            if (needType) WriteXsiType(@"AllowedValueCollectionType", @"http://docs.buildingsmartalliance.org/nbims03/cobie/core");
+            {
+                global::System.Collections.Generic.List<global::System.String> a = (global::System.Collections.Generic.List<global::System.String>)o.@AttributeAllowedValue;
+                if (a != null) {
+                    for (int ia = 0; ia < ((System.Collections.ICollection)a).Count; ia++) {
+                        WriteElementString(@"AttributeAllowedValue", @"http://docs.buildingsmartalliance.org/nbims03/cobie/core", ((global::System.String)a[ia]));
+                    }
+                }
+            }
+            WriteEndElement(o);
+        }
+
+        void Write39_AttributeIntegerValueType(string n, string ns, global::Xbim.COBieLiteUK.AttributeIntegerValueType o, bool isNullable, bool needType) {
+            if ((object)o == null) {
+                if (isNullable) WriteNullTagLiteral(n, ns);
+                return;
+            }
+            if (!needType) {
+                System.Type t = o.GetType();
+                if (t == typeof(global::Xbim.COBieLiteUK.AttributeIntegerValueType)) {
+                }
+                else {
+                    throw CreateUnknownTypeException(o);
+                }
+            }
+            WriteStartElement(n, ns, o, false, null);
+            if (needType) WriteXsiType(@"AttributeIntegerValueType", @"http://docs.buildingsmartalliance.org/nbims03/cobie/core");
+            WriteElementString(@"UnitName", @"http://docs.buildingsmartalliance.org/nbims03/cobie/core", ((global::System.String)o.@UnitName));
+            if (o.@IntegerValue != null) {
+                WriteNullableStringLiteralRaw(@"IntegerValue", @"http://docs.buildingsmartalliance.org/nbims03/cobie/core", System.Xml.XmlConvert.ToString((global::System.Int32)((global::System.Int32)o.@IntegerValue)));
+            }
+            else {
+                WriteNullTagLiteral(@"IntegerValue", @"http://docs.buildingsmartalliance.org/nbims03/cobie/core");
+            }
+            if (o.@MinValueInteger != null) {
+                WriteNullableStringLiteralRaw(@"MinValueInteger", @"http://docs.buildingsmartalliance.org/nbims03/cobie/core", System.Xml.XmlConvert.ToString((global::System.Int32)((global::System.Int32)o.@MinValueInteger)));
+            }
+            else {
+                WriteNullTagLiteral(@"MinValueInteger", @"http://docs.buildingsmartalliance.org/nbims03/cobie/core");
+            }
+            if (o.@MaxValueInteger != null) {
+                WriteNullableStringLiteralRaw(@"MaxValueInteger", @"http://docs.buildingsmartalliance.org/nbims03/cobie/core", System.Xml.XmlConvert.ToString((global::System.Int32)((global::System.Int32)o.@MaxValueInteger)));
+            }
+            else {
+                WriteNullTagLiteral(@"MaxValueInteger", @"http://docs.buildingsmartalliance.org/nbims03/cobie/core");
+            }
+            WriteEndElement(o);
+        }
+
+        void Write30_ContactCollectionType(string n, string ns, global::Xbim.COBieLiteUK.ContactCollectionType o, bool isNullable, bool needType) {
             if ((object)o == null) {
                 if (isNullable) WriteNullTagLiteral(n, ns);
                 return;
@@ -565,14 +581,14 @@ namespace Microsoft.Xml.Serialization.GeneratedAssembly {
                 global::System.Collections.Generic.List<global::Xbim.COBieLiteUK.ContactType> a = (global::System.Collections.Generic.List<global::Xbim.COBieLiteUK.ContactType>)o.@Contact;
                 if (a != null) {
                     for (int ia = 0; ia < ((System.Collections.ICollection)a).Count; ia++) {
-                        Write67_ContactType(@"Contact", @"http://docs.buildingsmartalliance.org/nbims03/cobie/core", ((global::Xbim.COBieLiteUK.ContactType)a[ia]), false, false);
+                        Write29_ContactType(@"Contact", @"http://docs.buildingsmartalliance.org/nbims03/cobie/core", ((global::Xbim.COBieLiteUK.ContactType)a[ia]), false, false);
                     }
                 }
             }
             WriteEndElement(o);
         }
 
-        void Write67_ContactType(string n, string ns, global::Xbim.COBieLiteUK.ContactType o, bool isNullable, bool needType) {
+        void Write29_ContactType(string n, string ns, global::Xbim.COBieLiteUK.ContactType o, bool isNullable, bool needType) {
             if ((object)o == null) {
                 if (isNullable) WriteNullTagLiteral(n, ns);
                 return;
@@ -604,13 +620,13 @@ namespace Microsoft.Xml.Serialization.GeneratedAssembly {
             WriteElementString(@"ContactCountryName", @"http://docs.buildingsmartalliance.org/nbims03/cobie/core", ((global::System.String)o.@ContactCountryName));
             WriteElementString(@"ContactPostalCode", @"http://docs.buildingsmartalliance.org/nbims03/cobie/core", ((global::System.String)o.@ContactPostalCode));
             WriteElementString(@"ContactURL", @"http://docs.buildingsmartalliance.org/nbims03/cobie/core", ((global::System.String)o.@ContactURL));
-            Write78_AttributeCollectionType(@"ContactAttributes", @"http://docs.buildingsmartalliance.org/nbims03/cobie/core", ((global::Xbim.COBieLiteUK.AttributeCollectionType)o.@ContactAttributes), false, false);
+            Write77_AttributeCollectionType(@"ContactAttributes", @"http://docs.buildingsmartalliance.org/nbims03/cobie/core", ((global::Xbim.COBieLiteUK.AttributeCollectionType)o.@ContactAttributes), false, false);
             Write28_DocumentCollectionType(@"ContactDocuments", @"http://docs.buildingsmartalliance.org/nbims03/cobie/core", ((global::Xbim.COBieLiteUK.DocumentCollectionType)o.@ContactDocuments), false, false);
             Write26_IssueCollectionType(@"ContactIssues", @"http://docs.buildingsmartalliance.org/nbims03/cobie/core", ((global::Xbim.COBieLiteUK.IssueCollectionType)o.@ContactIssues), false, false);
             WriteEndElement(o);
         }
 
-        void Write70_ConnectionCollectionType(string n, string ns, global::Xbim.COBieLiteUK.ConnectionCollectionType o, bool isNullable, bool needType) {
+        void Write69_ConnectionCollectionType(string n, string ns, global::Xbim.COBieLiteUK.ConnectionCollectionType o, bool isNullable, bool needType) {
             if ((object)o == null) {
                 if (isNullable) WriteNullTagLiteral(n, ns);
                 return;
@@ -629,14 +645,14 @@ namespace Microsoft.Xml.Serialization.GeneratedAssembly {
                 global::System.Collections.Generic.List<global::Xbim.COBieLiteUK.ConnectionType> a = (global::System.Collections.Generic.List<global::Xbim.COBieLiteUK.ConnectionType>)o.@Connection;
                 if (a != null) {
                     for (int ia = 0; ia < ((System.Collections.ICollection)a).Count; ia++) {
-                        Write69_ConnectionType(@"Connection", @"http://docs.buildingsmartalliance.org/nbims03/cobie/core", ((global::Xbim.COBieLiteUK.ConnectionType)a[ia]), false, false);
+                        Write92_ConnectionType(@"Connection", @"http://docs.buildingsmartalliance.org/nbims03/cobie/core", ((global::Xbim.COBieLiteUK.ConnectionType)a[ia]), false, false);
                     }
                 }
             }
             WriteEndElement(o);
         }
 
-        void Write69_ConnectionType(string n, string ns, global::Xbim.COBieLiteUK.ConnectionType o, bool isNullable, bool needType) {
+        void Write92_ConnectionType(string n, string ns, global::Xbim.COBieLiteUK.ConnectionType o, bool isNullable, bool needType) {
             if ((object)o == null) {
                 if (isNullable) WriteNullTagLiteral(n, ns);
                 return;
@@ -661,13 +677,13 @@ namespace Microsoft.Xml.Serialization.GeneratedAssembly {
             WriteElementString(@"ConnectionAsset2Name", @"http://docs.buildingsmartalliance.org/nbims03/cobie/core", ((global::System.String)o.@ConnectionAsset2Name));
             WriteElementString(@"ConnectionAsset2PortName", @"http://docs.buildingsmartalliance.org/nbims03/cobie/core", ((global::System.String)o.@ConnectionAsset2PortName));
             WriteElementString(@"ConnectionDescription", @"http://docs.buildingsmartalliance.org/nbims03/cobie/core", ((global::System.String)o.@ConnectionDescription));
-            Write78_AttributeCollectionType(@"ConnectionAttributes", @"http://docs.buildingsmartalliance.org/nbims03/cobie/core", ((global::Xbim.COBieLiteUK.AttributeCollectionType)o.@ConnectionAttributes), false, false);
+            Write77_AttributeCollectionType(@"ConnectionAttributes", @"http://docs.buildingsmartalliance.org/nbims03/cobie/core", ((global::Xbim.COBieLiteUK.AttributeCollectionType)o.@ConnectionAttributes), false, false);
             Write28_DocumentCollectionType(@"ConnectionDocuments", @"http://docs.buildingsmartalliance.org/nbims03/cobie/core", ((global::Xbim.COBieLiteUK.DocumentCollectionType)o.@ConnectionDocuments), false, false);
             Write26_IssueCollectionType(@"ConnectionIssues", @"http://docs.buildingsmartalliance.org/nbims03/cobie/core", ((global::Xbim.COBieLiteUK.IssueCollectionType)o.@ConnectionIssues), false, false);
             WriteEndElement(o);
         }
 
-        void Write30_SystemCollectionType(string n, string ns, global::Xbim.COBieLiteUK.SystemCollectionType o, bool isNullable, bool needType) {
+        void Write68_SystemCollectionType(string n, string ns, global::Xbim.COBieLiteUK.SystemCollectionType o, bool isNullable, bool needType) {
             if ((object)o == null) {
                 if (isNullable) WriteNullTagLiteral(n, ns);
                 return;
@@ -686,14 +702,14 @@ namespace Microsoft.Xml.Serialization.GeneratedAssembly {
                 global::System.Collections.Generic.List<global::Xbim.COBieLiteUK.SystemType> a = (global::System.Collections.Generic.List<global::Xbim.COBieLiteUK.SystemType>)o.@System;
                 if (a != null) {
                     for (int ia = 0; ia < ((System.Collections.ICollection)a).Count; ia++) {
-                        Write29_SystemType(@"System", @"http://docs.buildingsmartalliance.org/nbims03/cobie/core", ((global::Xbim.COBieLiteUK.SystemType)a[ia]), false, false);
+                        Write67_SystemType(@"System", @"http://docs.buildingsmartalliance.org/nbims03/cobie/core", ((global::Xbim.COBieLiteUK.SystemType)a[ia]), false, false);
                     }
                 }
             }
             WriteEndElement(o);
         }
 
-        void Write29_SystemType(string n, string ns, global::Xbim.COBieLiteUK.SystemType o, bool isNullable, bool needType) {
+        void Write67_SystemType(string n, string ns, global::Xbim.COBieLiteUK.SystemType o, bool isNullable, bool needType) {
             if ((object)o == null) {
                 if (isNullable) WriteNullTagLiteral(n, ns);
                 return;
@@ -714,13 +730,13 @@ namespace Microsoft.Xml.Serialization.GeneratedAssembly {
             WriteElementString(@"SystemName", @"http://docs.buildingsmartalliance.org/nbims03/cobie/core", ((global::System.String)o.@SystemName));
             WriteElementString(@"SystemCategory", @"http://docs.buildingsmartalliance.org/nbims03/cobie/core", ((global::System.String)o.@SystemCategory));
             WriteElementString(@"SystemDescription", @"http://docs.buildingsmartalliance.org/nbims03/cobie/core", ((global::System.String)o.@SystemDescription));
-            Write78_AttributeCollectionType(@"SystemAttributes", @"http://docs.buildingsmartalliance.org/nbims03/cobie/core", ((global::Xbim.COBieLiteUK.AttributeCollectionType)o.@SystemAttributes), false, false);
+            Write77_AttributeCollectionType(@"SystemAttributes", @"http://docs.buildingsmartalliance.org/nbims03/cobie/core", ((global::Xbim.COBieLiteUK.AttributeCollectionType)o.@SystemAttributes), false, false);
             Write28_DocumentCollectionType(@"SystemDocuments", @"http://docs.buildingsmartalliance.org/nbims03/cobie/core", ((global::Xbim.COBieLiteUK.DocumentCollectionType)o.@SystemDocuments), false, false);
             Write26_IssueCollectionType(@"SystemIssues", @"http://docs.buildingsmartalliance.org/nbims03/cobie/core", ((global::Xbim.COBieLiteUK.IssueCollectionType)o.@SystemIssues), false, false);
             WriteEndElement(o);
         }
 
-        void Write59_AssetTypeCollectionType(string n, string ns, global::Xbim.COBieLiteUK.AssetTypeCollectionType o, bool isNullable, bool needType) {
+        void Write56_AssetTypeCollectionType(string n, string ns, global::Xbim.COBieLiteUK.AssetTypeCollectionType o, bool isNullable, bool needType) {
             if ((object)o == null) {
                 if (isNullable) WriteNullTagLiteral(n, ns);
                 return;
@@ -739,14 +755,14 @@ namespace Microsoft.Xml.Serialization.GeneratedAssembly {
                 global::System.Collections.Generic.List<global::Xbim.COBieLiteUK.AssetTypeInfoType> a = (global::System.Collections.Generic.List<global::Xbim.COBieLiteUK.AssetTypeInfoType>)o.@AssetType;
                 if (a != null) {
                     for (int ia = 0; ia < ((System.Collections.ICollection)a).Count; ia++) {
-                        Write58_AssetTypeInfoType(@"AssetType", @"http://docs.buildingsmartalliance.org/nbims03/cobie/core", ((global::Xbim.COBieLiteUK.AssetTypeInfoType)a[ia]), false, false);
+                        Write55_AssetTypeInfoType(@"AssetType", @"http://docs.buildingsmartalliance.org/nbims03/cobie/core", ((global::Xbim.COBieLiteUK.AssetTypeInfoType)a[ia]), false, false);
                     }
                 }
             }
             WriteEndElement(o);
         }
 
-        void Write58_AssetTypeInfoType(string n, string ns, global::Xbim.COBieLiteUK.AssetTypeInfoType o, bool isNullable, bool needType) {
+        void Write55_AssetTypeInfoType(string n, string ns, global::Xbim.COBieLiteUK.AssetTypeInfoType o, bool isNullable, bool needType) {
             if ((object)o == null) {
                 if (isNullable) WriteNullTagLiteral(n, ns);
                 return;
@@ -768,14 +784,14 @@ namespace Microsoft.Xml.Serialization.GeneratedAssembly {
             WriteElementString(@"AssetTypeCategory", @"http://docs.buildingsmartalliance.org/nbims03/cobie/core", ((global::System.String)o.@AssetTypeCategory));
             WriteElementString(@"AssetTypeDescription", @"http://docs.buildingsmartalliance.org/nbims03/cobie/core", ((global::System.String)o.@AssetTypeDescription));
             if (o.@AssetTypeAccountingCategorySpecified) {
-                WriteElementString(@"AssetTypeAccountingCategory", @"http://docs.buildingsmartalliance.org/nbims03/cobie/core", Write36_AssetPortabilitySimpleType(((global::Xbim.COBieLiteUK.AssetPortabilitySimpleType)o.@AssetTypeAccountingCategory)));
+                WriteElementString(@"AssetTypeAccountingCategory", @"http://docs.buildingsmartalliance.org/nbims03/cobie/core", Write32_AssetPortabilitySimpleType(((global::Xbim.COBieLiteUK.AssetPortabilitySimpleType)o.@AssetTypeAccountingCategory)));
             }
             WriteElementString(@"AssetTypeModelNumber", @"http://docs.buildingsmartalliance.org/nbims03/cobie/core", ((global::System.String)o.@AssetTypeModelNumber));
-            Write45_DecimalValueType(@"AssetTypeReplacementCostValue", @"http://docs.buildingsmartalliance.org/nbims03/cobie/core", ((global::Xbim.COBieLiteUK.DecimalValueType)o.@AssetTypeReplacementCostValue), false, false);
-            Write41_IntegerValueType(@"AssetTypeExpectedLifeValue", @"http://docs.buildingsmartalliance.org/nbims03/cobie/core", ((global::Xbim.COBieLiteUK.IntegerValueType)o.@AssetTypeExpectedLifeValue), false, false);
-            Write45_DecimalValueType(@"AssetTypeNominalLength", @"http://docs.buildingsmartalliance.org/nbims03/cobie/core", ((global::Xbim.COBieLiteUK.DecimalValueType)o.@AssetTypeNominalLength), false, false);
-            Write45_DecimalValueType(@"AssetTypeNominalWidth", @"http://docs.buildingsmartalliance.org/nbims03/cobie/core", ((global::Xbim.COBieLiteUK.DecimalValueType)o.@AssetTypeNominalWidth), false, false);
-            Write45_DecimalValueType(@"AssetTypeNominalHeight", @"http://docs.buildingsmartalliance.org/nbims03/cobie/core", ((global::Xbim.COBieLiteUK.DecimalValueType)o.@AssetTypeNominalHeight), false, false);
+            Write41_DecimalValueType(@"AssetTypeReplacementCostValue", @"http://docs.buildingsmartalliance.org/nbims03/cobie/core", ((global::Xbim.COBieLiteUK.DecimalValueType)o.@AssetTypeReplacementCostValue), false, false);
+            Write38_IntegerValueType(@"AssetTypeExpectedLifeValue", @"http://docs.buildingsmartalliance.org/nbims03/cobie/core", ((global::Xbim.COBieLiteUK.IntegerValueType)o.@AssetTypeExpectedLifeValue), false, false);
+            Write41_DecimalValueType(@"AssetTypeNominalLength", @"http://docs.buildingsmartalliance.org/nbims03/cobie/core", ((global::Xbim.COBieLiteUK.DecimalValueType)o.@AssetTypeNominalLength), false, false);
+            Write41_DecimalValueType(@"AssetTypeNominalWidth", @"http://docs.buildingsmartalliance.org/nbims03/cobie/core", ((global::Xbim.COBieLiteUK.DecimalValueType)o.@AssetTypeNominalWidth), false, false);
+            Write41_DecimalValueType(@"AssetTypeNominalHeight", @"http://docs.buildingsmartalliance.org/nbims03/cobie/core", ((global::Xbim.COBieLiteUK.DecimalValueType)o.@AssetTypeNominalHeight), false, false);
             WriteElementString(@"AssetTypeAccessibilityText", @"http://docs.buildingsmartalliance.org/nbims03/cobie/core", ((global::System.String)o.@AssetTypeAccessibilityText));
             WriteElementString(@"AssetTypeCodePerformance", @"http://docs.buildingsmartalliance.org/nbims03/cobie/core", ((global::System.String)o.@AssetTypeCodePerformance));
             WriteElementString(@"AssetTypeColorCode", @"http://docs.buildingsmartalliance.org/nbims03/cobie/core", ((global::System.String)o.@AssetTypeColorCode));
@@ -787,19 +803,19 @@ namespace Microsoft.Xml.Serialization.GeneratedAssembly {
             WriteElementString(@"AssetTypeShapeDescription", @"http://docs.buildingsmartalliance.org/nbims03/cobie/core", ((global::System.String)o.@AssetTypeShapeDescription));
             WriteElementString(@"AssetTypeSizeDescription", @"http://docs.buildingsmartalliance.org/nbims03/cobie/core", ((global::System.String)o.@AssetTypeSizeDescription));
             WriteElementString(@"AssetTypeSustainabilityPerformanceDescription", @"http://docs.buildingsmartalliance.org/nbims03/cobie/core", ((global::System.String)o.@AssetTypeSustainabilityPerformanceDescription));
-            Write49_AssetCollectionType(@"Assets", @"http://docs.buildingsmartalliance.org/nbims03/cobie/core", ((global::Xbim.COBieLiteUK.AssetCollectionType)o.@Assets), false, false);
-            Write82_Item(@"AssetTypeManufacturerContactAssignments", @"http://docs.buildingsmartalliance.org/nbims03/cobie/core", ((global::Xbim.COBieLiteUK.ContactAssignmentCollectionType)o.@AssetTypeManufacturerContactAssignments), false, false);
-            Write51_WarrantyCollectionType(@"Warranties", @"http://docs.buildingsmartalliance.org/nbims03/cobie/core", ((global::Xbim.COBieLiteUK.WarrantyCollectionType)o.@Warranties), false, false);
-            Write31_SpareCollectionType(@"Spares", @"http://docs.buildingsmartalliance.org/nbims03/cobie/core", ((global::Xbim.COBieLiteUK.SpareCollectionType)o.@Spares), false, false);
-            Write57_JobCollectionType(@"Jobs", @"http://docs.buildingsmartalliance.org/nbims03/cobie/core", ((global::Xbim.COBieLiteUK.JobCollectionType)o.@Jobs), false, false);
-            Write80_Item(@"AssemblyAssignments", @"http://docs.buildingsmartalliance.org/nbims03/cobie/core", ((global::Xbim.COBieLiteUK.AssemblyAssignmentCollectionType)o.@AssemblyAssignments), false, false);
-            Write78_AttributeCollectionType(@"AssetTypeAttributes", @"http://docs.buildingsmartalliance.org/nbims03/cobie/core", ((global::Xbim.COBieLiteUK.AttributeCollectionType)o.@AssetTypeAttributes), false, false);
+            Write45_AssetCollectionType(@"Assets", @"http://docs.buildingsmartalliance.org/nbims03/cobie/core", ((global::Xbim.COBieLiteUK.AssetCollectionType)o.@Assets), false, false);
+            Write81_Item(@"AssetTypeManufacturerContactAssignments", @"http://docs.buildingsmartalliance.org/nbims03/cobie/core", ((global::Xbim.COBieLiteUK.ContactAssignmentCollectionType)o.@AssetTypeManufacturerContactAssignments), false, false);
+            Write47_WarrantyCollectionType(@"Warranties", @"http://docs.buildingsmartalliance.org/nbims03/cobie/core", ((global::Xbim.COBieLiteUK.WarrantyCollectionType)o.@Warranties), false, false);
+            Write48_SpareCollectionType(@"Spares", @"http://docs.buildingsmartalliance.org/nbims03/cobie/core", ((global::Xbim.COBieLiteUK.SpareCollectionType)o.@Spares), false, false);
+            Write54_JobCollectionType(@"Jobs", @"http://docs.buildingsmartalliance.org/nbims03/cobie/core", ((global::Xbim.COBieLiteUK.JobCollectionType)o.@Jobs), false, false);
+            Write79_Item(@"AssemblyAssignments", @"http://docs.buildingsmartalliance.org/nbims03/cobie/core", ((global::Xbim.COBieLiteUK.AssemblyAssignmentCollectionType)o.@AssemblyAssignments), false, false);
+            Write77_AttributeCollectionType(@"AssetTypeAttributes", @"http://docs.buildingsmartalliance.org/nbims03/cobie/core", ((global::Xbim.COBieLiteUK.AttributeCollectionType)o.@AssetTypeAttributes), false, false);
             Write28_DocumentCollectionType(@"AssetTypeDocuments", @"http://docs.buildingsmartalliance.org/nbims03/cobie/core", ((global::Xbim.COBieLiteUK.DocumentCollectionType)o.@AssetTypeDocuments), false, false);
             Write26_IssueCollectionType(@"AssetTypeIssues", @"http://docs.buildingsmartalliance.org/nbims03/cobie/core", ((global::Xbim.COBieLiteUK.IssueCollectionType)o.@AssetTypeIssues), false, false);
             WriteEndElement(o);
         }
 
-        void Write80_Item(string n, string ns, global::Xbim.COBieLiteUK.AssemblyAssignmentCollectionType o, bool isNullable, bool needType) {
+        void Write79_Item(string n, string ns, global::Xbim.COBieLiteUK.AssemblyAssignmentCollectionType o, bool isNullable, bool needType) {
             if ((object)o == null) {
                 if (isNullable) WriteNullTagLiteral(n, ns);
                 return;
@@ -818,14 +834,14 @@ namespace Microsoft.Xml.Serialization.GeneratedAssembly {
                 global::System.Collections.Generic.List<global::Xbim.COBieLiteUK.AssemblyType> a = (global::System.Collections.Generic.List<global::Xbim.COBieLiteUK.AssemblyType>)o.@AssemblyAssignment;
                 if (a != null) {
                     for (int ia = 0; ia < ((System.Collections.ICollection)a).Count; ia++) {
-                        Write79_AssemblyType(@"AssemblyAssignment", @"http://docs.buildingsmartalliance.org/nbims03/cobie/core", ((global::Xbim.COBieLiteUK.AssemblyType)a[ia]), false, false);
+                        Write78_AssemblyType(@"AssemblyAssignment", @"http://docs.buildingsmartalliance.org/nbims03/cobie/core", ((global::Xbim.COBieLiteUK.AssemblyType)a[ia]), false, false);
                     }
                 }
             }
             WriteEndElement(o);
         }
 
-        void Write79_AssemblyType(string n, string ns, global::Xbim.COBieLiteUK.AssemblyType o, bool isNullable, bool needType) {
+        void Write78_AssemblyType(string n, string ns, global::Xbim.COBieLiteUK.AssemblyType o, bool isNullable, bool needType) {
             if ((object)o == null) {
                 if (isNullable) WriteNullTagLiteral(n, ns);
                 return;
@@ -847,13 +863,13 @@ namespace Microsoft.Xml.Serialization.GeneratedAssembly {
             WriteElementString(@"AssemblyParentName", @"http://docs.buildingsmartalliance.org/nbims03/cobie/core", ((global::System.String)o.@AssemblyParentName));
             WriteElementString(@"AssemblyCategory", @"http://docs.buildingsmartalliance.org/nbims03/cobie/core", ((global::System.String)o.@AssemblyCategory));
             WriteElementString(@"AssemblyDescription", @"http://docs.buildingsmartalliance.org/nbims03/cobie/core", ((global::System.String)o.@AssemblyDescription));
-            Write78_AttributeCollectionType(@"AssemblyAttributes", @"http://docs.buildingsmartalliance.org/nbims03/cobie/core", ((global::Xbim.COBieLiteUK.AttributeCollectionType)o.@AssemblyAttributes), false, false);
+            Write77_AttributeCollectionType(@"AssemblyAttributes", @"http://docs.buildingsmartalliance.org/nbims03/cobie/core", ((global::Xbim.COBieLiteUK.AttributeCollectionType)o.@AssemblyAttributes), false, false);
             Write28_DocumentCollectionType(@"AssemblyDocuments", @"http://docs.buildingsmartalliance.org/nbims03/cobie/core", ((global::Xbim.COBieLiteUK.DocumentCollectionType)o.@AssemblyDocuments), false, false);
             Write26_IssueCollectionType(@"AssemblyIssues", @"http://docs.buildingsmartalliance.org/nbims03/cobie/core", ((global::Xbim.COBieLiteUK.IssueCollectionType)o.@AssemblyIssues), false, false);
             WriteEndElement(o);
         }
 
-        void Write57_JobCollectionType(string n, string ns, global::Xbim.COBieLiteUK.JobCollectionType o, bool isNullable, bool needType) {
+        void Write54_JobCollectionType(string n, string ns, global::Xbim.COBieLiteUK.JobCollectionType o, bool isNullable, bool needType) {
             if ((object)o == null) {
                 if (isNullable) WriteNullTagLiteral(n, ns);
                 return;
@@ -872,14 +888,14 @@ namespace Microsoft.Xml.Serialization.GeneratedAssembly {
                 global::System.Collections.Generic.List<global::Xbim.COBieLiteUK.JobType> a = (global::System.Collections.Generic.List<global::Xbim.COBieLiteUK.JobType>)o.@Job;
                 if (a != null) {
                     for (int ia = 0; ia < ((System.Collections.ICollection)a).Count; ia++) {
-                        Write56_JobType(@"Job", @"http://docs.buildingsmartalliance.org/nbims03/cobie/core", ((global::Xbim.COBieLiteUK.JobType)a[ia]), false, false);
+                        Write53_JobType(@"Job", @"http://docs.buildingsmartalliance.org/nbims03/cobie/core", ((global::Xbim.COBieLiteUK.JobType)a[ia]), false, false);
                     }
                 }
             }
             WriteEndElement(o);
         }
 
-        void Write56_JobType(string n, string ns, global::Xbim.COBieLiteUK.JobType o, bool isNullable, bool needType) {
+        void Write53_JobType(string n, string ns, global::Xbim.COBieLiteUK.JobType o, bool isNullable, bool needType) {
             if ((object)o == null) {
                 if (isNullable) WriteNullTagLiteral(n, ns);
                 return;
@@ -902,21 +918,21 @@ namespace Microsoft.Xml.Serialization.GeneratedAssembly {
             WriteElementString(@"JobCategory", @"http://docs.buildingsmartalliance.org/nbims03/cobie/core", ((global::System.String)o.@JobCategory));
             WriteElementString(@"JobStatus", @"http://docs.buildingsmartalliance.org/nbims03/cobie/core", ((global::System.String)o.@JobStatus));
             WriteElementString(@"JobDescription", @"http://docs.buildingsmartalliance.org/nbims03/cobie/core", ((global::System.String)o.@JobDescription));
-            Write41_IntegerValueType(@"JobDuration", @"http://docs.buildingsmartalliance.org/nbims03/cobie/core", ((global::Xbim.COBieLiteUK.IntegerValueType)o.@JobDuration), false, false);
+            Write38_IntegerValueType(@"JobDuration", @"http://docs.buildingsmartalliance.org/nbims03/cobie/core", ((global::Xbim.COBieLiteUK.IntegerValueType)o.@JobDuration), false, false);
             if (o.@JobStartDateSpecified) {
                 WriteElementStringRaw(@"JobStartDate", @"http://docs.buildingsmartalliance.org/nbims03/cobie/core", FromDate(((global::System.DateTime)o.@JobStartDate)));
             }
             WriteElementString(@"JobStartConditionDescription", @"http://docs.buildingsmartalliance.org/nbims03/cobie/core", ((global::System.String)o.@JobStartConditionDescription));
-            Write45_DecimalValueType(@"JobFrequencyValue", @"http://docs.buildingsmartalliance.org/nbims03/cobie/core", ((global::Xbim.COBieLiteUK.DecimalValueType)o.@JobFrequencyValue), false, false);
+            Write41_DecimalValueType(@"JobFrequencyValue", @"http://docs.buildingsmartalliance.org/nbims03/cobie/core", ((global::Xbim.COBieLiteUK.DecimalValueType)o.@JobFrequencyValue), false, false);
             WriteElementString(@"JobPriorTaskID", @"http://docs.buildingsmartalliance.org/nbims03/cobie/core", ((global::System.String)o.@JobPriorTaskID));
-            Write55_ResourceCollectionType(@"Resources", @"http://docs.buildingsmartalliance.org/nbims03/cobie/core", ((global::Xbim.COBieLiteUK.ResourceCollectionType)o.@Resources), false, false);
-            Write78_AttributeCollectionType(@"JobAttributes", @"http://docs.buildingsmartalliance.org/nbims03/cobie/core", ((global::Xbim.COBieLiteUK.AttributeCollectionType)o.@JobAttributes), false, false);
+            Write52_ResourceCollectionType(@"Resources", @"http://docs.buildingsmartalliance.org/nbims03/cobie/core", ((global::Xbim.COBieLiteUK.ResourceCollectionType)o.@Resources), false, false);
+            Write77_AttributeCollectionType(@"JobAttributes", @"http://docs.buildingsmartalliance.org/nbims03/cobie/core", ((global::Xbim.COBieLiteUK.AttributeCollectionType)o.@JobAttributes), false, false);
             Write28_DocumentCollectionType(@"JobDocuments", @"http://docs.buildingsmartalliance.org/nbims03/cobie/core", ((global::Xbim.COBieLiteUK.DocumentCollectionType)o.@JobDocuments), false, false);
             Write26_IssueCollectionType(@"JobIssues", @"http://docs.buildingsmartalliance.org/nbims03/cobie/core", ((global::Xbim.COBieLiteUK.IssueCollectionType)o.@JobIssues), false, false);
             WriteEndElement(o);
         }
 
-        void Write55_ResourceCollectionType(string n, string ns, global::Xbim.COBieLiteUK.ResourceCollectionType o, bool isNullable, bool needType) {
+        void Write52_ResourceCollectionType(string n, string ns, global::Xbim.COBieLiteUK.ResourceCollectionType o, bool isNullable, bool needType) {
             if ((object)o == null) {
                 if (isNullable) WriteNullTagLiteral(n, ns);
                 return;
@@ -935,14 +951,14 @@ namespace Microsoft.Xml.Serialization.GeneratedAssembly {
                 global::System.Collections.Generic.List<global::Xbim.COBieLiteUK.ResourceType> a = (global::System.Collections.Generic.List<global::Xbim.COBieLiteUK.ResourceType>)o.@Resource;
                 if (a != null) {
                     for (int ia = 0; ia < ((System.Collections.ICollection)a).Count; ia++) {
-                        Write54_ResourceType(@"Resource", @"http://docs.buildingsmartalliance.org/nbims03/cobie/core", ((global::Xbim.COBieLiteUK.ResourceType)a[ia]), false, false);
+                        Write51_ResourceType(@"Resource", @"http://docs.buildingsmartalliance.org/nbims03/cobie/core", ((global::Xbim.COBieLiteUK.ResourceType)a[ia]), false, false);
                     }
                 }
             }
             WriteEndElement(o);
         }
 
-        void Write54_ResourceType(string n, string ns, global::Xbim.COBieLiteUK.ResourceType o, bool isNullable, bool needType) {
+        void Write51_ResourceType(string n, string ns, global::Xbim.COBieLiteUK.ResourceType o, bool isNullable, bool needType) {
             if ((object)o == null) {
                 if (isNullable) WriteNullTagLiteral(n, ns);
                 return;
@@ -963,13 +979,13 @@ namespace Microsoft.Xml.Serialization.GeneratedAssembly {
             WriteElementString(@"ResourceName", @"http://docs.buildingsmartalliance.org/nbims03/cobie/core", ((global::System.String)o.@ResourceName));
             WriteElementString(@"ResourceCategory", @"http://docs.buildingsmartalliance.org/nbims03/cobie/core", ((global::System.String)o.@ResourceCategory));
             WriteElementString(@"ResourceDescription", @"http://docs.buildingsmartalliance.org/nbims03/cobie/core", ((global::System.String)o.@ResourceDescription));
-            Write78_AttributeCollectionType(@"ResourceAttributes", @"http://docs.buildingsmartalliance.org/nbims03/cobie/core", ((global::Xbim.COBieLiteUK.AttributeCollectionType)o.@ResourceAttributes), false, false);
+            Write77_AttributeCollectionType(@"ResourceAttributes", @"http://docs.buildingsmartalliance.org/nbims03/cobie/core", ((global::Xbim.COBieLiteUK.AttributeCollectionType)o.@ResourceAttributes), false, false);
             Write28_DocumentCollectionType(@"ResourceDocuments", @"http://docs.buildingsmartalliance.org/nbims03/cobie/core", ((global::Xbim.COBieLiteUK.DocumentCollectionType)o.@ResourceDocuments), false, false);
             Write26_IssueCollectionType(@"ResourceIssues", @"http://docs.buildingsmartalliance.org/nbims03/cobie/core", ((global::Xbim.COBieLiteUK.IssueCollectionType)o.@ResourceIssues), false, false);
             WriteEndElement(o);
         }
 
-        void Write45_DecimalValueType(string n, string ns, global::Xbim.COBieLiteUK.DecimalValueType o, bool isNullable, bool needType) {
+        void Write41_DecimalValueType(string n, string ns, global::Xbim.COBieLiteUK.DecimalValueType o, bool isNullable, bool needType) {
             if ((object)o == null) {
                 if (isNullable) WriteNullTagLiteral(n, ns);
                 return;
@@ -979,7 +995,7 @@ namespace Microsoft.Xml.Serialization.GeneratedAssembly {
                 if (t == typeof(global::Xbim.COBieLiteUK.DecimalValueType)) {
                 }
                 else if (t == typeof(global::Xbim.COBieLiteUK.AttributeDecimalValueType)) {
-                    Write43_AttributeDecimalValueType(n, ns,(global::Xbim.COBieLiteUK.AttributeDecimalValueType)o, isNullable, true);
+                    Write36_AttributeDecimalValueType(n, ns,(global::Xbim.COBieLiteUK.AttributeDecimalValueType)o, isNullable, true);
                     return;
                 }
                 else {
@@ -995,7 +1011,7 @@ namespace Microsoft.Xml.Serialization.GeneratedAssembly {
             WriteEndElement(o);
         }
 
-        void Write41_IntegerValueType(string n, string ns, global::Xbim.COBieLiteUK.IntegerValueType o, bool isNullable, bool needType) {
+        void Write38_IntegerValueType(string n, string ns, global::Xbim.COBieLiteUK.IntegerValueType o, bool isNullable, bool needType) {
             if ((object)o == null) {
                 if (isNullable) WriteNullTagLiteral(n, ns);
                 return;
@@ -1005,7 +1021,7 @@ namespace Microsoft.Xml.Serialization.GeneratedAssembly {
                 if (t == typeof(global::Xbim.COBieLiteUK.IntegerValueType)) {
                 }
                 else if (t == typeof(global::Xbim.COBieLiteUK.AttributeIntegerValueType)) {
-                    Write40_AttributeIntegerValueType(n, ns,(global::Xbim.COBieLiteUK.AttributeIntegerValueType)o, isNullable, true);
+                    Write39_AttributeIntegerValueType(n, ns,(global::Xbim.COBieLiteUK.AttributeIntegerValueType)o, isNullable, true);
                     return;
                 }
                 else {
@@ -1015,11 +1031,16 @@ namespace Microsoft.Xml.Serialization.GeneratedAssembly {
             WriteStartElement(n, ns, o, false, null);
             if (needType) WriteXsiType(@"IntegerValueType", @"http://docs.buildingsmartalliance.org/nbims03/cobie/core");
             WriteElementString(@"UnitName", @"http://docs.buildingsmartalliance.org/nbims03/cobie/core", ((global::System.String)o.@UnitName));
-            WriteElementStringRaw(@"IntegerValue", @"http://docs.buildingsmartalliance.org/nbims03/cobie/core", System.Xml.XmlConvert.ToString((global::System.Int32)((global::System.Int32)o.@IntegerValue)));
+            if (o.@IntegerValue != null) {
+                WriteNullableStringLiteralRaw(@"IntegerValue", @"http://docs.buildingsmartalliance.org/nbims03/cobie/core", System.Xml.XmlConvert.ToString((global::System.Int32)((global::System.Int32)o.@IntegerValue)));
+            }
+            else {
+                WriteNullTagLiteral(@"IntegerValue", @"http://docs.buildingsmartalliance.org/nbims03/cobie/core");
+            }
             WriteEndElement(o);
         }
 
-        void Write31_SpareCollectionType(string n, string ns, global::Xbim.COBieLiteUK.SpareCollectionType o, bool isNullable, bool needType) {
+        void Write48_SpareCollectionType(string n, string ns, global::Xbim.COBieLiteUK.SpareCollectionType o, bool isNullable, bool needType) {
             if ((object)o == null) {
                 if (isNullable) WriteNullTagLiteral(n, ns);
                 return;
@@ -1038,14 +1059,14 @@ namespace Microsoft.Xml.Serialization.GeneratedAssembly {
                 global::System.Collections.Generic.List<global::Xbim.COBieLiteUK.SpareType> a = (global::System.Collections.Generic.List<global::Xbim.COBieLiteUK.SpareType>)o.@Spare;
                 if (a != null) {
                     for (int ia = 0; ia < ((System.Collections.ICollection)a).Count; ia++) {
-                        Write83_SpareType(@"Spare", @"http://docs.buildingsmartalliance.org/nbims03/cobie/core", ((global::Xbim.COBieLiteUK.SpareType)a[ia]), false, false);
+                        Write82_SpareType(@"Spare", @"http://docs.buildingsmartalliance.org/nbims03/cobie/core", ((global::Xbim.COBieLiteUK.SpareType)a[ia]), false, false);
                     }
                 }
             }
             WriteEndElement(o);
         }
 
-        void Write83_SpareType(string n, string ns, global::Xbim.COBieLiteUK.SpareType o, bool isNullable, bool needType) {
+        void Write82_SpareType(string n, string ns, global::Xbim.COBieLiteUK.SpareType o, bool isNullable, bool needType) {
             if ((object)o == null) {
                 if (isNullable) WriteNullTagLiteral(n, ns);
                 return;
@@ -1068,14 +1089,14 @@ namespace Microsoft.Xml.Serialization.GeneratedAssembly {
             WriteElementString(@"SpareDescription", @"http://docs.buildingsmartalliance.org/nbims03/cobie/core", ((global::System.String)o.@SpareDescription));
             WriteElementString(@"SpareSetNumber", @"http://docs.buildingsmartalliance.org/nbims03/cobie/core", ((global::System.String)o.@SpareSetNumber));
             WriteElementString(@"SparePartNumber", @"http://docs.buildingsmartalliance.org/nbims03/cobie/core", ((global::System.String)o.@SparePartNumber));
-            Write82_Item(@"SpareSupplierContactAssignments", @"http://docs.buildingsmartalliance.org/nbims03/cobie/core", ((global::Xbim.COBieLiteUK.ContactAssignmentCollectionType)o.@SpareSupplierContactAssignments), false, false);
-            Write78_AttributeCollectionType(@"SpareAttributes", @"http://docs.buildingsmartalliance.org/nbims03/cobie/core", ((global::Xbim.COBieLiteUK.AttributeCollectionType)o.@SpareAttributes), false, false);
+            Write81_Item(@"SpareSupplierContactAssignments", @"http://docs.buildingsmartalliance.org/nbims03/cobie/core", ((global::Xbim.COBieLiteUK.ContactAssignmentCollectionType)o.@SpareSupplierContactAssignments), false, false);
+            Write77_AttributeCollectionType(@"SpareAttributes", @"http://docs.buildingsmartalliance.org/nbims03/cobie/core", ((global::Xbim.COBieLiteUK.AttributeCollectionType)o.@SpareAttributes), false, false);
             Write28_DocumentCollectionType(@"SpareDocuments", @"http://docs.buildingsmartalliance.org/nbims03/cobie/core", ((global::Xbim.COBieLiteUK.DocumentCollectionType)o.@SpareDocuments), false, false);
             Write26_IssueCollectionType(@"SpareIssues", @"http://docs.buildingsmartalliance.org/nbims03/cobie/core", ((global::Xbim.COBieLiteUK.IssueCollectionType)o.@SpareIssues), false, false);
             WriteEndElement(o);
         }
 
-        void Write82_Item(string n, string ns, global::Xbim.COBieLiteUK.ContactAssignmentCollectionType o, bool isNullable, bool needType) {
+        void Write81_Item(string n, string ns, global::Xbim.COBieLiteUK.ContactAssignmentCollectionType o, bool isNullable, bool needType) {
             if ((object)o == null) {
                 if (isNullable) WriteNullTagLiteral(n, ns);
                 return;
@@ -1094,14 +1115,14 @@ namespace Microsoft.Xml.Serialization.GeneratedAssembly {
                 global::System.Collections.Generic.List<global::Xbim.COBieLiteUK.ContactKeyType> a = (global::System.Collections.Generic.List<global::Xbim.COBieLiteUK.ContactKeyType>)o.@ContactAssignment;
                 if (a != null) {
                     for (int ia = 0; ia < ((System.Collections.ICollection)a).Count; ia++) {
-                        Write2_ContactKeyType(@"ContactAssignment", @"http://docs.buildingsmartalliance.org/nbims03/cobie/core", ((global::Xbim.COBieLiteUK.ContactKeyType)a[ia]), false, false);
+                        Write13_ContactKeyType(@"ContactAssignment", @"http://docs.buildingsmartalliance.org/nbims03/cobie/core", ((global::Xbim.COBieLiteUK.ContactKeyType)a[ia]), false, false);
                     }
                 }
             }
             WriteEndElement(o);
         }
 
-        void Write51_WarrantyCollectionType(string n, string ns, global::Xbim.COBieLiteUK.WarrantyCollectionType o, bool isNullable, bool needType) {
+        void Write47_WarrantyCollectionType(string n, string ns, global::Xbim.COBieLiteUK.WarrantyCollectionType o, bool isNullable, bool needType) {
             if ((object)o == null) {
                 if (isNullable) WriteNullTagLiteral(n, ns);
                 return;
@@ -1120,14 +1141,14 @@ namespace Microsoft.Xml.Serialization.GeneratedAssembly {
                 global::System.Collections.Generic.List<global::Xbim.COBieLiteUK.WarrantyType> a = (global::System.Collections.Generic.List<global::Xbim.COBieLiteUK.WarrantyType>)o.@Warranty;
                 if (a != null) {
                     for (int ia = 0; ia < ((System.Collections.ICollection)a).Count; ia++) {
-                        Write50_WarrantyType(@"Warranty", @"http://docs.buildingsmartalliance.org/nbims03/cobie/core", ((global::Xbim.COBieLiteUK.WarrantyType)a[ia]), false, false);
+                        Write46_WarrantyType(@"Warranty", @"http://docs.buildingsmartalliance.org/nbims03/cobie/core", ((global::Xbim.COBieLiteUK.WarrantyType)a[ia]), false, false);
                     }
                 }
             }
             WriteEndElement(o);
         }
 
-        void Write50_WarrantyType(string n, string ns, global::Xbim.COBieLiteUK.WarrantyType o, bool isNullable, bool needType) {
+        void Write46_WarrantyType(string n, string ns, global::Xbim.COBieLiteUK.WarrantyType o, bool isNullable, bool needType) {
             if ((object)o == null) {
                 if (isNullable) WriteNullTagLiteral(n, ns);
                 return;
@@ -1147,15 +1168,15 @@ namespace Microsoft.Xml.Serialization.GeneratedAssembly {
             WriteAttribute(@"externalSystemName", @"http://docs.buildingsmartalliance.org/nbims03/cobie/core", ((global::System.String)o.@externalSystemName));
             WriteElementString(@"WarrantyName", @"http://docs.buildingsmartalliance.org/nbims03/cobie/core", ((global::System.String)o.@WarrantyName));
             WriteElementString(@"WarrantyCategory", @"http://docs.buildingsmartalliance.org/nbims03/cobie/core", ((global::System.String)o.@WarrantyCategory));
-            Write41_IntegerValueType(@"WarrantyDuration", @"http://docs.buildingsmartalliance.org/nbims03/cobie/core", ((global::Xbim.COBieLiteUK.IntegerValueType)o.@WarrantyDuration), false, false);
-            Write82_Item(@"WarrantyGaurantorContactAssignments", @"http://docs.buildingsmartalliance.org/nbims03/cobie/core", ((global::Xbim.COBieLiteUK.ContactAssignmentCollectionType)o.@WarrantyGaurantorContactAssignments), false, false);
-            Write78_AttributeCollectionType(@"WarrantyAttributes", @"http://docs.buildingsmartalliance.org/nbims03/cobie/core", ((global::Xbim.COBieLiteUK.AttributeCollectionType)o.@WarrantyAttributes), false, false);
+            Write38_IntegerValueType(@"WarrantyDuration", @"http://docs.buildingsmartalliance.org/nbims03/cobie/core", ((global::Xbim.COBieLiteUK.IntegerValueType)o.@WarrantyDuration), false, false);
+            Write81_Item(@"WarrantyGaurantorContactAssignments", @"http://docs.buildingsmartalliance.org/nbims03/cobie/core", ((global::Xbim.COBieLiteUK.ContactAssignmentCollectionType)o.@WarrantyGaurantorContactAssignments), false, false);
+            Write77_AttributeCollectionType(@"WarrantyAttributes", @"http://docs.buildingsmartalliance.org/nbims03/cobie/core", ((global::Xbim.COBieLiteUK.AttributeCollectionType)o.@WarrantyAttributes), false, false);
             Write28_DocumentCollectionType(@"WarrantyDocuments", @"http://docs.buildingsmartalliance.org/nbims03/cobie/core", ((global::Xbim.COBieLiteUK.DocumentCollectionType)o.@WarrantyDocuments), false, false);
             Write26_IssueCollectionType(@"WarrantyIssues", @"http://docs.buildingsmartalliance.org/nbims03/cobie/core", ((global::Xbim.COBieLiteUK.IssueCollectionType)o.@WarrantyIssues), false, false);
             WriteEndElement(o);
         }
 
-        void Write49_AssetCollectionType(string n, string ns, global::Xbim.COBieLiteUK.AssetCollectionType o, bool isNullable, bool needType) {
+        void Write45_AssetCollectionType(string n, string ns, global::Xbim.COBieLiteUK.AssetCollectionType o, bool isNullable, bool needType) {
             if ((object)o == null) {
                 if (isNullable) WriteNullTagLiteral(n, ns);
                 return;
@@ -1174,14 +1195,14 @@ namespace Microsoft.Xml.Serialization.GeneratedAssembly {
                 global::System.Collections.Generic.List<global::Xbim.COBieLiteUK.AssetInfoType> a = (global::System.Collections.Generic.List<global::Xbim.COBieLiteUK.AssetInfoType>)o.@Asset;
                 if (a != null) {
                     for (int ia = 0; ia < ((System.Collections.ICollection)a).Count; ia++) {
-                        Write48_AssetInfoType(@"Asset", @"http://docs.buildingsmartalliance.org/nbims03/cobie/core", ((global::Xbim.COBieLiteUK.AssetInfoType)a[ia]), false, false);
+                        Write44_AssetInfoType(@"Asset", @"http://docs.buildingsmartalliance.org/nbims03/cobie/core", ((global::Xbim.COBieLiteUK.AssetInfoType)a[ia]), false, false);
                     }
                 }
             }
             WriteEndElement(o);
         }
 
-        void Write48_AssetInfoType(string n, string ns, global::Xbim.COBieLiteUK.AssetInfoType o, bool isNullable, bool needType) {
+        void Write44_AssetInfoType(string n, string ns, global::Xbim.COBieLiteUK.AssetInfoType o, bool isNullable, bool needType) {
             if ((object)o == null) {
                 if (isNullable) WriteNullTagLiteral(n, ns);
                 return;
@@ -1200,7 +1221,7 @@ namespace Microsoft.Xml.Serialization.GeneratedAssembly {
             WriteAttribute(@"externalID", @"http://docs.buildingsmartalliance.org/nbims03/cobie/core", ((global::System.String)o.@externalID));
             WriteAttribute(@"externalSystemName", @"http://docs.buildingsmartalliance.org/nbims03/cobie/core", ((global::System.String)o.@externalSystemName));
             WriteElementString(@"AssetName", @"http://docs.buildingsmartalliance.org/nbims03/cobie/core", ((global::System.String)o.@AssetName));
-            Write16_SpaceAssignmentCollectionType(@"AssetSpaceAssignments", @"http://docs.buildingsmartalliance.org/nbims03/cobie/core", ((global::Xbim.COBieLiteUK.SpaceAssignmentCollectionType)o.@AssetSpaceAssignments), false, false);
+            Write15_SpaceAssignmentCollectionType(@"AssetSpaceAssignments", @"http://docs.buildingsmartalliance.org/nbims03/cobie/core", ((global::Xbim.COBieLiteUK.SpaceAssignmentCollectionType)o.@AssetSpaceAssignments), false, false);
             WriteElementString(@"AssetDescription", @"http://docs.buildingsmartalliance.org/nbims03/cobie/core", ((global::System.String)o.@AssetDescription));
             WriteElementString(@"AssetSerialNumber", @"http://docs.buildingsmartalliance.org/nbims03/cobie/core", ((global::System.String)o.@AssetSerialNumber));
             if (o.@AssetInstallationDateSpecified) {
@@ -1215,15 +1236,15 @@ namespace Microsoft.Xml.Serialization.GeneratedAssembly {
             WriteElementString(@"AssetBarCode", @"http://docs.buildingsmartalliance.org/nbims03/cobie/core", ((global::System.String)o.@AssetBarCode));
             WriteElementString(@"AssetIdentifier", @"http://docs.buildingsmartalliance.org/nbims03/cobie/core", ((global::System.String)o.@AssetIdentifier));
             WriteElementString(@"AssetLocationDescription", @"http://docs.buildingsmartalliance.org/nbims03/cobie/core", ((global::System.String)o.@AssetLocationDescription));
-            Write47_SystemAssignmentCollectionType(@"AssetSystemAssignments", @"http://docs.buildingsmartalliance.org/nbims03/cobie/core", ((global::Xbim.COBieLiteUK.SystemAssignmentCollectionType)o.@AssetSystemAssignments), false, false);
-            Write80_Item(@"AssemblyAssignments", @"http://docs.buildingsmartalliance.org/nbims03/cobie/core", ((global::Xbim.COBieLiteUK.AssemblyAssignmentCollectionType)o.@AssemblyAssignments), false, false);
-            Write78_AttributeCollectionType(@"AssetAttributes", @"http://docs.buildingsmartalliance.org/nbims03/cobie/core", ((global::Xbim.COBieLiteUK.AttributeCollectionType)o.@AssetAttributes), false, false);
+            Write43_SystemAssignmentCollectionType(@"AssetSystemAssignments", @"http://docs.buildingsmartalliance.org/nbims03/cobie/core", ((global::Xbim.COBieLiteUK.SystemAssignmentCollectionType)o.@AssetSystemAssignments), false, false);
+            Write79_Item(@"AssemblyAssignments", @"http://docs.buildingsmartalliance.org/nbims03/cobie/core", ((global::Xbim.COBieLiteUK.AssemblyAssignmentCollectionType)o.@AssemblyAssignments), false, false);
+            Write77_AttributeCollectionType(@"AssetAttributes", @"http://docs.buildingsmartalliance.org/nbims03/cobie/core", ((global::Xbim.COBieLiteUK.AttributeCollectionType)o.@AssetAttributes), false, false);
             Write28_DocumentCollectionType(@"AssetDocuments", @"http://docs.buildingsmartalliance.org/nbims03/cobie/core", ((global::Xbim.COBieLiteUK.DocumentCollectionType)o.@AssetDocuments), false, false);
             Write26_IssueCollectionType(@"AssetIssues", @"http://docs.buildingsmartalliance.org/nbims03/cobie/core", ((global::Xbim.COBieLiteUK.IssueCollectionType)o.@AssetIssues), false, false);
             WriteEndElement(o);
         }
 
-        void Write47_SystemAssignmentCollectionType(string n, string ns, global::Xbim.COBieLiteUK.SystemAssignmentCollectionType o, bool isNullable, bool needType) {
+        void Write43_SystemAssignmentCollectionType(string n, string ns, global::Xbim.COBieLiteUK.SystemAssignmentCollectionType o, bool isNullable, bool needType) {
             if ((object)o == null) {
                 if (isNullable) WriteNullTagLiteral(n, ns);
                 return;
@@ -1242,14 +1263,14 @@ namespace Microsoft.Xml.Serialization.GeneratedAssembly {
                 global::System.Collections.Generic.List<global::Xbim.COBieLiteUK.SystemKeyType> a = (global::System.Collections.Generic.List<global::Xbim.COBieLiteUK.SystemKeyType>)o.@SystemAssignment;
                 if (a != null) {
                     for (int ia = 0; ia < ((System.Collections.ICollection)a).Count; ia++) {
-                        Write9_SystemKeyType(@"SystemAssignment", @"http://docs.buildingsmartalliance.org/nbims03/cobie/core", ((global::Xbim.COBieLiteUK.SystemKeyType)a[ia]), false, false);
+                        Write7_SystemKeyType(@"SystemAssignment", @"http://docs.buildingsmartalliance.org/nbims03/cobie/core", ((global::Xbim.COBieLiteUK.SystemKeyType)a[ia]), false, false);
                     }
                 }
             }
             WriteEndElement(o);
         }
 
-        void Write9_SystemKeyType(string n, string ns, global::Xbim.COBieLiteUK.SystemKeyType o, bool isNullable, bool needType) {
+        void Write7_SystemKeyType(string n, string ns, global::Xbim.COBieLiteUK.SystemKeyType o, bool isNullable, bool needType) {
             if ((object)o == null) {
                 if (isNullable) WriteNullTagLiteral(n, ns);
                 return;
@@ -1270,7 +1291,7 @@ namespace Microsoft.Xml.Serialization.GeneratedAssembly {
             WriteEndElement(o);
         }
 
-        void Write16_SpaceAssignmentCollectionType(string n, string ns, global::Xbim.COBieLiteUK.SpaceAssignmentCollectionType o, bool isNullable, bool needType) {
+        void Write15_SpaceAssignmentCollectionType(string n, string ns, global::Xbim.COBieLiteUK.SpaceAssignmentCollectionType o, bool isNullable, bool needType) {
             if ((object)o == null) {
                 if (isNullable) WriteNullTagLiteral(n, ns);
                 return;
@@ -1289,14 +1310,14 @@ namespace Microsoft.Xml.Serialization.GeneratedAssembly {
                 global::System.Collections.Generic.List<global::Xbim.COBieLiteUK.SpaceKeyType> a = (global::System.Collections.Generic.List<global::Xbim.COBieLiteUK.SpaceKeyType>)o.@SpaceAssignment;
                 if (a != null) {
                     for (int ia = 0; ia < ((System.Collections.ICollection)a).Count; ia++) {
-                        Write12_SpaceKeyType(@"SpaceAssignment", @"http://docs.buildingsmartalliance.org/nbims03/cobie/core", ((global::Xbim.COBieLiteUK.SpaceKeyType)a[ia]), false, false);
+                        Write10_SpaceKeyType(@"SpaceAssignment", @"http://docs.buildingsmartalliance.org/nbims03/cobie/core", ((global::Xbim.COBieLiteUK.SpaceKeyType)a[ia]), false, false);
                     }
                 }
             }
             WriteEndElement(o);
         }
 
-        void Write12_SpaceKeyType(string n, string ns, global::Xbim.COBieLiteUK.SpaceKeyType o, bool isNullable, bool needType) {
+        void Write10_SpaceKeyType(string n, string ns, global::Xbim.COBieLiteUK.SpaceKeyType o, bool isNullable, bool needType) {
             if ((object)o == null) {
                 if (isNullable) WriteNullTagLiteral(n, ns);
                 return;
@@ -1316,7 +1337,7 @@ namespace Microsoft.Xml.Serialization.GeneratedAssembly {
             WriteEndElement(o);
         }
 
-        string Write36_AssetPortabilitySimpleType(global::Xbim.COBieLiteUK.AssetPortabilitySimpleType v) {
+        string Write32_AssetPortabilitySimpleType(global::Xbim.COBieLiteUK.AssetPortabilitySimpleType v) {
             string s = null;
             switch (v) {
                 case global::Xbim.COBieLiteUK.AssetPortabilitySimpleType.@Fixed: s = @"Fixed"; break;
@@ -1327,7 +1348,7 @@ namespace Microsoft.Xml.Serialization.GeneratedAssembly {
             return s;
         }
 
-        void Write34_ZoneCollectionType(string n, string ns, global::Xbim.COBieLiteUK.ZoneCollectionType o, bool isNullable, bool needType) {
+        void Write59_ZoneCollectionType(string n, string ns, global::Xbim.COBieLiteUK.ZoneCollectionType o, bool isNullable, bool needType) {
             if ((object)o == null) {
                 if (isNullable) WriteNullTagLiteral(n, ns);
                 return;
@@ -1346,14 +1367,14 @@ namespace Microsoft.Xml.Serialization.GeneratedAssembly {
                 global::System.Collections.Generic.List<global::Xbim.COBieLiteUK.ZoneType> a = (global::System.Collections.Generic.List<global::Xbim.COBieLiteUK.ZoneType>)o.@Zone;
                 if (a != null) {
                     for (int ia = 0; ia < ((System.Collections.ICollection)a).Count; ia++) {
-                        Write33_ZoneType(@"Zone", @"http://docs.buildingsmartalliance.org/nbims03/cobie/core", ((global::Xbim.COBieLiteUK.ZoneType)a[ia]), false, false);
+                        Write58_ZoneType(@"Zone", @"http://docs.buildingsmartalliance.org/nbims03/cobie/core", ((global::Xbim.COBieLiteUK.ZoneType)a[ia]), false, false);
                     }
                 }
             }
             WriteEndElement(o);
         }
 
-        void Write33_ZoneType(string n, string ns, global::Xbim.COBieLiteUK.ZoneType o, bool isNullable, bool needType) {
+        void Write58_ZoneType(string n, string ns, global::Xbim.COBieLiteUK.ZoneType o, bool isNullable, bool needType) {
             if ((object)o == null) {
                 if (isNullable) WriteNullTagLiteral(n, ns);
                 return;
@@ -1374,7 +1395,7 @@ namespace Microsoft.Xml.Serialization.GeneratedAssembly {
             WriteElementString(@"ZoneName", @"http://docs.buildingsmartalliance.org/nbims03/cobie/core", ((global::System.String)o.@ZoneName));
             WriteElementString(@"ZoneCategory", @"http://docs.buildingsmartalliance.org/nbims03/cobie/core", ((global::System.String)o.@ZoneCategory));
             WriteElementString(@"ZoneDescription", @"http://docs.buildingsmartalliance.org/nbims03/cobie/core", ((global::System.String)o.@ZoneDescription));
-            Write78_AttributeCollectionType(@"ZoneAttributes", @"http://docs.buildingsmartalliance.org/nbims03/cobie/core", ((global::Xbim.COBieLiteUK.AttributeCollectionType)o.@ZoneAttributes), false, false);
+            Write77_AttributeCollectionType(@"ZoneAttributes", @"http://docs.buildingsmartalliance.org/nbims03/cobie/core", ((global::Xbim.COBieLiteUK.AttributeCollectionType)o.@ZoneAttributes), false, false);
             Write28_DocumentCollectionType(@"ZoneDocuments", @"http://docs.buildingsmartalliance.org/nbims03/cobie/core", ((global::Xbim.COBieLiteUK.DocumentCollectionType)o.@ZoneDocuments), false, false);
             Write26_IssueCollectionType(@"ZoneIssues", @"http://docs.buildingsmartalliance.org/nbims03/cobie/core", ((global::Xbim.COBieLiteUK.IssueCollectionType)o.@ZoneIssues), false, false);
             WriteEndElement(o);
@@ -1427,10 +1448,10 @@ namespace Microsoft.Xml.Serialization.GeneratedAssembly {
             WriteElementString(@"FloorName", @"http://docs.buildingsmartalliance.org/nbims03/cobie/core", ((global::System.String)o.@FloorName));
             WriteElementString(@"FloorCategory", @"http://docs.buildingsmartalliance.org/nbims03/cobie/core", ((global::System.String)o.@FloorCategory));
             WriteElementString(@"FloorDescription", @"http://docs.buildingsmartalliance.org/nbims03/cobie/core", ((global::System.String)o.@FloorDescription));
-            Write45_DecimalValueType(@"FloorElevationValue", @"http://docs.buildingsmartalliance.org/nbims03/cobie/core", ((global::Xbim.COBieLiteUK.DecimalValueType)o.@FloorElevationValue), false, false);
-            Write45_DecimalValueType(@"FloorHeightValue", @"http://docs.buildingsmartalliance.org/nbims03/cobie/core", ((global::Xbim.COBieLiteUK.DecimalValueType)o.@FloorHeightValue), false, false);
+            Write41_DecimalValueType(@"FloorElevationValue", @"http://docs.buildingsmartalliance.org/nbims03/cobie/core", ((global::Xbim.COBieLiteUK.DecimalValueType)o.@FloorElevationValue), false, false);
+            Write41_DecimalValueType(@"FloorHeightValue", @"http://docs.buildingsmartalliance.org/nbims03/cobie/core", ((global::Xbim.COBieLiteUK.DecimalValueType)o.@FloorHeightValue), false, false);
             Write62_SpaceCollectionType(@"Spaces", @"http://docs.buildingsmartalliance.org/nbims03/cobie/core", ((global::Xbim.COBieLiteUK.SpaceCollectionType)o.@Spaces), false, false);
-            Write78_AttributeCollectionType(@"FloorAttributes", @"http://docs.buildingsmartalliance.org/nbims03/cobie/core", ((global::Xbim.COBieLiteUK.AttributeCollectionType)o.@FloorAttributes), false, false);
+            Write77_AttributeCollectionType(@"FloorAttributes", @"http://docs.buildingsmartalliance.org/nbims03/cobie/core", ((global::Xbim.COBieLiteUK.AttributeCollectionType)o.@FloorAttributes), false, false);
             Write28_DocumentCollectionType(@"FloorDocuments", @"http://docs.buildingsmartalliance.org/nbims03/cobie/core", ((global::Xbim.COBieLiteUK.DocumentCollectionType)o.@FloorDocuments), false, false);
             Write26_IssueCollectionType(@"FloorIssues", @"http://docs.buildingsmartalliance.org/nbims03/cobie/core", ((global::Xbim.COBieLiteUK.IssueCollectionType)o.@FloorIssues), false, false);
             WriteEndElement(o);
@@ -1484,11 +1505,11 @@ namespace Microsoft.Xml.Serialization.GeneratedAssembly {
             WriteElementString(@"SpaceCategory", @"http://docs.buildingsmartalliance.org/nbims03/cobie/core", ((global::System.String)o.@SpaceCategory));
             WriteElementString(@"SpaceDescription", @"http://docs.buildingsmartalliance.org/nbims03/cobie/core", ((global::System.String)o.@SpaceDescription));
             WriteElementString(@"SpaceSignageName", @"http://docs.buildingsmartalliance.org/nbims03/cobie/core", ((global::System.String)o.@SpaceSignageName));
-            Write45_DecimalValueType(@"SpaceUsableHeightValue", @"http://docs.buildingsmartalliance.org/nbims03/cobie/core", ((global::Xbim.COBieLiteUK.DecimalValueType)o.@SpaceUsableHeightValue), false, false);
-            Write45_DecimalValueType(@"SpaceGrossAreaValue", @"http://docs.buildingsmartalliance.org/nbims03/cobie/core", ((global::Xbim.COBieLiteUK.DecimalValueType)o.@SpaceGrossAreaValue), false, false);
-            Write45_DecimalValueType(@"SpaceNetAreaValue", @"http://docs.buildingsmartalliance.org/nbims03/cobie/core", ((global::Xbim.COBieLiteUK.DecimalValueType)o.@SpaceNetAreaValue), false, false);
+            Write41_DecimalValueType(@"SpaceUsableHeightValue", @"http://docs.buildingsmartalliance.org/nbims03/cobie/core", ((global::Xbim.COBieLiteUK.DecimalValueType)o.@SpaceUsableHeightValue), false, false);
+            Write41_DecimalValueType(@"SpaceGrossAreaValue", @"http://docs.buildingsmartalliance.org/nbims03/cobie/core", ((global::Xbim.COBieLiteUK.DecimalValueType)o.@SpaceGrossAreaValue), false, false);
+            Write41_DecimalValueType(@"SpaceNetAreaValue", @"http://docs.buildingsmartalliance.org/nbims03/cobie/core", ((global::Xbim.COBieLiteUK.DecimalValueType)o.@SpaceNetAreaValue), false, false);
             Write20_ZoneAssignmentCollectionType(@"SpaceZoneAssignments", @"http://docs.buildingsmartalliance.org/nbims03/cobie/core", ((global::Xbim.COBieLiteUK.ZoneAssignmentCollectionType)o.@SpaceZoneAssignments), false, false);
-            Write78_AttributeCollectionType(@"SpaceAttributes", @"http://docs.buildingsmartalliance.org/nbims03/cobie/core", ((global::Xbim.COBieLiteUK.AttributeCollectionType)o.@SpaceAttributes), false, false);
+            Write77_AttributeCollectionType(@"SpaceAttributes", @"http://docs.buildingsmartalliance.org/nbims03/cobie/core", ((global::Xbim.COBieLiteUK.AttributeCollectionType)o.@SpaceAttributes), false, false);
             Write28_DocumentCollectionType(@"SpaceDocuments", @"http://docs.buildingsmartalliance.org/nbims03/cobie/core", ((global::Xbim.COBieLiteUK.DocumentCollectionType)o.@SpaceDocuments), false, false);
             Write26_IssueCollectionType(@"SpaceIssues", @"http://docs.buildingsmartalliance.org/nbims03/cobie/core", ((global::Xbim.COBieLiteUK.IssueCollectionType)o.@SpaceIssues), false, false);
             WriteEndElement(o);
@@ -1541,7 +1562,7 @@ namespace Microsoft.Xml.Serialization.GeneratedAssembly {
             WriteEndElement(o);
         }
 
-        string Write88_VolumeUnitSimpleType(global::Xbim.COBieLiteUK.VolumeUnitSimpleType v) {
+        string Write87_VolumeUnitSimpleType(global::Xbim.COBieLiteUK.VolumeUnitSimpleType v) {
             string s = null;
             switch (v) {
                 case global::Xbim.COBieLiteUK.VolumeUnitSimpleType.@cubiccentimeters: s = @"cubic centimeters"; break;
@@ -1555,7 +1576,7 @@ namespace Microsoft.Xml.Serialization.GeneratedAssembly {
             return s;
         }
 
-        string Write87_AreaUnitSimpleType(global::Xbim.COBieLiteUK.AreaUnitSimpleType v) {
+        string Write86_AreaUnitSimpleType(global::Xbim.COBieLiteUK.AreaUnitSimpleType v) {
             string s = null;
             switch (v) {
                 case global::Xbim.COBieLiteUK.AreaUnitSimpleType.@squarecentimeters: s = @"square centimeters"; break;
@@ -1572,7 +1593,7 @@ namespace Microsoft.Xml.Serialization.GeneratedAssembly {
             return s;
         }
 
-        string Write86_LinearUnitSimpleType(global::Xbim.COBieLiteUK.LinearUnitSimpleType v) {
+        string Write85_LinearUnitSimpleType(global::Xbim.COBieLiteUK.LinearUnitSimpleType v) {
             string s = null;
             switch (v) {
                 case global::Xbim.COBieLiteUK.LinearUnitSimpleType.@centimeters: s = @"centimeters"; break;
@@ -1588,7 +1609,7 @@ namespace Microsoft.Xml.Serialization.GeneratedAssembly {
             return s;
         }
 
-        void Write85_SiteType(string n, string ns, global::Xbim.COBieLiteUK.SiteType o, bool isNullable, bool needType) {
+        void Write84_SiteType(string n, string ns, global::Xbim.COBieLiteUK.SiteType o, bool isNullable, bool needType) {
             if ((object)o == null) {
                 if (isNullable) WriteNullTagLiteral(n, ns);
                 return;
@@ -1644,12 +1665,12 @@ namespace Microsoft.Xml.Serialization.GeneratedAssembly {
 
     public class XmlSerializationReaderProjectType : System.Xml.Serialization.XmlSerializationReader {
 
-        public object Read99_Project() {
+        public object Read100_Project() {
             object o = null;
             Reader.MoveToContent();
             if (Reader.NodeType == System.Xml.XmlNodeType.Element) {
                 if (((object) Reader.LocalName == (object)id1_Project && (object) Reader.NamespaceURI == (object)id2_Item)) {
-                    o = Read98_ProjectType(false, true);
+                    o = Read99_ProjectType(false, true);
                 }
                 else {
                     throw CreateUnknownNodeException();
@@ -1661,7 +1682,7 @@ namespace Microsoft.Xml.Serialization.GeneratedAssembly {
             return (object)o;
         }
 
-        global::Xbim.COBieLiteUK.ProjectType Read98_ProjectType(bool isNullable, bool checkType) {
+        global::Xbim.COBieLiteUK.ProjectType Read99_ProjectType(bool isNullable, bool checkType) {
             System.Xml.XmlQualifiedName xsiType = checkType ? GetXsiType() : null;
             bool isNull = false;
             if (isNullable) isNull = ReadNull();
@@ -1753,19 +1774,19 @@ namespace Microsoft.Xml.Serialization.GeneratedAssembly {
                         break;
                     case 5:
                         if (((object) Reader.LocalName == (object)id14_ProjectFunctionalUnit && (object) Reader.NamespaceURI == (object)id8_Item)) {
-                            o.@ProjectFunctionalUnit = Read45_DecimalValueType(false, true);
+                            o.@ProjectFunctionalUnit = Read42_DecimalValueType(false, true);
                         }
                         state = 6;
                         break;
                     case 6:
                         if (((object) Reader.LocalName == (object)id15_ProjectExpectedLifeCycle && (object) Reader.NamespaceURI == (object)id8_Item)) {
-                            o.@ProjectExpectedLifeCycle = Read45_DecimalValueType(false, true);
+                            o.@ProjectExpectedLifeCycle = Read42_DecimalValueType(false, true);
                         }
                         state = 7;
                         break;
                     case 7:
                         if (((object) Reader.LocalName == (object)id16_ProjectCost && (object) Reader.NamespaceURI == (object)id8_Item)) {
-                            o.@ProjectCost = Read45_DecimalValueType(false, true);
+                            o.@ProjectCost = Read42_DecimalValueType(false, true);
                         }
                         state = 8;
                         break;
@@ -1801,7 +1822,7 @@ namespace Microsoft.Xml.Serialization.GeneratedAssembly {
                                     while (Reader.NodeType != System.Xml.XmlNodeType.EndElement && Reader.NodeType != System.Xml.XmlNodeType.None) {
                                         if (Reader.NodeType == System.Xml.XmlNodeType.Element) {
                                             if (((object) Reader.LocalName == (object)id20_ProjectStage && (object) Reader.NamespaceURI == (object)id8_Item)) {
-                                                if ((object)(a_13_0) == null) Reader.Skip(); else a_13_0.Add(Read97_ProjectStageType(false, true));
+                                                if ((object)(a_13_0) == null) Reader.Skip(); else a_13_0.Add(Read98_ProjectStageType(false, true));
                                             }
                                             else {
                                                 UnknownNode(null, @":ProjectStage");
@@ -1836,7 +1857,7 @@ namespace Microsoft.Xml.Serialization.GeneratedAssembly {
             return o;
         }
 
-        global::Xbim.COBieLiteUK.ProjectStageType Read97_ProjectStageType(bool isNullable, bool checkType) {
+        global::Xbim.COBieLiteUK.ProjectStageType Read98_ProjectStageType(bool isNullable, bool checkType) {
             System.Xml.XmlQualifiedName xsiType = checkType ? GetXsiType() : null;
             bool isNull = false;
             if (isNullable) isNull = ReadNull();
@@ -1914,7 +1935,7 @@ namespace Microsoft.Xml.Serialization.GeneratedAssembly {
                         break;
                     case 5:
                         if (((object) Reader.LocalName == (object)id27_ProjectStageCost && (object) Reader.NamespaceURI == (object)id8_Item)) {
-                            o.@ProjectStageCost = Read45_DecimalValueType(false, true);
+                            o.@ProjectStageCost = Read42_DecimalValueType(false, true);
                         }
                         state = 6;
                         break;
@@ -1940,13 +1961,13 @@ namespace Microsoft.Xml.Serialization.GeneratedAssembly {
                         break;
                     case 9:
                         if (((object) Reader.LocalName == (object)id31_ProjectStagePrevious && (object) Reader.NamespaceURI == (object)id8_Item)) {
-                            o.@ProjectStagePrevious = Read96_ProjectStageKeyType(false, true);
+                            o.@ProjectStagePrevious = Read97_ProjectStageKeyType(false, true);
                         }
                         state = 10;
                         break;
                     case 10:
                         if (((object) Reader.LocalName == (object)id32_ProjectStageNext && (object) Reader.NamespaceURI == (object)id8_Item)) {
-                            o.@ProjectStageNext = Read96_ProjectStageKeyType(false, true);
+                            o.@ProjectStageNext = Read97_ProjectStageKeyType(false, true);
                         }
                         state = 11;
                         break;
@@ -1965,7 +1986,7 @@ namespace Microsoft.Xml.Serialization.GeneratedAssembly {
             return o;
         }
 
-        global::Xbim.COBieLiteUK.ProjectStageKeyType Read96_ProjectStageKeyType(bool isNullable, bool checkType) {
+        global::Xbim.COBieLiteUK.ProjectStageKeyType Read97_ProjectStageKeyType(bool isNullable, bool checkType) {
             System.Xml.XmlQualifiedName xsiType = checkType ? GetXsiType() : null;
             bool isNull = false;
             if (isNullable) isNull = ReadNull();
@@ -2073,7 +2094,7 @@ namespace Microsoft.Xml.Serialization.GeneratedAssembly {
                         break;
                     case 2:
                         if (((object) Reader.LocalName == (object)id38_ProjectAssignment && (object) Reader.NamespaceURI == (object)id5_Item)) {
-                            o.@ProjectAssignment = Read95_ProjectTypeBase(false, true);
+                            o.@ProjectAssignment = Read96_ProjectTypeBase(false, true);
                         }
                         state = 3;
                         break;
@@ -2145,25 +2166,25 @@ namespace Microsoft.Xml.Serialization.GeneratedAssembly {
                         break;
                     case 11:
                         if (((object) Reader.LocalName == (object)id47_Floors && (object) Reader.NamespaceURI == (object)id5_Item)) {
-                            o.@Floors = Read65_FloorCollectionType(false, true);
+                            o.@Floors = Read66_FloorCollectionType(false, true);
                         }
                         state = 12;
                         break;
                     case 12:
                         if (((object) Reader.LocalName == (object)id48_Zones && (object) Reader.NamespaceURI == (object)id5_Item)) {
-                            o.@Zones = Read34_ZoneCollectionType(false, true);
+                            o.@Zones = Read60_ZoneCollectionType(false, true);
                         }
                         state = 13;
                         break;
                     case 13:
                         if (((object) Reader.LocalName == (object)id49_AssetTypes && (object) Reader.NamespaceURI == (object)id5_Item)) {
-                            o.@AssetTypes = Read59_AssetTypeCollectionType(false, true);
+                            o.@AssetTypes = Read57_AssetTypeCollectionType(false, true);
                         }
                         state = 14;
                         break;
                     case 14:
                         if (((object) Reader.LocalName == (object)id50_Systems && (object) Reader.NamespaceURI == (object)id5_Item)) {
-                            o.@Systems = Read30_SystemCollectionType(false, true);
+                            o.@Systems = Read69_SystemCollectionType(false, true);
                         }
                         state = 15;
                         break;
@@ -2175,7 +2196,7 @@ namespace Microsoft.Xml.Serialization.GeneratedAssembly {
                         break;
                     case 16:
                         if (((object) Reader.LocalName == (object)id52_Contacts && (object) Reader.NamespaceURI == (object)id5_Item)) {
-                            o.@Contacts = Read68_ContactCollectionType(false, true);
+                            o.@Contacts = Read30_ContactCollectionType(false, true);
                         }
                         state = 17;
                         break;
@@ -2363,7 +2384,7 @@ namespace Microsoft.Xml.Serialization.GeneratedAssembly {
                         break;
                     case 6:
                         if (((object) Reader.LocalName == (object)id65_ContactAssignment && (object) Reader.NamespaceURI == (object)id5_Item)) {
-                            o.@ContactAssignment = Read2_ContactKeyType(false, true);
+                            o.@ContactAssignment = Read13_ContactKeyType(false, true);
                         }
                         state = 7;
                         break;
@@ -2390,7 +2411,7 @@ namespace Microsoft.Xml.Serialization.GeneratedAssembly {
             return o;
         }
 
-        global::Xbim.COBieLiteUK.ContactKeyType Read2_ContactKeyType(bool isNullable, bool checkType) {
+        global::Xbim.COBieLiteUK.ContactKeyType Read13_ContactKeyType(bool isNullable, bool checkType) {
             System.Xml.XmlQualifiedName xsiType = checkType ? GetXsiType() : null;
             bool isNull = false;
             if (isNullable) isNull = ReadNull();
@@ -2806,43 +2827,43 @@ namespace Microsoft.Xml.Serialization.GeneratedAssembly {
                 if (Reader.NodeType == System.Xml.XmlNodeType.Element) {
                     switch (state) {
                     case 0:
-                        if (((object) Reader.LocalName == (object)id90_AttributeIntegerValue && (object) Reader.NamespaceURI == (object)id5_Item)) {
-                            o.@Item = Read40_AttributeIntegerValueType(false, true);
-                            o.@ItemElementName = global::Xbim.COBieLiteUK.ItemChoiceType.@AttributeIntegerValue;
-                        }
-                        else if (((object) Reader.LocalName == (object)id91_AttributeDateValue && (object) Reader.NamespaceURI == (object)id5_Item)) {
-                            {
-                                o.@Item = ToDate(Reader.ReadElementString());
-                            }
-                            o.@ItemElementName = global::Xbim.COBieLiteUK.ItemChoiceType.@AttributeDateValue;
-                        }
-                        else if (((object) Reader.LocalName == (object)id92_AttributeDecimalValue && (object) Reader.NamespaceURI == (object)id5_Item)) {
-                            o.@Item = Read43_AttributeDecimalValueType(false, true);
-                            o.@ItemElementName = global::Xbim.COBieLiteUK.ItemChoiceType.@AttributeDecimalValue;
-                        }
-                        else if (((object) Reader.LocalName == (object)id93_AttributeDateTimeValue && (object) Reader.NamespaceURI == (object)id5_Item)) {
-                            {
-                                o.@Item = ToDateTime(Reader.ReadElementString());
-                            }
-                            o.@ItemElementName = global::Xbim.COBieLiteUK.ItemChoiceType.@AttributeDateTimeValue;
-                        }
-                        else if (((object) Reader.LocalName == (object)id94_AttributeStringValue && (object) Reader.NamespaceURI == (object)id5_Item)) {
-                            o.@Item = Read39_AttributeStringValueType(false, true);
-                            o.@ItemElementName = global::Xbim.COBieLiteUK.ItemChoiceType.@AttributeStringValue;
-                        }
-                        else if (((object) Reader.LocalName == (object)id95_AttributeTimeValue && (object) Reader.NamespaceURI == (object)id5_Item)) {
+                        if (((object) Reader.LocalName == (object)id90_AttributeTimeValue && (object) Reader.NamespaceURI == (object)id5_Item)) {
                             {
                                 o.@Item = ToTime(Reader.ReadElementString());
                             }
                             o.@ItemElementName = global::Xbim.COBieLiteUK.ItemChoiceType.@AttributeTimeValue;
                         }
-                        else if (((object) Reader.LocalName == (object)id96_AttributeMonetaryValue && (object) Reader.NamespaceURI == (object)id5_Item)) {
+                        else if (((object) Reader.LocalName == (object)id91_AttributeBooleanValue && (object) Reader.NamespaceURI == (object)id5_Item)) {
+                            o.@Item = Read37_BooleanValueType(false, true);
+                            o.@ItemElementName = global::Xbim.COBieLiteUK.ItemChoiceType.@AttributeBooleanValue;
+                        }
+                        else if (((object) Reader.LocalName == (object)id92_AttributeDateValue && (object) Reader.NamespaceURI == (object)id5_Item)) {
+                            {
+                                o.@Item = ToDate(Reader.ReadElementString());
+                            }
+                            o.@ItemElementName = global::Xbim.COBieLiteUK.ItemChoiceType.@AttributeDateValue;
+                        }
+                        else if (((object) Reader.LocalName == (object)id93_AttributeDecimalValue && (object) Reader.NamespaceURI == (object)id5_Item)) {
+                            o.@Item = Read36_AttributeDecimalValueType(false, true);
+                            o.@ItemElementName = global::Xbim.COBieLiteUK.ItemChoiceType.@AttributeDecimalValue;
+                        }
+                        else if (((object) Reader.LocalName == (object)id94_AttributeIntegerValue && (object) Reader.NamespaceURI == (object)id5_Item)) {
+                            o.@Item = Read40_AttributeIntegerValueType(false, true);
+                            o.@ItemElementName = global::Xbim.COBieLiteUK.ItemChoiceType.@AttributeIntegerValue;
+                        }
+                        else if (((object) Reader.LocalName == (object)id95_AttributeMonetaryValue && (object) Reader.NamespaceURI == (object)id5_Item)) {
                             o.@Item = Read75_AttributeMonetaryValueType(false, true);
                             o.@ItemElementName = global::Xbim.COBieLiteUK.ItemChoiceType.@AttributeMonetaryValue;
                         }
-                        else if (((object) Reader.LocalName == (object)id97_AttributeBooleanValue && (object) Reader.NamespaceURI == (object)id5_Item)) {
-                            o.@Item = Read42_BooleanValueType(false, true);
-                            o.@ItemElementName = global::Xbim.COBieLiteUK.ItemChoiceType.@AttributeBooleanValue;
+                        else if (((object) Reader.LocalName == (object)id96_AttributeStringValue && (object) Reader.NamespaceURI == (object)id5_Item)) {
+                            o.@Item = Read34_AttributeStringValueType(false, true);
+                            o.@ItemElementName = global::Xbim.COBieLiteUK.ItemChoiceType.@AttributeStringValue;
+                        }
+                        else if (((object) Reader.LocalName == (object)id97_AttributeDateTimeValue && (object) Reader.NamespaceURI == (object)id5_Item)) {
+                            {
+                                o.@Item = ToDateTime(Reader.ReadElementString());
+                            }
+                            o.@ItemElementName = global::Xbim.COBieLiteUK.ItemChoiceType.@AttributeDateTimeValue;
                         }
                         state = 1;
                         break;
@@ -2861,20 +2882,20 @@ namespace Microsoft.Xml.Serialization.GeneratedAssembly {
             return o;
         }
 
-        global::Xbim.COBieLiteUK.BooleanValueType Read42_BooleanValueType(bool isNullable, bool checkType) {
+        global::Xbim.COBieLiteUK.AttributeStringValueType Read34_AttributeStringValueType(bool isNullable, bool checkType) {
             System.Xml.XmlQualifiedName xsiType = checkType ? GetXsiType() : null;
             bool isNull = false;
             if (isNullable) isNull = ReadNull();
             if (checkType) {
-            if (xsiType == null || ((object) ((System.Xml.XmlQualifiedName)xsiType).Name == (object)id98_BooleanValueType && (object) ((System.Xml.XmlQualifiedName)xsiType).Namespace == (object)id5_Item)) {
+            if (xsiType == null || ((object) ((System.Xml.XmlQualifiedName)xsiType).Name == (object)id98_AttributeStringValueType && (object) ((System.Xml.XmlQualifiedName)xsiType).Namespace == (object)id5_Item)) {
             }
             else
                 throw CreateUnknownTypeException((System.Xml.XmlQualifiedName)xsiType);
             }
             if (isNull) return null;
-            global::Xbim.COBieLiteUK.BooleanValueType o;
-            o = new global::Xbim.COBieLiteUK.BooleanValueType();
-            bool[] paramsRead = new bool[2];
+            global::Xbim.COBieLiteUK.AttributeStringValueType o;
+            o = new global::Xbim.COBieLiteUK.AttributeStringValueType();
+            bool[] paramsRead = new bool[3];
             while (Reader.MoveToNextAttribute()) {
                 if (!IsXmlnsAttribute(Reader.Name)) {
                     UnknownNode((object)o);
@@ -2902,13 +2923,18 @@ namespace Microsoft.Xml.Serialization.GeneratedAssembly {
                         state = 1;
                         break;
                     case 1:
-                        if (((object) Reader.LocalName == (object)id100_BooleanValue && (object) Reader.NamespaceURI == (object)id5_Item)) {
-                            o.@BooleanValueSpecified = true;
+                        if (((object) Reader.LocalName == (object)id100_StringValue && (object) Reader.NamespaceURI == (object)id5_Item)) {
                             {
-                                o.@BooleanValue = System.Xml.XmlConvert.ToBoolean(Reader.ReadElementString());
+                                o.@StringValue = Reader.ReadElementString();
                             }
                         }
                         state = 2;
+                        break;
+                    case 2:
+                        if (((object) Reader.LocalName == (object)id101_AllowedValues && (object) Reader.NamespaceURI == (object)id5_Item)) {
+                            o.@AllowedValues = Read33_AllowedValueCollectionType(false, true);
+                        }
+                        state = 3;
                         break;
                     default:
                         UnknownNode((object)o, null);
@@ -2925,154 +2951,12 @@ namespace Microsoft.Xml.Serialization.GeneratedAssembly {
             return o;
         }
 
-        global::Xbim.COBieLiteUK.AttributeMonetaryValueType Read75_AttributeMonetaryValueType(bool isNullable, bool checkType) {
+        global::Xbim.COBieLiteUK.AllowedValueCollectionType Read33_AllowedValueCollectionType(bool isNullable, bool checkType) {
             System.Xml.XmlQualifiedName xsiType = checkType ? GetXsiType() : null;
             bool isNull = false;
             if (isNullable) isNull = ReadNull();
             if (checkType) {
-            if (xsiType == null || ((object) ((System.Xml.XmlQualifiedName)xsiType).Name == (object)id101_AttributeMonetaryValueType && (object) ((System.Xml.XmlQualifiedName)xsiType).Namespace == (object)id5_Item)) {
-            }
-            else
-                throw CreateUnknownTypeException((System.Xml.XmlQualifiedName)xsiType);
-            }
-            if (isNull) return null;
-            global::Xbim.COBieLiteUK.AttributeMonetaryValueType o;
-            o = new global::Xbim.COBieLiteUK.AttributeMonetaryValueType();
-            bool[] paramsRead = new bool[2];
-            while (Reader.MoveToNextAttribute()) {
-                if (!IsXmlnsAttribute(Reader.Name)) {
-                    UnknownNode((object)o);
-                }
-            }
-            Reader.MoveToElement();
-            if (Reader.IsEmptyElement) {
-                Reader.Skip();
-                return o;
-            }
-            Reader.ReadStartElement();
-            int state = 0;
-            Reader.MoveToContent();
-            int whileIterations14 = 0;
-            int readerCount14 = ReaderCount;
-            while (Reader.NodeType != System.Xml.XmlNodeType.EndElement && Reader.NodeType != System.Xml.XmlNodeType.None) {
-                if (Reader.NodeType == System.Xml.XmlNodeType.Element) {
-                    switch (state) {
-                    case 0:
-                        if (((object) Reader.LocalName == (object)id102_MonetaryValue && (object) Reader.NamespaceURI == (object)id5_Item)) {
-                            {
-                                o.@MonetaryValue = System.Xml.XmlConvert.ToDecimal(Reader.ReadElementString());
-                            }
-                        }
-                        state = 1;
-                        break;
-                    case 1:
-                        if (((object) Reader.LocalName == (object)id103_MonetaryUnit && (object) Reader.NamespaceURI == (object)id5_Item)) {
-                            {
-                                o.@MonetaryUnit = Read74_CurrencyUnitSimpleType(Reader.ReadElementString());
-                            }
-                        }
-                        state = 2;
-                        break;
-                    default:
-                        UnknownNode((object)o, null);
-                        break;
-                    }
-                }
-                else {
-                    UnknownNode((object)o, null);
-                }
-                Reader.MoveToContent();
-                CheckReaderCount(ref whileIterations14, ref readerCount14);
-            }
-            ReadEndElement();
-            return o;
-        }
-
-        global::Xbim.COBieLiteUK.CurrencyUnitSimpleType Read74_CurrencyUnitSimpleType(string s) {
-            switch (s) {
-                case @"British Pounds": return global::Xbim.COBieLiteUK.CurrencyUnitSimpleType.@BritishPounds;
-                case @"Dollars": return global::Xbim.COBieLiteUK.CurrencyUnitSimpleType.@Dollars;
-                case @"Euros": return global::Xbim.COBieLiteUK.CurrencyUnitSimpleType.@Euros;
-                case @"": return global::Xbim.COBieLiteUK.CurrencyUnitSimpleType.@Item;
-                default: throw CreateUnknownConstantException(s, typeof(global::Xbim.COBieLiteUK.CurrencyUnitSimpleType));
-            }
-        }
-
-        global::Xbim.COBieLiteUK.AttributeStringValueType Read39_AttributeStringValueType(bool isNullable, bool checkType) {
-            System.Xml.XmlQualifiedName xsiType = checkType ? GetXsiType() : null;
-            bool isNull = false;
-            if (isNullable) isNull = ReadNull();
-            if (checkType) {
-            if (xsiType == null || ((object) ((System.Xml.XmlQualifiedName)xsiType).Name == (object)id104_AttributeStringValueType && (object) ((System.Xml.XmlQualifiedName)xsiType).Namespace == (object)id5_Item)) {
-            }
-            else
-                throw CreateUnknownTypeException((System.Xml.XmlQualifiedName)xsiType);
-            }
-            if (isNull) return null;
-            global::Xbim.COBieLiteUK.AttributeStringValueType o;
-            o = new global::Xbim.COBieLiteUK.AttributeStringValueType();
-            bool[] paramsRead = new bool[3];
-            while (Reader.MoveToNextAttribute()) {
-                if (!IsXmlnsAttribute(Reader.Name)) {
-                    UnknownNode((object)o);
-                }
-            }
-            Reader.MoveToElement();
-            if (Reader.IsEmptyElement) {
-                Reader.Skip();
-                return o;
-            }
-            Reader.ReadStartElement();
-            int state = 0;
-            Reader.MoveToContent();
-            int whileIterations15 = 0;
-            int readerCount15 = ReaderCount;
-            while (Reader.NodeType != System.Xml.XmlNodeType.EndElement && Reader.NodeType != System.Xml.XmlNodeType.None) {
-                if (Reader.NodeType == System.Xml.XmlNodeType.Element) {
-                    switch (state) {
-                    case 0:
-                        if (((object) Reader.LocalName == (object)id99_UnitName && (object) Reader.NamespaceURI == (object)id5_Item)) {
-                            {
-                                o.@UnitName = Reader.ReadElementString();
-                            }
-                        }
-                        state = 1;
-                        break;
-                    case 1:
-                        if (((object) Reader.LocalName == (object)id105_StringValue && (object) Reader.NamespaceURI == (object)id5_Item)) {
-                            {
-                                o.@StringValue = Reader.ReadElementString();
-                            }
-                        }
-                        state = 2;
-                        break;
-                    case 2:
-                        if (((object) Reader.LocalName == (object)id106_AllowedValues && (object) Reader.NamespaceURI == (object)id5_Item)) {
-                            o.@AllowedValues = Read38_AllowedValueCollectionType(false, true);
-                        }
-                        state = 3;
-                        break;
-                    default:
-                        UnknownNode((object)o, null);
-                        break;
-                    }
-                }
-                else {
-                    UnknownNode((object)o, null);
-                }
-                Reader.MoveToContent();
-                CheckReaderCount(ref whileIterations15, ref readerCount15);
-            }
-            ReadEndElement();
-            return o;
-        }
-
-        global::Xbim.COBieLiteUK.AllowedValueCollectionType Read38_AllowedValueCollectionType(bool isNullable, bool checkType) {
-            System.Xml.XmlQualifiedName xsiType = checkType ? GetXsiType() : null;
-            bool isNull = false;
-            if (isNullable) isNull = ReadNull();
-            if (checkType) {
-            if (xsiType == null || ((object) ((System.Xml.XmlQualifiedName)xsiType).Name == (object)id107_AllowedValueCollectionType && (object) ((System.Xml.XmlQualifiedName)xsiType).Namespace == (object)id5_Item)) {
+            if (xsiType == null || ((object) ((System.Xml.XmlQualifiedName)xsiType).Name == (object)id102_AllowedValueCollectionType && (object) ((System.Xml.XmlQualifiedName)xsiType).Namespace == (object)id5_Item)) {
             }
             else
                 throw CreateUnknownTypeException((System.Xml.XmlQualifiedName)xsiType);
@@ -3096,13 +2980,13 @@ namespace Microsoft.Xml.Serialization.GeneratedAssembly {
             Reader.ReadStartElement();
             int state = 0;
             Reader.MoveToContent();
-            int whileIterations16 = 0;
-            int readerCount16 = ReaderCount;
+            int whileIterations14 = 0;
+            int readerCount14 = ReaderCount;
             while (Reader.NodeType != System.Xml.XmlNodeType.EndElement && Reader.NodeType != System.Xml.XmlNodeType.None) {
                 if (Reader.NodeType == System.Xml.XmlNodeType.Element) {
                     switch (state) {
                     case 0:
-                        if (((object) Reader.LocalName == (object)id108_AttributeAllowedValue && (object) Reader.NamespaceURI == (object)id5_Item)) {
+                        if (((object) Reader.LocalName == (object)id103_AttributeAllowedValue && (object) Reader.NamespaceURI == (object)id5_Item)) {
                             {
                                 a_0.Add(Reader.ReadElementString());
                             }
@@ -3120,18 +3004,174 @@ namespace Microsoft.Xml.Serialization.GeneratedAssembly {
                     UnknownNode((object)o, null);
                 }
                 Reader.MoveToContent();
+                CheckReaderCount(ref whileIterations14, ref readerCount14);
+            }
+            ReadEndElement();
+            return o;
+        }
+
+        global::Xbim.COBieLiteUK.AttributeMonetaryValueType Read75_AttributeMonetaryValueType(bool isNullable, bool checkType) {
+            System.Xml.XmlQualifiedName xsiType = checkType ? GetXsiType() : null;
+            bool isNull = false;
+            if (isNullable) isNull = ReadNull();
+            if (checkType) {
+            if (xsiType == null || ((object) ((System.Xml.XmlQualifiedName)xsiType).Name == (object)id104_AttributeMonetaryValueType && (object) ((System.Xml.XmlQualifiedName)xsiType).Namespace == (object)id5_Item)) {
+            }
+            else
+                throw CreateUnknownTypeException((System.Xml.XmlQualifiedName)xsiType);
+            }
+            if (isNull) return null;
+            global::Xbim.COBieLiteUK.AttributeMonetaryValueType o;
+            o = new global::Xbim.COBieLiteUK.AttributeMonetaryValueType();
+            bool[] paramsRead = new bool[2];
+            while (Reader.MoveToNextAttribute()) {
+                if (!IsXmlnsAttribute(Reader.Name)) {
+                    UnknownNode((object)o);
+                }
+            }
+            Reader.MoveToElement();
+            if (Reader.IsEmptyElement) {
+                Reader.Skip();
+                return o;
+            }
+            Reader.ReadStartElement();
+            int state = 0;
+            Reader.MoveToContent();
+            int whileIterations15 = 0;
+            int readerCount15 = ReaderCount;
+            while (Reader.NodeType != System.Xml.XmlNodeType.EndElement && Reader.NodeType != System.Xml.XmlNodeType.None) {
+                if (Reader.NodeType == System.Xml.XmlNodeType.Element) {
+                    switch (state) {
+                    case 0:
+                        if (((object) Reader.LocalName == (object)id105_MonetaryValue && (object) Reader.NamespaceURI == (object)id5_Item)) {
+                            {
+                                o.@MonetaryValue = System.Xml.XmlConvert.ToDecimal(Reader.ReadElementString());
+                            }
+                        }
+                        state = 1;
+                        break;
+                    case 1:
+                        if (((object) Reader.LocalName == (object)id106_MonetaryUnit && (object) Reader.NamespaceURI == (object)id5_Item)) {
+                            {
+                                o.@MonetaryUnit = Read74_CurrencyUnitSimpleType(Reader.ReadElementString());
+                            }
+                        }
+                        state = 2;
+                        break;
+                    default:
+                        UnknownNode((object)o, null);
+                        break;
+                    }
+                }
+                else {
+                    UnknownNode((object)o, null);
+                }
+                Reader.MoveToContent();
+                CheckReaderCount(ref whileIterations15, ref readerCount15);
+            }
+            ReadEndElement();
+            return o;
+        }
+
+        global::Xbim.COBieLiteUK.CurrencyUnitSimpleType Read74_CurrencyUnitSimpleType(string s) {
+            switch (s) {
+                case @"British Pounds": return global::Xbim.COBieLiteUK.CurrencyUnitSimpleType.@BritishPounds;
+                case @"Dollars": return global::Xbim.COBieLiteUK.CurrencyUnitSimpleType.@Dollars;
+                case @"Euros": return global::Xbim.COBieLiteUK.CurrencyUnitSimpleType.@Euros;
+                case @"": return global::Xbim.COBieLiteUK.CurrencyUnitSimpleType.@Item;
+                default: throw CreateUnknownConstantException(s, typeof(global::Xbim.COBieLiteUK.CurrencyUnitSimpleType));
+            }
+        }
+
+        global::Xbim.COBieLiteUK.AttributeIntegerValueType Read40_AttributeIntegerValueType(bool isNullable, bool checkType) {
+            System.Xml.XmlQualifiedName xsiType = checkType ? GetXsiType() : null;
+            bool isNull = false;
+            if (isNullable) isNull = ReadNull();
+            if (checkType) {
+            if (xsiType == null || ((object) ((System.Xml.XmlQualifiedName)xsiType).Name == (object)id107_AttributeIntegerValueType && (object) ((System.Xml.XmlQualifiedName)xsiType).Namespace == (object)id5_Item)) {
+            }
+            else
+                throw CreateUnknownTypeException((System.Xml.XmlQualifiedName)xsiType);
+            }
+            if (isNull) return null;
+            global::Xbim.COBieLiteUK.AttributeIntegerValueType o;
+            o = new global::Xbim.COBieLiteUK.AttributeIntegerValueType();
+            bool[] paramsRead = new bool[4];
+            while (Reader.MoveToNextAttribute()) {
+                if (!IsXmlnsAttribute(Reader.Name)) {
+                    UnknownNode((object)o);
+                }
+            }
+            Reader.MoveToElement();
+            if (Reader.IsEmptyElement) {
+                Reader.Skip();
+                return o;
+            }
+            Reader.ReadStartElement();
+            int state = 0;
+            Reader.MoveToContent();
+            int whileIterations16 = 0;
+            int readerCount16 = ReaderCount;
+            while (Reader.NodeType != System.Xml.XmlNodeType.EndElement && Reader.NodeType != System.Xml.XmlNodeType.None) {
+                if (Reader.NodeType == System.Xml.XmlNodeType.Element) {
+                    switch (state) {
+                    case 0:
+                        if (((object) Reader.LocalName == (object)id99_UnitName && (object) Reader.NamespaceURI == (object)id5_Item)) {
+                            {
+                                o.@UnitName = Reader.ReadElementString();
+                            }
+                        }
+                        state = 1;
+                        break;
+                    case 1:
+                        if (((object) Reader.LocalName == (object)id108_IntegerValue && (object) Reader.NamespaceURI == (object)id5_Item)) {
+                            o.@IntegerValue = Read38_NullableOfInt32(true);
+                        }
+                        state = 2;
+                        break;
+                    case 2:
+                        if (((object) Reader.LocalName == (object)id109_MinValueInteger && (object) Reader.NamespaceURI == (object)id5_Item)) {
+                            o.@MinValueInteger = Read38_NullableOfInt32(true);
+                        }
+                        state = 3;
+                        break;
+                    case 3:
+                        if (((object) Reader.LocalName == (object)id110_MaxValueInteger && (object) Reader.NamespaceURI == (object)id5_Item)) {
+                            o.@MaxValueInteger = Read38_NullableOfInt32(true);
+                        }
+                        state = 4;
+                        break;
+                    default:
+                        UnknownNode((object)o, null);
+                        break;
+                    }
+                }
+                else {
+                    UnknownNode((object)o, null);
+                }
+                Reader.MoveToContent();
                 CheckReaderCount(ref whileIterations16, ref readerCount16);
             }
             ReadEndElement();
             return o;
         }
 
-        global::Xbim.COBieLiteUK.AttributeDecimalValueType Read43_AttributeDecimalValueType(bool isNullable, bool checkType) {
+        global::System.Nullable<global::System.Int32> Read38_NullableOfInt32(bool checkType) {
+            global::System.Nullable<global::System.Int32> o = default(global::System.Nullable<global::System.Int32>);
+            if (ReadNull())
+                return o;
+            {
+                o = System.Xml.XmlConvert.ToInt32(Reader.ReadElementString());
+            }
+            return o;
+        }
+
+        global::Xbim.COBieLiteUK.AttributeDecimalValueType Read36_AttributeDecimalValueType(bool isNullable, bool checkType) {
             System.Xml.XmlQualifiedName xsiType = checkType ? GetXsiType() : null;
             bool isNull = false;
             if (isNullable) isNull = ReadNull();
             if (checkType) {
-            if (xsiType == null || ((object) ((System.Xml.XmlQualifiedName)xsiType).Name == (object)id109_AttributeDecimalValueType && (object) ((System.Xml.XmlQualifiedName)xsiType).Namespace == (object)id5_Item)) {
+            if (xsiType == null || ((object) ((System.Xml.XmlQualifiedName)xsiType).Name == (object)id111_AttributeDecimalValueType && (object) ((System.Xml.XmlQualifiedName)xsiType).Namespace == (object)id5_Item)) {
             }
             else
                 throw CreateUnknownTypeException((System.Xml.XmlQualifiedName)xsiType);
@@ -3167,7 +3207,7 @@ namespace Microsoft.Xml.Serialization.GeneratedAssembly {
                         state = 1;
                         break;
                     case 1:
-                        if (((object) Reader.LocalName == (object)id110_DecimalValue && (object) Reader.NamespaceURI == (object)id5_Item)) {
+                        if (((object) Reader.LocalName == (object)id112_DecimalValue && (object) Reader.NamespaceURI == (object)id5_Item)) {
                             o.@DecimalValueSpecified = true;
                             {
                                 o.@DecimalValue = System.Xml.XmlConvert.ToDouble(Reader.ReadElementString());
@@ -3176,7 +3216,7 @@ namespace Microsoft.Xml.Serialization.GeneratedAssembly {
                         state = 2;
                         break;
                     case 2:
-                        if (((object) Reader.LocalName == (object)id111_MinValueDecimal && (object) Reader.NamespaceURI == (object)id5_Item)) {
+                        if (((object) Reader.LocalName == (object)id113_MinValueDecimal && (object) Reader.NamespaceURI == (object)id5_Item)) {
                             o.@MinValueDecimalSpecified = true;
                             {
                                 o.@MinValueDecimal = System.Xml.XmlConvert.ToDouble(Reader.ReadElementString());
@@ -3185,7 +3225,7 @@ namespace Microsoft.Xml.Serialization.GeneratedAssembly {
                         state = 3;
                         break;
                     case 3:
-                        if (((object) Reader.LocalName == (object)id112_MaxValueDecimal && (object) Reader.NamespaceURI == (object)id5_Item)) {
+                        if (((object) Reader.LocalName == (object)id114_MaxValueDecimal && (object) Reader.NamespaceURI == (object)id5_Item)) {
                             o.@MaxValueDecimalSpecified = true;
                             {
                                 o.@MaxValueDecimal = System.Xml.XmlConvert.ToDouble(Reader.ReadElementString());
@@ -3208,20 +3248,20 @@ namespace Microsoft.Xml.Serialization.GeneratedAssembly {
             return o;
         }
 
-        global::Xbim.COBieLiteUK.AttributeIntegerValueType Read40_AttributeIntegerValueType(bool isNullable, bool checkType) {
+        global::Xbim.COBieLiteUK.BooleanValueType Read37_BooleanValueType(bool isNullable, bool checkType) {
             System.Xml.XmlQualifiedName xsiType = checkType ? GetXsiType() : null;
             bool isNull = false;
             if (isNullable) isNull = ReadNull();
             if (checkType) {
-            if (xsiType == null || ((object) ((System.Xml.XmlQualifiedName)xsiType).Name == (object)id113_AttributeIntegerValueType && (object) ((System.Xml.XmlQualifiedName)xsiType).Namespace == (object)id5_Item)) {
+            if (xsiType == null || ((object) ((System.Xml.XmlQualifiedName)xsiType).Name == (object)id115_BooleanValueType && (object) ((System.Xml.XmlQualifiedName)xsiType).Namespace == (object)id5_Item)) {
             }
             else
                 throw CreateUnknownTypeException((System.Xml.XmlQualifiedName)xsiType);
             }
             if (isNull) return null;
-            global::Xbim.COBieLiteUK.AttributeIntegerValueType o;
-            o = new global::Xbim.COBieLiteUK.AttributeIntegerValueType();
-            bool[] paramsRead = new bool[4];
+            global::Xbim.COBieLiteUK.BooleanValueType o;
+            o = new global::Xbim.COBieLiteUK.BooleanValueType();
+            bool[] paramsRead = new bool[2];
             while (Reader.MoveToNextAttribute()) {
                 if (!IsXmlnsAttribute(Reader.Name)) {
                     UnknownNode((object)o);
@@ -3249,28 +3289,13 @@ namespace Microsoft.Xml.Serialization.GeneratedAssembly {
                         state = 1;
                         break;
                     case 1:
-                        if (((object) Reader.LocalName == (object)id114_IntegerValue && (object) Reader.NamespaceURI == (object)id5_Item)) {
+                        if (((object) Reader.LocalName == (object)id116_BooleanValue && (object) Reader.NamespaceURI == (object)id5_Item)) {
+                            o.@BooleanValueSpecified = true;
                             {
-                                o.@IntegerValue = System.Xml.XmlConvert.ToInt32(Reader.ReadElementString());
+                                o.@BooleanValue = System.Xml.XmlConvert.ToBoolean(Reader.ReadElementString());
                             }
                         }
                         state = 2;
-                        break;
-                    case 2:
-                        if (((object) Reader.LocalName == (object)id115_MinValueInteger && (object) Reader.NamespaceURI == (object)id5_Item)) {
-                            {
-                                o.@MinValueInteger = System.Xml.XmlConvert.ToInt32(Reader.ReadElementString());
-                            }
-                        }
-                        state = 3;
-                        break;
-                    case 3:
-                        if (((object) Reader.LocalName == (object)id116_MaxValueInteger && (object) Reader.NamespaceURI == (object)id5_Item)) {
-                            {
-                                o.@MaxValueInteger = System.Xml.XmlConvert.ToInt32(Reader.ReadElementString());
-                            }
-                        }
-                        state = 4;
                         break;
                     default:
                         UnknownNode((object)o, null);
@@ -3287,7 +3312,7 @@ namespace Microsoft.Xml.Serialization.GeneratedAssembly {
             return o;
         }
 
-        global::Xbim.COBieLiteUK.ContactCollectionType Read68_ContactCollectionType(bool isNullable, bool checkType) {
+        global::Xbim.COBieLiteUK.ContactCollectionType Read30_ContactCollectionType(bool isNullable, bool checkType) {
             System.Xml.XmlQualifiedName xsiType = checkType ? GetXsiType() : null;
             bool isNull = false;
             if (isNullable) isNull = ReadNull();
@@ -3323,7 +3348,7 @@ namespace Microsoft.Xml.Serialization.GeneratedAssembly {
                     switch (state) {
                     case 0:
                         if (((object) Reader.LocalName == (object)id118_Contact && (object) Reader.NamespaceURI == (object)id5_Item)) {
-                            if ((object)(a_0) == null) Reader.Skip(); else a_0.Add(Read67_ContactType(false, true));
+                            if ((object)(a_0) == null) Reader.Skip(); else a_0.Add(Read29_ContactType(false, true));
                         }
                         else {
                             state = 1;
@@ -3344,7 +3369,7 @@ namespace Microsoft.Xml.Serialization.GeneratedAssembly {
             return o;
         }
 
-        global::Xbim.COBieLiteUK.ContactType Read67_ContactType(bool isNullable, bool checkType) {
+        global::Xbim.COBieLiteUK.ContactType Read29_ContactType(bool isNullable, bool checkType) {
             System.Xml.XmlQualifiedName xsiType = checkType ? GetXsiType() : null;
             bool isNull = false;
             if (isNullable) isNull = ReadNull();
@@ -3569,7 +3594,7 @@ namespace Microsoft.Xml.Serialization.GeneratedAssembly {
                     switch (state) {
                     case 0:
                         if (((object) Reader.LocalName == (object)id138_Connection && (object) Reader.NamespaceURI == (object)id5_Item)) {
-                            if ((object)(a_0) == null) Reader.Skip(); else a_0.Add(Read69_ConnectionType(false, true));
+                            if ((object)(a_0) == null) Reader.Skip(); else a_0.Add(Read93_ConnectionType(false, true));
                         }
                         else {
                             state = 1;
@@ -3590,7 +3615,7 @@ namespace Microsoft.Xml.Serialization.GeneratedAssembly {
             return o;
         }
 
-        global::Xbim.COBieLiteUK.ConnectionType Read69_ConnectionType(bool isNullable, bool checkType) {
+        global::Xbim.COBieLiteUK.ConnectionType Read93_ConnectionType(bool isNullable, bool checkType) {
             System.Xml.XmlQualifiedName xsiType = checkType ? GetXsiType() : null;
             bool isNull = false;
             if (isNullable) isNull = ReadNull();
@@ -3723,7 +3748,7 @@ namespace Microsoft.Xml.Serialization.GeneratedAssembly {
             return o;
         }
 
-        global::Xbim.COBieLiteUK.SystemCollectionType Read30_SystemCollectionType(bool isNullable, bool checkType) {
+        global::Xbim.COBieLiteUK.SystemCollectionType Read69_SystemCollectionType(bool isNullable, bool checkType) {
             System.Xml.XmlQualifiedName xsiType = checkType ? GetXsiType() : null;
             bool isNull = false;
             if (isNullable) isNull = ReadNull();
@@ -3759,7 +3784,7 @@ namespace Microsoft.Xml.Serialization.GeneratedAssembly {
                     switch (state) {
                     case 0:
                         if (((object) Reader.LocalName == (object)id151_System && (object) Reader.NamespaceURI == (object)id5_Item)) {
-                            if ((object)(a_0) == null) Reader.Skip(); else a_0.Add(Read29_SystemType(false, true));
+                            if ((object)(a_0) == null) Reader.Skip(); else a_0.Add(Read68_SystemType(false, true));
                         }
                         else {
                             state = 1;
@@ -3780,7 +3805,7 @@ namespace Microsoft.Xml.Serialization.GeneratedAssembly {
             return o;
         }
 
-        global::Xbim.COBieLiteUK.SystemType Read29_SystemType(bool isNullable, bool checkType) {
+        global::Xbim.COBieLiteUK.SystemType Read68_SystemType(bool isNullable, bool checkType) {
             System.Xml.XmlQualifiedName xsiType = checkType ? GetXsiType() : null;
             bool isNull = false;
             if (isNullable) isNull = ReadNull();
@@ -3881,7 +3906,7 @@ namespace Microsoft.Xml.Serialization.GeneratedAssembly {
             return o;
         }
 
-        global::Xbim.COBieLiteUK.AssetTypeCollectionType Read59_AssetTypeCollectionType(bool isNullable, bool checkType) {
+        global::Xbim.COBieLiteUK.AssetTypeCollectionType Read57_AssetTypeCollectionType(bool isNullable, bool checkType) {
             System.Xml.XmlQualifiedName xsiType = checkType ? GetXsiType() : null;
             bool isNull = false;
             if (isNullable) isNull = ReadNull();
@@ -3917,7 +3942,7 @@ namespace Microsoft.Xml.Serialization.GeneratedAssembly {
                     switch (state) {
                     case 0:
                         if (((object) Reader.LocalName == (object)id160_AssetType && (object) Reader.NamespaceURI == (object)id5_Item)) {
-                            if ((object)(a_0) == null) Reader.Skip(); else a_0.Add(Read58_AssetTypeInfoType(false, true));
+                            if ((object)(a_0) == null) Reader.Skip(); else a_0.Add(Read56_AssetTypeInfoType(false, true));
                         }
                         else {
                             state = 1;
@@ -3938,7 +3963,7 @@ namespace Microsoft.Xml.Serialization.GeneratedAssembly {
             return o;
         }
 
-        global::Xbim.COBieLiteUK.AssetTypeInfoType Read58_AssetTypeInfoType(bool isNullable, bool checkType) {
+        global::Xbim.COBieLiteUK.AssetTypeInfoType Read56_AssetTypeInfoType(bool isNullable, bool checkType) {
             System.Xml.XmlQualifiedName xsiType = checkType ? GetXsiType() : null;
             bool isNull = false;
             if (isNullable) isNull = ReadNull();
@@ -4010,7 +4035,7 @@ namespace Microsoft.Xml.Serialization.GeneratedAssembly {
                         if (((object) Reader.LocalName == (object)id165_AssetTypeAccountingCategory && (object) Reader.NamespaceURI == (object)id5_Item)) {
                             o.@AssetTypeAccountingCategorySpecified = true;
                             {
-                                o.@AssetTypeAccountingCategory = Read36_AssetPortabilitySimpleType(Reader.ReadElementString());
+                                o.@AssetTypeAccountingCategory = Read32_AssetPortabilitySimpleType(Reader.ReadElementString());
                             }
                         }
                         state = 4;
@@ -4025,31 +4050,31 @@ namespace Microsoft.Xml.Serialization.GeneratedAssembly {
                         break;
                     case 5:
                         if (((object) Reader.LocalName == (object)id167_AssetTypeReplacementCostValue && (object) Reader.NamespaceURI == (object)id5_Item)) {
-                            o.@AssetTypeReplacementCostValue = Read45_DecimalValueType(false, true);
+                            o.@AssetTypeReplacementCostValue = Read42_DecimalValueType(false, true);
                         }
                         state = 6;
                         break;
                     case 6:
                         if (((object) Reader.LocalName == (object)id168_AssetTypeExpectedLifeValue && (object) Reader.NamespaceURI == (object)id5_Item)) {
-                            o.@AssetTypeExpectedLifeValue = Read41_IntegerValueType(false, true);
+                            o.@AssetTypeExpectedLifeValue = Read39_IntegerValueType(false, true);
                         }
                         state = 7;
                         break;
                     case 7:
                         if (((object) Reader.LocalName == (object)id169_AssetTypeNominalLength && (object) Reader.NamespaceURI == (object)id5_Item)) {
-                            o.@AssetTypeNominalLength = Read45_DecimalValueType(false, true);
+                            o.@AssetTypeNominalLength = Read42_DecimalValueType(false, true);
                         }
                         state = 8;
                         break;
                     case 8:
                         if (((object) Reader.LocalName == (object)id170_AssetTypeNominalWidth && (object) Reader.NamespaceURI == (object)id5_Item)) {
-                            o.@AssetTypeNominalWidth = Read45_DecimalValueType(false, true);
+                            o.@AssetTypeNominalWidth = Read42_DecimalValueType(false, true);
                         }
                         state = 9;
                         break;
                     case 9:
                         if (((object) Reader.LocalName == (object)id171_AssetTypeNominalHeight && (object) Reader.NamespaceURI == (object)id5_Item)) {
-                            o.@AssetTypeNominalHeight = Read45_DecimalValueType(false, true);
+                            o.@AssetTypeNominalHeight = Read42_DecimalValueType(false, true);
                         }
                         state = 10;
                         break;
@@ -4143,7 +4168,7 @@ namespace Microsoft.Xml.Serialization.GeneratedAssembly {
                         break;
                     case 21:
                         if (((object) Reader.LocalName == (object)id183_Assets && (object) Reader.NamespaceURI == (object)id5_Item)) {
-                            o.@Assets = Read49_AssetCollectionType(false, true);
+                            o.@Assets = Read46_AssetCollectionType(false, true);
                         }
                         state = 22;
                         break;
@@ -4155,19 +4180,19 @@ namespace Microsoft.Xml.Serialization.GeneratedAssembly {
                         break;
                     case 23:
                         if (((object) Reader.LocalName == (object)id185_Warranties && (object) Reader.NamespaceURI == (object)id5_Item)) {
-                            o.@Warranties = Read51_WarrantyCollectionType(false, true);
+                            o.@Warranties = Read48_WarrantyCollectionType(false, true);
                         }
                         state = 24;
                         break;
                     case 24:
                         if (((object) Reader.LocalName == (object)id186_Spares && (object) Reader.NamespaceURI == (object)id5_Item)) {
-                            o.@Spares = Read31_SpareCollectionType(false, true);
+                            o.@Spares = Read49_SpareCollectionType(false, true);
                         }
                         state = 25;
                         break;
                     case 25:
                         if (((object) Reader.LocalName == (object)id187_Jobs && (object) Reader.NamespaceURI == (object)id5_Item)) {
-                            o.@Jobs = Read57_JobCollectionType(false, true);
+                            o.@Jobs = Read55_JobCollectionType(false, true);
                         }
                         state = 26;
                         break;
@@ -4376,7 +4401,7 @@ namespace Microsoft.Xml.Serialization.GeneratedAssembly {
             return o;
         }
 
-        global::Xbim.COBieLiteUK.JobCollectionType Read57_JobCollectionType(bool isNullable, bool checkType) {
+        global::Xbim.COBieLiteUK.JobCollectionType Read55_JobCollectionType(bool isNullable, bool checkType) {
             System.Xml.XmlQualifiedName xsiType = checkType ? GetXsiType() : null;
             bool isNull = false;
             if (isNullable) isNull = ReadNull();
@@ -4412,7 +4437,7 @@ namespace Microsoft.Xml.Serialization.GeneratedAssembly {
                     switch (state) {
                     case 0:
                         if (((object) Reader.LocalName == (object)id203_Job && (object) Reader.NamespaceURI == (object)id5_Item)) {
-                            if ((object)(a_0) == null) Reader.Skip(); else a_0.Add(Read56_JobType(false, true));
+                            if ((object)(a_0) == null) Reader.Skip(); else a_0.Add(Read54_JobType(false, true));
                         }
                         else {
                             state = 1;
@@ -4433,7 +4458,7 @@ namespace Microsoft.Xml.Serialization.GeneratedAssembly {
             return o;
         }
 
-        global::Xbim.COBieLiteUK.JobType Read56_JobType(bool isNullable, bool checkType) {
+        global::Xbim.COBieLiteUK.JobType Read54_JobType(bool isNullable, bool checkType) {
             System.Xml.XmlQualifiedName xsiType = checkType ? GetXsiType() : null;
             bool isNull = false;
             if (isNullable) isNull = ReadNull();
@@ -4519,7 +4544,7 @@ namespace Microsoft.Xml.Serialization.GeneratedAssembly {
                         break;
                     case 5:
                         if (((object) Reader.LocalName == (object)id210_JobDuration && (object) Reader.NamespaceURI == (object)id5_Item)) {
-                            o.@JobDuration = Read41_IntegerValueType(false, true);
+                            o.@JobDuration = Read39_IntegerValueType(false, true);
                         }
                         state = 6;
                         break;
@@ -4542,7 +4567,7 @@ namespace Microsoft.Xml.Serialization.GeneratedAssembly {
                         break;
                     case 8:
                         if (((object) Reader.LocalName == (object)id213_JobFrequencyValue && (object) Reader.NamespaceURI == (object)id5_Item)) {
-                            o.@JobFrequencyValue = Read45_DecimalValueType(false, true);
+                            o.@JobFrequencyValue = Read42_DecimalValueType(false, true);
                         }
                         state = 9;
                         break;
@@ -4556,7 +4581,7 @@ namespace Microsoft.Xml.Serialization.GeneratedAssembly {
                         break;
                     case 10:
                         if (((object) Reader.LocalName == (object)id215_Resources && (object) Reader.NamespaceURI == (object)id5_Item)) {
-                            o.@Resources = Read55_ResourceCollectionType(false, true);
+                            o.@Resources = Read53_ResourceCollectionType(false, true);
                         }
                         state = 11;
                         break;
@@ -4593,7 +4618,7 @@ namespace Microsoft.Xml.Serialization.GeneratedAssembly {
             return o;
         }
 
-        global::Xbim.COBieLiteUK.ResourceCollectionType Read55_ResourceCollectionType(bool isNullable, bool checkType) {
+        global::Xbim.COBieLiteUK.ResourceCollectionType Read53_ResourceCollectionType(bool isNullable, bool checkType) {
             System.Xml.XmlQualifiedName xsiType = checkType ? GetXsiType() : null;
             bool isNull = false;
             if (isNullable) isNull = ReadNull();
@@ -4629,7 +4654,7 @@ namespace Microsoft.Xml.Serialization.GeneratedAssembly {
                     switch (state) {
                     case 0:
                         if (((object) Reader.LocalName == (object)id220_Resource && (object) Reader.NamespaceURI == (object)id5_Item)) {
-                            if ((object)(a_0) == null) Reader.Skip(); else a_0.Add(Read54_ResourceType(false, true));
+                            if ((object)(a_0) == null) Reader.Skip(); else a_0.Add(Read52_ResourceType(false, true));
                         }
                         else {
                             state = 1;
@@ -4650,7 +4675,7 @@ namespace Microsoft.Xml.Serialization.GeneratedAssembly {
             return o;
         }
 
-        global::Xbim.COBieLiteUK.ResourceType Read54_ResourceType(bool isNullable, bool checkType) {
+        global::Xbim.COBieLiteUK.ResourceType Read52_ResourceType(bool isNullable, bool checkType) {
             System.Xml.XmlQualifiedName xsiType = checkType ? GetXsiType() : null;
             bool isNull = false;
             if (isNullable) isNull = ReadNull();
@@ -4751,15 +4776,15 @@ namespace Microsoft.Xml.Serialization.GeneratedAssembly {
             return o;
         }
 
-        global::Xbim.COBieLiteUK.DecimalValueType Read45_DecimalValueType(bool isNullable, bool checkType) {
+        global::Xbim.COBieLiteUK.DecimalValueType Read42_DecimalValueType(bool isNullable, bool checkType) {
             System.Xml.XmlQualifiedName xsiType = checkType ? GetXsiType() : null;
             bool isNull = false;
             if (isNullable) isNull = ReadNull();
             if (checkType) {
             if (xsiType == null || ((object) ((System.Xml.XmlQualifiedName)xsiType).Name == (object)id228_DecimalValueType && (object) ((System.Xml.XmlQualifiedName)xsiType).Namespace == (object)id5_Item)) {
             }
-            else if (((object) ((System.Xml.XmlQualifiedName)xsiType).Name == (object)id109_AttributeDecimalValueType && (object) ((System.Xml.XmlQualifiedName)xsiType).Namespace == (object)id5_Item))
-                return Read43_AttributeDecimalValueType(isNullable, false);
+            else if (((object) ((System.Xml.XmlQualifiedName)xsiType).Name == (object)id111_AttributeDecimalValueType && (object) ((System.Xml.XmlQualifiedName)xsiType).Namespace == (object)id5_Item))
+                return Read36_AttributeDecimalValueType(isNullable, false);
             else
                 throw CreateUnknownTypeException((System.Xml.XmlQualifiedName)xsiType);
             }
@@ -4794,7 +4819,7 @@ namespace Microsoft.Xml.Serialization.GeneratedAssembly {
                         state = 1;
                         break;
                     case 1:
-                        if (((object) Reader.LocalName == (object)id110_DecimalValue && (object) Reader.NamespaceURI == (object)id5_Item)) {
+                        if (((object) Reader.LocalName == (object)id112_DecimalValue && (object) Reader.NamespaceURI == (object)id5_Item)) {
                             o.@DecimalValueSpecified = true;
                             {
                                 o.@DecimalValue = System.Xml.XmlConvert.ToDouble(Reader.ReadElementString());
@@ -4817,14 +4842,14 @@ namespace Microsoft.Xml.Serialization.GeneratedAssembly {
             return o;
         }
 
-        global::Xbim.COBieLiteUK.IntegerValueType Read41_IntegerValueType(bool isNullable, bool checkType) {
+        global::Xbim.COBieLiteUK.IntegerValueType Read39_IntegerValueType(bool isNullable, bool checkType) {
             System.Xml.XmlQualifiedName xsiType = checkType ? GetXsiType() : null;
             bool isNull = false;
             if (isNullable) isNull = ReadNull();
             if (checkType) {
             if (xsiType == null || ((object) ((System.Xml.XmlQualifiedName)xsiType).Name == (object)id229_IntegerValueType && (object) ((System.Xml.XmlQualifiedName)xsiType).Namespace == (object)id5_Item)) {
             }
-            else if (((object) ((System.Xml.XmlQualifiedName)xsiType).Name == (object)id113_AttributeIntegerValueType && (object) ((System.Xml.XmlQualifiedName)xsiType).Namespace == (object)id5_Item))
+            else if (((object) ((System.Xml.XmlQualifiedName)xsiType).Name == (object)id107_AttributeIntegerValueType && (object) ((System.Xml.XmlQualifiedName)xsiType).Namespace == (object)id5_Item))
                 return Read40_AttributeIntegerValueType(isNullable, false);
             else
                 throw CreateUnknownTypeException((System.Xml.XmlQualifiedName)xsiType);
@@ -4860,10 +4885,8 @@ namespace Microsoft.Xml.Serialization.GeneratedAssembly {
                         state = 1;
                         break;
                     case 1:
-                        if (((object) Reader.LocalName == (object)id114_IntegerValue && (object) Reader.NamespaceURI == (object)id5_Item)) {
-                            {
-                                o.@IntegerValue = System.Xml.XmlConvert.ToInt32(Reader.ReadElementString());
-                            }
+                        if (((object) Reader.LocalName == (object)id108_IntegerValue && (object) Reader.NamespaceURI == (object)id5_Item)) {
+                            o.@IntegerValue = Read38_NullableOfInt32(true);
                         }
                         state = 2;
                         break;
@@ -4882,7 +4905,7 @@ namespace Microsoft.Xml.Serialization.GeneratedAssembly {
             return o;
         }
 
-        global::Xbim.COBieLiteUK.SpareCollectionType Read31_SpareCollectionType(bool isNullable, bool checkType) {
+        global::Xbim.COBieLiteUK.SpareCollectionType Read49_SpareCollectionType(bool isNullable, bool checkType) {
             System.Xml.XmlQualifiedName xsiType = checkType ? GetXsiType() : null;
             bool isNull = false;
             if (isNullable) isNull = ReadNull();
@@ -5098,7 +5121,7 @@ namespace Microsoft.Xml.Serialization.GeneratedAssembly {
                     switch (state) {
                     case 0:
                         if (((object) Reader.LocalName == (object)id65_ContactAssignment && (object) Reader.NamespaceURI == (object)id5_Item)) {
-                            if ((object)(a_0) == null) Reader.Skip(); else a_0.Add(Read2_ContactKeyType(false, true));
+                            if ((object)(a_0) == null) Reader.Skip(); else a_0.Add(Read13_ContactKeyType(false, true));
                         }
                         else {
                             state = 1;
@@ -5119,7 +5142,7 @@ namespace Microsoft.Xml.Serialization.GeneratedAssembly {
             return o;
         }
 
-        global::Xbim.COBieLiteUK.WarrantyCollectionType Read51_WarrantyCollectionType(bool isNullable, bool checkType) {
+        global::Xbim.COBieLiteUK.WarrantyCollectionType Read48_WarrantyCollectionType(bool isNullable, bool checkType) {
             System.Xml.XmlQualifiedName xsiType = checkType ? GetXsiType() : null;
             bool isNull = false;
             if (isNullable) isNull = ReadNull();
@@ -5155,7 +5178,7 @@ namespace Microsoft.Xml.Serialization.GeneratedAssembly {
                     switch (state) {
                     case 0:
                         if (((object) Reader.LocalName == (object)id244_Warranty && (object) Reader.NamespaceURI == (object)id5_Item)) {
-                            if ((object)(a_0) == null) Reader.Skip(); else a_0.Add(Read50_WarrantyType(false, true));
+                            if ((object)(a_0) == null) Reader.Skip(); else a_0.Add(Read47_WarrantyType(false, true));
                         }
                         else {
                             state = 1;
@@ -5176,7 +5199,7 @@ namespace Microsoft.Xml.Serialization.GeneratedAssembly {
             return o;
         }
 
-        global::Xbim.COBieLiteUK.WarrantyType Read50_WarrantyType(bool isNullable, bool checkType) {
+        global::Xbim.COBieLiteUK.WarrantyType Read47_WarrantyType(bool isNullable, bool checkType) {
             System.Xml.XmlQualifiedName xsiType = checkType ? GetXsiType() : null;
             bool isNull = false;
             if (isNullable) isNull = ReadNull();
@@ -5238,7 +5261,7 @@ namespace Microsoft.Xml.Serialization.GeneratedAssembly {
                         break;
                     case 2:
                         if (((object) Reader.LocalName == (object)id248_WarrantyDuration && (object) Reader.NamespaceURI == (object)id5_Item)) {
-                            o.@WarrantyDuration = Read41_IntegerValueType(false, true);
+                            o.@WarrantyDuration = Read39_IntegerValueType(false, true);
                         }
                         state = 3;
                         break;
@@ -5281,7 +5304,7 @@ namespace Microsoft.Xml.Serialization.GeneratedAssembly {
             return o;
         }
 
-        global::Xbim.COBieLiteUK.AssetCollectionType Read49_AssetCollectionType(bool isNullable, bool checkType) {
+        global::Xbim.COBieLiteUK.AssetCollectionType Read46_AssetCollectionType(bool isNullable, bool checkType) {
             System.Xml.XmlQualifiedName xsiType = checkType ? GetXsiType() : null;
             bool isNull = false;
             if (isNullable) isNull = ReadNull();
@@ -5317,7 +5340,7 @@ namespace Microsoft.Xml.Serialization.GeneratedAssembly {
                     switch (state) {
                     case 0:
                         if (((object) Reader.LocalName == (object)id254_Asset && (object) Reader.NamespaceURI == (object)id5_Item)) {
-                            if ((object)(a_0) == null) Reader.Skip(); else a_0.Add(Read48_AssetInfoType(false, true));
+                            if ((object)(a_0) == null) Reader.Skip(); else a_0.Add(Read45_AssetInfoType(false, true));
                         }
                         else {
                             state = 1;
@@ -5338,7 +5361,7 @@ namespace Microsoft.Xml.Serialization.GeneratedAssembly {
             return o;
         }
 
-        global::Xbim.COBieLiteUK.AssetInfoType Read48_AssetInfoType(bool isNullable, bool checkType) {
+        global::Xbim.COBieLiteUK.AssetInfoType Read45_AssetInfoType(bool isNullable, bool checkType) {
             System.Xml.XmlQualifiedName xsiType = checkType ? GetXsiType() : null;
             bool isNull = false;
             if (isNullable) isNull = ReadNull();
@@ -5392,7 +5415,7 @@ namespace Microsoft.Xml.Serialization.GeneratedAssembly {
                         break;
                     case 1:
                         if (((object) Reader.LocalName == (object)id257_AssetSpaceAssignments && (object) Reader.NamespaceURI == (object)id5_Item)) {
-                            o.@AssetSpaceAssignments = Read16_SpaceAssignmentCollectionType(false, true);
+                            o.@AssetSpaceAssignments = Read15_SpaceAssignmentCollectionType(false, true);
                         }
                         state = 2;
                         break;
@@ -5480,7 +5503,7 @@ namespace Microsoft.Xml.Serialization.GeneratedAssembly {
                         break;
                     case 12:
                         if (((object) Reader.LocalName == (object)id268_AssetSystemAssignments && (object) Reader.NamespaceURI == (object)id5_Item)) {
-                            o.@AssetSystemAssignments = Read47_SystemAssignmentCollectionType(false, true);
+                            o.@AssetSystemAssignments = Read44_SystemAssignmentCollectionType(false, true);
                         }
                         state = 13;
                         break;
@@ -5523,7 +5546,7 @@ namespace Microsoft.Xml.Serialization.GeneratedAssembly {
             return o;
         }
 
-        global::Xbim.COBieLiteUK.SystemAssignmentCollectionType Read47_SystemAssignmentCollectionType(bool isNullable, bool checkType) {
+        global::Xbim.COBieLiteUK.SystemAssignmentCollectionType Read44_SystemAssignmentCollectionType(bool isNullable, bool checkType) {
             System.Xml.XmlQualifiedName xsiType = checkType ? GetXsiType() : null;
             bool isNull = false;
             if (isNullable) isNull = ReadNull();
@@ -5559,7 +5582,7 @@ namespace Microsoft.Xml.Serialization.GeneratedAssembly {
                     switch (state) {
                     case 0:
                         if (((object) Reader.LocalName == (object)id273_SystemAssignment && (object) Reader.NamespaceURI == (object)id5_Item)) {
-                            if ((object)(a_0) == null) Reader.Skip(); else a_0.Add(Read9_SystemKeyType(false, true));
+                            if ((object)(a_0) == null) Reader.Skip(); else a_0.Add(Read7_SystemKeyType(false, true));
                         }
                         else {
                             state = 1;
@@ -5580,7 +5603,7 @@ namespace Microsoft.Xml.Serialization.GeneratedAssembly {
             return o;
         }
 
-        global::Xbim.COBieLiteUK.SystemKeyType Read9_SystemKeyType(bool isNullable, bool checkType) {
+        global::Xbim.COBieLiteUK.SystemKeyType Read7_SystemKeyType(bool isNullable, bool checkType) {
             System.Xml.XmlQualifiedName xsiType = checkType ? GetXsiType() : null;
             bool isNull = false;
             if (isNullable) isNull = ReadNull();
@@ -5647,7 +5670,7 @@ namespace Microsoft.Xml.Serialization.GeneratedAssembly {
             return o;
         }
 
-        global::Xbim.COBieLiteUK.SpaceAssignmentCollectionType Read16_SpaceAssignmentCollectionType(bool isNullable, bool checkType) {
+        global::Xbim.COBieLiteUK.SpaceAssignmentCollectionType Read15_SpaceAssignmentCollectionType(bool isNullable, bool checkType) {
             System.Xml.XmlQualifiedName xsiType = checkType ? GetXsiType() : null;
             bool isNull = false;
             if (isNullable) isNull = ReadNull();
@@ -5683,7 +5706,7 @@ namespace Microsoft.Xml.Serialization.GeneratedAssembly {
                     switch (state) {
                     case 0:
                         if (((object) Reader.LocalName == (object)id277_SpaceAssignment && (object) Reader.NamespaceURI == (object)id5_Item)) {
-                            if ((object)(a_0) == null) Reader.Skip(); else a_0.Add(Read12_SpaceKeyType(false, true));
+                            if ((object)(a_0) == null) Reader.Skip(); else a_0.Add(Read10_SpaceKeyType(false, true));
                         }
                         else {
                             state = 1;
@@ -5704,7 +5727,7 @@ namespace Microsoft.Xml.Serialization.GeneratedAssembly {
             return o;
         }
 
-        global::Xbim.COBieLiteUK.SpaceKeyType Read12_SpaceKeyType(bool isNullable, bool checkType) {
+        global::Xbim.COBieLiteUK.SpaceKeyType Read10_SpaceKeyType(bool isNullable, bool checkType) {
             System.Xml.XmlQualifiedName xsiType = checkType ? GetXsiType() : null;
             bool isNull = false;
             if (isNullable) isNull = ReadNull();
@@ -5767,7 +5790,7 @@ namespace Microsoft.Xml.Serialization.GeneratedAssembly {
             return o;
         }
 
-        global::Xbim.COBieLiteUK.AssetPortabilitySimpleType Read36_AssetPortabilitySimpleType(string s) {
+        global::Xbim.COBieLiteUK.AssetPortabilitySimpleType Read32_AssetPortabilitySimpleType(string s) {
             switch (s) {
                 case @"Fixed": return global::Xbim.COBieLiteUK.AssetPortabilitySimpleType.@Fixed;
                 case @"Moveable": return global::Xbim.COBieLiteUK.AssetPortabilitySimpleType.@Moveable;
@@ -5776,7 +5799,7 @@ namespace Microsoft.Xml.Serialization.GeneratedAssembly {
             }
         }
 
-        global::Xbim.COBieLiteUK.ZoneCollectionType Read34_ZoneCollectionType(bool isNullable, bool checkType) {
+        global::Xbim.COBieLiteUK.ZoneCollectionType Read60_ZoneCollectionType(bool isNullable, bool checkType) {
             System.Xml.XmlQualifiedName xsiType = checkType ? GetXsiType() : null;
             bool isNull = false;
             if (isNullable) isNull = ReadNull();
@@ -5812,7 +5835,7 @@ namespace Microsoft.Xml.Serialization.GeneratedAssembly {
                     switch (state) {
                     case 0:
                         if (((object) Reader.LocalName == (object)id282_Zone && (object) Reader.NamespaceURI == (object)id5_Item)) {
-                            if ((object)(a_0) == null) Reader.Skip(); else a_0.Add(Read33_ZoneType(false, true));
+                            if ((object)(a_0) == null) Reader.Skip(); else a_0.Add(Read59_ZoneType(false, true));
                         }
                         else {
                             state = 1;
@@ -5833,7 +5856,7 @@ namespace Microsoft.Xml.Serialization.GeneratedAssembly {
             return o;
         }
 
-        global::Xbim.COBieLiteUK.ZoneType Read33_ZoneType(bool isNullable, bool checkType) {
+        global::Xbim.COBieLiteUK.ZoneType Read59_ZoneType(bool isNullable, bool checkType) {
             System.Xml.XmlQualifiedName xsiType = checkType ? GetXsiType() : null;
             bool isNull = false;
             if (isNullable) isNull = ReadNull();
@@ -5934,7 +5957,7 @@ namespace Microsoft.Xml.Serialization.GeneratedAssembly {
             return o;
         }
 
-        global::Xbim.COBieLiteUK.FloorCollectionType Read65_FloorCollectionType(bool isNullable, bool checkType) {
+        global::Xbim.COBieLiteUK.FloorCollectionType Read66_FloorCollectionType(bool isNullable, bool checkType) {
             System.Xml.XmlQualifiedName xsiType = checkType ? GetXsiType() : null;
             bool isNull = false;
             if (isNullable) isNull = ReadNull();
@@ -5970,7 +5993,7 @@ namespace Microsoft.Xml.Serialization.GeneratedAssembly {
                     switch (state) {
                     case 0:
                         if (((object) Reader.LocalName == (object)id291_Floor && (object) Reader.NamespaceURI == (object)id5_Item)) {
-                            if ((object)(a_0) == null) Reader.Skip(); else a_0.Add(Read64_FloorType(false, true));
+                            if ((object)(a_0) == null) Reader.Skip(); else a_0.Add(Read65_FloorType(false, true));
                         }
                         else {
                             state = 1;
@@ -5991,7 +6014,7 @@ namespace Microsoft.Xml.Serialization.GeneratedAssembly {
             return o;
         }
 
-        global::Xbim.COBieLiteUK.FloorType Read64_FloorType(bool isNullable, bool checkType) {
+        global::Xbim.COBieLiteUK.FloorType Read65_FloorType(bool isNullable, bool checkType) {
             System.Xml.XmlQualifiedName xsiType = checkType ? GetXsiType() : null;
             bool isNull = false;
             if (isNullable) isNull = ReadNull();
@@ -6061,19 +6084,19 @@ namespace Microsoft.Xml.Serialization.GeneratedAssembly {
                         break;
                     case 3:
                         if (((object) Reader.LocalName == (object)id295_FloorElevationValue && (object) Reader.NamespaceURI == (object)id5_Item)) {
-                            o.@FloorElevationValue = Read45_DecimalValueType(false, true);
+                            o.@FloorElevationValue = Read42_DecimalValueType(false, true);
                         }
                         state = 4;
                         break;
                     case 4:
                         if (((object) Reader.LocalName == (object)id296_FloorHeightValue && (object) Reader.NamespaceURI == (object)id5_Item)) {
-                            o.@FloorHeightValue = Read45_DecimalValueType(false, true);
+                            o.@FloorHeightValue = Read42_DecimalValueType(false, true);
                         }
                         state = 5;
                         break;
                     case 5:
                         if (((object) Reader.LocalName == (object)id297_Spaces && (object) Reader.NamespaceURI == (object)id5_Item)) {
-                            o.@Spaces = Read62_SpaceCollectionType(false, true);
+                            o.@Spaces = Read63_SpaceCollectionType(false, true);
                         }
                         state = 6;
                         break;
@@ -6110,7 +6133,7 @@ namespace Microsoft.Xml.Serialization.GeneratedAssembly {
             return o;
         }
 
-        global::Xbim.COBieLiteUK.SpaceCollectionType Read62_SpaceCollectionType(bool isNullable, bool checkType) {
+        global::Xbim.COBieLiteUK.SpaceCollectionType Read63_SpaceCollectionType(bool isNullable, bool checkType) {
             System.Xml.XmlQualifiedName xsiType = checkType ? GetXsiType() : null;
             bool isNull = false;
             if (isNullable) isNull = ReadNull();
@@ -6146,7 +6169,7 @@ namespace Microsoft.Xml.Serialization.GeneratedAssembly {
                     switch (state) {
                     case 0:
                         if (((object) Reader.LocalName == (object)id302_Space && (object) Reader.NamespaceURI == (object)id5_Item)) {
-                            if ((object)(a_0) == null) Reader.Skip(); else a_0.Add(Read61_SpaceType(false, true));
+                            if ((object)(a_0) == null) Reader.Skip(); else a_0.Add(Read62_SpaceType(false, true));
                         }
                         else {
                             state = 1;
@@ -6167,7 +6190,7 @@ namespace Microsoft.Xml.Serialization.GeneratedAssembly {
             return o;
         }
 
-        global::Xbim.COBieLiteUK.SpaceType Read61_SpaceType(bool isNullable, bool checkType) {
+        global::Xbim.COBieLiteUK.SpaceType Read62_SpaceType(bool isNullable, bool checkType) {
             System.Xml.XmlQualifiedName xsiType = checkType ? GetXsiType() : null;
             bool isNull = false;
             if (isNullable) isNull = ReadNull();
@@ -6245,19 +6268,19 @@ namespace Microsoft.Xml.Serialization.GeneratedAssembly {
                         break;
                     case 4:
                         if (((object) Reader.LocalName == (object)id307_SpaceUsableHeightValue && (object) Reader.NamespaceURI == (object)id5_Item)) {
-                            o.@SpaceUsableHeightValue = Read45_DecimalValueType(false, true);
+                            o.@SpaceUsableHeightValue = Read42_DecimalValueType(false, true);
                         }
                         state = 5;
                         break;
                     case 5:
                         if (((object) Reader.LocalName == (object)id308_SpaceGrossAreaValue && (object) Reader.NamespaceURI == (object)id5_Item)) {
-                            o.@SpaceGrossAreaValue = Read45_DecimalValueType(false, true);
+                            o.@SpaceGrossAreaValue = Read42_DecimalValueType(false, true);
                         }
                         state = 6;
                         break;
                     case 6:
                         if (((object) Reader.LocalName == (object)id309_SpaceNetAreaValue && (object) Reader.NamespaceURI == (object)id5_Item)) {
-                            o.@SpaceNetAreaValue = Read45_DecimalValueType(false, true);
+                            o.@SpaceNetAreaValue = Read42_DecimalValueType(false, true);
                         }
                         state = 7;
                         break;
@@ -6540,7 +6563,7 @@ namespace Microsoft.Xml.Serialization.GeneratedAssembly {
             return o;
         }
 
-        global::Xbim.COBieLiteUK.ProjectTypeBase Read95_ProjectTypeBase(bool isNullable, bool checkType) {
+        global::Xbim.COBieLiteUK.ProjectTypeBase Read96_ProjectTypeBase(bool isNullable, bool checkType) {
             System.Xml.XmlQualifiedName xsiType = checkType ? GetXsiType() : null;
             bool isNull = false;
             if (isNullable) isNull = ReadNull();
@@ -6548,7 +6571,7 @@ namespace Microsoft.Xml.Serialization.GeneratedAssembly {
             if (xsiType == null || ((object) ((System.Xml.XmlQualifiedName)xsiType).Name == (object)id3_ProjectTypeBase && (object) ((System.Xml.XmlQualifiedName)xsiType).Namespace == (object)id5_Item)) {
             }
             else if (((object) ((System.Xml.XmlQualifiedName)xsiType).Name == (object)id3_ProjectTypeBase && (object) ((System.Xml.XmlQualifiedName)xsiType).Namespace == (object)id2_Item))
-                return Read98_ProjectType(isNullable, false);
+                return Read99_ProjectType(isNullable, false);
             else
                 throw CreateUnknownTypeException((System.Xml.XmlQualifiedName)xsiType);
             }
@@ -6621,7 +6644,7 @@ namespace Microsoft.Xml.Serialization.GeneratedAssembly {
         }
 
         string id279_FloorName;
-        string id100_BooleanValue;
+        string id116_BooleanValue;
         string id208_JobStatus;
         string id129_ContactTownName;
         string id68_ContactEmailReference;
@@ -6641,7 +6664,7 @@ namespace Microsoft.Xml.Serialization.GeneratedAssembly {
         string id55_FacilityIssues;
         string id243_WarrantyCollectionType;
         string id195_AssemblyName;
-        string id102_MonetaryValue;
+        string id105_MonetaryValue;
         string id81_AttributeTypeBase;
         string id298_FloorAttributes;
         string id18_ProjectConstructionEnd;
@@ -6665,18 +6688,18 @@ namespace Microsoft.Xml.Serialization.GeneratedAssembly {
         string id224_ResourceDescription;
         string id287_ZoneAttributes;
         string id181_AssetTypeSizeDescription;
-        string id113_AttributeIntegerValueType;
+        string id107_AttributeIntegerValueType;
         string id80_Attribute;
         string id227_ResourceIssues;
         string id132_ContactPostalCode;
         string id307_SpaceUsableHeightValue;
         string id214_JobPriorTaskID;
         string id99_UnitName;
-        string id95_AttributeTimeValue;
+        string id90_AttributeTimeValue;
         string id43_FacilityDefaultCurrencyUnit;
         string id77_DocumentAttributes;
         string id211_JobStartDate;
-        string id115_MinValueInteger;
+        string id109_MinValueInteger;
         string id203_Job;
         string id3_ProjectTypeBase;
         string id49_AssetTypes;
@@ -6687,10 +6710,10 @@ namespace Microsoft.Xml.Serialization.GeneratedAssembly {
         string id12_ProjectFunction;
         string id219_ResourceCollectionType;
         string id7_externalSystemName;
-        string id109_AttributeDecimalValueType;
+        string id111_AttributeDecimalValueType;
         string id67_ContactKeyType;
         string id276_SpaceAssignmentCollectionType;
-        string id104_AttributeStringValueType;
+        string id98_AttributeStringValueType;
         string id167_AssetTypeReplacementCostValue;
         string id217_JobDocuments;
         string id47_Floors;
@@ -6704,7 +6727,7 @@ namespace Microsoft.Xml.Serialization.GeneratedAssembly {
         string id136_ContactIssues;
         string id293_FloorCategory;
         string id242_Item;
-        string id107_AllowedValueCollectionType;
+        string id102_AllowedValueCollectionType;
         string id231_Spare;
         string id312_SpaceDocuments;
         string id260_AssetInstallationDate;
@@ -6722,10 +6745,10 @@ namespace Microsoft.Xml.Serialization.GeneratedAssembly {
         string id209_JobDescription;
         string id29_ProjectStageAttributes;
         string id197_AssemblyCategory;
-        string id92_AttributeDecimalValue;
+        string id93_AttributeDecimalValue;
         string id289_ZoneIssues;
         string id247_WarrantyCategory;
-        string id114_IntegerValue;
+        string id108_IntegerValue;
         string id4_externalEntityName;
         string id64_IssueDescription;
         string id257_AssetSpaceAssignments;
@@ -6740,10 +6763,10 @@ namespace Microsoft.Xml.Serialization.GeneratedAssembly {
         string id310_SpaceZoneAssignments;
         string id61_IssueRiskText;
         string id246_WarrantyName;
-        string id90_AttributeIntegerValue;
+        string id94_AttributeIntegerValue;
         string id86_AttributeDescription;
         string id45_FacilityDescription;
-        string id112_MaxValueDecimal;
+        string id114_MaxValueDecimal;
         string id62_IssueSeverityText;
         string id137_ConnectionCollectionType;
         string id205_JobName;
@@ -6773,8 +6796,8 @@ namespace Microsoft.Xml.Serialization.GeneratedAssembly {
         string id126_ContactFamilyName;
         string id44_Item;
         string id313_SpaceIssues;
-        string id110_DecimalValue;
-        string id91_AttributeDateValue;
+        string id112_DecimalValue;
+        string id92_AttributeDateValue;
         string id238_Item;
         string id147_ConnectionAttributes;
         string id305_SpaceDescription;
@@ -6784,12 +6807,12 @@ namespace Microsoft.Xml.Serialization.GeneratedAssembly {
         string id198_AssemblyDescription;
         string id56_IssueCollectionType;
         string id122_ContactCompanyName;
-        string id98_BooleanValueType;
+        string id115_BooleanValueType;
         string id53_FacilityAttributes;
         string id134_ContactAttributes;
         string id21_ProjectStageType;
         string id30_Facility;
-        string id116_MaxValueInteger;
+        string id110_MaxValueInteger;
         string id301_SpaceCollectionType;
         string id118_Contact;
         string id265_AssetBarCode;
@@ -6822,7 +6845,7 @@ namespace Microsoft.Xml.Serialization.GeneratedAssembly {
         string id71_DocumentTypeBase;
         string id319_SiteDescription;
         string id143_ConnectionAsset1PortName;
-        string id105_StringValue;
+        string id100_StringValue;
         string id33_ProjectStageKeyType;
         string id245_WarrantyType;
         string id234_SpareCategory;
@@ -6849,13 +6872,13 @@ namespace Microsoft.Xml.Serialization.GeneratedAssembly {
         string id180_AssetTypeShapeDescription;
         string id254_Asset;
         string id173_AssetTypeCodePerformance;
-        string id101_AttributeMonetaryValueType;
+        string id104_AttributeMonetaryValueType;
         string id133_ContactURL;
-        string id103_MonetaryUnit;
+        string id106_MonetaryUnit;
         string id272_SystemAssignmentCollectionType;
-        string id93_AttributeDateTimeValue;
+        string id97_AttributeDateTimeValue;
         string id225_ResourceAttributes;
-        string id108_AttributeAllowedValue;
+        string id103_AttributeAllowedValue;
         string id156_SystemAttributes;
         string id196_AssemblyParentName;
         string id194_AssemblyTypeBase;
@@ -6863,7 +6886,7 @@ namespace Microsoft.Xml.Serialization.GeneratedAssembly {
         string id191_AssetTypeIssues;
         string id275_externalIDReference;
         string id263_AssetStartDate;
-        string id96_AttributeMonetaryValue;
+        string id95_AttributeMonetaryValue;
         string id35_FacilityTypeBase;
         string id308_SpaceGrossAreaValue;
         string id152_SystemTypeBase;
@@ -6888,12 +6911,12 @@ namespace Microsoft.Xml.Serialization.GeneratedAssembly {
         string id58_IssueTypeBase;
         string id262_AssetWarrantyStartDate;
         string id193_AssemblyAssignment;
-        string id106_AllowedValues;
+        string id101_AllowedValues;
         string id255_AssetInfoTypeBase;
         string id10_ProjectDescription;
         string id14_ProjectFunctionalUnit;
         string id79_AttributeCollectionType;
-        string id94_AttributeStringValue;
+        string id96_AttributeStringValue;
         string id306_SpaceSignageName;
         string id78_DocumentIssues;
         string id59_IssueName;
@@ -6917,7 +6940,7 @@ namespace Microsoft.Xml.Serialization.GeneratedAssembly {
         string id215_Resources;
         string id125_ContactGivenName;
         string id229_IntegerValueType;
-        string id111_MinValueDecimal;
+        string id113_MinValueDecimal;
         string id139_ConnectionTypeBase;
         string id233_SpareName;
         string id199_AssemblyAttributes;
@@ -6929,7 +6952,7 @@ namespace Microsoft.Xml.Serialization.GeneratedAssembly {
         string id302_Space;
         string id213_JobFrequencyValue;
         string id237_SparePartNumber;
-        string id97_AttributeBooleanValue;
+        string id91_AttributeBooleanValue;
         string id267_AssetLocationDescription;
         string id40_FacilityDefaultLinearUnit;
         string id303_SpaceTypeBase;
@@ -6942,7 +6965,7 @@ namespace Microsoft.Xml.Serialization.GeneratedAssembly {
 
         protected override void InitIDs() {
             id279_FloorName = Reader.NameTable.Add(@"FloorName");
-            id100_BooleanValue = Reader.NameTable.Add(@"BooleanValue");
+            id116_BooleanValue = Reader.NameTable.Add(@"BooleanValue");
             id208_JobStatus = Reader.NameTable.Add(@"JobStatus");
             id129_ContactTownName = Reader.NameTable.Add(@"ContactTownName");
             id68_ContactEmailReference = Reader.NameTable.Add(@"ContactEmailReference");
@@ -6962,7 +6985,7 @@ namespace Microsoft.Xml.Serialization.GeneratedAssembly {
             id55_FacilityIssues = Reader.NameTable.Add(@"FacilityIssues");
             id243_WarrantyCollectionType = Reader.NameTable.Add(@"WarrantyCollectionType");
             id195_AssemblyName = Reader.NameTable.Add(@"AssemblyName");
-            id102_MonetaryValue = Reader.NameTable.Add(@"MonetaryValue");
+            id105_MonetaryValue = Reader.NameTable.Add(@"MonetaryValue");
             id81_AttributeTypeBase = Reader.NameTable.Add(@"AttributeTypeBase");
             id298_FloorAttributes = Reader.NameTable.Add(@"FloorAttributes");
             id18_ProjectConstructionEnd = Reader.NameTable.Add(@"ProjectConstructionEnd");
@@ -6986,18 +7009,18 @@ namespace Microsoft.Xml.Serialization.GeneratedAssembly {
             id224_ResourceDescription = Reader.NameTable.Add(@"ResourceDescription");
             id287_ZoneAttributes = Reader.NameTable.Add(@"ZoneAttributes");
             id181_AssetTypeSizeDescription = Reader.NameTable.Add(@"AssetTypeSizeDescription");
-            id113_AttributeIntegerValueType = Reader.NameTable.Add(@"AttributeIntegerValueType");
+            id107_AttributeIntegerValueType = Reader.NameTable.Add(@"AttributeIntegerValueType");
             id80_Attribute = Reader.NameTable.Add(@"Attribute");
             id227_ResourceIssues = Reader.NameTable.Add(@"ResourceIssues");
             id132_ContactPostalCode = Reader.NameTable.Add(@"ContactPostalCode");
             id307_SpaceUsableHeightValue = Reader.NameTable.Add(@"SpaceUsableHeightValue");
             id214_JobPriorTaskID = Reader.NameTable.Add(@"JobPriorTaskID");
             id99_UnitName = Reader.NameTable.Add(@"UnitName");
-            id95_AttributeTimeValue = Reader.NameTable.Add(@"AttributeTimeValue");
+            id90_AttributeTimeValue = Reader.NameTable.Add(@"AttributeTimeValue");
             id43_FacilityDefaultCurrencyUnit = Reader.NameTable.Add(@"FacilityDefaultCurrencyUnit");
             id77_DocumentAttributes = Reader.NameTable.Add(@"DocumentAttributes");
             id211_JobStartDate = Reader.NameTable.Add(@"JobStartDate");
-            id115_MinValueInteger = Reader.NameTable.Add(@"MinValueInteger");
+            id109_MinValueInteger = Reader.NameTable.Add(@"MinValueInteger");
             id203_Job = Reader.NameTable.Add(@"Job");
             id3_ProjectTypeBase = Reader.NameTable.Add(@"ProjectTypeBase");
             id49_AssetTypes = Reader.NameTable.Add(@"AssetTypes");
@@ -7008,10 +7031,10 @@ namespace Microsoft.Xml.Serialization.GeneratedAssembly {
             id12_ProjectFunction = Reader.NameTable.Add(@"ProjectFunction");
             id219_ResourceCollectionType = Reader.NameTable.Add(@"ResourceCollectionType");
             id7_externalSystemName = Reader.NameTable.Add(@"externalSystemName");
-            id109_AttributeDecimalValueType = Reader.NameTable.Add(@"AttributeDecimalValueType");
+            id111_AttributeDecimalValueType = Reader.NameTable.Add(@"AttributeDecimalValueType");
             id67_ContactKeyType = Reader.NameTable.Add(@"ContactKeyType");
             id276_SpaceAssignmentCollectionType = Reader.NameTable.Add(@"SpaceAssignmentCollectionType");
-            id104_AttributeStringValueType = Reader.NameTable.Add(@"AttributeStringValueType");
+            id98_AttributeStringValueType = Reader.NameTable.Add(@"AttributeStringValueType");
             id167_AssetTypeReplacementCostValue = Reader.NameTable.Add(@"AssetTypeReplacementCostValue");
             id217_JobDocuments = Reader.NameTable.Add(@"JobDocuments");
             id47_Floors = Reader.NameTable.Add(@"Floors");
@@ -7025,7 +7048,7 @@ namespace Microsoft.Xml.Serialization.GeneratedAssembly {
             id136_ContactIssues = Reader.NameTable.Add(@"ContactIssues");
             id293_FloorCategory = Reader.NameTable.Add(@"FloorCategory");
             id242_Item = Reader.NameTable.Add(@"ContactAssignmentCollectionType");
-            id107_AllowedValueCollectionType = Reader.NameTable.Add(@"AllowedValueCollectionType");
+            id102_AllowedValueCollectionType = Reader.NameTable.Add(@"AllowedValueCollectionType");
             id231_Spare = Reader.NameTable.Add(@"Spare");
             id312_SpaceDocuments = Reader.NameTable.Add(@"SpaceDocuments");
             id260_AssetInstallationDate = Reader.NameTable.Add(@"AssetInstallationDate");
@@ -7043,10 +7066,10 @@ namespace Microsoft.Xml.Serialization.GeneratedAssembly {
             id209_JobDescription = Reader.NameTable.Add(@"JobDescription");
             id29_ProjectStageAttributes = Reader.NameTable.Add(@"ProjectStageAttributes");
             id197_AssemblyCategory = Reader.NameTable.Add(@"AssemblyCategory");
-            id92_AttributeDecimalValue = Reader.NameTable.Add(@"AttributeDecimalValue");
+            id93_AttributeDecimalValue = Reader.NameTable.Add(@"AttributeDecimalValue");
             id289_ZoneIssues = Reader.NameTable.Add(@"ZoneIssues");
             id247_WarrantyCategory = Reader.NameTable.Add(@"WarrantyCategory");
-            id114_IntegerValue = Reader.NameTable.Add(@"IntegerValue");
+            id108_IntegerValue = Reader.NameTable.Add(@"IntegerValue");
             id4_externalEntityName = Reader.NameTable.Add(@"externalEntityName");
             id64_IssueDescription = Reader.NameTable.Add(@"IssueDescription");
             id257_AssetSpaceAssignments = Reader.NameTable.Add(@"AssetSpaceAssignments");
@@ -7061,10 +7084,10 @@ namespace Microsoft.Xml.Serialization.GeneratedAssembly {
             id310_SpaceZoneAssignments = Reader.NameTable.Add(@"SpaceZoneAssignments");
             id61_IssueRiskText = Reader.NameTable.Add(@"IssueRiskText");
             id246_WarrantyName = Reader.NameTable.Add(@"WarrantyName");
-            id90_AttributeIntegerValue = Reader.NameTable.Add(@"AttributeIntegerValue");
+            id94_AttributeIntegerValue = Reader.NameTable.Add(@"AttributeIntegerValue");
             id86_AttributeDescription = Reader.NameTable.Add(@"AttributeDescription");
             id45_FacilityDescription = Reader.NameTable.Add(@"FacilityDescription");
-            id112_MaxValueDecimal = Reader.NameTable.Add(@"MaxValueDecimal");
+            id114_MaxValueDecimal = Reader.NameTable.Add(@"MaxValueDecimal");
             id62_IssueSeverityText = Reader.NameTable.Add(@"IssueSeverityText");
             id137_ConnectionCollectionType = Reader.NameTable.Add(@"ConnectionCollectionType");
             id205_JobName = Reader.NameTable.Add(@"JobName");
@@ -7094,8 +7117,8 @@ namespace Microsoft.Xml.Serialization.GeneratedAssembly {
             id126_ContactFamilyName = Reader.NameTable.Add(@"ContactFamilyName");
             id44_Item = Reader.NameTable.Add(@"FacilityDefaultMeasurementStandard");
             id313_SpaceIssues = Reader.NameTable.Add(@"SpaceIssues");
-            id110_DecimalValue = Reader.NameTable.Add(@"DecimalValue");
-            id91_AttributeDateValue = Reader.NameTable.Add(@"AttributeDateValue");
+            id112_DecimalValue = Reader.NameTable.Add(@"DecimalValue");
+            id92_AttributeDateValue = Reader.NameTable.Add(@"AttributeDateValue");
             id238_Item = Reader.NameTable.Add(@"SpareSupplierContactAssignments");
             id147_ConnectionAttributes = Reader.NameTable.Add(@"ConnectionAttributes");
             id305_SpaceDescription = Reader.NameTable.Add(@"SpaceDescription");
@@ -7105,12 +7128,12 @@ namespace Microsoft.Xml.Serialization.GeneratedAssembly {
             id198_AssemblyDescription = Reader.NameTable.Add(@"AssemblyDescription");
             id56_IssueCollectionType = Reader.NameTable.Add(@"IssueCollectionType");
             id122_ContactCompanyName = Reader.NameTable.Add(@"ContactCompanyName");
-            id98_BooleanValueType = Reader.NameTable.Add(@"BooleanValueType");
+            id115_BooleanValueType = Reader.NameTable.Add(@"BooleanValueType");
             id53_FacilityAttributes = Reader.NameTable.Add(@"FacilityAttributes");
             id134_ContactAttributes = Reader.NameTable.Add(@"ContactAttributes");
             id21_ProjectStageType = Reader.NameTable.Add(@"ProjectStageType");
             id30_Facility = Reader.NameTable.Add(@"Facility");
-            id116_MaxValueInteger = Reader.NameTable.Add(@"MaxValueInteger");
+            id110_MaxValueInteger = Reader.NameTable.Add(@"MaxValueInteger");
             id301_SpaceCollectionType = Reader.NameTable.Add(@"SpaceCollectionType");
             id118_Contact = Reader.NameTable.Add(@"Contact");
             id265_AssetBarCode = Reader.NameTable.Add(@"AssetBarCode");
@@ -7143,7 +7166,7 @@ namespace Microsoft.Xml.Serialization.GeneratedAssembly {
             id71_DocumentTypeBase = Reader.NameTable.Add(@"DocumentTypeBase");
             id319_SiteDescription = Reader.NameTable.Add(@"SiteDescription");
             id143_ConnectionAsset1PortName = Reader.NameTable.Add(@"ConnectionAsset1PortName");
-            id105_StringValue = Reader.NameTable.Add(@"StringValue");
+            id100_StringValue = Reader.NameTable.Add(@"StringValue");
             id33_ProjectStageKeyType = Reader.NameTable.Add(@"ProjectStageKeyType");
             id245_WarrantyType = Reader.NameTable.Add(@"WarrantyType");
             id234_SpareCategory = Reader.NameTable.Add(@"SpareCategory");
@@ -7170,13 +7193,13 @@ namespace Microsoft.Xml.Serialization.GeneratedAssembly {
             id180_AssetTypeShapeDescription = Reader.NameTable.Add(@"AssetTypeShapeDescription");
             id254_Asset = Reader.NameTable.Add(@"Asset");
             id173_AssetTypeCodePerformance = Reader.NameTable.Add(@"AssetTypeCodePerformance");
-            id101_AttributeMonetaryValueType = Reader.NameTable.Add(@"AttributeMonetaryValueType");
+            id104_AttributeMonetaryValueType = Reader.NameTable.Add(@"AttributeMonetaryValueType");
             id133_ContactURL = Reader.NameTable.Add(@"ContactURL");
-            id103_MonetaryUnit = Reader.NameTable.Add(@"MonetaryUnit");
+            id106_MonetaryUnit = Reader.NameTable.Add(@"MonetaryUnit");
             id272_SystemAssignmentCollectionType = Reader.NameTable.Add(@"SystemAssignmentCollectionType");
-            id93_AttributeDateTimeValue = Reader.NameTable.Add(@"AttributeDateTimeValue");
+            id97_AttributeDateTimeValue = Reader.NameTable.Add(@"AttributeDateTimeValue");
             id225_ResourceAttributes = Reader.NameTable.Add(@"ResourceAttributes");
-            id108_AttributeAllowedValue = Reader.NameTable.Add(@"AttributeAllowedValue");
+            id103_AttributeAllowedValue = Reader.NameTable.Add(@"AttributeAllowedValue");
             id156_SystemAttributes = Reader.NameTable.Add(@"SystemAttributes");
             id196_AssemblyParentName = Reader.NameTable.Add(@"AssemblyParentName");
             id194_AssemblyTypeBase = Reader.NameTable.Add(@"AssemblyTypeBase");
@@ -7184,7 +7207,7 @@ namespace Microsoft.Xml.Serialization.GeneratedAssembly {
             id191_AssetTypeIssues = Reader.NameTable.Add(@"AssetTypeIssues");
             id275_externalIDReference = Reader.NameTable.Add(@"externalIDReference");
             id263_AssetStartDate = Reader.NameTable.Add(@"AssetStartDate");
-            id96_AttributeMonetaryValue = Reader.NameTable.Add(@"AttributeMonetaryValue");
+            id95_AttributeMonetaryValue = Reader.NameTable.Add(@"AttributeMonetaryValue");
             id35_FacilityTypeBase = Reader.NameTable.Add(@"FacilityTypeBase");
             id308_SpaceGrossAreaValue = Reader.NameTable.Add(@"SpaceGrossAreaValue");
             id152_SystemTypeBase = Reader.NameTable.Add(@"SystemTypeBase");
@@ -7209,12 +7232,12 @@ namespace Microsoft.Xml.Serialization.GeneratedAssembly {
             id58_IssueTypeBase = Reader.NameTable.Add(@"IssueTypeBase");
             id262_AssetWarrantyStartDate = Reader.NameTable.Add(@"AssetWarrantyStartDate");
             id193_AssemblyAssignment = Reader.NameTable.Add(@"AssemblyAssignment");
-            id106_AllowedValues = Reader.NameTable.Add(@"AllowedValues");
+            id101_AllowedValues = Reader.NameTable.Add(@"AllowedValues");
             id255_AssetInfoTypeBase = Reader.NameTable.Add(@"AssetInfoTypeBase");
             id10_ProjectDescription = Reader.NameTable.Add(@"ProjectDescription");
             id14_ProjectFunctionalUnit = Reader.NameTable.Add(@"ProjectFunctionalUnit");
             id79_AttributeCollectionType = Reader.NameTable.Add(@"AttributeCollectionType");
-            id94_AttributeStringValue = Reader.NameTable.Add(@"AttributeStringValue");
+            id96_AttributeStringValue = Reader.NameTable.Add(@"AttributeStringValue");
             id306_SpaceSignageName = Reader.NameTable.Add(@"SpaceSignageName");
             id78_DocumentIssues = Reader.NameTable.Add(@"DocumentIssues");
             id59_IssueName = Reader.NameTable.Add(@"IssueName");
@@ -7238,7 +7261,7 @@ namespace Microsoft.Xml.Serialization.GeneratedAssembly {
             id215_Resources = Reader.NameTable.Add(@"Resources");
             id125_ContactGivenName = Reader.NameTable.Add(@"ContactGivenName");
             id229_IntegerValueType = Reader.NameTable.Add(@"IntegerValueType");
-            id111_MinValueDecimal = Reader.NameTable.Add(@"MinValueDecimal");
+            id113_MinValueDecimal = Reader.NameTable.Add(@"MinValueDecimal");
             id139_ConnectionTypeBase = Reader.NameTable.Add(@"ConnectionTypeBase");
             id233_SpareName = Reader.NameTable.Add(@"SpareName");
             id199_AssemblyAttributes = Reader.NameTable.Add(@"AssemblyAttributes");
@@ -7250,7 +7273,7 @@ namespace Microsoft.Xml.Serialization.GeneratedAssembly {
             id302_Space = Reader.NameTable.Add(@"Space");
             id213_JobFrequencyValue = Reader.NameTable.Add(@"JobFrequencyValue");
             id237_SparePartNumber = Reader.NameTable.Add(@"SparePartNumber");
-            id97_AttributeBooleanValue = Reader.NameTable.Add(@"AttributeBooleanValue");
+            id91_AttributeBooleanValue = Reader.NameTable.Add(@"AttributeBooleanValue");
             id267_AssetLocationDescription = Reader.NameTable.Add(@"AssetLocationDescription");
             id40_FacilityDefaultLinearUnit = Reader.NameTable.Add(@"FacilityDefaultLinearUnit");
             id303_SpaceTypeBase = Reader.NameTable.Add(@"SpaceTypeBase");
@@ -7283,7 +7306,7 @@ namespace Microsoft.Xml.Serialization.GeneratedAssembly {
         }
 
         protected override object Deserialize(System.Xml.Serialization.XmlSerializationReader reader) {
-            return ((XmlSerializationReaderProjectType)reader).Read99_Project();
+            return ((XmlSerializationReaderProjectType)reader).Read100_Project();
         }
     }
 
@@ -7295,7 +7318,7 @@ namespace Microsoft.Xml.Serialization.GeneratedAssembly {
             get {
                 if (readMethods == null) {
                     System.Collections.Hashtable _tmp = new System.Collections.Hashtable();
-                    _tmp[@"Xbim.COBieLiteUK.ProjectType:http://docs.buildingsmartalliance.org/nbims03/cobie/cobielite:Project:False:"] = @"Read99_Project";
+                    _tmp[@"Xbim.COBieLiteUK.ProjectType:http://docs.buildingsmartalliance.org/nbims03/cobie/cobielite:Project:False:"] = @"Read100_Project";
                     if (readMethods == null) readMethods = _tmp;
                 }
                 return readMethods;

@@ -1,10 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
 using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 
 namespace SerialisationHelper
 {
@@ -12,18 +9,32 @@ namespace SerialisationHelper
     {
         private static void ProcessCobieLite(string fread, string fwrite)
         {
+            
+            
+
             var file = File.ReadAllText(fread);
 
+            var classes = new HashSet<string>();
 
-            var Classes = GetClassesByPattern(@"\b(\w+)Type1\b", file);
+            var reClassList = new Regex(@"\b(\w+)Type1\b");
+            var m = reClassList.Matches(file);
+            foreach (Match match in m)
+            {
+                var cname = match.Groups[1].Value;
+                if (!classes.Contains(cname))
+                {
+                    classes.Add(cname);
+                }
+            }
+
             Console.WriteLine("Classes found:");
-            foreach (var @class in Classes)
+            foreach (var @class in classes)
             {
                 Console.WriteLine(" - " + @class);
                 var srch = @"\b" + @class + @"Type\b";
                 var replace = @"" + @class + "TypeBase";
                 var reMoveToBase = new Regex(srch);
-                var m2 = reMoveToBase.Matches(file);
+                reMoveToBase.Matches(file);
                 file = reMoveToBase.Replace(file, replace);
 
                 srch = @"\b" + @class + @"Type1\b";
@@ -62,11 +73,12 @@ namespace SerialisationHelper
             file = SavegeTypeReplacement(file, @"ZoneAssignmentCollectionType", @"ZoneKeyType", @"List<ZoneKeyType>");
 
             // type replacements
-            file = SavegeTypeReplacement(file, @"AttributeIntegerValueType", @"string", @"int");
-            file = SavegeTypeReplacement(file, @"IntegerValueType", @"string", @"int");
 
+            // file = SavegeTypeReplacement(file, @"IntegerValueType", @"string", @"int?");
+            file = StringToNullableType(file, @"IntegerValueType", "IntegerValue", @"int");
+            file = StringToNullableType(file, @"AttributeIntegerValueType", @"MinValueInteger", @"int");
+            file = StringToNullableType(file, @"AttributeIntegerValueType", @"MaxValueInteger", @"int");
 
-            // 
             // type attributes
             file = file.Replace("XmlElementAttribute(DataType = \"integer\"", "XmlElementAttribute(DataType = \"int\"");
 
@@ -83,9 +95,14 @@ namespace SerialisationHelper
             // fix namespace
             file = file.Replace(@"namespace Xbim.COBieLite.SerialisationHelper", "namespace Xbim.COBieLite");
 
+            file = file.Replace(@"[System.Xml.Serialization.XmlIgnoreAttribute()]", "[System.Xml.Serialization.XmlIgnoreAttribute()][Newtonsoft.Json.JsonIgnore]");
+
+            
+
             File.Delete(fwrite);
             File.WriteAllText(fwrite, file);
         }
+
 
     }
 }

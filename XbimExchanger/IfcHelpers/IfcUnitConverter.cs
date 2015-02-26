@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Text.RegularExpressions;
 using Xbim.Ifc2x3.MeasureResource;
+using Xbim.IO;
+using Xbim.XbimExtensions.SelectTypes;
 
 namespace XbimExchanger.IfcHelpers
 {
@@ -303,5 +305,7 @@ namespace XbimExchanger.IfcHelpers
             UserDefinedSiUnitName = name; //default if all fails
             ConversionFactor = 1;
         }
+
+       
     }
 }

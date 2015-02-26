@@ -1,10 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
+using System.Security.Cryptography;
 using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 using System.Xml.Serialization;
 
 
@@ -44,16 +42,25 @@ namespace SerialisationHelper
 
         private static void Main()
         {
+            var f = new FileInfo("XmlSerializationCode.tcs");
+            FixSerialisation(f, @"..\..\..\Xbim.COBieLite\COBieLite Schema\");
+
+            f = new FileInfo("XmlSerializationCode.tcs");
+            FixSerialisation(f, @"..\..\..\Xbim.COBieLiteUK\Schemas\");
+
+
             if (true)
             {
                 try
                 {
-                    var s = new XmlSerializer(typeof (Xbim.COBieLite.FacilityType));
-                    s = new XmlSerializer(typeof (Xbim.COBieLiteUK.FacilityType));
+// ReSharper disable UnusedVariable
+                    var a = new XmlSerializer(typeof (Xbim.COBieLite.FacilityType));
+                    var b = new XmlSerializer(typeof (Xbim.COBieLiteUK.FacilityType));
+// ReSharper restore UnusedVariable  
                 }
                 catch (Exception exception)
                 {
-                    List<Exception> exs = new List<Exception>();
+                    var exs = new List<Exception>();
                     while (exception.InnerException != null)
                     {
                         exs.Add(exception);
@@ -61,10 +68,19 @@ namespace SerialisationHelper
                     }
                     Console.ForegroundColor = ConsoleColor.Red;
                     Console.WriteLine(exception.Message);
+                    Console.ForegroundColor = ConsoleColor.Yellow;
+                    foreach (var ec in exs)
+                    {
+                        Console.WriteLine(ec.Message);
+                    }
                     Console.ResetColor();
                     Console.ReadKey();
                 }
             }
+            
+            DirectoryInfo d = new DirectoryInfo(".");
+            Console.WriteLine("Current folder: " + d.FullName);
+
 
             var fread = @"..\..\..\Xbim.COBieLite\COBieLite Schema\cobielite.designer.cs";
             var fwrite = @"..\..\..\Xbim.COBieLite\COBieLite Schema\cobielite.designer.RenamedClasses.cs";
@@ -72,17 +88,92 @@ namespace SerialisationHelper
 
             fread = @"..\..\..\Xbim.COBieLiteUK\Schemas\cobieliteuk.designer.cs";
             fwrite = @"..\..\..\Xbim.COBieLiteUK\Schemas\cobieliteuk.designer.RenamedClasses.cs";
-            ProcessCobieLiteUK(fread, fwrite);
+            ProcessCobieLiteUk(fread, fwrite);
 
             Console.WriteLine("Press any key.");
             Console.ReadKey();
         }
 
+        private static void FixSerialisation(FileInfo f, string p)
+        {
+            if (!f.Exists)
+                return;
+            var d = new DirectoryInfo(p);
+            if (!d.Exists)
+                return;
+
+
+            string fName = Path.ChangeExtension(f.Name, "cs");
+
+            var destF = new FileInfo(Path.Combine(d.FullName, fName));
+            if (destF.Exists)
+                destF.Delete();
+            var destStream = destF.CreateText();
+
+            using (var rd = f.OpenText())
+            {
+                while (!rd.EndOfStream)
+                {
+                    var r = rd.ReadLine();
+                    if (r==null)
+                        break;
+                    if (r.StartsWith("[assembly:System.Reflection.AssemblyVersionAttribute"))
+                        continue;
+                    destStream.WriteLine(r);
+                }
+            }
+            destStream.Close();
+            f.Delete();
+        }
+
         private static string SavegeTypeReplacement(string file, string classname, string oldType, string newType)
         {
             var re = new Regex(@"\b" + oldType + @"\b");
-            var code = getClassCode(classname, file);
+            var code = GetClassCode(classname, file);
             var newcode = re.Replace(code, newType);
+            return file.Replace(code, newcode);
+        }
+
+
+        private static string StringToNullableType(string file, string classname, string fieldName, string newType)
+        {
+            var code = GetClassCode(classname, file);
+            var fld = new Regex("private string (" + fieldName + ")Field;", RegexOptions.IgnoreCase);
+            var ms = fld.Matches(code);
+            if (ms.Count == 0)
+                return code;
+            var m = ms[0];
+            var replace = string.Format(
+@"private {0}? {1}Field;
+        [XmlIgnore][Newtonsoft.Json.JsonIgnore]
+        public bool {2}Specified
+        {{
+            get {{ return this.{1}Field.HasValue; }}
+        }}
+", 
+                newType,
+                 m.Groups[1].Value,
+                 fieldName
+                 );
+
+            var newcode = fld.Replace(code, replace);
+
+            // property
+            string pattern = @"\[System.Xml.Serialization.XmlElementAttribute\(DataType = ""\w*""(, Order = (\d+))*\)].*?public string " + fieldName;
+            var regexOptions = RegexOptions.Multiline | RegexOptions.Singleline;
+            var regex = new Regex(pattern, regexOptions);
+
+            replace = string.Format("public {0}? {1}", newType, fieldName);
+
+            var tst = regex.Match(newcode);
+            var order = tst.Groups[2].Value;
+            if (order != "")
+            {
+                replace = "[System.Xml.Serialization.XmlElementAttribute(Order = " + order + ")]\r\n" + replace;
+            }
+            newcode = regex.Replace(newcode, replace);
+
+
             return file.Replace(code, newcode);
         }
 
@@ -90,23 +181,23 @@ namespace SerialisationHelper
         {
             if (destType == "")
                 destType = className.Replace("Collection", "");
-            var ccode = getClassCode(className, file);
-            var ccodeRep = replaceList(ccode, destType + "Base", destType);
+            var ccode = GetClassCode(className, file);
+            var ccodeRep = ReplaceList(ccode, destType + "Base", destType);
             file = file.Replace(ccode, ccodeRep);
             return file;
         }
 
-        static private string replaceList(string classcode, string currentType, string newType)
+        static private string ReplaceList(string classcode, string currentType, string newType)
         {
             string srch = string.Format("List<{0}>", currentType);
             string rep = string.Format("List<{0}>", newType);
             return classcode.Replace(srch, rep);
         }
 
-        static private string getClassCode(string classname, string sourcestring)
+        static private string GetClassCode(string classname, string sourcestring)
         {
             var mS = string.Format(@"public partial class {0} ", classname);
-            var start = sourcestring.IndexOf(mS);
+            var start = sourcestring.IndexOf(mS, StringComparison.Ordinal);
 
             var pos = start + mS.Length;
             int countBrace = 0;

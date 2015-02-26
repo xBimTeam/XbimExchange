@@ -26,12 +26,13 @@
     <IsWebBootstrapper>false</IsWebBootstrapper>
     <UseApplicationTrust>false</UseApplicationTrust>
     <BootstrapperEnabled>true</BootstrapperEnabled>
+    <NuGetPackageImportStamp>dd2a332e</NuGetPackageImportStamp>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
-    <OutputPath>bin\Debug\</OutputPath>
+    <OutputPath>..\..\..\..\..\..\Output\Debug\</OutputPath>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
@@ -39,7 +40,7 @@
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
-    <OutputPath>bin\Release\</OutputPath>
+    <OutputPath>bin\release\</OutputPath>
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
@@ -62,7 +63,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="..\Xbim.COBieLite\COBieLite Schema\cobielite.designer.RenamedClasses.cs" />
-	<Compile Include="..\Xbim.COBieLiteUK\Schemas\cobieliteuk.designer.RenamedClasses.cs" />
+    <Compile Include="..\Xbim.COBieLiteUK\Schemas\cobieliteuk.designer.RenamedClasses.cs" />
     <Compile Include="..\Xbim.COBieLite\Properties\AssemblyInfo.cs" />
     <Compile Include="Main.cs" />
   </ItemGroup>

@@ -1,23 +1,42 @@
 ﻿using Microsoft.Xml.Serialization.GeneratedAssembly;
 using System.Collections;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Xml;
 using System.Xml.Serialization;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Bson;
 using Xbim.COBieLite.CollectionTypes;
 using Xbim.Ifc2x3.Extensions;
 using Xbim.Ifc2x3.Kernel;
 using Xbim.Ifc2x3.ProductExtension;
 using Xbim.XbimExtensions.SelectTypes;
+using Xbim.COBieLite.Converters;
+using Newtonsoft.Json.Converters;
 
 namespace Xbim.COBieLite
 {
 
-    public partial class FacilityType
+    public partial class FacilityType: ICOBieObject
     {
         public static System.Xml.Serialization.XmlSerializer GetSerializer()
         {
             return new FacilityTypeSerializer();
+        }
+
+        public static JsonSerializer GetJsonSerializer()
+        {
+            var serializerSettings = new JsonSerializerSettings
+            {
+                NullValueHandling = NullValueHandling.Ignore,
+                Formatting = Newtonsoft.Json.Formatting.Indented,
+                DateFormatHandling = DateFormatHandling.IsoDateFormat
+            };
+            serializerSettings.Converters.Add(new StringEnumConverter());
+            serializerSettings.Converters.Add(new AttributeValueTypeConverter());
+            var serialiser = JsonSerializer.Create(serializerSettings);
+            return serialiser;
         }
 
         public FacilityType(IfcBuilding ifcBuilding, CoBieLiteHelper helper)
@@ -176,5 +195,130 @@ namespace Xbim.COBieLite
             if ((FacilityDefaultCurrencyUnitSpecified = helper.HasCurrencyUnit) == true)
                 facilityDefaultCurrencyUnitField = helper.ModelCurrencyUnit;
         }
+
+        [XmlIgnore, JsonIgnore]
+        DocumentCollectionType ICOBieObject.Documents
+        {
+            get { return FacilityDocuments; }
+            set { FacilityDocuments = value; }
+        }
+
+        [XmlIgnore, JsonIgnore]
+        IssueCollectionType ICOBieObject.Issues
+        {
+            get { return FacilityIssues; }
+            set { FacilityIssues = value; }
+        }
+
+        [XmlIgnore, JsonIgnore]
+        AttributeCollectionType ICOBieObject.Attributes
+        {
+            get { return FacilityAttributes; }
+            set { FacilityAttributes = value; }
+        }
+
+        [XmlIgnore, JsonIgnore]
+        string ICOBieObject.Name
+        {
+            get { return FacilityName; }
+            set { FacilityName = value; }
+        }
+
+        [XmlIgnore, JsonIgnore]
+        string ICOBieObject.Description
+        {
+            get { return FacilityDescription; }
+            set { FacilityDescription = value; }
+        }
+
+        [XmlIgnore, JsonIgnore]
+        string ICOBieObject.Category
+        {
+            get { return FacilityCategory; }
+            set { FacilityCategory = value; }
+        }
+
+        [XmlIgnore, JsonIgnore]
+        string ICOBieObject.Id
+        {
+            get { return externalID; }
+            set { externalID = value; }
+        }
+
+        #region Exporters
+
+        public void WriteBson(BinaryWriter binaryWriter)
+        {
+            var serialiser = GetJsonSerializer();
+            var writer = new BsonWriter(binaryWriter);
+            serialiser.Serialize(writer, this);
+        }
+
+        public void WriteJson(TextWriter textWriter)
+        {
+            var serialiser = GetJsonSerializer();
+            serialiser.Serialize(textWriter, this);
+        }
+
+        public void WriteJson(string path)
+        {
+            using (var writer = File.CreateText(path))
+            {
+                var serialiser = GetJsonSerializer();
+                serialiser.Serialize(writer, this);
+                writer.Close();
+            }
+        }
+
+
+        static public FacilityType ReadJson(TextReader textReader)
+        {
+            var serialiser = GetJsonSerializer();
+            return (FacilityType)serialiser.Deserialize(textReader, typeof(FacilityType));
+        }
+
+        static public FacilityType ReadJson(string path)
+        {
+            using (var textReader = File.OpenText(path))
+            {
+                var serialiser = GetJsonSerializer();
+                var facility = (FacilityType)serialiser.Deserialize(textReader, typeof(FacilityType));
+                textReader.Close();
+                return facility;
+            }
+
+        }
+
+        public static FacilityType ReadXml(string cobieModelFileName)
+        {
+            var x = GetSerializer();
+            var reader = new XmlTextReader(cobieModelFileName);
+            var reqFacility = (FacilityType)x.Deserialize(reader);
+            reader.Close();
+            return reqFacility;
+        }
+
+
+        public void WriteXml(TextWriter textWriter)
+        {
+            var namespaces = new XmlSerializerNamespaces(new[]
+            {
+                new XmlQualifiedName("cobielite", "http://docs.buildingsmartalliance.org/nbims03/cobie/cobielite"),
+                new XmlQualifiedName("core", "http://docs.buildingsmartalliance.org/nbims03/cobie/core"),
+                new XmlQualifiedName("xsi", "http://www.w3.org/2001/XMLSchema-instance")
+            });
+
+            var x = FacilityType.GetSerializer();
+
+            using (var xtw = new XbimCoBieLiteXmlWriter(textWriter))
+            {
+                xtw.Formatting = System.Xml.Formatting.Indented;
+                // Now serialize our object.
+                x.Serialize(xtw, this, namespaces);
+            }
+
+        }
+
+        #endregion
     }
 }

@@ -3,20 +3,24 @@ using Xbim.COBieLite;
 using Xbim.Ifc2x3.Extensions;
 using Xbim.Ifc2x3.MeasureResource;
 using Xbim.Ifc2x3.ProductExtension;
+using XbimExchanger.COBieLiteHelpers;
+using XbimExchanger.IfcHelpers;
 
 namespace XbimExchanger.COBieLiteToIfc
 {
     
     public class MappingFloorTypeToIfcBuildingStorey : CoBieLiteIfcMappings<string, FloorType, IfcBuildingStorey>
     {
-        protected override IfcBuildingStorey Mapping(FloorType floorType, IfcBuildingStorey buildingStory)
+        protected override IfcBuildingStorey Mapping(FloorType floorType, IfcBuildingStorey buildingStorey)
         {
-            buildingStory.Name = floorType.FloorName;
-            buildingStory.Description = floorType.FloorDescription;
-            if (floorType.FloorElevationValue != null && floorType.FloorElevationValue.DecimalValueSpecified)
-                buildingStory.Elevation = floorType.FloorElevationValue.DecimalValue;
-            Exchanger.CreatePropertySingleValue(buildingStory,  floorType.FloorHeightValue,"FloorHeightValue", Exchanger.DefaultLinearUnit);
-
+            buildingStorey.Name = floorType.FloorName;
+            buildingStorey.Description = floorType.FloorDescription;
+            buildingStorey.CompositionType = IfcElementCompositionEnum.ELEMENT;
+            if (floorType.FloorElevationValue != null && floorType.FloorElevationValue.HasValue())
+                buildingStorey.Elevation = floorType.FloorElevationValue.DecimalValue;
+            
+            Exchanger.TryCreatePropertySingleValue(buildingStorey, floorType.FloorHeightValue, "FloorHeightValue", Exchanger.DefaultLinearUnit);
+           
             //write out the spaces
             if (floorType.Spaces != null)
             {
@@ -24,10 +28,23 @@ namespace XbimExchanger.COBieLiteToIfc
                 foreach (var space in floorType.Spaces)
                 {
                     var ifcSpace = spaceMapping.AddMapping(space, spaceMapping.GetOrCreateTargetObject(space.externalID));
-                    buildingStory.AddToSpatialDecomposition(ifcSpace);
+                    buildingStorey.AddToSpatialDecomposition(ifcSpace);
+                    Exchanger.AddToSpaceMap(buildingStorey, ifcSpace);
                 }
             }
-            return buildingStory;
+
+            #region Attributes
+
+            if (floorType.FloorAttributes != null)
+            {
+
+                foreach (var attribute in floorType.FloorAttributes)
+                {
+                   Exchanger.ConvertAttributeTypeToIfcObjectProperty(buildingStorey, attribute);
+                }
+            }
+            #endregion
+            return buildingStorey;
         }
     }
 }

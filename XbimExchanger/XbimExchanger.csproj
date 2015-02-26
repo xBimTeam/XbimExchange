@@ -8,37 +8,42 @@
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>XbimExchanger</RootNamespace>
-    <AssemblyName>XbimExchanger</AssemblyName>
+    <AssemblyName>Xbim.Exchanger</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
-    <NuGetPackageImportStamp>50964667</NuGetPackageImportStamp>
+    <NuGetPackageImportStamp>1de792bb</NuGetPackageImportStamp>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
-    <OutputPath>bin\Debug\</OutputPath>
+    <OutputPath>..\Output\Debug\</OutputPath>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <DocumentationFile>
+    </DocumentationFile>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
-    <OutputPath>bin\Release\</OutputPath>
+    <OutputPath>..\Output\Release\</OutputPath>
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <DocumentationFile>..\Output\Release\Xbim.Exchanger.xml</DocumentationFile>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Esent.Interop">
+    <Reference Include="Esent.Interop, Version=1.9.2.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\ManagedEsent.1.9.2.0\lib\net40\Esent.Interop.dll</HintPath>
     </Reference>
     <Reference Include="ICSharpCode.SharpZipLib, Version=0.86.0.518, Culture=neutral, PublicKeyToken=1b03e6acf1164f73, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\SharpZipLib.0.86.0\lib\20\ICSharpCode.SharpZipLib.dll</HintPath>
     </Reference>
-    <Reference Include="log4net">
+    <Reference Include="log4net, Version=1.2.13.0, Culture=neutral, PublicKeyToken=669e0ddf0bb1aa2a, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\log4net.2.0.3\lib\net40-full\log4net.dll</HintPath>
     </Reference>
     <Reference Include="Newtonsoft.Json">
@@ -53,35 +58,55 @@
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
-    <Reference Include="Xbim.Common">
-      <HintPath>..\packages\Xbim.Essentials.3.0.5\lib\net45\Xbim.Common.dll</HintPath>
-      <Private>True</Private>
+    <Reference Include="Xbim.Common, Version=3.0.5519.31848, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Xbim.Essentials.3.0.7\lib\net45\Xbim.Common.dll</HintPath>
     </Reference>
-    <Reference Include="Xbim.Ifc.Extensions">
-      <HintPath>..\packages\Xbim.Essentials.3.0.5\lib\net45\Xbim.Ifc.Extensions.dll</HintPath>
-      <Private>True</Private>
+    <Reference Include="Xbim.Ifc.Extensions, Version=3.0.5531.29214, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Xbim.Essentials.3.0.7\lib\net45\Xbim.Ifc.Extensions.dll</HintPath>
     </Reference>
-    <Reference Include="Xbim.Ifc2x3">
-      <HintPath>..\packages\Xbim.Essentials.3.0.5\lib\net45\Xbim.Ifc2x3.dll</HintPath>
-      <Private>True</Private>
+    <Reference Include="Xbim.Ifc2x3, Version=3.0.5531.29214, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Xbim.Essentials.3.0.7\lib\net45\Xbim.Ifc2x3.dll</HintPath>
     </Reference>
-    <Reference Include="Xbim.IO">
-      <HintPath>..\packages\Xbim.Essentials.3.0.5\lib\net45\Xbim.IO.dll</HintPath>
-      <Private>True</Private>
+    <Reference Include="Xbim.IO, Version=3.0.5531.29215, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Xbim.Essentials.3.0.7\lib\net45\Xbim.IO.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="COBieLiteHelpers\AssetTypeInfoTypeComparer.cs" />
+    <Compile Include="COBieLiteHelpers\AttributeValueTypeExtensions.cs" />
+    <Compile Include="COBieLiteHelpers\ValueBaseTypeExtensions.cs" />
+    <Compile Include="COBieLiteHelpers\XbimSimplePropertyType.cs" />
     <Compile Include="COBieLiteToDPoW\COBieLiteToDPoWExchanger.cs" />
     <Compile Include="COBieLiteToDPoW\COBieLiteToDPoWMapping.cs" />
     <Compile Include="COBieLiteToDPoW\Helper.cs" />
     <Compile Include="COBieLiteToDPoW\MappingFacilityTypeToPlanOfWork.cs" />
     <Compile Include="COBieLiteToIfc\COBieLiteIfcMappings.cs" />
     <Compile Include="COBieLiteToIfc\COBieLiteToIfcExchanger.cs" />
+    <Compile Include="COBieLiteToIfc\MappingAssetInfoTypeToIfcElement.cs" />
+    <Compile Include="COBieLiteToIfc\MappingAssetTypeInfoTypeToIfcTypeObject.cs" />
     <Compile Include="COBieLiteToIfc\MappingFacilityTypeToIfcBuilding.cs" />
     <Compile Include="COBieLiteToIfc\MappingFloorTypeToIfcBuildingStorey.cs" />
     <Compile Include="COBieLiteToIfc\MappingProjectTypeToIfcProject.cs" />
     <Compile Include="COBieLiteToIfc\MappingSiteTypeToIfcSite.cs" />
     <Compile Include="COBieLiteToIfc\MappingSpaceTypeToIfcSpace.cs" />
+    <Compile Include="DPoW2ToCOBieLite\ClassificationMappings.cs" />
+    <Compile Include="DPoW2ToCOBieLite\DPoWToCOBieLiteExchanger.cs" />
+    <Compile Include="DPoW2ToCOBieLite\DPoWToCOBieLiteMapping.cs" />
+    <Compile Include="DPoW2ToCOBieLite\Extensions.cs" />
+    <Compile Include="DPoW2ToCOBieLite\MappingAssemblyTypeToAssemblyType.cs" />
+    <Compile Include="DPoW2ToCOBieLite\MappingAssetTypeToAssetType.cs" />
+    <Compile Include="DPoW2ToCOBieLite\MappingAttributableObjectToCOBieObject.cs" />
+    <Compile Include="DPoW2ToCOBieLite\MappingContactToContact.cs" />
+    <Compile Include="DPoW2ToCOBieLite\MappingDocumentToDocumentType.cs" />
+    <Compile Include="DPoW2ToCOBieLite\MappingDPoWObjectToCOBieObject.cs" />
+    <Compile Include="DPoW2ToCOBieLite\MappingJobToIssueType.cs" />
+    <Compile Include="DPoW2ToCOBieLite\MappingPlanOfWorkToFacilityType.cs" />
+    <Compile Include="DPoW2ToCOBieLite\MappingRoleToContact.cs" />
+    <Compile Include="DPoW2ToCOBieLite\MappingSpaceTypeToSpaceType.cs" />
     <Compile Include="DPoWToCOBieLite\DPoWToCOBieLiteExchanger.cs" />
     <Compile Include="DPoWToCOBieLite\DPoWToCOBieLiteMapping.cs" />
     <Compile Include="DPoWToCOBieLite\Extensions.cs" />
@@ -94,6 +119,8 @@
     <Compile Include="DPoWToCOBieLite\MappingPlanOfWorkToFacilityType.cs" />
     <Compile Include="DPoWToCOBieLite\MappingZoneToZoneType.cs" />
     <Compile Include="IfcHelpers\IfcMappings.cs" />
+    <Compile Include="IfcHelpers\IfcPropertySetDefinitionExtensions.cs" />
+    <Compile Include="IfcHelpers\IfcUnitComparer.cs" />
     <Compile Include="IfcHelpers\IfcUnitConverter.cs" />
     <Compile Include="IXbimMappings.cs" />
     <Compile Include="XbimMappings.cs" />
@@ -105,6 +132,9 @@
       <Link>COBieAttributes.config</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+    <EmbeddedResource Include="DPoW2ToCOBieLite\ClassificationMappings.config">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </EmbeddedResource>
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
@@ -116,9 +146,16 @@
       <Project>{2cd02b40-a823-4959-874b-e212569f8080}</Project>
       <Name>Xbim.DPoW.Interfaces</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Xbim.DPoW\Xbim.DPoW.csproj">
+      <Project>{79e7f597-f509-49ec-a606-fdc8326e72f5}</Project>
+      <Name>Xbim.DPoW</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <Folder Include="IfcToCOBieLite\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="DPoW2ToCOBieLite\Conventions.txt" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
