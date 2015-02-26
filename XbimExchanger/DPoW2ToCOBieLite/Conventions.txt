@@ -8,7 +8,7 @@ Role fields are saved in property set "RolePropertySet" of ContactType.
 
 Variant of AssetType from DPoW is saved as AssetType.AssetTypeModelNumber in COBieLite.
 
-For DPoW objects and Documentation all classification references are saved in COBieLite equivalents as a single string in 'Category' property with this convention: "[classification name];[classification code];[user specific code]|[classification name];[classification code];[user specific code]".
+For DPoW objects and Documentation all classification references are saved in COBieLite equivalents as a single string in 'Category' property with this convention: "[classification name]:[classification code]:[user specific code]|[classification name]:[classification code]:[user specific code]".
 
 Project attributes are saved as FatilityType attributes in property set "ProjectAttributes".
 ProjectStage attributes are saved as FatilityType attributes in property set "ProjectStageAttributes".
