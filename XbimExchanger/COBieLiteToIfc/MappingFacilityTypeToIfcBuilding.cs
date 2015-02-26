@@ -5,7 +5,6 @@ using Xbim.Ifc2x3.Kernel;
 using Xbim.Ifc2x3.MeasureResource;
 using Xbim.Ifc2x3.ProductExtension;
 using Xbim.Ifc2x3.Extensions;
-using XbimExchanger.COBieLiteHelpers;
 using XbimExchanger.IfcHelpers;
 
 namespace XbimExchanger.COBieLiteToIfc
@@ -99,12 +98,25 @@ namespace XbimExchanger.COBieLiteToIfc
             }
             #endregion
 
+            #region Add Space Geometry
+
+            CreateSpaceProxies();
+
+            #endregion
+
             return ifcBuilding;
+        }
+
+        /// <summary>
+        /// Creates proxy object for each type of space based on the space category
+        /// </summary>
+        private void CreateSpaceProxies()
+        {
+          
         }
 
         private void InitialiseUnits(IfcProject ifcProject)
         {      
-            var model = Exchanger.TargetRepository;
             //Area
             var areaUnit = ifcProject.UnitsInContext.GetAreaUnit() as IfcSIUnit; //they always are as we are initialising to this
             if (areaUnit!=null && Exchanger.DefaultAreaUnit.HasValue)
