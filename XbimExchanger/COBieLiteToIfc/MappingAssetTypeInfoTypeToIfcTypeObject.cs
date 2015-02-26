@@ -47,6 +47,12 @@ namespace XbimExchanger.COBieLiteToIfc
                     {
                         switch (assetInfoType.externalEntityName.ToUpper())
                         {
+                            case "IFCCOLUMN":
+                                ifcElement = MapAsset<IfcColumn>(assetInfoType);
+                                break;
+                            case "IFCCURTAINWALL":
+                                ifcElement = MapAsset<IfcCurtainWall>(assetInfoType);
+                                break;
                             case "IFCDOOR":
                                 ifcElement = MapAsset<IfcDoor>(assetInfoType);
                                 break; 
@@ -68,11 +74,17 @@ namespace XbimExchanger.COBieLiteToIfc
                             case "IFCFURNISHINGELEMENT":
                                 ifcElement = MapAsset<IfcFurnishingElement>(assetInfoType);
                                 break;
+                            case "IFCWALL":
+                                ifcElement = MapAsset<IfcWall>(assetInfoType);
+                                break;
+                            case "IFCWALLSTANDARDCASE":
+                                ifcElement = MapAsset<IfcWallStandardCase>(assetInfoType);
+                                break;
                             case "IFCWINDOW":
                                 ifcElement = MapAsset<IfcWindow>(assetInfoType);
                                 break;
                             default:
-                                Console.WriteLine(assetInfoType.externalEntityName);
+                                Console.WriteLine(assetInfoType.externalEntityName + " has been omitted");
                                 ifcElement = MapAsset<IfcBuildingElementProxy>(assetInfoType);
                                 break;
                         }

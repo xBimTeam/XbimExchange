@@ -25,13 +25,15 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Xbim.DPoW.Interfaces", "Xbi
 EndProject
 Project("{F088123C-0E9E-452A-89E6-6BA2F21D5CAC}") = "Xbim.DPoW.Schema", "Xbim.DPoW.Schema\Xbim.DPoW.Schema.modelproj", "{C2BDAD77-27EE-4655-9A01-4B4AB6F22E11}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XbimExchanger", "XbimExchanger\XbimExchanger.csproj", "{5540768D-8ACD-4CC0-B3CD-1951DEF54C20}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Xbim.Exchanger", "XbimExchanger\Xbim.Exchanger.csproj", "{5540768D-8ACD-4CC0-B3CD-1951DEF54C20}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SerialisationHelper", "Xbim.COBieLite.SerialisationHelper\SerialisationHelper.csproj", "{B7628DBA-72BF-4831-B744-84D445A11704}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Xbim.COBieLiteUK", "Xbim.COBieLiteUK\Xbim.COBieLiteUK.csproj", "{90DEF072-96C7-4972-835E-909C41169CB4}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Xbim.DPoW", "Xbim.DPoW\Xbim.DPoW.csproj", "{79E7F597-F509-49EC-A606-FDC8326E72F5}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Xbim.Exchange", "Xbim.Exchange\Xbim.Exchange.csproj", "{F818E996-CDB5-4ED7-9238-F21862D348E5}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -83,6 +85,10 @@ Global
 		{79E7F597-F509-49EC-A606-FDC8326E72F5}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{79E7F597-F509-49EC-A606-FDC8326E72F5}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{79E7F597-F509-49EC-A606-FDC8326E72F5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F818E996-CDB5-4ED7-9238-F21862D348E5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F818E996-CDB5-4ED7-9238-F21862D348E5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F818E996-CDB5-4ED7-9238-F21862D348E5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F818E996-CDB5-4ED7-9238-F21862D348E5}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
