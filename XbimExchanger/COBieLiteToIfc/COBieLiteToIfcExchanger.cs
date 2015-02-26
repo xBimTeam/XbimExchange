@@ -536,141 +536,158 @@ namespace XbimExchanger.COBieLiteToIfc
         internal IfcSimpleProperty ConvertAttributeTypeToIfcSimpleProperty(AttributeType attributeType)
         {
             var attributeValueType = attributeType.AttributeValue;
-            if (attributeValueType == null)
-                throw new Exception("AttributeType has a null AttributeValue");
+           
+            IfcSimpleProperty theProperty;
 
-            var a = XbimSimplePropertyType.SimpleString;
-            switch (a)
-            //switch (attributeValueType.SimplePropertyType())
+            var simplePropertyType = attributeValueType.SimplePropertyType();
+              switch (simplePropertyType)
             {
                 case XbimSimplePropertyType.SimpleDecimal:
-                    var attributeDecimalValueType = attributeValueType.Item as AttributeDecimalValueType;
-                    double? decimalValue;
-                    if (attributeDecimalValueType != null && attributeDecimalValueType.DecimalValueSpecified)
-                        decimalValue = attributeDecimalValueType.DecimalValue;
-                    else decimalValue = null;
-                    var simpleProperty = TargetRepository.Instances.New<IfcPropertySingleValue>();
-                    if (decimalValue.HasValue) simpleProperty.NominalValue = new IfcReal(decimalValue.Value);
-                    simpleProperty.Name = attributeType.AttributeName;
-                    simpleProperty.Description = attributeType.AttributeDescription;
-                    //if (attributeDecimalValueType != null)
-                    //{
-                    //    var unitConverter = new IfcUnitConverter(attributeDecimalValueType.UnitName);
-                    //    if (!unitConverter.IsUndefined)
-                    //        simpleProperty.Unit = unitConverter.IfcUnit(TargetRepository);
-                    //}
-                    return simpleProperty;
-                case XbimSimplePropertyType.BoundedDecimal:
-                    var attributeBoundedDecimalValueType = attributeValueType.Item as AttributeDecimalValueType;
-                    double? maxDecimalValue;
-                    double? minDecimalValue;
-                    if (attributeBoundedDecimalValueType != null &&
-                        attributeBoundedDecimalValueType.MaxValueDecimalSpecified)
-                        maxDecimalValue = attributeBoundedDecimalValueType.MaxValueDecimal;
-                    else maxDecimalValue = null;
-                    if (attributeBoundedDecimalValueType != null &&
-                        attributeBoundedDecimalValueType.MinValueDecimalSpecified)
-                        minDecimalValue = attributeBoundedDecimalValueType.MinValueDecimal;
-                    else minDecimalValue = null;
-                    var boundedProperty = TargetRepository.Instances.New<IfcPropertyBoundedValue>();
-                    if (maxDecimalValue.HasValue)
-                        boundedProperty.UpperBoundValue = new IfcReal(maxDecimalValue.Value);
-                    if (minDecimalValue.HasValue)
-                        boundedProperty.LowerBoundValue = new IfcReal(minDecimalValue.Value);
-                    boundedProperty.Name = attributeType.AttributeName;
-                    boundedProperty.Description = attributeType.AttributeDescription;
-                    return boundedProperty;
                 case XbimSimplePropertyType.SimpleInteger:
-                    var attributeSimpleIntegerValueType = attributeValueType.Item as AttributeIntegerValueType;
-                    var simpleIntProperty = TargetRepository.Instances.New<IfcPropertySingleValue>();
-                    if (attributeSimpleIntegerValueType != null && attributeSimpleIntegerValueType.IntegerValue.HasValue)
-                        simpleIntProperty.NominalValue = new IfcInteger(attributeSimpleIntegerValueType.IntegerValue.Value);
-                    simpleIntProperty.Name = attributeType.AttributeName;
-                    simpleIntProperty.Description = attributeType.AttributeDescription;
-                    return simpleIntProperty;
-                case XbimSimplePropertyType.BoundedInteger:
-                    var attributeBoundedIntegerValueType = attributeValueType.Item as AttributeIntegerValueType;
-                    var boundedIntegerProperty = TargetRepository.Instances.New<IfcPropertyBoundedValue>();
-                    if (attributeBoundedIntegerValueType != null)
-                    {
-                        if (attributeBoundedIntegerValueType.MaxValueInteger.HasValue)
-                        boundedIntegerProperty.UpperBoundValue =
-                            new IfcInteger(attributeBoundedIntegerValueType.MaxValueInteger.Value);
-                        if (attributeBoundedIntegerValueType.MinValueInteger.HasValue) 
-                            boundedIntegerProperty.LowerBoundValue =
-                            new IfcInteger(attributeBoundedIntegerValueType.MinValueInteger.Value);
-                    }
-                    boundedIntegerProperty.Name = attributeType.AttributeName;
-                    boundedIntegerProperty.Description = attributeType.AttributeDescription;
-                    return boundedIntegerProperty;
                 case XbimSimplePropertyType.SimpleBoolean:
-                    var attributeBooleanValueType = attributeValueType.Item as BooleanValueType;
-                    var simpleBooleanProperty = TargetRepository.Instances.New<IfcPropertySingleValue>();
-                    if (attributeBooleanValueType != null && attributeBooleanValueType.BooleanValueSpecified)
-                        simpleBooleanProperty.NominalValue = new IfcBoolean(attributeBooleanValueType.BooleanValue);
-                    simpleBooleanProperty.Name = attributeType.AttributeName;
-                    simpleBooleanProperty.Description = attributeType.AttributeDescription;
-                    return simpleBooleanProperty;
                 case XbimSimplePropertyType.SimpleMonetary:
-                    var attributeMonetaryValueType = attributeValueType.Item as AttributeMonetaryValueType;
-                    var simpleMonetaryProperty = TargetRepository.Instances.New<IfcPropertySingleValue>();
-                    if (attributeMonetaryValueType != null)
-                    {
-                        var monetaryValue = (double)attributeMonetaryValueType.MonetaryValue;
-                        simpleMonetaryProperty.NominalValue = new IfcReal(monetaryValue);
-                        IfcCurrencyEnum currencyEnum;
-                        if (Enum.TryParse(attributeMonetaryValueType.MonetaryUnit.ToString(), true, out currencyEnum))
-                            simpleMonetaryProperty.Unit = new IfcMonetaryUnit { Currency = currencyEnum };
-                    }
-                    simpleMonetaryProperty.Name = attributeType.AttributeName;
-                    simpleMonetaryProperty.Description = attributeType.AttributeDescription;
-                    return simpleMonetaryProperty;
-                case XbimSimplePropertyType.EnumerationString:
-                    var attributeEnumStringValueType = attributeValueType.Item as AttributeStringValueType;
-                    var simpleEnumStringProperty = TargetRepository.Instances.New<IfcPropertyEnumeratedValue>();
-                    if (attributeEnumStringValueType != null)
-                    {
-                        simpleEnumStringProperty.EnumerationValues.Add(
-                            new IfcLabel(attributeEnumStringValueType.StringValue));
-                        if (attributeEnumStringValueType.AllowedValues != null &&
-                            attributeEnumStringValueType.AllowedValues.Any())
-                        {
-                            simpleEnumStringProperty.EnumerationReference =
-                                TargetRepository.Instances.New<IfcPropertyEnumeration>();
-                            foreach (var allowedValue in attributeEnumStringValueType.AllowedValues)
-                            {
-                                simpleEnumStringProperty.EnumerationReference.Name = attributeType.AttributeName;
-                                simpleEnumStringProperty.EnumerationReference.EnumerationValues.Add(
-                                    new IfcLabel(allowedValue));
-                            }
-                        }
-                    }
-                    simpleEnumStringProperty.Name = attributeType.AttributeName;
-                    simpleEnumStringProperty.Description = attributeType.AttributeDescription;
-                    return simpleEnumStringProperty;
                 case XbimSimplePropertyType.SimpleString:
-                case XbimSimplePropertyType.Null:
-                    var attributeStringValueType = attributeValueType.Item as AttributeStringValueType;
-                    var simpleStringProperty = TargetRepository.Instances.New<IfcPropertySingleValue>();
-                    if (attributeStringValueType != null)
-                        simpleStringProperty.NominalValue = new IfcText(attributeStringValueType.StringValue);
-                    simpleStringProperty.Name = attributeType.AttributeName;
-                    simpleStringProperty.Description = attributeType.AttributeDescription;
-                    return simpleStringProperty;
                 case XbimSimplePropertyType.SimpleDateTime:
-                    var simpleDateTimeProperty = TargetRepository.Instances.New<IfcPropertySingleValue>();
-                    if (attributeValueType.Item is DateTime)
-                    {
-                        var attributeDateTimeValueType = (DateTime)attributeValueType.Item;
-                        simpleDateTimeProperty.NominalValue = IfcTimeStamp.ToTimeStamp(attributeDateTimeValueType);
-                    }
-                    simpleDateTimeProperty.Name = attributeType.AttributeName;
-                    simpleDateTimeProperty.Description = attributeType.AttributeDescription;
-                    return simpleDateTimeProperty;
-
+                case XbimSimplePropertyType.Null:
+                    theProperty = TargetRepository.Instances.New<IfcPropertySingleValue>();
+                    break;
+                case XbimSimplePropertyType.BoundedDecimal:
+                case XbimSimplePropertyType.BoundedInteger:
+                    theProperty = TargetRepository.Instances.New<IfcPropertyBoundedValue>();
+                    break;
+                case XbimSimplePropertyType.EnumerationString:
+                    theProperty = TargetRepository.Instances.New<IfcPropertyEnumeratedValue>();
+                    break;
                 default:
                     throw new ArgumentOutOfRangeException("attributeType", "Invalid attribute value type");
             }
+            
+            theProperty.Name = attributeType.AttributeName;
+            theProperty.Description = attributeType.AttributeDescription;
+            if (attributeValueType != null)
+            {
+                switch (simplePropertyType)
+                {
+                    case XbimSimplePropertyType.SimpleDecimal:
+                        var attributeDecimalValueType = attributeValueType.Item as AttributeDecimalValueType;
+                        double? decimalValue;
+                        if (attributeDecimalValueType != null && attributeDecimalValueType.DecimalValueSpecified)
+                            decimalValue = attributeDecimalValueType.DecimalValue;
+                        else decimalValue = null;
+                        var simpleProperty = (IfcPropertySingleValue) theProperty;
+                        if (decimalValue.HasValue) simpleProperty.NominalValue = new IfcReal(decimalValue.Value);
+                        //if (attributeDecimalValueType != null)
+                        //{
+                        //    var unitConverter = new IfcUnitConverter(attributeDecimalValueType.UnitName);
+                        //    if (!unitConverter.IsUndefined)
+                        //        simpleProperty.Unit = unitConverter.IfcUnit(TargetRepository);
+                        //}
+                        break;
+                    case XbimSimplePropertyType.BoundedDecimal:
+                        var attributeBoundedDecimalValueType = attributeValueType.Item as AttributeDecimalValueType;
+                        double? maxDecimalValue;
+                        double? minDecimalValue;
+                        if (attributeBoundedDecimalValueType != null &&
+                            attributeBoundedDecimalValueType.MaxValueDecimalSpecified)
+                            maxDecimalValue = attributeBoundedDecimalValueType.MaxValueDecimal;
+                        else maxDecimalValue = null;
+                        if (attributeBoundedDecimalValueType != null &&
+                            attributeBoundedDecimalValueType.MinValueDecimalSpecified)
+                            minDecimalValue = attributeBoundedDecimalValueType.MinValueDecimal;
+                        else minDecimalValue = null;
+                        var boundedProperty = (IfcPropertyBoundedValue)theProperty;
+                        if (maxDecimalValue.HasValue)
+                            boundedProperty.UpperBoundValue = new IfcReal(maxDecimalValue.Value);
+                        if (minDecimalValue.HasValue)
+                            boundedProperty.LowerBoundValue = new IfcReal(minDecimalValue.Value);
+                        break;
+                    case XbimSimplePropertyType.SimpleInteger:
+                        var attributeSimpleIntegerValueType = attributeValueType.Item as AttributeIntegerValueType;
+                        if (attributeSimpleIntegerValueType != null &&
+                            attributeSimpleIntegerValueType.IntegerValue.HasValue)
+                        {
+                            var simpleIntProperty = (IfcPropertySingleValue)theProperty;
+                            simpleIntProperty.NominalValue =
+                                new IfcInteger(attributeSimpleIntegerValueType.IntegerValue.Value);
+                        }
+                        break;
+                    case XbimSimplePropertyType.BoundedInteger:
+                        var attributeBoundedIntegerValueType = attributeValueType.Item as AttributeIntegerValueType;                        
+                        if (attributeBoundedIntegerValueType != null)
+                        {
+                            var boundedIntegerProperty = (IfcPropertyBoundedValue)theProperty;
+                            if (attributeBoundedIntegerValueType.MaxValueInteger.HasValue)
+                                boundedIntegerProperty.UpperBoundValue =
+                                    new IfcInteger(attributeBoundedIntegerValueType.MaxValueInteger.Value);
+                            if (attributeBoundedIntegerValueType.MinValueInteger.HasValue)
+                                boundedIntegerProperty.LowerBoundValue =
+                                    new IfcInteger(attributeBoundedIntegerValueType.MinValueInteger.Value);
+                        }
+                        break;
+                    case XbimSimplePropertyType.SimpleBoolean:
+                        var attributeBooleanValueType = attributeValueType.Item as BooleanValueType;
+                        if (attributeBooleanValueType != null && attributeBooleanValueType.BooleanValueSpecified)
+                        {
+                            var simpleBooleanProperty = (IfcPropertySingleValue)theProperty;
+                            simpleBooleanProperty.NominalValue = new IfcBoolean(attributeBooleanValueType.BooleanValue);
+                        }
+                        break;
+                    case XbimSimplePropertyType.SimpleMonetary:
+                        var attributeMonetaryValueType = attributeValueType.Item as AttributeMonetaryValueType;              
+                        if (attributeMonetaryValueType != null)
+                        {
+                            var simpleMonetaryProperty = (IfcPropertySingleValue) theProperty;
+                            var monetaryValue = (double) attributeMonetaryValueType.MonetaryValue;
+                            simpleMonetaryProperty.NominalValue = new IfcReal(monetaryValue);
+                            IfcCurrencyEnum currencyEnum;
+                            if (Enum.TryParse(attributeMonetaryValueType.MonetaryUnit.ToString(), true, out currencyEnum))
+                                simpleMonetaryProperty.Unit = new IfcMonetaryUnit {Currency = currencyEnum};
+                        }
+                        break;
+                    case XbimSimplePropertyType.EnumerationString:
+                        var attributeEnumStringValueType = attributeValueType.Item as AttributeStringValueType;
+                        if (attributeEnumStringValueType != null)
+                        {
+                            var simpleEnumStringProperty = (IfcPropertyEnumeratedValue)theProperty;
+                            simpleEnumStringProperty.EnumerationValues.Add(
+                                new IfcLabel(attributeEnumStringValueType.StringValue));
+                            if (attributeEnumStringValueType.AllowedValues != null &&
+                                attributeEnumStringValueType.AllowedValues.Any())
+                            {
+                                simpleEnumStringProperty.EnumerationReference =
+                                    TargetRepository.Instances.New<IfcPropertyEnumeration>();
+                                foreach (var allowedValue in attributeEnumStringValueType.AllowedValues)
+                                {
+                                    simpleEnumStringProperty.EnumerationReference.Name = attributeType.AttributeName;
+                                    simpleEnumStringProperty.EnumerationReference.EnumerationValues.Add(
+                                        new IfcLabel(allowedValue));
+                                }
+                            }
+                        }
+                        break;
+                    case XbimSimplePropertyType.SimpleString:
+                    case XbimSimplePropertyType.Null:
+                        var attributeStringValueType = attributeValueType.Item as AttributeStringValueType;
+                        if (attributeStringValueType != null)
+                        {
+                            var simpleStringProperty = (IfcPropertySingleValue)theProperty;
+                            simpleStringProperty.NominalValue = new IfcText(attributeStringValueType.StringValue);
+                        }
+                        break;
+                    case XbimSimplePropertyType.SimpleDateTime:
+                        if (attributeValueType.Item is DateTime)
+                        {
+                            var simpleDateTimeProperty = (IfcPropertySingleValue)theProperty;
+                            var attributeDateTimeValueType = (DateTime) attributeValueType.Item;
+                            simpleDateTimeProperty.NominalValue = IfcTimeStamp.ToTimeStamp(attributeDateTimeValueType);
+                        }
+                        break;
+
+                    default:
+                        throw new ArgumentOutOfRangeException("attributeType", "Invalid attribute value type");
+                }
+            }
+            return theProperty;
         }
 
         /// <summary>

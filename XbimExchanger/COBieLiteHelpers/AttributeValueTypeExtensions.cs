@@ -24,7 +24,7 @@ namespace XbimExchanger.COBieLiteHelpers
                     : XbimSimplePropertyType.SimpleDecimal;
                 case "AttributeIntegerValueType":
                     var it = valueType.Item as AttributeIntegerValueType;
-                    return it != null && (it.MaxValueInteger - it.MinValueInteger > 0)
+                    return it != null && (it.MaxValueIntegerSpecified || it.MinValueIntegerSpecified)
                     ? XbimSimplePropertyType.BoundedInteger
                     : XbimSimplePropertyType.SimpleInteger;
                 case "AttributeMonetaryValueType":
