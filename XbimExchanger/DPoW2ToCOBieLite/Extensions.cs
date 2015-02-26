@@ -47,7 +47,11 @@ namespace XbimExchanger.DPoW2ToCOBieLite
                         AttributeName = name,
                         AttributeDescription = description,
                         propertySetName = pset,
-                        AttributeValue = new AttributeValueType() { Item = new AttributeStringValueType() { StringValue = value } }
+                        AttributeValue = new AttributeValueType
+                        {
+                            Item = new AttributeStringValueType { StringValue = value },
+                            ItemElementName = ItemChoiceType.AttributeStringValue
+                        }
                     });
         }
 
@@ -58,7 +62,11 @@ namespace XbimExchanger.DPoW2ToCOBieLite
                 AttributeName = name,
                 AttributeDescription = description,
                 propertySetName = pset,
-                AttributeValue = new AttributeValueType() { Item = new AttributeIntegerValueType() { IntegerValue = value } }
+                AttributeValue = new AttributeValueType
+                {
+                    Item = new AttributeIntegerValueType { IntegerValue = value },
+                    ItemElementName = ItemChoiceType.AttributeIntegerValue
+                }
             });
         }
 
@@ -69,7 +77,11 @@ namespace XbimExchanger.DPoW2ToCOBieLite
                 AttributeName = name,
                 AttributeDescription = description,
                 propertySetName = pset,
-                AttributeValue = new AttributeValueType() { Item = new AttributeDecimalValueType() { DecimalValue = value , DecimalValueSpecified = true} }
+                AttributeValue = new AttributeValueType
+                {
+                    Item = new AttributeDecimalValueType { DecimalValue = value , DecimalValueSpecified = true},
+                    ItemElementName = ItemChoiceType.AttributeDecimalValue
+                }
             });
         }
 
@@ -80,7 +92,11 @@ namespace XbimExchanger.DPoW2ToCOBieLite
                 AttributeName = name,
                 AttributeDescription = description,
                 propertySetName = pset,
-                AttributeValue = new AttributeValueType() { Item = new BooleanValueType() { BooleanValue = value , BooleanValueSpecified = true} }
+                AttributeValue = new AttributeValueType
+                {
+                    Item = new BooleanValueType { BooleanValue = value , BooleanValueSpecified = true},
+                    ItemElementName = ItemChoiceType.AttributeBooleanValue
+                },
             });
         }
 

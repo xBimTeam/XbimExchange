@@ -2937,20 +2937,6 @@ namespace Xbim.COBieLite
 
         public AssetTypeInfoType()
         {
-            this.assetTypeIssuesField = new IssueCollectionType();
-            this.assetTypeDocumentsField = new DocumentCollectionType();
-            this.assetTypeAttributesField = new AttributeCollectionType();
-            this.assemblyAssignmentsField = new AssemblyAssignmentCollectionType();
-            this.jobsField = new JobCollectionType();
-            this.sparesField = new SpareCollectionType();
-            this.warrantiesField = new WarrantyCollectionType();
-            this.assetTypeManufacturerContactAssignmentsField = new ContactAssignmentCollectionType();
-            this.assetsField = new AssetCollectionType();
-            this.assetTypeNominalHeightField = new DecimalValueType();
-            this.assetTypeNominalWidthField = new DecimalValueType();
-            this.assetTypeNominalLengthField = new DecimalValueType();
-            this.assetTypeExpectedLifeValueField = new IntegerValueType();
-            this.assetTypeReplacementCostValueField = new DecimalValueType();
         }
 
         [System.Xml.Serialization.XmlElementAttribute(

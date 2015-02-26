@@ -8,7 +8,7 @@ namespace XbimExchanger.COBieLiteHelpers
 
         public static XbimSimplePropertyType SimplePropertyType(this AttributeValueType valueType)
         {
-            if (valueType.Item == null) return XbimSimplePropertyType.Null;
+            if (valueType == null || valueType.Item == null) return XbimSimplePropertyType.Null;
             string valueTypeString = valueType.Item.GetType().Name;
             
             switch (valueTypeString)
