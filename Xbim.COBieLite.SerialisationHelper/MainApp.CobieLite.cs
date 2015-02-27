@@ -73,11 +73,6 @@ namespace SerialisationHelper
             file = SavegeTypeReplacement(file, @"ZoneAssignmentCollectionType", @"ZoneKeyType", @"List<ZoneKeyType>");
 
             // type replacements
-<<<<<<< HEAD
-
-            // file = SavegeTypeReplacement(file, @"IntegerValueType", @"string", @"int?");
-=======
->>>>>>> 2bc3340d48b3af7e45dbf5deb48ebe53ea08f584
             file = StringToNullableType(file, @"IntegerValueType", "IntegerValue", @"int");
             file = StringToNullableType(file, @"AttributeIntegerValueType", @"MinValueInteger", @"int");
             file = StringToNullableType(file, @"AttributeIntegerValueType", @"MaxValueInteger", @"int");
@@ -85,66 +80,6 @@ namespace SerialisationHelper
             // 
             // type attributes
             file = file.Replace("XmlElementAttribute(DataType = \"integer\"", "XmlElementAttribute(DataType = \"int\"");
-
-<<<<<<< HEAD
-            //var CollectionClasses = GetClassesByPattern(@"\b(\w+)CollectionType\b", file);
-            //foreach (var collectionClass in CollectionClasses)
-            //{
-            //    var fullCName = collectionClass + "CollectionType";
-            //    var currCode = getClassCode(fullCName, file);
-            //    var newCode = InitCollectionClass(currCode);
-            //    file = file.Replace(currCode, newCode);
-            //}
-=======
-            var classesToInitialise = new[]
-            {
-                "AssemblyType", 
-                "AttributeCollectionType", 
-                "WarrantyCollectionType", 
-                "WarrantyType", 
-                "AttributeStringValueType", 
-                "AllowedValueCollectionType", 
-                "ContactAssignmentCollectionType", 
-                "AssetKeyType",
-                "SpaceAssignmentCollectionType",
-                "ZoneAssignmentCollectionType",
-                "SystemAssignmentCollectionType",
-                "AssemblyAssignmentCollectionType",
-                "DocumentCollectionType",
-                "DocumentType",
-                "IssueCollectionType",
-                "IssueType",
-                "ZoneCollectionType",
-                "ZoneType",
-                "SystemCollectionType",
-                "SystemType",
-                "SpaceCollectionType",
-                "SpaceType",
-                "FloorCollectionType",
-                "FloorType",
-                "ContactCollectionType",
-                "ContactType",
-                "ConnectionCollectionType",
-                "ConnectionType",
-                "ResourceCollectionType",
-                "ResourceType",
-                "JobCollectionType",
-                "JobType",
-                "SpareCollectionType",
-                "SpareType",
-                "AssetTypeCollectionType",
-                "AssetTypeInfoType",
-                "AssetCollectionType",
-                "AssetInfoTypeBase",
-                "AssetInfoType",
-                "FacilityType",
-                "AttributeType"
-            };
-            foreach (var classname in classesToInitialise)
-            {
-                file = CreateEmptyInitialiser(file, classname);
-            }
->>>>>>> 2bc3340d48b3af7e45dbf5deb48ebe53ea08f584
 
 
             // fix namespace
