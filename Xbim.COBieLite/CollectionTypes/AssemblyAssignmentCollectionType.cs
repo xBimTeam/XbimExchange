@@ -19,7 +19,7 @@ namespace Xbim.COBieLite
         [XmlIgnore][JsonIgnore]
         public List<AssemblyType> InnerList
         {
-            get { return AssemblyAssignment; }
+            get { return AssemblyAssignment ?? (AssemblyAssignment = new List<AssemblyType>()); }
         }
         
         IEnumerator IEnumerable.GetEnumerator()

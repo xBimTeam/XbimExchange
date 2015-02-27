@@ -19,7 +19,7 @@ namespace Xbim.COBieLite
         [XmlIgnore][JsonIgnore]
         public List<WarrantyType> InnerList
         {
-            get { return Warranty; }
+            get { return Warranty ?? (Warranty = new List<WarrantyType>()); }
         }
 
         IEnumerator IEnumerable.GetEnumerator()

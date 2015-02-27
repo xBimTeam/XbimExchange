@@ -264,8 +264,7 @@ namespace Xbim.COBieLite
         {
             using (var writer = File.CreateText(path))
             {
-                var serialiser = GetJsonSerializer();
-                serialiser.Serialize(writer, this);
+                WriteJson(writer);
                 writer.Close();
             }
         }
@@ -281,8 +280,7 @@ namespace Xbim.COBieLite
         {
             using (var textReader = File.OpenText(path))
             {
-                var serialiser = GetJsonSerializer();
-                var facility = (FacilityType)serialiser.Deserialize(textReader, typeof(FacilityType));
+                var facility = ReadJson(textReader);
                 textReader.Close();
                 return facility;
             }
@@ -298,6 +296,14 @@ namespace Xbim.COBieLite
             return reqFacility;
         }
 
+        public void WriteXml(string path)
+        {
+            using (TextWriter textWriter = File.CreateText(path))
+            {
+                WriteXml(textWriter);
+                textWriter.Close();
+            }
+        }
 
         public void WriteXml(TextWriter textWriter)
         {

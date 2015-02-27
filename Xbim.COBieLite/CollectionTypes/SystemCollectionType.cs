@@ -20,7 +20,7 @@ namespace Xbim.COBieLite
         [JsonIgnore]
         public List<SystemType> InnerList
         {
-            get { return System; }
+            get { return System ?? (System = new List<SystemType>()); }
         }
 
         IEnumerator IEnumerable.GetEnumerator()

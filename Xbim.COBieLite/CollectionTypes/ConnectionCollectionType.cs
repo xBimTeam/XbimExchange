@@ -20,7 +20,7 @@ namespace Xbim.COBieLite
         [JsonIgnore]
         public List<ConnectionType> InnerList
         {
-            get { return Connection; }
+            get { return Connection ?? (Connection = new List<ConnectionType>()); }
         }
 
         IEnumerator IEnumerable.GetEnumerator()

@@ -19,7 +19,7 @@ namespace Xbim.COBieLite
         [XmlIgnore][JsonIgnore]
         public List<AttributeType> InnerList
         {
-            get { return Attribute; }
+            get { return Attribute ?? (Attribute = new List<AttributeType>()); }
         }
 
 

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Runtime.Remoting.Messaging;
 using System.Security.Cryptography;
 using System.Text.RegularExpressions;
 using System.Xml.Serialization;
@@ -77,7 +78,7 @@ namespace SerialisationHelper
                     Console.ReadKey();
                 }
             }
-            
+
             DirectoryInfo d = new DirectoryInfo(".");
             Console.WriteLine("Current folder: " + d.FullName);
 
@@ -115,7 +116,7 @@ namespace SerialisationHelper
                 while (!rd.EndOfStream)
                 {
                     var r = rd.ReadLine();
-                    if (r==null)
+                    if (r == null)
                         break;
                     if (r.StartsWith("[assembly:System.Reflection.AssemblyVersionAttribute"))
                         continue;
@@ -144,22 +145,24 @@ namespace SerialisationHelper
                 return code;
             var m = ms[0];
             var replace = string.Format(
-@"private {0}? {1}Field;
+                @"private {0}? {1}Field;
         [XmlIgnore][Newtonsoft.Json.JsonIgnore]
         public bool {2}Specified
         {{
             get {{ return this.{1}Field.HasValue; }}
         }}
-", 
+",
                 newType,
-                 m.Groups[1].Value,
-                 fieldName
-                 );
+                m.Groups[1].Value,
+                fieldName
+                );
 
             var newcode = fld.Replace(code, replace);
 
             // property
-            string pattern = @"\[System.Xml.Serialization.XmlElementAttribute\(DataType = ""\w*""(, Order = (\d+))*\)].*?public string " + fieldName;
+            string pattern =
+                @"\[System.Xml.Serialization.XmlElementAttribute\(DataType = ""\w*""(, Order = (\d+))*\)].*?public string " +
+                fieldName;
             var regexOptions = RegexOptions.Multiline | RegexOptions.Singleline;
             var regex = new Regex(pattern, regexOptions);
 
@@ -187,17 +190,22 @@ namespace SerialisationHelper
             return file;
         }
 
-        static private string ReplaceList(string classcode, string currentType, string newType)
+        private static string ReplaceList(string classcode, string currentType, string newType)
         {
             string srch = string.Format("List<{0}>", currentType);
             string rep = string.Format("List<{0}>", newType);
             return classcode.Replace(srch, rep);
         }
 
-        static private string GetClassCode(string classname, string sourcestring)
+        private static string GetClassCode(string classname, string sourcestring)
         {
             var mS = string.Format(@"public partial class {0} ", classname);
             var start = sourcestring.IndexOf(mS, StringComparison.Ordinal);
+            if (start == -1)
+            {
+                mS = string.Format("public partial class {0}\r\n", classname);
+                start = sourcestring.IndexOf(mS, StringComparison.Ordinal);
+            }
 
             var pos = start + mS.Length;
             int countBrace = 0;
@@ -215,8 +223,19 @@ namespace SerialisationHelper
                 pos++;
             }
 
-            return sourcestring.Substring(start, pos - start + 1);
+             return sourcestring.Substring(start, pos - start + 1);
         }
 
+        private static string CreateEmptyInitialiser(string file, string classname)
+        {
+                        
+            var oldCode = GetClassCode(classname, file);
+            var newCode = oldCode;
+            var firstBrace = newCode.IndexOf('{');
+            newCode = newCode.Insert(firstBrace + 1, string.Format("\r\n        public {0}() {{}}", classname));
+
+            
+            return file.Replace(oldCode, newCode);
+        }
     }
 }

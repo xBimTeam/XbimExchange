@@ -14,21 +14,21 @@ namespace SerialisationHelper
         {
             var file = File.ReadAllText(fread);
 
-            HashSet<string> Classes = new HashSet<string>();
+            var classes = new HashSet<string>();
 
             var reClassList = new Regex(@"\b(\w+)Type1\b");
             var m = reClassList.Matches(file);
             foreach (Match match in m)
             {
                 var cname = match.Groups[1].Value;
-                if (!Classes.Contains(cname))
+                if (!classes.Contains(cname))
                 {
-                    Classes.Add(cname);
+                    classes.Add(cname);
                 }
             }
 
             Console.WriteLine("Classes found:");
-            foreach (var @class in Classes)
+            foreach (var @class in classes)
             {
                 Console.WriteLine(" - " + @class);
                 var srch = @"\b" + @class + @"Type\b";
@@ -80,6 +80,57 @@ namespace SerialisationHelper
             // 
             // type attributes
             file = file.Replace("XmlElementAttribute(DataType = \"integer\"", "XmlElementAttribute(DataType = \"int\"");
+
+            var classesToInitialise = new[]
+            {
+                "ProjectType",
+                "ProjectStageType",
+                "AssemblyType", 
+                "AttributeCollectionType", 
+                "WarrantyCollectionType", 
+                "WarrantyType", 
+                "AttributeStringValueType", 
+                "AllowedValueCollectionType", 
+                "ContactAssignmentCollectionType", 
+                "AssetKeyType",
+                "SpaceAssignmentCollectionType",
+                "ZoneAssignmentCollectionType",
+                "SystemAssignmentCollectionType",
+                "AssemblyAssignmentCollectionType",
+                "DocumentCollectionType",
+                "DocumentType",
+                "IssueCollectionType",
+                "IssueType",
+                "ZoneCollectionType",
+                "ZoneType",
+                "SystemCollectionType",
+                "SystemType",
+                "SpaceCollectionType",
+                "SpaceType",
+                "FloorCollectionType",
+                "FloorType",
+                "ContactCollectionType",
+                "ContactType",
+                "ConnectionCollectionType",
+                "ConnectionType",
+                "ResourceCollectionType",
+                "ResourceType",
+                "JobCollectionType",
+                "JobType",
+                "SpareCollectionType",
+                "SpareType",
+                "AssetTypeCollectionType",
+                "AssetTypeInfoType",
+                "AssetCollectionType",
+                "AssetInfoTypeBase",
+                "AssetInfoType",
+                "FacilityType",
+                "AttributeType"
+            };
+            foreach (var classname in classesToInitialise)
+            {
+                file = CreateEmptyInitialiser(file, classname);
+            }
 
 
             // fix namespace

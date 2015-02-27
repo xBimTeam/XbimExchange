@@ -19,7 +19,7 @@ namespace Xbim.COBieLite
         [XmlIgnore][JsonIgnore]
         public List<ZoneKeyType> InnerList
         {
-            get { return ZoneAssignment; }
+            get { return ZoneAssignment ?? (ZoneAssignment = new List<ZoneKeyType>()); }
         }
 
 

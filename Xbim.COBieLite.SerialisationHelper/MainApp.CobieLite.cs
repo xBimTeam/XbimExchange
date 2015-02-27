@@ -1,7 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
+using System.Text;
 using System.Text.RegularExpressions;
+using System.Threading.Tasks;
 
 namespace SerialisationHelper
 {
@@ -9,9 +12,6 @@ namespace SerialisationHelper
     {
         private static void ProcessCobieLite(string fread, string fwrite)
         {
-            
-            
-
             var file = File.ReadAllText(fread);
 
             var classes = new HashSet<string>();
@@ -73,15 +73,20 @@ namespace SerialisationHelper
             file = SavegeTypeReplacement(file, @"ZoneAssignmentCollectionType", @"ZoneKeyType", @"List<ZoneKeyType>");
 
             // type replacements
+<<<<<<< HEAD
 
             // file = SavegeTypeReplacement(file, @"IntegerValueType", @"string", @"int?");
+=======
+>>>>>>> 2bc3340d48b3af7e45dbf5deb48ebe53ea08f584
             file = StringToNullableType(file, @"IntegerValueType", "IntegerValue", @"int");
             file = StringToNullableType(file, @"AttributeIntegerValueType", @"MinValueInteger", @"int");
             file = StringToNullableType(file, @"AttributeIntegerValueType", @"MaxValueInteger", @"int");
 
+            // 
             // type attributes
             file = file.Replace("XmlElementAttribute(DataType = \"integer\"", "XmlElementAttribute(DataType = \"int\"");
 
+<<<<<<< HEAD
             //var CollectionClasses = GetClassesByPattern(@"\b(\w+)CollectionType\b", file);
             //foreach (var collectionClass in CollectionClasses)
             //{
@@ -90,6 +95,56 @@ namespace SerialisationHelper
             //    var newCode = InitCollectionClass(currCode);
             //    file = file.Replace(currCode, newCode);
             //}
+=======
+            var classesToInitialise = new[]
+            {
+                "AssemblyType", 
+                "AttributeCollectionType", 
+                "WarrantyCollectionType", 
+                "WarrantyType", 
+                "AttributeStringValueType", 
+                "AllowedValueCollectionType", 
+                "ContactAssignmentCollectionType", 
+                "AssetKeyType",
+                "SpaceAssignmentCollectionType",
+                "ZoneAssignmentCollectionType",
+                "SystemAssignmentCollectionType",
+                "AssemblyAssignmentCollectionType",
+                "DocumentCollectionType",
+                "DocumentType",
+                "IssueCollectionType",
+                "IssueType",
+                "ZoneCollectionType",
+                "ZoneType",
+                "SystemCollectionType",
+                "SystemType",
+                "SpaceCollectionType",
+                "SpaceType",
+                "FloorCollectionType",
+                "FloorType",
+                "ContactCollectionType",
+                "ContactType",
+                "ConnectionCollectionType",
+                "ConnectionType",
+                "ResourceCollectionType",
+                "ResourceType",
+                "JobCollectionType",
+                "JobType",
+                "SpareCollectionType",
+                "SpareType",
+                "AssetTypeCollectionType",
+                "AssetTypeInfoType",
+                "AssetCollectionType",
+                "AssetInfoTypeBase",
+                "AssetInfoType",
+                "FacilityType",
+                "AttributeType"
+            };
+            foreach (var classname in classesToInitialise)
+            {
+                file = CreateEmptyInitialiser(file, classname);
+            }
+>>>>>>> 2bc3340d48b3af7e45dbf5deb48ebe53ea08f584
 
 
             // fix namespace
@@ -97,12 +152,9 @@ namespace SerialisationHelper
 
             file = file.Replace(@"[System.Xml.Serialization.XmlIgnoreAttribute()]", "[System.Xml.Serialization.XmlIgnoreAttribute()][Newtonsoft.Json.JsonIgnore]");
 
-            
-
             File.Delete(fwrite);
             File.WriteAllText(fwrite, file);
         }
-
 
     }
 }

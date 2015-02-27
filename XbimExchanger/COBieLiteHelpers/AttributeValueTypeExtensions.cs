@@ -8,7 +8,7 @@ namespace XbimExchanger.COBieLiteHelpers
 
         public static XbimSimplePropertyType SimplePropertyType(this AttributeValueType valueType)
         {
-            if (valueType.Item == null) return XbimSimplePropertyType.Null;
+            if (valueType == null || valueType.Item == null) return XbimSimplePropertyType.Null;
             string valueTypeString = valueType.Item.GetType().Name;
             
             switch (valueTypeString)
@@ -31,7 +31,7 @@ namespace XbimExchanger.COBieLiteHelpers
                     return XbimSimplePropertyType.SimpleMonetary;
                 case "AttributeStringValueType":
                     var st = valueType.Item as AttributeStringValueType;
-                    return st != null && st.AllowedValues.Any()
+                    return st != null && st.AllowedValues != null && st.AllowedValues.Any()
                     ? XbimSimplePropertyType.EnumerationString
                     : XbimSimplePropertyType.SimpleString;
                 default:

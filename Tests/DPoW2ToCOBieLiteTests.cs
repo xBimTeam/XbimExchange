@@ -6,6 +6,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Newtonsoft.Json;
 using Xbim.COBieLite;
 using Xbim.DPoW;
+using Xbim.Ifc2x3.Kernel;
 using Xbim.IO;
 using Xbim.XbimExtensions.Interfaces;
 using XbimExchanger.COBieLiteToIfc;
@@ -60,7 +61,7 @@ namespace Tests
         public void Dpow2CobieLite2Ifc()
         {
             var pow = PlanOfWork.OpenJson("NewtownHighSchool.new.dpow");
-            const string dir = "Export";
+            const string dir = "..\\..\\Export";
             if (!Directory.Exists(dir))
                 Directory.CreateDirectory(dir);
             foreach (var stage in pow.ProjectStages)
@@ -68,6 +69,13 @@ namespace Tests
                 var facility = new FacilityType();
                 var d2C = new DPoWToCOBieLiteExchanger(pow, facility, stage);
                 d2C.Convert();
+
+                var outputIfc = Path.Combine(dir, stage.Name + ".DPoW.ifc");
+                var outputCobieJson = Path.Combine(dir, stage.Name + ".DPoW.json");
+                var outputCobieXml = Path.Combine(dir, stage.Name + ".DPoW.xml");
+                facility.WriteJson(outputCobieJson);
+                facility.WriteXml(outputCobieXml);
+
                 using (var model = XbimModel.CreateTemporaryModel())
                 {
                     model.Initialise("Xbim Tester", "XbimTeam", "Xbim.Exchanger", "Xbim Development Team", "3.0");
@@ -77,13 +85,13 @@ namespace Tests
                         var c2Ifc = new CoBieLiteToIfcExchanger(facility, model);
                         c2Ifc.Convert();
                         txn.Commit();
-                        //var err = model.Validate(model.Instances, Console.Out);
                     }
-                    var output = Path.Combine(dir, stage.Name + ".ifc");
-                    model.SaveAs(output, XbimStorageType.IFC);
+                    model.SaveAs(outputIfc, XbimStorageType.IFC);
+
+                    if (facility.AssetTypes != null)
+                        Assert.AreEqual(facility.AssetTypes.Count(), model.Instances.OfType<IfcTypeObject>().Count());
                 }
             }
-            
         }
     }
 }

@@ -20,7 +20,7 @@ namespace Xbim.COBieLite
         [JsonIgnore]
         public List<SpareType> InnerList
         {
-            get { return Spare; }
+            get { return Spare ?? (Spare = new List<SpareType>()); }
         }
 
         IEnumerator IEnumerable.GetEnumerator()
