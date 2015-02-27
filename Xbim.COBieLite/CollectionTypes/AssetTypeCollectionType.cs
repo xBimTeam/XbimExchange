@@ -20,7 +20,7 @@ namespace Xbim.COBieLite
         [JsonIgnore]
         public List<AssetTypeInfoType> InnerList
         {
-            get { return AssetType; }
+            get { return AssetType ?? (AssetType = new List<AssetTypeInfoType>()); }
         }
 
         IEnumerator IEnumerable.GetEnumerator()

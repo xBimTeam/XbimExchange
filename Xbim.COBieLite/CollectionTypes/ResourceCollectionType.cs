@@ -20,7 +20,7 @@ namespace Xbim.COBieLite
         [JsonIgnore]
         public List<ResourceType> InnerList
         {
-            get { return Resource; }
+            get { return Resource ?? (Resource = new List<ResourceType>()); }
         }
 
         IEnumerator IEnumerable.GetEnumerator()

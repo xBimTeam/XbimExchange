@@ -152,7 +152,7 @@ namespace XbimExchanger.DPoW2ToCOBieLite
                     tContact.ContactCategory = "Client";
 
                 mappings.AddMapping(sContact, tContact);
-                target.Contacts.Contact.Add(tContact);
+                target.Contacts.Add(tContact);
             }
         }
 

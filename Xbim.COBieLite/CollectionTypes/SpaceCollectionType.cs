@@ -19,7 +19,7 @@ namespace Xbim.COBieLite
         [XmlIgnore][JsonIgnore]
         public List<SpaceType> InnerList
         {
-            get { return Space; }
+            get { return Space ?? (Space = new List<SpaceType>()); }
         }
 
         IEnumerator IEnumerable.GetEnumerator()

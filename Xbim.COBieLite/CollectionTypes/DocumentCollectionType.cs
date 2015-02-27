@@ -20,7 +20,7 @@ namespace Xbim.COBieLite
         [JsonIgnore]
         public List<DocumentType> InnerList
         {
-            get { return Document; }
+            get { return Document ?? (Document = new List<DocumentType>()); }
         }
 
 

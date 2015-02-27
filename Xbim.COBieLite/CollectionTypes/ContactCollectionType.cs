@@ -20,7 +20,7 @@ namespace Xbim.COBieLite
         [JsonIgnore]
         public List<ContactType> InnerList
         {
-            get { return Contact; }
+            get { return Contact ?? (Contact = new List<ContactType>()); }
         }
 
         IEnumerator IEnumerable.GetEnumerator()

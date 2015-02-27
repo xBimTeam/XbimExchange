@@ -19,7 +19,7 @@ namespace Xbim.COBieLite
         [XmlIgnore][JsonIgnore]
         public List<SystemKeyType> InnerList
         {
-            get { return SystemAssignment; }
+            get { return SystemAssignment ?? (SystemAssignment = new List<SystemKeyType>()); }
         }
 
 

@@ -20,7 +20,7 @@ namespace Xbim.COBieLite
         [JsonIgnore]
         public List<JobType> InnerList
         {
-            get { return Job; }
+            get { return Job ?? (Job = new List<JobType>()); }
         }
 
         IEnumerator IEnumerable.GetEnumerator()

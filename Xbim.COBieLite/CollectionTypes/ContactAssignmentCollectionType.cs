@@ -19,7 +19,7 @@ namespace Xbim.COBieLite
         [XmlIgnore][JsonIgnore]
         public List<ContactKeyType> InnerList
         {
-            get { return ContactAssignment; }
+            get { return ContactAssignment ?? (ContactAssignment = new List<ContactKeyType>()); }
 
         }
 

@@ -20,7 +20,7 @@ namespace Xbim.COBieLite
         [JsonIgnore]
         public List<string> InnerList
         {
-            get { return AttributeAllowedValue; }
+            get { return AttributeAllowedValue ?? (AttributeAllowedValue = new List<string>()); }
         }
 
         IEnumerator IEnumerable.GetEnumerator()

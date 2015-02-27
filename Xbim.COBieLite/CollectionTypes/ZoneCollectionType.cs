@@ -20,7 +20,7 @@ namespace Xbim.COBieLite
         [JsonIgnore]
         public List<ZoneType> InnerList
         {
-            get { return Zone; }
+            get { return Zone ?? (Zone = new List<ZoneType>()); }
         }
 
         IEnumerator IEnumerable.GetEnumerator()
