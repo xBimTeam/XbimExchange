@@ -17,6 +17,22 @@ namespace Xbim.Tests.COBie
     public class CoBieLiteTests
     {
         [TestMethod]
+        public void CanReadSerialisedJson()
+        {
+            var filename =
+                @"007-Lakeside_Restaurant.dpow.json";
+            //filename = "007-Lakeside_Restaurant-stage6-COBie.json";
+            filename =
+                Path.Combine(@"C:\Users\Bonghi\Google Drive\UNN\_Research\2014 12 01 - DPOW\_modelInfo\requirements4\",
+                    filename);
+
+            //var data = File.ReadAllText();
+            //var t = JsonConvert.DeserializeObject<FacilityType>(data);
+            var facility = FacilityType.ReadJson(filename);
+
+        }
+
+        [TestMethod]
         public void CanReadSerialisedXml()
         {
             try
