@@ -572,6 +572,8 @@ namespace Xbim.COBieLite
                                 "SimpleProp(PSet_Revit_Type_Identity Data.OmniClass Number): SimpleProp(PSet_Revit_Type_Identity Data.OmniClass Title)"
                             };
 
+                        if (!_attributedObjects.ContainsKey(obj))
+                            return null;
                         var val = _attributedObjects[obj];
                         string pattern = @"SimpleProp\(([^\)]*)\)";
                         Regex regex = new Regex(pattern);

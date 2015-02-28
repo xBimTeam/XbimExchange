@@ -81,6 +81,55 @@ namespace SerialisationHelper
             // type attributes
             file = file.Replace("XmlElementAttribute(DataType = \"integer\"", "XmlElementAttribute(DataType = \"int\"");
 
+            var classesToInitialise = new[]
+            {
+                "AssemblyType", 
+                "AttributeCollectionType", 
+                "WarrantyCollectionType", 
+                "WarrantyType", 
+                "AttributeStringValueType", 
+                "AllowedValueCollectionType", 
+                "ContactAssignmentCollectionType", 
+                "AssetKeyType",
+                "SpaceAssignmentCollectionType",
+                "ZoneAssignmentCollectionType",
+                "SystemAssignmentCollectionType",
+                "AssemblyAssignmentCollectionType",
+                "DocumentCollectionType",
+                "DocumentType",
+                "IssueCollectionType",
+                "IssueType",
+                "ZoneCollectionType",
+                "ZoneType",
+                "SystemCollectionType",
+                "SystemType",
+                "SpaceCollectionType",
+                "SpaceType",
+                "FloorCollectionType",
+                "FloorType",
+                "ContactCollectionType",
+                "ContactType",
+                "ConnectionCollectionType",
+                "ConnectionType",
+                "ResourceCollectionType",
+                "ResourceType",
+                "JobCollectionType",
+                "JobType",
+                "SpareCollectionType",
+                "SpareType",
+                "AssetTypeCollectionType",
+                "AssetTypeInfoType",
+                "AssetCollectionType",
+                "AssetInfoTypeBase",
+                "AssetInfoType",
+                "FacilityType",
+                "AttributeType"
+            };
+            foreach (var classname in classesToInitialise)
+            {
+                file = CreateEmptyInitialiser(file, classname);
+            }
+
 
             // fix namespace
             file = file.Replace(@"namespace Xbim.COBieLite.SerialisationHelper", "namespace Xbim.COBieLite");
