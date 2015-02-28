@@ -556,52 +556,58 @@ namespace Xbim.COBieLite
                     return classificationName;
                 }
             }
-            else if (classifiedObject is IfcTypeObject)
+            else
             {
-                if (_definingTypeObjectMap.ContainsKey((IfcTypeObject) classifiedObject))
-                {
-                    var obj = _definingTypeObjectMap[(IfcTypeObject) classifiedObject].FirstOrDefault();
+                var classifiedIfcTypeObject = classifiedObject as IfcTypeObject;
+                if (classifiedIfcTypeObject == null) 
+                    return null;
+                if (!_definingTypeObjectMap.ContainsKey(classifiedIfcTypeObject)) 
+                    return null;
+                var obj = _definingTypeObjectMap[classifiedIfcTypeObject].FirstOrDefault();
 
-                    if (obj != null)
+                if (obj == null) 
+                    return null;
+                // PSet_Revit_Type_Other.Classification Code
+                var cfg =
+                    new[]
                     {
-                        // PSet_Revit_Type_Other.Classification Code
-                        var cfg =
-                            new[]
-                            {
-                                "SimpleProp(PSet_Revit_Type_Other.Classification Code): SimpleProp(PSet_Revit_Type_Other.Classification Description)",
-                                "SimpleProp(PSet_Revit_Type_Identity Data.OmniClass Number): SimpleProp(PSet_Revit_Type_Identity Data.OmniClass Title)"
-                            };
+                        "SimpleProp(PSet_Revit_Type_Other.Classification Code): SimpleProp(PSet_Revit_Type_Other.Classification Description)",
+                        "SimpleProp(PSet_Revit_Type_Identity Data.OmniClass Number): SimpleProp(PSet_Revit_Type_Identity Data.OmniClass Title)"
+                    };
+                try
+                {
+                    if (!_attributedObjects.ContainsKey(obj))
+                        return null;
+                    var val = _attributedObjects[obj];
+                    const string pattern = @"SimpleProp\(([^\)]*)\)";
+                    var regex = new Regex(pattern);
 
-                        if (!_attributedObjects.ContainsKey(obj))
-                            return null;
-                        var val = _attributedObjects[obj];
-                        string pattern = @"SimpleProp\(([^\)]*)\)";
-                        Regex regex = new Regex(pattern);
-
-                        foreach (var classificationRule in cfg)
+                    foreach (var classificationRule in cfg)
+                    {
+                        var ok = true;
+                        var result = classificationRule;
+                        var mts = regex.Matches(classificationRule);
+                        foreach (Match mt in mts)
                         {
-                            bool ok = true;
-                            string result = classificationRule;
-                            var mts = regex.Matches(classificationRule);
-                            foreach (Match mt in mts)
+                            var propName = mt.Groups[1].Value;
+                            string propVal;
+                            val.GetSimplePropertyValue(propName, out propVal);
+                            if (propVal == null)
                             {
-                                string propName = mt.Groups[1].Value;
-                                string propVal;
-                                val.GetSimplePropertyValue(propName, out propVal);
-                                if (propVal == null)
-                                {
-                                    ok = false;
-                                    break;
-                                }
-                                result = result.Replace("SimpleProp(" + propName + ")", propVal);
+                                ok = false;
+                                break;
                             }
-                            if (ok)
-                                return result;
+                            result = result.Replace("SimpleProp(" + propName + ")", propVal);
                         }
+                        if (ok)
+                            return result;
                     }
                 }
+                catch (Exception)
+                {
+                    return null;
+                }
             }
-
             return null;
         }
 
