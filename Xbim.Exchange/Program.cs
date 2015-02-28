@@ -55,7 +55,8 @@ namespace Xbim.Exchange
                     foreach (var facilityType in facilityTypes)
                     {
                         var dpow = "DPoW";
-                        if (facilityTypes.Count > 1) dpow += ++facilityNumber;
+                        if (facilityTypes.Count > 1) 
+                            dpow += ++facilityNumber;
 // ReSharper disable AssignNullToNotNullAttribute
                         var dPoWFile = Path.Combine(fileDirectoryName, fileNameWithoutExtension+"_"+ dpow);
 // ReSharper restore AssignNullToNotNullAttribute
@@ -66,13 +67,13 @@ namespace Xbim.Exchange
                             CoBieLiteHelper.WriteJson(fs, facilityType);
                             fs.Close();
                         }
-                        //dPoWFile = Path.ChangeExtension(dPoWFile, "xml");
-                        //Console.WriteLine("Creating " + dPoWFile);
-                        //using (var fs = new StreamWriter(dPoWFile))
-                        //{
-                        //    CoBieLiteHelper.WriteXml(fs, facilityType);
-                        //    fs.Close();
-                        //}
+                        dPoWFile = Path.ChangeExtension(dPoWFile, "xml");
+                        Console.WriteLine("Creating " + dPoWFile);
+                        using (var fs = new StreamWriter(dPoWFile))
+                        {
+                            CoBieLiteHelper.WriteXml(fs, facilityType);
+                            fs.Close();
+                        }
                         dPoWFile = Path.ChangeExtension(dPoWFile, "xbim");
                         Console.WriteLine("Creating " + dPoWFile);
                         using (var ifcModel = XbimModel.CreateModel(dPoWFile))
