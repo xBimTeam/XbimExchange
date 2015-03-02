@@ -1,19 +1,19 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using System.Xml.Serialization;
+using Newtonsoft.Json;
+using Xbim.COBieLite.CollectionTypes;
 using Xbim.Ifc2x3.Extensions;
 using Xbim.Ifc2x3.ProductExtension;
 
 namespace Xbim.COBieLite
 {
-    public partial class FloorType
+    public partial class FloorType: ICOBieObject
     {
         //[System.Xml.Serialization.XmlIgnoreAttribute()]
         //private IfcBuildingStorey _ifcBuildingStorey;
 
-        public FloorType()
-        {
-            
-        }
+   
         public FloorType(IfcBuildingStorey ifcBuildingStorey, CoBieLiteHelper helper)
             : this()
         {
@@ -54,7 +54,9 @@ namespace Xbim.COBieLite
             {
                 Spaces = new SpaceCollectionType {Space = new List<SpaceType>(ifcSpaces.Count)};
                 for (var i = 0; i < ifcSpaces.Count; i++)
+                {
                     Spaces.Add(new SpaceType(ifcSpaces[i], helper));
+                }
             }
 
             //Attributes
@@ -65,6 +67,56 @@ namespace Xbim.COBieLite
             //TODO:
             //Space Issues
             //Space Documents
+        }
+
+        [XmlIgnore, JsonIgnore]
+        DocumentCollectionType ICOBieObject.Documents
+        {
+            get { return FloorDocuments; }
+            set { FloorDocuments = value; }
+        }
+
+        [XmlIgnore, JsonIgnore]
+        IssueCollectionType ICOBieObject.Issues
+        {
+            get { return FloorIssues; }
+            set { FloorIssues = value; }
+        }
+
+        [XmlIgnore, JsonIgnore]
+        AttributeCollectionType ICOBieObject.Attributes
+        {
+            get { return FloorAttributes; }
+            set { FloorAttributes = value; }
+        }
+
+        [XmlIgnore, JsonIgnore]
+        string ICOBieObject.Name
+        {
+            get { return FloorName; }
+            set { FloorName = value; }
+        }
+
+        [XmlIgnore, JsonIgnore]
+        string ICOBieObject.Description
+        {
+            get { return FloorDescription; }
+            set { FloorDescription = value; }
+        }
+
+        [XmlIgnore, JsonIgnore]
+        string ICOBieObject.Category
+        {
+            get { return FloorCategory; }
+            set { FloorCategory = value; }
+        }
+
+
+        [XmlIgnore, JsonIgnore]
+        string ICOBieObject.Id
+        {
+            get { return externalID; }
+            set { externalID = value; }
         }
     }
 }

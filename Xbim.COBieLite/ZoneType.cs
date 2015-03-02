@@ -1,14 +1,13 @@
 ﻿using System.Linq;
+using System.Xml.Serialization;
+using Newtonsoft.Json;
 using Xbim.Ifc2x3.ProductExtension;
 
 namespace Xbim.COBieLite
 {
-    public partial class ZoneType
+    public partial class ZoneType: ICOBieObject
     {
-        public ZoneType()
-        {
-            
-        }
+    
 
         public ZoneType(IfcZone ifcZone, CoBieLiteHelper helper)
             : this()
@@ -27,6 +26,56 @@ namespace Xbim.COBieLite
             //TODO:
             //Space Issues
             //Space Documents
+        }
+
+        [XmlIgnore, JsonIgnore]
+        DocumentCollectionType ICOBieObject.Documents
+        {
+            get { return ZoneDocuments; }
+            set { ZoneDocuments = value; }
+        }
+
+        [XmlIgnore, JsonIgnore]
+        IssueCollectionType ICOBieObject.Issues
+        {
+            get { return ZoneIssues; }
+            set { ZoneIssues = value; }
+        }
+
+        [XmlIgnore, JsonIgnore]
+        AttributeCollectionType ICOBieObject.Attributes
+        {
+            get { return ZoneAttributes; }
+            set { ZoneAttributes = value; }
+        }
+
+        [XmlIgnore, JsonIgnore]
+        string ICOBieObject.Name
+        {
+            get { return ZoneName; }
+            set { ZoneName = value; }
+        }
+
+        [XmlIgnore, JsonIgnore]
+        string ICOBieObject.Description
+        {
+            get { return ZoneDescription; }
+            set { ZoneDescription = value; }
+        }
+
+        [XmlIgnore, JsonIgnore]
+        string ICOBieObject.Category
+        {
+            get { return ZoneCategory; }
+            set { ZoneCategory = value; }
+        }
+
+
+        [XmlIgnore, JsonIgnore]
+        string ICOBieObject.Id
+        {
+            get { return externalID; }
+            set { externalID = value; }
         }
     }
 }

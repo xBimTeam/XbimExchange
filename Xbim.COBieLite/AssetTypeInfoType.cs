@@ -1,19 +1,19 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Xml.Serialization;
+using Newtonsoft.Json;
+using Xbim.COBieLite.CollectionTypes;
 using Xbim.Ifc2x3.Kernel;
 using Xbim.Ifc2x3.ProductExtension;
 using Xbim.Ifc2x3.SharedFacilitiesElements;
 
 namespace Xbim.COBieLite
 {
-    public partial class AssetTypeInfoType
+    public partial class AssetTypeInfoType : ICOBieObject
     {
        
-        public AssetTypeInfoType()
-        {
-            
-        }
+     
 
         public AssetTypeInfoType(IfcTypeObject ifcTypeObject, CoBieLiteHelper helper)
             : this()
@@ -76,6 +76,56 @@ namespace Xbim.COBieLite
             if (ifcAttributes != null && ifcAttributes.Any())
                 AssetTypeAttributes = new AttributeCollectionType { Attribute = ifcAttributes };
            
+        }
+
+        [XmlIgnore, JsonIgnore]
+        DocumentCollectionType ICOBieObject.Documents
+        {
+            get { return AssetTypeDocuments; }
+            set { AssetTypeDocuments = value; }
+        }
+
+        [XmlIgnore, JsonIgnore]
+        IssueCollectionType ICOBieObject.Issues
+        {
+            get { return AssetTypeIssues; }
+            set { AssetTypeIssues = value; }
+        }
+
+        [XmlIgnore, JsonIgnore]
+        AttributeCollectionType ICOBieObject.Attributes
+        {
+            get { return AssetTypeAttributes; }
+            set { AssetTypeAttributes = value; }
+        }
+
+        [XmlIgnore, JsonIgnore]
+        string ICOBieObject.Name
+        {
+            get { return AssetTypeName; }
+            set { AssetTypeName = value; }
+        }
+
+        [XmlIgnore, JsonIgnore]
+        string ICOBieObject.Description
+        {
+            get { return AssetTypeDescription; }
+            set { AssetTypeDescription = value; }
+        }
+
+        [XmlIgnore, JsonIgnore]
+        string ICOBieObject.Category
+        {
+            get { return AssetTypeCategory; }
+            set { AssetTypeCategory = value; }
+        }
+
+
+        [XmlIgnore, JsonIgnore]
+        string ICOBieObject.Id
+        {
+            get { return externalID; }
+            set { externalID = value; }
         }
     }
 }

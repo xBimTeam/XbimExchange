@@ -8,9 +8,9 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyTitle("Xbim.Exchange")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("Northumbria University")]
+[assembly: AssemblyCompany("")]
 [assembly: AssemblyProduct("Xbim.Exchange")]
-[assembly: AssemblyCopyright("Copyright © Northumbria University 2015")]
+[assembly: AssemblyCopyright("Copyright ©  2015")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
@@ -20,7 +20,7 @@ using System.Runtime.InteropServices;
 [assembly: ComVisible(false)]
 
 // The following GUID is for the ID of the typelib if this project is exposed to COM
-[assembly: Guid("2c0cb6ce-6034-4427-84c3-a6be0c30a868")]
+[assembly: Guid("a7a0cc65-5a83-4b27-96d2-4391de77ebd1")]
 
 // Version information for an assembly consists of the following four values:
 //

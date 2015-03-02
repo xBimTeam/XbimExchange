@@ -1,0 +1,621 @@
+{
+  "ProjectAssignment": {
+    "ProjectName": "Newtown High School",
+    "ProjectDescription": "Gateshead, NE8 5XU",
+    "externalID": "2"
+  },
+  "SiteAssignment": {
+    "SiteName": "Gateshead, , NE8 5XU",
+    "externalID": "1"
+  },
+  "FacilityDefaultLinearUnit": "meters",
+  "FacilityDefaultLinearUnitSpecified": true,
+  "FacilityDefaultAreaUnit": "squaremeters",
+  "FacilityDefaultAreaUnitSpecified": true,
+  "FacilityDefaultVolumeUnit": "cubicmeters",
+  "FacilityDefaultVolumeUnitSpecified": true,
+  "FacilityDefaultCurrencyUnit": "BritishPounds",
+  "FacilityDefaultCurrencyUnitSpecified": true,
+  "Floors": {
+    "Floor": []
+  },
+  "Zones": {
+    "Zone": []
+  },
+  "AssetTypes": {
+    "AssetType": []
+  },
+  "Systems": {
+    "System": []
+  },
+  "Connections": {
+    "Connection": []
+  },
+  "Contacts": {
+    "Contact": [
+      {
+        "ContactCompanyName": "Big Widget Limited",
+        "ContactAttributes": {
+          "Attribute": []
+        },
+        "ContactDocuments": {
+          "Document": []
+        },
+        "ContactIssues": {
+          "Issue": []
+        },
+        "externalID": "4"
+      },
+      {
+        "ContactCompanyName": "Newtown CC",
+        "ContactAttributes": {
+          "Attribute": []
+        },
+        "ContactDocuments": {
+          "Document": []
+        },
+        "ContactIssues": {
+          "Issue": []
+        },
+        "externalID": "6"
+      },
+      {
+        "ContactCompanyName": "SJH Consult",
+        "ContactAttributes": {
+          "Attribute": []
+        },
+        "ContactDocuments": {
+          "Document": []
+        },
+        "ContactIssues": {
+          "Issue": []
+        },
+        "externalID": "8"
+      },
+      {
+        "ContactCompanyName": "Clear Costs",
+        "ContactAttributes": {
+          "Attribute": []
+        },
+        "ContactDocuments": {
+          "Document": []
+        },
+        "ContactIssues": {
+          "Issue": []
+        },
+        "externalID": "10"
+      },
+      {
+        "ContactCompanyName": "ABC Architect",
+        "ContactAttributes": {
+          "Attribute": []
+        },
+        "ContactDocuments": {
+          "Document": []
+        },
+        "ContactIssues": {
+          "Issue": []
+        },
+        "externalID": "12"
+      },
+      {
+        "ContactCompanyName": "Wires and Fires",
+        "ContactAttributes": {
+          "Attribute": []
+        },
+        "ContactDocuments": {
+          "Document": []
+        },
+        "ContactIssues": {
+          "Issue": []
+        },
+        "externalID": "14"
+      },
+      {
+        "ContactCompanyName": "NBS",
+        "ContactAttributes": {
+          "Attribute": []
+        },
+        "ContactDocuments": {
+          "Document": []
+        },
+        "ContactIssues": {
+          "Issue": []
+        },
+        "externalID": "16"
+      }
+    ]
+  },
+  "FacilityAttributes": {
+    "Attribute": [
+      {
+        "AttributeDescription": "Client of this project as defined in DPoW.",
+        "AttributeValue": {
+          "Item": {
+            "AllowedValues": {
+              "AttributeAllowedValue": []
+            },
+            "StringValue": "Test Surname"
+          },
+          "ItemElementName": "AttributeBooleanValue"
+        },
+        "AttributeIssues": {
+          "Issue": []
+        },
+        "AttributeName": "ProjectClientFamilyName",
+        "propertySetName": "ProjectClient"
+      },
+      {
+        "AttributeDescription": "Client of this project as defined in DPoW.",
+        "AttributeValue": {
+          "Item": {
+            "AllowedValues": {
+              "AttributeAllowedValue": []
+            },
+            "StringValue": "TEST Forename"
+          },
+          "ItemElementName": "AttributeBooleanValue"
+        },
+        "AttributeIssues": {
+          "Issue": []
+        },
+        "AttributeName": "ProjectClientGivenName",
+        "propertySetName": "ProjectClient"
+      },
+      {
+        "AttributeDescription": "Client of this project as defined in DPoW.",
+        "AttributeValue": {
+          "Item": {
+            "AllowedValues": {
+              "AttributeAllowedValue": []
+            },
+            "StringValue": "alan.smith@ribaenterprises.com"
+          },
+          "ItemElementName": "AttributeBooleanValue"
+        },
+        "AttributeIssues": {
+          "Issue": []
+        },
+        "AttributeName": "ProjectClientEmail",
+        "propertySetName": "ProjectClient"
+      },
+      {
+        "AttributeDescription": "Client of this project as defined in DPoW.",
+        "AttributeValue": {
+          "Item": {
+            "AllowedValues": {
+              "AttributeAllowedValue": []
+            }
+          },
+          "ItemElementName": "AttributeBooleanValue"
+        },
+        "AttributeIssues": {
+          "Issue": []
+        },
+        "AttributeName": "ProjectClientCompanyName",
+        "propertySetName": "ProjectClient"
+      },
+      {
+        "AttributeDescription": "Client of this project as defined in DPoW.",
+        "AttributeValue": {
+          "Item": {
+            "AllowedValues": {
+              "AttributeAllowedValue": []
+            }
+          },
+          "ItemElementName": "AttributeBooleanValue"
+        },
+        "AttributeIssues": {
+          "Issue": []
+        },
+        "AttributeName": "ProjectClientURL",
+        "propertySetName": "ProjectClient"
+      }
+    ]
+  },
+  "FacilityDocuments": {
+    "Document": [
+      {
+        "DocumentCategory": "dPOW Document Numbering",
+        "DocumentDescription": "The Business Case for a project is the rationale behind the initiation of a new building project. It may consist solely of a reasoned argument. It may contain supporting information, financial appraisals or other background information. It should also highlight initial considerations for the Project Outcomes. In summary, it is a combination of objective and subjective considerations. The Business Case might be prepared in relation to, for example, appraising a number of sites or in relation to assessing a refurbishment against a new build option.",
+        "DocumentAttributes": {
+          "Attribute": []
+        },
+        "DocumentIssues": {
+          "Issue": []
+        },
+        "DocumentName": "0.010 Identify Business Case requirements.",
+        "externalID": "20",
+        "externalSystemName": "Facility"
+      },
+      {
+        "DocumentCategory": "dPOW Document Numbering",
+        "DocumentDescription": "The brief prepared to enable the Strategic Definition of the project. Strategic considerations might include considering different sites, whether to extend, refurbish or build new and the key Project Outcomes as well as initial considerations for the Project Programme and assembling the project team.",
+        "DocumentAttributes": {
+          "Attribute": []
+        },
+        "DocumentIssues": {
+          "Issue": []
+        },
+        "DocumentName": "0.020 Identify Strategic Brief.",
+        "externalID": "24",
+        "externalSystemName": "Facility"
+      },
+      {
+        "DocumentCategory": "dPOW Document Numbering",
+        "DocumentDescription": "The Core Project Requirements include any specific Project Outcomes and Project Objectives essential for the successful completion of the project",
+        "DocumentAttributes": {
+          "Attribute": []
+        },
+        "DocumentIssues": {
+          "Issue": []
+        },
+        "DocumentName": "0.030 Identify Core Project Requirements.",
+        "externalID": "28",
+        "externalSystemName": "Facility"
+      },
+      {
+        "DocumentCategory": "dPOW Document Numbering",
+        "DocumentDescription": "All members of the Project Team will have an input, but one member takes responsibilty for organising the process and coordinating the results.",
+        "DocumentAttributes": {
+          "Attribute": []
+        },
+        "DocumentIssues": {
+          "Issue": []
+        },
+        "DocumentName": "0.040 Collate comments and facilitate workshops to discuss Business Case and develop Strategic Brief with Project Team members",
+        "externalID": "32",
+        "externalSystemName": "Facility"
+      },
+      {
+        "DocumentCategory": "dPOW Document Numbering",
+        "DocumentDescription": "The Project Team must be appropriate to the nature and scale of the project, and the agreed method of delivery of the Core Objectives.",
+        "DocumentAttributes": {
+          "Attribute": []
+        },
+        "DocumentIssues": {
+          "Issue": []
+        },
+        "DocumentName": "0.050 Discuss initial considerations for assembling the Project Team",
+        "externalID": "36",
+        "externalSystemName": "Facility"
+      },
+      {
+        "DocumentCategory": "dPOW Document Numbering",
+        "DocumentDescription": "The overall period for the briefing, design, construction and postcompletion activities of a project",
+        "DocumentAttributes": {
+          "Attribute": []
+        },
+        "DocumentIssues": {
+          "Issue": []
+        },
+        "DocumentName": "0.060 Establish Project Programme",
+        "externalID": "40",
+        "externalSystemName": "Facility"
+      },
+      {
+        "DocumentCategory": "dPOW Document Numbering",
+        "DocumentDescription": "All members of the Project Team will have an input, but one member takes responsibilty for organising the process and coordinating the results.",
+        "DocumentAttributes": {
+          "Attribute": []
+        },
+        "DocumentIssues": {
+          "Issue": []
+        },
+        "DocumentName": "0.070 Collate Feedback from previous projects",
+        "externalID": "44",
+        "externalSystemName": "Facility"
+      },
+      {
+        "DocumentCategory": "dPOW Document Numbering",
+        "DocumentDescription": "All members of the Project Team will have an input, but one member takes responsibilty for organising the process and coordinating the results.",
+        "DocumentAttributes": {
+          "Attribute": []
+        },
+        "DocumentIssues": {
+          "Issue": []
+        },
+        "DocumentName": "0.080 Contribute to preparation of Strategic Brief",
+        "externalID": "48",
+        "externalSystemName": "Facility"
+      },
+      {
+        "DocumentCategory": "dPOW Document Numbering",
+        "DocumentDescription": "The overall period for the briefing, design, construction and postcompletion activities of a project",
+        "DocumentAttributes": {
+          "Attribute": []
+        },
+        "DocumentIssues": {
+          "Issue": []
+        },
+        "DocumentName": "0.090 Comment on project Programme",
+        "externalID": "52",
+        "externalSystemName": "Facility"
+      },
+      {
+        "DocumentCategory": "dPOW Document Numbering",
+        "DocumentDescription": "All members of the Project Team will have an input, but one member takes responsibilty for organising the process and coordinating the results.",
+        "DocumentAttributes": {
+          "Attribute": []
+        },
+        "DocumentIssues": {
+          "Issue": []
+        },
+        "DocumentName": "0.100 Provide Feedback from previous projects",
+        "externalID": "56",
+        "externalSystemName": "Facility"
+      },
+      {
+        "DocumentCategory": "dPOW Document Numbering",
+        "DocumentDescription": "All members of the Project Team will have an input, but one member takes responsibilty for organising the process and coordinating the results.",
+        "DocumentAttributes": {
+          "Attribute": []
+        },
+        "DocumentIssues": {
+          "Issue": []
+        },
+        "DocumentName": "0.110 Contribute to preparation of Strategic Brief",
+        "externalID": "60",
+        "externalSystemName": "Facility"
+      },
+      {
+        "DocumentCategory": "dPOW Document Numbering",
+        "DocumentAttributes": {
+          "Attribute": []
+        },
+        "DocumentIssues": {
+          "Issue": []
+        },
+        "DocumentName": "0.120 Discuss project with appropriate planning authority",
+        "externalID": "64",
+        "externalSystemName": "Facility"
+      },
+      {
+        "DocumentCategory": "dPOW Document Numbering",
+        "DocumentDescription": "All members of the Project Team will have an input, but one member takes responsibilty for organising the process and coordinating the results.",
+        "DocumentAttributes": {
+          "Attribute": []
+        },
+        "DocumentIssues": {
+          "Issue": []
+        },
+        "DocumentName": "0.130 Provide Feedback from previous projects",
+        "externalID": "68",
+        "externalSystemName": "Facility"
+      },
+      {
+        "DocumentCategory": "dPOW Document Numbering",
+        "DocumentDescription": "All members of the Project Team will have an input, but one member takes responsibilty for organising the process and coordinating the results.",
+        "DocumentAttributes": {
+          "Attribute": []
+        },
+        "DocumentIssues": {
+          "Issue": []
+        },
+        "DocumentName": "0.140 Contribute to preparation of Strategic Brief",
+        "externalID": "72",
+        "externalSystemName": "Facility"
+      },
+      {
+        "DocumentCategory": "dPOW Document Numbering",
+        "DocumentDescription": "All members of the Project Team will have an input, but one member takes responsibilty for organising the process and coordinating the results.",
+        "DocumentAttributes": {
+          "Attribute": []
+        },
+        "DocumentIssues": {
+          "Issue": []
+        },
+        "DocumentName": "0.150 Contribute to preparation of Strategic Brief",
+        "externalID": "76",
+        "externalSystemName": "Facility"
+      },
+      {
+        "DocumentCategory": "dPOW Document Numbering",
+        "DocumentDescription": "All members of the Project Team will have an input, but one member takes responsibilty for organising the process and coordinating the results.",
+        "DocumentAttributes": {
+          "Attribute": []
+        },
+        "DocumentIssues": {
+          "Issue": []
+        },
+        "DocumentName": "0.160 Contribute to preparation of Strategic Brief",
+        "externalID": "80",
+        "externalSystemName": "Facility"
+      },
+      {
+        "DocumentCategory": "dPOW Document Numbering",
+        "DocumentDescription": "All members of the Project Team will have an input, but one member takes responsibilty for organising the process and coordinating the results.",
+        "DocumentAttributes": {
+          "Attribute": []
+        },
+        "DocumentIssues": {
+          "Issue": []
+        },
+        "DocumentName": "0.170 Contribute to preparation of Strategic Brief",
+        "externalID": "84",
+        "externalSystemName": "Facility"
+      },
+      {
+        "DocumentCategory": "dPOW Document Numbering",
+        "DocumentDescription": "Cost information will depend on the Core Project Requirements and may include development costs, facilitating work, construction and whole life costs, as well as an assessment of non - financial factors, such as environmental impacts.",
+        "DocumentAttributes": {
+          "Attribute": []
+        },
+        "DocumentIssues": {
+          "Issue": []
+        },
+        "DocumentName": "0.180 Contribute Cost Information to preparation of Strategic Brief",
+        "externalID": "88",
+        "externalSystemName": "Facility"
+      },
+      {
+        "DocumentCategory": "dPOW Document Numbering",
+        "DocumentDescription": "This will establish how well the Strategic Brief meets the Business Case and the Core Project Requirements. Actual testing will vary depending on particular circumstancesof the project",
+        "DocumentAttributes": {
+          "Attribute": []
+        },
+        "DocumentIssues": {
+          "Issue": []
+        },
+        "DocumentName": "0.190 Test the robustness of the Strategic Brief",
+        "externalID": "92",
+        "externalSystemName": "Facility"
+      },
+      {
+        "DocumentCategory": "dPOW Document Numbering",
+        "DocumentDescription": "All members of the Project Team will have an input, but one member takes responsibilty for organising the process and coordinating the results.",
+        "DocumentAttributes": {
+          "Attribute": []
+        },
+        "DocumentIssues": {
+          "Issue": []
+        },
+        "DocumentName": "0.200 Review feedback from previous projects",
+        "externalID": "96",
+        "externalSystemName": "Facility"
+      },
+      {
+        "DocumentCategory": "dPOW Document Numbering",
+        "DocumentDescription": "Ensure that a strategic sustainability review of client needs and potential sites has been carried out, including reuse of existing facilities, building components or materials. The precise nature of the review will depend on the definition and method chosen for measuring sustainabilty.",
+        "DocumentAttributes": {
+          "Attribute": []
+        },
+        "DocumentIssues": {
+          "Issue": []
+        },
+        "DocumentName": "0.210 Ensure that a strategic sustainability review of client needs and potential sites has been carried out, including reuse of existing facilities, building components or materials.",
+        "externalID": "100",
+        "externalSystemName": "Facility"
+      },
+      {
+        "DocumentCategory": "dPOW Document Numbering",
+        "DocumentDescription": "Methods and protocol for information exchange will depend on the nature and complexity of the project.",
+        "DocumentAttributes": {
+          "Attribute": []
+        },
+        "DocumentIssues": {
+          "Issue": []
+        },
+        "DocumentName": "0.220 Strategic Brief Information Exchange",
+        "externalID": "104",
+        "externalSystemName": "Facility"
+      }
+    ]
+  },
+  "FacilityIssues": {
+    "Issue": [
+      {
+        "ContactAssignment": {},
+        "IssueName": "0.010 Identify Business Case requirements.",
+        "externalID": "17"
+      },
+      {
+        "ContactAssignment": {},
+        "IssueName": "0.020 Identify Strategic Brief.",
+        "externalID": "21"
+      },
+      {
+        "ContactAssignment": {},
+        "IssueName": "0.030 Identify Core Project Requirements.",
+        "externalID": "25"
+      },
+      {
+        "ContactAssignment": {},
+        "IssueName": "0.040 Collate comments and facilitate workshops to discuss Business Case and develop Strategic Brief with Project Team members",
+        "externalID": "29"
+      },
+      {
+        "ContactAssignment": {},
+        "IssueName": "0.050 Discuss initial considerations for assembling the Project Team",
+        "externalID": "33"
+      },
+      {
+        "ContactAssignment": {},
+        "IssueName": "0.060 Establish Project Programme",
+        "externalID": "37"
+      },
+      {
+        "ContactAssignment": {},
+        "IssueName": "0.070 Collate Feedback from previous projects",
+        "externalID": "41"
+      },
+      {
+        "ContactAssignment": {},
+        "IssueName": "0.080 Contribute to preparation of Strategic Brief",
+        "externalID": "45"
+      },
+      {
+        "ContactAssignment": {},
+        "IssueName": "0.090 Comment on project Programme",
+        "externalID": "49"
+      },
+      {
+        "ContactAssignment": {},
+        "IssueName": "0.100 Provide Feedback from previous projects",
+        "externalID": "53"
+      },
+      {
+        "ContactAssignment": {},
+        "IssueName": "0.110 Contribute to preparation of Strategic Brief",
+        "externalID": "57"
+      },
+      {
+        "ContactAssignment": {},
+        "IssueName": "0.120 Discuss project with appropriate planning authority",
+        "externalID": "61"
+      },
+      {
+        "ContactAssignment": {},
+        "IssueName": "0.130 Provide Feedback from previous projects",
+        "externalID": "65"
+      },
+      {
+        "ContactAssignment": {},
+        "IssueName": "0.140 Contribute to preparation of Strategic Brief",
+        "externalID": "69"
+      },
+      {
+        "ContactAssignment": {},
+        "IssueName": "0.150 Contribute to preparation of Strategic Brief",
+        "externalID": "73"
+      },
+      {
+        "ContactAssignment": {},
+        "IssueName": "0.160 Contribute to preparation of Strategic Brief",
+        "externalID": "77"
+      },
+      {
+        "ContactAssignment": {},
+        "IssueName": "0.170 Contribute to preparation of Strategic Brief",
+        "externalID": "81"
+      },
+      {
+        "ContactAssignment": {},
+        "IssueName": "0.180 Contribute Cost Information to preparation of Strategic Brief",
+        "externalID": "85"
+      },
+      {
+        "ContactAssignment": {},
+        "IssueName": "0.190 Test the robustness of the Strategic Brief",
+        "externalID": "89"
+      },
+      {
+        "ContactAssignment": {},
+        "IssueName": "0.200 Review feedback from previous projects",
+        "externalID": "93"
+      },
+      {
+        "ContactAssignment": {},
+        "IssueName": "0.210 Ensure that a strategic sustainability review of client needs and potential sites has been carried out, including reuse of existing facilities, building components or materials.",
+        "externalID": "97"
+      },
+      {
+        "ContactAssignment": {},
+        "IssueName": "0.220 Strategic Brief Information Exchange",
+        "externalID": "101"
+      }
+    ]
+  },
+  "FacilityName": "Newtown High School",
+  "externalID": "0"
+}

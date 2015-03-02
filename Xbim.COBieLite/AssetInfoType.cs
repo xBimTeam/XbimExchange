@@ -3,17 +3,16 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Xml.Serialization;
+using Newtonsoft.Json;
 using Xbim.Ifc2x3.Kernel;
 using Xbim.Ifc2x3.ProductExtension;
 
 namespace Xbim.COBieLite
 {
-    public partial class AssetInfoType
+    public partial class AssetInfoType: ICOBieObject
     {
-        public AssetInfoType()
-        {
-            
-        }
+    
 
         public AssetInfoType(IfcElement ifcElement, CoBieLiteHelper helper)
             : this()
@@ -66,6 +65,59 @@ namespace Xbim.COBieLite
             //Issues
 
             //Documents
+
+
+        }
+
+
+        [XmlIgnore, JsonIgnore]
+        DocumentCollectionType ICOBieObject.Documents
+        {
+            get { return AssetDocuments; }
+            set { AssetDocuments = value; }
+        }
+
+        [XmlIgnore, JsonIgnore]
+        IssueCollectionType ICOBieObject.Issues
+        {
+            get { return AssetIssues; }
+            set { AssetIssues = value; }
+        }
+
+        [XmlIgnore, JsonIgnore]
+        AttributeCollectionType ICOBieObject.Attributes
+        {
+            get { return AssetAttributes; }
+            set { AssetAttributes = value; }
+        }
+
+        [XmlIgnore, JsonIgnore]
+        string ICOBieObject.Name
+        {
+            get { return AssetName; }
+            set { AssetName = value; }
+        }
+
+        [XmlIgnore, JsonIgnore]
+        string ICOBieObject.Description
+        {
+            get { return AssetDescription; }
+            set { AssetDescription = value; }
+        }
+
+        [XmlIgnore, JsonIgnore]
+        string ICOBieObject.Category
+        {
+            get { return null; }
+            set { }
+        }
+
+
+        [XmlIgnore, JsonIgnore]
+        string ICOBieObject.Id
+        {
+            get { return externalID; }
+            set { externalID = value; }
         }
     }
 }

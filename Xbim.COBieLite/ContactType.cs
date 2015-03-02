@@ -3,18 +3,17 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Xml.Serialization;
+using Newtonsoft.Json;
 using Xbim.Ifc2x3.ActorResource;
 using Xbim.Ifc2x3.Kernel;
 using Xbim.XbimExtensions.SelectTypes;
 
 namespace Xbim.COBieLite
 {
-    public partial class ContactType
+    public partial class ContactType: ICOBieObject
     {
-        public ContactType()
-        {
-            
-        }
+    
 
 
         /// <summary>
@@ -158,6 +157,55 @@ namespace Xbim.COBieLite
                     ContactCategory = string.Join(";", roles, ContactCategory ?? "");
             }
 
+        }
+        [XmlIgnore, JsonIgnore]
+        DocumentCollectionType ICOBieObject.Documents
+        {
+            get { return ContactDocuments; }
+            set { ContactDocuments = value; }
+        }
+
+        [XmlIgnore, JsonIgnore]
+        IssueCollectionType ICOBieObject.Issues
+        {
+            get { return ContactIssues; }
+            set { ContactIssues = value; }
+        }
+
+        [XmlIgnore, JsonIgnore]
+        AttributeCollectionType ICOBieObject.Attributes
+        {
+            get { return ContactAttributes; }
+            set { ContactAttributes = value; }
+        }
+
+        [XmlIgnore, JsonIgnore]
+        string ICOBieObject.Name
+        {
+            get { return ContactGivenName; }
+            set { ContactGivenName = value; }
+        }
+
+        [XmlIgnore, JsonIgnore]
+        string ICOBieObject.Description
+        {
+            get { return ContactFamilyName; }
+            set { ContactFamilyName = value; }
+        }
+
+        [XmlIgnore, JsonIgnore]
+        string ICOBieObject.Category
+        {
+            get { return ContactCategory; }
+            set { ContactCategory = value; }
+        }
+
+
+        [XmlIgnore, JsonIgnore]
+        string ICOBieObject.Id
+        {
+            get { return externalID; }
+            set { externalID = value; }
         }
     }
 }

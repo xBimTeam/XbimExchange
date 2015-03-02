@@ -5832,6 +5832,290 @@
         </generalsInternal>
       </Interface>
     </packageHasNamedElement>
+    <packageHasNamedElement>
+      <enumeration
+        Id="f2b27880-c6fd-4dc9-af0f-c298511df7b0"
+        name="CurrencyUnits1"
+        isAbstract="false"
+        isLeaf="false">
+        <description>Units for currency measurement, these are define as 3 character codes in ISO  4217</description>
+        <appliedStereotypesInternal>
+          <stereotypeInstance
+            Id="7300e135-cc6b-4915-8d65-52b19798c489"
+            name="enum"
+            profile="CSharpProfile">
+            <propertyInstances>
+              <stereotypeInstanceHasPropertyInstances
+                Id="c9348283-8282-4cc4-8b1f-2bf24fb3fdd1">
+                <propertyInstance
+                  Id="9f49c5a5-a17b-4930-9126-77eeed2d3cc1"
+                  name="ClrAttributes" />
+              </stereotypeInstanceHasPropertyInstances>
+              <stereotypeInstanceHasPropertyInstances
+                Id="81be0f78-198e-4369-9e3f-44c27cea8cbc">
+                <propertyInstance
+                  Id="8a7b46aa-ea89-415f-b0b6-f788f86250f6"
+                  name="BaseType"
+                  value="int" />
+              </stereotypeInstanceHasPropertyInstances>
+              <stereotypeInstanceHasPropertyInstances
+                Id="98e81a2e-9f17-4856-abb4-6750a4072e49">
+                <propertyInstance
+                  Id="5b97eedb-6074-494b-aeb4-1157423410f3"
+                  name="PackageVisibility"
+                  value="internal" />
+              </stereotypeInstanceHasPropertyInstances>
+            </propertyInstances>
+          </stereotypeInstance>
+        </appliedStereotypesInternal>
+        <ownedLiterals>
+          <enumerationLiteral
+            Id="9b7e574c-f18d-4470-897d-5906a7f0b950"
+            name="USD">
+            <description>United States Dollar</description>
+          </enumerationLiteral>
+          <enumerationLiteral
+            Id="5c6315ee-0327-4037-9718-56030aead492"
+            name="EUR">
+            <description>Currency of the European Union States in monetary union Euro</description>
+          </enumerationLiteral>
+          <enumerationLiteral
+            Id="157eccea-a1d1-4db8-a7e5-98cd6b26883b"
+            name="GBP">
+            <description>British Pound Stirling</description>
+          </enumerationLiteral>
+        </ownedLiterals>
+      </enumeration>
+    </packageHasNamedElement>
+    <packageHasNamedElement>
+      <enumeration
+        Id="de3ab04a-e67e-4052-a125-ba9ede8db40f"
+        name="LinearUnits1"
+        isAbstract="false"
+        isLeaf="false">
+        <description>Units used for linear measurement, do we need to consider imperial</description>
+        <appliedStereotypesInternal>
+          <stereotypeInstance
+            Id="262ac240-4f06-4181-896d-8f28af710739"
+            name="enum"
+            profile="CSharpProfile">
+            <propertyInstances>
+              <stereotypeInstanceHasPropertyInstances
+                Id="5c69d329-d20a-4c4a-b9d4-a50e2ee9d526">
+                <propertyInstance
+                  Id="f3f60b87-8f8d-4757-982c-9c0ec505e361"
+                  name="ClrAttributes" />
+              </stereotypeInstanceHasPropertyInstances>
+              <stereotypeInstanceHasPropertyInstances
+                Id="673c0ab1-9202-462a-879b-42bf1885f2bb">
+                <propertyInstance
+                  Id="68e6cf3b-3eb2-4f4c-8ad1-f282955c5587"
+                  name="BaseType"
+                  value="int" />
+              </stereotypeInstanceHasPropertyInstances>
+              <stereotypeInstanceHasPropertyInstances
+                Id="f078d959-57a1-485e-aee5-5afdd321bc05">
+                <propertyInstance
+                  Id="7a5f7562-dada-4d40-9495-97dff75b60e8"
+                  name="PackageVisibility"
+                  value="internal" />
+              </stereotypeInstanceHasPropertyInstances>
+            </propertyInstances>
+          </stereotypeInstance>
+        </appliedStereotypesInternal>
+        <ownedLiterals>
+          <enumerationLiteral
+            Id="ca4d0d59-b6fc-4dc4-8081-5125c077f7dc"
+            name="meters" />
+          <enumerationLiteral
+            Id="0ac414f3-4e9a-444c-9a12-ee04e3664ac3"
+            name="millimeters" />
+          <enumerationLiteral
+            Id="2a8e9054-ae26-40cd-9c94-c0b4e65ca2d9"
+            name="centimeters" />
+          <enumerationLiteral
+            Id="b0add1d6-8633-469e-bc97-8d88e80aa550"
+            name="kilometers" />
+        </ownedLiterals>
+      </enumeration>
+    </packageHasNamedElement>
+    <packageHasNamedElement>
+      <enumeration
+        Id="b1c575d3-97bd-4f30-9dfd-c6f1e687f4fa"
+        name="AreaUnits1"
+        isAbstract="false"
+        isLeaf="false">
+        <description>Units for area measurement, do we need to consider imperial?</description>
+        <appliedStereotypesInternal>
+          <stereotypeInstance
+            Id="9cafed1f-7cc5-4bf1-9155-1464343f7516"
+            name="enum"
+            profile="CSharpProfile">
+            <propertyInstances>
+              <stereotypeInstanceHasPropertyInstances
+                Id="1d171b24-d10f-45a9-b019-2ad73a860cd7">
+                <propertyInstance
+                  Id="7072d8e3-3232-4b9d-8d78-ca597721049f"
+                  name="ClrAttributes" />
+              </stereotypeInstanceHasPropertyInstances>
+              <stereotypeInstanceHasPropertyInstances
+                Id="83c9782e-8ada-4416-a6d1-997679f18439">
+                <propertyInstance
+                  Id="cbd51702-ee5e-48f5-808e-6e6f4d2ae1c4"
+                  name="BaseType"
+                  value="int" />
+              </stereotypeInstanceHasPropertyInstances>
+              <stereotypeInstanceHasPropertyInstances
+                Id="76322498-428c-4123-bbb7-b260ede1dd17">
+                <propertyInstance
+                  Id="ac4033ae-4287-4849-a308-1bf6778ee764"
+                  name="PackageVisibility"
+                  value="internal" />
+              </stereotypeInstanceHasPropertyInstances>
+            </propertyInstances>
+          </stereotypeInstance>
+        </appliedStereotypesInternal>
+        <ownedLiterals>
+          <enumerationLiteral
+            Id="395bb78c-f430-4df6-abc8-d9d22b726ffd"
+            name="squaremeters" />
+          <enumerationLiteral
+            Id="18b74570-0784-4714-9925-aad0c89b3791"
+            name="squarecentimeters" />
+          <enumerationLiteral
+            Id="6772ae7b-a404-4307-a583-bb4d49ba5d29"
+            name="squaremillimeters" />
+          <enumerationLiteral
+            Id="44537134-74be-4acb-9141-bc48232b277c"
+            name="squarekilometers" />
+        </ownedLiterals>
+      </enumeration>
+    </packageHasNamedElement>
+    <packageHasNamedElement>
+      <enumeration
+        Id="882ec039-b1be-4fc0-83eb-2afd8240daf3"
+        name="ScopeOfDocument1"
+        isAbstract="false"
+        isLeaf="false">
+        <description>The COBie scope that a document applies to, in the early releases these all default to Facility</description>
+        <appliedStereotypesInternal>
+          <stereotypeInstance
+            Id="432295fe-ee75-423e-8eb0-486ff73a0e86"
+            name="enum"
+            profile="CSharpProfile">
+            <propertyInstances>
+              <stereotypeInstanceHasPropertyInstances
+                Id="64e50691-82da-41c1-b84f-28d211b6f2e0">
+                <propertyInstance
+                  Id="537b4e9c-b0e2-4f9b-966a-65fe8b490196"
+                  name="ClrAttributes" />
+              </stereotypeInstanceHasPropertyInstances>
+              <stereotypeInstanceHasPropertyInstances
+                Id="6827d86f-bfb2-4d7a-8172-501e13d1d1bf">
+                <propertyInstance
+                  Id="72aa1990-2790-46d9-945a-254330a95ff4"
+                  name="BaseType"
+                  value="int" />
+              </stereotypeInstanceHasPropertyInstances>
+              <stereotypeInstanceHasPropertyInstances
+                Id="1c6af236-48e3-4a1a-974c-46f8a8db9e81">
+                <propertyInstance
+                  Id="53fa1cde-3221-450f-af89-46f49905f003"
+                  name="PackageVisibility"
+                  value="internal" />
+              </stereotypeInstanceHasPropertyInstances>
+            </propertyInstances>
+          </stereotypeInstance>
+        </appliedStereotypesInternal>
+        <ownedLiterals>
+          <enumerationLiteral
+            Id="4879c8da-5bc7-48e1-889e-ca9261822424"
+            name="Space">
+            <description>Instance of a Space</description>
+          </enumerationLiteral>
+          <enumerationLiteral
+            Id="51c80e9a-ebff-489c-beaa-64fa28502b29"
+            name="Facility" />
+          <enumerationLiteral
+            Id="4d8840ae-7e04-41ab-8171-48f955c69ea9"
+            name="Zone">
+            <description>An NBS Space Type</description>
+          </enumerationLiteral>
+          <enumerationLiteral
+            Id="4eb9c4f5-adb8-4af9-9a49-3a5d76d89d83"
+            name="System">
+            <description>A collection of Assets that perform a function</description>
+          </enumerationLiteral>
+          <enumerationLiteral
+            Id="f38d686d-325c-4194-8e7f-71bf32318959"
+            name="Asset">
+            <description>A NBS Product Instance</description>
+          </enumerationLiteral>
+          <enumerationLiteral
+            Id="a00a2134-4d84-4be4-8664-e709e602f2c9"
+            name="AssetType">
+            <description>An NBS Product</description>
+          </enumerationLiteral>
+          <enumerationLiteral
+            Id="28245d27-67a7-452d-90ae-90d8d4474863"
+            name="Assembly">
+            <description>An NBS System</description>
+          </enumerationLiteral>
+        </ownedLiterals>
+      </enumeration>
+    </packageHasNamedElement>
+    <packageHasNamedElement>
+      <enumeration
+        Id="7b59b331-460e-4558-a967-c30394672848"
+        name="VolumeUnits1"
+        isAbstract="false"
+        isLeaf="false">
+        <description>Units for volume measurement, do we need to consider imperial</description>
+        <appliedStereotypesInternal>
+          <stereotypeInstance
+            Id="0bab613a-ffa5-4425-839f-742c55fc06a1"
+            name="enum"
+            profile="CSharpProfile">
+            <propertyInstances>
+              <stereotypeInstanceHasPropertyInstances
+                Id="f07a7bd4-ac5b-4dce-a295-a739ffd970c0">
+                <propertyInstance
+                  Id="10b1e934-8057-48b7-b241-62cf13931bcf"
+                  name="ClrAttributes" />
+              </stereotypeInstanceHasPropertyInstances>
+              <stereotypeInstanceHasPropertyInstances
+                Id="3ad6d073-7548-4099-bfd9-52aec7a19bc2">
+                <propertyInstance
+                  Id="c659e4c5-b9f1-40fe-a551-e9059b31a128"
+                  name="BaseType"
+                  value="int" />
+              </stereotypeInstanceHasPropertyInstances>
+              <stereotypeInstanceHasPropertyInstances
+                Id="50884b95-26b9-4652-b3da-48794f72235d">
+                <propertyInstance
+                  Id="38c33e79-f929-4444-b9b4-1866b4d4b251"
+                  name="PackageVisibility"
+                  value="internal" />
+              </stereotypeInstanceHasPropertyInstances>
+            </propertyInstances>
+          </stereotypeInstance>
+        </appliedStereotypesInternal>
+        <ownedLiterals>
+          <enumerationLiteral
+            Id="5ab15553-a21b-4824-abd1-033c9e4c97b3"
+            name="cubicmeters" />
+          <enumerationLiteral
+            Id="215bb7da-3b39-4d14-9d54-8191aef206f1"
+            name="cubicmillimeters" />
+          <enumerationLiteral
+            Id="d6639b92-5c19-46a4-9f22-631f6c1f749d"
+            name="cubiccentimeters" />
+          <enumerationLiteral
+            Id="e45ad9ca-8f12-4a72-ba51-6f5a769da298"
+            name="cubickilometers" />
+        </ownedLiterals>
+      </enumeration>
+    </packageHasNamedElement>
   </packagedElements>
   <primitiveType
     Id="220a3521-e091-4221-bae9-3ef9018e845c"

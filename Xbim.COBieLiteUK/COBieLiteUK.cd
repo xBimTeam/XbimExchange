@@ -1,0 +1,116 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Class Name="Xbim.COBieLiteUK.FacilityType">
+    <Position X="3.25" Y="2.25" Width="2.75" />
+    <Compartments>
+      <Compartment Name="Fields" Collapsed="true" />
+      <Compartment Name="Methods" Collapsed="true" />
+    </Compartments>
+    <AssociationLine Name="AssetTypes" Type="Xbim.COBieLiteUK.AssetTypeCollectionType" FixedFromPoint="true">
+      <Path>
+        <Point X="6" Y="2.625" />
+        <Point X="7" Y="2.625" />
+      </Path>
+    </AssociationLine>
+    <TypeIdentifier>
+      <HashCode>BAAIQAKECACQAAoIAAAgAigyogAQAQQEUYIAJGjAAMA=</HashCode>
+      <FileName>Schemas\cobieliteuk.designer.RenamedClasses.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Property Name="Floors" />
+      <Property Name="Zones" />
+      <Property Name="AssetTypes" />
+      <Property Name="Systems" />
+      <Property Name="Contacts" />
+      <Property Name="FacilityDocuments" />
+      <Property Name="FacilityIssues" />
+    </ShowAsAssociation>
+  </Class>
+  <Class Name="Xbim.COBieLiteUK.FloorCollectionType" Collapsed="true">
+    <Position X="7" Y="4.25" Width="1.75" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAABgAAACAAAAAAAAAAAAEAEAAAAAAAAA=</HashCode>
+      <FileName>CollectionTypes\FloorCollectionType.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="Xbim.COBieLiteUK.ZoneCollectionType" Collapsed="true">
+    <Position X="7" Y="6.25" Width="1.75" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAABAAAhAAAAAAAAAAAAAEAEAAAAAAAAA=</HashCode>
+      <FileName>CollectionTypes\ZoneCollectionType.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="Xbim.COBieLiteUK.SystemCollectionType" Collapsed="true">
+    <Position X="7" Y="5.25" Width="1.75" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAIAAABAAAAAAAAAAAAAAEAAEAEAAAAAAAAA=</HashCode>
+      <FileName>CollectionTypes\SystemCollectionType.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="Xbim.COBieLiteUK.ContactCollectionType" Collapsed="true">
+    <Position X="7" Y="3.25" Width="2" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAABAACAAAAAAAAAAAAAAEAEAAAAAAAAE=</HashCode>
+      <FileName>CollectionTypes\ContactCollectionType.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="Xbim.COBieLiteUK.AssetTypeCollectionType" Collapsed="true">
+    <Position X="7" Y="2.25" Width="2" />
+    <Compartments>
+      <Compartment Name="Fields" Collapsed="true" />
+      <Compartment Name="Methods" Collapsed="true" />
+    </Compartments>
+    <TypeIdentifier>
+      <HashCode>AAAAAAAgAAAAQBAAAAAAAAAAAAAAAAAEAEAAAAAAAAA=</HashCode>
+      <FileName>CollectionTypes\AssetTypeCollectionType.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="Xbim.COBieLiteUK.DocumentCollectionType" Collapsed="true">
+    <Position X="3" Y="0.75" Width="2" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAABAAAAAAAAAAAAgAAAAGAEAAAAAAAAA=</HashCode>
+      <FileName>CollectionTypes\DocumentCollectionType.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="Xbim.COBieLiteUK.IssueCollectionType" Collapsed="true">
+    <Position X="5" Y="0.75" Width="1.75" />
+    <TypeIdentifier>
+      <HashCode>AAEAAAAAAAAAABAAAAAAAAAAAAAEAAAEAEAAAAAAAAA=</HashCode>
+      <FileName>CollectionTypes\IssueCollectionType.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="Xbim.COBieLiteUK.ProjectStageCollectionType">
+    <Position X="0.5" Y="0.5" Width="2.25" />
+    <Compartments>
+      <Compartment Name="Fields" Collapsed="true" />
+    </Compartments>
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAEAAAAAAAAAAAAAAAAAAAAAAAAAAAACAAA=</HashCode>
+      <FileName>Schemas\cobieliteuk.designer.RenamedClasses.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsCollectionAssociation>
+      <Property Name="ProjectStage" />
+    </ShowAsCollectionAssociation>
+  </Class>
+  <Class Name="Xbim.COBieLiteUK.ProjectStageType">
+    <Position X="0.5" Y="2.5" Width="2.25" />
+    <Compartments>
+      <Compartment Name="Fields" Collapsed="true" />
+    </Compartments>
+    <TypeIdentifier>
+      <HashCode>AAAoEAAAAACiBgCNAACCCAAAIBAAAAQAAABBSIAgAAA=</HashCode>
+      <FileName>Schemas\cobieliteuk.designer.RenamedClasses.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Property Name="Facility" />
+    </ShowAsAssociation>
+  </Class>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>
