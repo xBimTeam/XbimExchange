@@ -1,0 +1,5402 @@
+{
+  "ProjectAssignment": {
+    "ProjectName": "007 Lakeside Restaurant",
+    "ProjectDescription": "New restaurant to the side of the lake in the country park.",
+    "externalID": "805db6c0-868b-48af-86a1-1a2cf1008ac4"
+  },
+  "SiteAssignment": {
+    "SiteName": "Lakeside Country Park, Newtown",
+    "externalID": "031e2421-04af-4940-9b89-6f279333b8f1"
+  },
+  "FacilityDefaultLinearUnit": "meters",
+  "FacilityDefaultAreaUnit": "squaremeters",
+  "FacilityDefaultVolumeUnit": "cubicmeters",
+  "FacilityDescription": "New restaurant to the side of the lake in the country park.",
+  "AssetTypes": {
+    "AssetType": [
+      {
+        "AssetTypeCategory": "NBS Code:25-50-20/175:|Uniclass2015:Ss-25-30-20-77:|NRM1:2.6.2:|NRM1:2.8.1:",
+        "AssetTypeShapeDescription": "5",
+        "Assets": {
+          "Asset": [
+            {
+              "AssetName": "Sliding doorset systems",
+              "externalID": "e674f8b6-d266-4498-bf7a-ac2fd340137f"
+            }
+          ]
+        },
+        "AssetTypeAttributes": {
+          "Attribute": [
+            {
+              "AttributeValue": {
+                "AttributeStringValue": {
+                  "StringValue": "25-50-20/175"
+                }
+              },
+              "AttributeName": "NbsCode"
+            },
+            {
+              "AttributeValue": {
+                "AttributeStringValue": {
+                  "StringValue": "Beautiful glass sliding door out onto the decking space."
+                }
+              },
+              "AttributeName": "Notes"
+            },
+            {
+              "AttributeDescription": "Required LOD Code",
+              "AttributeValue": {
+                "AttributeStringValue": {
+                  "StringValue": "5"
+                }
+              },
+              "AttributeName": "RequiredLODCode",
+              "propertySetName": "RequiredLOD"
+            },
+            {
+              "AttributeDescription": "Required LOD Description",
+              "AttributeValue": {
+                "AttributeStringValue": {
+                  "StringValue": "Sliding doorset systems"
+                }
+              },
+              "AttributeName": "RequiredLODDescription",
+              "propertySetName": "RequiredLOD"
+            },
+            {
+              "AttributeDescription": "Required LOD URI",
+              "AttributeValue": {
+                "AttributeStringValue": {
+                  "StringValue": "https://bimtoolkit-dev.thenbs.com/Toolkit/199/0/0ObjectDefinition/25_50_20_175/?version=1.0"
+                }
+              },
+              "AttributeName": "RequiredLODURI",
+              "propertySetName": "RequiredLOD"
+            },
+            {
+              "AttributeDescription": "Required LOI Code",
+              "AttributeValue": {
+                "AttributeStringValue": {
+                  "StringValue": "6"
+                }
+              },
+              "AttributeName": "RequiredLOICode",
+              "propertySetName": "RequiredLOI"
+            },
+            {
+              "AttributeDescription": "Required LOI Description",
+              "AttributeValue": {
+                "AttributeStringValue": {
+                  "StringValue": "Sliding doorset systems"
+                }
+              },
+              "AttributeName": "RequiredLOIDescription",
+              "propertySetName": "RequiredLOI"
+            },
+            {
+              "AttributeDescription": "The identity of the bar code (or rfid) given to an occurrence of the product (per instance).",
+              "AttributeName": "BarCode",
+              "propertySetName": "[required]"
+            },
+            {
+              "AttributeDescription": "The service life that an artefact is expected to have under current operating conditions.",
+              "AttributeName": "ServiceLifeDuration",
+              "propertySetName": "[required]"
+            },
+            {
+              "AttributeDescription": "The date that the manufactured item was installed (per instance).",
+              "AttributeName": "InstallationDate",
+              "propertySetName": "[required]"
+            },
+            {
+              "AttributeDescription": "The year of production of the manufactured item.",
+              "AttributeName": "ProductionYear",
+              "propertySetName": "[required]"
+            },
+            {
+              "AttributeDescription": "An indicative cost for unit replacement.",
+              "AttributeName": "ReplacementCost",
+              "propertySetName": "[required]"
+            },
+            {
+              "AttributeDescription": "The serial number assigned to an occurrence of a product by the manufacturer (per instance).",
+              "AttributeName": "SerialNumber",
+              "propertySetName": "[required]"
+            },
+            {
+              "AttributeDescription": "Description of the warranty.",
+              "AttributeName": "WarrantyDescription",
+              "propertySetName": "[required]"
+            },
+            {
+              "AttributeDescription": "Duration of labour warranty (years).",
+              "AttributeName": "WarrantyDurationLabour",
+              "propertySetName": "[required]"
+            },
+            {
+              "AttributeDescription": "Duration of parts warranty (years).",
+              "AttributeName": "WarrantyDurationParts",
+              "propertySetName": "[required]"
+            },
+            {
+              "AttributeDescription": "Duration of labour guarantor (years).",
+              "AttributeName": "WarrantyGuarantorLabour",
+              "propertySetName": "[required]"
+            },
+            {
+              "AttributeDescription": "Duration of parts guarantor (years).",
+              "AttributeName": "WarrantyGuarantorParts",
+              "propertySetName": "[required]"
+            },
+            {
+              "AttributeDescription": "The date on which the warranty commences.",
+              "AttributeName": "WarrantyStartDate",
+              "propertySetName": "[required]"
+            }
+          ]
+        },
+        "AssetTypeIssues": {
+          "Issue": [
+            {
+              "ContactAssignment": {
+                "ContactEmailReference": "noname.nosurname@abc_architect.com"
+              },
+              "IssueName": "Sliding doorset systems",
+              "externalID": "f189f840-a328-44ca-833a-57762916676d"
+            }
+          ]
+        },
+        "AssetTypeName": "Sliding doorset systems",
+        "externalID": "681d819c-a035-4292-adc2-b42c9d866a3a"
+      },
+      {
+        "AssetTypeCategory": "NBS Code:20-10-20/190:|Uniclass2015:Ss-30-25-22-90:|NRM1:3.3.3:|NRM1:3.3.2:",
+        "AssetTypeShapeDescription": "5",
+        "Assets": {
+          "Asset": [
+            {
+              "AssetName": "Unit/ modular suspended ceiling systems",
+              "externalID": "8d9e6f38-b153-4a29-bef2-06be65a2abc6"
+            }
+          ]
+        },
+        "AssetTypeAttributes": {
+          "Attribute": [
+            {
+              "AttributeValue": {
+                "AttributeStringValue": {
+                  "StringValue": "20-10-20/190"
+                }
+              },
+              "AttributeName": "NbsCode"
+            },
+            {
+              "AttributeValue": {
+                "AttributeStringValue": {
+                  "StringValue": "A"
+                }
+              },
+              "AttributeName": "Type"
+            },
+            {
+              "AttributeValue": {
+                "AttributeStringValue": {
+                  "StringValue": "Ceiling to washrooms.\n\nHave supply-chain agreement with Armstrong."
+                }
+              },
+              "AttributeName": "Notes"
+            },
+            {
+              "AttributeDescription": "Required LOD Code",
+              "AttributeValue": {
+                "AttributeStringValue": {
+                  "StringValue": "5"
+                }
+              },
+              "AttributeName": "RequiredLODCode",
+              "propertySetName": "RequiredLOD"
+            },
+            {
+              "AttributeDescription": "Required LOD Description",
+              "AttributeValue": {
+                "AttributeStringValue": {
+                  "StringValue": "Unit/ modular suspended ceiling systems"
+                }
+              },
+              "AttributeName": "RequiredLODDescription",
+              "propertySetName": "RequiredLOD"
+            },
+            {
+              "AttributeDescription": "Required LOD URI",
+              "AttributeValue": {
+                "AttributeStringValue": {
+                  "StringValue": "https://bimtoolkit-dev.thenbs.com/Toolkit/199/0/0ObjectDefinition/20_10_20_190/?version=1.0"
+                }
+              },
+              "AttributeName": "RequiredLODURI",
+              "propertySetName": "RequiredLOD"
+            },
+            {
+              "AttributeDescription": "Required LOI Code",
+              "AttributeValue": {
+                "AttributeStringValue": {
+                  "StringValue": "6"
+                }
+              },
+              "AttributeName": "RequiredLOICode",
+              "propertySetName": "RequiredLOI"
+            },
+            {
+              "AttributeDescription": "Required LOI Description",
+              "AttributeValue": {
+                "AttributeStringValue": {
+                  "StringValue": "Unit/ modular suspended ceiling systems"
+                }
+              },
+              "AttributeName": "RequiredLOIDescription",
+              "propertySetName": "RequiredLOI"
+            },
+            {
+              "AttributeDescription": "The identity of the bar code (or rfid) given to an occurrence of the product (per instance).",
+              "AttributeName": "BarCode",
+              "propertySetName": "[required]"
+            },
+            {
+              "AttributeDescription": "The service life that an artefact is expected to have under current operating conditions.",
+              "AttributeName": "ServiceLifeDuration",
+              "propertySetName": "[required]"
+            },
+            {
+              "AttributeDescription": "The date that the manufactured item was installed (per instance).",
+              "AttributeName": "InstallationDate",
+              "propertySetName": "[required]"
+            },
+            {
+              "AttributeDescription": "The year of production of the manufactured item.",
+              "AttributeName": "ProductionYear",
+              "propertySetName": "[required]"
+            },
+            {
+              "AttributeDescription": "An indicative cost for unit replacement.",
+              "AttributeName": "ReplacementCost",
+              "propertySetName": "[required]"
+            },
+            {
+              "AttributeDescription": "The serial number assigned to an occurrence of a product by the manufacturer (per instance).",
+              "AttributeName": "SerialNumber",
+              "propertySetName": "[required]"
+            },
+            {
+              "AttributeDescription": "Description of the warranty.",
+              "AttributeName": "WarrantyDescription",
+              "propertySetName": "[required]"
+            },
+            {
+              "AttributeDescription": "Duration of labour warranty (years).",
+              "AttributeName": "WarrantyDurationLabour",
+              "propertySetName": "[required]"
+            },
+            {
+              "AttributeDescription": "Duration of parts warranty (years).",
+              "AttributeName": "WarrantyDurationParts",
+              "propertySetName": "[required]"
+            },
+            {
+              "AttributeDescription": "Duration of labour guarantor (years).",
+              "AttributeName": "WarrantyGuarantorLabour",
+              "propertySetName": "[required]"
+            },
+            {
+              "AttributeDescription": "Duration of parts guarantor (years).",
+              "AttributeName": "WarrantyGuarantorParts",
+              "propertySetName": "[required]"
+            },
+            {
+              "AttributeDescription": "The date on which the warranty commences.",
+              "AttributeName": "WarrantyStartDate",
+              "propertySetName": "[required]"
+            }
+          ]
+        },
+        "AssetTypeIssues": {
+          "Issue": [
+            {
+              "ContactAssignment": {
+                "ContactEmailReference": "noname.nosurname@abc_architect.com"
+              },
+              "IssueName": "Unit/ modular suspended ceiling systems",
+              "externalID": "687c14ca-653b-4050-97a7-783ca99f4f8a"
+            }
+          ]
+        },
+        "AssetTypeName": "Unit/ modular suspended ceiling systems",
+        "externalID": "668233d8-e935-492a-8cad-b238a9063b16"
+      },
+      {
+        "AssetTypeCategory": "NBS Code:20-10-20/190:|Uniclass2015:Ss-30-25-22-90:|NRM1:3.3.3:|NRM1:3.3.2:",
+        "AssetTypeShapeDescription": "5",
+        "Assets": {
+          "Asset": [
+            {
+              "AssetName": "Unit/ modular suspended ceiling systems",
+              "externalID": "c18531b8-bad1-4fe1-840b-2461c483644d"
+            }
+          ]
+        },
+        "AssetTypeAttributes": {
+          "Attribute": [
+            {
+              "AttributeValue": {
+                "AttributeStringValue": {
+                  "StringValue": "20-10-20/190"
+                }
+              },
+              "AttributeName": "NbsCode"
+            },
+            {
+              "AttributeValue": {
+                "AttributeStringValue": {
+                  "StringValue": "B"
+                }
+              },
+              "AttributeName": "Type"
+            },
+            {
+              "AttributeValue": {
+                "AttributeStringValue": {
+                  "StringValue": "Ceiling to kitchen.\n\nHave supply-chain agreement with Armstrong."
+                }
+              },
+              "AttributeName": "Notes"
+            },
+            {
+              "AttributeDescription": "Required LOD Code",
+              "AttributeValue": {
+                "AttributeStringValue": {
+                  "StringValue": "5"
+                }
+              },
+              "AttributeName": "RequiredLODCode",
+              "propertySetName": "RequiredLOD"
+            },
+            {
+              "AttributeDescription": "Required LOD Description",
+              "AttributeValue": {
+                "AttributeStringValue": {
+                  "StringValue": "Unit/ modular suspended ceiling systems"
+                }
+              },
+              "AttributeName": "RequiredLODDescription",
+              "propertySetName": "RequiredLOD"
+            },
+            {
+              "AttributeDescription": "Required LOD URI",
+              "AttributeValue": {
+                "AttributeStringValue": {
+                  "StringValue": "https://bimtoolkit-dev.thenbs.com/Toolkit/199/0/0ObjectDefinition/20_10_20_190/?version=1.0"
+                }
+              },
+              "AttributeName": "RequiredLODURI",
+              "propertySetName": "RequiredLOD"
+            },
+            {
+              "AttributeDescription": "Required LOI Code",
+              "AttributeValue": {
+                "AttributeStringValue": {
+                  "StringValue": "6"
+                }
+              },
+              "AttributeName": "RequiredLOICode",
+              "propertySetName": "RequiredLOI"
+            },
+            {
+              "AttributeDescription": "Required LOI Description",
+              "AttributeValue": {
+                "AttributeStringValue": {
+                  "StringValue": "Unit/ modular suspended ceiling systems"
+                }
+              },
+              "AttributeName": "RequiredLOIDescription",
+              "propertySetName": "RequiredLOI"
+            },
+            {
+              "AttributeDescription": "The identity of the bar code (or rfid) given to an occurrence of the product (per instance).",
+              "AttributeName": "BarCode",
+              "propertySetName": "[required]"
+            },
+            {
+              "AttributeDescription": "The service life that an artefact is expected to have under current operating conditions.",
+              "AttributeName": "ServiceLifeDuration",
+              "propertySetName": "[required]"
+            },
+            {
+              "AttributeDescription": "The date that the manufactured item was installed (per instance).",
+              "AttributeName": "InstallationDate",
+              "propertySetName": "[required]"
+            },
+            {
+              "AttributeDescription": "The year of production of the manufactured item.",
+              "AttributeName": "ProductionYear",
+              "propertySetName": "[required]"
+            },
+            {
+              "AttributeDescription": "An indicative cost for unit replacement.",
+              "AttributeName": "ReplacementCost",
+              "propertySetName": "[required]"
+            },
+            {
+              "AttributeDescription": "The serial number assigned to an occurrence of a product by the manufacturer (per instance).",
+              "AttributeName": "SerialNumber",
+              "propertySetName": "[required]"
+            },
+            {
+              "AttributeDescription": "Description of the warranty.",
+              "AttributeName": "WarrantyDescription",
+              "propertySetName": "[required]"
+            },
+            {
+              "AttributeDescription": "Duration of labour warranty (years).",
+              "AttributeName": "WarrantyDurationLabour",
+              "propertySetName": "[required]"
+            },
+            {
+              "AttributeDescription": "Duration of parts warranty (years).",
+              "AttributeName": "WarrantyDurationParts",
+              "propertySetName": "[required]"
+            },
+            {
+              "AttributeDescription": "Duration of labour guarantor (years).",
+              "AttributeName": "WarrantyGuarantorLabour",
+              "propertySetName": "[required]"
+            },
+            {
+              "AttributeDescription": "Duration of parts guarantor (years).",
+              "AttributeName": "WarrantyGuarantorParts",
+              "propertySetName": "[required]"
+            },
+            {
+              "AttributeDescription": "The date on which the warranty commences.",
+              "AttributeName": "WarrantyStartDate",
+              "propertySetName": "[required]"
+            }
+          ]
+        },
+        "AssetTypeIssues": {
+          "Issue": [
+            {
+              "ContactAssignment": {
+                "ContactEmailReference": "noname.nosurname@abc_architect.com"
+              },
+              "IssueName": "Unit/ modular suspended ceiling systems",
+              "externalID": "364ac6e2-c87e-4e3d-80f5-d2724a9f1bdf"
+            }
+          ]
+        },
+        "AssetTypeName": "Unit/ modular suspended ceiling systems",
+        "externalID": "3667edb5-64e0-4078-a7d1-c3e7f3e86ab5"
+      },
+      {
+        "AssetTypeCategory": "NBS Code:90-40-35/335:|Uniclass2015:Pr-70-60-36-30:",
+        "AssetTypeShapeDescription": "5",
+        "Assets": {
+          "Asset": [
+            {
+              "AssetName": "Fan convectors",
+              "externalID": "651b4ed8-3109-4584-9b3a-64b711861de2"
+            }
+          ]
+        },
+        "AssetTypeAttributes": {
+          "Attribute": [
+            {
+              "AttributeValue": {
+                "AttributeStringValue": {
+                  "StringValue": "90-40-35/335"
+                }
+              },
+              "AttributeName": "NbsCode"
+            },
+            {
+              "AttributeValue": {
+                "AttributeStringValue": {
+                  "StringValue": "For the main restaurant area. Will get a little cold in the winter."
+                }
+              },
+              "AttributeName": "Notes"
+            },
+            {
+              "AttributeDescription": "Required LOD Code",
+              "AttributeValue": {
+                "AttributeStringValue": {
+                  "StringValue": "5"
+                }
+              },
+              "AttributeName": "RequiredLODCode",
+              "propertySetName": "RequiredLOD"
+            },
+            {
+              "AttributeDescription": "Required LOD Description",
+              "AttributeValue": {
+                "AttributeStringValue": {
+                  "StringValue": "Fan convectors"
+                }
+              },
+              "AttributeName": "RequiredLODDescription",
+              "propertySetName": "RequiredLOD"
+            },
+            {
+              "AttributeDescription": "Required LOD URI",
+              "AttributeValue": {
+                "AttributeStringValue": {
+                  "StringValue": "https://bimtoolkit-dev.thenbs.com/Toolkit/199/0/0ObjectDefinition/90_40_35_335/?version=1.0"
+                }
+              },
+              "AttributeName": "RequiredLODURI",
+              "propertySetName": "RequiredLOD"
+            },
+            {
+              "AttributeDescription": "Required LOI Code",
+              "AttributeValue": {
+                "AttributeStringValue": {
+                  "StringValue": "6"
+                }
+              },
+              "AttributeName": "RequiredLOICode",
+              "propertySetName": "RequiredLOI"
+            },
+            {
+              "AttributeDescription": "Required LOI Description",
+              "AttributeValue": {
+                "AttributeStringValue": {
+                  "StringValue": "Fan convectors"
+                }
+              },
+              "AttributeName": "RequiredLOIDescription",
+              "propertySetName": "RequiredLOI"
+            },
+            {
+              "AttributeDescription": "The identity of the bar code (or rfid) given to an occurrence of the product (per instance).",
+              "AttributeName": "BarCode",
+              "propertySetName": "[required]"
+            },
+            {
+              "AttributeDescription": "The service life that an artefact is expected to have under current operating conditions.",
+              "AttributeName": "ServiceLifeDuration",
+              "propertySetName": "[required]"
+            },
+            {
+              "AttributeDescription": "The date that the manufactured item was installed (per instance).",
+              "AttributeName": "InstallationDate",
+              "propertySetName": "[required]"
+            },
+            {
+              "AttributeDescription": "The year of production of the manufactured item.",
+              "AttributeName": "ProductionYear",
+              "propertySetName": "[required]"
+            },
+            {
+              "AttributeDescription": "An indicative cost for unit replacement.",
+              "AttributeName": "ReplacementCost",
+              "propertySetName": "[required]"
+            },
+            {
+              "AttributeDescription": "The serial number assigned to an occurrence of a product by the manufacturer (per instance).",
+              "AttributeName": "SerialNumber",
+              "propertySetName": "[required]"
+            },
+            {
+              "AttributeDescription": "Description of the warranty.",
+              "AttributeName": "WarrantyDescription",
+              "propertySetName": "[required]"
+            },
+            {
+              "AttributeDescription": "Duration of labour warranty (years).",
+              "AttributeName": "WarrantyDurationLabour",
+              "propertySetName": "[required]"
+            },
+            {
+              "AttributeDescription": "Duration of parts warranty (years).",
+              "AttributeName": "WarrantyDurationParts",
+              "propertySetName": "[required]"
+            },
+            {
+              "AttributeDescription": "Duration of labour guarantor (years).",
+              "AttributeName": "WarrantyGuarantorLabour",
+              "propertySetName": "[required]"
+            },
+            {
+              "AttributeDescription": "Duration of parts guarantor (years).",
+              "AttributeName": "WarrantyGuarantorParts",
+              "propertySetName": "[required]"
+            },
+            {
+              "AttributeDescription": "The date on which the warranty commences.",
+              "AttributeName": "WarrantyStartDate",
+              "propertySetName": "[required]"
+            },
+            {
+              "AttributeDescription": "Enter date work carried out.",
+              "AttributeName": "DateOfLastMaintenance",
+              "propertySetName": "[required]"
+            },
+            {
+              "AttributeDescription": "Enter date for next event/automatic generation based on maintenance instructions.",
+              "AttributeName": "DateOfNextPlannedMaintenance",
+              "propertySetName": "[required]"
+            },
+            {
+              "AttributeDescription": "Enter hours from meter reading.",
+              "AttributeName": "HoursRunWhereRelevant",
+              "propertySetName": "[required]"
+            },
+            {
+              "AttributeDescription": "Details of action, e.g. change filter, fill dosing pot reservoir.",
+              "AttributeName": "PlannedMaintenanceRequirements",
+              "propertySetName": "[required]"
+            },
+            {
+              "AttributeDescription": "Details of costs including time to carry out and cost of spares/consumables.",
+              "AttributeName": "PlannedMaintenanceCost",
+              "propertySetName": "[required]"
+            },
+            {
+              "AttributeDescription": "Confirmation of whether weekly, monthly, annually, etc.",
+              "AttributeName": "PlannedMaintenanceFrequencySchedule",
+              "propertySetName": "[required]"
+            },
+            {
+              "AttributeDescription": "Details of consumables and spares to be kept in stock.",
+              "AttributeName": "ListOfConsumablesSpares",
+              "propertySetName": "[required]"
+            }
+          ]
+        },
+        "AssetTypeIssues": {
+          "Issue": [
+            {
+              "ContactAssignment": {
+                "ContactEmailReference": "noname.nosurname@wires_and_fires.com"
+              },
+              "IssueName": "Fan convectors",
+              "externalID": "37c943cd-5de3-4094-823b-7c901113a005"
+            }
+          ]
+        },
+        "AssetTypeName": "Fan convectors",
+        "externalID": "7576658e-d2c7-494f-b911-763ff07be959"
+      },
+      {
+        "AssetTypeCategory": "NBS Code:90-60-50/405:|Uniclass2015:Pr-70-70-48-71:|Uniclass2015:Pr-70-70-48-02:|Uniclass2015:Pr-70-70-48-32:|Uniclass2015:Pr-70-70-48-85:|Uniclass2015:Pr-70-70-48-62:|Uniclass2015:Pr-70-70-48-86:|Uniclass2015:Pr-70-70-48-13:|Uniclass2015:Pr-70-70-48-24:|Uniclass2015:Pr-70-70-48-65:|Uniclass2015:Pr-70-70-48-82:|Uniclass2015:Pr-70-70-48-36:|Uniclass2015:Pr-70-70-48-92:|Uniclass2015:Pr-70-70-48-35:",
+        "Assets": {
+          "Asset": [
+            {
+              "AssetName": "Free standing luminaires",
+              "externalID": "d60234a7-a16e-4bfe-8fbf-39ca6b746dfb"
+            }
+          ]
+        },
+        "AssetTypeAttributes": {
+          "Attribute": [
+            {
+              "AttributeValue": {
+                "AttributeStringValue": {
+                  "StringValue": "90-60-50/405"
+                }
+              },
+              "AttributeName": "NbsCode"
+            },
+            {
+              "AttributeValue": {
+                "AttributeStringValue": {
+                  "StringValue": "A"
+                }
+              },
+              "AttributeName": "Type"
+            },
+            {
+              "AttributeValue": {
+                "AttributeStringValue": {
+                  "StringValue": "Beautiful lighting for the dining area."
+                }
+              },
+              "AttributeName": "Notes"
+            },
+            {
+              "AttributeDescription": "Required LOD Code",
+              "AttributeValue": {
+                "AttributeStringValue": {}
+              },
+              "AttributeName": "RequiredLODCode",
+              "propertySetName": "RequiredLOD"
+            },
+            {
+              "AttributeDescription": "Required LOD Description",
+              "AttributeValue": {
+                "AttributeStringValue": {
+                  "StringValue": "Free standing luminaires"
+                }
+              },
+              "AttributeName": "RequiredLODDescription",
+              "propertySetName": "RequiredLOD"
+            },
+            {
+              "AttributeDescription": "Required LOD URI",
+              "AttributeValue": {
+                "AttributeStringValue": {
+                  "StringValue": "https://bimtoolkit-dev.thenbs.com/Toolkit/199/0/0ObjectDefinition/90_60_50_405/?version=1.0"
+                }
+              },
+              "AttributeName": "RequiredLODURI",
+              "propertySetName": "RequiredLOD"
+            },
+            {
+              "AttributeDescription": "Required LOI Code",
+              "AttributeValue": {
+                "AttributeStringValue": {
+                  "StringValue": "6"
+                }
+              },
+              "AttributeName": "RequiredLOICode",
+              "propertySetName": "RequiredLOI"
+            },
+            {
+              "AttributeDescription": "Required LOI Description",
+              "AttributeValue": {
+                "AttributeStringValue": {
+                  "StringValue": "Free standing luminaires"
+                }
+              },
+              "AttributeName": "RequiredLOIDescription",
+              "propertySetName": "RequiredLOI"
+            },
+            {
+              "AttributeDescription": "The identity of the bar code (or rfid) given to an occurrence of the product (per instance).",
+              "AttributeName": "BarCode",
+              "propertySetName": "[required]"
+            },
+            {
+              "AttributeDescription": "The service life that an artefact is expected to have under current operating conditions.",
+              "AttributeName": "ServiceLifeDuration",
+              "propertySetName": "[required]"
+            },
+            {
+              "AttributeDescription": "The date that the manufactured item was installed (per instance).",
+              "AttributeName": "InstallationDate",
+              "propertySetName": "[required]"
+            },
+            {
+              "AttributeDescription": "The year of production of the manufactured item.",
+              "AttributeName": "ProductionYear",
+              "propertySetName": "[required]"
+            },
+            {
+              "AttributeDescription": "An indicative cost for unit replacement.",
+              "AttributeName": "ReplacementCost",
+              "propertySetName": "[required]"
+            },
+            {
+              "AttributeDescription": "The serial number assigned to an occurrence of a product by the manufacturer (per instance).",
+              "AttributeName": "SerialNumber",
+              "propertySetName": "[required]"
+            },
+            {
+              "AttributeDescription": "Description of the warranty.",
+              "AttributeName": "WarrantyDescription",
+              "propertySetName": "[required]"
+            },
+            {
+              "AttributeDescription": "Duration of labour warranty (years).",
+              "AttributeName": "WarrantyDurationLabour",
+              "propertySetName": "[required]"
+            },
+            {
+              "AttributeDescription": "Duration of parts warranty (years).",
+              "AttributeName": "WarrantyDurationParts",
+              "propertySetName": "[required]"
+            },
+            {
+              "AttributeDescription": "Duration of labour guarantor (years).",
+              "AttributeName": "WarrantyGuarantorLabour",
+              "propertySetName": "[required]"
+            },
+            {
+              "AttributeDescription": "Duration of parts guarantor (years).",
+              "AttributeName": "WarrantyGuarantorParts",
+              "propertySetName": "[required]"
+            },
+            {
+              "AttributeDescription": "The date on which the warranty commences.",
+              "AttributeName": "WarrantyStartDate",
+              "propertySetName": "[required]"
+            },
+            {
+              "AttributeDescription": "Enter date work carried out.",
+              "AttributeName": "DateOfLastMaintenance",
+              "propertySetName": "[required]"
+            },
+            {
+              "AttributeDescription": "Enter date for next event/automatic generation based on maintenance instructions.",
+              "AttributeName": "DateOfNextPlannedMaintenance",
+              "propertySetName": "[required]"
+            },
+            {
+              "AttributeDescription": "Enter hours from meter reading.",
+              "AttributeName": "HoursRunWhereRelevant",
+              "propertySetName": "[required]"
+            },
+            {
+              "AttributeDescription": "Details of action, e.g. change filter, fill dosing pot reservoir.",
+              "AttributeName": "PlannedMaintenanceRequirements",
+              "propertySetName": "[required]"
+            },
+            {
+              "AttributeDescription": "Details of costs including time to carry out and cost of spares/consumables.",
+              "AttributeName": "PlannedMaintenanceCost",
+              "propertySetName": "[required]"
+            },
+            {
+              "AttributeDescription": "Confirmation of whether weekly, monthly, annually, etc.",
+              "AttributeName": "PlannedMaintenanceFrequencySchedule",
+              "propertySetName": "[required]"
+            },
+            {
+              "AttributeDescription": "Details of consumables and spares to be kept in stock.",
+              "AttributeName": "ListOfConsumablesSpares",
+              "propertySetName": "[required]"
+            }
+          ]
+        },
+        "AssetTypeIssues": {
+          "Issue": [
+            {
+              "ContactAssignment": {
+                "ContactEmailReference": "noname.nosurname@wires_and_fires.com"
+              },
+              "IssueName": "Free standing luminaires",
+              "externalID": "4fed0385-caeb-4783-bb07-d27c26a6803b"
+            }
+          ]
+        },
+        "AssetTypeName": "Free standing luminaires",
+        "externalID": "e6269619-bdd4-427f-b0dc-9797d2ab3227"
+      },
+      {
+        "AssetTypeCategory": "NBS Code:90-60-50/405:|Uniclass2015:Pr-70-70-48-71:|Uniclass2015:Pr-70-70-48-02:|Uniclass2015:Pr-70-70-48-32:|Uniclass2015:Pr-70-70-48-85:|Uniclass2015:Pr-70-70-48-62:|Uniclass2015:Pr-70-70-48-86:|Uniclass2015:Pr-70-70-48-13:|Uniclass2015:Pr-70-70-48-24:|Uniclass2015:Pr-70-70-48-65:|Uniclass2015:Pr-70-70-48-82:|Uniclass2015:Pr-70-70-48-36:|Uniclass2015:Pr-70-70-48-92:|Uniclass2015:Pr-70-70-48-35:",
+        "Assets": {
+          "Asset": [
+            {
+              "AssetName": "Suspended luminaires",
+              "externalID": "bbc6ed97-dfd3-4d22-96c4-b84c373ccd3c"
+            }
+          ]
+        },
+        "AssetTypeAttributes": {
+          "Attribute": [
+            {
+              "AttributeValue": {
+                "AttributeStringValue": {
+                  "StringValue": "90-60-50/405"
+                }
+              },
+              "AttributeName": "NbsCode"
+            },
+            {
+              "AttributeValue": {
+                "AttributeStringValue": {
+                  "StringValue": "B"
+                }
+              },
+              "AttributeName": "Type"
+            },
+            {
+              "AttributeValue": {
+                "AttributeStringValue": {
+                  "StringValue": "For the walls of the restaurant."
+                }
+              },
+              "AttributeName": "Notes"
+            },
+            {
+              "AttributeDescription": "Required LOD Code",
+              "AttributeValue": {
+                "AttributeStringValue": {}
+              },
+              "AttributeName": "RequiredLODCode",
+              "propertySetName": "RequiredLOD"
+            },
+            {
+              "AttributeDescription": "Required LOD Description",
+              "AttributeValue": {
+                "AttributeStringValue": {
+                  "StringValue": "Suspended luminaires"
+                }
+              },
+              "AttributeName": "RequiredLODDescription",
+              "propertySetName": "RequiredLOD"
+            },
+            {
+              "AttributeDescription": "Required LOD URI",
+              "AttributeValue": {
+                "AttributeStringValue": {
+                  "StringValue": "https://bimtoolkit-dev.thenbs.com/Toolkit/199/0/0ObjectDefinition/90_60_50_405/?version=1.0"
+                }
+              },
+              "AttributeName": "RequiredLODURI",
+              "propertySetName": "RequiredLOD"
+            },
+            {
+              "AttributeDescription": "Required LOI Code",
+              "AttributeValue": {
+                "AttributeStringValue": {
+                  "StringValue": "6"
+                }
+              },
+              "AttributeName": "RequiredLOICode",
+              "propertySetName": "RequiredLOI"
+            },
+            {
+              "AttributeDescription": "Required LOI Description",
+              "AttributeValue": {
+                "AttributeStringValue": {
+                  "StringValue": "Suspended luminaires"
+                }
+              },
+              "AttributeName": "RequiredLOIDescription",
+              "propertySetName": "RequiredLOI"
+            },
+            {
+              "AttributeDescription": "The identity of the bar code (or rfid) given to an occurrence of the product (per instance).",
+              "AttributeName": "BarCode",
+              "propertySetName": "[required]"
+            },
+            {
+              "AttributeDescription": "The service life that an artefact is expected to have under current operating conditions.",
+              "AttributeName": "ServiceLifeDuration",
+              "propertySetName": "[required]"
+            },
+            {
+              "AttributeDescription": "The date that the manufactured item was installed (per instance).",
+              "AttributeName": "InstallationDate",
+              "propertySetName": "[required]"
+            },
+            {
+              "AttributeDescription": "The year of production of the manufactured item.",
+              "AttributeName": "ProductionYear",
+              "propertySetName": "[required]"
+            },
+            {
+              "AttributeDescription": "An indicative cost for unit replacement.",
+              "AttributeName": "ReplacementCost",
+              "propertySetName": "[required]"
+            },
+            {
+              "AttributeDescription": "The serial number assigned to an occurrence of a product by the manufacturer (per instance).",
+              "AttributeName": "SerialNumber",
+              "propertySetName": "[required]"
+            },
+            {
+              "AttributeDescription": "Description of the warranty.",
+              "AttributeName": "WarrantyDescription",
+              "propertySetName": "[required]"
+            },
+            {
+              "AttributeDescription": "Duration of labour warranty (years).",
+              "AttributeName": "WarrantyDurationLabour",
+              "propertySetName": "[required]"
+            },
+            {
+              "AttributeDescription": "Duration of parts warranty (years).",
+              "AttributeName": "WarrantyDurationParts",
+              "propertySetName": "[required]"
+            },
+            {
+              "AttributeDescription": "Duration of labour guarantor (years).",
+              "AttributeName": "WarrantyGuarantorLabour",
+              "propertySetName": "[required]"
+            },
+            {
+              "AttributeDescription": "Duration of parts guarantor (years).",
+              "AttributeName": "WarrantyGuarantorParts",
+              "propertySetName": "[required]"
+            },
+            {
+              "AttributeDescription": "The date on which the warranty commences.",
+              "AttributeName": "WarrantyStartDate",
+              "propertySetName": "[required]"
+            },
+            {
+              "AttributeDescription": "Enter date work carried out.",
+              "AttributeName": "DateOfLastMaintenance",
+              "propertySetName": "[required]"
+            },
+            {
+              "AttributeDescription": "Enter date for next event/automatic generation based on maintenance instructions.",
+              "AttributeName": "DateOfNextPlannedMaintenance",
+              "propertySetName": "[required]"
+            },
+            {
+              "AttributeDescription": "Enter hours from meter reading.",
+              "AttributeName": "HoursRunWhereRelevant",
+              "propertySetName": "[required]"
+            },
+            {
+              "AttributeDescription": "Details of action, e.g. change filter, fill dosing pot reservoir.",
+              "AttributeName": "PlannedMaintenanceRequirements",
+              "propertySetName": "[required]"
+            },
+            {
+              "AttributeDescription": "Details of costs including time to carry out and cost of spares/consumables.",
+              "AttributeName": "PlannedMaintenanceCost",
+              "propertySetName": "[required]"
+            },
+            {
+              "AttributeDescription": "Confirmation of whether weekly, monthly, annually, etc.",
+              "AttributeName": "PlannedMaintenanceFrequencySchedule",
+              "propertySetName": "[required]"
+            },
+            {
+              "AttributeDescription": "Details of consumables and spares to be kept in stock.",
+              "AttributeName": "ListOfConsumablesSpares",
+              "propertySetName": "[required]"
+            }
+          ]
+        },
+        "AssetTypeIssues": {
+          "Issue": [
+            {
+              "ContactAssignment": {
+                "ContactEmailReference": "noname.nosurname@wires_and_fires.com"
+              },
+              "IssueName": "Suspended luminaires",
+              "externalID": "61b081a1-9b40-435f-bfbf-520487e887f0"
+            }
+          ]
+        },
+        "AssetTypeName": "Suspended luminaires",
+        "externalID": "615429da-7fe3-4861-8d7e-6fb9c51f2b63"
+      }
+    ]
+  },
+  "Contacts": {
+    "Contact": [
+      {
+        "ContactCompanyName": "Big Widget Limited",
+        "ContactEmail": "noname.nosurname@big_widget_limited.com",
+        "externalID": "2c57e42e-df57-4e58-9dc9-e89cf1e50bba"
+      },
+      {
+        "ContactCompanyName": "Newtown CC",
+        "ContactEmail": "noname.nosurname@newtown_cc.com",
+        "externalID": "cff2cd3c-aaf1-4f3c-bb6c-38f6574934a8"
+      },
+      {
+        "ContactCompanyName": "Lockley Services",
+        "ContactEmail": "noname.nosurname@lockley_services.com",
+        "externalID": "18542aac-0a35-41a7-a0e8-6e27996d2114"
+      },
+      {
+        "ContactCompanyName": "Clear Costs",
+        "ContactEmail": "noname.nosurname@clear_costs.com",
+        "externalID": "d5694846-1457-4ad6-9bae-8075b2bc58d3"
+      },
+      {
+        "ContactCompanyName": "ABC Architect",
+        "ContactEmail": "noname.nosurname@abc_architect.com",
+        "externalID": "910d977a-47b5-46d4-bab3-c5fd47c7aa95"
+      },
+      {
+        "ContactCompanyName": "Wires and Fires",
+        "ContactEmail": "noname.nosurname@wires_and_fires.com",
+        "externalID": "9e7d9ca4-977e-497b-ac9f-308af4d326d0"
+      },
+      {
+        "ContactCompanyName": "NBS",
+        "ContactEmail": "noname.nosurname@nbs.com",
+        "externalID": "cd731dae-72f4-4b1e-98e3-01cc3f068f93"
+      },
+      {
+        "ContactCompanyName": "Big Beam",
+        "ContactEmail": "noname.nosurname@big_beam.com",
+        "externalID": "9837b1d1-c7fa-48cf-9ff8-3b4f4668b3a7"
+      },
+      {
+        "ContactCompanyName": "[Not decided]",
+        "ContactEmail": "noname.nosurname@_not_decided_.com",
+        "externalID": "00000000-0000-0000-0000-000000000000"
+      },
+      {
+        "ContactCategory": "Client",
+        "ContactGivenName": "TEST Forename",
+        "ContactFamilyName": "Test Surname",
+        "ContactEmail": "steve.lockley@northumbria.ac.uk",
+        "externalID": "aecee073-2abc-49f0-bee7-59791b819091"
+      },
+      {
+        "ContactCategory": "Role",
+        "ContactGivenName": "[Not decided]",
+        "ContactAttributes": {
+          "Attribute": [
+            {
+              "AttributeDescription": "RoleName",
+              "AttributeValue": {
+                "AttributeStringValue": {
+                  "StringValue": "[Not decided]"
+                }
+              },
+              "AttributeName": "Name",
+              "propertySetName": "RolePropertySet"
+            },
+            {
+              "AttributeDescription": "RoleDescription",
+              "AttributeValue": {
+                "AttributeStringValue": {
+                  "StringValue": "Denotes where responsibility of a task or deliverable has not yet been decided"
+                }
+              },
+              "AttributeName": "Description",
+              "propertySetName": "RolePropertySet"
+            }
+          ]
+        },
+        "ContactEmail": "not_decided_@role.com",
+        "externalID": "475426f6-3c0e-4958-8a37-979c8c981d86"
+      },
+      {
+        "ContactCategory": "Role",
+        "ContactGivenName": "Stage0_Client",
+        "ContactAttributes": {
+          "Attribute": [
+            {
+              "AttributeValue": {
+                "AttributeStringValue": {
+                  "StringValue": "0"
+                }
+              },
+              "AttributeName": "Stage"
+            },
+            {
+              "AttributeDescription": "RoleName",
+              "AttributeValue": {
+                "AttributeStringValue": {
+                  "StringValue": "Stage0_Client"
+                }
+              },
+              "AttributeName": "Name",
+              "propertySetName": "RolePropertySet"
+            },
+            {
+              "AttributeDescription": "RoleDescription",
+              "AttributeValue": {
+                "AttributeStringValue": {}
+              },
+              "AttributeName": "Description",
+              "propertySetName": "RolePropertySet"
+            }
+          ]
+        },
+        "ContactEmail": "stage0_client@role.com",
+        "externalID": "6784eb64-6c08-4326-b8f0-7523839490af"
+      },
+      {
+        "ContactCategory": "Role",
+        "ContactGivenName": "Stage0_Project lead",
+        "ContactAttributes": {
+          "Attribute": [
+            {
+              "AttributeValue": {
+                "AttributeStringValue": {
+                  "StringValue": "0"
+                }
+              },
+              "AttributeName": "Stage"
+            },
+            {
+              "AttributeDescription": "RoleName",
+              "AttributeValue": {
+                "AttributeStringValue": {
+                  "StringValue": "Stage0_Project lead"
+                }
+              },
+              "AttributeName": "Name",
+              "propertySetName": "RolePropertySet"
+            },
+            {
+              "AttributeDescription": "RoleDescription",
+              "AttributeValue": {
+                "AttributeStringValue": {}
+              },
+              "AttributeName": "Description",
+              "propertySetName": "RolePropertySet"
+            }
+          ]
+        },
+        "ContactEmail": "stage0_project_lead@role.com",
+        "externalID": "02e91ebb-9698-41f1-ba96-bfd8217919e3"
+      },
+      {
+        "ContactCategory": "Role",
+        "ContactGivenName": "Stage0_Lead designer",
+        "ContactAttributes": {
+          "Attribute": [
+            {
+              "AttributeValue": {
+                "AttributeStringValue": {
+                  "StringValue": "0"
+                }
+              },
+              "AttributeName": "Stage"
+            },
+            {
+              "AttributeDescription": "RoleName",
+              "AttributeValue": {
+                "AttributeStringValue": {
+                  "StringValue": "Stage0_Lead designer"
+                }
+              },
+              "AttributeName": "Name",
+              "propertySetName": "RolePropertySet"
+            },
+            {
+              "AttributeDescription": "RoleDescription",
+              "AttributeValue": {
+                "AttributeStringValue": {}
+              },
+              "AttributeName": "Description",
+              "propertySetName": "RolePropertySet"
+            }
+          ]
+        },
+        "ContactEmail": "stage0_lead_designer@role.com",
+        "externalID": "637c7a10-798a-440a-ae5c-e76605f4127e"
+      },
+      {
+        "ContactCategory": "Role",
+        "ContactGivenName": "Stage0_Architect",
+        "ContactAttributes": {
+          "Attribute": [
+            {
+              "AttributeValue": {
+                "AttributeStringValue": {
+                  "StringValue": "0"
+                }
+              },
+              "AttributeName": "Stage"
+            },
+            {
+              "AttributeDescription": "RoleName",
+              "AttributeValue": {
+                "AttributeStringValue": {
+                  "StringValue": "Stage0_Architect"
+                }
+              },
+              "AttributeName": "Name",
+              "propertySetName": "RolePropertySet"
+            },
+            {
+              "AttributeDescription": "RoleDescription",
+              "AttributeValue": {
+                "AttributeStringValue": {}
+              },
+              "AttributeName": "Description",
+              "propertySetName": "RolePropertySet"
+            }
+          ]
+        },
+        "ContactEmail": "stage0_architect@role.com",
+        "externalID": "d9f9b388-0021-42e4-9b1c-2dabc7c7582d"
+      },
+      {
+        "ContactCategory": "Role",
+        "ContactGivenName": "Stage0_Building services engineer",
+        "ContactAttributes": {
+          "Attribute": [
+            {
+              "AttributeValue": {
+                "AttributeStringValue": {
+                  "StringValue": "0"
+                }
+              },
+              "AttributeName": "Stage"
+            },
+            {
+              "AttributeDescription": "RoleName",
+              "AttributeValue": {
+                "AttributeStringValue": {
+                  "StringValue": "Stage0_Building services engineer"
+                }
+              },
+              "AttributeName": "Name",
+              "propertySetName": "RolePropertySet"
+            },
+            {
+              "AttributeDescription": "RoleDescription",
+              "AttributeValue": {
+                "AttributeStringValue": {}
+              },
+              "AttributeName": "Description",
+              "propertySetName": "RolePropertySet"
+            }
+          ]
+        },
+        "ContactEmail": "stage0_building_services_engineer@role.com",
+        "externalID": "3c238c6b-9d37-4a12-9898-5a4738cc1de7"
+      },
+      {
+        "ContactCategory": "Role",
+        "ContactGivenName": "Stage0_Structural engineer",
+        "ContactAttributes": {
+          "Attribute": [
+            {
+              "AttributeValue": {
+                "AttributeStringValue": {
+                  "StringValue": "0"
+                }
+              },
+              "AttributeName": "Stage"
+            },
+            {
+              "AttributeDescription": "RoleName",
+              "AttributeValue": {
+                "AttributeStringValue": {
+                  "StringValue": "Stage0_Structural engineer"
+                }
+              },
+              "AttributeName": "Name",
+              "propertySetName": "RolePropertySet"
+            },
+            {
+              "AttributeDescription": "RoleDescription",
+              "AttributeValue": {
+                "AttributeStringValue": {}
+              },
+              "AttributeName": "Description",
+              "propertySetName": "RolePropertySet"
+            }
+          ]
+        },
+        "ContactEmail": "stage0_structural_engineer@role.com",
+        "externalID": "e89b0d2c-139a-4833-81e8-efef3c8ac675"
+      },
+      {
+        "ContactCategory": "Role",
+        "ContactGivenName": "Stage0_Civil engineer",
+        "ContactAttributes": {
+          "Attribute": [
+            {
+              "AttributeValue": {
+                "AttributeStringValue": {
+                  "StringValue": "0"
+                }
+              },
+              "AttributeName": "Stage"
+            },
+            {
+              "AttributeDescription": "RoleName",
+              "AttributeValue": {
+                "AttributeStringValue": {
+                  "StringValue": "Stage0_Civil engineer"
+                }
+              },
+              "AttributeName": "Name",
+              "propertySetName": "RolePropertySet"
+            },
+            {
+              "AttributeDescription": "RoleDescription",
+              "AttributeValue": {
+                "AttributeStringValue": {}
+              },
+              "AttributeName": "Description",
+              "propertySetName": "RolePropertySet"
+            }
+          ]
+        },
+        "ContactEmail": "stage0_civil_engineer@role.com",
+        "externalID": "3005d581-3134-4faf-bf4e-26fe83af9c95"
+      },
+      {
+        "ContactCategory": "Role",
+        "ContactGivenName": "Stage0_Other consultant",
+        "ContactAttributes": {
+          "Attribute": [
+            {
+              "AttributeValue": {
+                "AttributeStringValue": {
+                  "StringValue": "0"
+                }
+              },
+              "AttributeName": "Stage"
+            },
+            {
+              "AttributeDescription": "RoleName",
+              "AttributeValue": {
+                "AttributeStringValue": {
+                  "StringValue": "Stage0_Other consultant"
+                }
+              },
+              "AttributeName": "Name",
+              "propertySetName": "RolePropertySet"
+            },
+            {
+              "AttributeDescription": "RoleDescription",
+              "AttributeValue": {
+                "AttributeStringValue": {}
+              },
+              "AttributeName": "Description",
+              "propertySetName": "RolePropertySet"
+            }
+          ]
+        },
+        "ContactEmail": "stage0_other_consultant@role.com",
+        "externalID": "290e65a0-8bd4-4530-beb3-4711dc5e5320"
+      },
+      {
+        "ContactCategory": "Role",
+        "ContactGivenName": "Stage0_Cost consultant",
+        "ContactAttributes": {
+          "Attribute": [
+            {
+              "AttributeValue": {
+                "AttributeStringValue": {
+                  "StringValue": "0"
+                }
+              },
+              "AttributeName": "Stage"
+            },
+            {
+              "AttributeDescription": "RoleName",
+              "AttributeValue": {
+                "AttributeStringValue": {
+                  "StringValue": "Stage0_Cost consultant"
+                }
+              },
+              "AttributeName": "Name",
+              "propertySetName": "RolePropertySet"
+            },
+            {
+              "AttributeDescription": "RoleDescription",
+              "AttributeValue": {
+                "AttributeStringValue": {}
+              },
+              "AttributeName": "Description",
+              "propertySetName": "RolePropertySet"
+            }
+          ]
+        },
+        "ContactEmail": "stage0_cost_consultant@role.com",
+        "externalID": "a7f76e48-e34b-41c5-bb08-9419e6fc9e66"
+      },
+      {
+        "ContactCategory": "Role",
+        "ContactGivenName": "Stage1_Client",
+        "ContactAttributes": {
+          "Attribute": [
+            {
+              "AttributeValue": {
+                "AttributeStringValue": {
+                  "StringValue": "1"
+                }
+              },
+              "AttributeName": "Stage"
+            },
+            {
+              "AttributeDescription": "RoleName",
+              "AttributeValue": {
+                "AttributeStringValue": {
+                  "StringValue": "Stage1_Client"
+                }
+              },
+              "AttributeName": "Name",
+              "propertySetName": "RolePropertySet"
+            },
+            {
+              "AttributeDescription": "RoleDescription",
+              "AttributeValue": {
+                "AttributeStringValue": {}
+              },
+              "AttributeName": "Description",
+              "propertySetName": "RolePropertySet"
+            }
+          ]
+        },
+        "ContactEmail": "stage1_client@role.com",
+        "externalID": "7100052e-301b-4c26-afd0-f9ac89c3d58b"
+      },
+      {
+        "ContactCategory": "Role",
+        "ContactGivenName": "Stage1_Project lead",
+        "ContactAttributes": {
+          "Attribute": [
+            {
+              "AttributeValue": {
+                "AttributeStringValue": {
+                  "StringValue": "1"
+                }
+              },
+              "AttributeName": "Stage"
+            },
+            {
+              "AttributeDescription": "RoleName",
+              "AttributeValue": {
+                "AttributeStringValue": {
+                  "StringValue": "Stage1_Project lead"
+                }
+              },
+              "AttributeName": "Name",
+              "propertySetName": "RolePropertySet"
+            },
+            {
+              "AttributeDescription": "RoleDescription",
+              "AttributeValue": {
+                "AttributeStringValue": {}
+              },
+              "AttributeName": "Description",
+              "propertySetName": "RolePropertySet"
+            }
+          ]
+        },
+        "ContactEmail": "stage1_project_lead@role.com",
+        "externalID": "436d86f7-91f5-4624-8df2-7a7aa808745e"
+      },
+      {
+        "ContactCategory": "Role",
+        "ContactGivenName": "Stage1_Lead designer",
+        "ContactAttributes": {
+          "Attribute": [
+            {
+              "AttributeValue": {
+                "AttributeStringValue": {
+                  "StringValue": "1"
+                }
+              },
+              "AttributeName": "Stage"
+            },
+            {
+              "AttributeDescription": "RoleName",
+              "AttributeValue": {
+                "AttributeStringValue": {
+                  "StringValue": "Stage1_Lead designer"
+                }
+              },
+              "AttributeName": "Name",
+              "propertySetName": "RolePropertySet"
+            },
+            {
+              "AttributeDescription": "RoleDescription",
+              "AttributeValue": {
+                "AttributeStringValue": {}
+              },
+              "AttributeName": "Description",
+              "propertySetName": "RolePropertySet"
+            }
+          ]
+        },
+        "ContactEmail": "stage1_lead_designer@role.com",
+        "externalID": "d4b071ae-ea44-418a-a8ce-ba914ea04aae"
+      },
+      {
+        "ContactCategory": "Role",
+        "ContactGivenName": "Stage1_Architect",
+        "ContactAttributes": {
+          "Attribute": [
+            {
+              "AttributeValue": {
+                "AttributeStringValue": {
+                  "StringValue": "1"
+                }
+              },
+              "AttributeName": "Stage"
+            },
+            {
+              "AttributeDescription": "RoleName",
+              "AttributeValue": {
+                "AttributeStringValue": {
+                  "StringValue": "Stage1_Architect"
+                }
+              },
+              "AttributeName": "Name",
+              "propertySetName": "RolePropertySet"
+            },
+            {
+              "AttributeDescription": "RoleDescription",
+              "AttributeValue": {
+                "AttributeStringValue": {}
+              },
+              "AttributeName": "Description",
+              "propertySetName": "RolePropertySet"
+            }
+          ]
+        },
+        "ContactEmail": "stage1_architect@role.com",
+        "externalID": "878299ec-0981-44a1-bc02-7b1bf0844d58"
+      },
+      {
+        "ContactCategory": "Role",
+        "ContactGivenName": "Stage1_Building services engineer",
+        "ContactAttributes": {
+          "Attribute": [
+            {
+              "AttributeValue": {
+                "AttributeStringValue": {
+                  "StringValue": "1"
+                }
+              },
+              "AttributeName": "Stage"
+            },
+            {
+              "AttributeDescription": "RoleName",
+              "AttributeValue": {
+                "AttributeStringValue": {
+                  "StringValue": "Stage1_Building services engineer"
+                }
+              },
+              "AttributeName": "Name",
+              "propertySetName": "RolePropertySet"
+            },
+            {
+              "AttributeDescription": "RoleDescription",
+              "AttributeValue": {
+                "AttributeStringValue": {}
+              },
+              "AttributeName": "Description",
+              "propertySetName": "RolePropertySet"
+            }
+          ]
+        },
+        "ContactEmail": "stage1_building_services_engineer@role.com",
+        "externalID": "7e2ac305-4c44-4271-a492-cf9e44c46c12"
+      },
+      {
+        "ContactCategory": "Role",
+        "ContactGivenName": "Stage1_Civil engineer",
+        "ContactAttributes": {
+          "Attribute": [
+            {
+              "AttributeValue": {
+                "AttributeStringValue": {
+                  "StringValue": "1"
+                }
+              },
+              "AttributeName": "Stage"
+            },
+            {
+              "AttributeDescription": "RoleName",
+              "AttributeValue": {
+                "AttributeStringValue": {
+                  "StringValue": "Stage1_Civil engineer"
+                }
+              },
+              "AttributeName": "Name",
+              "propertySetName": "RolePropertySet"
+            },
+            {
+              "AttributeDescription": "RoleDescription",
+              "AttributeValue": {
+                "AttributeStringValue": {}
+              },
+              "AttributeName": "Description",
+              "propertySetName": "RolePropertySet"
+            }
+          ]
+        },
+        "ContactEmail": "stage1_civil_engineer@role.com",
+        "externalID": "5711fb6e-d50f-4e7e-a99f-1d921936eb47"
+      },
+      {
+        "ContactCategory": "Role",
+        "ContactGivenName": "Stage1_Structural engineer",
+        "ContactAttributes": {
+          "Attribute": [
+            {
+              "AttributeValue": {
+                "AttributeStringValue": {
+                  "StringValue": "1"
+                }
+              },
+              "AttributeName": "Stage"
+            },
+            {
+              "AttributeDescription": "RoleName",
+              "AttributeValue": {
+                "AttributeStringValue": {
+                  "StringValue": "Stage1_Structural engineer"
+                }
+              },
+              "AttributeName": "Name",
+              "propertySetName": "RolePropertySet"
+            },
+            {
+              "AttributeDescription": "RoleDescription",
+              "AttributeValue": {
+                "AttributeStringValue": {}
+              },
+              "AttributeName": "Description",
+              "propertySetName": "RolePropertySet"
+            }
+          ]
+        },
+        "ContactEmail": "stage1_structural_engineer@role.com",
+        "externalID": "1332489d-5c79-4059-9c50-f6b766542c3c"
+      },
+      {
+        "ContactCategory": "Role",
+        "ContactGivenName": "Stage1_Cost consultant",
+        "ContactAttributes": {
+          "Attribute": [
+            {
+              "AttributeValue": {
+                "AttributeStringValue": {
+                  "StringValue": "1"
+                }
+              },
+              "AttributeName": "Stage"
+            },
+            {
+              "AttributeDescription": "RoleName",
+              "AttributeValue": {
+                "AttributeStringValue": {
+                  "StringValue": "Stage1_Cost consultant"
+                }
+              },
+              "AttributeName": "Name",
+              "propertySetName": "RolePropertySet"
+            },
+            {
+              "AttributeDescription": "RoleDescription",
+              "AttributeValue": {
+                "AttributeStringValue": {}
+              },
+              "AttributeName": "Description",
+              "propertySetName": "RolePropertySet"
+            }
+          ]
+        },
+        "ContactEmail": "stage1_cost_consultant@role.com",
+        "externalID": "318a957a-84da-4750-a902-05834ff65a82"
+      },
+      {
+        "ContactCategory": "Role",
+        "ContactGivenName": "Stage1_Construction lead",
+        "ContactAttributes": {
+          "Attribute": [
+            {
+              "AttributeValue": {
+                "AttributeStringValue": {
+                  "StringValue": "1"
+                }
+              },
+              "AttributeName": "Stage"
+            },
+            {
+              "AttributeDescription": "RoleName",
+              "AttributeValue": {
+                "AttributeStringValue": {
+                  "StringValue": "Stage1_Construction lead"
+                }
+              },
+              "AttributeName": "Name",
+              "propertySetName": "RolePropertySet"
+            },
+            {
+              "AttributeDescription": "RoleDescription",
+              "AttributeValue": {
+                "AttributeStringValue": {}
+              },
+              "AttributeName": "Description",
+              "propertySetName": "RolePropertySet"
+            }
+          ]
+        },
+        "ContactEmail": "stage1_construction_lead@role.com",
+        "externalID": "5780263f-da9a-4207-80b1-5604d43f4f55"
+      },
+      {
+        "ContactCategory": "Role",
+        "ContactGivenName": "Stage1_Contract administrator",
+        "ContactAttributes": {
+          "Attribute": [
+            {
+              "AttributeValue": {
+                "AttributeStringValue": {
+                  "StringValue": "1"
+                }
+              },
+              "AttributeName": "Stage"
+            },
+            {
+              "AttributeDescription": "RoleName",
+              "AttributeValue": {
+                "AttributeStringValue": {
+                  "StringValue": "Stage1_Contract administrator"
+                }
+              },
+              "AttributeName": "Name",
+              "propertySetName": "RolePropertySet"
+            },
+            {
+              "AttributeDescription": "RoleDescription",
+              "AttributeValue": {
+                "AttributeStringValue": {}
+              },
+              "AttributeName": "Description",
+              "propertySetName": "RolePropertySet"
+            }
+          ]
+        },
+        "ContactEmail": "stage1_contract_administrator@role.com",
+        "externalID": "e5cbe0f4-790a-4aba-a5c9-c8398db3c8cc"
+      },
+      {
+        "ContactCategory": "Role",
+        "ContactGivenName": "Stage1_Health and safety adviser",
+        "ContactAttributes": {
+          "Attribute": [
+            {
+              "AttributeValue": {
+                "AttributeStringValue": {
+                  "StringValue": "1"
+                }
+              },
+              "AttributeName": "Stage"
+            },
+            {
+              "AttributeDescription": "RoleName",
+              "AttributeValue": {
+                "AttributeStringValue": {
+                  "StringValue": "Stage1_Health and safety adviser"
+                }
+              },
+              "AttributeName": "Name",
+              "propertySetName": "RolePropertySet"
+            },
+            {
+              "AttributeDescription": "RoleDescription",
+              "AttributeValue": {
+                "AttributeStringValue": {}
+              },
+              "AttributeName": "Description",
+              "propertySetName": "RolePropertySet"
+            }
+          ]
+        },
+        "ContactEmail": "stage1_health_and_safety_adviser@role.com",
+        "externalID": "4bd4c0ea-9905-495f-94ea-390b813f216b"
+      },
+      {
+        "ContactCategory": "Role",
+        "ContactGivenName": "Stage1_Design lead",
+        "ContactAttributes": {
+          "Attribute": [
+            {
+              "AttributeValue": {
+                "AttributeStringValue": {
+                  "StringValue": "1"
+                }
+              },
+              "AttributeName": "Stage"
+            },
+            {
+              "AttributeDescription": "RoleName",
+              "AttributeValue": {
+                "AttributeStringValue": {
+                  "StringValue": "Stage1_Design lead"
+                }
+              },
+              "AttributeName": "Name",
+              "propertySetName": "RolePropertySet"
+            },
+            {
+              "AttributeDescription": "RoleDescription",
+              "AttributeValue": {
+                "AttributeStringValue": {}
+              },
+              "AttributeName": "Description",
+              "propertySetName": "RolePropertySet"
+            }
+          ]
+        },
+        "ContactEmail": "stage1_design_lead@role.com",
+        "externalID": "b4167cbf-9dbb-4b2a-bfed-5403b7fbbece"
+      },
+      {
+        "ContactCategory": "Role",
+        "ContactGivenName": "Stage2_Client",
+        "ContactAttributes": {
+          "Attribute": [
+            {
+              "AttributeValue": {
+                "AttributeStringValue": {
+                  "StringValue": "2"
+                }
+              },
+              "AttributeName": "Stage"
+            },
+            {
+              "AttributeDescription": "RoleName",
+              "AttributeValue": {
+                "AttributeStringValue": {
+                  "StringValue": "Stage2_Client"
+                }
+              },
+              "AttributeName": "Name",
+              "propertySetName": "RolePropertySet"
+            },
+            {
+              "AttributeDescription": "RoleDescription",
+              "AttributeValue": {
+                "AttributeStringValue": {}
+              },
+              "AttributeName": "Description",
+              "propertySetName": "RolePropertySet"
+            }
+          ]
+        },
+        "ContactEmail": "stage2_client@role.com",
+        "externalID": "66fe74c9-8ef3-4487-9ffb-45105fcd0ab1"
+      },
+      {
+        "ContactCategory": "Role",
+        "ContactGivenName": "Stage2_Project lead",
+        "ContactAttributes": {
+          "Attribute": [
+            {
+              "AttributeValue": {
+                "AttributeStringValue": {
+                  "StringValue": "2"
+                }
+              },
+              "AttributeName": "Stage"
+            },
+            {
+              "AttributeDescription": "RoleName",
+              "AttributeValue": {
+                "AttributeStringValue": {
+                  "StringValue": "Stage2_Project lead"
+                }
+              },
+              "AttributeName": "Name",
+              "propertySetName": "RolePropertySet"
+            },
+            {
+              "AttributeDescription": "RoleDescription",
+              "AttributeValue": {
+                "AttributeStringValue": {}
+              },
+              "AttributeName": "Description",
+              "propertySetName": "RolePropertySet"
+            }
+          ]
+        },
+        "ContactEmail": "stage2_project_lead@role.com",
+        "externalID": "bc4667a7-473f-47a3-aa6b-fa8f26ed2445"
+      },
+      {
+        "ContactCategory": "Role",
+        "ContactGivenName": "Stage2_Lead designer",
+        "ContactAttributes": {
+          "Attribute": [
+            {
+              "AttributeValue": {
+                "AttributeStringValue": {
+                  "StringValue": "2"
+                }
+              },
+              "AttributeName": "Stage"
+            },
+            {
+              "AttributeDescription": "RoleName",
+              "AttributeValue": {
+                "AttributeStringValue": {
+                  "StringValue": "Stage2_Lead designer"
+                }
+              },
+              "AttributeName": "Name",
+              "propertySetName": "RolePropertySet"
+            },
+            {
+              "AttributeDescription": "RoleDescription",
+              "AttributeValue": {
+                "AttributeStringValue": {}
+              },
+              "AttributeName": "Description",
+              "propertySetName": "RolePropertySet"
+            }
+          ]
+        },
+        "ContactEmail": "stage2_lead_designer@role.com",
+        "externalID": "07582bca-7ef2-400f-84ad-8c165693c7af"
+      },
+      {
+        "ContactCategory": "Role",
+        "ContactGivenName": "Stage2_Architect",
+        "ContactAttributes": {
+          "Attribute": [
+            {
+              "AttributeValue": {
+                "AttributeStringValue": {
+                  "StringValue": "2"
+                }
+              },
+              "AttributeName": "Stage"
+            },
+            {
+              "AttributeDescription": "RoleName",
+              "AttributeValue": {
+                "AttributeStringValue": {
+                  "StringValue": "Stage2_Architect"
+                }
+              },
+              "AttributeName": "Name",
+              "propertySetName": "RolePropertySet"
+            },
+            {
+              "AttributeDescription": "RoleDescription",
+              "AttributeValue": {
+                "AttributeStringValue": {}
+              },
+              "AttributeName": "Description",
+              "propertySetName": "RolePropertySet"
+            }
+          ]
+        },
+        "ContactEmail": "stage2_architect@role.com",
+        "externalID": "c7138e81-678a-4331-9add-6bd0e5fa6216"
+      },
+      {
+        "ContactCategory": "Role",
+        "ContactGivenName": "Stage2_Building services engineer",
+        "ContactAttributes": {
+          "Attribute": [
+            {
+              "AttributeValue": {
+                "AttributeStringValue": {
+                  "StringValue": "2"
+                }
+              },
+              "AttributeName": "Stage"
+            },
+            {
+              "AttributeDescription": "RoleName",
+              "AttributeValue": {
+                "AttributeStringValue": {
+                  "StringValue": "Stage2_Building services engineer"
+                }
+              },
+              "AttributeName": "Name",
+              "propertySetName": "RolePropertySet"
+            },
+            {
+              "AttributeDescription": "RoleDescription",
+              "AttributeValue": {
+                "AttributeStringValue": {}
+              },
+              "AttributeName": "Description",
+              "propertySetName": "RolePropertySet"
+            }
+          ]
+        },
+        "ContactEmail": "stage2_building_services_engineer@role.com",
+        "externalID": "65cd02eb-ad6a-42b4-b1bd-ab39d9fe00d8"
+      },
+      {
+        "ContactCategory": "Role",
+        "ContactGivenName": "Stage2_Civil engineer",
+        "ContactAttributes": {
+          "Attribute": [
+            {
+              "AttributeValue": {
+                "AttributeStringValue": {
+                  "StringValue": "2"
+                }
+              },
+              "AttributeName": "Stage"
+            },
+            {
+              "AttributeDescription": "RoleName",
+              "AttributeValue": {
+                "AttributeStringValue": {
+                  "StringValue": "Stage2_Civil engineer"
+                }
+              },
+              "AttributeName": "Name",
+              "propertySetName": "RolePropertySet"
+            },
+            {
+              "AttributeDescription": "RoleDescription",
+              "AttributeValue": {
+                "AttributeStringValue": {}
+              },
+              "AttributeName": "Description",
+              "propertySetName": "RolePropertySet"
+            }
+          ]
+        },
+        "ContactEmail": "stage2_civil_engineer@role.com",
+        "externalID": "95d6e853-75df-449e-8a3a-b2f3eeddd567"
+      },
+      {
+        "ContactCategory": "Role",
+        "ContactGivenName": "Stage2_Structural engineer",
+        "ContactAttributes": {
+          "Attribute": [
+            {
+              "AttributeValue": {
+                "AttributeStringValue": {
+                  "StringValue": "2"
+                }
+              },
+              "AttributeName": "Stage"
+            },
+            {
+              "AttributeDescription": "RoleName",
+              "AttributeValue": {
+                "AttributeStringValue": {
+                  "StringValue": "Stage2_Structural engineer"
+                }
+              },
+              "AttributeName": "Name",
+              "propertySetName": "RolePropertySet"
+            },
+            {
+              "AttributeDescription": "RoleDescription",
+              "AttributeValue": {
+                "AttributeStringValue": {}
+              },
+              "AttributeName": "Description",
+              "propertySetName": "RolePropertySet"
+            }
+          ]
+        },
+        "ContactEmail": "stage2_structural_engineer@role.com",
+        "externalID": "d6d7abbe-9caf-47a5-820d-9c8dc2306a9d"
+      },
+      {
+        "ContactCategory": "Role",
+        "ContactGivenName": "Stage2_Cost consultant",
+        "ContactAttributes": {
+          "Attribute": [
+            {
+              "AttributeValue": {
+                "AttributeStringValue": {
+                  "StringValue": "2"
+                }
+              },
+              "AttributeName": "Stage"
+            },
+            {
+              "AttributeDescription": "RoleName",
+              "AttributeValue": {
+                "AttributeStringValue": {
+                  "StringValue": "Stage2_Cost consultant"
+                }
+              },
+              "AttributeName": "Name",
+              "propertySetName": "RolePropertySet"
+            },
+            {
+              "AttributeDescription": "RoleDescription",
+              "AttributeValue": {
+                "AttributeStringValue": {}
+              },
+              "AttributeName": "Description",
+              "propertySetName": "RolePropertySet"
+            }
+          ]
+        },
+        "ContactEmail": "stage2_cost_consultant@role.com",
+        "externalID": "618c365d-0584-4047-87de-dab5a835be8e"
+      },
+      {
+        "ContactCategory": "Role",
+        "ContactGivenName": "Stage2_Construction lead",
+        "ContactAttributes": {
+          "Attribute": [
+            {
+              "AttributeValue": {
+                "AttributeStringValue": {
+                  "StringValue": "2"
+                }
+              },
+              "AttributeName": "Stage"
+            },
+            {
+              "AttributeDescription": "RoleName",
+              "AttributeValue": {
+                "AttributeStringValue": {
+                  "StringValue": "Stage2_Construction lead"
+                }
+              },
+              "AttributeName": "Name",
+              "propertySetName": "RolePropertySet"
+            },
+            {
+              "AttributeDescription": "RoleDescription",
+              "AttributeValue": {
+                "AttributeStringValue": {}
+              },
+              "AttributeName": "Description",
+              "propertySetName": "RolePropertySet"
+            }
+          ]
+        },
+        "ContactEmail": "stage2_construction_lead@role.com",
+        "externalID": "85333e87-761c-4faf-b512-d385ce550f28"
+      },
+      {
+        "ContactCategory": "Role",
+        "ContactGivenName": "Stage2_Health & safety adviser",
+        "ContactAttributes": {
+          "Attribute": [
+            {
+              "AttributeValue": {
+                "AttributeStringValue": {
+                  "StringValue": "2"
+                }
+              },
+              "AttributeName": "Stage"
+            },
+            {
+              "AttributeDescription": "RoleName",
+              "AttributeValue": {
+                "AttributeStringValue": {
+                  "StringValue": "Stage2_Health & safety adviser"
+                }
+              },
+              "AttributeName": "Name",
+              "propertySetName": "RolePropertySet"
+            },
+            {
+              "AttributeDescription": "RoleDescription",
+              "AttributeValue": {
+                "AttributeStringValue": {}
+              },
+              "AttributeName": "Description",
+              "propertySetName": "RolePropertySet"
+            }
+          ]
+        },
+        "ContactEmail": "stage2_health_&_safety_adviser@role.com",
+        "externalID": "19256887-c127-47a8-ae8f-96a5fb7c13b1"
+      },
+      {
+        "ContactCategory": "Role",
+        "ContactGivenName": "Stage2_All additional project roles",
+        "ContactAttributes": {
+          "Attribute": [
+            {
+              "AttributeValue": {
+                "AttributeStringValue": {
+                  "StringValue": "2"
+                }
+              },
+              "AttributeName": "Stage"
+            },
+            {
+              "AttributeDescription": "RoleName",
+              "AttributeValue": {
+                "AttributeStringValue": {
+                  "StringValue": "Stage2_All additional project roles"
+                }
+              },
+              "AttributeName": "Name",
+              "propertySetName": "RolePropertySet"
+            },
+            {
+              "AttributeDescription": "RoleDescription",
+              "AttributeValue": {
+                "AttributeStringValue": {}
+              },
+              "AttributeName": "Description",
+              "propertySetName": "RolePropertySet"
+            }
+          ]
+        },
+        "ContactEmail": "stage2_all_additional_project_roles@role.com",
+        "externalID": "d6aa903c-9cf3-43f2-9969-c77c0e1b3148"
+      },
+      {
+        "ContactCategory": "Role",
+        "ContactGivenName": "Stage2_All roles",
+        "ContactAttributes": {
+          "Attribute": [
+            {
+              "AttributeValue": {
+                "AttributeStringValue": {
+                  "StringValue": "2"
+                }
+              },
+              "AttributeName": "Stage"
+            },
+            {
+              "AttributeDescription": "RoleName",
+              "AttributeValue": {
+                "AttributeStringValue": {
+                  "StringValue": "Stage2_All roles"
+                }
+              },
+              "AttributeName": "Name",
+              "propertySetName": "RolePropertySet"
+            },
+            {
+              "AttributeDescription": "RoleDescription",
+              "AttributeValue": {
+                "AttributeStringValue": {}
+              },
+              "AttributeName": "Description",
+              "propertySetName": "RolePropertySet"
+            }
+          ]
+        },
+        "ContactEmail": "stage2_all_roles@role.com",
+        "externalID": "ad7ca4ae-f5d6-4c42-ac95-3045845509b7"
+      },
+      {
+        "ContactCategory": "Role",
+        "ContactGivenName": "Stage3_Client",
+        "ContactAttributes": {
+          "Attribute": [
+            {
+              "AttributeValue": {
+                "AttributeStringValue": {
+                  "StringValue": "3"
+                }
+              },
+              "AttributeName": "Stage"
+            },
+            {
+              "AttributeDescription": "RoleName",
+              "AttributeValue": {
+                "AttributeStringValue": {
+                  "StringValue": "Stage3_Client"
+                }
+              },
+              "AttributeName": "Name",
+              "propertySetName": "RolePropertySet"
+            },
+            {
+              "AttributeDescription": "RoleDescription",
+              "AttributeValue": {
+                "AttributeStringValue": {}
+              },
+              "AttributeName": "Description",
+              "propertySetName": "RolePropertySet"
+            }
+          ]
+        },
+        "ContactEmail": "stage3_client@role.com",
+        "externalID": "ad12b5d3-3541-4b83-9429-8845eeb93ae8"
+      },
+      {
+        "ContactCategory": "Role",
+        "ContactGivenName": "Stage3_Project lead",
+        "ContactAttributes": {
+          "Attribute": [
+            {
+              "AttributeValue": {
+                "AttributeStringValue": {
+                  "StringValue": "3"
+                }
+              },
+              "AttributeName": "Stage"
+            },
+            {
+              "AttributeDescription": "RoleName",
+              "AttributeValue": {
+                "AttributeStringValue": {
+                  "StringValue": "Stage3_Project lead"
+                }
+              },
+              "AttributeName": "Name",
+              "propertySetName": "RolePropertySet"
+            },
+            {
+              "AttributeDescription": "RoleDescription",
+              "AttributeValue": {
+                "AttributeStringValue": {}
+              },
+              "AttributeName": "Description",
+              "propertySetName": "RolePropertySet"
+            }
+          ]
+        },
+        "ContactEmail": "stage3_project_lead@role.com",
+        "externalID": "31004018-7ba9-4066-8e3c-1fbb86232435"
+      },
+      {
+        "ContactCategory": "Role",
+        "ContactGivenName": "Stage3_Lead designer",
+        "ContactAttributes": {
+          "Attribute": [
+            {
+              "AttributeValue": {
+                "AttributeStringValue": {
+                  "StringValue": "3"
+                }
+              },
+              "AttributeName": "Stage"
+            },
+            {
+              "AttributeDescription": "RoleName",
+              "AttributeValue": {
+                "AttributeStringValue": {
+                  "StringValue": "Stage3_Lead designer"
+                }
+              },
+              "AttributeName": "Name",
+              "propertySetName": "RolePropertySet"
+            },
+            {
+              "AttributeDescription": "RoleDescription",
+              "AttributeValue": {
+                "AttributeStringValue": {}
+              },
+              "AttributeName": "Description",
+              "propertySetName": "RolePropertySet"
+            }
+          ]
+        },
+        "ContactEmail": "stage3_lead_designer@role.com",
+        "externalID": "9f6f57e7-9f5b-4088-9040-651c47e5721a"
+      },
+      {
+        "ContactCategory": "Role",
+        "ContactGivenName": "Stage3_Architect",
+        "ContactAttributes": {
+          "Attribute": [
+            {
+              "AttributeValue": {
+                "AttributeStringValue": {
+                  "StringValue": "3"
+                }
+              },
+              "AttributeName": "Stage"
+            },
+            {
+              "AttributeDescription": "RoleName",
+              "AttributeValue": {
+                "AttributeStringValue": {
+                  "StringValue": "Stage3_Architect"
+                }
+              },
+              "AttributeName": "Name",
+              "propertySetName": "RolePropertySet"
+            },
+            {
+              "AttributeDescription": "RoleDescription",
+              "AttributeValue": {
+                "AttributeStringValue": {}
+              },
+              "AttributeName": "Description",
+              "propertySetName": "RolePropertySet"
+            }
+          ]
+        },
+        "ContactEmail": "stage3_architect@role.com",
+        "externalID": "38a3a8d6-8369-4b03-9394-7f0d1abadbc0"
+      },
+      {
+        "ContactCategory": "Role",
+        "ContactGivenName": "Stage3_Building services engineer",
+        "ContactAttributes": {
+          "Attribute": [
+            {
+              "AttributeValue": {
+                "AttributeStringValue": {
+                  "StringValue": "3"
+                }
+              },
+              "AttributeName": "Stage"
+            },
+            {
+              "AttributeDescription": "RoleName",
+              "AttributeValue": {
+                "AttributeStringValue": {
+                  "StringValue": "Stage3_Building services engineer"
+                }
+              },
+              "AttributeName": "Name",
+              "propertySetName": "RolePropertySet"
+            },
+            {
+              "AttributeDescription": "RoleDescription",
+              "AttributeValue": {
+                "AttributeStringValue": {}
+              },
+              "AttributeName": "Description",
+              "propertySetName": "RolePropertySet"
+            }
+          ]
+        },
+        "ContactEmail": "stage3_building_services_engineer@role.com",
+        "externalID": "004b6a73-842c-4edf-8614-7762d08f7ccd"
+      },
+      {
+        "ContactCategory": "Role",
+        "ContactGivenName": "Stage3_Civil engineer",
+        "ContactAttributes": {
+          "Attribute": [
+            {
+              "AttributeValue": {
+                "AttributeStringValue": {
+                  "StringValue": "3"
+                }
+              },
+              "AttributeName": "Stage"
+            },
+            {
+              "AttributeDescription": "RoleName",
+              "AttributeValue": {
+                "AttributeStringValue": {
+                  "StringValue": "Stage3_Civil engineer"
+                }
+              },
+              "AttributeName": "Name",
+              "propertySetName": "RolePropertySet"
+            },
+            {
+              "AttributeDescription": "RoleDescription",
+              "AttributeValue": {
+                "AttributeStringValue": {}
+              },
+              "AttributeName": "Description",
+              "propertySetName": "RolePropertySet"
+            }
+          ]
+        },
+        "ContactEmail": "stage3_civil_engineer@role.com",
+        "externalID": "51003040-5915-4899-b49e-799ac48223cd"
+      },
+      {
+        "ContactCategory": "Role",
+        "ContactGivenName": "Stage3_Structural engineer",
+        "ContactAttributes": {
+          "Attribute": [
+            {
+              "AttributeValue": {
+                "AttributeStringValue": {
+                  "StringValue": "3"
+                }
+              },
+              "AttributeName": "Stage"
+            },
+            {
+              "AttributeDescription": "RoleName",
+              "AttributeValue": {
+                "AttributeStringValue": {
+                  "StringValue": "Stage3_Structural engineer"
+                }
+              },
+              "AttributeName": "Name",
+              "propertySetName": "RolePropertySet"
+            },
+            {
+              "AttributeDescription": "RoleDescription",
+              "AttributeValue": {
+                "AttributeStringValue": {}
+              },
+              "AttributeName": "Description",
+              "propertySetName": "RolePropertySet"
+            }
+          ]
+        },
+        "ContactEmail": "stage3_structural_engineer@role.com",
+        "externalID": "7cfd2abb-d452-4e2b-8c5a-014c4bbe0188"
+      },
+      {
+        "ContactCategory": "Role",
+        "ContactGivenName": "Stage3_Cost consultant",
+        "ContactAttributes": {
+          "Attribute": [
+            {
+              "AttributeValue": {
+                "AttributeStringValue": {
+                  "StringValue": "3"
+                }
+              },
+              "AttributeName": "Stage"
+            },
+            {
+              "AttributeDescription": "RoleName",
+              "AttributeValue": {
+                "AttributeStringValue": {
+                  "StringValue": "Stage3_Cost consultant"
+                }
+              },
+              "AttributeName": "Name",
+              "propertySetName": "RolePropertySet"
+            },
+            {
+              "AttributeDescription": "RoleDescription",
+              "AttributeValue": {
+                "AttributeStringValue": {}
+              },
+              "AttributeName": "Description",
+              "propertySetName": "RolePropertySet"
+            }
+          ]
+        },
+        "ContactEmail": "stage3_cost_consultant@role.com",
+        "externalID": "2e43b154-d832-46e6-b406-0a01410568d9"
+      },
+      {
+        "ContactCategory": "Role",
+        "ContactGivenName": "Stage3_Construction lead",
+        "ContactAttributes": {
+          "Attribute": [
+            {
+              "AttributeValue": {
+                "AttributeStringValue": {
+                  "StringValue": "3"
+                }
+              },
+              "AttributeName": "Stage"
+            },
+            {
+              "AttributeDescription": "RoleName",
+              "AttributeValue": {
+                "AttributeStringValue": {
+                  "StringValue": "Stage3_Construction lead"
+                }
+              },
+              "AttributeName": "Name",
+              "propertySetName": "RolePropertySet"
+            },
+            {
+              "AttributeDescription": "RoleDescription",
+              "AttributeValue": {
+                "AttributeStringValue": {}
+              },
+              "AttributeName": "Description",
+              "propertySetName": "RolePropertySet"
+            }
+          ]
+        },
+        "ContactEmail": "stage3_construction_lead@role.com",
+        "externalID": "40c60410-8c95-49b7-8ab0-70ded0507472"
+      },
+      {
+        "ContactCategory": "Role",
+        "ContactGivenName": "Stage3_Health & safety adviser",
+        "ContactAttributes": {
+          "Attribute": [
+            {
+              "AttributeValue": {
+                "AttributeStringValue": {
+                  "StringValue": "3"
+                }
+              },
+              "AttributeName": "Stage"
+            },
+            {
+              "AttributeDescription": "RoleName",
+              "AttributeValue": {
+                "AttributeStringValue": {
+                  "StringValue": "Stage3_Health & safety adviser"
+                }
+              },
+              "AttributeName": "Name",
+              "propertySetName": "RolePropertySet"
+            },
+            {
+              "AttributeDescription": "RoleDescription",
+              "AttributeValue": {
+                "AttributeStringValue": {}
+              },
+              "AttributeName": "Description",
+              "propertySetName": "RolePropertySet"
+            }
+          ]
+        },
+        "ContactEmail": "stage3_health_&_safety_adviser@role.com",
+        "externalID": "724f3acb-2e31-44e1-b42e-bf982605a31f"
+      },
+      {
+        "ContactCategory": "Role",
+        "ContactGivenName": "Stage3_All roles",
+        "ContactAttributes": {
+          "Attribute": [
+            {
+              "AttributeValue": {
+                "AttributeStringValue": {
+                  "StringValue": "3"
+                }
+              },
+              "AttributeName": "Stage"
+            },
+            {
+              "AttributeDescription": "RoleName",
+              "AttributeValue": {
+                "AttributeStringValue": {
+                  "StringValue": "Stage3_All roles"
+                }
+              },
+              "AttributeName": "Name",
+              "propertySetName": "RolePropertySet"
+            },
+            {
+              "AttributeDescription": "RoleDescription",
+              "AttributeValue": {
+                "AttributeStringValue": {}
+              },
+              "AttributeName": "Description",
+              "propertySetName": "RolePropertySet"
+            }
+          ]
+        },
+        "ContactEmail": "stage3_all_roles@role.com",
+        "externalID": "0c375513-5e14-4e88-817e-dc683e55a92d"
+      },
+      {
+        "ContactCategory": "Role",
+        "ContactGivenName": "Stage3_All additional project roles",
+        "ContactAttributes": {
+          "Attribute": [
+            {
+              "AttributeValue": {
+                "AttributeStringValue": {
+                  "StringValue": "3"
+                }
+              },
+              "AttributeName": "Stage"
+            },
+            {
+              "AttributeDescription": "RoleName",
+              "AttributeValue": {
+                "AttributeStringValue": {
+                  "StringValue": "Stage3_All additional project roles"
+                }
+              },
+              "AttributeName": "Name",
+              "propertySetName": "RolePropertySet"
+            },
+            {
+              "AttributeDescription": "RoleDescription",
+              "AttributeValue": {
+                "AttributeStringValue": {}
+              },
+              "AttributeName": "Description",
+              "propertySetName": "RolePropertySet"
+            }
+          ]
+        },
+        "ContactEmail": "stage3_all_additional_project_roles@role.com",
+        "externalID": "61708d87-4a99-4151-aaf5-3a9660fb48a6"
+      },
+      {
+        "ContactCategory": "Role",
+        "ContactGivenName": "Stage4_Client",
+        "ContactAttributes": {
+          "Attribute": [
+            {
+              "AttributeValue": {
+                "AttributeStringValue": {
+                  "StringValue": "4"
+                }
+              },
+              "AttributeName": "Stage"
+            },
+            {
+              "AttributeDescription": "RoleName",
+              "AttributeValue": {
+                "AttributeStringValue": {
+                  "StringValue": "Stage4_Client"
+                }
+              },
+              "AttributeName": "Name",
+              "propertySetName": "RolePropertySet"
+            },
+            {
+              "AttributeDescription": "RoleDescription",
+              "AttributeValue": {
+                "AttributeStringValue": {}
+              },
+              "AttributeName": "Description",
+              "propertySetName": "RolePropertySet"
+            }
+          ]
+        },
+        "ContactEmail": "stage4_client@role.com",
+        "externalID": "42acbf3d-f696-4b1d-a967-04987f195bc4"
+      },
+      {
+        "ContactCategory": "Role",
+        "ContactGivenName": "Stage4_Project lead",
+        "ContactAttributes": {
+          "Attribute": [
+            {
+              "AttributeValue": {
+                "AttributeStringValue": {
+                  "StringValue": "4"
+                }
+              },
+              "AttributeName": "Stage"
+            },
+            {
+              "AttributeDescription": "RoleName",
+              "AttributeValue": {
+                "AttributeStringValue": {
+                  "StringValue": "Stage4_Project lead"
+                }
+              },
+              "AttributeName": "Name",
+              "propertySetName": "RolePropertySet"
+            },
+            {
+              "AttributeDescription": "RoleDescription",
+              "AttributeValue": {
+                "AttributeStringValue": {}
+              },
+              "AttributeName": "Description",
+              "propertySetName": "RolePropertySet"
+            }
+          ]
+        },
+        "ContactEmail": "stage4_project_lead@role.com",
+        "externalID": "1a1a1446-7bc4-42fe-8556-6df93972e75f"
+      },
+      {
+        "ContactCategory": "Role",
+        "ContactGivenName": "Stage4_Lead designer",
+        "ContactAttributes": {
+          "Attribute": [
+            {
+              "AttributeValue": {
+                "AttributeStringValue": {
+                  "StringValue": "4"
+                }
+              },
+              "AttributeName": "Stage"
+            },
+            {
+              "AttributeDescription": "RoleName",
+              "AttributeValue": {
+                "AttributeStringValue": {
+                  "StringValue": "Stage4_Lead designer"
+                }
+              },
+              "AttributeName": "Name",
+              "propertySetName": "RolePropertySet"
+            },
+            {
+              "AttributeDescription": "RoleDescription",
+              "AttributeValue": {
+                "AttributeStringValue": {}
+              },
+              "AttributeName": "Description",
+              "propertySetName": "RolePropertySet"
+            }
+          ]
+        },
+        "ContactEmail": "stage4_lead_designer@role.com",
+        "externalID": "cae72783-ab86-4f8f-aaa8-28c74000e675"
+      },
+      {
+        "ContactCategory": "Role",
+        "ContactGivenName": "Stage4_Architect",
+        "ContactAttributes": {
+          "Attribute": [
+            {
+              "AttributeValue": {
+                "AttributeStringValue": {
+                  "StringValue": "4"
+                }
+              },
+              "AttributeName": "Stage"
+            },
+            {
+              "AttributeDescription": "RoleName",
+              "AttributeValue": {
+                "AttributeStringValue": {
+                  "StringValue": "Stage4_Architect"
+                }
+              },
+              "AttributeName": "Name",
+              "propertySetName": "RolePropertySet"
+            },
+            {
+              "AttributeDescription": "RoleDescription",
+              "AttributeValue": {
+                "AttributeStringValue": {}
+              },
+              "AttributeName": "Description",
+              "propertySetName": "RolePropertySet"
+            }
+          ]
+        },
+        "ContactEmail": "stage4_architect@role.com",
+        "externalID": "8f2276b8-ac63-479f-b151-8f048e781e56"
+      },
+      {
+        "ContactCategory": "Role",
+        "ContactGivenName": "Stage4_Building services engineer",
+        "ContactAttributes": {
+          "Attribute": [
+            {
+              "AttributeValue": {
+                "AttributeStringValue": {
+                  "StringValue": "4"
+                }
+              },
+              "AttributeName": "Stage"
+            },
+            {
+              "AttributeDescription": "RoleName",
+              "AttributeValue": {
+                "AttributeStringValue": {
+                  "StringValue": "Stage4_Building services engineer"
+                }
+              },
+              "AttributeName": "Name",
+              "propertySetName": "RolePropertySet"
+            },
+            {
+              "AttributeDescription": "RoleDescription",
+              "AttributeValue": {
+                "AttributeStringValue": {}
+              },
+              "AttributeName": "Description",
+              "propertySetName": "RolePropertySet"
+            }
+          ]
+        },
+        "ContactEmail": "stage4_building_services_engineer@role.com",
+        "externalID": "49d04e9f-a805-4454-b606-ee0a3d92dff1"
+      },
+      {
+        "ContactCategory": "Role",
+        "ContactGivenName": "Stage4_Civil engineer",
+        "ContactAttributes": {
+          "Attribute": [
+            {
+              "AttributeValue": {
+                "AttributeStringValue": {
+                  "StringValue": "4"
+                }
+              },
+              "AttributeName": "Stage"
+            },
+            {
+              "AttributeDescription": "RoleName",
+              "AttributeValue": {
+                "AttributeStringValue": {
+                  "StringValue": "Stage4_Civil engineer"
+                }
+              },
+              "AttributeName": "Name",
+              "propertySetName": "RolePropertySet"
+            },
+            {
+              "AttributeDescription": "RoleDescription",
+              "AttributeValue": {
+                "AttributeStringValue": {}
+              },
+              "AttributeName": "Description",
+              "propertySetName": "RolePropertySet"
+            }
+          ]
+        },
+        "ContactEmail": "stage4_civil_engineer@role.com",
+        "externalID": "2388c3ef-0303-4b50-b308-5b8a982725e2"
+      },
+      {
+        "ContactCategory": "Role",
+        "ContactGivenName": "Stage4_Structural engineer",
+        "ContactAttributes": {
+          "Attribute": [
+            {
+              "AttributeValue": {
+                "AttributeStringValue": {
+                  "StringValue": "4"
+                }
+              },
+              "AttributeName": "Stage"
+            },
+            {
+              "AttributeDescription": "RoleName",
+              "AttributeValue": {
+                "AttributeStringValue": {
+                  "StringValue": "Stage4_Structural engineer"
+                }
+              },
+              "AttributeName": "Name",
+              "propertySetName": "RolePropertySet"
+            },
+            {
+              "AttributeDescription": "RoleDescription",
+              "AttributeValue": {
+                "AttributeStringValue": {}
+              },
+              "AttributeName": "Description",
+              "propertySetName": "RolePropertySet"
+            }
+          ]
+        },
+        "ContactEmail": "stage4_structural_engineer@role.com",
+        "externalID": "ea59bb96-0a26-40b6-95c9-390da4177fca"
+      },
+      {
+        "ContactCategory": "Role",
+        "ContactGivenName": "Stage4_Cost consultant",
+        "ContactAttributes": {
+          "Attribute": [
+            {
+              "AttributeValue": {
+                "AttributeStringValue": {
+                  "StringValue": "4"
+                }
+              },
+              "AttributeName": "Stage"
+            },
+            {
+              "AttributeDescription": "RoleName",
+              "AttributeValue": {
+                "AttributeStringValue": {
+                  "StringValue": "Stage4_Cost consultant"
+                }
+              },
+              "AttributeName": "Name",
+              "propertySetName": "RolePropertySet"
+            },
+            {
+              "AttributeDescription": "RoleDescription",
+              "AttributeValue": {
+                "AttributeStringValue": {}
+              },
+              "AttributeName": "Description",
+              "propertySetName": "RolePropertySet"
+            }
+          ]
+        },
+        "ContactEmail": "stage4_cost_consultant@role.com",
+        "externalID": "29c27db7-38db-4711-93ef-eaa9aa1f7374"
+      },
+      {
+        "ContactCategory": "Role",
+        "ContactGivenName": "Stage4_Construction lead",
+        "ContactAttributes": {
+          "Attribute": [
+            {
+              "AttributeValue": {
+                "AttributeStringValue": {
+                  "StringValue": "4"
+                }
+              },
+              "AttributeName": "Stage"
+            },
+            {
+              "AttributeDescription": "RoleName",
+              "AttributeValue": {
+                "AttributeStringValue": {
+                  "StringValue": "Stage4_Construction lead"
+                }
+              },
+              "AttributeName": "Name",
+              "propertySetName": "RolePropertySet"
+            },
+            {
+              "AttributeDescription": "RoleDescription",
+              "AttributeValue": {
+                "AttributeStringValue": {}
+              },
+              "AttributeName": "Description",
+              "propertySetName": "RolePropertySet"
+            }
+          ]
+        },
+        "ContactEmail": "stage4_construction_lead@role.com",
+        "externalID": "c517f050-4ca1-4334-8a51-b98ba6632353"
+      },
+      {
+        "ContactCategory": "Role",
+        "ContactGivenName": "Stage4_Contract administrator",
+        "ContactAttributes": {
+          "Attribute": [
+            {
+              "AttributeValue": {
+                "AttributeStringValue": {
+                  "StringValue": "4"
+                }
+              },
+              "AttributeName": "Stage"
+            },
+            {
+              "AttributeDescription": "RoleName",
+              "AttributeValue": {
+                "AttributeStringValue": {
+                  "StringValue": "Stage4_Contract administrator"
+                }
+              },
+              "AttributeName": "Name",
+              "propertySetName": "RolePropertySet"
+            },
+            {
+              "AttributeDescription": "RoleDescription",
+              "AttributeValue": {
+                "AttributeStringValue": {}
+              },
+              "AttributeName": "Description",
+              "propertySetName": "RolePropertySet"
+            }
+          ]
+        },
+        "ContactEmail": "stage4_contract_administrator@role.com",
+        "externalID": "008b4eeb-7ba1-42ba-b015-3f6fb2558c7e"
+      },
+      {
+        "ContactCategory": "Role",
+        "ContactGivenName": "Stage4_Health & safety adviser",
+        "ContactAttributes": {
+          "Attribute": [
+            {
+              "AttributeValue": {
+                "AttributeStringValue": {
+                  "StringValue": "4"
+                }
+              },
+              "AttributeName": "Stage"
+            },
+            {
+              "AttributeDescription": "RoleName",
+              "AttributeValue": {
+                "AttributeStringValue": {
+                  "StringValue": "Stage4_Health & safety adviser"
+                }
+              },
+              "AttributeName": "Name",
+              "propertySetName": "RolePropertySet"
+            },
+            {
+              "AttributeDescription": "RoleDescription",
+              "AttributeValue": {
+                "AttributeStringValue": {}
+              },
+              "AttributeName": "Description",
+              "propertySetName": "RolePropertySet"
+            }
+          ]
+        },
+        "ContactEmail": "stage4_health_&_safety_adviser@role.com",
+        "externalID": "0b88184b-7cfe-4767-96b6-281080c33fba"
+      },
+      {
+        "ContactCategory": "Role",
+        "ContactGivenName": "Stage4_All roles",
+        "ContactAttributes": {
+          "Attribute": [
+            {
+              "AttributeValue": {
+                "AttributeStringValue": {
+                  "StringValue": "4"
+                }
+              },
+              "AttributeName": "Stage"
+            },
+            {
+              "AttributeDescription": "RoleName",
+              "AttributeValue": {
+                "AttributeStringValue": {
+                  "StringValue": "Stage4_All roles"
+                }
+              },
+              "AttributeName": "Name",
+              "propertySetName": "RolePropertySet"
+            },
+            {
+              "AttributeDescription": "RoleDescription",
+              "AttributeValue": {
+                "AttributeStringValue": {}
+              },
+              "AttributeName": "Description",
+              "propertySetName": "RolePropertySet"
+            }
+          ]
+        },
+        "ContactEmail": "stage4_all_roles@role.com",
+        "externalID": "a1b45a6f-d3fc-45b4-94a3-d044db93fd5a"
+      },
+      {
+        "ContactCategory": "Role",
+        "ContactGivenName": "Stage4_All additional project roles",
+        "ContactAttributes": {
+          "Attribute": [
+            {
+              "AttributeValue": {
+                "AttributeStringValue": {
+                  "StringValue": "4"
+                }
+              },
+              "AttributeName": "Stage"
+            },
+            {
+              "AttributeDescription": "RoleName",
+              "AttributeValue": {
+                "AttributeStringValue": {
+                  "StringValue": "Stage4_All additional project roles"
+                }
+              },
+              "AttributeName": "Name",
+              "propertySetName": "RolePropertySet"
+            },
+            {
+              "AttributeDescription": "RoleDescription",
+              "AttributeValue": {
+                "AttributeStringValue": {}
+              },
+              "AttributeName": "Description",
+              "propertySetName": "RolePropertySet"
+            }
+          ]
+        },
+        "ContactEmail": "stage4_all_additional_project_roles@role.com",
+        "externalID": "c442c791-c37f-45a3-aa23-5ae9981cc9a9"
+      },
+      {
+        "ContactCategory": "Role",
+        "ContactGivenName": "Stage5_Client",
+        "ContactAttributes": {
+          "Attribute": [
+            {
+              "AttributeValue": {
+                "AttributeStringValue": {
+                  "StringValue": "5"
+                }
+              },
+              "AttributeName": "Stage"
+            },
+            {
+              "AttributeDescription": "RoleName",
+              "AttributeValue": {
+                "AttributeStringValue": {
+                  "StringValue": "Stage5_Client"
+                }
+              },
+              "AttributeName": "Name",
+              "propertySetName": "RolePropertySet"
+            },
+            {
+              "AttributeDescription": "RoleDescription",
+              "AttributeValue": {
+                "AttributeStringValue": {}
+              },
+              "AttributeName": "Description",
+              "propertySetName": "RolePropertySet"
+            }
+          ]
+        },
+        "ContactEmail": "stage5_client@role.com",
+        "externalID": "85d22d02-4741-4b68-8544-f0b7c372ada9"
+      },
+      {
+        "ContactCategory": "Role",
+        "ContactGivenName": "Stage5_Project lead",
+        "ContactAttributes": {
+          "Attribute": [
+            {
+              "AttributeValue": {
+                "AttributeStringValue": {
+                  "StringValue": "5"
+                }
+              },
+              "AttributeName": "Stage"
+            },
+            {
+              "AttributeDescription": "RoleName",
+              "AttributeValue": {
+                "AttributeStringValue": {
+                  "StringValue": "Stage5_Project lead"
+                }
+              },
+              "AttributeName": "Name",
+              "propertySetName": "RolePropertySet"
+            },
+            {
+              "AttributeDescription": "RoleDescription",
+              "AttributeValue": {
+                "AttributeStringValue": {}
+              },
+              "AttributeName": "Description",
+              "propertySetName": "RolePropertySet"
+            }
+          ]
+        },
+        "ContactEmail": "stage5_project_lead@role.com",
+        "externalID": "1460ced7-dc54-49a3-83b3-05b027fd95d5"
+      },
+      {
+        "ContactCategory": "Role",
+        "ContactGivenName": "Stage5_Lead designer",
+        "ContactAttributes": {
+          "Attribute": [
+            {
+              "AttributeValue": {
+                "AttributeStringValue": {
+                  "StringValue": "5"
+                }
+              },
+              "AttributeName": "Stage"
+            },
+            {
+              "AttributeDescription": "RoleName",
+              "AttributeValue": {
+                "AttributeStringValue": {
+                  "StringValue": "Stage5_Lead designer"
+                }
+              },
+              "AttributeName": "Name",
+              "propertySetName": "RolePropertySet"
+            },
+            {
+              "AttributeDescription": "RoleDescription",
+              "AttributeValue": {
+                "AttributeStringValue": {}
+              },
+              "AttributeName": "Description",
+              "propertySetName": "RolePropertySet"
+            }
+          ]
+        },
+        "ContactEmail": "stage5_lead_designer@role.com",
+        "externalID": "81cd9fc7-d59f-4d30-98c3-863655799408"
+      },
+      {
+        "ContactCategory": "Role",
+        "ContactGivenName": "Stage5_Architect",
+        "ContactAttributes": {
+          "Attribute": [
+            {
+              "AttributeValue": {
+                "AttributeStringValue": {
+                  "StringValue": "5"
+                }
+              },
+              "AttributeName": "Stage"
+            },
+            {
+              "AttributeDescription": "RoleName",
+              "AttributeValue": {
+                "AttributeStringValue": {
+                  "StringValue": "Stage5_Architect"
+                }
+              },
+              "AttributeName": "Name",
+              "propertySetName": "RolePropertySet"
+            },
+            {
+              "AttributeDescription": "RoleDescription",
+              "AttributeValue": {
+                "AttributeStringValue": {}
+              },
+              "AttributeName": "Description",
+              "propertySetName": "RolePropertySet"
+            }
+          ]
+        },
+        "ContactEmail": "stage5_architect@role.com",
+        "externalID": "c63ed03c-c409-49a8-af49-dd17350a0c26"
+      },
+      {
+        "ContactCategory": "Role",
+        "ContactGivenName": "Stage5_Building services engineer",
+        "ContactAttributes": {
+          "Attribute": [
+            {
+              "AttributeValue": {
+                "AttributeStringValue": {
+                  "StringValue": "5"
+                }
+              },
+              "AttributeName": "Stage"
+            },
+            {
+              "AttributeDescription": "RoleName",
+              "AttributeValue": {
+                "AttributeStringValue": {
+                  "StringValue": "Stage5_Building services engineer"
+                }
+              },
+              "AttributeName": "Name",
+              "propertySetName": "RolePropertySet"
+            },
+            {
+              "AttributeDescription": "RoleDescription",
+              "AttributeValue": {
+                "AttributeStringValue": {}
+              },
+              "AttributeName": "Description",
+              "propertySetName": "RolePropertySet"
+            }
+          ]
+        },
+        "ContactEmail": "stage5_building_services_engineer@role.com",
+        "externalID": "d1b226ec-d69b-4ed2-9d77-ed4fd72d52da"
+      },
+      {
+        "ContactCategory": "Role",
+        "ContactGivenName": "Stage5_Civil engineer",
+        "ContactAttributes": {
+          "Attribute": [
+            {
+              "AttributeValue": {
+                "AttributeStringValue": {
+                  "StringValue": "5"
+                }
+              },
+              "AttributeName": "Stage"
+            },
+            {
+              "AttributeDescription": "RoleName",
+              "AttributeValue": {
+                "AttributeStringValue": {
+                  "StringValue": "Stage5_Civil engineer"
+                }
+              },
+              "AttributeName": "Name",
+              "propertySetName": "RolePropertySet"
+            },
+            {
+              "AttributeDescription": "RoleDescription",
+              "AttributeValue": {
+                "AttributeStringValue": {}
+              },
+              "AttributeName": "Description",
+              "propertySetName": "RolePropertySet"
+            }
+          ]
+        },
+        "ContactEmail": "stage5_civil_engineer@role.com",
+        "externalID": "8f7f18b4-e6fa-4ea3-b557-6516d07a4e69"
+      },
+      {
+        "ContactCategory": "Role",
+        "ContactGivenName": "Stage5_Structural engineer",
+        "ContactAttributes": {
+          "Attribute": [
+            {
+              "AttributeValue": {
+                "AttributeStringValue": {
+                  "StringValue": "5"
+                }
+              },
+              "AttributeName": "Stage"
+            },
+            {
+              "AttributeDescription": "RoleName",
+              "AttributeValue": {
+                "AttributeStringValue": {
+                  "StringValue": "Stage5_Structural engineer"
+                }
+              },
+              "AttributeName": "Name",
+              "propertySetName": "RolePropertySet"
+            },
+            {
+              "AttributeDescription": "RoleDescription",
+              "AttributeValue": {
+                "AttributeStringValue": {}
+              },
+              "AttributeName": "Description",
+              "propertySetName": "RolePropertySet"
+            }
+          ]
+        },
+        "ContactEmail": "stage5_structural_engineer@role.com",
+        "externalID": "1910d604-186c-4815-af90-f1d9a144504d"
+      },
+      {
+        "ContactCategory": "Role",
+        "ContactGivenName": "Stage5_Cost consultant",
+        "ContactAttributes": {
+          "Attribute": [
+            {
+              "AttributeValue": {
+                "AttributeStringValue": {
+                  "StringValue": "5"
+                }
+              },
+              "AttributeName": "Stage"
+            },
+            {
+              "AttributeDescription": "RoleName",
+              "AttributeValue": {
+                "AttributeStringValue": {
+                  "StringValue": "Stage5_Cost consultant"
+                }
+              },
+              "AttributeName": "Name",
+              "propertySetName": "RolePropertySet"
+            },
+            {
+              "AttributeDescription": "RoleDescription",
+              "AttributeValue": {
+                "AttributeStringValue": {}
+              },
+              "AttributeName": "Description",
+              "propertySetName": "RolePropertySet"
+            }
+          ]
+        },
+        "ContactEmail": "stage5_cost_consultant@role.com",
+        "externalID": "10e91943-045b-49a9-8fdb-2c479d1f6bcf"
+      },
+      {
+        "ContactCategory": "Role",
+        "ContactGivenName": "Stage5_Construction lead",
+        "ContactAttributes": {
+          "Attribute": [
+            {
+              "AttributeValue": {
+                "AttributeStringValue": {
+                  "StringValue": "5"
+                }
+              },
+              "AttributeName": "Stage"
+            },
+            {
+              "AttributeDescription": "RoleName",
+              "AttributeValue": {
+                "AttributeStringValue": {
+                  "StringValue": "Stage5_Construction lead"
+                }
+              },
+              "AttributeName": "Name",
+              "propertySetName": "RolePropertySet"
+            },
+            {
+              "AttributeDescription": "RoleDescription",
+              "AttributeValue": {
+                "AttributeStringValue": {}
+              },
+              "AttributeName": "Description",
+              "propertySetName": "RolePropertySet"
+            }
+          ]
+        },
+        "ContactEmail": "stage5_construction_lead@role.com",
+        "externalID": "1502c53b-53d0-49bb-b1fe-9aac5dd2e00e"
+      },
+      {
+        "ContactCategory": "Role",
+        "ContactGivenName": "Stage5_Contract administrator",
+        "ContactAttributes": {
+          "Attribute": [
+            {
+              "AttributeValue": {
+                "AttributeStringValue": {
+                  "StringValue": "5"
+                }
+              },
+              "AttributeName": "Stage"
+            },
+            {
+              "AttributeDescription": "RoleName",
+              "AttributeValue": {
+                "AttributeStringValue": {
+                  "StringValue": "Stage5_Contract administrator"
+                }
+              },
+              "AttributeName": "Name",
+              "propertySetName": "RolePropertySet"
+            },
+            {
+              "AttributeDescription": "RoleDescription",
+              "AttributeValue": {
+                "AttributeStringValue": {}
+              },
+              "AttributeName": "Description",
+              "propertySetName": "RolePropertySet"
+            }
+          ]
+        },
+        "ContactEmail": "stage5_contract_administrator@role.com",
+        "externalID": "3cd3f84b-211e-4925-8fbe-277d0c93d57b"
+      },
+      {
+        "ContactCategory": "Role",
+        "ContactGivenName": "Stage5_Health & safety adviser",
+        "ContactAttributes": {
+          "Attribute": [
+            {
+              "AttributeValue": {
+                "AttributeStringValue": {
+                  "StringValue": "5"
+                }
+              },
+              "AttributeName": "Stage"
+            },
+            {
+              "AttributeDescription": "RoleName",
+              "AttributeValue": {
+                "AttributeStringValue": {
+                  "StringValue": "Stage5_Health & safety adviser"
+                }
+              },
+              "AttributeName": "Name",
+              "propertySetName": "RolePropertySet"
+            },
+            {
+              "AttributeDescription": "RoleDescription",
+              "AttributeValue": {
+                "AttributeStringValue": {}
+              },
+              "AttributeName": "Description",
+              "propertySetName": "RolePropertySet"
+            }
+          ]
+        },
+        "ContactEmail": "stage5_health_&_safety_adviser@role.com",
+        "externalID": "5d749a3f-233c-4e82-9593-7f48c285d6f2"
+      },
+      {
+        "ContactCategory": "Role",
+        "ContactGivenName": "Stage5_All roles",
+        "ContactAttributes": {
+          "Attribute": [
+            {
+              "AttributeValue": {
+                "AttributeStringValue": {
+                  "StringValue": "5"
+                }
+              },
+              "AttributeName": "Stage"
+            },
+            {
+              "AttributeDescription": "RoleName",
+              "AttributeValue": {
+                "AttributeStringValue": {
+                  "StringValue": "Stage5_All roles"
+                }
+              },
+              "AttributeName": "Name",
+              "propertySetName": "RolePropertySet"
+            },
+            {
+              "AttributeDescription": "RoleDescription",
+              "AttributeValue": {
+                "AttributeStringValue": {}
+              },
+              "AttributeName": "Description",
+              "propertySetName": "RolePropertySet"
+            }
+          ]
+        },
+        "ContactEmail": "stage5_all_roles@role.com",
+        "externalID": "46a69cfc-8452-4624-bd41-d8e2b53ba919"
+      },
+      {
+        "ContactCategory": "Role",
+        "ContactGivenName": "Stage5_All additional project roles",
+        "ContactAttributes": {
+          "Attribute": [
+            {
+              "AttributeValue": {
+                "AttributeStringValue": {
+                  "StringValue": "5"
+                }
+              },
+              "AttributeName": "Stage"
+            },
+            {
+              "AttributeDescription": "RoleName",
+              "AttributeValue": {
+                "AttributeStringValue": {
+                  "StringValue": "Stage5_All additional project roles"
+                }
+              },
+              "AttributeName": "Name",
+              "propertySetName": "RolePropertySet"
+            },
+            {
+              "AttributeDescription": "RoleDescription",
+              "AttributeValue": {
+                "AttributeStringValue": {}
+              },
+              "AttributeName": "Description",
+              "propertySetName": "RolePropertySet"
+            }
+          ]
+        },
+        "ContactEmail": "stage5_all_additional_project_roles@role.com",
+        "externalID": "5088d01e-9027-415b-90b2-16f327e97ebe"
+      },
+      {
+        "ContactCategory": "Role",
+        "ContactGivenName": "Stage6_Client",
+        "ContactAttributes": {
+          "Attribute": [
+            {
+              "AttributeValue": {
+                "AttributeStringValue": {
+                  "StringValue": "6"
+                }
+              },
+              "AttributeName": "Stage"
+            },
+            {
+              "AttributeDescription": "RoleName",
+              "AttributeValue": {
+                "AttributeStringValue": {
+                  "StringValue": "Stage6_Client"
+                }
+              },
+              "AttributeName": "Name",
+              "propertySetName": "RolePropertySet"
+            },
+            {
+              "AttributeDescription": "RoleDescription",
+              "AttributeValue": {
+                "AttributeStringValue": {}
+              },
+              "AttributeName": "Description",
+              "propertySetName": "RolePropertySet"
+            }
+          ]
+        },
+        "ContactEmail": "stage6_client@role.com",
+        "externalID": "e3fdf183-a462-4c93-906e-c46468dca363"
+      },
+      {
+        "ContactCategory": "Role",
+        "ContactGivenName": "Stage6_Project lead",
+        "ContactAttributes": {
+          "Attribute": [
+            {
+              "AttributeValue": {
+                "AttributeStringValue": {
+                  "StringValue": "6"
+                }
+              },
+              "AttributeName": "Stage"
+            },
+            {
+              "AttributeDescription": "RoleName",
+              "AttributeValue": {
+                "AttributeStringValue": {
+                  "StringValue": "Stage6_Project lead"
+                }
+              },
+              "AttributeName": "Name",
+              "propertySetName": "RolePropertySet"
+            },
+            {
+              "AttributeDescription": "RoleDescription",
+              "AttributeValue": {
+                "AttributeStringValue": {}
+              },
+              "AttributeName": "Description",
+              "propertySetName": "RolePropertySet"
+            }
+          ]
+        },
+        "ContactEmail": "stage6_project_lead@role.com",
+        "externalID": "a986397e-1287-4589-91e4-e7423d9e93ec"
+      },
+      {
+        "ContactCategory": "Role",
+        "ContactGivenName": "Stage6_Lead designer",
+        "ContactAttributes": {
+          "Attribute": [
+            {
+              "AttributeValue": {
+                "AttributeStringValue": {
+                  "StringValue": "6"
+                }
+              },
+              "AttributeName": "Stage"
+            },
+            {
+              "AttributeDescription": "RoleName",
+              "AttributeValue": {
+                "AttributeStringValue": {
+                  "StringValue": "Stage6_Lead designer"
+                }
+              },
+              "AttributeName": "Name",
+              "propertySetName": "RolePropertySet"
+            },
+            {
+              "AttributeDescription": "RoleDescription",
+              "AttributeValue": {
+                "AttributeStringValue": {}
+              },
+              "AttributeName": "Description",
+              "propertySetName": "RolePropertySet"
+            }
+          ]
+        },
+        "ContactEmail": "stage6_lead_designer@role.com",
+        "externalID": "a51bccc0-0daf-42d4-b46f-c71645200b12"
+      },
+      {
+        "ContactCategory": "Role",
+        "ContactGivenName": "Stage6_Architect",
+        "ContactAttributes": {
+          "Attribute": [
+            {
+              "AttributeValue": {
+                "AttributeStringValue": {
+                  "StringValue": "6"
+                }
+              },
+              "AttributeName": "Stage"
+            },
+            {
+              "AttributeDescription": "RoleName",
+              "AttributeValue": {
+                "AttributeStringValue": {
+                  "StringValue": "Stage6_Architect"
+                }
+              },
+              "AttributeName": "Name",
+              "propertySetName": "RolePropertySet"
+            },
+            {
+              "AttributeDescription": "RoleDescription",
+              "AttributeValue": {
+                "AttributeStringValue": {}
+              },
+              "AttributeName": "Description",
+              "propertySetName": "RolePropertySet"
+            }
+          ]
+        },
+        "ContactEmail": "stage6_architect@role.com",
+        "externalID": "cc49a3e2-5465-4479-828b-cc771e6dfaf9"
+      },
+      {
+        "ContactCategory": "Role",
+        "ContactGivenName": "Stage6_Building services engineer",
+        "ContactAttributes": {
+          "Attribute": [
+            {
+              "AttributeValue": {
+                "AttributeStringValue": {
+                  "StringValue": "6"
+                }
+              },
+              "AttributeName": "Stage"
+            },
+            {
+              "AttributeDescription": "RoleName",
+              "AttributeValue": {
+                "AttributeStringValue": {
+                  "StringValue": "Stage6_Building services engineer"
+                }
+              },
+              "AttributeName": "Name",
+              "propertySetName": "RolePropertySet"
+            },
+            {
+              "AttributeDescription": "RoleDescription",
+              "AttributeValue": {
+                "AttributeStringValue": {}
+              },
+              "AttributeName": "Description",
+              "propertySetName": "RolePropertySet"
+            }
+          ]
+        },
+        "ContactEmail": "stage6_building_services_engineer@role.com",
+        "externalID": "e4f9f580-cf68-479a-83d1-dd64e95fae12"
+      },
+      {
+        "ContactCategory": "Role",
+        "ContactGivenName": "Stage6_Civil engineer",
+        "ContactAttributes": {
+          "Attribute": [
+            {
+              "AttributeValue": {
+                "AttributeStringValue": {
+                  "StringValue": "6"
+                }
+              },
+              "AttributeName": "Stage"
+            },
+            {
+              "AttributeDescription": "RoleName",
+              "AttributeValue": {
+                "AttributeStringValue": {
+                  "StringValue": "Stage6_Civil engineer"
+                }
+              },
+              "AttributeName": "Name",
+              "propertySetName": "RolePropertySet"
+            },
+            {
+              "AttributeDescription": "RoleDescription",
+              "AttributeValue": {
+                "AttributeStringValue": {}
+              },
+              "AttributeName": "Description",
+              "propertySetName": "RolePropertySet"
+            }
+          ]
+        },
+        "ContactEmail": "stage6_civil_engineer@role.com",
+        "externalID": "334f02b0-809d-41e3-8c24-fd0b82ad0ed0"
+      },
+      {
+        "ContactCategory": "Role",
+        "ContactGivenName": "Stage6_Structural engineer",
+        "ContactAttributes": {
+          "Attribute": [
+            {
+              "AttributeValue": {
+                "AttributeStringValue": {
+                  "StringValue": "6"
+                }
+              },
+              "AttributeName": "Stage"
+            },
+            {
+              "AttributeDescription": "RoleName",
+              "AttributeValue": {
+                "AttributeStringValue": {
+                  "StringValue": "Stage6_Structural engineer"
+                }
+              },
+              "AttributeName": "Name",
+              "propertySetName": "RolePropertySet"
+            },
+            {
+              "AttributeDescription": "RoleDescription",
+              "AttributeValue": {
+                "AttributeStringValue": {}
+              },
+              "AttributeName": "Description",
+              "propertySetName": "RolePropertySet"
+            }
+          ]
+        },
+        "ContactEmail": "stage6_structural_engineer@role.com",
+        "externalID": "98e3489c-9794-41e0-b906-414483f0e0ac"
+      },
+      {
+        "ContactCategory": "Role",
+        "ContactGivenName": "Stage6_Cost consultant",
+        "ContactAttributes": {
+          "Attribute": [
+            {
+              "AttributeValue": {
+                "AttributeStringValue": {
+                  "StringValue": "6"
+                }
+              },
+              "AttributeName": "Stage"
+            },
+            {
+              "AttributeDescription": "RoleName",
+              "AttributeValue": {
+                "AttributeStringValue": {
+                  "StringValue": "Stage6_Cost consultant"
+                }
+              },
+              "AttributeName": "Name",
+              "propertySetName": "RolePropertySet"
+            },
+            {
+              "AttributeDescription": "RoleDescription",
+              "AttributeValue": {
+                "AttributeStringValue": {}
+              },
+              "AttributeName": "Description",
+              "propertySetName": "RolePropertySet"
+            }
+          ]
+        },
+        "ContactEmail": "stage6_cost_consultant@role.com",
+        "externalID": "9adeea19-31dd-4a0d-bf37-cf467cf52883"
+      },
+      {
+        "ContactCategory": "Role",
+        "ContactGivenName": "Stage6_Construction lead",
+        "ContactAttributes": {
+          "Attribute": [
+            {
+              "AttributeValue": {
+                "AttributeStringValue": {
+                  "StringValue": "6"
+                }
+              },
+              "AttributeName": "Stage"
+            },
+            {
+              "AttributeDescription": "RoleName",
+              "AttributeValue": {
+                "AttributeStringValue": {
+                  "StringValue": "Stage6_Construction lead"
+                }
+              },
+              "AttributeName": "Name",
+              "propertySetName": "RolePropertySet"
+            },
+            {
+              "AttributeDescription": "RoleDescription",
+              "AttributeValue": {
+                "AttributeStringValue": {}
+              },
+              "AttributeName": "Description",
+              "propertySetName": "RolePropertySet"
+            }
+          ]
+        },
+        "ContactEmail": "stage6_construction_lead@role.com",
+        "externalID": "458b179a-5c7a-4bdc-8fff-48871fa656a4"
+      },
+      {
+        "ContactCategory": "Role",
+        "ContactGivenName": "Stage6_Contract administrator",
+        "ContactAttributes": {
+          "Attribute": [
+            {
+              "AttributeValue": {
+                "AttributeStringValue": {
+                  "StringValue": "6"
+                }
+              },
+              "AttributeName": "Stage"
+            },
+            {
+              "AttributeDescription": "RoleName",
+              "AttributeValue": {
+                "AttributeStringValue": {
+                  "StringValue": "Stage6_Contract administrator"
+                }
+              },
+              "AttributeName": "Name",
+              "propertySetName": "RolePropertySet"
+            },
+            {
+              "AttributeDescription": "RoleDescription",
+              "AttributeValue": {
+                "AttributeStringValue": {}
+              },
+              "AttributeName": "Description",
+              "propertySetName": "RolePropertySet"
+            }
+          ]
+        },
+        "ContactEmail": "stage6_contract_administrator@role.com",
+        "externalID": "08d62997-82fb-4c81-bdc1-3874093df181"
+      },
+      {
+        "ContactCategory": "Role",
+        "ContactGivenName": "Stage6_Health & safety adviser",
+        "ContactAttributes": {
+          "Attribute": [
+            {
+              "AttributeValue": {
+                "AttributeStringValue": {
+                  "StringValue": "6"
+                }
+              },
+              "AttributeName": "Stage"
+            },
+            {
+              "AttributeDescription": "RoleName",
+              "AttributeValue": {
+                "AttributeStringValue": {
+                  "StringValue": "Stage6_Health & safety adviser"
+                }
+              },
+              "AttributeName": "Name",
+              "propertySetName": "RolePropertySet"
+            },
+            {
+              "AttributeDescription": "RoleDescription",
+              "AttributeValue": {
+                "AttributeStringValue": {}
+              },
+              "AttributeName": "Description",
+              "propertySetName": "RolePropertySet"
+            }
+          ]
+        },
+        "ContactEmail": "stage6_health_&_safety_adviser@role.com",
+        "externalID": "8901b48f-6ed1-481c-9f23-77ee9bc59df1"
+      },
+      {
+        "ContactCategory": "Role",
+        "ContactGivenName": "Stage6_All additional project roles",
+        "ContactAttributes": {
+          "Attribute": [
+            {
+              "AttributeValue": {
+                "AttributeStringValue": {
+                  "StringValue": "6"
+                }
+              },
+              "AttributeName": "Stage"
+            },
+            {
+              "AttributeDescription": "RoleName",
+              "AttributeValue": {
+                "AttributeStringValue": {
+                  "StringValue": "Stage6_All additional project roles"
+                }
+              },
+              "AttributeName": "Name",
+              "propertySetName": "RolePropertySet"
+            },
+            {
+              "AttributeDescription": "RoleDescription",
+              "AttributeValue": {
+                "AttributeStringValue": {}
+              },
+              "AttributeName": "Description",
+              "propertySetName": "RolePropertySet"
+            }
+          ]
+        },
+        "ContactEmail": "stage6_all_additional_project_roles@role.com",
+        "externalID": "00ed1474-2e0b-4190-9d57-31b9d0a35e55"
+      },
+      {
+        "ContactCategory": "Role",
+        "ContactGivenName": "Stage7_Client",
+        "ContactAttributes": {
+          "Attribute": [
+            {
+              "AttributeValue": {
+                "AttributeStringValue": {
+                  "StringValue": "7"
+                }
+              },
+              "AttributeName": "Stage"
+            },
+            {
+              "AttributeDescription": "RoleName",
+              "AttributeValue": {
+                "AttributeStringValue": {
+                  "StringValue": "Stage7_Client"
+                }
+              },
+              "AttributeName": "Name",
+              "propertySetName": "RolePropertySet"
+            },
+            {
+              "AttributeDescription": "RoleDescription",
+              "AttributeValue": {
+                "AttributeStringValue": {}
+              },
+              "AttributeName": "Description",
+              "propertySetName": "RolePropertySet"
+            }
+          ]
+        },
+        "ContactEmail": "stage7_client@role.com",
+        "externalID": "85ab9ee3-e909-4d64-ab91-eab3396380ab"
+      },
+      {
+        "ContactCategory": "Role",
+        "ContactGivenName": "Stage7_Project lead",
+        "ContactAttributes": {
+          "Attribute": [
+            {
+              "AttributeValue": {
+                "AttributeStringValue": {
+                  "StringValue": "7"
+                }
+              },
+              "AttributeName": "Stage"
+            },
+            {
+              "AttributeDescription": "RoleName",
+              "AttributeValue": {
+                "AttributeStringValue": {
+                  "StringValue": "Stage7_Project lead"
+                }
+              },
+              "AttributeName": "Name",
+              "propertySetName": "RolePropertySet"
+            },
+            {
+              "AttributeDescription": "RoleDescription",
+              "AttributeValue": {
+                "AttributeStringValue": {}
+              },
+              "AttributeName": "Description",
+              "propertySetName": "RolePropertySet"
+            }
+          ]
+        },
+        "ContactEmail": "stage7_project_lead@role.com",
+        "externalID": "58d60a0f-aea2-4afe-8ab8-a04b7116ee16"
+      },
+      {
+        "ContactCategory": "Role",
+        "ContactGivenName": "Stage7_Lead designer",
+        "ContactAttributes": {
+          "Attribute": [
+            {
+              "AttributeValue": {
+                "AttributeStringValue": {
+                  "StringValue": "7"
+                }
+              },
+              "AttributeName": "Stage"
+            },
+            {
+              "AttributeDescription": "RoleName",
+              "AttributeValue": {
+                "AttributeStringValue": {
+                  "StringValue": "Stage7_Lead designer"
+                }
+              },
+              "AttributeName": "Name",
+              "propertySetName": "RolePropertySet"
+            },
+            {
+              "AttributeDescription": "RoleDescription",
+              "AttributeValue": {
+                "AttributeStringValue": {}
+              },
+              "AttributeName": "Description",
+              "propertySetName": "RolePropertySet"
+            }
+          ]
+        },
+        "ContactEmail": "stage7_lead_designer@role.com",
+        "externalID": "4ab81332-712c-4c64-b646-c20435164c10"
+      },
+      {
+        "ContactCategory": "Role",
+        "ContactGivenName": "Stage7_Architect",
+        "ContactAttributes": {
+          "Attribute": [
+            {
+              "AttributeValue": {
+                "AttributeStringValue": {
+                  "StringValue": "7"
+                }
+              },
+              "AttributeName": "Stage"
+            },
+            {
+              "AttributeDescription": "RoleName",
+              "AttributeValue": {
+                "AttributeStringValue": {
+                  "StringValue": "Stage7_Architect"
+                }
+              },
+              "AttributeName": "Name",
+              "propertySetName": "RolePropertySet"
+            },
+            {
+              "AttributeDescription": "RoleDescription",
+              "AttributeValue": {
+                "AttributeStringValue": {}
+              },
+              "AttributeName": "Description",
+              "propertySetName": "RolePropertySet"
+            }
+          ]
+        },
+        "ContactEmail": "stage7_architect@role.com",
+        "externalID": "e20d408f-cfb2-4e3a-8270-71339c569c9a"
+      },
+      {
+        "ContactCategory": "Role",
+        "ContactGivenName": "Stage7_Building services engineer",
+        "ContactAttributes": {
+          "Attribute": [
+            {
+              "AttributeValue": {
+                "AttributeStringValue": {
+                  "StringValue": "7"
+                }
+              },
+              "AttributeName": "Stage"
+            },
+            {
+              "AttributeDescription": "RoleName",
+              "AttributeValue": {
+                "AttributeStringValue": {
+                  "StringValue": "Stage7_Building services engineer"
+                }
+              },
+              "AttributeName": "Name",
+              "propertySetName": "RolePropertySet"
+            },
+            {
+              "AttributeDescription": "RoleDescription",
+              "AttributeValue": {
+                "AttributeStringValue": {}
+              },
+              "AttributeName": "Description",
+              "propertySetName": "RolePropertySet"
+            }
+          ]
+        },
+        "ContactEmail": "stage7_building_services_engineer@role.com",
+        "externalID": "4512a4f9-f7d8-43f5-8f52-3c3fa5d2fe4d"
+      },
+      {
+        "ContactCategory": "Role",
+        "ContactGivenName": "Stage7_Civil engineer",
+        "ContactAttributes": {
+          "Attribute": [
+            {
+              "AttributeValue": {
+                "AttributeStringValue": {
+                  "StringValue": "7"
+                }
+              },
+              "AttributeName": "Stage"
+            },
+            {
+              "AttributeDescription": "RoleName",
+              "AttributeValue": {
+                "AttributeStringValue": {
+                  "StringValue": "Stage7_Civil engineer"
+                }
+              },
+              "AttributeName": "Name",
+              "propertySetName": "RolePropertySet"
+            },
+            {
+              "AttributeDescription": "RoleDescription",
+              "AttributeValue": {
+                "AttributeStringValue": {}
+              },
+              "AttributeName": "Description",
+              "propertySetName": "RolePropertySet"
+            }
+          ]
+        },
+        "ContactEmail": "stage7_civil_engineer@role.com",
+        "externalID": "9dac15e5-52bc-4b6c-89b9-b20d963aa56a"
+      },
+      {
+        "ContactCategory": "Role",
+        "ContactGivenName": "Stage7_Structural engineer",
+        "ContactAttributes": {
+          "Attribute": [
+            {
+              "AttributeValue": {
+                "AttributeStringValue": {
+                  "StringValue": "7"
+                }
+              },
+              "AttributeName": "Stage"
+            },
+            {
+              "AttributeDescription": "RoleName",
+              "AttributeValue": {
+                "AttributeStringValue": {
+                  "StringValue": "Stage7_Structural engineer"
+                }
+              },
+              "AttributeName": "Name",
+              "propertySetName": "RolePropertySet"
+            },
+            {
+              "AttributeDescription": "RoleDescription",
+              "AttributeValue": {
+                "AttributeStringValue": {}
+              },
+              "AttributeName": "Description",
+              "propertySetName": "RolePropertySet"
+            }
+          ]
+        },
+        "ContactEmail": "stage7_structural_engineer@role.com",
+        "externalID": "137f95c9-c1aa-40d1-b51f-4efd407ad542"
+      },
+      {
+        "ContactCategory": "Role",
+        "ContactGivenName": "Stage7_Cost consultant",
+        "ContactAttributes": {
+          "Attribute": [
+            {
+              "AttributeValue": {
+                "AttributeStringValue": {
+                  "StringValue": "7"
+                }
+              },
+              "AttributeName": "Stage"
+            },
+            {
+              "AttributeDescription": "RoleName",
+              "AttributeValue": {
+                "AttributeStringValue": {
+                  "StringValue": "Stage7_Cost consultant"
+                }
+              },
+              "AttributeName": "Name",
+              "propertySetName": "RolePropertySet"
+            },
+            {
+              "AttributeDescription": "RoleDescription",
+              "AttributeValue": {
+                "AttributeStringValue": {}
+              },
+              "AttributeName": "Description",
+              "propertySetName": "RolePropertySet"
+            }
+          ]
+        },
+        "ContactEmail": "stage7_cost_consultant@role.com",
+        "externalID": "e729875c-09ed-4e45-8c64-c540ddb499cf"
+      },
+      {
+        "ContactCategory": "Role",
+        "ContactGivenName": "Stage7_Construction lead",
+        "ContactAttributes": {
+          "Attribute": [
+            {
+              "AttributeValue": {
+                "AttributeStringValue": {
+                  "StringValue": "7"
+                }
+              },
+              "AttributeName": "Stage"
+            },
+            {
+              "AttributeDescription": "RoleName",
+              "AttributeValue": {
+                "AttributeStringValue": {
+                  "StringValue": "Stage7_Construction lead"
+                }
+              },
+              "AttributeName": "Name",
+              "propertySetName": "RolePropertySet"
+            },
+            {
+              "AttributeDescription": "RoleDescription",
+              "AttributeValue": {
+                "AttributeStringValue": {}
+              },
+              "AttributeName": "Description",
+              "propertySetName": "RolePropertySet"
+            }
+          ]
+        },
+        "ContactEmail": "stage7_construction_lead@role.com",
+        "externalID": "a63001c4-6b1c-47b0-bb57-3db5484bcf7d"
+      },
+      {
+        "ContactCategory": "Role",
+        "ContactGivenName": "Stage7_Contract administrator",
+        "ContactAttributes": {
+          "Attribute": [
+            {
+              "AttributeValue": {
+                "AttributeStringValue": {
+                  "StringValue": "7"
+                }
+              },
+              "AttributeName": "Stage"
+            },
+            {
+              "AttributeDescription": "RoleName",
+              "AttributeValue": {
+                "AttributeStringValue": {
+                  "StringValue": "Stage7_Contract administrator"
+                }
+              },
+              "AttributeName": "Name",
+              "propertySetName": "RolePropertySet"
+            },
+            {
+              "AttributeDescription": "RoleDescription",
+              "AttributeValue": {
+                "AttributeStringValue": {}
+              },
+              "AttributeName": "Description",
+              "propertySetName": "RolePropertySet"
+            }
+          ]
+        },
+        "ContactEmail": "stage7_contract_administrator@role.com",
+        "externalID": "5207a29a-f800-44be-9c37-a4f9d574da24"
+      },
+      {
+        "ContactCategory": "Role",
+        "ContactGivenName": "Stage7_Health & safety adviser",
+        "ContactAttributes": {
+          "Attribute": [
+            {
+              "AttributeValue": {
+                "AttributeStringValue": {
+                  "StringValue": "7"
+                }
+              },
+              "AttributeName": "Stage"
+            },
+            {
+              "AttributeDescription": "RoleName",
+              "AttributeValue": {
+                "AttributeStringValue": {
+                  "StringValue": "Stage7_Health & safety adviser"
+                }
+              },
+              "AttributeName": "Name",
+              "propertySetName": "RolePropertySet"
+            },
+            {
+              "AttributeDescription": "RoleDescription",
+              "AttributeValue": {
+                "AttributeStringValue": {}
+              },
+              "AttributeName": "Description",
+              "propertySetName": "RolePropertySet"
+            }
+          ]
+        },
+        "ContactEmail": "stage7_health_&_safety_adviser@role.com",
+        "externalID": "01ac28a2-c29e-4362-bd1d-e3e5a29de989"
+      },
+      {
+        "ContactCategory": "Role",
+        "ContactGivenName": "Stage7_All additional project roles",
+        "ContactAttributes": {
+          "Attribute": [
+            {
+              "AttributeValue": {
+                "AttributeStringValue": {
+                  "StringValue": "7"
+                }
+              },
+              "AttributeName": "Stage"
+            },
+            {
+              "AttributeDescription": "RoleName",
+              "AttributeValue": {
+                "AttributeStringValue": {
+                  "StringValue": "Stage7_All additional project roles"
+                }
+              },
+              "AttributeName": "Name",
+              "propertySetName": "RolePropertySet"
+            },
+            {
+              "AttributeDescription": "RoleDescription",
+              "AttributeValue": {
+                "AttributeStringValue": {}
+              },
+              "AttributeName": "Description",
+              "propertySetName": "RolePropertySet"
+            }
+          ]
+        },
+        "ContactEmail": "stage7_all_additional_project_roles@role.com",
+        "externalID": "c95604db-7c7f-49fb-87e8-30539a70fc2d"
+      }
+    ]
+  },
+  "FacilityAttributes": {
+    "Attribute": [
+      {
+        "AttributeValue": {
+          "AttributeDecimalValue": {
+            "DecimalValue": 350.0
+          }
+        },
+        "AttributeName": "Area",
+        "propertySetName": "ProjectAttributes"
+      },
+      {
+        "AttributeValue": {
+          "AttributeDateTimeValue": "2015-02-27T08:40:44Z"
+        },
+        "AttributeName": "LastModified",
+        "propertySetName": "ProjectAttributes"
+      },
+      {
+        "AttributeValue": {
+          "AttributeDecimalValue": {
+            "DecimalValue": 54.801162719726562
+          }
+        },
+        "AttributeName": "Latitude",
+        "propertySetName": "ProjectAttributes"
+      },
+      {
+        "AttributeValue": {
+          "AttributeDecimalValue": {
+            "DecimalValue": 40.0
+          }
+        },
+        "AttributeName": "LifeCycle",
+        "propertySetName": "ProjectAttributes"
+      },
+      {
+        "AttributeValue": {
+          "AttributeStringValue": {
+            "StringValue": "Years"
+          }
+        },
+        "AttributeName": "LifeCycleDisplayUnit",
+        "propertySetName": "ProjectAttributes"
+      },
+      {
+        "AttributeValue": {
+          "AttributeDecimalValue": {
+            "DecimalValue": -1.5443850755691528
+          }
+        },
+        "AttributeName": "Longitude",
+        "propertySetName": "ProjectAttributes"
+      },
+      {
+        "AttributeValue": {
+          "AttributeStringValue": {
+            "StringValue": "Traditional contract"
+          }
+        },
+        "AttributeName": "ProcurementType",
+        "propertySetName": "ProjectAttributes"
+      },
+      {
+        "AttributeValue": {
+          "AttributeStringValue": {
+            "StringValue": "512. Restaurants"
+          }
+        },
+        "AttributeName": "ProjectFunction",
+        "propertySetName": "ProjectAttributes"
+      },
+      {
+        "AttributeValue": {
+          "AttributeStringValue": {
+            "StringValue": "New build"
+          }
+        },
+        "AttributeName": "ProjectType",
+        "propertySetName": "ProjectAttributes"
+      },
+      {
+        "AttributeValue": {
+          "AttributeDecimalValue": {
+            "DecimalValue": 0.0
+          }
+        },
+        "AttributeName": "Cost",
+        "propertySetName": "ProjectStageAttributes"
+      },
+      {
+        "AttributeValue": {
+          "AttributeStringValue": {
+            "StringValue": "1.0"
+          }
+        },
+        "AttributeName": "DataVersion"
+      },
+      {
+        "AttributeValue": {
+          "AttributeStringValue": {
+            "StringValue": "0"
+          }
+        },
+        "AttributeName": "CurrentStage"
+      }
+    ]
+  },
+  "FacilityDocuments": {
+    "Document": [
+      {
+        "DocumentCategory": "dPOW Document Numbering;6.010",
+        "DocumentDescription": "Includes resolution of queries from site.",
+        "DocumentAttributes": {
+          "Attribute": [
+            {
+              "AttributeValue": {
+                "AttributeDateTimeValue": "2015-02-27T08:18:47Z"
+              },
+              "AttributeName": "LastModified"
+            }
+          ]
+        },
+        "DocumentIssues": {
+          "Issue": [
+            {
+              "ContactAssignment": {
+                "ContactEmailReference": "noname.nosurname@newtown_cc.com"
+              },
+              "IssueName": "6.010 Respond to queries in relation to handover of building as required.",
+              "externalID": "cbf80858-a1aa-4134-af3f-37fb5491633c"
+            }
+          ]
+        },
+        "DocumentName": "Respond to queries in relation to handover of building as required.",
+        "externalID": "cbf80858-a1aa-4134-af3f-37fb5491633c"
+      },
+      {
+        "DocumentCategory": "dPOW Document Numbering;6.020",
+        "DocumentDescription": "Support tasks are now focused on health and safety on site and ensuring that the project handover and post-occupancy activities, determined earlier, are properly facilitated.",
+        "DocumentAttributes": {
+          "Attribute": [
+            {
+              "AttributeValue": {
+                "AttributeDateTimeValue": "2015-02-27T08:18:47Z"
+              },
+              "AttributeName": "LastModified"
+            }
+          ]
+        },
+        "DocumentIssues": {
+          "Issue": [
+            {
+              "ContactAssignment": {
+                "ContactEmailReference": "noname.nosurname@lockley_services.com"
+              },
+              "IssueName": "6.020 Manage tasks listed in Handover Strategy.",
+              "externalID": "ed732736-ebad-4935-b0d7-62c3b8b574d6"
+            }
+          ]
+        },
+        "DocumentName": "Manage tasks listed in Handover Strategy.",
+        "externalID": "ed732736-ebad-4935-b0d7-62c3b8b574d6"
+      },
+      {
+        "DocumentCategory": "dPOW Document Numbering;6.030",
+        "DocumentDescription": "Support tasks are now focused on health and safety on site and ensuring that the project handover and post-occupancy activities, determined earlier, are properly facilitated.",
+        "DocumentAttributes": {
+          "Attribute": [
+            {
+              "AttributeValue": {
+                "AttributeDateTimeValue": "2015-02-27T08:18:47Z"
+              },
+              "AttributeName": "LastModified"
+            }
+          ]
+        },
+        "DocumentIssues": {
+          "Issue": [
+            {
+              "ContactAssignment": {
+                "ContactEmailReference": "noname.nosurname@lockley_services.com"
+              },
+              "IssueName": "6.030 Manage updating of  'As Constructed' Information.",
+              "externalID": "50d2d3aa-17a5-4809-8676-ba88e6a0a35d"
+            }
+          ]
+        },
+        "DocumentName": "Manage updating of  'As Constructed' Information.",
+        "externalID": "50d2d3aa-17a5-4809-8676-ba88e6a0a35d"
+      },
+      {
+        "DocumentCategory": "dPOW Document Numbering;6.040",
+        "DocumentDescription": "This should be measured in accordance with the Project Programme.",
+        "DocumentAttributes": {
+          "Attribute": [
+            {
+              "AttributeValue": {
+                "AttributeDateTimeValue": "2015-02-27T08:18:47Z"
+              },
+              "AttributeName": "LastModified"
+            }
+          ]
+        },
+        "DocumentIssues": {
+          "Issue": [
+            {
+              "ContactAssignment": {
+                "ContactEmailReference": "noname.nosurname@lockley_services.com"
+              },
+              "IssueName": "6.040 Monitor and review progress and performance of project team.",
+              "externalID": "c1415edd-ad71-4bfd-a230-ba7ec829b8b9"
+            }
+          ]
+        },
+        "DocumentName": "Monitor and review progress and performance of project team.",
+        "externalID": "c1415edd-ad71-4bfd-a230-ba7ec829b8b9"
+      },
+      {
+        "DocumentCategory": "dPOW Document Numbering;6.220",
+        "DocumentDescription": "Has assistance with the collation of post-completion information for final sustainability certification been provided?",
+        "DocumentAttributes": {
+          "Attribute": [
+            {
+              "AttributeValue": {
+                "AttributeDateTimeValue": "2015-02-27T08:18:47Z"
+              },
+              "AttributeName": "LastModified"
+            }
+          ]
+        },
+        "DocumentIssues": {
+          "Issue": [
+            {
+              "ContactAssignment": {
+                "ContactEmailReference": "noname.nosurname@lockley_services.com"
+              },
+              "IssueName": "6.220 Check as constructed informaiton.",
+              "externalID": "17202cda-7cbe-4970-80d9-5d5b97195a84"
+            }
+          ]
+        },
+        "DocumentName": "Check as constructed informaiton.",
+        "externalID": "17202cda-7cbe-4970-80d9-5d5b97195a84"
+      },
+      {
+        "DocumentCategory": "dPOW Document Numbering;6.250",
+        "DocumentDescription": "'As-constructed' Information\nupdated in response to ongoing client Feedback and maintenance or operational developments.",
+        "DocumentAttributes": {
+          "Attribute": [
+            {
+              "AttributeValue": {
+                "AttributeDateTimeValue": "2015-02-27T08:18:47Z"
+              },
+              "AttributeName": "LastModified"
+            }
+          ]
+        },
+        "DocumentIssues": {
+          "Issue": [
+            {
+              "ContactAssignment": {
+                "ContactEmailReference": "noname.nosurname@lockley_services.com"
+              },
+              "IssueName": "6.250 Exchange updated 'As constructed' information.",
+              "externalID": "dac1de64-9880-45a1-a14c-15cfee9ddbcd"
+            }
+          ]
+        },
+        "DocumentName": "Exchange updated 'As constructed' information.",
+        "externalID": "dac1de64-9880-45a1-a14c-15cfee9ddbcd"
+      },
+      {
+        "DocumentCategory": "dPOW Document Numbering;6.260",
+        "DocumentDescription": "Required at this stage",
+        "DocumentAttributes": {
+          "Attribute": [
+            {
+              "AttributeValue": {
+                "AttributeDateTimeValue": "2015-02-27T08:18:47Z"
+              },
+              "AttributeName": "LastModified"
+            }
+          ]
+        },
+        "DocumentIssues": {
+          "Issue": [
+            {
+              "ContactAssignment": {
+                "ContactEmailReference": "noname.nosurname@lockley_services.com"
+              },
+              "IssueName": "6.260 Undertake UK government information exchange.",
+              "externalID": "32003882-d990-4c08-ba64-1f7896e45dcf"
+            }
+          ]
+        },
+        "DocumentName": "Undertake UK government information exchange.",
+        "externalID": "32003882-d990-4c08-ba64-1f7896e45dcf"
+      },
+      {
+        "DocumentCategory": "dPOW Document Numbering;6.050",
+        "DocumentDescription": "Including Feedback for use during the future life of the building or on future projects.",
+        "DocumentAttributes": {
+          "Attribute": [
+            {
+              "AttributeValue": {
+                "AttributeDateTimeValue": "2015-02-27T08:18:47Z"
+              },
+              "AttributeName": "LastModified"
+            }
+          ]
+        },
+        "DocumentIssues": {
+          "Issue": [
+            {
+              "ContactAssignment": {
+                "ContactEmailReference": "noname.nosurname@abc_architect.com"
+              },
+              "IssueName": "6.050 Undertake tasks listed in Handover Strategy.",
+              "externalID": "f0664d69-4cd5-47ee-9a30-0cecc6754233"
+            }
+          ]
+        },
+        "DocumentName": "Undertake tasks listed in Handover Strategy.",
+        "externalID": "f0664d69-4cd5-47ee-9a30-0cecc6754233"
+      },
+      {
+        "DocumentCategory": "dPOW Document Numbering;6.060",
+        "DocumentDescription": "Support tasks are now focused on health and safety on site and ensuring that the project handover and post-occupancy activities, determined earlier, are properly facilitated.",
+        "DocumentAttributes": {
+          "Attribute": [
+            {
+              "AttributeValue": {
+                "AttributeDateTimeValue": "2015-02-27T08:18:47Z"
+              },
+              "AttributeName": "LastModified"
+            }
+          ]
+        },
+        "DocumentIssues": {
+          "Issue": [
+            {
+              "ContactAssignment": {
+                "ContactEmailReference": "noname.nosurname@abc_architect.com"
+              },
+              "IssueName": "6.060 Review updated 'As Constructed' Information.",
+              "externalID": "624b7bc2-2028-4330-a392-657cc21d8d94"
+            }
+          ]
+        },
+        "DocumentName": "Review updated 'As Constructed' Information.",
+        "externalID": "624b7bc2-2028-4330-a392-657cc21d8d94"
+      },
+      {
+        "DocumentCategory": "dPOW Document Numbering;6.070",
+        "DocumentDescription": "Including Feedback for use during the future life of the building or on future projects.",
+        "DocumentAttributes": {
+          "Attribute": [
+            {
+              "AttributeValue": {
+                "AttributeDateTimeValue": "2015-02-27T08:18:47Z"
+              },
+              "AttributeName": "LastModified"
+            }
+          ]
+        },
+        "DocumentIssues": {
+          "Issue": [
+            {
+              "ContactAssignment": {
+                "ContactEmailReference": "noname.nosurname@abc_architect.com"
+              },
+              "IssueName": "6.070 Undertake tasks listed in Handover Strategy.",
+              "externalID": "7316e7c5-1559-4f6b-89d1-fabe581820ad"
+            }
+          ]
+        },
+        "DocumentName": "Undertake tasks listed in Handover Strategy.",
+        "externalID": "7316e7c5-1559-4f6b-89d1-fabe581820ad"
+      },
+      {
+        "DocumentCategory": "dPOW Document Numbering;6.080",
+        "DocumentDescription": "In accordance with Design Responsibility Matrix incorporating Information Exchanges",
+        "DocumentAttributes": {
+          "Attribute": [
+            {
+              "AttributeValue": {
+                "AttributeDateTimeValue": "2015-02-27T08:18:47Z"
+              },
+              "AttributeName": "LastModified"
+            }
+          ]
+        },
+        "DocumentIssues": {
+          "Issue": [
+            {
+              "ContactAssignment": {
+                "ContactEmailReference": "noname.nosurname@abc_architect.com"
+              },
+              "IssueName": "6.080 Update 'As Constructed' Information.",
+              "externalID": "b003bbf9-18ed-4dfb-817d-13afa060c4cf"
+            }
+          ]
+        },
+        "DocumentName": "Update 'As Constructed' Information.",
+        "externalID": "b003bbf9-18ed-4dfb-817d-13afa060c4cf"
+      },
+      {
+        "DocumentCategory": "dPOW Document Numbering;6.090",
+        "DocumentDescription": "Including Feedback for use during the future life of the building or on future projects.",
+        "DocumentAttributes": {
+          "Attribute": [
+            {
+              "AttributeValue": {
+                "AttributeDateTimeValue": "2015-02-27T08:18:47Z"
+              },
+              "AttributeName": "LastModified"
+            }
+          ]
+        },
+        "DocumentIssues": {
+          "Issue": [
+            {
+              "ContactAssignment": {
+                "ContactEmailReference": "noname.nosurname@wires_and_fires.com"
+              },
+              "IssueName": "6.090 Undertake tasks listed in Handover Strategy.",
+              "externalID": "80064dc8-0a06-4f99-adb8-4b277ab26742"
+            }
+          ]
+        },
+        "DocumentName": "Undertake tasks listed in Handover Strategy.",
+        "externalID": "80064dc8-0a06-4f99-adb8-4b277ab26742"
+      },
+      {
+        "DocumentCategory": "dPOW Document Numbering;6.100",
+        "DocumentDescription": "In accordance with Design Responsibility Matrix incorporating Information Exchanges",
+        "DocumentAttributes": {
+          "Attribute": [
+            {
+              "AttributeValue": {
+                "AttributeDateTimeValue": "2015-02-27T08:18:47Z"
+              },
+              "AttributeName": "LastModified"
+            }
+          ]
+        },
+        "DocumentIssues": {
+          "Issue": [
+            {
+              "ContactAssignment": {
+                "ContactEmailReference": "noname.nosurname@wires_and_fires.com"
+              },
+              "IssueName": "6.100 Update 'As Constructed' Information.",
+              "externalID": "3a902a38-3657-405a-99ad-a86e8e1cc205"
+            }
+          ]
+        },
+        "DocumentName": "Update 'As Constructed' Information.",
+        "externalID": "3a902a38-3657-405a-99ad-a86e8e1cc205"
+      },
+      {
+        "DocumentCategory": "dPOW Document Numbering;6.110",
+        "DocumentDescription": "Including Feedback for use during the future life of the building or on future projects.",
+        "DocumentAttributes": {
+          "Attribute": [
+            {
+              "AttributeValue": {
+                "AttributeDateTimeValue": "2015-02-27T08:18:47Z"
+              },
+              "AttributeName": "LastModified"
+            }
+          ]
+        },
+        "DocumentIssues": {
+          "Issue": [
+            {
+              "ContactAssignment": {
+                "ContactEmailReference": "noname.nosurname@_not_decided_.com"
+              },
+              "IssueName": "6.110 Undertake tasks listed in Handover Strategy.",
+              "externalID": "8192c146-e266-4485-85df-f5dfe41eaae6"
+            }
+          ]
+        },
+        "DocumentName": "Undertake tasks listed in Handover Strategy.",
+        "externalID": "8192c146-e266-4485-85df-f5dfe41eaae6"
+      },
+      {
+        "DocumentCategory": "dPOW Document Numbering;6.120",
+        "DocumentDescription": "In accordance with Design Responsibility Matrix incorporating Information Exchanges",
+        "DocumentAttributes": {
+          "Attribute": [
+            {
+              "AttributeValue": {
+                "AttributeDateTimeValue": "2015-02-27T08:18:47Z"
+              },
+              "AttributeName": "LastModified"
+            }
+          ]
+        },
+        "DocumentIssues": {
+          "Issue": [
+            {
+              "ContactAssignment": {
+                "ContactEmailReference": "noname.nosurname@_not_decided_.com"
+              },
+              "IssueName": "6.120 Update 'As Constructed' Information.",
+              "externalID": "6e0d9a8a-c4f3-43e2-ba19-ac19cfff1902"
+            }
+          ]
+        },
+        "DocumentName": "Update 'As Constructed' Information.",
+        "externalID": "6e0d9a8a-c4f3-43e2-ba19-ac19cfff1902"
+      },
+      {
+        "DocumentCategory": "dPOW Document Numbering;6.130",
+        "DocumentDescription": "Including Feedback for use during the future life of the building or on future projects.",
+        "DocumentAttributes": {
+          "Attribute": [
+            {
+              "AttributeValue": {
+                "AttributeDateTimeValue": "2015-02-27T08:18:47Z"
+              },
+              "AttributeName": "LastModified"
+            }
+          ]
+        },
+        "DocumentIssues": {
+          "Issue": [
+            {
+              "ContactAssignment": {
+                "ContactEmailReference": "noname.nosurname@big_beam.com"
+              },
+              "IssueName": "6.130 Undertake tasks listed in Handover Strategy.",
+              "externalID": "d442d9b9-669d-4fca-b0fd-f3362e811ca3"
+            }
+          ]
+        },
+        "DocumentName": "Undertake tasks listed in Handover Strategy.",
+        "externalID": "d442d9b9-669d-4fca-b0fd-f3362e811ca3"
+      },
+      {
+        "DocumentCategory": "dPOW Document Numbering;6.140",
+        "DocumentDescription": "In accordance with Design Responsibility Matrix incorporating Information Exchanges",
+        "DocumentAttributes": {
+          "Attribute": [
+            {
+              "AttributeValue": {
+                "AttributeDateTimeValue": "2015-02-27T08:18:47Z"
+              },
+              "AttributeName": "LastModified"
+            }
+          ]
+        },
+        "DocumentIssues": {
+          "Issue": [
+            {
+              "ContactAssignment": {
+                "ContactEmailReference": "noname.nosurname@big_beam.com"
+              },
+              "IssueName": "6.140 Update 'As Constructed' Information.",
+              "externalID": "87358a9c-797b-4782-bec1-73807ed62ada"
+            }
+          ]
+        },
+        "DocumentName": "Update 'As Constructed' Information.",
+        "externalID": "87358a9c-797b-4782-bec1-73807ed62ada"
+      },
+      {
+        "DocumentCategory": "dPOW Document Numbering;6.150",
+        "DocumentDescription": "Including Feedback for use during the future life of the building or on future projects.",
+        "DocumentAttributes": {
+          "Attribute": [
+            {
+              "AttributeValue": {
+                "AttributeDateTimeValue": "2015-02-27T08:18:47Z"
+              },
+              "AttributeName": "LastModified"
+            }
+          ]
+        },
+        "DocumentIssues": {
+          "Issue": [
+            {
+              "ContactAssignment": {
+                "ContactEmailReference": "noname.nosurname@wires_and_fires.com"
+              },
+              "IssueName": "6.150 Undertake tasks listed in Handover Strategy.",
+              "externalID": "7bcaa68a-061c-4bb8-8103-191e06b88e01"
+            }
+          ]
+        },
+        "DocumentName": "Undertake tasks listed in Handover Strategy.",
+        "externalID": "7bcaa68a-061c-4bb8-8103-191e06b88e01"
+      },
+      {
+        "DocumentCategory": "dPOW Document Numbering;6.160",
+        "DocumentDescription": "In accordance with Building Contract. Procedures may vary depending on the form of contract used.",
+        "DocumentAttributes": {
+          "Attribute": [
+            {
+              "AttributeValue": {
+                "AttributeDateTimeValue": "2015-02-27T08:18:47Z"
+              },
+              "AttributeName": "LastModified"
+            }
+          ]
+        },
+        "DocumentIssues": {
+          "Issue": [
+            {
+              "ContactAssignment": {
+                "ContactEmailReference": "noname.nosurname@wires_and_fires.com"
+              },
+              "IssueName": "6.160 Agree final account.",
+              "externalID": "0c768ed1-a16f-43a3-9872-c97d2c3dbfdb"
+            }
+          ]
+        },
+        "DocumentName": "Agree final account.",
+        "externalID": "0c768ed1-a16f-43a3-9872-c97d2c3dbfdb"
+      },
+      {
+        "DocumentCategory": "dPOW Document Numbering;6.170",
+        "DocumentDescription": "Including Feedback for use during the future life of the building or on future projects.",
+        "DocumentAttributes": {
+          "Attribute": [
+            {
+              "AttributeValue": {
+                "AttributeDateTimeValue": "2015-02-27T08:18:47Z"
+              },
+              "AttributeName": "LastModified"
+            }
+          ]
+        },
+        "DocumentIssues": {
+          "Issue": [
+            {
+              "ContactAssignment": {
+                "ContactEmailReference": "noname.nosurname@lockley_services.com"
+              },
+              "IssueName": "6.170 Undertake tasks listed in Handover Strategy.",
+              "externalID": "e8ddfe66-9d71-4c2b-a418-4b0c99056cb4"
+            }
+          ]
+        },
+        "DocumentName": "Undertake tasks listed in Handover Strategy.",
+        "externalID": "e8ddfe66-9d71-4c2b-a418-4b0c99056cb4"
+      },
+      {
+        "DocumentCategory": "dPOW Document Numbering;6.180",
+        "DocumentDescription": "In accordance with Design Responsibility Matrix incorporating Information Exchanges.",
+        "DocumentAttributes": {
+          "Attribute": [
+            {
+              "AttributeValue": {
+                "AttributeDateTimeValue": "2015-02-27T08:18:47Z"
+              },
+              "AttributeName": "LastModified"
+            }
+          ]
+        },
+        "DocumentIssues": {
+          "Issue": [
+            {
+              "ContactAssignment": {
+                "ContactEmailReference": "noname.nosurname@lockley_services.com"
+              },
+              "IssueName": "6.180 Manage preparation and issue of  'As Constructed' Information by specialist subcontractors.",
+              "externalID": "b15cb0c5-91da-4111-babd-eb91444b49ae"
+            }
+          ]
+        },
+        "DocumentName": "Manage preparation and issue of  'As Constructed' Information by specialist subcontractors.",
+        "externalID": "b15cb0c5-91da-4111-babd-eb91444b49ae"
+      },
+      {
+        "DocumentCategory": "dPOW Document Numbering;6.190",
+        "DocumentDescription": "In accordance with Building Contract. Procedures may vary depending on the form of contract used.",
+        "DocumentAttributes": {
+          "Attribute": [
+            {
+              "AttributeValue": {
+                "AttributeDateTimeValue": "2015-02-27T08:18:47Z"
+              },
+              "AttributeName": "LastModified"
+            }
+          ]
+        },
+        "DocumentIssues": {
+          "Issue": [
+            {
+              "ContactAssignment": {
+                "ContactEmailReference": "noname.nosurname@lockley_services.com"
+              },
+              "IssueName": "6.190 Advise on the resolution of defects.",
+              "externalID": "2b9074e6-9cd8-454b-9649-557a6fc60bc3"
+            }
+          ]
+        },
+        "DocumentName": "Advise on the resolution of defects.",
+        "externalID": "2b9074e6-9cd8-454b-9649-557a6fc60bc3"
+      },
+      {
+        "DocumentCategory": "dPOW Document Numbering;6.200",
+        "DocumentDescription": "In accordance with Building Contract. Procedures may vary depending on the form of contract used.",
+        "DocumentAttributes": {
+          "Attribute": [
+            {
+              "AttributeValue": {
+                "AttributeDateTimeValue": "2015-02-27T08:18:47Z"
+              },
+              "AttributeName": "LastModified"
+            }
+          ]
+        },
+        "DocumentIssues": {
+          "Issue": [
+            {
+              "ContactAssignment": {
+                "ContactEmailReference": "noname.nosurname@lockley_services.com"
+              },
+              "IssueName": "6.200 Conclude administration of Building Contract.",
+              "externalID": "6830ac31-c177-4f74-94fa-c842bbacf3c1"
+            }
+          ]
+        },
+        "DocumentName": "Conclude administration of Building Contract.",
+        "externalID": "6830ac31-c177-4f74-94fa-c842bbacf3c1"
+      },
+      {
+        "DocumentCategory": "dPOW Document Numbering;6.210",
+        "DocumentDescription": "Support tasks are now focused on health and safety on site and ensuring that the project handover and post-occupancy activities, determined earlier, are properly facilitated.",
+        "DocumentAttributes": {
+          "Attribute": [
+            {
+              "AttributeValue": {
+                "AttributeDateTimeValue": "2015-02-27T08:18:47Z"
+              },
+              "AttributeName": "LastModified"
+            }
+          ]
+        },
+        "DocumentIssues": {
+          "Issue": [
+            {
+              "ContactAssignment": {
+                "ContactEmailReference": "noname.nosurname@lockley_services.com"
+              },
+              "IssueName": "6.210 Review Project Information.",
+              "externalID": "6ea1ceb1-80da-464a-bb88-fa778ccd2ace"
+            }
+          ]
+        },
+        "DocumentName": "Review Project Information.",
+        "externalID": "6ea1ceb1-80da-464a-bb88-fa778ccd2ace"
+      },
+      {
+        "DocumentCategory": "dPOW Document Numbering;6.230",
+        "DocumentDescription": "As required",
+        "DocumentAttributes": {
+          "Attribute": [
+            {
+              "AttributeValue": {
+                "AttributeDateTimeValue": "2015-02-27T08:18:47Z"
+              },
+              "AttributeName": "LastModified"
+            }
+          ]
+        },
+        "DocumentIssues": {
+          "Issue": [
+            {
+              "ContactAssignment": {
+                "ContactEmailReference": "noname.nosurname@_not_decided_.com"
+              },
+              "IssueName": "6.230 Liaise with project Lead.",
+              "externalID": "2f1d2b39-1c85-4a85-92d3-d6abfec98d63"
+            }
+          ]
+        },
+        "DocumentName": "Liaise with project Lead.",
+        "externalID": "2f1d2b39-1c85-4a85-92d3-d6abfec98d63"
+      },
+      {
+        "DocumentCategory": "dPOW Document Numbering;6.240",
+        "DocumentDescription": "As set out in the Design Responsibility Matrix incorporating Information Exchanges",
+        "DocumentAttributes": {
+          "Attribute": [
+            {
+              "AttributeValue": {
+                "AttributeDateTimeValue": "2015-02-27T08:18:47Z"
+              },
+              "AttributeName": "LastModified"
+            }
+          ]
+        },
+        "DocumentIssues": {
+          "Issue": [
+            {
+              "ContactAssignment": {
+                "ContactEmailReference": "noname.nosurname@_not_decided_.com"
+              },
+              "IssueName": "6.240 Provide information.",
+              "externalID": "0e486c98-8cff-42b1-b20a-0081a652f05a"
+            }
+          ]
+        },
+        "DocumentName": "Provide information.",
+        "externalID": "0e486c98-8cff-42b1-b20a-0081a652f05a"
+      }
+    ]
+  },
+  "FacilityName": "Lakeside Restaurant",
+  "externalID": "65a3a159-f801-42d8-b951-a2b4bdabb4d7"
+}

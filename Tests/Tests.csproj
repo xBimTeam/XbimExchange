@@ -51,6 +51,7 @@
     <Compile Include="ConversionTests.cs" />
     <Compile Include="COBieLiteUKTests.cs" />
     <Compile Include="DPoW2ToCOBieLiteTests.cs" />
+    <Compile Include="ValidationMockUp.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Xbim.COBieLiteUK\Xbim.COBieLiteUK.csproj">
@@ -76,7 +77,13 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
+    <None Include="DemoFiles\LakesideRestaurant_Deliverables.DPoW.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Include="packages.config" />
+    <None Include="DemoFiles\LakesideRestaurant_stage6_Requirements.DPoW.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Include="TestFiles\NewtownHighSchool.new.dpow">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
