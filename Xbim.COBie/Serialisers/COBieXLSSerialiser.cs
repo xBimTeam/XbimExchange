@@ -169,7 +169,7 @@ namespace Xbim.COBie.Serialisers
                         break;
                     }
                     //limit comments to 1000 per sheet
-                    if (sheetCommnetCount == 1000)
+                    if (sheetCommnetCount == 999)
                         break;
 
                     IRow excelRow = excelSheet.GetRow(error.Row);
@@ -189,14 +189,21 @@ namespace Xbim.COBie.Serialisers
 
                             if (excelCell.CellComment == null)
                             {
-                                // A client anchor is attached to an excel worksheet. It anchors against a top-left and bottom-right cell.
-                                // Create a comment 3 columns wide and 3 rows height
-                                IComment comment = patr.CreateCellComment(new HSSFClientAnchor(0, 0, 0, 0, error.Column, error.Row, error.Column + 3, error.Row + 3));
-                                comment.String = new HSSFRichTextString(description);
-                                comment.Author = "XBim";
-                                excelCell.CellComment = comment;
-                                _commentCount++;
-                                sheetCommnetCount++;
+                                try
+                                {
+                                    // A client anchor is attached to an excel worksheet. It anchors against a top-left and bottom-right cell.
+                                    // Create a comment 3 columns wide and 3 rows height
+                                    IComment comment = patr.CreateCellComment(new HSSFClientAnchor(0, 0, 0, 0, error.Column, error.Row, error.Column + 3, error.Row + 3));
+                                    comment.String = new HSSFRichTextString(description);
+                                    comment.Author = "XBim";
+                                    excelCell.CellComment = comment;
+                                    _commentCount++;
+                                    sheetCommnetCount++;
+                                }
+                                catch (Exception ex)
+                                {
+                                    Console.WriteLine(ex.Message);
+                                }
                             }
                             else
                             {
