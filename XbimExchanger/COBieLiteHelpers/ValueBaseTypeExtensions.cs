@@ -22,7 +22,7 @@ namespace XbimExchanger.COBieLiteHelpers
             var decimalType = valueBaseType as DecimalValueType;
             if (decimalType != null) return decimalType.DecimalValueSpecified;
             var stringType = valueBaseType as StringValueType;
-            if (stringType != null) return string.IsNullOrEmpty(stringType.StringValue);
+            if (stringType != null) return !string.IsNullOrEmpty(stringType.StringValue);
             var integerType = valueBaseType as IntegerValueType;
             if (integerType != null) return true; //for some reason these are always OK
             var booleanType = valueBaseType as BooleanValueType;
