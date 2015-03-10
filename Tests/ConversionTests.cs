@@ -6,7 +6,6 @@ using System.Linq;
 using Newtonsoft.Json.Converters;
 using Xbim.COBieLite;
 using Xbim.COBieLite.Converters;
-using Xbim.DPoW.Interfaces;
 using Xbim.Ifc2x3.MeasureResource;
 using Xbim.IO;
 using Xbim.ModelGeometry.Scene;
@@ -86,31 +85,6 @@ namespace Tests
                 }
                 model.SaveAs(@"ConvertedFromCOBieLite.ifc", XbimStorageType.IFC);
             }
-        }
-
-        [TestMethod]
-        public void ConvertDpoWtoCoBieLite()
-        {
-            var dpow = PlanOfWork.Open("NewtownHighSchool.dpow");
-            var facility = new FacilityType();
-            var exchanger = new DpoWtoCoBieLiteExchanger(dpow, facility);
-            exchanger.Convert();
-            facility.WriteJson("NewtownHighSchool.COBieLite.json");
-        }
-
-        [TestMethod]
-        public void ConvertDpoWtoCoBieLiteDpoWObjects()
-        {
-            var dpow = PlanOfWork.Open("NewtownHighSchool.dpow");
-            var facility = new FacilityType();
-            var stage =
-                dpow.ProjectStages.FirstOrDefault(s => s.Jobs.Any(j => j.DPoWObjects != null && j.DPoWObjects.Any()));
-            Assert.IsNotNull(stage);
-            var exchanger = new DpoWtoCoBieLiteExchanger(dpow, facility, stage);
-            exchanger.Convert();
-            facility.WriteJson("NewtownHighSchool.COBieLite.json");
-
-            Assert.IsTrue(facility.AssetTypes.AssetType.Any());
         }
 
         [TestMethod]

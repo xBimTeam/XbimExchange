@@ -47,10 +47,9 @@
   <ItemGroup>
     <Compile Include="COBieLiteTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="DPoWSerializationTests.cs" />
     <Compile Include="ConversionTests.cs" />
     <Compile Include="COBieLiteUKTests.cs" />
-    <Compile Include="DPoW2ToCOBieLiteTests.cs" />
+    <Compile Include="DPoWToCOBieLiteTests.cs" />
     <Compile Include="ValidationMockUp.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -62,15 +61,11 @@
       <Project>{e550c721-50af-4ad0-998e-0c61f305eec8}</Project>
       <Name>Xbim.COBieLite</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Xbim.DPoW.Interfaces\Xbim.DPoW.Interfaces.csproj">
-      <Project>{2CD02B40-A823-4959-874B-E212569F8080}</Project>
-      <Name>Xbim.DPoW.Interfaces</Name>
-    </ProjectReference>
     <ProjectReference Include="..\Xbim.DPoW\Xbim.DPoW.csproj">
       <Project>{79e7f597-f509-49ec-a606-fdc8326e72f5}</Project>
       <Name>Xbim.DPoW</Name>
     </ProjectReference>
-    <ProjectReference Include="..\XbimExchanger\Xbim.Exchanger.csproj">
+    <ProjectReference Include="..\Xbim.Exchanger\Xbim.Exchanger.csproj">
       <Project>{5540768D-8ACD-4CC0-B3CD-1951DEF54C20}</Project>
       <Name>Xbim.Exchanger</Name>
     </ProjectReference>
