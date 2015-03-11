@@ -14,6 +14,7 @@ using Xbim.Ifc2x3.ProductExtension;
 using Xbim.XbimExtensions.SelectTypes;
 using Xbim.COBieLite.Converters;
 using Newtonsoft.Json.Converters;
+using Formatting = Newtonsoft.Json.Formatting;
 
 namespace Xbim.COBieLite
 {
@@ -25,12 +26,12 @@ namespace Xbim.COBieLite
             return new FacilityTypeSerializer();
         }
 
-        public static JsonSerializer GetJsonSerializer()
+        public static JsonSerializer GetJsonSerializer(bool indented = false)
         {
             var serializerSettings = new JsonSerializerSettings
             {
                 NullValueHandling = NullValueHandling.Ignore,
-                Formatting = Newtonsoft.Json.Formatting.Indented,
+                Formatting = indented ? Formatting.Indented : Formatting.None,
                 DateFormatHandling = DateFormatHandling.IsoDateFormat
             };
             serializerSettings.Converters.Add(new StringEnumConverter());
@@ -254,17 +255,17 @@ namespace Xbim.COBieLite
             serialiser.Serialize(writer, this);
         }
 
-        public void WriteJson(TextWriter textWriter)
+        public void WriteJson(TextWriter textWriter, bool indented = false)
         {
-            var serialiser = GetJsonSerializer();
+            var serialiser = GetJsonSerializer(indented);
             serialiser.Serialize(textWriter, this);
         }
 
-        public void WriteJson(string path)
+        public void WriteJson(string path, bool indented = false)
         {
             using (var writer = File.CreateText(path))
             {
-                WriteJson(writer);
+                WriteJson(writer, indented);
                 writer.Close();
             }
         }
