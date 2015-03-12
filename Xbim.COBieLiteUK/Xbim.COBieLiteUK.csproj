@@ -69,6 +69,7 @@
     <Compile Include="CollectionTypes\ZoneCollectionType.cs" />
     <Compile Include="ProjectType.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Schemas\cobieliteuk.designer.cs" />
     <Compile Include="Schemas\cobieliteuk.designer.RenamedClasses.cs" />
     <Compile Include="Schemas\XmlSerializationCodeCobieUK.cs" />
   </ItemGroup>
@@ -76,6 +77,9 @@
     <None Include="COBieLiteUK.cd" />
     <None Include="packages.config" />
     <None Include="Schemas\cobieliteuk.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Schemas\cobielite_modified.xsd">
       <SubType>Designer</SubType>
     </None>
     <None Include="Schemas\core.xsd">
