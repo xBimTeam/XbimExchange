@@ -187,8 +187,8 @@
       <FileName>AssetTypeInfoType.cs</FileName>
     </TypeIdentifier>
     <ShowAsAssociation>
-      <Property Name="AssemblyAssignments" />
       <Property Name="Assets" />
+      <Property Name="AssemblyAssignments" />
     </ShowAsAssociation>
     <Lollipop Position="0.2" />
   </Class>

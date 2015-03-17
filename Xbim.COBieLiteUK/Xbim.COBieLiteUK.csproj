@@ -45,6 +45,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CobieAttributes.cs" />
     <Compile Include="CollectionTypes\AllowedValueCollectionType.cs" />
     <Compile Include="CollectionTypes\AssemblyAssignmentCollectionType.cs" />
     <Compile Include="CollectionTypes\AssetCollectionType.cs" />
@@ -76,6 +77,7 @@
   <ItemGroup>
     <None Include="COBieLiteUK.cd" />
     <None Include="packages.config" />
+    <None Include="Schemas\cobieliteuk.cd" />
     <None Include="Schemas\cobieliteuk.xsd">
       <SubType>Designer</SubType>
     </None>

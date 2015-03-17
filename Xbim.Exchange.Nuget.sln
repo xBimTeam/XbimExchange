@@ -28,6 +28,12 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Xbim.DPoW", "Xbim.DPoW\Xbim
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Xbim.Exchange", "Xbim.Exchange\Xbim.Exchange.csproj", "{F818E996-CDB5-4ED7-9238-F21862D348E5}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Utilities", "Utilities", "{3D4383C4-C053-4EC1-BBB7-D768314F37BE}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Xsd2Code", "Xsd2Code\Xsd2Code.csproj", "{1B59FB12-699C-4927-ACA3-D7F0E0F79100}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Xbim.COBieLiteUK.CodeGeneration", "Xbim.COBieLiteUK.CodeGeneration\Xbim.COBieLiteUK.CodeGeneration.csproj", "{ECF29BC1-D9B6-4E9F-8915-892B8D6D1089}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -74,8 +80,21 @@ Global
 		{F818E996-CDB5-4ED7-9238-F21862D348E5}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F818E996-CDB5-4ED7-9238-F21862D348E5}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F818E996-CDB5-4ED7-9238-F21862D348E5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1B59FB12-699C-4927-ACA3-D7F0E0F79100}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1B59FB12-699C-4927-ACA3-D7F0E0F79100}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1B59FB12-699C-4927-ACA3-D7F0E0F79100}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1B59FB12-699C-4927-ACA3-D7F0E0F79100}.Release|Any CPU.Build.0 = Release|Any CPU
+		{ECF29BC1-D9B6-4E9F-8915-892B8D6D1089}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{ECF29BC1-D9B6-4E9F-8915-892B8D6D1089}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{ECF29BC1-D9B6-4E9F-8915-892B8D6D1089}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{ECF29BC1-D9B6-4E9F-8915-892B8D6D1089}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{B7628DBA-72BF-4831-B744-84D445A11704} = {3D4383C4-C053-4EC1-BBB7-D768314F37BE}
+		{1B59FB12-699C-4927-ACA3-D7F0E0F79100} = {3D4383C4-C053-4EC1-BBB7-D768314F37BE}
+		{ECF29BC1-D9B6-4E9F-8915-892B8D6D1089} = {3D4383C4-C053-4EC1-BBB7-D768314F37BE}
 	EndGlobalSection
 EndGlobal

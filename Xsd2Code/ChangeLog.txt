@@ -1,0 +1,63 @@
+﻿Release 3.0.0.0
+---------------
+2009-05-27, PC : Apply patch Patch fixing error "SimpleType has already been declared", Cyclic Schema Reference
+				 http://xsd2code.codeplex.com/WorkItem/View.aspx?WorkItemId=7285
+2009-06-11, PC : Fix incorrect generation on two-dimentional arrays.
+			     http://xsd2code.codeplex.com/WorkItem/View.aspx?WorkItemId=7269
+2009-06-19, PC : Add new Serialize, Deserilaze, SaveToFile, LoadFromFile method signature.
+				 Fix warnning when setter test if field is null on enum type.
+				 Refactoring, styleCop.
+2009-07-11, PC : Detect project langage and default project namespace.
+2009-07-15, PC : Use IsolateStrorageFile to save and load xml with silverlight.
+2009-07-15, PC : Add the initialization of the collections in the property according the lazy pattern.
+2009-07-15, PC : Fix bug stackoverflow in ctor in case of circular class reference.
+2009-07-15, PC : Detect target framework.
+2009-10-21, PC : Fix bug of invalid type List'1 when use automatic properties.
+				 http://xsd2code.codeplex.com/WorkItem/View.aspx?WorkItemId=8943
+				 For optional items, an element is incorrectly instantiated in the constructor of the created code.
+				 http://xsd2code.codeplex.com/WorkItem/View.aspx?WorkItemId=8118
+2010-01-07, DCM: Added patch from Rob van der Veer. Adding Option to exclude "Included" Schema's in Code Generation,
+				 eliminating duplicate class generation: 
+				 ExcludeIncludedTypes CommandLine = /eit
+				 UseGenericBaseClass /gbc switch from the commandline
+				 
+				 Issue #8781 Import directive of many files duplicate types - http://xsd2code.codeplex.com/WorkItem/View.aspx?WorkItemId=8781
+				 Issue #6944 Add possibility to do not generate types from referenced schemas - http://xsd2code.codeplex.com/WorkItem/View.aspx?WorkItemId=6944
+				 Issue #6941 Generation from XSD wich contains only types declarations doesn't work - http://xsd2code.codeplex.com/WorkItem/View.aspx?WorkItemId=6941
+				 
+				 EnableInitializeFields /if switch. Enables/disables all Field Initialization both Constructor or Lazy. Which are workarounds for below.
+				 Issue #9489 Optional fields are instanciated in constructor - http://xsd2code.codeplex.com/WorkItem/View.aspx?WorkItemId=9489
+				 Issue #9023 Automatic collection props result in incorrect field order - http://xsd2code.codeplex.com/WorkItem/View.aspx?WorkItemId=9023
+				 
+2010-01-07, DCM: Fixed DefinedType and Custom Collection issue that generated C# syntax only.
+2010-01-07, DCM: Added BindingList to List of Collections. Used in primarily in WinForms vs ObservableCollection
+2010-01-10, DCM: Fixed Documentation Comments being improperly formatted when Using CodeDomHelper Classes
+2010-01-20, DCM: Cleaned up CodeSnippetExpressions Converting to appropriate CodeDom specific Expression. Further removing
+                 language specific Switch statements where possible.
+2010-01-22, DCM: Updated Help and readme to match current command line.
+				 /cb,/codebase and /i[nput] /using should be retired.
+2010-03-11, DCM: Modified the Param Loading process to search for the Auto-generated Tag. 
+				 Added the concept of a defaults.xsd2code parameter file.
+				 Added the concept of a <schemaName>.xsd.xsd2code parameter file per schema ( <schemaName>.xsd ).
+				 
+				 Parameter loading process was modified as follows:
+					
+					if a <schemaName>.xsd.xsd2code parameter for the schema named <schemaName>.xsd
+					then it is loaded and used for Parameters. Its a per schema override. 
+					Sorry No user interface at this time.
+					
+					Else if an <output>.<languageExtension> such as .cs or .vb exists
+					then read its paramters.
+					
+					else if a defaults.xsd2code file exist then use its parematers.
+					
+					else use the defaults from code.
+
+				 This search order will only happen on the commandline if a schema file is the single argument. This
+				 is the prior behavior.
+				 
+				 Added default defaults.xsd2code
+2010-08-16, PC:  Added tracking changes for c#. Use CopleTemplate at this time. Will be convert in CodeDom in futur version.
+			     Apply path of Feb 26 at 12:33 PM (support for IList collection type). (tmanthey).
+				 Apply patch Feb 26 at 2:30 PM Adds "EnableVirtualProperties" behavior for use of generated classes with NHibernate. (tmanthey).
+2010-08-17, PC:  Issue #11761 SerializableAttribute error in silverlight project - http://xsd2code.codeplex.com/workitem/11761
