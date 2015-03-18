@@ -17,7 +17,7 @@ namespace Tests
         {
             var facility = new Facility
             {
-                ExternalID = System.Guid.NewGuid().ToString(),
+                ExternalId = System.Guid.NewGuid().ToString(),
                 AreaUnits = AreaUnit.squaremeters,
                 CurrencyUnit = CurrencyUnit.GBP,
                 LinearUnits = LinearUnit.millimeters,
@@ -34,11 +34,11 @@ namespace Tests
                 {
                     new Zone
                     {
-                        ExternalID = Guid.NewGuid().ToString(),
+                        ExternalId = Guid.NewGuid().ToString(),
                         Name = "Zone A",
                         Category = "45.789.78",
                         Description = "Description of the zone A",
-                        SpacesAssignment = new List<SpaceKey>
+                        Spaces = new List<SpaceKey>
                         {
                             new SpaceKey {Name = "A001 - Front Room"},
                             new SpaceKey {Name = "A002 - Living Room"},

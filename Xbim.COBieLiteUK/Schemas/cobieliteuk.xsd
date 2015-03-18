@@ -5,106 +5,64 @@
   elementFormDefault="unqualified" attributeFormDefault="unqualified" version="RC1">
 
   <!--Begin Project related content-->
-  <xs:complexType name="Project">
+  <xs:complexType name="ProjectStage">
     <xs:annotation>
-      <xs:appinfo source="sheet">UK2012|Project</xs:appinfo>
-      <xs:appinfo source="sheet">US2013|Project</xs:appinfo>
+      <xs:appinfo source="sheet">UK2016|Project</xs:appinfo>
+      <!--mapping, column, header, required/optional, list/item, pick/-, path-->
+      <xs:appinfo source="mapping">UK2016|A|Name          |required|item|-                    |Name</xs:appinfo>
+      <xs:appinfo source="mapping">UK2016|B|CreatedBy     |required|item|-                    |CreatedBy.Email</xs:appinfo>
+      <xs:appinfo source="mapping">UK2016|C|CreatedOn     |required|item|-                    |CreatedOn</xs:appinfo>
+      <xs:appinfo source="mapping">UK2016|D|Category      |required|item|Category-ProjectStage|Category</xs:appinfo>
+      <xs:appinfo source="mapping">UK2016|E|Description   |optional|item|-                    |Description</xs:appinfo>
+      <xs:appinfo source="mapping">UK2016|F|ExtSystem     |optional|item|-                    |ExternalSystem</xs:appinfo>
+      <xs:appinfo source="mapping">UK2016|G|ExtObject     |optional|item|-                    |ExternalEntity</xs:appinfo>
+      <xs:appinfo source="mapping">UK2016|H|ExtIdentifier |optional|item|-                    |ExternalId</xs:appinfo>
+      <xs:appinfo source="mapping">UK2016|I|Start         |optional|item|-                    |Start</xs:appinfo>
+      <xs:appinfo source="mapping">UK2016|J|End           |optional|item|-                    |End</xs:appinfo>
     </xs:annotation>
     <xs:complexContent>
       <xs:extension base="cobielite:CobieObject">
         <xs:sequence>
-          <xs:element name="Description" type="xs:string" minOccurs="0">
-            <xs:annotation>
-              <xs:appinfo source="mapping">UK2012|D|Description|false</xs:appinfo>
-              <xs:appinfo source="mapping">US2013|D|Description|false</xs:appinfo>
-            </xs:annotation>
-          </xs:element>
-          <xs:element name="Address" type="xs:string" minOccurs="0">
-            <xs:annotation>
-              <xs:appinfo source="mapping">UK2012|E|Address|false</xs:appinfo>
-              <xs:appinfo source="mapping">US2013|E|Address|false</xs:appinfo>
-            </xs:annotation>
-          </xs:element>
-          <xs:element name="Function" type="xs:string" minOccurs="0">
-            <xs:annotation>
-              <xs:appinfo source="mapping">UK2012|F|Function|false</xs:appinfo>
-              <xs:appinfo source="mapping">US2013|F|Function|false</xs:appinfo>
-            </xs:annotation>
-          </xs:element>
-          <xs:element name="Procurement" type="xs:string" minOccurs="0">
-            <xs:annotation>
-              <xs:appinfo source="mapping">UK2012|G|Procurement|false</xs:appinfo>
-              <xs:appinfo source="mapping">US2013|G|Procurement|false</xs:appinfo>
-            </xs:annotation>
-          </xs:element>
-          <xs:element name="FunctionalUnit" type="xs:double" minOccurs="0" nillable="true">
-            <xs:annotation>
-              <xs:appinfo source="mapping">UK2012|H|FunctionalUnit|false</xs:appinfo>
-              <xs:appinfo source="mapping">US2013|H|FunctionalUnit|false</xs:appinfo>
-            </xs:annotation>
-          </xs:element>
-          <xs:element name="ExpectedLifeCycle" type="xs:double" minOccurs="0" nillable="true">
-            <xs:annotation>
-              <xs:appinfo source="mapping">UK2012|I|ExpectedLifeCycle|false</xs:appinfo>
-              <xs:appinfo source="mapping">US2013|I|ExpectedLifeCycle|false</xs:appinfo>
-            </xs:annotation>
-          </xs:element>
-          <xs:element name="Cost" type="xs:decimal" minOccurs="0" nillable="true">
-            <xs:annotation>
-              <xs:appinfo source="mapping">UK2012|J|Cost|false</xs:appinfo>
-              <xs:appinfo source="mapping">US2013|J|Cost|false</xs:appinfo>
-            </xs:annotation>
-          </xs:element>
-          <xs:element name="ConstructionStart" type="xs:date" minOccurs="0" nillable="true">
-            <xs:annotation>
-              <xs:appinfo source="mapping">UK2012|K|ConstructionStart|false</xs:appinfo>
-              <xs:appinfo source="mapping">US2013|K|ConstructionStart|false</xs:appinfo>
-            </xs:annotation>
-          </xs:element>
-          <xs:element name="ConstructionEnd" type="xs:date" minOccurs="0" nillable="true">
-            <xs:annotation>
-              <xs:appinfo source="mapping">UK2012|L|ConstructionEnd|false</xs:appinfo>
-              <xs:appinfo source="mapping">US2013|L|ConstructionEnd|false</xs:appinfo>
-            </xs:annotation>
-          </xs:element>
-          <xs:element name="ExternalSystem" type="xs:string" minOccurs="0">
-            <xs:annotation>
-              <xs:appinfo source="mapping">UK2012|M|ExtSystem|false</xs:appinfo>
-              <xs:appinfo source="mapping">US2013|M|ExtSystem|false</xs:appinfo>
-            </xs:annotation>
-          </xs:element>
-          <xs:element name="ExternalEntity" type="xs:string" minOccurs="0">
-            <xs:annotation>
-              <xs:appinfo source="mapping">UK2012|N|ExtObject|false</xs:appinfo>
-              <xs:appinfo source="mapping">US2013|N|ExtObject|false</xs:appinfo>
-            </xs:annotation>
-          </xs:element>
-          <xs:element name="ExternalID" type="xs:string" minOccurs="0">
-            <xs:annotation>
-              <xs:appinfo source="mapping">UK2012|O|ExtIdentifier|false</xs:appinfo>
-              <xs:appinfo source="mapping">US2013|O|ExtIdentifier|false</xs:appinfo>
-            </xs:annotation>
-          </xs:element>
-          <!-- Lists of contained elements -->
-          <xs:element name="Facilities" type="cobielite:FacilityCollection" minOccurs="0" maxOccurs="1" />
+          <xs:element name="Start" type="xs:date" minOccurs="0" nillable="true" />
+          <xs:element name="End" type="xs:date" minOccurs="0" nillable="true" />
         </xs:sequence>
       </xs:extension>
     </xs:complexContent>
   </xs:complexType>
-  <xs:element name="Project" type="cobielite:Project">
-    <xs:annotation>
-      <xs:documentation>
-        Project containing project stages and other related data. This is the root element of COBieLiteUK
-      </xs:documentation>
-    </xs:annotation>
-  </xs:element>
+  <xs:complexType name="ProjectStageCollection">
+    <xs:sequence>
+      <xs:element name="ProjectStage" type="cobielite:ProjectStage" minOccurs="0" maxOccurs="unbounded" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="ProjectStageKey">
+    <xs:sequence>
+      <xs:element name="Name" type="xs:string" minOccurs="1" maxOccurs="1" />
+      <xs:element name="KeyType" type="cobielite:EntityType" fixed="ProjectStage" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="ProjectStageKeyCollection">
+    <xs:sequence>
+      <xs:element name="ProjectStageKey" type="cobielite:ProjectStageKey" minOccurs="0" maxOccurs="unbounded" />
+    </xs:sequence>
+  </xs:complexType>
   <!--End Project related content-->
 
   <!--Begin Assembly related content-->
   <xs:complexType name="Assembly">
     <xs:annotation>
       <xs:appinfo source="sheet">UK2012|Assembly</xs:appinfo>
-      <xs:appinfo source="sheet">US2013|Assembly</xs:appinfo>
+      <!--mapping, column, header, required/optional, list/item, pick/-, path-->
+      <xs:appinfo source="mapping">UK2012|A|Name|required|item|-|Name</xs:appinfo>
+      <xs:appinfo source="mapping">UK2012|B|CreatedBy|required|item|-|CreatedBy.Email</xs:appinfo>
+      <xs:appinfo source="mapping">UK2012|C|CreatedOn|required|item|-|CreatedOn</xs:appinfo>
+      <xs:appinfo source="mapping">UK2012|D|SheetName|required|item|-|parent</xs:appinfo>
+      <xs:appinfo source="mapping">UK2012|E|ParentName|required|item|-|parent.Name</xs:appinfo>
+      <xs:appinfo source="mapping">UK2012|F|ChildNames|required|list|-|ChildAssets.Name</xs:appinfo>
+      <xs:appinfo source="mapping">UK2012|G|AssemblyType|optional|item|AssemblyType|Category</xs:appinfo>
+      <xs:appinfo source="mapping">UK2012|H|ExtSystem|optional|item|-|ExternalSystem</xs:appinfo>
+      <xs:appinfo source="mapping">UK2012|I|ExtObject|optional|item|-|ExternalEntity</xs:appinfo>
+      <xs:appinfo source="mapping">UK2012|J|ExtIdentifier|optional|item|-|ExternalId</xs:appinfo>
+      <xs:appinfo source="mapping">UK2012|K|Description|optional|item|-|Description</xs:appinfo>
       <xs:documentation>The Assembly to which this Asset belongs</xs:documentation>
     </xs:annotation>
     <xs:complexContent>
@@ -113,38 +71,11 @@
           <xs:element name="AssemblyName" type="xs:string" minOccurs="0">
             <xs:annotation>
               <xs:appinfo source="mapping">UK2012|D|Assembly|false</xs:appinfo>
-              <xs:appinfo source="mapping">US2013|G|Assembly|false</xs:appinfo>
             </xs:annotation>
           </xs:element>
-          <xs:element name="ExternalSystem" type="xs:string" minOccurs="0">
-            <xs:annotation>
-              <xs:appinfo source="mapping">UK2012|H|ExtSystem|false</xs:appinfo>
-              <xs:appinfo source="mapping">US2013|H|ExtSystem|false</xs:appinfo>
-            </xs:annotation>
-          </xs:element>
-          <xs:element name="ExternalEntity" type="xs:string" minOccurs="0">
-            <xs:annotation>
-              <xs:appinfo source="mapping">UK2012|I|ExtObject|false</xs:appinfo>
-              <xs:appinfo source="mapping">US2013|I|ExtObject|false</xs:appinfo>
-            </xs:annotation>
-          </xs:element>
-          <xs:element name="ExternalID" type="xs:string" minOccurs="0">
-            <xs:annotation>
-              <xs:appinfo source="mapping">UK2012|J|ExtIdentifier|false</xs:appinfo>
-              <xs:appinfo source="mapping">US2013|J|ExtIdentifier|false</xs:appinfo>
-            </xs:annotation>
-          </xs:element>
-          <xs:element name="Description" type="xs:string" minOccurs="0">
-            <xs:annotation>
-              <xs:appinfo source="mapping">UK2012|K|Description|false</xs:appinfo>
-              <xs:appinfo source="mapping">US2013|K|Description|false</xs:appinfo>
-            </xs:annotation>
-          </xs:element>
-
           <!-- Lists -->
           <xs:element name="ChildAssets" type="cobielite:AssetCollection" minOccurs="0" maxOccurs="1" />
           <xs:element name="ChildAssetTypes" type="cobielite:AssetTypeCollection" minOccurs="0" maxOccurs="1" />
-
         </xs:sequence>
       </xs:extension>
     </xs:complexContent>
@@ -160,79 +91,36 @@
   <xs:complexType name="Asset">
     <xs:annotation>
       <xs:appinfo source="sheet">UK2012|Component</xs:appinfo>
-      <xs:appinfo source="sheet">US2013|Component</xs:appinfo>
-      <xs:documentation>A minimum of one COBie.Asset record is required for all COBie deliverables related to equpment Asset information.</xs:documentation>
+      <!--mapping, column, header, required/optional, list/item, pick/-, path-->
+      <xs:appinfo source="mapping">UK2012|A|Name|required|item|-|Name</xs:appinfo>
+      <xs:appinfo source="mapping">UK2012|B|CreatedBy|required|item|-|CreatedBy.Email</xs:appinfo>
+      <xs:appinfo source="mapping">UK2012|C|CreatedOn|required|item|-|CreatedOn</xs:appinfo>
+      <xs:appinfo source="mapping">UK2012|D|TypeName|required|item|-|parent.Name</xs:appinfo>
+      <xs:appinfo source="mapping">UK2012|E|Space|required|item|-|Space.Name</xs:appinfo>
+      <xs:appinfo source="mapping">UK2012|F|Description|required|item|-|Description</xs:appinfo>
+      <xs:appinfo source="mapping">UK2012|G|ExtSystem|optional|item|-|ExternalSystem</xs:appinfo>
+      <xs:appinfo source="mapping">UK2012|H|ExtObject|optional|item|-|ExternalEntity</xs:appinfo>
+      <xs:appinfo source="mapping">UK2012|I|ExtIdentifier|optional|item|-|ExternalId</xs:appinfo>
+      <xs:appinfo source="mapping">UK2012|J|SerialNumber|required|item|-|SerialNumber</xs:appinfo>
+      <xs:appinfo source="mapping">UK2012|K|InstallationDate|required|item|-|InstallationDate</xs:appinfo>
+      <xs:appinfo source="mapping">UK2012|L|WarrantyStartDate|required|item|-|WarrantyStartDate</xs:appinfo>
+      <xs:appinfo source="mapping">UK2012|M|TagNumber|optional|item|-|TagNumber</xs:appinfo>
+      <xs:appinfo source="mapping">UK2012|N|BarCode|optional|item|-|BarCode</xs:appinfo>
+      <xs:appinfo source="mapping">UK2012|O|AssetIdentifier|optional|item|-|AssetIdentifier</xs:appinfo>
+      <xs:documentation>
+        A minimum of one COBie.Asset record is required for all COBie deliverables related to equpment Asset information.
+      </xs:documentation>
     </xs:annotation>
     <xs:complexContent>
       <xs:extension base="cobielite:ObjectInfo">
         <xs:sequence>
-          <xs:element name="SpaceAssignment" type="cobielite:SpaceKey" minOccurs="1">
-            <xs:annotation>
-              <xs:appinfo source="mapping">UK2012|E|Space|true</xs:appinfo>
-              <xs:appinfo source="mapping">US2013|E|Space|true</xs:appinfo>
-              <xs:appinfo source="path">Name</xs:appinfo>
-            </xs:annotation>
-          </xs:element>
-          <xs:element name="Description" type="xs:string" minOccurs="0">
-            <xs:annotation>
-              <xs:appinfo source="mapping">UK2012|F|Description|true</xs:appinfo>
-              <xs:appinfo source="mapping">US2013|F|Description|true</xs:appinfo>
-            </xs:annotation>
-          </xs:element>
-          <xs:element name="ExternalSystem" type="xs:string" minOccurs="0">
-            <xs:annotation>
-              <xs:appinfo source="mapping">UK2012|G|ExtSystem|false</xs:appinfo>
-              <xs:appinfo source="mapping">US2013|G|ExtSystem|false</xs:appinfo>
-            </xs:annotation>
-          </xs:element>
-          <xs:element name="ExternalEntity" type="xs:string" minOccurs="0">
-            <xs:annotation>
-              <xs:appinfo source="mapping">UK2012|H|ExtObject|false</xs:appinfo>
-              <xs:appinfo source="mapping">US2013|H|ExtObject|false</xs:appinfo>
-            </xs:annotation>
-          </xs:element>
-          <xs:element name="ExternalID" type="xs:string" minOccurs="0">
-            <xs:annotation>
-              <xs:appinfo source="mapping">UK2012|I|ExtIdentifier|false</xs:appinfo>
-              <xs:appinfo source="mapping">US2013|I|ExtIdentifier|false</xs:appinfo>
-            </xs:annotation>
-          </xs:element>
-          <xs:element name="SerialNumber" type="xs:string" minOccurs="1">
-            <xs:annotation>
-              <xs:appinfo source="mapping">UK2012|J|SerialNumber|true</xs:appinfo>
-              <xs:appinfo source="mapping">US2013|J|SerialNumber|true</xs:appinfo>
-            </xs:annotation>
-          </xs:element>
-          <xs:element name="InstallationDate" type="xs:dateTime" minOccurs="1" nillable="true">
-            <xs:annotation>
-              <xs:appinfo source="mapping">UK2012|K|InstallationDate|true</xs:appinfo>
-              <xs:appinfo source="mapping">US2013|K|InstallationDate|true</xs:appinfo>
-            </xs:annotation>
-          </xs:element>
-          <xs:element name="WarrantyStartDate" type="xs:dateTime" minOccurs="1" nillable="true">
-            <xs:annotation>
-              <xs:appinfo source="mapping">UK2012|L|WarrantyStartDate|true</xs:appinfo>
-              <xs:appinfo source="mapping">US2013|L|WarrantyStartDate|true</xs:appinfo>
-            </xs:annotation>
-          </xs:element>
-          <xs:element name="TagNumber" type="xs:string" minOccurs="0">
-            <xs:annotation>
-              <xs:appinfo source="mapping">UK2012|M|TagNumber|false</xs:appinfo>
-              <xs:appinfo source="mapping">US2013|M|TagNumber|false</xs:appinfo>
-            </xs:annotation>
-          </xs:element>
-          <xs:element name="BarCode" type="xs:string" minOccurs="0">
-            <xs:annotation>
-              <xs:appinfo source="mapping">UK2012|N|BarCode|false</xs:appinfo>
-              <xs:appinfo source="mapping">US2013|N|BarCode|false</xs:appinfo>
-            </xs:annotation>
-          </xs:element>
-          <xs:element name="AssetIdentifier" type="xs:string" minOccurs="0">
-            <xs:annotation>
-              <xs:appinfo source="mapping">UK2012|O|AssetIdentifier|false</xs:appinfo>
-              <xs:appinfo source="mapping">US2013|O|AssetIdentifier|false</xs:appinfo>
-            </xs:annotation>
-          </xs:element>
+          <xs:element name="Space" type="cobielite:SpaceKey" minOccurs="1" />
+          <xs:element name="SerialNumber" type="xs:string" minOccurs="1" />
+          <xs:element name="InstallationDate" type="xs:dateTime" minOccurs="1" nillable="true" />
+          <xs:element name="WarrantyStartDate" type="xs:dateTime" minOccurs="1" nillable="true" />
+          <xs:element name="TagNumber" type="xs:string" minOccurs="0" />
+          <xs:element name="BarCode" type="xs:string" minOccurs="0" />
+          <xs:element name="AssetIdentifier" type="xs:string" minOccurs="0" />
 
           <!-- Lists -->
           <xs:element name="Connections" type="cobielite:ConnectionCollection" minOccurs="0" maxOccurs="1" />
@@ -263,212 +151,71 @@
   <xs:complexType name="AssetType">
     <xs:annotation>
       <xs:appinfo source="sheet">UK2012|Type</xs:appinfo>
-      <xs:appinfo source="sheet">US2013|Type</xs:appinfo>
-      <xs:documentation>A minimum of one COBie.Type record is required for all COBie deliverables related to equipment Type information.</xs:documentation>
+      <!--mapping, column, header, required/optional, list/item, pick/-, path-->
+      <xs:appinfo source="mapping">UK2012|A|Name|required|item|-|Name</xs:appinfo>
+      <xs:appinfo source="mapping">UK2012|B|CreatedBy|required|item|-|CreatedBy.Email</xs:appinfo>
+      <xs:appinfo source="mapping">UK2012|C|CreatedOn|required|item|-|CreatedOn</xs:appinfo>
+      <xs:appinfo source="mapping">UK2012|D|Category|required|item|Category-Product|Category</xs:appinfo>
+      <xs:appinfo source="mapping">UK2012|E|Description|required|item|-|Description</xs:appinfo>
+      <xs:appinfo source="mapping">UK2012|F|AssetType|required|item|AssetType|AssetType</xs:appinfo>
+      <xs:appinfo source="mapping">UK2012|G|Manufacturer|required|item|-|Manufacturer.Email</xs:appinfo>
+      <xs:appinfo source="mapping">UK2012|H|ModelNumber|required|item|-|ModelNumber</xs:appinfo>
+      <xs:appinfo source="mapping">UK2012|I|WarrantyGuarantorParts|required|item|-|Warranty.GuarantorParts.Email</xs:appinfo>
+      <xs:appinfo source="mapping">UK2012|J|WarrantyDurationParts|required|item|-|Warranty.DurationParts</xs:appinfo>
+      <xs:appinfo source="mapping">UK2012|K|WarrantyGuarantorLabor|required|item|-|Warranty.GuarantorLabor.Email</xs:appinfo>
+      <xs:appinfo source="mapping">UK2012|L|WarrantyDurationLabor|required|item|-|Warranty.DurationLabor</xs:appinfo>
+      <xs:appinfo source="mapping">UK2012|M|WarrantyDurationUnit|required|item|DurationUnit|Warranty.DurationUnit</xs:appinfo>
+      <xs:appinfo source="mapping">UK2012|N|ExtSystem|optional|item|-|ExternalSystem</xs:appinfo>
+      <xs:appinfo source="mapping">UK2012|O|ExtObject|optional|item|-|ExternalEntity</xs:appinfo>
+      <xs:appinfo source="mapping">UK2012|P|ExtIdentifier|optional|item|-|ExternalId</xs:appinfo>
+      <xs:appinfo source="mapping">UK2012|Q|ReplacementCost|optional|item|-|ReplacementCost</xs:appinfo>
+      <xs:appinfo source="mapping">UK2012|R|ExpectedLife|optional|item|-|ExpectedLife</xs:appinfo>
+      <xs:appinfo source="mapping">UK2012|S|DurationUnit|optional|item|DurationUnit|DurationUnit</xs:appinfo>
+      <xs:appinfo source="mapping">UK2012|T|WarrantyDescription|optional|item|-|Warranty.Description</xs:appinfo>
+      <xs:appinfo source="mapping">UK2012|U|NominalLength|required|item|-|NominalLength</xs:appinfo>
+      <xs:appinfo source="mapping">UK2012|V|NominalWidth|required|item|-|NominalWidth</xs:appinfo>
+      <xs:appinfo source="mapping">UK2012|W|NominalHeight|required|item|-|NominalHeight</xs:appinfo>
+      <xs:appinfo source="mapping">UK2012|X|ModelReference|optional|item|-|ModelReference</xs:appinfo>
+      <xs:appinfo source="mapping">UK2012|Y|Shape|optional|item|-|Shape</xs:appinfo>
+      <xs:appinfo source="mapping">UK2012|Z|Size|optional|item|-|Size</xs:appinfo>
+      <xs:appinfo source="mapping">UK2012|AA|Color|optional|item|-|Color</xs:appinfo>
+      <xs:appinfo source="mapping">UK2012|AB|Finish|optional|item|-|Finish</xs:appinfo>
+      <xs:appinfo source="mapping">UK2012|AC|Grade|optional|item|-|Grade</xs:appinfo>
+      <xs:appinfo source="mapping">UK2012|AD|Material|optional|item|-|Material</xs:appinfo>
+      <xs:appinfo source="mapping">UK2012|AE|Constituents|optional|item|-|Constituents</xs:appinfo>
+      <xs:appinfo source="mapping">UK2012|AF|Features|optional|item|-|Features</xs:appinfo>
+      <xs:appinfo source="mapping">UK2012|AG|AccessibilityPerformance|optional|item|-|AccessibilityPerformance</xs:appinfo>
+      <xs:appinfo source="mapping">UK2012|AH|CodePerformance|optional|item|-|CodePerformance</xs:appinfo>
+      <xs:appinfo source="mapping">UK2012|AI|SustainabilityPerformance|optional|item|-|SustainabilityPerformance</xs:appinfo>
+      <xs:documentation>
+        A minimum of one COBie.Type record is required for all COBie deliverables related to equipment Type information.
+      </xs:documentation>
     </xs:annotation>
     <xs:complexContent>
       <xs:extension base="cobielite:ObjectInfo">
         <xs:sequence>
-          <xs:element name="Category" type="xs:string" minOccurs="1">
-            <xs:annotation>
-              <xs:appinfo source="mapping">UK2012|D|Category|true</xs:appinfo>
-              <xs:appinfo source="mapping">US2013|D|Category|true</xs:appinfo>
-              <xs:appinfo source="picklist">Category-Product</xs:appinfo>
-            </xs:annotation>
-          </xs:element>
-          <xs:element name="Description" type="xs:string" minOccurs="1">
-            <xs:annotation>
-              <xs:appinfo source="mapping">UK2012|E|Description|true</xs:appinfo>
-              <xs:appinfo source="mapping">US2013|E|Description|true</xs:appinfo>
-            </xs:annotation>
-          </xs:element>
-          <xs:element name="AssetType" type="xs:string" minOccurs="1">
-            <xs:annotation>
-              <xs:appinfo source="mapping">UK2012|F|AssetType|true</xs:appinfo>
-              <xs:appinfo source="mapping">US2013|F|AssetType|true</xs:appinfo>
-              <xs:appinfo source="picklist">AssetType</xs:appinfo>
-            </xs:annotation>
-          </xs:element>
-          <xs:element name="ManufacturerAssignment" type="cobielite:ContactKey" minOccurs="1">
-            <xs:annotation>
-              <xs:appinfo source="mapping">UK2012|G|Manufacturer|true</xs:appinfo>
-              <xs:appinfo source="mapping">US2013|G|Manufacturer|true</xs:appinfo>
-              <xs:appinfo source="path">Email</xs:appinfo>
-            </xs:annotation>
-          </xs:element>
-          <xs:element name="ModelNumber" type="xs:string" minOccurs="1">
-            <xs:annotation>
-              <xs:appinfo source="mapping">UK2012|H|ModelNumber|true</xs:appinfo>
-              <xs:appinfo source="mapping">US2013|H|ModelNumber|true</xs:appinfo>
-            </xs:annotation>
-          </xs:element>
-          <xs:element name="WarrantyGuarantorPartsAssignment" type="cobielite:ContactKey" minOccurs="1">
-            <xs:annotation>
-              <xs:appinfo source="mapping">UK2012|I|WarrantyGuarantorParts|true</xs:appinfo>
-              <xs:appinfo source="mapping">US2013|I|WarrantyGuarantorParts|true</xs:appinfo>
-              <xs:appinfo source="path">Email</xs:appinfo>
-            </xs:annotation>
-          </xs:element>
-          <xs:element name="WarrantyDurationParts" type="xs:double" minOccurs="1" nillable="true">
-            <xs:annotation>
-              <xs:appinfo source="mapping">UK2012|J|WarrantyDurationParts|true</xs:appinfo>
-              <xs:appinfo source="mapping">US2013|J|WarrantyDurationParts|true</xs:appinfo>
-            </xs:annotation>
-          </xs:element>
-          <xs:element name="WarrantyGuarantorLaborAssignment" type="cobielite:ContactKey" minOccurs="1">
-            <xs:annotation>
-              <xs:appinfo source="mapping">UK2012|K|WarrantyGuarantorLabor|true</xs:appinfo>
-              <xs:appinfo source="mapping">US2013|K|WarrantyGuarantorLabor|true</xs:appinfo>
-              <xs:appinfo source="path">Email</xs:appinfo>
-            </xs:annotation>
-          </xs:element>
-          <xs:element name="WarrantyDurationLabor" type="xs:double" minOccurs="1" nillable="true">
-            <xs:annotation>
-              <xs:appinfo source="mapping">UK2012|L|WarrantyDurationLabor|true</xs:appinfo>
-              <xs:appinfo source="mapping">US2013|L|WarrantyDurationLabor|true</xs:appinfo>
-            </xs:annotation>
-          </xs:element>
-          <xs:element name="WarrantyDurationUnit" type="xs:string" minOccurs="1">
-            <xs:annotation>
-              <xs:appinfo source="mapping">UK2012|M|WarrantyDurationUnit|true</xs:appinfo>
-              <xs:appinfo source="mapping">US2013|M|WarrantyDurationUnit|true</xs:appinfo>
-              <xs:appinfo source="picklist">DurationUnit</xs:appinfo>
-            </xs:annotation>
-          </xs:element>
-          <xs:element name="ExternalSystem" type="xs:string" minOccurs="0">
-            <xs:annotation>
-              <xs:appinfo source="mapping">UK2012|N|ExtSystem|false</xs:appinfo>
-              <xs:appinfo source="mapping">US2013|N|ExtSystem|false</xs:appinfo>
-            </xs:annotation>
-          </xs:element>
-          <xs:element name="ExternalEntity" type="xs:string" minOccurs="0">
-            <xs:annotation>
-              <xs:appinfo source="mapping">UK2012|O|ExtObject|false</xs:appinfo>
-              <xs:appinfo source="mapping">US2013|O|ExtObject|false</xs:appinfo>
-            </xs:annotation>
-          </xs:element>
-          <xs:element name="ExternalID" type="xs:string" minOccurs="0">
-            <xs:annotation>
-              <xs:appinfo source="mapping">UK2012|P|ExtIdentifier|false</xs:appinfo>
-              <xs:appinfo source="mapping">US2013|P|ExtIdentifier|false</xs:appinfo>
-            </xs:annotation>
-          </xs:element>
-          <xs:element name="ReplacementCost" type="xs:double" minOccurs="0" nillable="true">
-            <xs:annotation>
-              <xs:appinfo source="mapping">UK2012|Q|ReplacementCost|false</xs:appinfo>
-              <xs:appinfo source="mapping">US2013|Q|ReplacementCost|false</xs:appinfo>
-            </xs:annotation>
-          </xs:element>
-          <xs:element name="ExpectedLife" type="xs:double" minOccurs="0" nillable="true">
-            <xs:annotation>
-              <xs:appinfo source="mapping">UK2012|R|ExpectedLife|false</xs:appinfo>
-              <xs:appinfo source="mapping">US2013|R|ExpectedLife|false</xs:appinfo>
-            </xs:annotation>
-          </xs:element>
-          <xs:element name="DurationUnit" type="xs:string" minOccurs="0">
-            <xs:annotation>
-              <xs:appinfo source="mapping">UK2012|S|DurationUnit|false</xs:appinfo>
-              <xs:appinfo source="mapping">US2013|S|DurationUnit|false</xs:appinfo>
-              <xs:appinfo source="picklist">DurationUnit</xs:appinfo>
-            </xs:annotation>
-          </xs:element>
-          <xs:element name="WarrantyDescription" type="xs:string" minOccurs="0">
-            <xs:annotation>
-              <xs:appinfo source="mapping">UK2012|T|WarrantyDescription|false</xs:appinfo>
-              <xs:appinfo source="mapping">US2013|T|WarrantyDescription|false</xs:appinfo>
-            </xs:annotation>
-          </xs:element>
-          <xs:element name="NominalLenght" type="xs:double" minOccurs="1" nillable="true">
-            <xs:annotation>
-              <xs:appinfo source="mapping">UK2012|U|NominalLenght|true</xs:appinfo>
-              <xs:appinfo source="mapping">US2013|U|NominalLenght|true</xs:appinfo>
-            </xs:annotation>
-          </xs:element>
-          <xs:element name="NominalWidth" type="xs:double" minOccurs="1" nillable="true">
-            <xs:annotation>
-              <xs:appinfo source="mapping">UK2012|V|NominalWidth|true</xs:appinfo>
-              <xs:appinfo source="mapping">US2013|V|NominalWidth|true</xs:appinfo>
-            </xs:annotation>
-          </xs:element>
-          <xs:element name="NominalHeight" type="xs:double" minOccurs="1" nillable="true">
-            <xs:annotation>
-              <xs:appinfo source="mapping">UK2012|W|NominalHeight|true</xs:appinfo>
-              <xs:appinfo source="mapping">US2013|W|NominalHeight|true</xs:appinfo>
-            </xs:annotation>
-          </xs:element>
-          <xs:element name="ModelReference" type="xs:string" minOccurs="0">
-            <xs:annotation>
-              <xs:appinfo source="mapping">UK2012|X|ModelReference|false</xs:appinfo>
-              <xs:appinfo source="mapping">US2013|X|ModelReference|false</xs:appinfo>
-            </xs:annotation>
-          </xs:element>
-          <xs:element name="Shape" type="xs:string" minOccurs="0">
-            <xs:annotation>
-              <xs:appinfo source="mapping">UK2012|Y|Shape|false</xs:appinfo>
-              <xs:appinfo source="mapping">US2013|Y|Shape|false</xs:appinfo>
-            </xs:annotation>
-          </xs:element>
-          <xs:element name="Size" type="xs:string" minOccurs="0">
-            <xs:annotation>
-              <xs:appinfo source="mapping">UK2012|Z|Size|false</xs:appinfo>
-              <xs:appinfo source="mapping">US2013|Z|Size|false</xs:appinfo>
-            </xs:annotation>
-          </xs:element>
-          <xs:element name="Color" type="xs:string" minOccurs="0">
-            <xs:annotation>
-              <xs:appinfo source="mapping">UK2012|AA|Color|false</xs:appinfo>
-              <xs:appinfo source="mapping">US2013|AA|Color|false</xs:appinfo>
-            </xs:annotation>
-          </xs:element>
-          <xs:element name="Finish" type="xs:string" minOccurs="0">
-            <xs:annotation>
-              <xs:appinfo source="mapping">UK2012|AB|Finish|false</xs:appinfo>
-              <xs:appinfo source="mapping">US2013|AB|Finish|false</xs:appinfo>
-            </xs:annotation>
-          </xs:element>
-          <xs:element name="Grade" type="xs:string" minOccurs="0">
-            <xs:annotation>
-              <xs:appinfo source="mapping">UK2012|AC|Grade|false</xs:appinfo>
-              <xs:appinfo source="mapping">US2013|AC|Grade|false</xs:appinfo>
-            </xs:annotation>
-          </xs:element>
-          <xs:element name="Material" type="xs:string" minOccurs="0">
-            <xs:annotation>
-              <xs:appinfo source="mapping">UK2012|AD|Material|false</xs:appinfo>
-              <xs:appinfo source="mapping">US2013|AD|Material|false</xs:appinfo>
-            </xs:annotation>
-          </xs:element>
-          <xs:element name="Constituents" type="xs:string" minOccurs="0">
-            <xs:annotation>
-              <xs:appinfo source="mapping">UK2012|AE|Constituents|false</xs:appinfo>
-              <xs:appinfo source="mapping">US2013|AE|Constituents|false</xs:appinfo>
-            </xs:annotation>
-          </xs:element>
-          <xs:element name="Features" type="xs:string" minOccurs="0">
-            <xs:annotation>
-              <xs:appinfo source="mapping">UK2012|AF|Features|false</xs:appinfo>
-              <xs:appinfo source="mapping">US2013|AF|Features|false</xs:appinfo>
-            </xs:annotation>
-          </xs:element>
-          <xs:element name="AccessibilityPerformance" type="xs:string" minOccurs="0">
-            <xs:annotation>
-              <xs:appinfo source="mapping">UK2012|AG|AccessibilityPerformance|false</xs:appinfo>
-              <xs:appinfo source="mapping">US2013|AG|AccessibilityPerformance|false</xs:appinfo>
-            </xs:annotation>
-          </xs:element>
-          <xs:element name="CodePerformance" type="xs:string" minOccurs="0">
-            <xs:annotation>
-              <xs:appinfo source="mapping">UK2012|AH|CodePerformance|false</xs:appinfo>
-              <xs:appinfo source="mapping">US2013|AH|CodePerformance|false</xs:appinfo>
-            </xs:annotation>
-          </xs:element>
-          <xs:element name="SustainabilityPerformance" type="xs:string" minOccurs="0">
-            <xs:annotation>
-              <xs:appinfo source="mapping">UK2012|AI|SustainabilityPerformance|false</xs:appinfo>
-              <xs:appinfo source="mapping">US2013|AI|SustainabilityPerformance|false</xs:appinfo>
-            </xs:annotation>
-          </xs:element>
-
+          <xs:element name="AssetType" type="xs:string" minOccurs="1" />
+          <xs:element name="Manufacturer" type="cobielite:ContactKey" minOccurs="1" />
+          <xs:element name="ModelNumber" type="xs:string" minOccurs="1" />
+          <xs:element name="Warranty" type="cobielite:Warranty" minOccurs="1" />
+          <xs:element name="ReplacementCost" type="xs:double" minOccurs="0" nillable="true" />
+          <xs:element name="ExpectedLife" type="xs:double" minOccurs="0" nillable="true" />
+          <xs:element name="DurationUnit" type="cobielite:DurationUnit" minOccurs="0" nillable="true" />
+          <xs:element name="NominalLenght" type="xs:double" minOccurs="1" nillable="true" />
+          <xs:element name="NominalWidth" type="xs:double" minOccurs="1" nillable="true" />
+          <xs:element name="NominalHeight" type="xs:double" minOccurs="1" nillable="true" />
+          <xs:element name="ModelReference" type="xs:string" minOccurs="0" />
+          <xs:element name="Shape" type="xs:string" minOccurs="0" />
+          <xs:element name="Size" type="xs:string" minOccurs="0" />
+          <xs:element name="Color" type="xs:string" minOccurs="0" />
+          <xs:element name="Finish" type="xs:string" minOccurs="0" />
+          <xs:element name="Grade" type="xs:string" minOccurs="0" />
+          <xs:element name="Material" type="xs:string" minOccurs="0" />
+          <xs:element name="Constituents" type="xs:string" minOccurs="0" />
+          <xs:element name="Features" type="xs:string" minOccurs="0" />
+          <xs:element name="AccessibilityPerformance" type="xs:string" minOccurs="0" />
+          <xs:element name="CodePerformance" type="xs:string" minOccurs="0" />
+          <xs:element name="SustainabilityPerformance" type="xs:string" minOccurs="0" />
 
           <!-- Lists -->
           <xs:element name="Assets" type="cobielite:AssetCollection" maxOccurs="1" minOccurs="0" />
@@ -485,52 +232,48 @@
     </xs:sequence>
   </xs:complexType>
   <xs:element name="AssetType" type="cobielite:AssetType" substitutionGroup="cobielite:ObjectInfo" />
+  <!-- Warranty -->
+  <xs:complexType name="Warranty">
+    <xs:annotation>
+      <xs:documentation>
+        This holds group of warranty related properties to make data model more granular
+      </xs:documentation>
+    </xs:annotation>
+    <xs:sequence>
+      <xs:element name="GuarantorParts" type="cobielite:ContactKey" minOccurs="1" />
+      <xs:element name="Description" type="xs:string" minOccurs="0" />
+      <xs:element name="DurationParts" type="xs:double" minOccurs="1" nillable="true" />
+      <xs:element name="GuarantorLabor" type="cobielite:ContactKey" minOccurs="1" />
+      <xs:element name="DurationLabor" type="xs:double" minOccurs="1" nillable="true" />
+      <xs:element name="DurationUnit" type="cobielite:DurationUnit" minOccurs="1" nillable="true" />
+    </xs:sequence>
+  </xs:complexType>
   <!--End AssetType related content-->
 
   <!--Begin Attribute related content-->
   <xs:complexType name="Attribute">
     <xs:annotation>
       <xs:appinfo source="sheet">UK2012|Attribute</xs:appinfo>
-      <xs:appinfo source="sheet">US2013|Attribute</xs:appinfo>
+      <!--mapping, column, header, required/optional, list/item, pick/-, path-->
+      <xs:appinfo source="mapping">UK2012|A|Name|required|item|-|Name</xs:appinfo>
+      <xs:appinfo source="mapping">UK2012|B|CreatedBy|required|item|-|CreatedBy.Email</xs:appinfo>
+      <xs:appinfo source="mapping">UK2012|C|CreatedOn|required|item|-|CreatedOn</xs:appinfo>
+      <xs:appinfo source="mapping">UK2012|D|Category|required|item|StageType|Category</xs:appinfo>
+      <xs:appinfo source="mapping">UK2012|E|SheetName|required|item|SheetType|parent</xs:appinfo>
+      <xs:appinfo source="mapping">UK2012|F|RowName|required|item|-|parent.Name</xs:appinfo>
+      <xs:appinfo source="mapping">UK2012|G|Value|required|item|-|Value.Value</xs:appinfo>
+      <xs:appinfo source="mapping">UK2012|H|Unit|required|item|-|Value.Unit</xs:appinfo>
+      <xs:appinfo source="mapping">UK2012|I|ExtSystem|optional|item|-|ExternalSystem</xs:appinfo>
+      <xs:appinfo source="mapping">UK2012|J|ExtObject|optional|item|-|ExternalEntity</xs:appinfo>
+      <xs:appinfo source="mapping">UK2012|K|ExtIdentifier|optional|item|-|ExternalId</xs:appinfo>
+      <xs:appinfo source="mapping">UK2012|L|Description|optional|item|-|Description</xs:appinfo>
+      <xs:appinfo source="mapping">UK2012|M|AllowedValues|optional|list|-|Value.AllowedValues</xs:appinfo>
       <xs:documentation>Information about a specific Attribute.</xs:documentation>
     </xs:annotation>
     <xs:complexContent>
       <xs:extension base="cobielite:CobieObject">
         <xs:sequence>
-          <xs:element name="Category" type="xs:string" minOccurs="1">
-            <xs:annotation>
-              <xs:appinfo source="mapping">UK2012|D|Category|true</xs:appinfo>
-              <xs:appinfo source="mapping">US2013|D|Category|true</xs:appinfo>
-              <xs:appinfo source="picklist">StageType</xs:appinfo>
-            </xs:annotation>
-          </xs:element>
-
           <xs:element ref="cobielite:AttributeValue" minOccurs="1" />
-
-          <xs:element name="ExternalSystem" type="xs:string" minOccurs="0">
-            <xs:annotation>
-              <xs:appinfo source="mapping">UK2012|I|ExtSystem|false</xs:appinfo>
-              <xs:appinfo source="mapping">US2013|I|ExtSystem|false</xs:appinfo>
-            </xs:annotation>
-          </xs:element>
-          <xs:element name="ExternalEntity" type="xs:string" minOccurs="0">
-            <xs:annotation>
-              <xs:appinfo source="mapping">UK2012|J|ExtObject|false</xs:appinfo>
-              <xs:appinfo source="mapping">US2013|J|ExtObject|false</xs:appinfo>
-            </xs:annotation>
-          </xs:element>
-          <xs:element name="ExternalID" type="xs:string" minOccurs="0">
-            <xs:annotation>
-              <xs:appinfo source="mapping">UK2012|K|ExtIdentifier|false</xs:appinfo>
-              <xs:appinfo source="mapping">US2013|K|ExtIdentifier|false</xs:appinfo>
-            </xs:annotation>
-          </xs:element>
-          <xs:element name="Description" type="xs:string" minOccurs="0">
-            <xs:annotation>
-              <xs:appinfo source="mapping">UK2012|L|Description|false</xs:appinfo>
-              <xs:appinfo source="mapping">US2013|L|Description|false</xs:appinfo>
-            </xs:annotation>
-          </xs:element>
         </xs:sequence>
       </xs:extension>
     </xs:complexContent>
@@ -546,73 +289,30 @@
   <xs:complexType name="Connection">
     <xs:annotation>
       <xs:appinfo source="sheet">UK2012|Connection</xs:appinfo>
-      <xs:appinfo source="sheet">US2013|Connection</xs:appinfo>
-      <xs:appinfo source="parent::mapping">UK2012|E|SheetName|parent</xs:appinfo>
-      <xs:appinfo source="parent::mapping">US2013|E|SheetName|parent</xs:appinfo>
-      <xs:appinfo source="parent::mapping">UK2012|F|RowName1|parent.Name</xs:appinfo>
-      <xs:appinfo source="parent::mapping">US2013|F|RowName1|parent.Name</xs:appinfo>
+      <!--mapping, column, header, required/optional, list/item, pick/-, path-->
+      <xs:appinfo source="mapping">UK2012|A|Name|required|item|-|Name</xs:appinfo>
+      <xs:appinfo source="mapping">UK2012|B|CreatedBy|required|item|-|CreatedBy.Email</xs:appinfo>
+      <xs:appinfo source="mapping">UK2012|C|CreatedOn|required|item|-|CreatedOn</xs:appinfo>
+      <xs:appinfo source="mapping">UK2012|D|ConnectionType|required|item|ConnectionType|Category</xs:appinfo>
+      <xs:appinfo source="mapping">UK2012|E|SheetName|optional|item|SheetType|parent</xs:appinfo>
+      <xs:appinfo source="mapping">UK2012|F|RowName1|required|item|-|parent.Name</xs:appinfo>
+      <xs:appinfo source="mapping">UK2012|G|RowName2|required|item|-|ConnectedTo.Name</xs:appinfo>
+      <xs:appinfo source="mapping">UK2012|H|RealizingElement|optional|item|-|RealizingElement.Name</xs:appinfo>
+      <xs:appinfo source="mapping">UK2012|I|PortName1|optional|item|-|PortName1</xs:appinfo>
+      <xs:appinfo source="mapping">UK2012|J|PortName2|optional|item|-|PortName2</xs:appinfo>
+      <xs:appinfo source="mapping">UK2012|K|ExtSystem|optional|item|-|ExternalSystem</xs:appinfo>
+      <xs:appinfo source="mapping">UK2012|L|ExtObject|optional|item|-|ExternalEntity</xs:appinfo>
+      <xs:appinfo source="mapping">UK2012|M|ExtIdentifier|optional|item|-|ExternalId</xs:appinfo>
+      <xs:appinfo source="mapping">UK2012|N|Description|optional|item|-|Description</xs:appinfo>
       <xs:documentation>A type for representing Connection Information.</xs:documentation>
     </xs:annotation>
     <xs:complexContent>
       <xs:extension base="cobielite:CobieObject">
         <xs:sequence>
-          <xs:element name="Category" type="xs:string" minOccurs="1">
-            <xs:annotation>
-              <xs:appinfo source="mapping">UK2012|D|ConnectionType|true</xs:appinfo>
-              <xs:appinfo source="mapping">US2013|D|ConnectionType|true</xs:appinfo>
-              <xs:appinfo source="picklist">ConnectionType</xs:appinfo>
-            </xs:annotation>
-          </xs:element>
-          <xs:element name="ConnectedToAssignment" type="cobielite:AssetKey" minOccurs="1">
-            <xs:annotation>
-              <xs:appinfo source="mapping">UK2012|G|RowName2|true</xs:appinfo>
-              <xs:appinfo source="mapping">US2013|G|RowName2|true</xs:appinfo>
-              <xs:appinfo source="path">Name</xs:appinfo>
-            </xs:annotation>
-          </xs:element>
-          <xs:element name="RealizingElement" type="cobielite:AssetKey" minOccurs="0">
-            <xs:annotation>
-              <xs:appinfo source="mapping">UK2012|H|RealizingElement|false</xs:appinfo>
-              <xs:appinfo source="mapping">US2013|H|RealizingElement|false</xs:appinfo>
-              <xs:appinfo source="path">Name</xs:appinfo>
-            </xs:annotation>
-          </xs:element>
-          <xs:element name="PortName1" type="xs:string" minOccurs="0">
-            <xs:annotation>
-              <xs:appinfo source="mapping">UK2012|I|PortName1|false</xs:appinfo>
-              <xs:appinfo source="mapping">US2013|I|PortName1|false</xs:appinfo>
-            </xs:annotation>
-          </xs:element>
-          <xs:element name="PortName2" type="xs:string" minOccurs="0">
-            <xs:annotation>
-              <xs:appinfo source="mapping">UK2012|J|PortName2|false</xs:appinfo>
-              <xs:appinfo source="mapping">US2013|J|PortName2|false</xs:appinfo>
-            </xs:annotation>
-          </xs:element>
-          <xs:element name="ExternalSystem" type="xs:string" minOccurs="0">
-            <xs:annotation>
-              <xs:appinfo source="mapping">UK2012|K|ExtSystem|false</xs:appinfo>
-              <xs:appinfo source="mapping">US2013|K|ExtSystem|false</xs:appinfo>
-            </xs:annotation>
-          </xs:element>
-          <xs:element name="ExternalEntity" type="xs:string" minOccurs="0">
-            <xs:annotation>
-              <xs:appinfo source="mapping">UK2012|L|ExtObject|false</xs:appinfo>
-              <xs:appinfo source="mapping">US2013|L|ExtObject|false</xs:appinfo>
-            </xs:annotation>
-          </xs:element>
-          <xs:element name="ExternalID" type="xs:string" minOccurs="0">
-            <xs:annotation>
-              <xs:appinfo source="mapping">UK2012|M|ExtIdentifier|false</xs:appinfo>
-              <xs:appinfo source="mapping">US2013|M|ExtIdentifier|false</xs:appinfo>
-            </xs:annotation>
-          </xs:element>
-          <xs:element name="Description" type="xs:string" minOccurs="0">
-            <xs:annotation>
-              <xs:appinfo source="mapping">UK2012|N|Description|false</xs:appinfo>
-              <xs:appinfo source="mapping">US2013|N|Description|false</xs:appinfo>
-            </xs:annotation>
-          </xs:element>
+          <xs:element name="ConnectedTo" type="cobielite:AssetKey" minOccurs="1" />
+          <xs:element name="RealizingElement" type="cobielite:AssetKey" minOccurs="0" />
+          <xs:element name="PortName1" type="xs:string" minOccurs="0" />
+          <xs:element name="PortName2" type="xs:string" minOccurs="0" />
         </xs:sequence>
       </xs:extension>
     </xs:complexContent>
@@ -628,115 +328,44 @@
   <xs:complexType name="Contact">
     <xs:annotation>
       <xs:appinfo source="sheet">UK2012|Contact</xs:appinfo>
-      <xs:appinfo source="sheet">US2013|Contact</xs:appinfo>
+      <!--mapping, column, header, required/optional, list/item, pick/-, path-->
+      <xs:appinfo source="mapping">UK2012|A|Email|required|item|-|Email</xs:appinfo>
+      <xs:appinfo source="mapping">UK2012|B|CreatedBy|required|item|-|CreatedBy.Email</xs:appinfo>
+      <xs:appinfo source="mapping">UK2012|C|CreatedOn|required|item|-|CreatedOn</xs:appinfo>
+      <xs:appinfo source="mapping">UK2012|D|Category|required|item|Category-Role|Category</xs:appinfo>
+      <xs:appinfo source="mapping">UK2012|E|Company|required|item|-|Company</xs:appinfo>
+      <xs:appinfo source="mapping">UK2012|F|Phone|required|item|-|Phone</xs:appinfo>
+      <xs:appinfo source="mapping">UK2012|G|ExtSystem|optional|item|-|ExternalSystem</xs:appinfo>
+      <xs:appinfo source="mapping">UK2012|H|ExtObject|optional|item|-|ExternalEntity</xs:appinfo>
+      <xs:appinfo source="mapping">UK2012|I|ExtIdentifier|optional|item|-|ExternalId</xs:appinfo>
+      <xs:appinfo source="mapping">UK2012|J|Department|optional|item|-|Department</xs:appinfo>
+      <xs:appinfo source="mapping">UK2012|K|OrganizationCode|optional|item|-|OrganizationCode</xs:appinfo>
+      <xs:appinfo source="mapping">UK2012|L|GivenName|optional|item|-|GivenName</xs:appinfo>
+      <xs:appinfo source="mapping">UK2012|M|FamilyName|optional|item|-|FamilyName</xs:appinfo>
+      <xs:appinfo source="mapping">UK2012|N|Street|optional|item|-|Street</xs:appinfo>
+      <xs:appinfo source="mapping">UK2012|O|PostalBox|optional|item|-|PostalBox</xs:appinfo>
+      <xs:appinfo source="mapping">UK2012|P|Town|optional|item|-|Town</xs:appinfo>
+      <xs:appinfo source="mapping">UK2012|Q|StateRegion|optional|item|-|StateRegion</xs:appinfo>
+      <xs:appinfo source="mapping">UK2012|R|PostalCode|optional|item|-|PostalCode</xs:appinfo>
+      <xs:appinfo source="mapping">UK2012|S|Country|optional|item|-|Country</xs:appinfo>
       <xs:documentation>Information about a specific company who can provide the type of equipment.</xs:documentation>
     </xs:annotation>
     <xs:complexContent>
       <xs:extension base="cobielite:CobieObject">
         <xs:sequence>
-          <xs:element name="Email" type="xs:string" minOccurs="1">
-            <xs:annotation>
-              <xs:appinfo source="mapping">UK2012|A|Email|true</xs:appinfo>
-              <xs:appinfo source="mapping">US2013|A|Email|true</xs:appinfo>
-            </xs:annotation>
-          </xs:element>
-          <xs:element name="Category" type="xs:string" minOccurs="1">
-            <xs:annotation>
-              <xs:appinfo source="mapping">UK2012|D|Category|true</xs:appinfo>
-              <xs:appinfo source="mapping">US2013|D|Category|true</xs:appinfo>
-              <xs:appinfo source="picklist">Category-Role</xs:appinfo>
-            </xs:annotation>
-          </xs:element>
-          <xs:element name="Company" type="xs:string" minOccurs="1">
-            <xs:annotation>
-              <xs:appinfo source="mapping">UK2012|E|Category|true</xs:appinfo>
-              <xs:appinfo source="mapping">US2013|E|Category|true</xs:appinfo>
-            </xs:annotation>
-          </xs:element>
-          <xs:element name="Phone" type="xs:string" minOccurs="1">
-            <xs:annotation>
-              <xs:appinfo source="mapping">UK2012|F|Phone|true</xs:appinfo>
-              <xs:appinfo source="mapping">US2013|F|Phone|true</xs:appinfo>
-            </xs:annotation>
-          </xs:element>
-          <xs:element name="ExternalSystem" type="xs:string" minOccurs="0">
-            <xs:annotation>
-              <xs:appinfo source="mapping">UK2012|G|ExternalSystem|false</xs:appinfo>
-              <xs:appinfo source="mapping">US2013|G|ExtSystem|false</xs:appinfo>
-            </xs:annotation>
-          </xs:element>
-          <xs:element name="ExternalEntity" type="xs:string" minOccurs="0">
-            <xs:annotation>
-              <xs:appinfo source="mapping">UK2012|H|ExternalObject|false</xs:appinfo>
-              <xs:appinfo source="mapping">US2013|H|ExtObject|false</xs:appinfo>
-            </xs:annotation>
-          </xs:element>
-          <xs:element name="ExternalID" type="xs:string" minOccurs="0">
-            <xs:annotation>
-              <xs:appinfo source="mapping">UK2012|I|ExternalIdentifier|false</xs:appinfo>
-              <xs:appinfo source="mapping">US2013|I|ExtIdentifier|false</xs:appinfo>
-            </xs:annotation>
-          </xs:element>
-          <xs:element name="Department" type="xs:string" minOccurs="0">
-            <xs:annotation>
-              <xs:appinfo source="mapping">UK2012|J|Department|false</xs:appinfo>
-              <xs:appinfo source="mapping">US2013|J|Department|false</xs:appinfo>
-            </xs:annotation>
-          </xs:element>
-          <xs:element name="OrganizationCode" type="xs:string" minOccurs="0">
-            <xs:annotation>
-              <xs:appinfo source="mapping">UK2012|K|OrganizationCode|false</xs:appinfo>
-              <xs:appinfo source="mapping">US2013|K|OrganizationCode|false</xs:appinfo>
-            </xs:annotation>
-          </xs:element>
-          <xs:element name="GivenName" type="xs:string" minOccurs="0">
-            <xs:annotation>
-              <xs:appinfo source="mapping">UK2012|L|GivenName|false</xs:appinfo>
-              <xs:appinfo source="mapping">US2013|L|GivenName|false</xs:appinfo>
-            </xs:annotation>
-          </xs:element>
-          <xs:element name="FamilyName" type="xs:string" minOccurs="0">
-            <xs:annotation>
-              <xs:appinfo source="mapping">UK2012|M|FamilyName|false</xs:appinfo>
-              <xs:appinfo source="mapping">US2013|M|FamilyName|false</xs:appinfo>
-            </xs:annotation>
-          </xs:element>
-          <xs:element name="Street" type="xs:string" minOccurs="0">
-            <xs:annotation>
-              <xs:appinfo source="mapping">UK2012|N|Street|false</xs:appinfo>
-              <xs:appinfo source="mapping">US2013|N|Street|false</xs:appinfo>
-            </xs:annotation>
-          </xs:element>
-          <xs:element name="PostalBox" type="xs:string" minOccurs="0">
-            <xs:annotation>
-              <xs:appinfo source="mapping">UK2012|O|PostalBox|false</xs:appinfo>
-              <xs:appinfo source="mapping">US2013|O|PostalBox|false</xs:appinfo>
-            </xs:annotation>
-          </xs:element>
-          <xs:element name="Town" type="xs:string" minOccurs="0">
-            <xs:annotation>
-              <xs:appinfo source="mapping">UK2012|P|Town|false</xs:appinfo>
-              <xs:appinfo source="mapping">US2013|P|Town|false</xs:appinfo>
-            </xs:annotation>
-          </xs:element>
-          <xs:element name="StateRegion" type="xs:string" minOccurs="0">
-            <xs:annotation>
-              <xs:appinfo source="mapping">UK2012|Q|StateRegion|false</xs:appinfo>
-              <xs:appinfo source="mapping">US2013|Q|StateRegion|false</xs:appinfo>
-            </xs:annotation>
-          </xs:element>
-          <xs:element name="PostalCode" type="xs:string" minOccurs="0">
-            <xs:annotation>
-              <xs:appinfo source="mapping">UK2012|R|PostalCode|false</xs:appinfo>
-              <xs:appinfo source="mapping">US2013|R|PostalCode|false</xs:appinfo>
-            </xs:annotation>
-          </xs:element>
-          <xs:element name="Country" type="xs:string" minOccurs="0">
-            <xs:annotation>
-              <xs:appinfo source="mapping">UK2012|S|Country|false</xs:appinfo>
-              <xs:appinfo source="mapping">US2013|S|Country|false</xs:appinfo>
-            </xs:annotation>
-          </xs:element>
+          <xs:element name="Email" type="xs:string" minOccurs="1" />
+          <xs:element name="Company" type="xs:string" minOccurs="1" />
+          <xs:element name="Phone" type="xs:string" minOccurs="1" />
+          <xs:element name="Department" type="xs:string" minOccurs="0" />
+          <xs:element name="OrganizationCode" type="xs:string" minOccurs="0" />
+          <xs:element name="GivenName" type="xs:string" minOccurs="0" />
+          <xs:element name="FamilyName" type="xs:string" minOccurs="0" />
+          <xs:element name="Street" type="xs:string" minOccurs="0" />
+          <xs:element name="PostalBox" type="xs:string" minOccurs="0" />
+          <xs:element name="Town" type="xs:string" minOccurs="0" />
+          <xs:element name="StateRegion" type="xs:string" minOccurs="0" />
+          <xs:element name="PostalCode" type="xs:string" minOccurs="0" />
+          <xs:element name="Country" type="xs:string" minOccurs="0" />
         </xs:sequence>
       </xs:extension>
     </xs:complexContent>
@@ -763,75 +392,32 @@
   <xs:complexType name="Document">
     <xs:annotation>
       <xs:appinfo source="sheet">UK2012|Document</xs:appinfo>
-      <xs:appinfo source="sheet">US2013|Document</xs:appinfo>
+      <!--mapping, column, header, required/optional, list/item, pick/-, path-->
+      <xs:appinfo source="mapping">UK2012|A|Name|required|item|-|Name</xs:appinfo>
+      <xs:appinfo source="mapping">UK2012|B|CreatedBy|required|item|-|CreatedBy.Email</xs:appinfo>
+      <xs:appinfo source="mapping">UK2012|C|CreatedOn|required|item|-|CreatedOn</xs:appinfo>
+      <xs:appinfo source="mapping">UK2012|D|Category|required|item|DocumentType|Category</xs:appinfo>
+      <xs:appinfo source="mapping">UK2012|E|ApprovalBy|required|item|ApprovalBy|ApprovalBy</xs:appinfo>
+      <xs:appinfo source="mapping">UK2012|F|Stage|required|item|StageType|Stage</xs:appinfo>
+      <xs:appinfo source="mapping">UK2012|G|SheetName|required|item|SheetType|parent</xs:appinfo>
+      <xs:appinfo source="mapping">UK2012|H|RowName|required|item|-|parent.Name</xs:appinfo>
+      <xs:appinfo source="mapping">UK2012|I|Directory|required|item|-|Directory</xs:appinfo>
+      <xs:appinfo source="mapping">UK2012|J|File|required|item|-|File</xs:appinfo>
+      <xs:appinfo source="mapping">UK2012|K|ExtSystem|optional|item|-|ExternalSystem</xs:appinfo>
+      <xs:appinfo source="mapping">UK2012|L|ExtObject|optional|item|-|ExternalEntity</xs:appinfo>
+      <xs:appinfo source="mapping">UK2012|M|ExtIdentifier|optional|item|-|ExternalId</xs:appinfo>
+      <xs:appinfo source="mapping">UK2012|N|Description|optional|item|-|Description</xs:appinfo>
+      <xs:appinfo source="mapping">UK2012|O|Reference|optional|item|-|Reference</xs:appinfo>
       <xs:documentation>Information about a specific Document.</xs:documentation>
     </xs:annotation>
     <xs:complexContent>
       <xs:extension base="cobielite:CobieObject">
         <xs:sequence>
-          <xs:element name="Category" type="xs:string" minOccurs="1">
-            <xs:annotation>
-              <xs:appinfo source="mapping">UK2012|D|Category|true</xs:appinfo>
-              <xs:appinfo source="mapping">US2013|D|Category|true</xs:appinfo>
-              <xs:appinfo source="picklist">Document</xs:appinfo>
-            </xs:annotation>
-          </xs:element>
-          <xs:element name="ApprovalBy" type="xs:string" minOccurs="1">
-            <xs:annotation>
-              <xs:appinfo source="mapping">UK2012|E|ApprovalBy|true</xs:appinfo>
-              <xs:appinfo source="mapping">US2013|E|ApprovalBy|true</xs:appinfo>
-              <xs:appinfo source="picklist">ApprovalBy</xs:appinfo>
-            </xs:annotation>
-          </xs:element>
-          <xs:element name="Stage" type="xs:string" minOccurs="1">
-            <xs:annotation>
-              <xs:appinfo source="mapping">UK2012|F|Stage|true</xs:appinfo>
-              <xs:appinfo source="mapping">US2013|F|Stage|true</xs:appinfo>
-              <xs:appinfo source="picklist">StageType</xs:appinfo>
-            </xs:annotation>
-          </xs:element>
-          <xs:element name="Directory" type="xs:string" minOccurs="1">
-            <xs:annotation>
-              <xs:appinfo source="mapping">UK2012|I|Directory|true</xs:appinfo>
-              <xs:appinfo source="mapping">US2013|I|Directory|true</xs:appinfo>
-            </xs:annotation>
-          </xs:element>
-          <xs:element name="File" type="xs:string" minOccurs="1">
-            <xs:annotation>
-              <xs:appinfo source="mapping">UK2012|J|File|true</xs:appinfo>
-              <xs:appinfo source="mapping">US2013|J|File|true</xs:appinfo>
-            </xs:annotation>
-          </xs:element>
-          <xs:element name="ExternalSystem" type="xs:string" minOccurs="0">
-            <xs:annotation>
-              <xs:appinfo source="mapping">UK2012|K|ExtSystem|false</xs:appinfo>
-              <xs:appinfo source="mapping">US2013|K|ExtSystem|false</xs:appinfo>
-            </xs:annotation>
-          </xs:element>
-          <xs:element name="ExternalEntity" type="xs:string" minOccurs="0">
-            <xs:annotation>
-              <xs:appinfo source="mapping">UK2012|L|ExtObject|false</xs:appinfo>
-              <xs:appinfo source="mapping">US2013|L|ExtObject|false</xs:appinfo>
-            </xs:annotation>
-          </xs:element>
-          <xs:element name="ExternalID" type="xs:string" minOccurs="0">
-            <xs:annotation>
-              <xs:appinfo source="mapping">UK2012|M|ExtIdentifier|false</xs:appinfo>
-              <xs:appinfo source="mapping">US2013|M|ExtIdentifier|false</xs:appinfo>
-            </xs:annotation>
-          </xs:element>
-          <xs:element name="Description" type="xs:string" minOccurs="0">
-            <xs:annotation>
-              <xs:appinfo source="mapping">UK2012|N|Description|false</xs:appinfo>
-              <xs:appinfo source="mapping">US2013|N|Description|false</xs:appinfo>
-            </xs:annotation>
-          </xs:element>
-          <xs:element name="Reference" type="xs:string" minOccurs="0">
-            <xs:annotation>
-              <xs:appinfo source="mapping">UK2012|O|Reference|false</xs:appinfo>
-              <xs:appinfo source="mapping">US2013|O|Reference|false</xs:appinfo>
-            </xs:annotation>
-          </xs:element>
+          <xs:element name="ApprovalBy" type="xs:string" minOccurs="1" />
+          <xs:element name="Stage" type="xs:string" minOccurs="1" />
+          <xs:element name="Directory" type="xs:string" minOccurs="1" />
+          <xs:element name="File" type="xs:string" minOccurs="1" />
+          <xs:element name="Reference" type="xs:string" minOccurs="0" />
         </xs:sequence>
       </xs:extension>
     </xs:complexContent>
@@ -847,133 +433,54 @@
   <xs:complexType name="Facility">
     <xs:annotation>
       <xs:appinfo source="sheet">UK2012|Facility</xs:appinfo>
-      <xs:appinfo source="sheet">US2013|Facility</xs:appinfo>
+      <!--mapping, column, header, required/optional, list/item, pick/-, path-->
+      <xs:appinfo source="mapping">UK2012|A|Name|required|item|-|Name</xs:appinfo>
+      <xs:appinfo source="mapping">UK2012|B|CreatedBy|required|item|-|CreatedBy.Email</xs:appinfo>
+      <xs:appinfo source="mapping">UK2012|C|CreatedOn|required|item|-|CreatedOn</xs:appinfo>
+      <xs:appinfo source="mapping">UK2012|D|Category|required|item|Category-Facility|Category</xs:appinfo>
+      <xs:appinfo source="mapping">UK2012|E|ProjectName|required|item|-|ProjectName</xs:appinfo>
+      <xs:appinfo source="mapping">UK2012|F|SiteName|required|item|-|SiteName</xs:appinfo>
+      <xs:appinfo source="mapping">UK2012|G|LinearUnits|required|item|LinearUnits|LinearUnits</xs:appinfo>
+      <xs:appinfo source="mapping">UK2012|H|AreaUnits|required|item|AreaUnits|AreaUnits</xs:appinfo>
+      <xs:appinfo source="mapping">UK2012|I|VolumeUnits|required|item|VolumeUnits|VolumeUnits</xs:appinfo>
+      <xs:appinfo source="mapping">UK2012|J|CurrencyUnit|required|item|CostUnit|CurrencyUnit</xs:appinfo>
+      <xs:appinfo source="mapping">UK2012|K|AreaMeasurement|required|item|-|AreaMeasurement</xs:appinfo>
+      <xs:appinfo source="mapping">UK2012|L|ExternalSystem|optional|item|-|ExternalSystem</xs:appinfo>
+      <xs:appinfo source="mapping">UK2012|M|ExternalProjectObject|optional|item|-|ExternalProjectObject</xs:appinfo>
+      <xs:appinfo source="mapping">UK2012|N|ExternalProjectIdentifier|optional|item|-|ExternalProjectIdentifier</xs:appinfo>
+      <xs:appinfo source="mapping">UK2012|O|ExternalSiteObject|optional|item|-|ExternalSiteObject</xs:appinfo>
+      <xs:appinfo source="mapping">UK2012|P|ExternalSiteIdentifier|optional|item|-|ExternalSiteIdentifier</xs:appinfo>
+      <xs:appinfo source="mapping">UK2012|Q|ExternalFacilityObject|optional|item|-|ExternalEntity</xs:appinfo>
+      <xs:appinfo source="mapping">UK2012|R|ExternalFacilityIdentifier|optional|item|-|ExternalId</xs:appinfo>
+      <xs:appinfo source="mapping">UK2012|S|Description|optional|item|-|Description</xs:appinfo>
+      <xs:appinfo source="mapping">UK2012|T|ProjectDescription|optional|item|-|ProjectDescription</xs:appinfo>
+      <xs:appinfo source="mapping">UK2012|U|SiteDescription|optional|item|-|SiteDescription</xs:appinfo>
+      <xs:appinfo source="mapping">UK2012|V|Phase|optional|item|-|Phase</xs:appinfo>
       <xs:documentation>
         A type for the Facility element that is the root of a COBie document.
-        Facility contains information about the facility being exchanged during a given COBie deliverable.  Since COBie deliverables may be exchanged during planning, design, construction, handover, or operation phases there may be differences in facility designations.
+        Facility contains information about the facility being exchanged during a given COBie deliverable.
+        Since COBie deliverables may be exchanged during planning, design, construction, handover, or operation
+        phases there may be differences in facility designations.
         COBie files will typically contain a single facility.
       </xs:documentation>
     </xs:annotation>
     <xs:complexContent>
       <xs:extension base="cobielite:CobieObject">
         <xs:sequence>
-          <xs:element name="Category" type="xs:string" minOccurs="1">
-            <xs:annotation>
-              <xs:appinfo source="mapping">UK2012|D|Category|true</xs:appinfo>
-              <xs:appinfo source="mapping">US2013|D|Category|true</xs:appinfo>
-              <xs:appinfo source="picklist">Category-Facility</xs:appinfo>
-            </xs:annotation>
-          </xs:element>
-          <xs:element name="ProjectName" type="xs:string" minOccurs="1">
-            <xs:annotation>
-              <xs:appinfo source="mapping">UK2012|E|ProjectName|true</xs:appinfo>
-              <xs:appinfo source="mapping">US2013|E|ProjectName|true</xs:appinfo>
-            </xs:annotation>
-          </xs:element>
-          <xs:element name="SiteName" type="xs:string" minOccurs="1">
-            <xs:annotation>
-              <xs:appinfo source="mapping">UK2012|F|SiteName|true</xs:appinfo>
-              <xs:appinfo source="mapping">US2013|F|SiteName|true</xs:appinfo>
-            </xs:annotation>
-          </xs:element>
-          <xs:element name="LinearUnits" type="cobielite:LinearUnit" minOccurs="1" nillable="true">
-            <xs:annotation>
-              <xs:appinfo source="mapping">UK2012|G|LinearUnits|true</xs:appinfo>
-              <xs:appinfo source="mapping">US2013|G|LinearUnits|true</xs:appinfo>
-            </xs:annotation>
-          </xs:element>
-          <xs:element name="AreaUnits" type="cobielite:AreaUnit" minOccurs="1" nillable="true">
-            <xs:annotation>
-              <xs:appinfo source="mapping">UK2012|H|AreaUnits|true</xs:appinfo>
-              <xs:appinfo source="mapping">US2013|H|AreaUnits|true</xs:appinfo>
-            </xs:annotation>
-          </xs:element>
-          <xs:element name="VolumeUnits" type="cobielite:VolumeUnit" minOccurs="1" nillable="true">
-            <xs:annotation>
-              <xs:appinfo source="mapping">UK2012|I|VolumeUnits|true</xs:appinfo>
-              <xs:appinfo source="mapping">US2013|I|VolumeUnits|true</xs:appinfo>
-            </xs:annotation>
-          </xs:element>
-          <xs:element name="CurrencyUnit" type="cobielite:CurrencyUnit" minOccurs="1" nillable="true">
-            <xs:annotation>
-              <xs:appinfo source="mapping">UK2012|J|CurrencyUnit|true</xs:appinfo>
-              <xs:appinfo source="mapping">US2013|J|CurrencyUnit|true</xs:appinfo>
-            </xs:annotation>
-          </xs:element>
-          <xs:element name="AreaMeasurement" type="xs:string" minOccurs="1">
-            <xs:annotation>
-              <xs:appinfo source="mapping">UK2012|K|AreaMeasurement|true</xs:appinfo>
-              <xs:appinfo source="mapping">US2013|K|AreaMeasurement|true</xs:appinfo>
-              <xs:documentation> Method of measurement used across the facility data </xs:documentation>
-            </xs:annotation>
-          </xs:element>
-
-          <xs:element name="ExternalSystem" type="xs:string" minOccurs="0">
-            <xs:annotation>
-              <xs:appinfo source="mapping">UK2012|L|ExternalSystem|false</xs:appinfo>
-              <xs:appinfo source="mapping">US2013|L|ExternalSystem|false</xs:appinfo>
-            </xs:annotation>
-          </xs:element>
-          <xs:element name="ExternalProjectEntity" type="xs:string" minOccurs="0">
-            <xs:annotation>
-              <xs:appinfo source="mapping">UK2012|M|ExternalProjectObject|false</xs:appinfo>
-              <xs:appinfo source="mapping">US2013|M|ExternalProjectObject|false</xs:appinfo>
-            </xs:annotation>
-          </xs:element>
-          <xs:element name="ExternalProjectIdentifier" type="xs:string" minOccurs="0">
-            <xs:annotation>
-              <xs:appinfo source="mapping">UK2012|N|ExternalProjectIdentifier|false</xs:appinfo>
-              <xs:appinfo source="mapping">US2013|N|ExternalProjectIdentifier|false</xs:appinfo>
-            </xs:annotation>
-          </xs:element>
-          <xs:element name="ExternalSiteEntity" type="xs:string" minOccurs="0">
-            <xs:annotation>
-              <xs:appinfo source="mapping">UK2012|O|ExternalSiteObject|false</xs:appinfo>
-              <xs:appinfo source="mapping">US2013|O|ExternalSiteObject|false</xs:appinfo>
-            </xs:annotation>
-          </xs:element>
-          <xs:element name="ExternalSiteIdentifier" type="xs:string" minOccurs="0">
-            <xs:annotation>
-              <xs:appinfo source="mapping">UK2012|P|ExternalSiteIdentifier|false</xs:appinfo>
-              <xs:appinfo source="mapping">US2013|P|ExternalSiteIdentifier|false</xs:appinfo>
-            </xs:annotation>
-          </xs:element>
-          <xs:element name="ExternalEntity" type="xs:string" minOccurs="0">
-            <xs:annotation>
-              <xs:appinfo source="mapping">UK2012|Q|ExternalFacilityObject|false</xs:appinfo>
-              <xs:appinfo source="mapping">US2013|Q|ExternalFacilityObject|false</xs:appinfo>
-            </xs:annotation>
-          </xs:element>
-          <xs:element name="ExternalID" type="xs:string" minOccurs="0">
-            <xs:annotation>
-              <xs:appinfo source="mapping">UK2012|R|ExternalFacilityIdentifier|false</xs:appinfo>
-              <xs:appinfo source="mapping">US2013|R|ExternalFacilityIdentifier|false</xs:appinfo>
-            </xs:annotation>
-          </xs:element>
-          <xs:element name="Description" type="xs:string" minOccurs="0">
-            <xs:annotation>
-              <xs:appinfo source="mapping">UK2012|S|Description|false</xs:appinfo>
-              <xs:appinfo source="mapping">US2013|S|Description|false</xs:appinfo>
-            </xs:annotation>
-          </xs:element>
-          <xs:element name="ProjectDescription" type="xs:string" minOccurs="0">
-            <xs:annotation>
-              <xs:appinfo source="mapping">UK2012|T|ProjectDescription|false</xs:appinfo>
-              <xs:appinfo source="mapping">US2013|T|ProjectDescription|false</xs:appinfo>
-            </xs:annotation>
-          </xs:element>
-          <xs:element name="SiteDescription" type="xs:string" minOccurs="0">
-            <xs:annotation>
-              <xs:appinfo source="mapping">UK2012|U|SiteDescription|false</xs:appinfo>
-              <xs:appinfo source="mapping">US2013|U|SiteDescription|false</xs:appinfo>
-            </xs:annotation>
-          </xs:element>
-          <xs:element name="Phase" type="xs:string" minOccurs="0">
-            <xs:annotation>
-              <xs:appinfo source="mapping">UK2012|V|Phase|false</xs:appinfo>
-              <xs:appinfo source="mapping">US2013|V|Phase|false</xs:appinfo>
-            </xs:annotation>
-          </xs:element>
+          <xs:element name="ProjectName" type="xs:string" minOccurs="1" />
+          <xs:element name="SiteName" type="xs:string" minOccurs="1" />
+          <xs:element name="LinearUnits" type="cobielite:LinearUnit" minOccurs="1" nillable="true" />
+          <xs:element name="AreaUnits" type="cobielite:AreaUnit" minOccurs="1" nillable="true" />
+          <xs:element name="VolumeUnits" type="cobielite:VolumeUnit" minOccurs="1" nillable="true" />
+          <xs:element name="CurrencyUnit" type="cobielite:CurrencyUnit" minOccurs="1" nillable="true" />
+          <xs:element name="AreaMeasurement" type="xs:string" minOccurs="1" />
+          <xs:element name="ExternalProjectEntity" type="xs:string" minOccurs="0" />
+          <xs:element name="ExternalProjectIdentifier" type="xs:string" minOccurs="0" />
+          <xs:element name="ExternalSiteEntity" type="xs:string" minOccurs="0" />
+          <xs:element name="ExternalSiteIdentifier" type="xs:string" minOccurs="0" />
+          <xs:element name="ProjectDescription" type="xs:string" minOccurs="0" />
+          <xs:element name="SiteDescription" type="xs:string" minOccurs="0" />
+          <xs:element name="Phase" type="xs:string" minOccurs="0" />
 
           <!-- Lists of top level objects -->
           <xs:element name="Floors" type="cobielite:FloorCollection" minOccurs="0" maxOccurs="1" />
@@ -982,6 +489,7 @@
           <xs:element name="Systems" type="cobielite:SystemCollection" minOccurs="0" maxOccurs="1" />
           <xs:element name="Zones" type="cobielite:ZoneCollection" minOccurs="0" maxOccurs="1" />
           <xs:element name="Resources" type="cobielite:ResourceCollection" minOccurs="0" maxOccurs="1" />
+          <xs:element name="Stages" type="cobielite:ProjectStageCollection" minOccurs="0" maxOccurs="1" />
 
         </xs:sequence>
       </xs:extension>
@@ -1005,7 +513,17 @@
   <xs:complexType name="Floor">
     <xs:annotation>
       <xs:appinfo source="sheet">UK2012|Floor</xs:appinfo>
-      <xs:appinfo source="sheet">US2013|Floor</xs:appinfo>
+      <!--mapping, column, header, required/optional, list/item, pick/-, path-->
+      <xs:appinfo source="mapping">UK2012|A|Name|required|item|-|Name</xs:appinfo>
+      <xs:appinfo source="mapping">UK2012|B|CreatedBy|required|item|-|CreatedBy.Email</xs:appinfo>
+      <xs:appinfo source="mapping">UK2012|C|CreatedOn|required|item|-|CreatedOn</xs:appinfo>
+      <xs:appinfo source="mapping">UK2012|D|Category|required|item|FloorType|Category</xs:appinfo>
+      <xs:appinfo source="mapping">UK2012|E|ExtSystem|optional|item|-|ExternalSystem</xs:appinfo>
+      <xs:appinfo source="mapping">UK2012|F|ExtObject|optional|item|-|ExternalEntity</xs:appinfo>
+      <xs:appinfo source="mapping">UK2012|G|ExtIdentifier|optional|item|-|ExternalId</xs:appinfo>
+      <xs:appinfo source="mapping">UK2012|H|Description|optional|item|-|Description</xs:appinfo>
+      <xs:appinfo source="mapping">UK2012|I|Elevation|optional|item|-|Elevation</xs:appinfo>
+      <xs:appinfo source="mapping">UK2012|J|Height|optional|item|-|Height</xs:appinfo>
       <xs:documentation>
         A minimum of one COBie. Floor record is required for all COBie deliverables containing spatial information.
       </xs:documentation>
@@ -1013,50 +531,8 @@
     <xs:complexContent>
       <xs:extension base="cobielite:CobieObject">
         <xs:sequence>
-          <xs:element name="Category" type="xs:string" minOccurs="1">
-            <xs:annotation>
-              <xs:appinfo source="mapping">UK2012|D|Category|true</xs:appinfo>
-              <xs:appinfo source="mapping">US2013|D|Category|true</xs:appinfo>
-              <xs:appinfo source="picklist">Category-Space</xs:appinfo>
-            </xs:annotation>
-          </xs:element>
-          <xs:element name="ExternalSystem" type="xs:string" minOccurs="0">
-            <xs:annotation>
-              <xs:appinfo source="mapping">UK2012|E|ExtSystem|false</xs:appinfo>
-              <xs:appinfo source="mapping">US2013|E|ExtSystem|false</xs:appinfo>
-            </xs:annotation>
-          </xs:element>
-          <xs:element name="ExternalEntity" type="xs:string" minOccurs="0">
-            <xs:annotation>
-              <xs:appinfo source="mapping">UK2012|F|ExtObject|false</xs:appinfo>
-              <xs:appinfo source="mapping">US2013|F|ExtObject|false</xs:appinfo>
-            </xs:annotation>
-          </xs:element>
-          <xs:element name="ExternalID" type="xs:string" minOccurs="0">
-            <xs:annotation>
-              <xs:appinfo source="mapping">UK2012|G|ExtIdentifier|false</xs:appinfo>
-              <xs:appinfo source="mapping">US2013|G|ExtIdentifier|false</xs:appinfo>
-            </xs:annotation>
-          </xs:element>
-          <xs:element name="Description" type="xs:string" minOccurs="0">
-            <xs:annotation>
-              <xs:appinfo source="mapping">UK2012|H|Description|false</xs:appinfo>
-              <xs:appinfo source="mapping">US2013|H|Description|false</xs:appinfo>
-            </xs:annotation>
-          </xs:element>
-          <xs:element name="Elevation" type="xs:double" minOccurs="0" nillable="true">
-            <xs:annotation>
-              <xs:appinfo source="mapping">UK2012|I|Elevation|false</xs:appinfo>
-              <xs:appinfo source="mapping">US2013|I|Elevation|false</xs:appinfo>
-            </xs:annotation>
-          </xs:element>
-          <xs:element name="Height" type="xs:double" minOccurs="0" nillable="true">
-            <xs:annotation>
-              <xs:appinfo source="mapping">UK2012|J|Height|false</xs:appinfo>
-              <xs:appinfo source="mapping">US2013|J|Height|false</xs:appinfo>
-            </xs:annotation>
-          </xs:element>
-
+          <xs:element name="Elevation" type="xs:double" minOccurs="0" nillable="true" />
+          <xs:element name="Height" type="xs:double" minOccurs="0" nillable="true" />
 
           <!-- List of spaces -->
           <xs:element name="Spaces" type="cobielite:SpaceCollection" minOccurs="0" maxOccurs="1" />
@@ -1076,85 +552,36 @@
   <xs:complexType name="Issue">
     <xs:annotation>
       <xs:appinfo source="sheet">UK2012|Issue</xs:appinfo>
-      <xs:appinfo source="mapping::parent">UK2012|H|SheetName1|parent</xs:appinfo>
-      <xs:appinfo source="mapping::parent">UK2012|I|RawName1|parent.Name</xs:appinfo>
-      <xs:appinfo source="mapping::parent">UK2012|J|SheetName2|parent</xs:appinfo>
-      <xs:appinfo source="mapping::parent">UK2012|K|RawName2|parent.Name</xs:appinfo>
-      <xs:appinfo source="sheet">US2013|Issue</xs:appinfo>
-      <xs:appinfo source="mapping::parent">US2013|H|SheetName1|parent</xs:appinfo>
-      <xs:appinfo source="mapping::parent">US2013|I|RawName1|parent.Name</xs:appinfo>
-      <xs:appinfo source="mapping::parent">US2013|J|SheetName2|parent</xs:appinfo>
-      <xs:appinfo source="mapping::parent">US2013|K|RawName2|parent.Name</xs:appinfo>
-      <xs:documentation>A specific Issue related to a specific object (asset, asset type, facility, document etc.).</xs:documentation>
+      <!--mapping, column, header, required/optional, list/item, pick/-, path-->
+      <xs:appinfo source="mapping">UK2012|A|Name|required|item|-|Name</xs:appinfo>
+      <xs:appinfo source="mapping">UK2012|B|CreatedBy|required|item|-|CreatedBy.Email</xs:appinfo>
+      <xs:appinfo source="mapping">UK2012|C|CreatedOn|required|item|-|CreatedOn</xs:appinfo>
+      <xs:appinfo source="mapping">UK2012|D|Type|required|item|IssueCategory|Category</xs:appinfo>
+      <xs:appinfo source="mapping">UK2012|E|Risk|required|item|IssueRisk|Risk</xs:appinfo>
+      <xs:appinfo source="mapping">UK2012|F|Chance|required|item|IssueChance|Chance</xs:appinfo>
+      <xs:appinfo source="mapping">UK2012|G|Impact|required|item|IssueImpact|Impact</xs:appinfo>
+      <xs:appinfo source="mapping">UK2012|H|SheetName1|required|item|SheetType|parent</xs:appinfo>
+      <xs:appinfo source="mapping">UK2012|I|RowName1|required|item|-|parent.Name</xs:appinfo>
+      <xs:appinfo source="mapping">UK2012|J|SheetName2|required|item|SheetType|SheetName2</xs:appinfo>
+      <xs:appinfo source="mapping">UK2012|K|RowName2|required|item|-|RowName2</xs:appinfo>
+      <xs:appinfo source="mapping">UK2012|L|Description|required|item|-|Description</xs:appinfo>
+      <xs:appinfo source="mapping">UK2012|M|Owner|required|item|-|Owner.Email</xs:appinfo>
+      <xs:appinfo source="mapping">UK2012|N|Mitigation|required|item|-|Mitigation</xs:appinfo>
+      <xs:appinfo source="mapping">UK2012|O|ExtSystem|optional|item|-|ExternalSystem</xs:appinfo>
+      <xs:appinfo source="mapping">UK2012|P|ExtObject|optional|item|-|ExternalEntity</xs:appinfo>
+      <xs:appinfo source="mapping">UK2012|Q|ExtIdentifier|optional|item|-|ExternalId</xs:appinfo>
+      <xs:documentation>
+        A specific Issue related to a specific object (asset, asset type, facility, document etc.).
+      </xs:documentation>
     </xs:annotation>
     <xs:complexContent>
       <xs:extension base="cobielite:CobieObject">
         <xs:sequence>
-          <xs:element name="Category" type="xs:string" minOccurs="1">
-            <xs:annotation>
-              <xs:appinfo source="mapping">UK2012|D|Type|true</xs:appinfo>
-              <xs:appinfo source="mapping">US2013|D|Type|true</xs:appinfo>
-              <xs:appinfo source="picklist">IssueCategory</xs:appinfo>
-            </xs:annotation>
-          </xs:element>
-          <xs:element name="Risk" type="xs:string" minOccurs="1">
-            <xs:annotation>
-              <xs:appinfo source="mapping">UK2012|E|Risk|true</xs:appinfo>
-              <xs:appinfo source="mapping">US2013|E|Risk|true</xs:appinfo>
-              <xs:appinfo source="picklist">IssueRisk</xs:appinfo>
-            </xs:annotation>
-          </xs:element>
-          <xs:element name="Chance" type="xs:string" minOccurs="1">
-            <xs:annotation>
-              <xs:appinfo source="mapping">UK2012|F|Chance|true</xs:appinfo>
-              <xs:appinfo source="mapping">US2013|F|Chance|true</xs:appinfo>
-              <xs:appinfo source="picklist">IssueChance</xs:appinfo>
-            </xs:annotation>
-          </xs:element>
-          <xs:element name="Impact" type="xs:string" minOccurs="1">
-            <xs:annotation>
-              <xs:appinfo source="mapping">UK2012|G|Impact|true</xs:appinfo>
-              <xs:appinfo source="mapping">US2013|G|Impact|true</xs:appinfo>
-              <xs:appinfo source="picklist">IssueImpact</xs:appinfo>
-            </xs:annotation>
-          </xs:element>
-          <xs:element name="Description" type="xs:string" minOccurs="1">
-            <xs:annotation>
-              <xs:appinfo source="mapping">UK2012|L|Description|true</xs:appinfo>
-              <xs:appinfo source="mapping">US2013|L|Description|true</xs:appinfo>
-            </xs:annotation>
-          </xs:element>
-          <xs:element name="Owner" type="cobielite:ContactKey" minOccurs="1">
-            <xs:annotation>
-              <xs:appinfo source="mapping">UK2012|M|Owner|true</xs:appinfo>
-              <xs:appinfo source="mapping">US2013|M|Owner|true</xs:appinfo>
-              <xs:appinfo source="path">Email</xs:appinfo>
-            </xs:annotation>
-          </xs:element>
-          <xs:element name="Mitigation" type="xs:string" minOccurs="1">
-            <xs:annotation>
-              <xs:appinfo source="mapping">UK2012|N|Mitigation|true</xs:appinfo>
-              <xs:appinfo source="mapping">US2013|N|Mitigation|true</xs:appinfo>
-            </xs:annotation>
-          </xs:element>
-          <xs:element name="ExternalSystem" type="xs:string" minOccurs="0">
-            <xs:annotation>
-              <xs:appinfo source="mapping">UK2012|O|ExtSystem|false</xs:appinfo>
-              <xs:appinfo source="mapping">US2013|O|ExtSystem|false</xs:appinfo>
-            </xs:annotation>
-          </xs:element>
-          <xs:element name="ExternalEntity" type="xs:string" minOccurs="0">
-            <xs:annotation>
-              <xs:appinfo source="mapping">UK2012|P|ExtObject|false</xs:appinfo>
-              <xs:appinfo source="mapping">US2013|P|ExtObject|false</xs:appinfo>
-            </xs:annotation>
-          </xs:element>
-          <xs:element name="ExternalID" type="xs:string" minOccurs="0">
-            <xs:annotation>
-              <xs:appinfo source="mapping">UK2012|Q|ExtIdentifier|false</xs:appinfo>
-              <xs:appinfo source="mapping">US2013|Q|ExtIdentifier|false</xs:appinfo>
-            </xs:annotation>
-          </xs:element>
+          <xs:element name="Risk" type="xs:string" minOccurs="1" />
+          <xs:element name="Chance" type="xs:string" minOccurs="1" />
+          <xs:element name="Impact" type="xs:string" minOccurs="1" />
+          <xs:element name="Owner" type="cobielite:ContactKey" minOccurs="1" />
+          <xs:element name="Mitigation" type="xs:string" minOccurs="1" />
         </xs:sequence>
       </xs:extension>
     </xs:complexContent>
@@ -1170,87 +597,34 @@
   <xs:complexType name="Impact">
     <xs:annotation>
       <xs:appinfo source="sheet">UK2012|Impact</xs:appinfo>
-      <xs:appinfo source="mapping::parent">UK2012|F|SheetName|parent</xs:appinfo>
-      <xs:appinfo source="mapping::parent">UK2012|G|RawName|parent.Name</xs:appinfo>
-
-      <xs:appinfo source="sheet">US2013|Impact</xs:appinfo>
-      <xs:appinfo source="mapping::parent">US2013|F|SheetName|parent</xs:appinfo>
-      <xs:appinfo source="mapping::parent">US2013|G|RawName|parent.Name</xs:appinfo>
-
+      <!--mapping, column, header, required/optional, list/item, pick/-, path-->
+      <xs:appinfo source="mapping">UK2012|A|Name|required|item|-|Name</xs:appinfo>
+      <xs:appinfo source="mapping">UK2012|B|CreatedBy|required|item|-|CreatedBy.Email</xs:appinfo>
+      <xs:appinfo source="mapping">UK2012|C|CreatedOn|required|item|-|CreatedOn</xs:appinfo>
+      <xs:appinfo source="mapping">UK2012|D|ImpactType|required|item|ImpactType|Category</xs:appinfo>
+      <xs:appinfo source="mapping">UK2012|E|ImpactStage|required|item|ImpactStage|ImpactStage</xs:appinfo>
+      <xs:appinfo source="mapping">UK2012|F|SheetName|required|item|SheetType|parent</xs:appinfo>
+      <xs:appinfo source="mapping">UK2012|G|RowName|required|item|-|parent.Name</xs:appinfo>
+      <xs:appinfo source="mapping">UK2012|H|Value|required|item|-|Value</xs:appinfo>
+      <xs:appinfo source="mapping">UK2012|I|ImpactUnit|required|item|ImpactUnit|ImpactUnit</xs:appinfo>
+      <xs:appinfo source="mapping">UK2012|J|LeadInTime|optional|item|-|LeadInTime</xs:appinfo>
+      <xs:appinfo source="mapping">UK2012|K|Duration|optional|item|-|Duration</xs:appinfo>
+      <xs:appinfo source="mapping">UK2012|L|LeadOutTime|optional|item|-|LeadOutTime</xs:appinfo>
+      <xs:appinfo source="mapping">UK2012|M|ExtSystem|optional|item|-|ExternalSystem</xs:appinfo>
+      <xs:appinfo source="mapping">UK2012|N|ExtObject|optional|item|-|ExternalEntity</xs:appinfo>
+      <xs:appinfo source="mapping">UK2012|O|ExtIdentifier|optional|item|-|ExternalId</xs:appinfo>
+      <xs:appinfo source="mapping">UK2012|P|Description|optional|item|-|Description</xs:appinfo>
       <xs:documentation>A specific Impact within this set of Impacts.</xs:documentation>
     </xs:annotation>
     <xs:complexContent>
       <xs:extension base="cobielite:CobieObject">
         <xs:sequence>
-          <xs:element name="Category" type="xs:string" minOccurs="1">
-            <xs:annotation>
-              <xs:appinfo source="mapping">UK2012|D|Impact|true</xs:appinfo>
-              <xs:appinfo source="mapping">US2013|D|Impact|true</xs:appinfo>
-              <xs:appinfo source="picklist">Impact</xs:appinfo>
-            </xs:annotation>
-          </xs:element>
-          <xs:element name="ImpactStage" type="xs:string" minOccurs="1">
-            <xs:annotation>
-              <xs:appinfo source="mapping">UK2012|E|ImpactStage|true</xs:appinfo>
-              <xs:appinfo source="mapping">US2013|E|ImpactStage|true</xs:appinfo>
-              <xs:appinfo source="picklist">ImpactStage</xs:appinfo>
-            </xs:annotation>
-          </xs:element>
-          <xs:element name="Value" type="xs:string" minOccurs="0">
-            <xs:annotation>
-              <xs:appinfo source="mapping">UK2012|H|ImpactStage|false</xs:appinfo>
-              <xs:appinfo source="mapping">US2013|H|ImpactStage|false</xs:appinfo>
-            </xs:annotation>
-          </xs:element>
-          <xs:element name="ImpactUnit" type="xs:string" minOccurs="0">
-            <xs:annotation>
-              <xs:appinfo source="mapping">UK2012|I|ImpactUnit|false</xs:appinfo>
-              <xs:appinfo source="mapping">US2013|I|ImpactUnit|false</xs:appinfo>
-              <xs:appinfo source="picklist">ImpactUnit</xs:appinfo>
-            </xs:annotation>
-          </xs:element>
-          <xs:element name="LeadInTime" type="xs:double" minOccurs="0" nillable="true">
-            <xs:annotation>
-              <xs:appinfo source="mapping">UK2012|J|LeadInTime|false</xs:appinfo>
-              <xs:appinfo source="mapping">US2013|J|LeadInTime|false</xs:appinfo>
-            </xs:annotation>
-          </xs:element>
-          <xs:element name="Duration" type="xs:double" minOccurs="0" nillable="true">
-            <xs:annotation>
-              <xs:appinfo source="mapping">UK2012|K|Duration|false</xs:appinfo>
-              <xs:appinfo source="mapping">US2013|K|Duration|false</xs:appinfo>
-            </xs:annotation>
-          </xs:element>
-          <xs:element name="LeadOutTime" type="xs:double" minOccurs="0" nillable="true">
-            <xs:annotation>
-              <xs:appinfo source="mapping">UK2012|L|LeadOutTime|false</xs:appinfo>
-              <xs:appinfo source="mapping">US2013|L|LeadOutTime|false</xs:appinfo>
-            </xs:annotation>
-          </xs:element>
-          <xs:element name="ExternalSystem" type="xs:string" minOccurs="0">
-            <xs:annotation>
-              <xs:appinfo source="mapping">UK2012|M|ExtSystem|false</xs:appinfo>
-              <xs:appinfo source="mapping">US2013|M|ExtSystem|false</xs:appinfo>
-            </xs:annotation>
-          </xs:element>
-          <xs:element name="ExternalEntity" type="xs:string" minOccurs="0">
-            <xs:annotation>
-              <xs:appinfo source="mapping">UK2012|N|ExtObject|false</xs:appinfo>
-              <xs:appinfo source="mapping">US2013|N|ExtObject|false</xs:appinfo>
-            </xs:annotation>
-          </xs:element>
-          <xs:element name="ExternalID" type="xs:string" minOccurs="0">
-            <xs:annotation>
-              <xs:appinfo source="mapping">UK2012|O|ExtIdentifier|false</xs:appinfo>
-              <xs:appinfo source="mapping">US2013|O|ExtIdentifier|false</xs:appinfo>
-            </xs:annotation>
-          </xs:element>
-          <xs:element name="Description" type="xs:string" minOccurs="0">
-            <xs:annotation>
-              <xs:appinfo source="mapping">UK2012|O|Description|false</xs:appinfo>
-              <xs:appinfo source="mapping">US2013|O|Description|false</xs:appinfo>
-            </xs:annotation>
-          </xs:element>
+          <xs:element name="ImpactStage" type="xs:string" minOccurs="1" />
+          <xs:element name="Value" type="xs:string" minOccurs="0" />
+          <xs:element name="ImpactUnit" type="xs:string" minOccurs="0" />
+          <xs:element name="LeadInTime" type="xs:double" minOccurs="0" nillable="true" />
+          <xs:element name="Duration" type="xs:double" minOccurs="0" nillable="true" />
+          <xs:element name="LeadOutTime" type="xs:double" minOccurs="0" nillable="true" />
         </xs:sequence>
       </xs:extension>
     </xs:complexContent>
@@ -1266,111 +640,44 @@
   <xs:complexType name="Job">
     <xs:annotation>
       <xs:appinfo source="sheet">UK2012|Job</xs:appinfo>
-      <xs:appinfo source="mapping::parent">UK2012|F|TypeName|parent.Name</xs:appinfo>
-      <xs:appinfo source="sheet">US2013|Job</xs:appinfo>
-      <xs:appinfo source="mapping::parent">US2013|F|TypeName|parent.Name</xs:appinfo>
-      <xs:documentation>A minimum of one COBie.Job record is required for all relevant COBie.Type objects submitted at the benefical occupancy or facility handover stage.</xs:documentation>
+      <!--mapping, column, header, required/optional, list/item, pick/-, path-->
+      <xs:appinfo source="mapping">UK2012|A|Name|required|item|-|Name</xs:appinfo>
+      <xs:appinfo source="mapping">UK2012|B|CreatedBy|required|item|-|CreatedBy.Email</xs:appinfo>
+      <xs:appinfo source="mapping">UK2012|C|CreatedOn|required|item|-|CreatedOn</xs:appinfo>
+      <xs:appinfo source="mapping">UK2012|D|Category|required|item|JobType|Category</xs:appinfo>
+      <xs:appinfo source="mapping">UK2012|E|Status|required|item|JobStatusType|Status</xs:appinfo>
+      <xs:appinfo source="mapping">UK2012|F|TypeName|required|item|-|parent.Name</xs:appinfo>
+      <xs:appinfo source="mapping">UK2012|G|Description|required|item|-|Description</xs:appinfo>
+      <xs:appinfo source="mapping">UK2012|H|Duration|required|item|-|Duration</xs:appinfo>
+      <xs:appinfo source="mapping">UK2012|I|DurationUnit|required|item|DurationUnit|DurationUnit</xs:appinfo>
+      <xs:appinfo source="mapping">UK2012|J|Start|required|item|-|Start</xs:appinfo>
+      <xs:appinfo source="mapping">UK2012|K|TaskStartUnit|required|item|DurationUnit|TaskStartUnit</xs:appinfo>
+      <xs:appinfo source="mapping">UK2012|L|Frequency|required|item|-|Frequency</xs:appinfo>
+      <xs:appinfo source="mapping">UK2012|M|FrequencyUnit|required|item|DurationUnit|FrequencyUnit</xs:appinfo>
+      <xs:appinfo source="mapping">UK2012|N|ExtSystem|optional|item|-|ExternalSystem</xs:appinfo>
+      <xs:appinfo source="mapping">UK2012|O|ExtObject|optional|item|-|ExternalEntity</xs:appinfo>
+      <xs:appinfo source="mapping">UK2012|P|ExtIdentifier|optional|item|-|ExternalId</xs:appinfo>
+      <xs:appinfo source="mapping">UK2012|Q|TaskNumber|optional|item|-|TaskNumber</xs:appinfo>
+      <xs:appinfo source="mapping">UK2012|R|Priors|optional|list|-|Priors.TaskNumber</xs:appinfo>
+      <xs:appinfo source="mapping">UK2012|S|ResourceNames|optional|list|-|ResourceNames.Name</xs:appinfo>
+      <xs:documentation>
+        A minimum of one COBie.Job record is required for all relevant COBie.Type objects submitted at the benefical occupancy or
+        facility handover stage.
+      </xs:documentation>
     </xs:annotation>
     <xs:complexContent>
       <xs:extension base="cobielite:CobieObject">
         <xs:sequence>
-          <xs:element name="Category" type="xs:string" minOccurs="1">
-            <xs:annotation>
-              <xs:appinfo source="mapping">UK2012|D|Category|true</xs:appinfo>
-              <xs:appinfo source="mapping">US2013|D|Category|true</xs:appinfo>
-              <xs:appinfo source="picklist">Job</xs:appinfo>
-            </xs:annotation>
-          </xs:element>
-          <xs:element name="Status" type="xs:string" minOccurs="1">
-            <xs:annotation>
-              <xs:appinfo source="mapping">UK2012|E|Status|true</xs:appinfo>
-              <xs:appinfo source="mapping">US2013|E|Status|true</xs:appinfo>
-              <xs:appinfo source="picklist">JobStatusType</xs:appinfo>
-            </xs:annotation>
-          </xs:element>
-          <xs:element name="Description" type="xs:string" minOccurs="1">
-            <xs:annotation>
-              <xs:appinfo source="mapping">UK2012|G|Description|true</xs:appinfo>
-              <xs:appinfo source="mapping">US2013|G|Description|true</xs:appinfo>
-            </xs:annotation>
-          </xs:element>
-          <xs:element name="Duration" type="xs:double" minOccurs="1" nillable="true">
-            <xs:annotation>
-              <xs:appinfo source="mapping">UK2012|H|Duration|true</xs:appinfo>
-              <xs:appinfo source="mapping">US2013|H|Duration|true</xs:appinfo>
-            </xs:annotation>
-          </xs:element>
-          <xs:element name="DurationUnit" type="xs:string" minOccurs="1">
-            <xs:annotation>
-              <xs:appinfo source="mapping">UK2012|I|DurationUnit|true</xs:appinfo>
-              <xs:appinfo source="mapping">US2013|I|DurationUnit|true</xs:appinfo>
-              <xs:appinfo source="picklist">DurationUnit</xs:appinfo>
-            </xs:annotation>
-          </xs:element>
-          <xs:element name="Start" type="xs:double" minOccurs="1" nillable="true">
-            <xs:annotation>
-              <xs:appinfo source="mapping">UK2012|J|Start|true</xs:appinfo>
-              <xs:appinfo source="mapping">US2013|J|Start|true</xs:appinfo>
-            </xs:annotation>
-          </xs:element>
-          <xs:element name="TaskStartUnit" type="xs:string" minOccurs="1">
-            <xs:annotation>
-              <xs:appinfo source="mapping">UK2012|K|TaskStartUnit|true</xs:appinfo>
-              <xs:appinfo source="mapping">US2013|K|TaskStartUnit|true</xs:appinfo>
-              <xs:appinfo source="picklist">DurationUnit</xs:appinfo>
-            </xs:annotation>
-          </xs:element>
-          <xs:element name="Frequency" type="xs:double" minOccurs="1" nillable="true">
-            <xs:annotation>
-              <xs:appinfo source="mapping">UK2012|L|Frequency|true</xs:appinfo>
-              <xs:appinfo source="mapping">US2013|L|Frequency|true</xs:appinfo>
-            </xs:annotation>
-          </xs:element>
-          <xs:element name="FrequencyUnit" type="xs:string" minOccurs="1">
-            <xs:annotation>
-              <xs:appinfo source="mapping">UK2012|M|FrequencyUnit|true</xs:appinfo>
-              <xs:appinfo source="mapping">US2013|M|FrequencyUnit|true</xs:appinfo>
-              <xs:appinfo source="picklist">DurationUnit</xs:appinfo>
-            </xs:annotation>
-          </xs:element>
-          <xs:element name="ExternalSystem" type="xs:string" minOccurs="0">
-            <xs:annotation>
-              <xs:appinfo source="mapping">UK2012|N|ExtSystem|false</xs:appinfo>
-              <xs:appinfo source="mapping">US2013|N|ExtSystem|false</xs:appinfo>
-            </xs:annotation>
-          </xs:element>
-          <xs:element name="ExternalEntity" type="xs:string" minOccurs="0">
-            <xs:annotation>
-              <xs:appinfo source="mapping">UK2012|O|ExtObject|false</xs:appinfo>
-              <xs:appinfo source="mapping">US2013|O|ExtObject|false</xs:appinfo>
-            </xs:annotation>
-          </xs:element>
-          <xs:element name="ExternalID" type="xs:string" minOccurs="0">
-            <xs:annotation>
-              <xs:appinfo source="mapping">UK2012|P|ExtIdentifier|false</xs:appinfo>
-              <xs:appinfo source="mapping">US2013|P|ExtIdentifier|false</xs:appinfo>
-            </xs:annotation>
-          </xs:element>
-          <xs:element name="TaskNumber" type="xs:string" minOccurs="0">
-            <xs:annotation>
-              <xs:appinfo source="mapping">UK2012|Q|TaskNumber|false</xs:appinfo>
-              <xs:appinfo source="mapping">US2013|Q|TaskNumber|false</xs:appinfo>
-            </xs:annotation>
-          </xs:element>
-          <xs:element name="PriorsTaskNumber" type="xs:string" minOccurs="0">
-            <xs:annotation>
-              <xs:appinfo source="mapping">UK2012|R|Priors|false</xs:appinfo>
-              <xs:appinfo source="mapping">US2013|R|Priors|false</xs:appinfo>
-            </xs:annotation>
-          </xs:element>
-          <xs:element name="Resources" type="cobielite:ResourceKeyCollection" minOccurs="0" maxOccurs="1">
-            <xs:annotation>
-              <xs:appinfo source="mapping">UK2012|S|ResourceNames|false</xs:appinfo>
-              <xs:appinfo source="mapping">US2013|S|ResourceNames|false</xs:appinfo>
-              <xs:appinfo source="list">true</xs:appinfo>
-              <xs:appinfo source="path">Name</xs:appinfo>
-            </xs:annotation>
-          </xs:element>
+          <xs:element name="Status" type="xs:string" minOccurs="1" />
+          <xs:element name="Duration" type="xs:double" minOccurs="1" nillable="true" />
+          <xs:element name="DurationUnit" type="cobielite:DurationUnit" minOccurs="1" nillable="true" />
+          <xs:element name="Start" type="xs:double" minOccurs="1" nillable="true" />
+          <xs:element name="TaskStartUnit" type="cobielite:DurationUnit" minOccurs="1" nillable="true" />
+          <xs:element name="Frequency" type="xs:double" minOccurs="1" nillable="true" />
+          <xs:element name="FrequencyUnit" type="cobielite:DurationUnit" minOccurs="1" nillable="true" />
+          <xs:element name="TaskNumber" type="xs:string" minOccurs="0" />
+          <xs:element name="Priors" type="cobielite:JobKeyCollection" minOccurs="0" maxOccurs="1" />
+          <xs:element name="Resources" type="cobielite:ResourceKeyCollection" minOccurs="0" maxOccurs="1" />
         </xs:sequence>
       </xs:extension>
     </xs:complexContent>
@@ -1380,49 +687,40 @@
       <xs:element name="Job" type="cobielite:Job" maxOccurs="unbounded" />
     </xs:sequence>
   </xs:complexType>
+  <xs:complexType name="JobKeyCollection">
+    <xs:sequence>
+      <xs:element name="JobKey" type="cobielite:JobKey" maxOccurs="unbounded" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="JobKey">
+    <xs:sequence>
+      <xs:element name="Name" type="xs:string" />
+      <xs:element name="TaskNumber" type="xs:string" />
+      <xs:element name="KeyType" type="cobielite:EntityType" fixed="Job" />
+    </xs:sequence>
+  </xs:complexType>
   <!--End Job Related Content-->
 
   <!--Begin Resource Related Content-->
   <xs:complexType name="Resource">
     <xs:annotation>
       <xs:appinfo source="sheet">UK2012|Resource</xs:appinfo>
-      <xs:appinfo source="sheet">US2013|Resource</xs:appinfo>
-      <xs:documentation>Information about a specific resource.</xs:documentation>
+      <!--mapping, column, header, required/optional, list/item, pick/-, path-->
+      <xs:appinfo source="mapping">UK2012|A|Name|required|item|-|Name</xs:appinfo>
+      <xs:appinfo source="mapping">UK2012|B|CreatedBy|required|item|-|CreatedBy.Email</xs:appinfo>
+      <xs:appinfo source="mapping">UK2012|C|CreatedOn|required|item|-|CreatedOn</xs:appinfo>
+      <xs:appinfo source="mapping">UK2012|D|Category|required|item|ResourceType|Category</xs:appinfo>
+      <xs:appinfo source="mapping">UK2012|E|ExtSystem|optional|item|-|ExternalSystem</xs:appinfo>
+      <xs:appinfo source="mapping">UK2012|F|ExtObject|optional|item|-|ExternalEntity</xs:appinfo>
+      <xs:appinfo source="mapping">UK2012|G|ExtIdentifier|optional|item|-|ExternalId</xs:appinfo>
+      <xs:appinfo source="mapping">UK2012|H|Description|optional|item|-|Description</xs:appinfo>
+      <xs:documentation>
+        Information about a specific resource.
+      </xs:documentation>
     </xs:annotation>
     <xs:complexContent>
       <xs:extension base="cobielite:CobieObject">
         <xs:sequence>
-          <xs:element name="Category" type="xs:string" minOccurs="1">
-            <xs:annotation>
-              <xs:appinfo source="mapping">UK2012|D|Category|true</xs:appinfo>
-              <xs:appinfo source="mapping">US2013|D|Category|true</xs:appinfo>
-              <xs:appinfo source="picklist">Resource</xs:appinfo>
-            </xs:annotation>
-          </xs:element>
-          <xs:element name="ExternalSystem" type="xs:string" minOccurs="0">
-            <xs:annotation>
-              <xs:appinfo source="mapping">UK2012|E|ExtSystem|false</xs:appinfo>
-              <xs:appinfo source="mapping">US2013|E|ExtSystem|false</xs:appinfo>
-            </xs:annotation>
-          </xs:element>
-          <xs:element name="ExternalEntity" type="xs:string" minOccurs="0">
-            <xs:annotation>
-              <xs:appinfo source="mapping">UK2012|F|ExtObject|false</xs:appinfo>
-              <xs:appinfo source="mapping">US2013|F|ExtObject|false</xs:appinfo>
-            </xs:annotation>
-          </xs:element>
-          <xs:element name="ExternalID" type="xs:string" minOccurs="0">
-            <xs:annotation>
-              <xs:appinfo source="mapping">UK2012|G|ExtIdentifier|false</xs:appinfo>
-              <xs:appinfo source="mapping">US2013|G|ExtIdentifier|false</xs:appinfo>
-            </xs:annotation>
-          </xs:element>
-          <xs:element name="Description" type="xs:string" minOccurs="0">
-            <xs:annotation>
-              <xs:appinfo source="mapping">UK2012|H|Description|false</xs:appinfo>
-              <xs:appinfo source="mapping">US2013|H|Description|false</xs:appinfo>
-            </xs:annotation>
-          </xs:element>
         </xs:sequence>
       </xs:extension>
     </xs:complexContent>
@@ -1449,72 +747,31 @@
   <xs:complexType name="Space">
     <xs:annotation>
       <xs:appinfo source="sheet">UK2012|Space</xs:appinfo>
-      <xs:appinfo source="sheet">US2013|Space</xs:appinfo>
-      <xs:appinfo source="mapping::parent">UK2012|E|FloorName|parent.Name</xs:appinfo>
-      <xs:appinfo source="mapping::parent">US2013|E|FloorName|parent.Name</xs:appinfo>
-      <xs:documentation>A minimum of one COBie.Space record is required for all COBie deliverables related to Space information.</xs:documentation>
+      <!--mapping, column, header, required/optional, list/item, pick/-, path-->
+      <xs:appinfo source="mapping">UK2012|A|Name|required|item|-|Name</xs:appinfo>
+      <xs:appinfo source="mapping">UK2012|B|CreatedBy|required|item|-|CreatedBy.Email</xs:appinfo>
+      <xs:appinfo source="mapping">UK2012|C|CreatedOn|required|item|-|CreatedOn</xs:appinfo>
+      <xs:appinfo source="mapping">UK2012|D|Category|required|item|Category-Space|Category</xs:appinfo>
+      <xs:appinfo source="mapping">UK2012|E|FloorName|required|item|-|parent.Name</xs:appinfo>
+      <xs:appinfo source="mapping">UK2012|F|Description|required|item|-|Description</xs:appinfo>
+      <xs:appinfo source="mapping">UK2012|G|ExtSystem|optional|item|-|ExternalSystem</xs:appinfo>
+      <xs:appinfo source="mapping">UK2012|H|ExtObject|optional|item|-|ExternalEntity</xs:appinfo>
+      <xs:appinfo source="mapping">UK2012|I|ExtIdentifier|optional|item|-|ExternalId</xs:appinfo>
+      <xs:appinfo source="mapping">UK2012|J|RoomTag|optional|item|-|RoomTag</xs:appinfo>
+      <xs:appinfo source="mapping">UK2012|K|UsableHeight|optional|item|-|UsableHeight</xs:appinfo>
+      <xs:appinfo source="mapping">UK2012|L|GrossArea|optional|item|-|GrossArea</xs:appinfo>
+      <xs:appinfo source="mapping">UK2012|M|NetArea|optional|item|-|NetArea</xs:appinfo>
+      <xs:documentation>
+        A minimum of one COBie.Space record is required for all COBie deliverables related to Space information.
+      </xs:documentation>
     </xs:annotation>
     <xs:complexContent>
       <xs:extension base="cobielite:CobieObject">
         <xs:sequence>
-          <xs:element name="Category" type="xs:string" minOccurs="1">
-            <xs:annotation>
-              <xs:appinfo source="mapping">UK2012|D|Category|true</xs:appinfo>
-              <xs:appinfo source="mapping">US2013|D|Category|true</xs:appinfo>
-              <xs:appinfo source="picklist">Category-Space</xs:appinfo>
-            </xs:annotation>
-          </xs:element>
-          <xs:element name="Description" type="xs:string" minOccurs="1">
-            <xs:annotation>
-              <xs:appinfo source="mapping">UK2012|F|Description|true</xs:appinfo>
-              <xs:appinfo source="mapping">US2013|F|Description|true</xs:appinfo>
-            </xs:annotation>
-          </xs:element>
-          <xs:element name="ExternalSystem" type="xs:string" minOccurs="0">
-            <xs:annotation>
-              <xs:appinfo source="mapping">UK2012|G|ExtSystem|false</xs:appinfo>
-              <xs:appinfo source="mapping">US2013|G|ExtSystem|false</xs:appinfo>
-            </xs:annotation>
-          </xs:element>
-          <xs:element name="ExternalEntity" type="xs:string" minOccurs="0">
-            <xs:annotation>
-              <xs:appinfo source="mapping">UK2012|H|ExtObject|false</xs:appinfo>
-              <xs:appinfo source="mapping">US2013|H|ExtObject|false</xs:appinfo>
-            </xs:annotation>
-          </xs:element>
-          <xs:element name="ExternalID" type="xs:string" minOccurs="0">
-            <xs:annotation>
-              <xs:appinfo source="mapping">UK2012|I|ExtIdentifier|false</xs:appinfo>
-              <xs:appinfo source="mapping">US2013|I|ExtIdentifier|false</xs:appinfo>
-            </xs:annotation>
-          </xs:element>
-          <xs:element name="RoomTag" type="xs:string" minOccurs="0">
-            <xs:annotation>
-              <xs:appinfo source="mapping">UK2012|J|RoomTag|false</xs:appinfo>
-              <xs:appinfo source="mapping">US2013|J|RoomTag|false</xs:appinfo>
-            </xs:annotation>
-          </xs:element>
-          <xs:element name="UsableHeight" type="xs:double" minOccurs="0" nillable="true">
-            <xs:annotation>
-              <xs:appinfo source="mapping">UK2012|K|UsableHeight|false</xs:appinfo>
-              <xs:appinfo source="mapping">US2013|K|UsableHeight|false</xs:appinfo>
-            </xs:annotation>
-          </xs:element>
-          <xs:element name="GrossArea" type="xs:double" minOccurs="0" nillable="true">
-            <xs:annotation>
-              <xs:appinfo source="mapping">UK2012|L|GrossArea|false</xs:appinfo>
-              <xs:appinfo source="mapping">US2013|L|GrossArea|false</xs:appinfo>
-            </xs:annotation>
-          </xs:element>
-          <xs:element name="NetArea" type="xs:double" minOccurs="0" nillable="true">
-            <xs:annotation>
-              <xs:appinfo source="mapping">UK2012|M|NetArea|false</xs:appinfo>
-              <xs:appinfo source="mapping">US2013|M|NetArea|false</xs:appinfo>
-            </xs:annotation>
-          </xs:element>
-
-          <!-- Lists -->
-
+          <xs:element name="RoomTag" type="xs:string" minOccurs="0" />
+          <xs:element name="UsableHeight" type="xs:double" minOccurs="0" nillable="true" />
+          <xs:element name="GrossArea" type="xs:double" minOccurs="0" nillable="true" />
+          <xs:element name="NetArea" type="xs:double" minOccurs="0" nillable="true" />
         </xs:sequence>
       </xs:extension>
     </xs:complexContent>
@@ -1541,66 +798,27 @@
   <xs:complexType name="Spare">
     <xs:annotation>
       <xs:appinfo source="sheet">UK2012|Spare</xs:appinfo>
-      <xs:appinfo source="sheet">US2013|Spare</xs:appinfo>
-      <xs:appinfo source="mapping::parent">UK2012|E|TypeName|parent.Name</xs:appinfo>
-      <xs:appinfo source="mapping::parent">US2013|E|TypeName|parent.Name</xs:appinfo>
+      <!--mapping, column, header, required/optional, list/item, pick/-, path-->
+      <xs:appinfo source="mapping">UK2012|A|Name|required|item|-|Name</xs:appinfo>
+      <xs:appinfo source="mapping">UK2012|B|CreatedBy|required|item|-|CreatedBy.Email</xs:appinfo>
+      <xs:appinfo source="mapping">UK2012|C|CreatedOn|required|item|-|CreatedOn</xs:appinfo>
+      <xs:appinfo source="mapping">UK2012|D|Category|required|item|SpareType|Category</xs:appinfo>
+      <xs:appinfo source="mapping">UK2012|E|TypeName|required|item|-|parent.Name</xs:appinfo>
+      <xs:appinfo source="mapping">UK2012|F|Suppliers|required|list|-|Suppliers.Email</xs:appinfo>
+      <xs:appinfo source="mapping">UK2012|G|ExtSystem|optional|item|-|ExternalSystem</xs:appinfo>
+      <xs:appinfo source="mapping">UK2012|H|ExtObject|optional|item|-|ExternalEntity</xs:appinfo>
+      <xs:appinfo source="mapping">UK2012|I|ExtIdentifier|optional|item|-|ExternalId</xs:appinfo>
+      <xs:appinfo source="mapping">UK2012|J|Description|optional|item|-|Description</xs:appinfo>
+      <xs:appinfo source="mapping">UK2012|K|SetNumber|optional|item|-|SetNumber</xs:appinfo>
+      <xs:appinfo source="mapping">UK2012|L|PartNumber|optional|item|-|PartNumber</xs:appinfo>
       <xs:documentation>Information about a specific Spare.</xs:documentation>
     </xs:annotation>
     <xs:complexContent>
       <xs:extension base="cobielite:CobieObject">
         <xs:sequence>
-          <xs:element name="Category" type="xs:string" minOccurs="1">
-            <xs:annotation>
-              <xs:appinfo source="mapping">UK2012|D|Category|true</xs:appinfo>
-              <xs:appinfo source="mapping">US2013|D|Category|true</xs:appinfo>
-              <xs:appinfo source="picklist">Spare</xs:appinfo>
-            </xs:annotation>
-          </xs:element>
-          <xs:element name="SuppliersAssignment" type="cobielite:ContactKeyCollection" minOccurs="0" maxOccurs="1">
-            <xs:annotation>
-              <xs:appinfo source="mapping">UK2012|F|Suppliers|true</xs:appinfo>
-              <xs:appinfo source="mapping">US2013|F|Suppliers|true</xs:appinfo>
-              <xs:appinfo source="list">true</xs:appinfo>
-              <xs:appinfo source="path">Name</xs:appinfo>
-            </xs:annotation>
-          </xs:element>
-          <xs:element name="ExternalSystem" type="xs:string" minOccurs="0">
-            <xs:annotation>
-              <xs:appinfo source="mapping">UK2012|G|ExtSystem|false</xs:appinfo>
-              <xs:appinfo source="mapping">US2013|G|ExtSystem|false</xs:appinfo>
-            </xs:annotation>
-          </xs:element>
-          <xs:element name="ExternalEntity" type="xs:string" minOccurs="0">
-            <xs:annotation>
-              <xs:appinfo source="mapping">UK2012|H|ExtObject|false</xs:appinfo>
-              <xs:appinfo source="mapping">US2013|H|ExtObject|false</xs:appinfo>
-            </xs:annotation>
-          </xs:element>
-          <xs:element name="ExternalID" type="xs:string" minOccurs="0">
-            <xs:annotation>
-              <xs:appinfo source="mapping">UK2012|I|ExtIdentifier|false</xs:appinfo>
-              <xs:appinfo source="mapping">US2013|I|ExtIdentifier|false</xs:appinfo>
-            </xs:annotation>
-          </xs:element>
-          <xs:element name="Description" type="xs:string" minOccurs="0">
-            <xs:annotation>
-              <xs:appinfo source="mapping">UK2012|J|Description|false</xs:appinfo>
-              <xs:appinfo source="mapping">US2013|J|Description|false</xs:appinfo>
-            </xs:annotation>
-          </xs:element>
-          <xs:element name="SetNumber" type="xs:string" minOccurs="0">
-            <xs:annotation>
-              <xs:appinfo source="mapping">UK2012|K|SetNumber|false</xs:appinfo>
-              <xs:appinfo source="mapping">US2013|K|SetNumber|false</xs:appinfo>
-            </xs:annotation>
-          </xs:element>
-          <xs:element name="PartNumber" type="xs:string" minOccurs="0">
-            <xs:annotation>
-              <xs:appinfo source="mapping">UK2012|L|PartNumber|false</xs:appinfo>
-              <xs:appinfo source="mapping">US2013|L|PartNumber|false</xs:appinfo>
-            </xs:annotation>
-          </xs:element>
-
+          <xs:element name="Suppliers" type="cobielite:ContactKeyCollection" minOccurs="0" maxOccurs="1" />
+          <xs:element name="SetNumber" type="xs:string" minOccurs="0" />
+          <xs:element name="PartNumber" type="xs:string" minOccurs="0" />
         </xs:sequence>
       </xs:extension>
     </xs:complexContent>
@@ -1615,52 +833,26 @@
   <!--Begin System Related Content-->
   <xs:complexType name="SystemType">
     <xs:annotation>
-      <xs:appinfo source="mapping">UK2012|System</xs:appinfo>
-      <xs:appinfo source="mapping">US2013|System</xs:appinfo>
-      <xs:documentation>COBie.System information is considered to be required only as-specified.  Please refer to the COBie Guide for more information on specific system requirements.</xs:documentation>
+      <xs:appinfo source="sheet">UK2012|System</xs:appinfo>
+      <!--mapping, column, header, required/optional, list/item, pick/-, path-->
+      <xs:appinfo source="mapping">UK2012|A|Name|required|item|-|Name</xs:appinfo>
+      <xs:appinfo source="mapping">UK2012|B|CreatedBy|required|item|-|CreatedBy.Email</xs:appinfo>
+      <xs:appinfo source="mapping">UK2012|C|CreatedOn|required|item|-|CreatedOn</xs:appinfo>
+      <xs:appinfo source="mapping">UK2012|D|Category|required|item|Category-Element|Category</xs:appinfo>
+      <xs:appinfo source="mapping">UK2012|E|ComponentNames|required|list|-|Components.Name</xs:appinfo>
+      <xs:appinfo source="mapping">UK2012|F|ExtSystem|optional|item|-|ExternalSystem</xs:appinfo>
+      <xs:appinfo source="mapping">UK2012|G|ExtObject|optional|item|-|ExternalEntity</xs:appinfo>
+      <xs:appinfo source="mapping">UK2012|H|ExtIdentifier|optional|item|-|ExternalId</xs:appinfo>
+      <xs:appinfo source="mapping">UK2012|I|Description|optional|item|-|Description</xs:appinfo>
+      <xs:documentation>
+        COBie.System information is considered to be required only as-specified.
+        Please refer to the COBie Guide for more information on specific system requirements.
+      </xs:documentation>
     </xs:annotation>
     <xs:complexContent>
       <xs:extension base="cobielite:CobieObject">
         <xs:sequence>
-          <xs:element name="Category" type="xs:string" minOccurs="1">
-            <xs:annotation>
-              <xs:appinfo source="mapping">UK2012|D|Category|true</xs:appinfo>
-              <xs:appinfo source="mapping">US2013|D|Category|true</xs:appinfo>
-              <xs:appinfo source="picklist">Category-Element</xs:appinfo>
-            </xs:annotation>
-          </xs:element>
-          <xs:element name="ComponentsAssignment" type="cobielite:AssetKeyCollection" minOccurs="0" maxOccurs="1">
-            <xs:annotation>
-              <xs:appinfo source="mapping">UK2012|E|ComponentNames|true</xs:appinfo>
-              <xs:appinfo source="mapping">US2013|E|ComponentNames|true</xs:appinfo>
-              <xs:appinfo source="list">true</xs:appinfo>
-              <xs:appinfo source="path">Name</xs:appinfo>
-            </xs:annotation>
-          </xs:element>
-          <xs:element name="ExternalSystem" type="xs:string" minOccurs="0">
-            <xs:annotation>
-              <xs:appinfo source="mapping">UK2012|F|ExtSystem|false</xs:appinfo>
-              <xs:appinfo source="mapping">US2013|F|ExtSystem|false</xs:appinfo>
-            </xs:annotation>
-          </xs:element>
-          <xs:element name="ExternalEntity" type="xs:string" minOccurs="0">
-            <xs:annotation>
-              <xs:appinfo source="mapping">UK2012|G|ExtObject|false</xs:appinfo>
-              <xs:appinfo source="mapping">US2013|G|ExtObject|false</xs:appinfo>
-            </xs:annotation>
-          </xs:element>
-          <xs:element name="ExternalID" type="xs:string" minOccurs="0">
-            <xs:annotation>
-              <xs:appinfo source="mapping">UK2012|H|ExtIdentifier|false</xs:appinfo>
-              <xs:appinfo source="mapping">US2013|H|ExtIdentifier|false</xs:appinfo>
-            </xs:annotation>
-          </xs:element>
-          <xs:element name="Description" type="xs:string" minOccurs="0">
-            <xs:annotation>
-              <xs:appinfo source="mapping">UK2012|I|Description|false</xs:appinfo>
-              <xs:appinfo source="mapping">US2013|I|Description|false</xs:appinfo>
-            </xs:annotation>
-          </xs:element>
+          <xs:element name="Components" type="cobielite:AssetKeyCollection" minOccurs="0" maxOccurs="1" />
         </xs:sequence>
       </xs:extension>
     </xs:complexContent>
@@ -1675,52 +867,26 @@
   <!--Begin Zone Related Content-->
   <xs:complexType name="Zone">
     <xs:annotation>
-      <xs:appinfo source="mapping">UK2012|Zone</xs:appinfo>
-      <xs:appinfo source="mapping">US2013|Zone</xs:appinfo>
-      <xs:documentation>COBie.Zone information is considered to be required only as-specified.  Please refer to the COBie Guide for more information on specific zoning requirements.</xs:documentation>
+      <xs:appinfo source="sheet">UK2012|Zone</xs:appinfo>
+      <!--mapping, column, header, required/optional, list/item, pick/-, path-->
+      <xs:appinfo source="mapping">UK2012|A|Name|required|item|-|Name</xs:appinfo>
+      <xs:appinfo source="mapping">UK2012|B|CreatedBy|required|item|-|CreatedBy.Email</xs:appinfo>
+      <xs:appinfo source="mapping">UK2012|C|CreatedOn|required|item|-|CreatedOn</xs:appinfo>
+      <xs:appinfo source="mapping">UK2012|D|Category|required|item|ZoneType|Category</xs:appinfo>
+      <xs:appinfo source="mapping">UK2012|E|SpaceNames|required|list|-|Spaces.Name</xs:appinfo>
+      <xs:appinfo source="mapping">UK2012|F|ExtSystem|optional|item|-|ExternalSystem</xs:appinfo>
+      <xs:appinfo source="mapping">UK2012|G|ExtObject|optional|item|-|ExternalEntity</xs:appinfo>
+      <xs:appinfo source="mapping">UK2012|H|ExtIdentifier|optional|item|-|ExternalId</xs:appinfo>
+      <xs:appinfo source="mapping">UK2012|I|Description|optional|item|-|Description</xs:appinfo>
+      <xs:documentation>
+        COBie.Zone information is considered to be required only as-specified.
+        Please refer to the COBie Guide for more information on specific zoning requirements.
+      </xs:documentation>
     </xs:annotation>
     <xs:complexContent>
       <xs:extension base="cobielite:CobieObject">
         <xs:sequence>
-          <xs:element name="Category" type="xs:string" minOccurs="1">
-            <xs:annotation>
-              <xs:appinfo source="mapping">UK2012|D|Category|true</xs:appinfo>
-              <xs:appinfo source="mapping">US2013|D|Category|true</xs:appinfo>
-              <xs:appinfo source="picklist">Zone</xs:appinfo>
-            </xs:annotation>
-          </xs:element>
-          <xs:element name="SpacesAssignment" type="cobielite:SpaceKeyCollection" minOccurs="0" maxOccurs="1">
-            <xs:annotation>
-              <xs:appinfo source="mapping">UK2012|E|SpaceNames|true</xs:appinfo>
-              <xs:appinfo source="mapping">US2013|E|SpaceNames|true</xs:appinfo>
-              <xs:appinfo source="list">true</xs:appinfo>
-              <xs:appinfo source="path">Name</xs:appinfo>
-            </xs:annotation>
-          </xs:element>
-          <xs:element name="ExternalSystem" type="xs:string" minOccurs="0">
-            <xs:annotation>
-              <xs:appinfo source="mapping">UK2012|F|ExtSystem|false</xs:appinfo>
-              <xs:appinfo source="mapping">US2013|F|ExtSystem|false</xs:appinfo>
-            </xs:annotation>
-          </xs:element>
-          <xs:element name="ExternalEntity" type="xs:string" minOccurs="0">
-            <xs:annotation>
-              <xs:appinfo source="mapping">UK2012|G|ExtObject|false</xs:appinfo>
-              <xs:appinfo source="mapping">US2013|G|ExtObject|false</xs:appinfo>
-            </xs:annotation>
-          </xs:element>
-          <xs:element name="ExternalID" type="xs:string" minOccurs="0">
-            <xs:annotation>
-              <xs:appinfo source="mapping">UK2012|H|ExtIdentifier|false</xs:appinfo>
-              <xs:appinfo source="mapping">US2013|H|ExtIdentifier|false</xs:appinfo>
-            </xs:annotation>
-          </xs:element>
-          <xs:element name="Description" type="xs:string" minOccurs="0">
-            <xs:annotation>
-              <xs:appinfo source="mapping">UK2012|I|Description|false</xs:appinfo>
-              <xs:appinfo source="mapping">US2013|I|Description|false</xs:appinfo>
-            </xs:annotation>
-          </xs:element>
+          <xs:element name="Spaces" type="cobielite:SpaceKeyCollection" minOccurs="0" maxOccurs="1" />
         </xs:sequence>
       </xs:extension>
     </xs:complexContent>
@@ -1732,36 +898,27 @@
   </xs:complexType>
   <!--End Zone Related Content-->
 
-
   <!-- Complex types -->
   <xs:complexType name="CobieObject" abstract="true">
     <xs:sequence>
       <!--  Common properties  -->
-      <xs:element name="Name" type="xs:string" minOccurs="1">
-        <xs:annotation>
-          <xs:appinfo source="mapping">UK2012|A|Name|true</xs:appinfo>
-          <xs:appinfo source="mapping">US2013|A|Name|true</xs:appinfo>
-        </xs:annotation>
-      </xs:element>
-      <xs:element name="CreatedByAssignment" type="cobielite:ContactKey" minOccurs="1">
-        <xs:annotation>
-          <xs:appinfo source="mapping">UK2012|B|CreatedBy|true</xs:appinfo>
-          <xs:appinfo source="mapping">US2013|B|CreatedBy|true</xs:appinfo>
-          <xs:appinfo source="path">Email</xs:appinfo>
-        </xs:annotation>
-      </xs:element>
-      <xs:element name="CreatedOn" type="xs:dateTime" minOccurs="1" nillable="true">
-        <xs:annotation>
-          <xs:appinfo source="mapping">UK2012|C|CreatedOn|true</xs:appinfo>
-          <xs:appinfo source="mapping">US2013|C|CreatedOn|true</xs:appinfo>
-        </xs:annotation>
-      </xs:element>
+      <xs:element name="Name" type="xs:string" minOccurs="1" />
+      <xs:element name="Description" type="xs:string" minOccurs="0" />
+      <xs:element name="CreatedBy" type="cobielite:ContactKey" minOccurs="1" />
+      <xs:element name="CreatedOn" type="xs:dateTime" minOccurs="1" nillable="true" />
+      <xs:element name="Category" type="xs:string" minOccurs="0" />
+
+      <!-- External system identifiers -->
+      <xs:element name="ExternalSystem" type="xs:string" minOccurs="0" />
+      <xs:element name="ExternalEntity" type="xs:string" minOccurs="0" />
+      <xs:element name="ExternalId" type="xs:string" minOccurs="0" />
 
       <!-- Common lists -->
       <xs:element name="Documents" type="cobielite:DocumentCollection" maxOccurs="1" minOccurs="0" />
       <xs:element name="Attributes" type="cobielite:AttributeCollection" maxOccurs="1" minOccurs="0" />
       <xs:element name="Issues" type="cobielite:IssueCollection" maxOccurs="1" minOccurs="0" />
       <xs:element name="Impacts" type="cobielite:ImpactCollection" maxOccurs="1" minOccurs="0" />
+      <xs:element name="ProjectStages" type="cobielite:ProjectStageKeyCollection" maxOccurs="1" minOccurs="0" />
     </xs:sequence>
   </xs:complexType>
 
@@ -2059,6 +1216,21 @@
       <xs:enumeration value="Document" />
       <xs:enumeration value="Attribute" />
       <xs:enumeration value="Issue" />
+      <xs:enumeration value="ProjectStage" />
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="DurationUnit">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="milisecond" />
+      <xs:enumeration value="second" />
+      <xs:enumeration value="minute" />
+      <xs:enumeration value="hour" />
+      <xs:enumeration value="day" />
+      <xs:enumeration value="week" />
+      <xs:enumeration value="month" />
+      <xs:enumeration value="quarter" />
+      <xs:enumeration value="year" />
+      <xs:enumeration value="as required" />
     </xs:restriction>
   </xs:simpleType>
 </xs:schema>

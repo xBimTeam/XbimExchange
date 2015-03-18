@@ -1,6 +1,6 @@
 ﻿namespace Xbim.COBieLiteUK
 {
-    public partial class Facility: ICobieObject
+    public partial class Facility
     {
          
     }

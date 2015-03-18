@@ -8,41 +8,92 @@ using Newtonsoft.Json;
 
 namespace Xbim.COBieLiteUK
 {
-    public partial class Contact : ICobieObject
+    public partial class Contact
     {
         [XmlIgnore][JsonIgnore]
         new public string Name
         {
-            get { return String.Format("{0} {1}", FamilyName, GivenName); }
+            get
+            {
+                if (Attributes == null) return null;
+                var attr = Attributes.FirstOrDefault(a => a.Name == "Name");
+                if (attr == null) return null;
+
+                var strAttrVal = attr.Item as StringAttributeValue;
+                if (strAttrVal == null) return null;
+
+                return strAttrVal.Value;
+            }
             set
             {
-                if (String.IsNullOrEmpty(value))
+                if (Attributes == null) Attributes = new List<Attribute>();
+                var attr = Attributes.FirstOrDefault(a => a.Name == "Name");
+                if (attr == null)
                 {
-                    FamilyName = null;
-                    GivenName = null;
+                    attr = new Attribute(){Name = "Name"};
+                    Attributes.Add(attr);
+                }
+
+                if (value == null)
+                {
+                    attr.Item = null;
                     return;
                 }
-                var parts = value.Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
-                if (parts.Length == 1)
+
+                var strAttrVal = attr.Item as StringAttributeValue;
+                if (strAttrVal == null)
                 {
-                    FamilyName = parts[0];
-                    GivenName = null;
+                    strAttrVal = new StringAttributeValue();
+                    attr.Item = strAttrVal;
                 }
-                else
-                {
-                    FamilyName = parts[0].Trim();
-                    GivenName = value.Substring(FamilyName.Length).Trim();
-                }
+
+                strAttrVal.Value = value;
             }
         }
 
         /// <summary>
         /// Description is invalid for Contact object
         /// </summary>
-        string ICobieObject.Description
+        [XmlIgnore]
+        [JsonIgnore]
+        new public string Description
         {
-            get { return null; }
-            set { }
+            get
+            {
+                if (Attributes == null) return null;
+                var attr = Attributes.FirstOrDefault(a => a.Name == "Description");
+                if (attr == null) return null;
+
+                var strAttrVal = attr.Item as StringAttributeValue;
+                if (strAttrVal == null) return null;
+
+                return strAttrVal.Value;
+            }
+            set
+            {
+                if (Attributes == null) Attributes = new List<Attribute>();
+                var attr = Attributes.FirstOrDefault(a => a.Name == "Description");
+                if (attr == null)
+                {
+                    attr = new Attribute() { Name = "Description" };
+                    Attributes.Add(attr);
+                }
+
+                if (value == null)
+                {
+                    attr.Item = null;
+                    return;
+                }
+
+                var strAttrVal = attr.Item as StringAttributeValue;
+                if (strAttrVal == null)
+                {
+                    strAttrVal = new StringAttributeValue();
+                    attr.Item = strAttrVal;
+                }
+
+                strAttrVal.Value = value;
+            }
         }
     }
 }

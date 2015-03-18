@@ -6,16 +6,7 @@
       <Compartment Name="Fields" Collapsed="true" />
     </Compartments>
     <TypeIdentifier>
-      <HashCode>AQEAAAAAAAAAAAgAAIIAAAQQAAACiAACAEAEBAAAAAA=</HashCode>
-    </TypeIdentifier>
-  </Class>
-  <Class Name="Xbim.COBieLiteUK.Project" HideInheritanceLine="true">
-    <Position X="0.5" Y="1.25" Width="1.5" />
-    <Compartments>
-      <Compartment Name="Fields" Collapsed="true" />
-    </Compartments>
-    <TypeIdentifier>
-      <HashCode>QAACkEABAAwgIAAQAAAIABYCAAAAQAQCAiQCEAAAgAE=</HashCode>
+      <HashCode>AQECAAABAAggAAgAAIIAAAQQAAASCAICACaEFAAAiAE=</HashCode>
     </TypeIdentifier>
   </Class>
   <Class Name="Xbim.COBieLiteUK.SystemType" HideInheritanceLine="true">
@@ -24,10 +15,9 @@
       <Compartment Name="Fields" Collapsed="true" />
     </Compartments>
     <TypeIdentifier>
-      <HashCode>AAACAAAAAAAgAAAAAAAAAAAAIAAAAAQCACSCEAAAiAA=</HashCode>
+      <HashCode>AAAAAAAAAAAAAIAAAAAAAAAAAAAAAAAAAAQAAAAAAAA=</HashCode>
       <FileName>SystemType.cs</FileName>
     </TypeIdentifier>
-    <Lollipop Position="0.2" />
   </Class>
   <Font Name="Segoe UI" Size="9" />
 </ClassDiagram>

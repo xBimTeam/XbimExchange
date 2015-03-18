@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Xbim.COBieLiteUK
 {
-    public partial class SystemType : ICobieObject
+    public partial class SystemType
     {
     }
 }
