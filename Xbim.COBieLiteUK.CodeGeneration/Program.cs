@@ -32,7 +32,7 @@ namespace Xbim.COBieLiteUK.CodeGeneration
             };
             generatorParams.PropertyParams = new PropertyParams(generatorParams)
             {
-                GenerateShouldSerializeProperty = false, 
+                GenerateShouldSerializeProperty = true, 
                 GeneratePropertyNameSpecified = PropertyNameSpecifiedType.None
             };
 
