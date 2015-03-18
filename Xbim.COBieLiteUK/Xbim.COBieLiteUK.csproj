@@ -45,46 +45,32 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="CobieAttributes.cs" />
-    <Compile Include="CollectionTypes\AllowedValueCollectionType.cs" />
-    <Compile Include="CollectionTypes\AssemblyAssignmentCollectionType.cs" />
-    <Compile Include="CollectionTypes\AssetCollectionType.cs" />
-    <Compile Include="CollectionTypes\AssetTypeCollectionType.cs" />
-    <Compile Include="CollectionTypes\AttributeCollectionType.cs" />
-    <Compile Include="CollectionTypes\ConnectionCollectionType.cs" />
-    <Compile Include="CollectionTypes\ContactAssignmentCollectionType.cs" />
-    <Compile Include="CollectionTypes\ContactCollectionType.cs" />
-    <Compile Include="CollectionTypes\DocumentCollectionType.cs" />
-    <Compile Include="CollectionTypes\FloorCollectionType.cs" />
-    <Compile Include="CollectionTypes\ICollectionType.cs" />
-    <Compile Include="CollectionTypes\IssueCollectionType.cs" />
-    <Compile Include="CollectionTypes\JobCollectionType.cs" />
-    <Compile Include="CollectionTypes\ResourceCollectionType.cs" />
-    <Compile Include="CollectionTypes\SpaceAssignmentCollectionType.cs" />
-    <Compile Include="CollectionTypes\SpaceCollectionType.cs" />
-    <Compile Include="CollectionTypes\SpareCollectionType.cs" />
-    <Compile Include="CollectionTypes\SystemAssignmentCollectionType.cs" />
-    <Compile Include="CollectionTypes\SystemCollectionType.cs" />
-    <Compile Include="CollectionTypes\WarrantyCollectionType.cs" />
-    <Compile Include="CollectionTypes\ZoneAssignmentCollectionType.cs" />
-    <Compile Include="CollectionTypes\ZoneCollectionType.cs" />
-    <Compile Include="ProjectType.cs" />
+    <Compile Include="Assembly.cs" />
+    <Compile Include="Asset.cs" />
+    <Compile Include="AssetType.cs" />
+    <Compile Include="Attribute.cs" />
+    <Compile Include="Connection.cs" />
+    <Compile Include="Contact.cs" />
+    <Compile Include="Document.cs" />
+    <Compile Include="Floor.cs" />
+    <Compile Include="Impact.cs" />
+    <Compile Include="Issue.cs" />
+    <Compile Include="Job.cs" />
+    <Compile Include="Resource.cs" />
+    <Compile Include="Schemas\Attributes.cs" />
+    <Compile Include="Facility.cs" />
+    <Compile Include="ICobieObject.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Schemas\cobieliteuk.designer.cs" />
-    <Compile Include="Schemas\cobieliteuk.designer.RenamedClasses.cs" />
-    <Compile Include="Schemas\XmlSerializationCodeCobieUK.cs" />
+    <Compile Include="Space.cs" />
+    <Compile Include="Spare.cs" />
+    <Compile Include="SystemType.cs" />
+    <Compile Include="Zone.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="COBieLiteUK.cd" />
     <None Include="packages.config" />
     <None Include="Schemas\cobieliteuk.cd" />
     <None Include="Schemas\cobieliteuk.xsd">
-      <SubType>Designer</SubType>
-    </None>
-    <None Include="Schemas\cobielite_modified.xsd">
-      <SubType>Designer</SubType>
-    </None>
-    <None Include="Schemas\core.xsd">
       <SubType>Designer</SubType>
     </None>
   </ItemGroup>

@@ -15,6 +15,9 @@ namespace Xsd2Code.Library.Extensions
         {
             base.ProcessProperty(type, ns, member, xmlElement, schema);
 
+            var propertyMember = member as CodeMemberProperty;
+            if(propertyMember == null) return;
+
             var xsdType = schema.SchemaTypes.Values.OfType<XmlSchemaComplexType>().FirstOrDefault(ct => ct.Name == type.Name);
             if (xsdType == null) return;
 
@@ -57,6 +60,8 @@ namespace Xsd2Code.Library.Extensions
                     member.CustomAttributes.Add(new CodeAttributeDeclaration("Xbim.COBieLiteUK.List"));
 
             }
+
+            
         }
 
         protected override void ProcessClass(CodeNamespace codeNamespace, XmlSchema schema, CodeTypeDeclaration type)
@@ -91,8 +96,26 @@ namespace Xsd2Code.Library.Extensions
                         new CodeAttributeArgument("Path", new CodePrimitiveExpression(parts[3]))
                         ));
                 }
+                if (source == "list" && appInfo.Markup[0].InnerText.ToLower() == "true")
+                {
+                    type.CustomAttributes.Add(new CodeAttributeDeclaration("Xbim.COBieLiteUK.List"));
+                }
                 
             }
+
+        }
+
+        public override void Process(CodeNamespace code, XmlSchema schema)
+        {
+            base.Process(code, schema);
+
+            //remove collection types as they are not used 
+            var collections = code.Types.Cast<CodeTypeDeclaration>().Where(ctd => ctd.Name.Contains("Collection")).ToList();
+            foreach (var collection in collections)
+            {
+                code.Types.Remove(collection);
+            }
+
         }
     }
 }

@@ -171,6 +171,7 @@
     <Compile Include="TargetFramework.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Content Include="License.txt" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="defaults.xsd2code.template">

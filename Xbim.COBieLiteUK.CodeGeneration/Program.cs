@@ -20,7 +20,7 @@ namespace Xbim.COBieLiteUK.CodeGeneration
                 InputFilePath = @"..\..\..\Xbim.COBieLiteUK\Schemas\cobieliteuk.xsd",
                 CollectionObjectType = CollectionType.List,
                 Language = GenerationLanguage.CSharp,
-                NameSpace = "Xbim.COBieLiteUK2",
+                NameSpace = "Xbim.COBieLiteUK",
                 OutputFilePath = @"cobieliteuk.designer.cs",
                 TargetFramework = TargetFramework.CobieLiteUk,
                 EnableInitializeFields = false,

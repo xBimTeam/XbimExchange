@@ -1,161 +1,33 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <ClassDiagram MajorVersion="1" MinorVersion="1">
-  <Class Name="Xbim.COBieLiteUK2.ProjectType">
-    <Position X="0.5" Y="0.5" Width="1.5" />
-    <Compartments>
-      <Compartment Name="Fields" Collapsed="true" />
-    </Compartments>
-    <TypeIdentifier>
-      <HashCode>QAACkEABAAwgIAAQAAAIABYCAAAAQAQCAiQCEAAAgAE=</HashCode>
-    </TypeIdentifier>
-    <ShowAsCollectionAssociation>
-      <Property Name="Facilities" />
-    </ShowAsCollectionAssociation>
-  </Class>
-  <Class Name="Xbim.COBieLiteUK2.FacilityType">
-    <Position X="0.5" Y="5" Width="1.5" />
-    <Compartments>
-      <Compartment Name="Fields" Collapsed="true" />
-    </Compartments>
-    <AssociationLine Name="Zones" Type="Xbim.COBieLiteUK2.ZoneType" FixedFromPoint="true" FixedToPoint="true">
-      <Path>
-        <Point X="2" Y="5.25" />
-        <Point X="4.75" Y="5.25" />
-        <Point X="4.75" Y="5.75" />
-      </Path>
-    </AssociationLine>
-    <AssociationLine Name="Systems" Type="Xbim.COBieLiteUK2.SystemType" FixedFromPoint="true" FixedToPoint="true">
-      <Path>
-        <Point X="2" Y="5.25" />
-        <Point X="4.667" Y="5.25" Type="JumpStart" />
-        <Point X="4.833" Y="5.25" Type="JumpEnd" />
-        <Point X="8.75" Y="5.25" />
-        <Point X="8.75" Y="5.75" />
-      </Path>
-    </AssociationLine>
-    <AssociationLine Name="Resources" Type="Xbim.COBieLiteUK2.ResourceType" FixedFromPoint="true" FixedToPoint="true">
-      <Path>
-        <Point X="2" Y="5.25" />
-        <Point X="4.667" Y="5.25" Type="JumpStart" />
-        <Point X="4.833" Y="5.25" Type="JumpEnd" />
-        <Point X="6.75" Y="5.25" />
-        <Point X="6.75" Y="5.75" />
-      </Path>
-    </AssociationLine>
-    <AssociationLine Name="Floors" Type="Xbim.COBieLiteUK2.FloorType" FixedFromPoint="true" FixedToPoint="true">
-      <Path>
-        <Point X="2" Y="5.25" />
-        <Point X="4.667" Y="5.25" Type="JumpStart" />
-        <Point X="4.833" Y="5.25" Type="JumpEnd" />
-        <Point X="12.25" Y="5.25" />
-        <Point X="12.25" Y="5.75" />
-      </Path>
-    </AssociationLine>
-    <AssociationLine Name="AssetTypes" Type="Xbim.COBieLiteUK2.AssetTypeInfoType" FixedFromPoint="true" FixedToPoint="true">
-      <Path>
-        <Point X="2" Y="5.25" />
-        <Point X="4.667" Y="5.25" Type="JumpStart" />
-        <Point X="4.833" Y="5.25" Type="JumpEnd" />
-        <Point X="10.312" Y="5.25" />
-        <Point X="10.312" Y="5.75" />
-      </Path>
-    </AssociationLine>
-    <AssociationLine Name="Contacts" Type="Xbim.COBieLiteUK2.ContactType" FixedFromPoint="true" FixedToPoint="true">
-      <Path>
-        <Point X="2" Y="5.25" />
-        <Point X="2.594" Y="5.25" />
-        <Point X="2.594" Y="5.75" />
-      </Path>
-    </AssociationLine>
-    <TypeIdentifier>
-      <HashCode>BAAaACAAJAAoKgoACAIAAyASoAAQgAQkNiTCMFBAjFA=</HashCode>
-    </TypeIdentifier>
-    <ShowAsCollectionAssociation>
-      <Property Name="Zones" />
-      <Property Name="Systems" />
-      <Property Name="Resources" />
-      <Property Name="Floors" />
-      <Property Name="AssetTypes" />
-      <Property Name="Contacts" />
-    </ShowAsCollectionAssociation>
-  </Class>
-  <Class Name="Xbim.COBieLiteUK2.ZoneType" Collapsed="true">
-    <Position X="4" Y="5.75" Width="1.5" />
-    <TypeIdentifier>
-      <HashCode>AAICAAAAAAAgAAAAAAAAAAAAAAAAAQQAACSCEAAAiAA=</HashCode>
-    </TypeIdentifier>
-  </Class>
-  <Class Name="Xbim.COBieLiteUK2.SystemType" Collapsed="true">
-    <Position X="8" Y="5.75" Width="1.5" />
-    <TypeIdentifier>
-      <HashCode>AAACAAAAAAAgAAAAAAAAAAAAIAAAAAQCACSCEAAAiAA=</HashCode>
-    </TypeIdentifier>
-  </Class>
-  <Class Name="Xbim.COBieLiteUK2.ResourceType" Collapsed="true">
-    <Position X="6" Y="5.75" Width="1.5" />
-    <TypeIdentifier>
-      <HashCode>AAACAAAAAAAgAAAAAAAAAAAAAAAAAAQAACSCEAAAiAA=</HashCode>
-    </TypeIdentifier>
-  </Class>
-  <Class Name="Xbim.COBieLiteUK2.FloorType" Collapsed="true">
-    <Position X="11.5" Y="5.75" Width="1.5" />
-    <TypeIdentifier>
-      <HashCode>AAACACAABQAgAAACAAAAAAAAAECAAAQAACSCEAAAiAA=</HashCode>
-    </TypeIdentifier>
-  </Class>
-  <Class Name="Xbim.COBieLiteUK2.AssetTypeInfoType" Collapsed="true">
-    <Position X="9.75" Y="5.75" Width="1.5" />
-    <Compartments>
-      <Compartment Name="Fields" Collapsed="true" />
-    </Compartments>
-    <TypeIdentifier>
-      <HashCode>AUEWGEIkWQcizIgAAEBhgEABCgKQAgwABCTi0IHAiRg=</HashCode>
-    </TypeIdentifier>
-  </Class>
-  <Class Name="Xbim.COBieLiteUK2.CobieObject">
-    <Position X="4" Y="0.5" Width="1.5" />
+  <Class Name="Xbim.COBieLiteUK.CobieObject" HideInheritanceLine="true">
+    <Position X="4.75" Y="0.5" Width="1.75" />
     <Compartments>
       <Compartment Name="Fields" Collapsed="true" />
     </Compartments>
     <TypeIdentifier>
       <HashCode>AQEAAAAAAAAAAAgAAIIAAAQQAAACiAACAEAEBAAAAAA=</HashCode>
     </TypeIdentifier>
-    <ShowAsCollectionAssociation>
-      <Property Name="Attributes" />
-      <Property Name="Documents" />
-      <Property Name="Issues" />
-      <Property Name="Impacts" />
-    </ShowAsCollectionAssociation>
   </Class>
-  <Class Name="Xbim.COBieLiteUK2.AttributeType" Collapsed="true" HideInheritanceLine="true">
-    <Position X="7.5" Y="0.5" Width="1.5" />
+  <Class Name="Xbim.COBieLiteUK.Project" HideInheritanceLine="true">
+    <Position X="0.5" Y="1.25" Width="1.5" />
+    <Compartments>
+      <Compartment Name="Fields" Collapsed="true" />
+    </Compartments>
     <TypeIdentifier>
-      <HashCode>AAACAAAAAAAgAAAAAAAAAAAAAAACAAQAACSiEAAAiAA=</HashCode>
+      <HashCode>QAACkEABAAwgIAAQAAAIABYCAAAAQAQCAiQCEAAAgAE=</HashCode>
     </TypeIdentifier>
   </Class>
-  <Class Name="Xbim.COBieLiteUK2.DocumentType" Collapsed="true" HideInheritanceLine="true">
-    <Position X="7.5" Y="1.25" Width="1.5" />
+  <Class Name="Xbim.COBieLiteUK.SystemType" HideInheritanceLine="true">
+    <Position X="8" Y="6.75" Width="1.5" />
+    <Compartments>
+      <Compartment Name="Fields" Collapsed="true" />
+    </Compartments>
     <TypeIdentifier>
-      <HashCode>AAACABCAAEAgAAAAAgCAAAAAAAAEAAYAECyCEAAAiAA=</HashCode>
+      <HashCode>AAACAAAAAAAgAAAAAAAAAAAAIAAAAAQCACSCEAAAiAA=</HashCode>
+      <FileName>SystemType.cs</FileName>
     </TypeIdentifier>
-  </Class>
-  <Class Name="Xbim.COBieLiteUK2.IssueType" Collapsed="true" HideInheritanceLine="true">
-    <Position X="7.5" Y="2" Width="1.5" />
-    <TypeIdentifier>
-      <HashCode>AAACAACAgAEgAAAIAIAAGAAAAABAAAQIACSCEAAAiAA=</HashCode>
-    </TypeIdentifier>
-  </Class>
-  <Class Name="Xbim.COBieLiteUK2.ImpactType" Collapsed="true" HideInheritanceLine="true">
-    <Position X="7.5" Y="2.75" Width="1.5" />
-    <TypeIdentifier>
-      <HashCode>AAACABAEAAAiEAAAAAACAAAAAAgDCAwIACSiEAAAiAA=</HashCode>
-    </TypeIdentifier>
-  </Class>
-  <Class Name="Xbim.COBieLiteUK2.ContactType" Collapsed="true">
-    <Position X="2.25" Y="5.75" Width="1.5" />
-    <TypeIdentifier>
-      <HashCode>AAIAAAAAAiCAAAAAIAYMAAAIEgIABAQBSCaCNAAAyAE=</HashCode>
-    </TypeIdentifier>
+    <Lollipop Position="0.2" />
   </Class>
   <Font Name="Segoe UI" Size="9" />
 </ClassDiagram>

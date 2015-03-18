@@ -23,6 +23,9 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SerialisationHelper", "Xbim.COBieLite.SerialisationHelper\SerialisationHelper.csproj", "{B7628DBA-72BF-4831-B744-84D445A11704}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Xbim.COBieLiteUK", "Xbim.COBieLiteUK\Xbim.COBieLiteUK.csproj", "{90DEF072-96C7-4972-835E-909C41169CB4}"
+	ProjectSection(ProjectDependencies) = postProject
+		{ECF29BC1-D9B6-4E9F-8915-892B8D6D1089} = {ECF29BC1-D9B6-4E9F-8915-892B8D6D1089}
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Xbim.DPoW", "Xbim.DPoW\Xbim.DPoW.csproj", "{79E7F597-F509-49EC-A606-FDC8326E72F5}"
 EndProject
@@ -65,7 +68,6 @@ Global
 		{5540768D-8ACD-4CC0-B3CD-1951DEF54C20}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5540768D-8ACD-4CC0-B3CD-1951DEF54C20}.Release|Any CPU.Build.0 = Release|Any CPU
 		{B7628DBA-72BF-4831-B744-84D445A11704}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{B7628DBA-72BF-4831-B744-84D445A11704}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B7628DBA-72BF-4831-B744-84D445A11704}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B7628DBA-72BF-4831-B744-84D445A11704}.Release|Any CPU.Build.0 = Release|Any CPU
 		{90DEF072-96C7-4972-835E-909C41169CB4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
