@@ -19,1661 +19,6 @@ namespace Xbim.COBieLiteUK {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://openbim.org/schemas/cobieliteuk")]
     [System.Xml.Serialization.XmlRootAttribute(Namespace="http://openbim.org/schemas/cobieliteuk", IsNullable=false)]
-    [Xbim.COBieLiteUK.SheetMapping(Type="UK2012", Sheet="Component")]
-    [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="A", Header="Name", Required=true, List=false, PickList=null, Path="Name")]
-    [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="B", Header="CreatedBy", Required=true, List=false, PickList=null, Path="CreatedBy.Email")]
-    [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="C", Header="CreatedOn", Required=true, List=false, PickList=null, Path="CreatedOn")]
-    [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="D", Header="TypeName", Required=true, List=false, PickList=null, Path="parent.Name")]
-    [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="E", Header="Space", Required=true, List=false, PickList=null, Path="Space.Name")]
-    [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="F", Header="Description", Required=true, List=false, PickList=null, Path="Description")]
-    [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="G", Header="ExtSystem", Required=false, List=false, PickList=null, Path="ExternalSystem")]
-    [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="H", Header="ExtObject", Required=false, List=false, PickList=null, Path="ExternalEntity")]
-    [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="I", Header="ExtIdentifier", Required=false, List=false, PickList=null, Path="ExternalId")]
-    [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="J", Header="SerialNumber", Required=true, List=false, PickList=null, Path="SerialNumber")]
-    [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="K", Header="InstallationDate", Required=true, List=false, PickList=null, Path="InstallationDate")]
-    [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="L", Header="WarrantyStartDate", Required=true, List=false, PickList=null, Path="WarrantyStartDate")]
-    [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="M", Header="TagNumber", Required=false, List=false, PickList=null, Path="TagNumber")]
-    [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="N", Header="BarCode", Required=false, List=false, PickList=null, Path="BarCode")]
-    [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="O", Header="AssetIdentifier", Required=false, List=false, PickList=null, Path="AssetIdentifier")]
-    public partial class Asset : ObjectInfo {
-        
-        private SpaceKey spaceField;
-        
-        private string serialNumberField;
-        
-        private System.Nullable<System.DateTime> installationDateField;
-        
-        private System.Nullable<System.DateTime> warrantyStartDateField;
-        
-        private string tagNumberField;
-        
-        private string barCodeField;
-        
-        private string assetIdentifierField;
-        
-        private List<Connection> connectionsField;
-        
-        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
-        public SpaceKey Space {
-            get {
-                return this.spaceField;
-            }
-            set {
-                this.spaceField = value;
-            }
-        }
-        
-        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
-        public string SerialNumber {
-            get {
-                return this.serialNumberField;
-            }
-            set {
-                this.serialNumberField = value;
-            }
-        }
-        
-        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified, IsNullable=true)]
-        public System.Nullable<System.DateTime> InstallationDate {
-            get {
-                return this.installationDateField;
-            }
-            set {
-                this.installationDateField = value;
-            }
-        }
-        
-        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified, IsNullable=true)]
-        public System.Nullable<System.DateTime> WarrantyStartDate {
-            get {
-                return this.warrantyStartDateField;
-            }
-            set {
-                this.warrantyStartDateField = value;
-            }
-        }
-        
-        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
-        public string TagNumber {
-            get {
-                return this.tagNumberField;
-            }
-            set {
-                this.tagNumberField = value;
-            }
-        }
-        
-        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
-        public string BarCode {
-            get {
-                return this.barCodeField;
-            }
-            set {
-                this.barCodeField = value;
-            }
-        }
-        
-        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
-        public string AssetIdentifier {
-            get {
-                return this.assetIdentifierField;
-            }
-            set {
-                this.assetIdentifierField = value;
-            }
-        }
-        
-        [System.Xml.Serialization.XmlArrayAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
-        [System.Xml.Serialization.XmlArrayItemAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified, IsNullable=false)]
-        public List<Connection> Connections {
-            get {
-                return this.connectionsField;
-            }
-            set {
-                this.connectionsField = value;
-            }
-        }
-        
-        /// <summary>
-        /// Test whether InstallationDate should be serialized
-        /// </summary>
-        public virtual bool ShouldSerializeInstallationDate() {
-            return InstallationDate.HasValue;
-        }
-        
-        /// <summary>
-        /// Test whether WarrantyStartDate should be serialized
-        /// </summary>
-        public virtual bool ShouldSerializeWarrantyStartDate() {
-            return WarrantyStartDate.HasValue;
-        }
-    }
-    
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Xbim.COBieLiteUK.CodeGeneration", "1.0.0.0")]
-    [System.SerializableAttribute()]
-    [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://openbim.org/schemas/cobieliteuk")]
-    [System.Xml.Serialization.XmlRootAttribute(Namespace="http://openbim.org/schemas/cobieliteuk", IsNullable=true)]
-    public partial class SpaceKey {
-        
-        private string nameField;
-        
-        private EntityType keyTypeField;
-        
-        public SpaceKey() {
-            this.keyTypeField = EntityType.Space;
-        }
-        
-        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
-        public string Name {
-            get {
-                return this.nameField;
-            }
-            set {
-                this.nameField = value;
-            }
-        }
-        
-        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
-        public EntityType KeyType {
-            get {
-                return this.keyTypeField;
-            }
-            set {
-                this.keyTypeField = value;
-            }
-        }
-    }
-    
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Xbim.COBieLiteUK.CodeGeneration", "1.0.0.0")]
-    [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://openbim.org/schemas/cobieliteuk")]
-    [System.Xml.Serialization.XmlRootAttribute(Namespace="http://openbim.org/schemas/cobieliteuk", IsNullable=false)]
-    public enum EntityType {
-        
-        /// <remarks/>
-        Contact,
-        
-        /// <remarks/>
-        Facility,
-        
-        /// <remarks/>
-        Floor,
-        
-        /// <remarks/>
-        Space,
-        
-        /// <remarks/>
-        Zone,
-        
-        /// <remarks/>
-        AssetType,
-        
-        /// <remarks/>
-        Asset,
-        
-        /// <remarks/>
-        System,
-        
-        /// <remarks/>
-        Assembly,
-        
-        /// <remarks/>
-        Connection,
-        
-        /// <remarks/>
-        Spare,
-        
-        /// <remarks/>
-        Resource,
-        
-        /// <remarks/>
-        Job,
-        
-        /// <remarks/>
-        Impact,
-        
-        /// <remarks/>
-        Document,
-        
-        /// <remarks/>
-        Attribute,
-        
-        /// <remarks/>
-        Issue,
-        
-        /// <remarks/>
-        ProjectStage,
-    }
-    
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Xbim.COBieLiteUK.CodeGeneration", "1.0.0.0")]
-    [System.SerializableAttribute()]
-    [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://openbim.org/schemas/cobieliteuk")]
-    [System.Xml.Serialization.XmlRootAttribute(Namespace="http://openbim.org/schemas/cobieliteuk", IsNullable=true)]
-    public partial class ResourceKey {
-        
-        private string nameField;
-        
-        private EntityType keyTypeField;
-        
-        public ResourceKey() {
-            this.keyTypeField = EntityType.Resource;
-        }
-        
-        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
-        public string Name {
-            get {
-                return this.nameField;
-            }
-            set {
-                this.nameField = value;
-            }
-        }
-        
-        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
-        public EntityType KeyType {
-            get {
-                return this.keyTypeField;
-            }
-            set {
-                this.keyTypeField = value;
-            }
-        }
-    }
-    
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Xbim.COBieLiteUK.CodeGeneration", "1.0.0.0")]
-    [System.SerializableAttribute()]
-    [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://openbim.org/schemas/cobieliteuk")]
-    [System.Xml.Serialization.XmlRootAttribute(Namespace="http://openbim.org/schemas/cobieliteuk", IsNullable=true)]
-    public partial class JobKey {
-        
-        private string nameField;
-        
-        private string taskNumberField;
-        
-        private EntityType keyTypeField;
-        
-        public JobKey() {
-            this.keyTypeField = EntityType.Job;
-        }
-        
-        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
-        public string Name {
-            get {
-                return this.nameField;
-            }
-            set {
-                this.nameField = value;
-            }
-        }
-        
-        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
-        public string TaskNumber {
-            get {
-                return this.taskNumberField;
-            }
-            set {
-                this.taskNumberField = value;
-            }
-        }
-        
-        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
-        public EntityType KeyType {
-            get {
-                return this.keyTypeField;
-            }
-            set {
-                this.keyTypeField = value;
-            }
-        }
-    }
-    
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Xbim.COBieLiteUK.CodeGeneration", "1.0.0.0")]
-    [System.SerializableAttribute()]
-    [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://openbim.org/schemas/cobieliteuk")]
-    [System.Xml.Serialization.XmlRootAttribute(Namespace="http://openbim.org/schemas/cobieliteuk", IsNullable=true)]
-    public partial class Warranty {
-        
-        private ContactKey guarantorPartsField;
-        
-        private string descriptionField;
-        
-        private System.Nullable<double> durationPartsField;
-        
-        private ContactKey guarantorLaborField;
-        
-        private System.Nullable<double> durationLaborField;
-        
-        private System.Nullable<DurationUnit> durationUnitField;
-        
-        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
-        public ContactKey GuarantorParts {
-            get {
-                return this.guarantorPartsField;
-            }
-            set {
-                this.guarantorPartsField = value;
-            }
-        }
-        
-        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
-        public string Description {
-            get {
-                return this.descriptionField;
-            }
-            set {
-                this.descriptionField = value;
-            }
-        }
-        
-        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified, IsNullable=true)]
-        public System.Nullable<double> DurationParts {
-            get {
-                return this.durationPartsField;
-            }
-            set {
-                this.durationPartsField = value;
-            }
-        }
-        
-        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
-        public ContactKey GuarantorLabor {
-            get {
-                return this.guarantorLaborField;
-            }
-            set {
-                this.guarantorLaborField = value;
-            }
-        }
-        
-        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified, IsNullable=true)]
-        public System.Nullable<double> DurationLabor {
-            get {
-                return this.durationLaborField;
-            }
-            set {
-                this.durationLaborField = value;
-            }
-        }
-        
-        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified, IsNullable=true)]
-        public System.Nullable<DurationUnit> DurationUnit {
-            get {
-                return this.durationUnitField;
-            }
-            set {
-                this.durationUnitField = value;
-            }
-        }
-        
-        /// <summary>
-        /// Test whether DurationParts should be serialized
-        /// </summary>
-        public virtual bool ShouldSerializeDurationParts() {
-            return DurationParts.HasValue;
-        }
-        
-        /// <summary>
-        /// Test whether DurationLabor should be serialized
-        /// </summary>
-        public virtual bool ShouldSerializeDurationLabor() {
-            return DurationLabor.HasValue;
-        }
-        
-        /// <summary>
-        /// Test whether DurationUnit should be serialized
-        /// </summary>
-        public virtual bool ShouldSerializeDurationUnit() {
-            return DurationUnit.HasValue;
-        }
-    }
-    
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Xbim.COBieLiteUK.CodeGeneration", "1.0.0.0")]
-    [System.SerializableAttribute()]
-    [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://openbim.org/schemas/cobieliteuk")]
-    [System.Xml.Serialization.XmlRootAttribute(Namespace="http://openbim.org/schemas/cobieliteuk", IsNullable=true)]
-    public partial class ContactKey {
-        
-        private string emailField;
-        
-        private EntityType keyTypeField;
-        
-        public ContactKey() {
-            this.keyTypeField = EntityType.Contact;
-        }
-        
-        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
-        public string Email {
-            get {
-                return this.emailField;
-            }
-            set {
-                this.emailField = value;
-            }
-        }
-        
-        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
-        public EntityType KeyType {
-            get {
-                return this.keyTypeField;
-            }
-            set {
-                this.keyTypeField = value;
-            }
-        }
-    }
-    
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Xbim.COBieLiteUK.CodeGeneration", "1.0.0.0")]
-    [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://openbim.org/schemas/cobieliteuk")]
-    [System.Xml.Serialization.XmlRootAttribute(Namespace="http://openbim.org/schemas/cobieliteuk", IsNullable=false)]
-    public enum DurationUnit {
-        
-        /// <remarks/>
-        milisecond,
-        
-        /// <remarks/>
-        second,
-        
-        /// <remarks/>
-        minute,
-        
-        /// <remarks/>
-        hour,
-        
-        /// <remarks/>
-        day,
-        
-        /// <remarks/>
-        week,
-        
-        /// <remarks/>
-        month,
-        
-        /// <remarks/>
-        quarter,
-        
-        /// <remarks/>
-        year,
-        
-        /// <remarks/>
-        [System.Xml.Serialization.XmlEnumAttribute("as required")]
-        asrequired,
-    }
-    
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Xbim.COBieLiteUK.CodeGeneration", "1.0.0.0")]
-    [System.SerializableAttribute()]
-    [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://openbim.org/schemas/cobieliteuk")]
-    [System.Xml.Serialization.XmlRootAttribute(Namespace="http://openbim.org/schemas/cobieliteuk", IsNullable=true)]
-    public partial class AssetKey {
-        
-        private string nameField;
-        
-        private EntityType keyTypeField;
-        
-        public AssetKey() {
-            this.keyTypeField = EntityType.AssetType;
-        }
-        
-        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
-        public string Name {
-            get {
-                return this.nameField;
-            }
-            set {
-                this.nameField = value;
-            }
-        }
-        
-        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
-        public EntityType KeyType {
-            get {
-                return this.keyTypeField;
-            }
-            set {
-                this.keyTypeField = value;
-            }
-        }
-    }
-    
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Xbim.COBieLiteUK.CodeGeneration", "1.0.0.0")]
-    [System.SerializableAttribute()]
-    [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://openbim.org/schemas/cobieliteuk")]
-    [System.Xml.Serialization.XmlRootAttribute(Namespace="http://openbim.org/schemas/cobieliteuk", IsNullable=true)]
-    public partial class ProjectStageKey {
-        
-        private string nameField;
-        
-        private EntityType keyTypeField;
-        
-        public ProjectStageKey() {
-            this.keyTypeField = EntityType.ProjectStage;
-        }
-        
-        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
-        public string Name {
-            get {
-                return this.nameField;
-            }
-            set {
-                this.nameField = value;
-            }
-        }
-        
-        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
-        public EntityType KeyType {
-            get {
-                return this.keyTypeField;
-            }
-            set {
-                this.keyTypeField = value;
-            }
-        }
-    }
-    
-    [System.Xml.Serialization.XmlIncludeAttribute(typeof(IntegerAttributeValue))]
-    [System.Xml.Serialization.XmlIncludeAttribute(typeof(DecimalAttributeValue))]
-    [System.Xml.Serialization.XmlIncludeAttribute(typeof(DateTimeAttributeValue))]
-    [System.Xml.Serialization.XmlIncludeAttribute(typeof(BooleanAttributeValue))]
-    [System.Xml.Serialization.XmlIncludeAttribute(typeof(StringAttributeValue))]
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Xbim.COBieLiteUK.CodeGeneration", "1.0.0.0")]
-    [System.SerializableAttribute()]
-    [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://openbim.org/schemas/cobieliteuk")]
-    [System.Xml.Serialization.XmlRootAttribute(Namespace="http://openbim.org/schemas/cobieliteuk", IsNullable=false)]
-    public abstract partial class AttributeValue {
-        
-        private string unitField;
-        
-        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
-        public string Unit {
-            get {
-                return this.unitField;
-            }
-            set {
-                this.unitField = value;
-            }
-        }
-    }
-    
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Xbim.COBieLiteUK.CodeGeneration", "1.0.0.0")]
-    [System.SerializableAttribute()]
-    [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://openbim.org/schemas/cobieliteuk")]
-    [System.Xml.Serialization.XmlRootAttribute(Namespace="http://openbim.org/schemas/cobieliteuk", IsNullable=false)]
-    public partial class IntegerAttributeValue : AttributeValue {
-        
-        private int valueField;
-        
-        private System.Nullable<int> minimalValueField;
-        
-        private System.Nullable<int> maximalValueField;
-        
-        private ValueType typeField;
-        
-        public IntegerAttributeValue() {
-            this.typeField = ValueType.Integer;
-        }
-        
-        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
-        public int Value {
-            get {
-                return this.valueField;
-            }
-            set {
-                this.valueField = value;
-            }
-        }
-        
-        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified, IsNullable=true)]
-        public System.Nullable<int> MinimalValue {
-            get {
-                return this.minimalValueField;
-            }
-            set {
-                this.minimalValueField = value;
-            }
-        }
-        
-        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified, IsNullable=true)]
-        public System.Nullable<int> MaximalValue {
-            get {
-                return this.maximalValueField;
-            }
-            set {
-                this.maximalValueField = value;
-            }
-        }
-        
-        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
-        public ValueType Type {
-            get {
-                return this.typeField;
-            }
-            set {
-                this.typeField = value;
-            }
-        }
-        
-        /// <summary>
-        /// Test whether MinimalValue should be serialized
-        /// </summary>
-        public virtual bool ShouldSerializeMinimalValue() {
-            return MinimalValue.HasValue;
-        }
-        
-        /// <summary>
-        /// Test whether MaximalValue should be serialized
-        /// </summary>
-        public virtual bool ShouldSerializeMaximalValue() {
-            return MaximalValue.HasValue;
-        }
-    }
-    
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Xbim.COBieLiteUK.CodeGeneration", "1.0.0.0")]
-    [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://openbim.org/schemas/cobieliteuk")]
-    [System.Xml.Serialization.XmlRootAttribute(Namespace="http://openbim.org/schemas/cobieliteuk", IsNullable=false)]
-    public enum ValueType {
-        
-        /// <remarks/>
-        String,
-        
-        /// <remarks/>
-        Boolean,
-        
-        /// <remarks/>
-        DateTime,
-        
-        /// <remarks/>
-        Decimal,
-        
-        /// <remarks/>
-        Integer,
-    }
-    
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Xbim.COBieLiteUK.CodeGeneration", "1.0.0.0")]
-    [System.SerializableAttribute()]
-    [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://openbim.org/schemas/cobieliteuk")]
-    [System.Xml.Serialization.XmlRootAttribute(Namespace="http://openbim.org/schemas/cobieliteuk", IsNullable=false)]
-    public partial class DecimalAttributeValue : AttributeValue {
-        
-        private System.Nullable<double> valueField;
-        
-        private System.Nullable<double> minimalValueField;
-        
-        private System.Nullable<double> maximalValueField;
-        
-        private ValueType typeField;
-        
-        public DecimalAttributeValue() {
-            this.typeField = ValueType.Decimal;
-        }
-        
-        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified, IsNullable=true)]
-        public System.Nullable<double> Value {
-            get {
-                return this.valueField;
-            }
-            set {
-                this.valueField = value;
-            }
-        }
-        
-        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified, IsNullable=true)]
-        public System.Nullable<double> MinimalValue {
-            get {
-                return this.minimalValueField;
-            }
-            set {
-                this.minimalValueField = value;
-            }
-        }
-        
-        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified, IsNullable=true)]
-        public System.Nullable<double> MaximalValue {
-            get {
-                return this.maximalValueField;
-            }
-            set {
-                this.maximalValueField = value;
-            }
-        }
-        
-        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
-        public ValueType Type {
-            get {
-                return this.typeField;
-            }
-            set {
-                this.typeField = value;
-            }
-        }
-        
-        /// <summary>
-        /// Test whether Value should be serialized
-        /// </summary>
-        public virtual bool ShouldSerializeValue() {
-            return Value.HasValue;
-        }
-        
-        /// <summary>
-        /// Test whether MinimalValue should be serialized
-        /// </summary>
-        public virtual bool ShouldSerializeMinimalValue() {
-            return MinimalValue.HasValue;
-        }
-        
-        /// <summary>
-        /// Test whether MaximalValue should be serialized
-        /// </summary>
-        public virtual bool ShouldSerializeMaximalValue() {
-            return MaximalValue.HasValue;
-        }
-    }
-    
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Xbim.COBieLiteUK.CodeGeneration", "1.0.0.0")]
-    [System.SerializableAttribute()]
-    [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://openbim.org/schemas/cobieliteuk")]
-    [System.Xml.Serialization.XmlRootAttribute(Namespace="http://openbim.org/schemas/cobieliteuk", IsNullable=false)]
-    public partial class DateTimeAttributeValue : AttributeValue {
-        
-        private System.Nullable<System.DateTime> valueField;
-        
-        private ValueType typeField;
-        
-        public DateTimeAttributeValue() {
-            this.typeField = ValueType.DateTime;
-        }
-        
-        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified, IsNullable=true)]
-        public System.Nullable<System.DateTime> Value {
-            get {
-                return this.valueField;
-            }
-            set {
-                this.valueField = value;
-            }
-        }
-        
-        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
-        public ValueType Type {
-            get {
-                return this.typeField;
-            }
-            set {
-                this.typeField = value;
-            }
-        }
-        
-        /// <summary>
-        /// Test whether Value should be serialized
-        /// </summary>
-        public virtual bool ShouldSerializeValue() {
-            return Value.HasValue;
-        }
-    }
-    
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Xbim.COBieLiteUK.CodeGeneration", "1.0.0.0")]
-    [System.SerializableAttribute()]
-    [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://openbim.org/schemas/cobieliteuk")]
-    [System.Xml.Serialization.XmlRootAttribute(Namespace="http://openbim.org/schemas/cobieliteuk", IsNullable=false)]
-    public partial class BooleanAttributeValue : AttributeValue {
-        
-        private bool valueField;
-        
-        private ValueType typeField;
-        
-        public BooleanAttributeValue() {
-            this.typeField = ValueType.Boolean;
-        }
-        
-        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
-        public bool Value {
-            get {
-                return this.valueField;
-            }
-            set {
-                this.valueField = value;
-            }
-        }
-        
-        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
-        public ValueType Type {
-            get {
-                return this.typeField;
-            }
-            set {
-                this.typeField = value;
-            }
-        }
-    }
-    
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Xbim.COBieLiteUK.CodeGeneration", "1.0.0.0")]
-    [System.SerializableAttribute()]
-    [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://openbim.org/schemas/cobieliteuk")]
-    [System.Xml.Serialization.XmlRootAttribute(Namespace="http://openbim.org/schemas/cobieliteuk", IsNullable=false)]
-    public partial class StringAttributeValue : AttributeValue {
-        
-        private string valueField;
-        
-        private List<string> allowedValuesField;
-        
-        private ValueType typeField;
-        
-        public StringAttributeValue() {
-            this.typeField = ValueType.String;
-        }
-        
-        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
-        public string Value {
-            get {
-                return this.valueField;
-            }
-            set {
-                this.valueField = value;
-            }
-        }
-        
-        [System.Xml.Serialization.XmlArrayAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
-        [System.Xml.Serialization.XmlArrayItemAttribute("Value", Form=System.Xml.Schema.XmlSchemaForm.Unqualified, IsNullable=false)]
-        public List<string> AllowedValues {
-            get {
-                return this.allowedValuesField;
-            }
-            set {
-                this.allowedValuesField = value;
-            }
-        }
-        
-        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
-        public ValueType Type {
-            get {
-                return this.typeField;
-            }
-            set {
-                this.typeField = value;
-            }
-        }
-    }
-    
-    [System.Xml.Serialization.XmlIncludeAttribute(typeof(Resource))]
-    [System.Xml.Serialization.XmlIncludeAttribute(typeof(Zone))]
-    [System.Xml.Serialization.XmlIncludeAttribute(typeof(SystemType))]
-    [System.Xml.Serialization.XmlIncludeAttribute(typeof(Space))]
-    [System.Xml.Serialization.XmlIncludeAttribute(typeof(Floor))]
-    [System.Xml.Serialization.XmlIncludeAttribute(typeof(Facility))]
-    [System.Xml.Serialization.XmlIncludeAttribute(typeof(Contact))]
-    [System.Xml.Serialization.XmlIncludeAttribute(typeof(Job))]
-    [System.Xml.Serialization.XmlIncludeAttribute(typeof(Spare))]
-    [System.Xml.Serialization.XmlIncludeAttribute(typeof(Connection))]
-    [System.Xml.Serialization.XmlIncludeAttribute(typeof(ObjectInfo))]
-    [System.Xml.Serialization.XmlIncludeAttribute(typeof(AssetType))]
-    [System.Xml.Serialization.XmlIncludeAttribute(typeof(Asset))]
-    [System.Xml.Serialization.XmlIncludeAttribute(typeof(Assembly))]
-    [System.Xml.Serialization.XmlIncludeAttribute(typeof(ProjectStage))]
-    [System.Xml.Serialization.XmlIncludeAttribute(typeof(Impact))]
-    [System.Xml.Serialization.XmlIncludeAttribute(typeof(Issue))]
-    [System.Xml.Serialization.XmlIncludeAttribute(typeof(Attribute))]
-    [System.Xml.Serialization.XmlIncludeAttribute(typeof(Document))]
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Xbim.COBieLiteUK.CodeGeneration", "1.0.0.0")]
-    [System.SerializableAttribute()]
-    [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://openbim.org/schemas/cobieliteuk")]
-    [System.Xml.Serialization.XmlRootAttribute(Namespace="http://openbim.org/schemas/cobieliteuk", IsNullable=true)]
-    public abstract partial class CobieObject {
-        
-        private string nameField;
-        
-        private string descriptionField;
-        
-        private ContactKey createdByField;
-        
-        private System.Nullable<System.DateTime> createdOnField;
-        
-        private string categoryField;
-        
-        private string externalSystemField;
-        
-        private string externalEntityField;
-        
-        private string externalIdField;
-        
-        private List<Document> documentsField;
-        
-        private List<Attribute> attributesField;
-        
-        private List<Issue> issuesField;
-        
-        private List<Impact> impactsField;
-        
-        private List<ProjectStageKey> projectStagesField;
-        
-        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
-        public string Name {
-            get {
-                return this.nameField;
-            }
-            set {
-                this.nameField = value;
-            }
-        }
-        
-        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
-        public string Description {
-            get {
-                return this.descriptionField;
-            }
-            set {
-                this.descriptionField = value;
-            }
-        }
-        
-        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
-        public ContactKey CreatedBy {
-            get {
-                return this.createdByField;
-            }
-            set {
-                this.createdByField = value;
-            }
-        }
-        
-        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified, IsNullable=true)]
-        public System.Nullable<System.DateTime> CreatedOn {
-            get {
-                return this.createdOnField;
-            }
-            set {
-                this.createdOnField = value;
-            }
-        }
-        
-        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
-        public string Category {
-            get {
-                return this.categoryField;
-            }
-            set {
-                this.categoryField = value;
-            }
-        }
-        
-        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
-        public string ExternalSystem {
-            get {
-                return this.externalSystemField;
-            }
-            set {
-                this.externalSystemField = value;
-            }
-        }
-        
-        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
-        public string ExternalEntity {
-            get {
-                return this.externalEntityField;
-            }
-            set {
-                this.externalEntityField = value;
-            }
-        }
-        
-        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
-        public string ExternalId {
-            get {
-                return this.externalIdField;
-            }
-            set {
-                this.externalIdField = value;
-            }
-        }
-        
-        [System.Xml.Serialization.XmlArrayAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
-        [System.Xml.Serialization.XmlArrayItemAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified, IsNullable=false)]
-        public List<Document> Documents {
-            get {
-                return this.documentsField;
-            }
-            set {
-                this.documentsField = value;
-            }
-        }
-        
-        [System.Xml.Serialization.XmlArrayAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
-        [System.Xml.Serialization.XmlArrayItemAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified, IsNullable=false)]
-        public List<Attribute> Attributes {
-            get {
-                return this.attributesField;
-            }
-            set {
-                this.attributesField = value;
-            }
-        }
-        
-        [System.Xml.Serialization.XmlArrayAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
-        [System.Xml.Serialization.XmlArrayItemAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified, IsNullable=false)]
-        public List<Issue> Issues {
-            get {
-                return this.issuesField;
-            }
-            set {
-                this.issuesField = value;
-            }
-        }
-        
-        [System.Xml.Serialization.XmlArrayAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
-        [System.Xml.Serialization.XmlArrayItemAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified, IsNullable=false)]
-        public List<Impact> Impacts {
-            get {
-                return this.impactsField;
-            }
-            set {
-                this.impactsField = value;
-            }
-        }
-        
-        [System.Xml.Serialization.XmlArrayAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
-        [System.Xml.Serialization.XmlArrayItemAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified, IsNullable=false)]
-        public List<ProjectStageKey> ProjectStages {
-            get {
-                return this.projectStagesField;
-            }
-            set {
-                this.projectStagesField = value;
-            }
-        }
-        
-        /// <summary>
-        /// Test whether CreatedOn should be serialized
-        /// </summary>
-        public virtual bool ShouldSerializeCreatedOn() {
-            return CreatedOn.HasValue;
-        }
-    }
-    
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Xbim.COBieLiteUK.CodeGeneration", "1.0.0.0")]
-    [System.SerializableAttribute()]
-    [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://openbim.org/schemas/cobieliteuk")]
-    [System.Xml.Serialization.XmlRootAttribute(Namespace="http://openbim.org/schemas/cobieliteuk", IsNullable=true)]
-    [Xbim.COBieLiteUK.SheetMapping(Type="UK2012", Sheet="Document")]
-    [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="A", Header="Name", Required=true, List=false, PickList=null, Path="Name")]
-    [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="B", Header="CreatedBy", Required=true, List=false, PickList=null, Path="CreatedBy.Email")]
-    [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="C", Header="CreatedOn", Required=true, List=false, PickList=null, Path="CreatedOn")]
-    [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="D", Header="Category", Required=true, List=false, PickList="DocumentType", Path="Category")]
-    [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="E", Header="ApprovalBy", Required=true, List=false, PickList="ApprovalBy", Path="ApprovalBy")]
-    [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="F", Header="Stage", Required=true, List=false, PickList="StageType", Path="Stage")]
-    [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="G", Header="SheetName", Required=true, List=false, PickList="SheetType", Path="parent")]
-    [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="H", Header="RowName", Required=true, List=false, PickList=null, Path="parent.Name")]
-    [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="I", Header="Directory", Required=true, List=false, PickList=null, Path="Directory")]
-    [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="J", Header="File", Required=true, List=false, PickList=null, Path="File")]
-    [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="K", Header="ExtSystem", Required=false, List=false, PickList=null, Path="ExternalSystem")]
-    [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="L", Header="ExtObject", Required=false, List=false, PickList=null, Path="ExternalEntity")]
-    [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="M", Header="ExtIdentifier", Required=false, List=false, PickList=null, Path="ExternalId")]
-    [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="N", Header="Description", Required=false, List=false, PickList=null, Path="Description")]
-    [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="O", Header="Reference", Required=false, List=false, PickList=null, Path="Reference")]
-    public partial class Document : CobieObject {
-        
-        private string approvalByField;
-        
-        private string stageField;
-        
-        private string directoryField;
-        
-        private string fileField;
-        
-        private string referenceField;
-        
-        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
-        public string ApprovalBy {
-            get {
-                return this.approvalByField;
-            }
-            set {
-                this.approvalByField = value;
-            }
-        }
-        
-        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
-        public string Stage {
-            get {
-                return this.stageField;
-            }
-            set {
-                this.stageField = value;
-            }
-        }
-        
-        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
-        public string Directory {
-            get {
-                return this.directoryField;
-            }
-            set {
-                this.directoryField = value;
-            }
-        }
-        
-        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
-        public string File {
-            get {
-                return this.fileField;
-            }
-            set {
-                this.fileField = value;
-            }
-        }
-        
-        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
-        public string Reference {
-            get {
-                return this.referenceField;
-            }
-            set {
-                this.referenceField = value;
-            }
-        }
-    }
-    
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Xbim.COBieLiteUK.CodeGeneration", "1.0.0.0")]
-    [System.SerializableAttribute()]
-    [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://openbim.org/schemas/cobieliteuk")]
-    [System.Xml.Serialization.XmlRootAttribute(Namespace="http://openbim.org/schemas/cobieliteuk", IsNullable=true)]
-    [Xbim.COBieLiteUK.SheetMapping(Type="UK2012", Sheet="Attribute")]
-    [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="A", Header="Name", Required=true, List=false, PickList=null, Path="Name")]
-    [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="B", Header="CreatedBy", Required=true, List=false, PickList=null, Path="CreatedBy.Email")]
-    [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="C", Header="CreatedOn", Required=true, List=false, PickList=null, Path="CreatedOn")]
-    [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="D", Header="Category", Required=true, List=false, PickList="StageType", Path="Category")]
-    [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="E", Header="SheetName", Required=true, List=false, PickList="SheetType", Path="parent")]
-    [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="F", Header="RowName", Required=true, List=false, PickList=null, Path="parent.Name")]
-    [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="G", Header="Value", Required=true, List=false, PickList=null, Path="Value.Value")]
-    [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="H", Header="Unit", Required=true, List=false, PickList=null, Path="Value.Unit")]
-    [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="I", Header="ExtSystem", Required=false, List=false, PickList=null, Path="ExternalSystem")]
-    [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="J", Header="ExtObject", Required=false, List=false, PickList=null, Path="ExternalEntity")]
-    [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="K", Header="ExtIdentifier", Required=false, List=false, PickList=null, Path="ExternalId")]
-    [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="L", Header="Description", Required=false, List=false, PickList=null, Path="Description")]
-    [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="M", Header="AllowedValues", Required=false, List=true, PickList=null, Path="Value.AllowedValues")]
-    public partial class Attribute : CobieObject {
-        
-        private AttributeValue itemField;
-        
-        [System.Xml.Serialization.XmlElementAttribute("AttributeValue", typeof(AttributeValue))]
-        [System.Xml.Serialization.XmlElementAttribute("BooleanAttributeValue", typeof(BooleanAttributeValue))]
-        [System.Xml.Serialization.XmlElementAttribute("DateTimeAttributeValue", typeof(DateTimeAttributeValue))]
-        [System.Xml.Serialization.XmlElementAttribute("DecimalAttributeValue", typeof(DecimalAttributeValue))]
-        [System.Xml.Serialization.XmlElementAttribute("IntegerAttributeValue", typeof(IntegerAttributeValue))]
-        [System.Xml.Serialization.XmlElementAttribute("StringAttributeValue", typeof(StringAttributeValue))]
-        public AttributeValue Item {
-            get {
-                return this.itemField;
-            }
-            set {
-                this.itemField = value;
-            }
-        }
-    }
-    
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Xbim.COBieLiteUK.CodeGeneration", "1.0.0.0")]
-    [System.SerializableAttribute()]
-    [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://openbim.org/schemas/cobieliteuk")]
-    [System.Xml.Serialization.XmlRootAttribute(Namespace="http://openbim.org/schemas/cobieliteuk", IsNullable=true)]
-    [Xbim.COBieLiteUK.SheetMapping(Type="UK2012", Sheet="Issue")]
-    [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="A", Header="Name", Required=true, List=false, PickList=null, Path="Name")]
-    [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="B", Header="CreatedBy", Required=true, List=false, PickList=null, Path="CreatedBy.Email")]
-    [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="C", Header="CreatedOn", Required=true, List=false, PickList=null, Path="CreatedOn")]
-    [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="D", Header="Type", Required=true, List=false, PickList="IssueCategory", Path="Category")]
-    [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="E", Header="Risk", Required=true, List=false, PickList="IssueRisk", Path="Risk")]
-    [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="F", Header="Chance", Required=true, List=false, PickList="IssueChance", Path="Chance")]
-    [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="G", Header="Impact", Required=true, List=false, PickList="IssueImpact", Path="Impact")]
-    [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="H", Header="SheetName1", Required=true, List=false, PickList="SheetType", Path="parent")]
-    [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="I", Header="RowName1", Required=true, List=false, PickList=null, Path="parent.Name")]
-    [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="J", Header="SheetName2", Required=true, List=false, PickList="SheetType", Path="SheetName2")]
-    [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="K", Header="RowName2", Required=true, List=false, PickList=null, Path="RowName2")]
-    [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="L", Header="Description", Required=true, List=false, PickList=null, Path="Description")]
-    [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="M", Header="Owner", Required=true, List=false, PickList=null, Path="Owner.Email")]
-    [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="N", Header="Mitigation", Required=true, List=false, PickList=null, Path="Mitigation")]
-    [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="O", Header="ExtSystem", Required=false, List=false, PickList=null, Path="ExternalSystem")]
-    [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="P", Header="ExtObject", Required=false, List=false, PickList=null, Path="ExternalEntity")]
-    [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="Q", Header="ExtIdentifier", Required=false, List=false, PickList=null, Path="ExternalId")]
-    public partial class Issue : CobieObject {
-        
-        private string riskField;
-        
-        private string chanceField;
-        
-        private string impactField;
-        
-        private ContactKey ownerField;
-        
-        private string mitigationField;
-        
-        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
-        public string Risk {
-            get {
-                return this.riskField;
-            }
-            set {
-                this.riskField = value;
-            }
-        }
-        
-        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
-        public string Chance {
-            get {
-                return this.chanceField;
-            }
-            set {
-                this.chanceField = value;
-            }
-        }
-        
-        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
-        public string Impact {
-            get {
-                return this.impactField;
-            }
-            set {
-                this.impactField = value;
-            }
-        }
-        
-        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
-        public ContactKey Owner {
-            get {
-                return this.ownerField;
-            }
-            set {
-                this.ownerField = value;
-            }
-        }
-        
-        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
-        public string Mitigation {
-            get {
-                return this.mitigationField;
-            }
-            set {
-                this.mitigationField = value;
-            }
-        }
-    }
-    
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Xbim.COBieLiteUK.CodeGeneration", "1.0.0.0")]
-    [System.SerializableAttribute()]
-    [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://openbim.org/schemas/cobieliteuk")]
-    [System.Xml.Serialization.XmlRootAttribute(Namespace="http://openbim.org/schemas/cobieliteuk", IsNullable=true)]
-    [Xbim.COBieLiteUK.SheetMapping(Type="UK2012", Sheet="Impact")]
-    [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="A", Header="Name", Required=true, List=false, PickList=null, Path="Name")]
-    [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="B", Header="CreatedBy", Required=true, List=false, PickList=null, Path="CreatedBy.Email")]
-    [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="C", Header="CreatedOn", Required=true, List=false, PickList=null, Path="CreatedOn")]
-    [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="D", Header="ImpactType", Required=true, List=false, PickList="ImpactType", Path="Category")]
-    [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="E", Header="ImpactStage", Required=true, List=false, PickList="ImpactStage", Path="ImpactStage")]
-    [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="F", Header="SheetName", Required=true, List=false, PickList="SheetType", Path="parent")]
-    [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="G", Header="RowName", Required=true, List=false, PickList=null, Path="parent.Name")]
-    [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="H", Header="Value", Required=true, List=false, PickList=null, Path="Value")]
-    [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="I", Header="ImpactUnit", Required=true, List=false, PickList="ImpactUnit", Path="ImpactUnit")]
-    [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="J", Header="LeadInTime", Required=false, List=false, PickList=null, Path="LeadInTime")]
-    [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="K", Header="Duration", Required=false, List=false, PickList=null, Path="Duration")]
-    [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="L", Header="LeadOutTime", Required=false, List=false, PickList=null, Path="LeadOutTime")]
-    [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="M", Header="ExtSystem", Required=false, List=false, PickList=null, Path="ExternalSystem")]
-    [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="N", Header="ExtObject", Required=false, List=false, PickList=null, Path="ExternalEntity")]
-    [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="O", Header="ExtIdentifier", Required=false, List=false, PickList=null, Path="ExternalId")]
-    [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="P", Header="Description", Required=false, List=false, PickList=null, Path="Description")]
-    public partial class Impact : CobieObject {
-        
-        private string impactStageField;
-        
-        private string valueField;
-        
-        private string impactUnitField;
-        
-        private System.Nullable<double> leadInTimeField;
-        
-        private System.Nullable<double> durationField;
-        
-        private System.Nullable<double> leadOutTimeField;
-        
-        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
-        public string ImpactStage {
-            get {
-                return this.impactStageField;
-            }
-            set {
-                this.impactStageField = value;
-            }
-        }
-        
-        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
-        public string Value {
-            get {
-                return this.valueField;
-            }
-            set {
-                this.valueField = value;
-            }
-        }
-        
-        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
-        public string ImpactUnit {
-            get {
-                return this.impactUnitField;
-            }
-            set {
-                this.impactUnitField = value;
-            }
-        }
-        
-        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified, IsNullable=true)]
-        public System.Nullable<double> LeadInTime {
-            get {
-                return this.leadInTimeField;
-            }
-            set {
-                this.leadInTimeField = value;
-            }
-        }
-        
-        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified, IsNullable=true)]
-        public System.Nullable<double> Duration {
-            get {
-                return this.durationField;
-            }
-            set {
-                this.durationField = value;
-            }
-        }
-        
-        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified, IsNullable=true)]
-        public System.Nullable<double> LeadOutTime {
-            get {
-                return this.leadOutTimeField;
-            }
-            set {
-                this.leadOutTimeField = value;
-            }
-        }
-        
-        /// <summary>
-        /// Test whether LeadInTime should be serialized
-        /// </summary>
-        public virtual bool ShouldSerializeLeadInTime() {
-            return LeadInTime.HasValue;
-        }
-        
-        /// <summary>
-        /// Test whether Duration should be serialized
-        /// </summary>
-        public virtual bool ShouldSerializeDuration() {
-            return Duration.HasValue;
-        }
-        
-        /// <summary>
-        /// Test whether LeadOutTime should be serialized
-        /// </summary>
-        public virtual bool ShouldSerializeLeadOutTime() {
-            return LeadOutTime.HasValue;
-        }
-    }
-    
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Xbim.COBieLiteUK.CodeGeneration", "1.0.0.0")]
-    [System.SerializableAttribute()]
-    [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://openbim.org/schemas/cobieliteuk")]
-    [System.Xml.Serialization.XmlRootAttribute(Namespace="http://openbim.org/schemas/cobieliteuk", IsNullable=true)]
-    [Xbim.COBieLiteUK.SheetMapping(Type="UK2012", Sheet="Resource")]
-    [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="A", Header="Name", Required=true, List=false, PickList=null, Path="Name")]
-    [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="B", Header="CreatedBy", Required=true, List=false, PickList=null, Path="CreatedBy.Email")]
-    [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="C", Header="CreatedOn", Required=true, List=false, PickList=null, Path="CreatedOn")]
-    [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="D", Header="Category", Required=true, List=false, PickList="ResourceType", Path="Category")]
-    [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="E", Header="ExtSystem", Required=false, List=false, PickList=null, Path="ExternalSystem")]
-    [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="F", Header="ExtObject", Required=false, List=false, PickList=null, Path="ExternalEntity")]
-    [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="G", Header="ExtIdentifier", Required=false, List=false, PickList=null, Path="ExternalId")]
-    [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="H", Header="Description", Required=false, List=false, PickList=null, Path="Description")]
-    public partial class Resource : CobieObject {
-    }
-    
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Xbim.COBieLiteUK.CodeGeneration", "1.0.0.0")]
-    [System.SerializableAttribute()]
-    [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://openbim.org/schemas/cobieliteuk")]
-    [System.Xml.Serialization.XmlRootAttribute(Namespace="http://openbim.org/schemas/cobieliteuk", IsNullable=true)]
-    [Xbim.COBieLiteUK.SheetMapping(Type="UK2012", Sheet="Zone")]
-    [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="A", Header="Name", Required=true, List=false, PickList=null, Path="Name")]
-    [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="B", Header="CreatedBy", Required=true, List=false, PickList=null, Path="CreatedBy.Email")]
-    [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="C", Header="CreatedOn", Required=true, List=false, PickList=null, Path="CreatedOn")]
-    [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="D", Header="Category", Required=true, List=false, PickList="ZoneType", Path="Category")]
-    [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="E", Header="SpaceNames", Required=true, List=true, PickList=null, Path="Spaces.Name")]
-    [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="F", Header="ExtSystem", Required=false, List=false, PickList=null, Path="ExternalSystem")]
-    [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="G", Header="ExtObject", Required=false, List=false, PickList=null, Path="ExternalEntity")]
-    [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="H", Header="ExtIdentifier", Required=false, List=false, PickList=null, Path="ExternalId")]
-    [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="I", Header="Description", Required=false, List=false, PickList=null, Path="Description")]
-    public partial class Zone : CobieObject {
-        
-        private List<SpaceKey> spacesField;
-        
-        [System.Xml.Serialization.XmlArrayAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
-        [System.Xml.Serialization.XmlArrayItemAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified, IsNullable=false)]
-        public List<SpaceKey> Spaces {
-            get {
-                return this.spacesField;
-            }
-            set {
-                this.spacesField = value;
-            }
-        }
-    }
-    
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Xbim.COBieLiteUK.CodeGeneration", "1.0.0.0")]
-    [System.SerializableAttribute()]
-    [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://openbim.org/schemas/cobieliteuk")]
-    [System.Xml.Serialization.XmlRootAttribute(Namespace="http://openbim.org/schemas/cobieliteuk", IsNullable=true)]
-    [Xbim.COBieLiteUK.SheetMapping(Type="UK2012", Sheet="System")]
-    [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="A", Header="Name", Required=true, List=false, PickList=null, Path="Name")]
-    [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="B", Header="CreatedBy", Required=true, List=false, PickList=null, Path="CreatedBy.Email")]
-    [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="C", Header="CreatedOn", Required=true, List=false, PickList=null, Path="CreatedOn")]
-    [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="D", Header="Category", Required=true, List=false, PickList="Category-Element", Path="Category")]
-    [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="E", Header="ComponentNames", Required=true, List=true, PickList=null, Path="Components.Name")]
-    [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="F", Header="ExtSystem", Required=false, List=false, PickList=null, Path="ExternalSystem")]
-    [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="G", Header="ExtObject", Required=false, List=false, PickList=null, Path="ExternalEntity")]
-    [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="H", Header="ExtIdentifier", Required=false, List=false, PickList=null, Path="ExternalId")]
-    [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="I", Header="Description", Required=false, List=false, PickList=null, Path="Description")]
-    public partial class SystemType : CobieObject {
-        
-        private List<AssetKey> componentsField;
-        
-        [System.Xml.Serialization.XmlArrayAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
-        [System.Xml.Serialization.XmlArrayItemAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified, IsNullable=false)]
-        public List<AssetKey> Components {
-            get {
-                return this.componentsField;
-            }
-            set {
-                this.componentsField = value;
-            }
-        }
-    }
-    
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Xbim.COBieLiteUK.CodeGeneration", "1.0.0.0")]
-    [System.SerializableAttribute()]
-    [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://openbim.org/schemas/cobieliteuk")]
-    [System.Xml.Serialization.XmlRootAttribute(Namespace="http://openbim.org/schemas/cobieliteuk", IsNullable=true)]
-    [Xbim.COBieLiteUK.SheetMapping(Type="UK2012", Sheet="Space")]
-    [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="A", Header="Name", Required=true, List=false, PickList=null, Path="Name")]
-    [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="B", Header="CreatedBy", Required=true, List=false, PickList=null, Path="CreatedBy.Email")]
-    [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="C", Header="CreatedOn", Required=true, List=false, PickList=null, Path="CreatedOn")]
-    [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="D", Header="Category", Required=true, List=false, PickList="Category-Space", Path="Category")]
-    [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="E", Header="FloorName", Required=true, List=false, PickList=null, Path="parent.Name")]
-    [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="F", Header="Description", Required=true, List=false, PickList=null, Path="Description")]
-    [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="G", Header="ExtSystem", Required=false, List=false, PickList=null, Path="ExternalSystem")]
-    [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="H", Header="ExtObject", Required=false, List=false, PickList=null, Path="ExternalEntity")]
-    [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="I", Header="ExtIdentifier", Required=false, List=false, PickList=null, Path="ExternalId")]
-    [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="J", Header="RoomTag", Required=false, List=false, PickList=null, Path="RoomTag")]
-    [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="K", Header="UsableHeight", Required=false, List=false, PickList=null, Path="UsableHeight")]
-    [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="L", Header="GrossArea", Required=false, List=false, PickList=null, Path="GrossArea")]
-    [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="M", Header="NetArea", Required=false, List=false, PickList=null, Path="NetArea")]
-    public partial class Space : CobieObject {
-        
-        private string roomTagField;
-        
-        private System.Nullable<double> usableHeightField;
-        
-        private System.Nullable<double> grossAreaField;
-        
-        private System.Nullable<double> netAreaField;
-        
-        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
-        public string RoomTag {
-            get {
-                return this.roomTagField;
-            }
-            set {
-                this.roomTagField = value;
-            }
-        }
-        
-        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified, IsNullable=true)]
-        public System.Nullable<double> UsableHeight {
-            get {
-                return this.usableHeightField;
-            }
-            set {
-                this.usableHeightField = value;
-            }
-        }
-        
-        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified, IsNullable=true)]
-        public System.Nullable<double> GrossArea {
-            get {
-                return this.grossAreaField;
-            }
-            set {
-                this.grossAreaField = value;
-            }
-        }
-        
-        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified, IsNullable=true)]
-        public System.Nullable<double> NetArea {
-            get {
-                return this.netAreaField;
-            }
-            set {
-                this.netAreaField = value;
-            }
-        }
-        
-        /// <summary>
-        /// Test whether UsableHeight should be serialized
-        /// </summary>
-        public virtual bool ShouldSerializeUsableHeight() {
-            return UsableHeight.HasValue;
-        }
-        
-        /// <summary>
-        /// Test whether GrossArea should be serialized
-        /// </summary>
-        public virtual bool ShouldSerializeGrossArea() {
-            return GrossArea.HasValue;
-        }
-        
-        /// <summary>
-        /// Test whether NetArea should be serialized
-        /// </summary>
-        public virtual bool ShouldSerializeNetArea() {
-            return NetArea.HasValue;
-        }
-    }
-    
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Xbim.COBieLiteUK.CodeGeneration", "1.0.0.0")]
-    [System.SerializableAttribute()]
-    [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://openbim.org/schemas/cobieliteuk")]
-    [System.Xml.Serialization.XmlRootAttribute(Namespace="http://openbim.org/schemas/cobieliteuk", IsNullable=true)]
-    [Xbim.COBieLiteUK.SheetMapping(Type="UK2012", Sheet="Floor")]
-    [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="A", Header="Name", Required=true, List=false, PickList=null, Path="Name")]
-    [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="B", Header="CreatedBy", Required=true, List=false, PickList=null, Path="CreatedBy.Email")]
-    [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="C", Header="CreatedOn", Required=true, List=false, PickList=null, Path="CreatedOn")]
-    [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="D", Header="Category", Required=true, List=false, PickList="FloorType", Path="Category")]
-    [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="E", Header="ExtSystem", Required=false, List=false, PickList=null, Path="ExternalSystem")]
-    [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="F", Header="ExtObject", Required=false, List=false, PickList=null, Path="ExternalEntity")]
-    [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="G", Header="ExtIdentifier", Required=false, List=false, PickList=null, Path="ExternalId")]
-    [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="H", Header="Description", Required=false, List=false, PickList=null, Path="Description")]
-    [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="I", Header="Elevation", Required=false, List=false, PickList=null, Path="Elevation")]
-    [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="J", Header="Height", Required=false, List=false, PickList=null, Path="Height")]
-    public partial class Floor : CobieObject {
-        
-        private System.Nullable<double> elevationField;
-        
-        private System.Nullable<double> heightField;
-        
-        private List<Space> spacesField;
-        
-        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified, IsNullable=true)]
-        public System.Nullable<double> Elevation {
-            get {
-                return this.elevationField;
-            }
-            set {
-                this.elevationField = value;
-            }
-        }
-        
-        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified, IsNullable=true)]
-        public System.Nullable<double> Height {
-            get {
-                return this.heightField;
-            }
-            set {
-                this.heightField = value;
-            }
-        }
-        
-        [System.Xml.Serialization.XmlArrayAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
-        [System.Xml.Serialization.XmlArrayItemAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified, IsNullable=false)]
-        public List<Space> Spaces {
-            get {
-                return this.spacesField;
-            }
-            set {
-                this.spacesField = value;
-            }
-        }
-        
-        /// <summary>
-        /// Test whether Elevation should be serialized
-        /// </summary>
-        public virtual bool ShouldSerializeElevation() {
-            return Elevation.HasValue;
-        }
-        
-        /// <summary>
-        /// Test whether Height should be serialized
-        /// </summary>
-        public virtual bool ShouldSerializeHeight() {
-            return Height.HasValue;
-        }
-    }
-    
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Xbim.COBieLiteUK.CodeGeneration", "1.0.0.0")]
-    [System.SerializableAttribute()]
-    [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://openbim.org/schemas/cobieliteuk")]
-    [System.Xml.Serialization.XmlRootAttribute(Namespace="http://openbim.org/schemas/cobieliteuk", IsNullable=false)]
     [Xbim.COBieLiteUK.SheetMapping(Type="UK2012", Sheet="Facility")]
     [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="A", Header="Name", Required=true, List=false, PickList=null, Path="Name")]
     [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="B", Header="CreatedBy", Required=true, List=false, PickList=null, Path="CreatedBy.Email")]
@@ -2352,7 +697,1961 @@ namespace Xbim.COBieLiteUK {
     [System.SerializableAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://openbim.org/schemas/cobieliteuk")]
+    [System.Xml.Serialization.XmlRootAttribute(Namespace="http://openbim.org/schemas/cobieliteuk", IsNullable=true)]
+    [Xbim.COBieLiteUK.SheetMapping(Type="UK2012", Sheet="Floor")]
+    [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="A", Header="Name", Required=true, List=false, PickList=null, Path="Name")]
+    [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="B", Header="CreatedBy", Required=true, List=false, PickList=null, Path="CreatedBy.Email")]
+    [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="C", Header="CreatedOn", Required=true, List=false, PickList=null, Path="CreatedOn")]
+    [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="D", Header="Category", Required=true, List=false, PickList="FloorType", Path="Category")]
+    [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="E", Header="ExtSystem", Required=false, List=false, PickList=null, Path="ExternalSystem")]
+    [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="F", Header="ExtObject", Required=false, List=false, PickList=null, Path="ExternalEntity")]
+    [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="G", Header="ExtIdentifier", Required=false, List=false, PickList=null, Path="ExternalId")]
+    [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="H", Header="Description", Required=false, List=false, PickList=null, Path="Description")]
+    [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="I", Header="Elevation", Required=false, List=false, PickList=null, Path="Elevation")]
+    [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="J", Header="Height", Required=false, List=false, PickList=null, Path="Height")]
+    public partial class Floor : CobieObject {
+        
+        private System.Nullable<double> elevationField;
+        
+        private System.Nullable<double> heightField;
+        
+        private List<Space> spacesField;
+        
+        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified, IsNullable=true)]
+        public System.Nullable<double> Elevation {
+            get {
+                return this.elevationField;
+            }
+            set {
+                this.elevationField = value;
+            }
+        }
+        
+        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified, IsNullable=true)]
+        public System.Nullable<double> Height {
+            get {
+                return this.heightField;
+            }
+            set {
+                this.heightField = value;
+            }
+        }
+        
+        [System.Xml.Serialization.XmlArrayAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
+        [System.Xml.Serialization.XmlArrayItemAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified, IsNullable=false)]
+        public List<Space> Spaces {
+            get {
+                return this.spacesField;
+            }
+            set {
+                this.spacesField = value;
+            }
+        }
+        
+        /// <summary>
+        /// Test whether Elevation should be serialized
+        /// </summary>
+        public virtual bool ShouldSerializeElevation() {
+            return Elevation.HasValue;
+        }
+        
+        /// <summary>
+        /// Test whether Height should be serialized
+        /// </summary>
+        public virtual bool ShouldSerializeHeight() {
+            return Height.HasValue;
+        }
+    }
+    
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Xbim.COBieLiteUK.CodeGeneration", "1.0.0.0")]
+    [System.SerializableAttribute()]
+    [System.ComponentModel.DesignerCategoryAttribute("code")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://openbim.org/schemas/cobieliteuk")]
+    [System.Xml.Serialization.XmlRootAttribute(Namespace="http://openbim.org/schemas/cobieliteuk", IsNullable=true)]
+    [Xbim.COBieLiteUK.SheetMapping(Type="UK2012", Sheet="Space")]
+    [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="A", Header="Name", Required=true, List=false, PickList=null, Path="Name")]
+    [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="B", Header="CreatedBy", Required=true, List=false, PickList=null, Path="CreatedBy.Email")]
+    [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="C", Header="CreatedOn", Required=true, List=false, PickList=null, Path="CreatedOn")]
+    [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="D", Header="Category", Required=true, List=false, PickList="Category-Space", Path="Category")]
+    [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="E", Header="FloorName", Required=true, List=false, PickList=null, Path="parent.Name")]
+    [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="F", Header="Description", Required=true, List=false, PickList=null, Path="Description")]
+    [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="G", Header="ExtSystem", Required=false, List=false, PickList=null, Path="ExternalSystem")]
+    [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="H", Header="ExtObject", Required=false, List=false, PickList=null, Path="ExternalEntity")]
+    [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="I", Header="ExtIdentifier", Required=false, List=false, PickList=null, Path="ExternalId")]
+    [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="J", Header="RoomTag", Required=false, List=false, PickList=null, Path="RoomTag")]
+    [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="K", Header="UsableHeight", Required=false, List=false, PickList=null, Path="UsableHeight")]
+    [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="L", Header="GrossArea", Required=false, List=false, PickList=null, Path="GrossArea")]
+    [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="M", Header="NetArea", Required=false, List=false, PickList=null, Path="NetArea")]
+    public partial class Space : CobieObject {
+        
+        private string roomTagField;
+        
+        private System.Nullable<double> usableHeightField;
+        
+        private System.Nullable<double> grossAreaField;
+        
+        private System.Nullable<double> netAreaField;
+        
+        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
+        public string RoomTag {
+            get {
+                return this.roomTagField;
+            }
+            set {
+                this.roomTagField = value;
+            }
+        }
+        
+        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified, IsNullable=true)]
+        public System.Nullable<double> UsableHeight {
+            get {
+                return this.usableHeightField;
+            }
+            set {
+                this.usableHeightField = value;
+            }
+        }
+        
+        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified, IsNullable=true)]
+        public System.Nullable<double> GrossArea {
+            get {
+                return this.grossAreaField;
+            }
+            set {
+                this.grossAreaField = value;
+            }
+        }
+        
+        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified, IsNullable=true)]
+        public System.Nullable<double> NetArea {
+            get {
+                return this.netAreaField;
+            }
+            set {
+                this.netAreaField = value;
+            }
+        }
+        
+        /// <summary>
+        /// Test whether UsableHeight should be serialized
+        /// </summary>
+        public virtual bool ShouldSerializeUsableHeight() {
+            return UsableHeight.HasValue;
+        }
+        
+        /// <summary>
+        /// Test whether GrossArea should be serialized
+        /// </summary>
+        public virtual bool ShouldSerializeGrossArea() {
+            return GrossArea.HasValue;
+        }
+        
+        /// <summary>
+        /// Test whether NetArea should be serialized
+        /// </summary>
+        public virtual bool ShouldSerializeNetArea() {
+            return NetArea.HasValue;
+        }
+    }
+    
+    [System.Xml.Serialization.XmlIncludeAttribute(typeof(Resource))]
+    [System.Xml.Serialization.XmlIncludeAttribute(typeof(Zone))]
+    [System.Xml.Serialization.XmlIncludeAttribute(typeof(SystemType))]
+    [System.Xml.Serialization.XmlIncludeAttribute(typeof(Space))]
+    [System.Xml.Serialization.XmlIncludeAttribute(typeof(Floor))]
+    [System.Xml.Serialization.XmlIncludeAttribute(typeof(Facility))]
+    [System.Xml.Serialization.XmlIncludeAttribute(typeof(Contact))]
+    [System.Xml.Serialization.XmlIncludeAttribute(typeof(Job))]
+    [System.Xml.Serialization.XmlIncludeAttribute(typeof(Spare))]
+    [System.Xml.Serialization.XmlIncludeAttribute(typeof(AssetType))]
+    [System.Xml.Serialization.XmlIncludeAttribute(typeof(AssetTypeAssembly))]
+    [System.Xml.Serialization.XmlIncludeAttribute(typeof(Connection))]
+    [System.Xml.Serialization.XmlIncludeAttribute(typeof(Asset))]
+    [System.Xml.Serialization.XmlIncludeAttribute(typeof(AssetAssembly))]
+    [System.Xml.Serialization.XmlIncludeAttribute(typeof(ProjectStage))]
+    [System.Xml.Serialization.XmlIncludeAttribute(typeof(Impact))]
+    [System.Xml.Serialization.XmlIncludeAttribute(typeof(Issue))]
+    [System.Xml.Serialization.XmlIncludeAttribute(typeof(Attribute))]
+    [System.Xml.Serialization.XmlIncludeAttribute(typeof(Document))]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Xbim.COBieLiteUK.CodeGeneration", "1.0.0.0")]
+    [System.SerializableAttribute()]
+    [System.ComponentModel.DesignerCategoryAttribute("code")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://openbim.org/schemas/cobieliteuk")]
+    [System.Xml.Serialization.XmlRootAttribute(Namespace="http://openbim.org/schemas/cobieliteuk", IsNullable=true)]
+    public abstract partial class CobieObject {
+        
+        private string nameField;
+        
+        private string descriptionField;
+        
+        private ContactKey createdByField;
+        
+        private System.Nullable<System.DateTime> createdOnField;
+        
+        private string categoryField;
+        
+        private string externalSystemField;
+        
+        private string externalEntityField;
+        
+        private string externalIdField;
+        
+        private List<Document> documentsField;
+        
+        private List<Attribute> attributesField;
+        
+        private List<Issue> issuesField;
+        
+        private List<Impact> impactsField;
+        
+        private List<ProjectStageKey> projectStagesField;
+        
+        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
+        public string Name {
+            get {
+                return this.nameField;
+            }
+            set {
+                this.nameField = value;
+            }
+        }
+        
+        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
+        public string Description {
+            get {
+                return this.descriptionField;
+            }
+            set {
+                this.descriptionField = value;
+            }
+        }
+        
+        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
+        public ContactKey CreatedBy {
+            get {
+                return this.createdByField;
+            }
+            set {
+                this.createdByField = value;
+            }
+        }
+        
+        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified, IsNullable=true)]
+        public System.Nullable<System.DateTime> CreatedOn {
+            get {
+                return this.createdOnField;
+            }
+            set {
+                this.createdOnField = value;
+            }
+        }
+        
+        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
+        public string Category {
+            get {
+                return this.categoryField;
+            }
+            set {
+                this.categoryField = value;
+            }
+        }
+        
+        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
+        public string ExternalSystem {
+            get {
+                return this.externalSystemField;
+            }
+            set {
+                this.externalSystemField = value;
+            }
+        }
+        
+        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
+        public string ExternalEntity {
+            get {
+                return this.externalEntityField;
+            }
+            set {
+                this.externalEntityField = value;
+            }
+        }
+        
+        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
+        public string ExternalId {
+            get {
+                return this.externalIdField;
+            }
+            set {
+                this.externalIdField = value;
+            }
+        }
+        
+        [System.Xml.Serialization.XmlArrayAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
+        [System.Xml.Serialization.XmlArrayItemAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified, IsNullable=false)]
+        public List<Document> Documents {
+            get {
+                return this.documentsField;
+            }
+            set {
+                this.documentsField = value;
+            }
+        }
+        
+        [System.Xml.Serialization.XmlArrayAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
+        [System.Xml.Serialization.XmlArrayItemAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified, IsNullable=false)]
+        public List<Attribute> Attributes {
+            get {
+                return this.attributesField;
+            }
+            set {
+                this.attributesField = value;
+            }
+        }
+        
+        [System.Xml.Serialization.XmlArrayAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
+        [System.Xml.Serialization.XmlArrayItemAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified, IsNullable=false)]
+        public List<Issue> Issues {
+            get {
+                return this.issuesField;
+            }
+            set {
+                this.issuesField = value;
+            }
+        }
+        
+        [System.Xml.Serialization.XmlArrayAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
+        [System.Xml.Serialization.XmlArrayItemAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified, IsNullable=false)]
+        public List<Impact> Impacts {
+            get {
+                return this.impactsField;
+            }
+            set {
+                this.impactsField = value;
+            }
+        }
+        
+        [System.Xml.Serialization.XmlArrayAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
+        [System.Xml.Serialization.XmlArrayItemAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified, IsNullable=false)]
+        public List<ProjectStageKey> ProjectStages {
+            get {
+                return this.projectStagesField;
+            }
+            set {
+                this.projectStagesField = value;
+            }
+        }
+        
+        /// <summary>
+        /// Test whether CreatedOn should be serialized
+        /// </summary>
+        public virtual bool ShouldSerializeCreatedOn() {
+            return CreatedOn.HasValue;
+        }
+    }
+    
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Xbim.COBieLiteUK.CodeGeneration", "1.0.0.0")]
+    [System.SerializableAttribute()]
+    [System.ComponentModel.DesignerCategoryAttribute("code")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://openbim.org/schemas/cobieliteuk")]
+    [System.Xml.Serialization.XmlRootAttribute(Namespace="http://openbim.org/schemas/cobieliteuk", IsNullable=true)]
+    public partial class ContactKey {
+        
+        private string emailField;
+        
+        private EntityType keyTypeField;
+        
+        public ContactKey() {
+            this.keyTypeField = EntityType.Contact;
+        }
+        
+        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
+        public string Email {
+            get {
+                return this.emailField;
+            }
+            set {
+                this.emailField = value;
+            }
+        }
+        
+        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
+        public EntityType KeyType {
+            get {
+                return this.keyTypeField;
+            }
+            set {
+                this.keyTypeField = value;
+            }
+        }
+    }
+    
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Xbim.COBieLiteUK.CodeGeneration", "1.0.0.0")]
+    [System.SerializableAttribute()]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://openbim.org/schemas/cobieliteuk")]
     [System.Xml.Serialization.XmlRootAttribute(Namespace="http://openbim.org/schemas/cobieliteuk", IsNullable=false)]
+    public enum EntityType {
+        
+        /// <remarks/>
+        Contact,
+        
+        /// <remarks/>
+        Facility,
+        
+        /// <remarks/>
+        Floor,
+        
+        /// <remarks/>
+        Space,
+        
+        /// <remarks/>
+        Zone,
+        
+        /// <remarks/>
+        AssetType,
+        
+        /// <remarks/>
+        Asset,
+        
+        /// <remarks/>
+        System,
+        
+        /// <remarks/>
+        Assembly,
+        
+        /// <remarks/>
+        Connection,
+        
+        /// <remarks/>
+        Spare,
+        
+        /// <remarks/>
+        Resource,
+        
+        /// <remarks/>
+        Job,
+        
+        /// <remarks/>
+        Impact,
+        
+        /// <remarks/>
+        Document,
+        
+        /// <remarks/>
+        Attribute,
+        
+        /// <remarks/>
+        Issue,
+        
+        /// <remarks/>
+        ProjectStage,
+    }
+    
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Xbim.COBieLiteUK.CodeGeneration", "1.0.0.0")]
+    [System.SerializableAttribute()]
+    [System.ComponentModel.DesignerCategoryAttribute("code")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://openbim.org/schemas/cobieliteuk")]
+    [System.Xml.Serialization.XmlRootAttribute(Namespace="http://openbim.org/schemas/cobieliteuk", IsNullable=true)]
+    public partial class ResourceKey {
+        
+        private string nameField;
+        
+        private EntityType keyTypeField;
+        
+        public ResourceKey() {
+            this.keyTypeField = EntityType.Resource;
+        }
+        
+        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
+        public string Name {
+            get {
+                return this.nameField;
+            }
+            set {
+                this.nameField = value;
+            }
+        }
+        
+        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
+        public EntityType KeyType {
+            get {
+                return this.keyTypeField;
+            }
+            set {
+                this.keyTypeField = value;
+            }
+        }
+    }
+    
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Xbim.COBieLiteUK.CodeGeneration", "1.0.0.0")]
+    [System.SerializableAttribute()]
+    [System.ComponentModel.DesignerCategoryAttribute("code")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://openbim.org/schemas/cobieliteuk")]
+    [System.Xml.Serialization.XmlRootAttribute(Namespace="http://openbim.org/schemas/cobieliteuk", IsNullable=true)]
+    public partial class JobKey {
+        
+        private string nameField;
+        
+        private string taskNumberField;
+        
+        private EntityType keyTypeField;
+        
+        public JobKey() {
+            this.keyTypeField = EntityType.Job;
+        }
+        
+        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
+        public string Name {
+            get {
+                return this.nameField;
+            }
+            set {
+                this.nameField = value;
+            }
+        }
+        
+        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
+        public string TaskNumber {
+            get {
+                return this.taskNumberField;
+            }
+            set {
+                this.taskNumberField = value;
+            }
+        }
+        
+        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
+        public EntityType KeyType {
+            get {
+                return this.keyTypeField;
+            }
+            set {
+                this.keyTypeField = value;
+            }
+        }
+    }
+    
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Xbim.COBieLiteUK.CodeGeneration", "1.0.0.0")]
+    [System.SerializableAttribute()]
+    [System.ComponentModel.DesignerCategoryAttribute("code")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://openbim.org/schemas/cobieliteuk")]
+    [System.Xml.Serialization.XmlRootAttribute(Namespace="http://openbim.org/schemas/cobieliteuk", IsNullable=true)]
+    public partial class Warranty {
+        
+        private ContactKey guarantorPartsField;
+        
+        private string descriptionField;
+        
+        private System.Nullable<double> durationPartsField;
+        
+        private ContactKey guarantorLaborField;
+        
+        private System.Nullable<double> durationLaborField;
+        
+        private System.Nullable<DurationUnit> durationUnitField;
+        
+        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
+        public ContactKey GuarantorParts {
+            get {
+                return this.guarantorPartsField;
+            }
+            set {
+                this.guarantorPartsField = value;
+            }
+        }
+        
+        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
+        public string Description {
+            get {
+                return this.descriptionField;
+            }
+            set {
+                this.descriptionField = value;
+            }
+        }
+        
+        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified, IsNullable=true)]
+        public System.Nullable<double> DurationParts {
+            get {
+                return this.durationPartsField;
+            }
+            set {
+                this.durationPartsField = value;
+            }
+        }
+        
+        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
+        public ContactKey GuarantorLabor {
+            get {
+                return this.guarantorLaborField;
+            }
+            set {
+                this.guarantorLaborField = value;
+            }
+        }
+        
+        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified, IsNullable=true)]
+        public System.Nullable<double> DurationLabor {
+            get {
+                return this.durationLaborField;
+            }
+            set {
+                this.durationLaborField = value;
+            }
+        }
+        
+        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified, IsNullable=true)]
+        public System.Nullable<DurationUnit> DurationUnit {
+            get {
+                return this.durationUnitField;
+            }
+            set {
+                this.durationUnitField = value;
+            }
+        }
+        
+        /// <summary>
+        /// Test whether DurationParts should be serialized
+        /// </summary>
+        public virtual bool ShouldSerializeDurationParts() {
+            return DurationParts.HasValue;
+        }
+        
+        /// <summary>
+        /// Test whether DurationLabor should be serialized
+        /// </summary>
+        public virtual bool ShouldSerializeDurationLabor() {
+            return DurationLabor.HasValue;
+        }
+        
+        /// <summary>
+        /// Test whether DurationUnit should be serialized
+        /// </summary>
+        public virtual bool ShouldSerializeDurationUnit() {
+            return DurationUnit.HasValue;
+        }
+    }
+    
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Xbim.COBieLiteUK.CodeGeneration", "1.0.0.0")]
+    [System.SerializableAttribute()]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://openbim.org/schemas/cobieliteuk")]
+    [System.Xml.Serialization.XmlRootAttribute(Namespace="http://openbim.org/schemas/cobieliteuk", IsNullable=false)]
+    public enum DurationUnit {
+        
+        /// <remarks/>
+        milisecond,
+        
+        /// <remarks/>
+        second,
+        
+        /// <remarks/>
+        minute,
+        
+        /// <remarks/>
+        hour,
+        
+        /// <remarks/>
+        day,
+        
+        /// <remarks/>
+        week,
+        
+        /// <remarks/>
+        month,
+        
+        /// <remarks/>
+        quarter,
+        
+        /// <remarks/>
+        year,
+        
+        /// <remarks/>
+        [System.Xml.Serialization.XmlEnumAttribute("as required")]
+        asrequired,
+    }
+    
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Xbim.COBieLiteUK.CodeGeneration", "1.0.0.0")]
+    [System.SerializableAttribute()]
+    [System.ComponentModel.DesignerCategoryAttribute("code")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://openbim.org/schemas/cobieliteuk")]
+    [System.Xml.Serialization.XmlRootAttribute(Namespace="http://openbim.org/schemas/cobieliteuk", IsNullable=true)]
+    public partial class AssetKey {
+        
+        private string nameField;
+        
+        private EntityType keyTypeField;
+        
+        public AssetKey() {
+            this.keyTypeField = EntityType.AssetType;
+        }
+        
+        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
+        public string Name {
+            get {
+                return this.nameField;
+            }
+            set {
+                this.nameField = value;
+            }
+        }
+        
+        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
+        public EntityType KeyType {
+            get {
+                return this.keyTypeField;
+            }
+            set {
+                this.keyTypeField = value;
+            }
+        }
+    }
+    
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Xbim.COBieLiteUK.CodeGeneration", "1.0.0.0")]
+    [System.SerializableAttribute()]
+    [System.ComponentModel.DesignerCategoryAttribute("code")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://openbim.org/schemas/cobieliteuk")]
+    [System.Xml.Serialization.XmlRootAttribute(Namespace="http://openbim.org/schemas/cobieliteuk", IsNullable=true)]
+    public partial class SpaceKey {
+        
+        private string nameField;
+        
+        private EntityType keyTypeField;
+        
+        public SpaceKey() {
+            this.keyTypeField = EntityType.Space;
+        }
+        
+        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
+        public string Name {
+            get {
+                return this.nameField;
+            }
+            set {
+                this.nameField = value;
+            }
+        }
+        
+        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
+        public EntityType KeyType {
+            get {
+                return this.keyTypeField;
+            }
+            set {
+                this.keyTypeField = value;
+            }
+        }
+    }
+    
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Xbim.COBieLiteUK.CodeGeneration", "1.0.0.0")]
+    [System.SerializableAttribute()]
+    [System.ComponentModel.DesignerCategoryAttribute("code")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://openbim.org/schemas/cobieliteuk")]
+    [System.Xml.Serialization.XmlRootAttribute(Namespace="http://openbim.org/schemas/cobieliteuk", IsNullable=true)]
+    public partial class ProjectStageKey {
+        
+        private string nameField;
+        
+        private EntityType keyTypeField;
+        
+        public ProjectStageKey() {
+            this.keyTypeField = EntityType.ProjectStage;
+        }
+        
+        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
+        public string Name {
+            get {
+                return this.nameField;
+            }
+            set {
+                this.nameField = value;
+            }
+        }
+        
+        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
+        public EntityType KeyType {
+            get {
+                return this.keyTypeField;
+            }
+            set {
+                this.keyTypeField = value;
+            }
+        }
+    }
+    
+    [System.Xml.Serialization.XmlIncludeAttribute(typeof(IntegerAttributeValue))]
+    [System.Xml.Serialization.XmlIncludeAttribute(typeof(DecimalAttributeValue))]
+    [System.Xml.Serialization.XmlIncludeAttribute(typeof(DateTimeAttributeValue))]
+    [System.Xml.Serialization.XmlIncludeAttribute(typeof(BooleanAttributeValue))]
+    [System.Xml.Serialization.XmlIncludeAttribute(typeof(StringAttributeValue))]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Xbim.COBieLiteUK.CodeGeneration", "1.0.0.0")]
+    [System.SerializableAttribute()]
+    [System.ComponentModel.DesignerCategoryAttribute("code")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://openbim.org/schemas/cobieliteuk")]
+    [System.Xml.Serialization.XmlRootAttribute(Namespace="http://openbim.org/schemas/cobieliteuk", IsNullable=false)]
+    public abstract partial class AttributeValue {
+        
+        private string unitField;
+        
+        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
+        public string Unit {
+            get {
+                return this.unitField;
+            }
+            set {
+                this.unitField = value;
+            }
+        }
+    }
+    
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Xbim.COBieLiteUK.CodeGeneration", "1.0.0.0")]
+    [System.SerializableAttribute()]
+    [System.ComponentModel.DesignerCategoryAttribute("code")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://openbim.org/schemas/cobieliteuk")]
+    [System.Xml.Serialization.XmlRootAttribute(Namespace="http://openbim.org/schemas/cobieliteuk", IsNullable=false)]
+    public partial class IntegerAttributeValue : AttributeValue {
+        
+        private int valueField;
+        
+        private System.Nullable<int> minimalValueField;
+        
+        private System.Nullable<int> maximalValueField;
+        
+        private ValueType typeField;
+        
+        public IntegerAttributeValue() {
+            this.typeField = ValueType.Integer;
+        }
+        
+        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
+        public int Value {
+            get {
+                return this.valueField;
+            }
+            set {
+                this.valueField = value;
+            }
+        }
+        
+        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified, IsNullable=true)]
+        public System.Nullable<int> MinimalValue {
+            get {
+                return this.minimalValueField;
+            }
+            set {
+                this.minimalValueField = value;
+            }
+        }
+        
+        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified, IsNullable=true)]
+        public System.Nullable<int> MaximalValue {
+            get {
+                return this.maximalValueField;
+            }
+            set {
+                this.maximalValueField = value;
+            }
+        }
+        
+        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
+        public ValueType Type {
+            get {
+                return this.typeField;
+            }
+            set {
+                this.typeField = value;
+            }
+        }
+        
+        /// <summary>
+        /// Test whether MinimalValue should be serialized
+        /// </summary>
+        public virtual bool ShouldSerializeMinimalValue() {
+            return MinimalValue.HasValue;
+        }
+        
+        /// <summary>
+        /// Test whether MaximalValue should be serialized
+        /// </summary>
+        public virtual bool ShouldSerializeMaximalValue() {
+            return MaximalValue.HasValue;
+        }
+    }
+    
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Xbim.COBieLiteUK.CodeGeneration", "1.0.0.0")]
+    [System.SerializableAttribute()]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://openbim.org/schemas/cobieliteuk")]
+    [System.Xml.Serialization.XmlRootAttribute(Namespace="http://openbim.org/schemas/cobieliteuk", IsNullable=false)]
+    public enum ValueType {
+        
+        /// <remarks/>
+        String,
+        
+        /// <remarks/>
+        Boolean,
+        
+        /// <remarks/>
+        DateTime,
+        
+        /// <remarks/>
+        Decimal,
+        
+        /// <remarks/>
+        Integer,
+    }
+    
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Xbim.COBieLiteUK.CodeGeneration", "1.0.0.0")]
+    [System.SerializableAttribute()]
+    [System.ComponentModel.DesignerCategoryAttribute("code")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://openbim.org/schemas/cobieliteuk")]
+    [System.Xml.Serialization.XmlRootAttribute(Namespace="http://openbim.org/schemas/cobieliteuk", IsNullable=false)]
+    public partial class DecimalAttributeValue : AttributeValue {
+        
+        private System.Nullable<double> valueField;
+        
+        private System.Nullable<double> minimalValueField;
+        
+        private System.Nullable<double> maximalValueField;
+        
+        private ValueType typeField;
+        
+        public DecimalAttributeValue() {
+            this.typeField = ValueType.Decimal;
+        }
+        
+        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified, IsNullable=true)]
+        public System.Nullable<double> Value {
+            get {
+                return this.valueField;
+            }
+            set {
+                this.valueField = value;
+            }
+        }
+        
+        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified, IsNullable=true)]
+        public System.Nullable<double> MinimalValue {
+            get {
+                return this.minimalValueField;
+            }
+            set {
+                this.minimalValueField = value;
+            }
+        }
+        
+        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified, IsNullable=true)]
+        public System.Nullable<double> MaximalValue {
+            get {
+                return this.maximalValueField;
+            }
+            set {
+                this.maximalValueField = value;
+            }
+        }
+        
+        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
+        public ValueType Type {
+            get {
+                return this.typeField;
+            }
+            set {
+                this.typeField = value;
+            }
+        }
+        
+        /// <summary>
+        /// Test whether Value should be serialized
+        /// </summary>
+        public virtual bool ShouldSerializeValue() {
+            return Value.HasValue;
+        }
+        
+        /// <summary>
+        /// Test whether MinimalValue should be serialized
+        /// </summary>
+        public virtual bool ShouldSerializeMinimalValue() {
+            return MinimalValue.HasValue;
+        }
+        
+        /// <summary>
+        /// Test whether MaximalValue should be serialized
+        /// </summary>
+        public virtual bool ShouldSerializeMaximalValue() {
+            return MaximalValue.HasValue;
+        }
+    }
+    
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Xbim.COBieLiteUK.CodeGeneration", "1.0.0.0")]
+    [System.SerializableAttribute()]
+    [System.ComponentModel.DesignerCategoryAttribute("code")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://openbim.org/schemas/cobieliteuk")]
+    [System.Xml.Serialization.XmlRootAttribute(Namespace="http://openbim.org/schemas/cobieliteuk", IsNullable=false)]
+    public partial class DateTimeAttributeValue : AttributeValue {
+        
+        private System.Nullable<System.DateTime> valueField;
+        
+        private ValueType typeField;
+        
+        public DateTimeAttributeValue() {
+            this.typeField = ValueType.DateTime;
+        }
+        
+        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified, IsNullable=true)]
+        public System.Nullable<System.DateTime> Value {
+            get {
+                return this.valueField;
+            }
+            set {
+                this.valueField = value;
+            }
+        }
+        
+        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
+        public ValueType Type {
+            get {
+                return this.typeField;
+            }
+            set {
+                this.typeField = value;
+            }
+        }
+        
+        /// <summary>
+        /// Test whether Value should be serialized
+        /// </summary>
+        public virtual bool ShouldSerializeValue() {
+            return Value.HasValue;
+        }
+    }
+    
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Xbim.COBieLiteUK.CodeGeneration", "1.0.0.0")]
+    [System.SerializableAttribute()]
+    [System.ComponentModel.DesignerCategoryAttribute("code")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://openbim.org/schemas/cobieliteuk")]
+    [System.Xml.Serialization.XmlRootAttribute(Namespace="http://openbim.org/schemas/cobieliteuk", IsNullable=false)]
+    public partial class BooleanAttributeValue : AttributeValue {
+        
+        private bool valueField;
+        
+        private ValueType typeField;
+        
+        public BooleanAttributeValue() {
+            this.typeField = ValueType.Boolean;
+        }
+        
+        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
+        public bool Value {
+            get {
+                return this.valueField;
+            }
+            set {
+                this.valueField = value;
+            }
+        }
+        
+        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
+        public ValueType Type {
+            get {
+                return this.typeField;
+            }
+            set {
+                this.typeField = value;
+            }
+        }
+    }
+    
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Xbim.COBieLiteUK.CodeGeneration", "1.0.0.0")]
+    [System.SerializableAttribute()]
+    [System.ComponentModel.DesignerCategoryAttribute("code")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://openbim.org/schemas/cobieliteuk")]
+    [System.Xml.Serialization.XmlRootAttribute(Namespace="http://openbim.org/schemas/cobieliteuk", IsNullable=false)]
+    public partial class StringAttributeValue : AttributeValue {
+        
+        private string valueField;
+        
+        private List<string> allowedValuesField;
+        
+        private ValueType typeField;
+        
+        public StringAttributeValue() {
+            this.typeField = ValueType.String;
+        }
+        
+        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
+        public string Value {
+            get {
+                return this.valueField;
+            }
+            set {
+                this.valueField = value;
+            }
+        }
+        
+        [System.Xml.Serialization.XmlArrayAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
+        [System.Xml.Serialization.XmlArrayItemAttribute("Value", Form=System.Xml.Schema.XmlSchemaForm.Unqualified, IsNullable=false)]
+        public List<string> AllowedValues {
+            get {
+                return this.allowedValuesField;
+            }
+            set {
+                this.allowedValuesField = value;
+            }
+        }
+        
+        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
+        public ValueType Type {
+            get {
+                return this.typeField;
+            }
+            set {
+                this.typeField = value;
+            }
+        }
+    }
+    
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Xbim.COBieLiteUK.CodeGeneration", "1.0.0.0")]
+    [System.SerializableAttribute()]
+    [System.ComponentModel.DesignerCategoryAttribute("code")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://openbim.org/schemas/cobieliteuk")]
+    [System.Xml.Serialization.XmlRootAttribute(Namespace="http://openbim.org/schemas/cobieliteuk", IsNullable=true)]
+    [Xbim.COBieLiteUK.SheetMapping(Type="UK2012", Sheet="Document")]
+    [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="A", Header="Name", Required=true, List=false, PickList=null, Path="Name")]
+    [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="B", Header="CreatedBy", Required=true, List=false, PickList=null, Path="CreatedBy.Email")]
+    [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="C", Header="CreatedOn", Required=true, List=false, PickList=null, Path="CreatedOn")]
+    [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="D", Header="Category", Required=true, List=false, PickList="DocumentType", Path="Category")]
+    [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="E", Header="ApprovalBy", Required=true, List=false, PickList="ApprovalBy", Path="ApprovalBy")]
+    [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="F", Header="Stage", Required=true, List=false, PickList="StageType", Path="Stage")]
+    [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="G", Header="SheetName", Required=true, List=false, PickList="SheetType", Path="parent")]
+    [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="H", Header="RowName", Required=true, List=false, PickList=null, Path="parent.Name")]
+    [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="I", Header="Directory", Required=true, List=false, PickList=null, Path="Directory")]
+    [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="J", Header="File", Required=true, List=false, PickList=null, Path="File")]
+    [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="K", Header="ExtSystem", Required=false, List=false, PickList=null, Path="ExternalSystem")]
+    [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="L", Header="ExtObject", Required=false, List=false, PickList=null, Path="ExternalEntity")]
+    [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="M", Header="ExtIdentifier", Required=false, List=false, PickList=null, Path="ExternalId")]
+    [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="N", Header="Description", Required=false, List=false, PickList=null, Path="Description")]
+    [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="O", Header="Reference", Required=false, List=false, PickList=null, Path="Reference")]
+    public partial class Document : CobieObject {
+        
+        private string approvalByField;
+        
+        private string stageField;
+        
+        private string directoryField;
+        
+        private string fileField;
+        
+        private string referenceField;
+        
+        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
+        public string ApprovalBy {
+            get {
+                return this.approvalByField;
+            }
+            set {
+                this.approvalByField = value;
+            }
+        }
+        
+        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
+        public string Stage {
+            get {
+                return this.stageField;
+            }
+            set {
+                this.stageField = value;
+            }
+        }
+        
+        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
+        public string Directory {
+            get {
+                return this.directoryField;
+            }
+            set {
+                this.directoryField = value;
+            }
+        }
+        
+        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
+        public string File {
+            get {
+                return this.fileField;
+            }
+            set {
+                this.fileField = value;
+            }
+        }
+        
+        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
+        public string Reference {
+            get {
+                return this.referenceField;
+            }
+            set {
+                this.referenceField = value;
+            }
+        }
+    }
+    
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Xbim.COBieLiteUK.CodeGeneration", "1.0.0.0")]
+    [System.SerializableAttribute()]
+    [System.ComponentModel.DesignerCategoryAttribute("code")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://openbim.org/schemas/cobieliteuk")]
+    [System.Xml.Serialization.XmlRootAttribute(Namespace="http://openbim.org/schemas/cobieliteuk", IsNullable=true)]
+    [Xbim.COBieLiteUK.SheetMapping(Type="UK2012", Sheet="Attribute")]
+    [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="A", Header="Name", Required=true, List=false, PickList=null, Path="Name")]
+    [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="B", Header="CreatedBy", Required=true, List=false, PickList=null, Path="CreatedBy.Email")]
+    [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="C", Header="CreatedOn", Required=true, List=false, PickList=null, Path="CreatedOn")]
+    [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="D", Header="Category", Required=true, List=false, PickList="StageType", Path="Category")]
+    [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="E", Header="SheetName", Required=true, List=false, PickList="SheetType", Path="parent")]
+    [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="F", Header="RowName", Required=true, List=false, PickList=null, Path="parent.Name")]
+    [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="G", Header="Value", Required=true, List=false, PickList=null, Path="Value.Value")]
+    [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="H", Header="Unit", Required=true, List=false, PickList=null, Path="Value.Unit")]
+    [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="I", Header="ExtSystem", Required=false, List=false, PickList=null, Path="ExternalSystem")]
+    [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="J", Header="ExtObject", Required=false, List=false, PickList=null, Path="ExternalEntity")]
+    [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="K", Header="ExtIdentifier", Required=false, List=false, PickList=null, Path="ExternalId")]
+    [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="L", Header="Description", Required=false, List=false, PickList=null, Path="Description")]
+    [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="M", Header="AllowedValues", Required=false, List=true, PickList=null, Path="Value.AllowedValues")]
+    public partial class Attribute : CobieObject {
+        
+        private AttributeValue itemField;
+        
+        [System.Xml.Serialization.XmlElementAttribute("AttributeValue", typeof(AttributeValue))]
+        [System.Xml.Serialization.XmlElementAttribute("BooleanAttributeValue", typeof(BooleanAttributeValue))]
+        [System.Xml.Serialization.XmlElementAttribute("DateTimeAttributeValue", typeof(DateTimeAttributeValue))]
+        [System.Xml.Serialization.XmlElementAttribute("DecimalAttributeValue", typeof(DecimalAttributeValue))]
+        [System.Xml.Serialization.XmlElementAttribute("IntegerAttributeValue", typeof(IntegerAttributeValue))]
+        [System.Xml.Serialization.XmlElementAttribute("StringAttributeValue", typeof(StringAttributeValue))]
+        public AttributeValue Item {
+            get {
+                return this.itemField;
+            }
+            set {
+                this.itemField = value;
+            }
+        }
+    }
+    
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Xbim.COBieLiteUK.CodeGeneration", "1.0.0.0")]
+    [System.SerializableAttribute()]
+    [System.ComponentModel.DesignerCategoryAttribute("code")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://openbim.org/schemas/cobieliteuk")]
+    [System.Xml.Serialization.XmlRootAttribute(Namespace="http://openbim.org/schemas/cobieliteuk", IsNullable=true)]
+    [Xbim.COBieLiteUK.SheetMapping(Type="UK2012", Sheet="Issue")]
+    [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="A", Header="Name", Required=true, List=false, PickList=null, Path="Name")]
+    [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="B", Header="CreatedBy", Required=true, List=false, PickList=null, Path="CreatedBy.Email")]
+    [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="C", Header="CreatedOn", Required=true, List=false, PickList=null, Path="CreatedOn")]
+    [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="D", Header="Type", Required=true, List=false, PickList="IssueCategory", Path="Category")]
+    [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="E", Header="Risk", Required=true, List=false, PickList="IssueRisk", Path="Risk")]
+    [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="F", Header="Chance", Required=true, List=false, PickList="IssueChance", Path="Chance")]
+    [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="G", Header="Impact", Required=true, List=false, PickList="IssueImpact", Path="Impact")]
+    [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="H", Header="SheetName1", Required=true, List=false, PickList="SheetType", Path="parent")]
+    [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="I", Header="RowName1", Required=true, List=false, PickList=null, Path="parent.Name")]
+    [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="J", Header="SheetName2", Required=true, List=false, PickList="SheetType", Path="SheetName2")]
+    [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="K", Header="RowName2", Required=true, List=false, PickList=null, Path="RowName2")]
+    [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="L", Header="Description", Required=true, List=false, PickList=null, Path="Description")]
+    [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="M", Header="Owner", Required=true, List=false, PickList=null, Path="Owner.Email")]
+    [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="N", Header="Mitigation", Required=true, List=false, PickList=null, Path="Mitigation")]
+    [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="O", Header="ExtSystem", Required=false, List=false, PickList=null, Path="ExternalSystem")]
+    [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="P", Header="ExtObject", Required=false, List=false, PickList=null, Path="ExternalEntity")]
+    [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="Q", Header="ExtIdentifier", Required=false, List=false, PickList=null, Path="ExternalId")]
+    public partial class Issue : CobieObject {
+        
+        private string riskField;
+        
+        private string chanceField;
+        
+        private string impactField;
+        
+        private ContactKey ownerField;
+        
+        private string mitigationField;
+        
+        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
+        public string Risk {
+            get {
+                return this.riskField;
+            }
+            set {
+                this.riskField = value;
+            }
+        }
+        
+        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
+        public string Chance {
+            get {
+                return this.chanceField;
+            }
+            set {
+                this.chanceField = value;
+            }
+        }
+        
+        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
+        public string Impact {
+            get {
+                return this.impactField;
+            }
+            set {
+                this.impactField = value;
+            }
+        }
+        
+        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
+        public ContactKey Owner {
+            get {
+                return this.ownerField;
+            }
+            set {
+                this.ownerField = value;
+            }
+        }
+        
+        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
+        public string Mitigation {
+            get {
+                return this.mitigationField;
+            }
+            set {
+                this.mitigationField = value;
+            }
+        }
+    }
+    
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Xbim.COBieLiteUK.CodeGeneration", "1.0.0.0")]
+    [System.SerializableAttribute()]
+    [System.ComponentModel.DesignerCategoryAttribute("code")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://openbim.org/schemas/cobieliteuk")]
+    [System.Xml.Serialization.XmlRootAttribute(Namespace="http://openbim.org/schemas/cobieliteuk", IsNullable=true)]
+    [Xbim.COBieLiteUK.SheetMapping(Type="UK2012", Sheet="Impact")]
+    [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="A", Header="Name", Required=true, List=false, PickList=null, Path="Name")]
+    [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="B", Header="CreatedBy", Required=true, List=false, PickList=null, Path="CreatedBy.Email")]
+    [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="C", Header="CreatedOn", Required=true, List=false, PickList=null, Path="CreatedOn")]
+    [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="D", Header="ImpactType", Required=true, List=false, PickList="ImpactType", Path="Category")]
+    [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="E", Header="ImpactStage", Required=true, List=false, PickList="ImpactStage", Path="ImpactStage")]
+    [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="F", Header="SheetName", Required=true, List=false, PickList="SheetType", Path="parent")]
+    [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="G", Header="RowName", Required=true, List=false, PickList=null, Path="parent.Name")]
+    [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="H", Header="Value", Required=true, List=false, PickList=null, Path="Value")]
+    [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="I", Header="ImpactUnit", Required=true, List=false, PickList="ImpactUnit", Path="ImpactUnit")]
+    [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="J", Header="LeadInTime", Required=false, List=false, PickList=null, Path="LeadInTime")]
+    [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="K", Header="Duration", Required=false, List=false, PickList=null, Path="Duration")]
+    [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="L", Header="LeadOutTime", Required=false, List=false, PickList=null, Path="LeadOutTime")]
+    [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="M", Header="ExtSystem", Required=false, List=false, PickList=null, Path="ExternalSystem")]
+    [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="N", Header="ExtObject", Required=false, List=false, PickList=null, Path="ExternalEntity")]
+    [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="O", Header="ExtIdentifier", Required=false, List=false, PickList=null, Path="ExternalId")]
+    [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="P", Header="Description", Required=false, List=false, PickList=null, Path="Description")]
+    public partial class Impact : CobieObject {
+        
+        private string impactStageField;
+        
+        private string valueField;
+        
+        private string impactUnitField;
+        
+        private System.Nullable<double> leadInTimeField;
+        
+        private System.Nullable<double> durationField;
+        
+        private System.Nullable<double> leadOutTimeField;
+        
+        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
+        public string ImpactStage {
+            get {
+                return this.impactStageField;
+            }
+            set {
+                this.impactStageField = value;
+            }
+        }
+        
+        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
+        public string Value {
+            get {
+                return this.valueField;
+            }
+            set {
+                this.valueField = value;
+            }
+        }
+        
+        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
+        public string ImpactUnit {
+            get {
+                return this.impactUnitField;
+            }
+            set {
+                this.impactUnitField = value;
+            }
+        }
+        
+        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified, IsNullable=true)]
+        public System.Nullable<double> LeadInTime {
+            get {
+                return this.leadInTimeField;
+            }
+            set {
+                this.leadInTimeField = value;
+            }
+        }
+        
+        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified, IsNullable=true)]
+        public System.Nullable<double> Duration {
+            get {
+                return this.durationField;
+            }
+            set {
+                this.durationField = value;
+            }
+        }
+        
+        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified, IsNullable=true)]
+        public System.Nullable<double> LeadOutTime {
+            get {
+                return this.leadOutTimeField;
+            }
+            set {
+                this.leadOutTimeField = value;
+            }
+        }
+        
+        /// <summary>
+        /// Test whether LeadInTime should be serialized
+        /// </summary>
+        public virtual bool ShouldSerializeLeadInTime() {
+            return LeadInTime.HasValue;
+        }
+        
+        /// <summary>
+        /// Test whether Duration should be serialized
+        /// </summary>
+        public virtual bool ShouldSerializeDuration() {
+            return Duration.HasValue;
+        }
+        
+        /// <summary>
+        /// Test whether LeadOutTime should be serialized
+        /// </summary>
+        public virtual bool ShouldSerializeLeadOutTime() {
+            return LeadOutTime.HasValue;
+        }
+    }
+    
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Xbim.COBieLiteUK.CodeGeneration", "1.0.0.0")]
+    [System.SerializableAttribute()]
+    [System.ComponentModel.DesignerCategoryAttribute("code")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://openbim.org/schemas/cobieliteuk")]
+    [System.Xml.Serialization.XmlRootAttribute(Namespace="http://openbim.org/schemas/cobieliteuk", IsNullable=true)]
+    [Xbim.COBieLiteUK.SheetMapping(Type="UK2012", Sheet="Resource")]
+    [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="A", Header="Name", Required=true, List=false, PickList=null, Path="Name")]
+    [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="B", Header="CreatedBy", Required=true, List=false, PickList=null, Path="CreatedBy.Email")]
+    [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="C", Header="CreatedOn", Required=true, List=false, PickList=null, Path="CreatedOn")]
+    [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="D", Header="Category", Required=true, List=false, PickList="ResourceType", Path="Category")]
+    [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="E", Header="ExtSystem", Required=false, List=false, PickList=null, Path="ExternalSystem")]
+    [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="F", Header="ExtObject", Required=false, List=false, PickList=null, Path="ExternalEntity")]
+    [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="G", Header="ExtIdentifier", Required=false, List=false, PickList=null, Path="ExternalId")]
+    [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="H", Header="Description", Required=false, List=false, PickList=null, Path="Description")]
+    public partial class Resource : CobieObject {
+    }
+    
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Xbim.COBieLiteUK.CodeGeneration", "1.0.0.0")]
+    [System.SerializableAttribute()]
+    [System.ComponentModel.DesignerCategoryAttribute("code")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://openbim.org/schemas/cobieliteuk")]
+    [System.Xml.Serialization.XmlRootAttribute(Namespace="http://openbim.org/schemas/cobieliteuk", IsNullable=true)]
+    [Xbim.COBieLiteUK.SheetMapping(Type="UK2012", Sheet="Zone")]
+    [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="A", Header="Name", Required=true, List=false, PickList=null, Path="Name")]
+    [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="B", Header="CreatedBy", Required=true, List=false, PickList=null, Path="CreatedBy.Email")]
+    [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="C", Header="CreatedOn", Required=true, List=false, PickList=null, Path="CreatedOn")]
+    [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="D", Header="Category", Required=true, List=false, PickList="ZoneType", Path="Category")]
+    [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="E", Header="SpaceNames", Required=true, List=true, PickList=null, Path="Spaces.Name")]
+    [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="F", Header="ExtSystem", Required=false, List=false, PickList=null, Path="ExternalSystem")]
+    [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="G", Header="ExtObject", Required=false, List=false, PickList=null, Path="ExternalEntity")]
+    [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="H", Header="ExtIdentifier", Required=false, List=false, PickList=null, Path="ExternalId")]
+    [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="I", Header="Description", Required=false, List=false, PickList=null, Path="Description")]
+    public partial class Zone : CobieObject {
+        
+        private List<SpaceKey> spacesField;
+        
+        [System.Xml.Serialization.XmlArrayAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
+        [System.Xml.Serialization.XmlArrayItemAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified, IsNullable=false)]
+        public List<SpaceKey> Spaces {
+            get {
+                return this.spacesField;
+            }
+            set {
+                this.spacesField = value;
+            }
+        }
+    }
+    
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Xbim.COBieLiteUK.CodeGeneration", "1.0.0.0")]
+    [System.SerializableAttribute()]
+    [System.ComponentModel.DesignerCategoryAttribute("code")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://openbim.org/schemas/cobieliteuk")]
+    [System.Xml.Serialization.XmlRootAttribute(Namespace="http://openbim.org/schemas/cobieliteuk", IsNullable=true)]
+    [Xbim.COBieLiteUK.SheetMapping(Type="UK2012", Sheet="System")]
+    [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="A", Header="Name", Required=true, List=false, PickList=null, Path="Name")]
+    [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="B", Header="CreatedBy", Required=true, List=false, PickList=null, Path="CreatedBy.Email")]
+    [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="C", Header="CreatedOn", Required=true, List=false, PickList=null, Path="CreatedOn")]
+    [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="D", Header="Category", Required=true, List=false, PickList="Category-Element", Path="Category")]
+    [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="E", Header="ComponentNames", Required=true, List=true, PickList=null, Path="Components.Name")]
+    [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="F", Header="ExtSystem", Required=false, List=false, PickList=null, Path="ExternalSystem")]
+    [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="G", Header="ExtObject", Required=false, List=false, PickList=null, Path="ExternalEntity")]
+    [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="H", Header="ExtIdentifier", Required=false, List=false, PickList=null, Path="ExternalId")]
+    [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="I", Header="Description", Required=false, List=false, PickList=null, Path="Description")]
+    public partial class SystemType : CobieObject {
+        
+        private List<AssetKey> componentsField;
+        
+        [System.Xml.Serialization.XmlArrayAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
+        [System.Xml.Serialization.XmlArrayItemAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified, IsNullable=false)]
+        public List<AssetKey> Components {
+            get {
+                return this.componentsField;
+            }
+            set {
+                this.componentsField = value;
+            }
+        }
+    }
+    
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Xbim.COBieLiteUK.CodeGeneration", "1.0.0.0")]
+    [System.SerializableAttribute()]
+    [System.ComponentModel.DesignerCategoryAttribute("code")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://openbim.org/schemas/cobieliteuk")]
+    [System.Xml.Serialization.XmlRootAttribute(Namespace="http://openbim.org/schemas/cobieliteuk", IsNullable=true)]
+    [Xbim.COBieLiteUK.SheetMapping(Type="UK2012", Sheet="Contact")]
+    [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="A", Header="Email", Required=true, List=false, PickList=null, Path="Email")]
+    [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="B", Header="CreatedBy", Required=true, List=false, PickList=null, Path="CreatedBy.Email")]
+    [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="C", Header="CreatedOn", Required=true, List=false, PickList=null, Path="CreatedOn")]
+    [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="D", Header="Category", Required=true, List=false, PickList="Category-Role", Path="Category")]
+    [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="E", Header="Company", Required=true, List=false, PickList=null, Path="Company")]
+    [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="F", Header="Phone", Required=true, List=false, PickList=null, Path="Phone")]
+    [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="G", Header="ExtSystem", Required=false, List=false, PickList=null, Path="ExternalSystem")]
+    [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="H", Header="ExtObject", Required=false, List=false, PickList=null, Path="ExternalEntity")]
+    [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="I", Header="ExtIdentifier", Required=false, List=false, PickList=null, Path="ExternalId")]
+    [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="J", Header="Department", Required=false, List=false, PickList=null, Path="Department")]
+    [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="K", Header="OrganizationCode", Required=false, List=false, PickList=null, Path="OrganizationCode")]
+    [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="L", Header="GivenName", Required=false, List=false, PickList=null, Path="GivenName")]
+    [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="M", Header="FamilyName", Required=false, List=false, PickList=null, Path="FamilyName")]
+    [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="N", Header="Street", Required=false, List=false, PickList=null, Path="Street")]
+    [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="O", Header="PostalBox", Required=false, List=false, PickList=null, Path="PostalBox")]
+    [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="P", Header="Town", Required=false, List=false, PickList=null, Path="Town")]
+    [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="Q", Header="StateRegion", Required=false, List=false, PickList=null, Path="StateRegion")]
+    [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="R", Header="PostalCode", Required=false, List=false, PickList=null, Path="PostalCode")]
+    [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="S", Header="Country", Required=false, List=false, PickList=null, Path="Country")]
+    public partial class Contact : CobieObject {
+        
+        private string emailField;
+        
+        private string companyField;
+        
+        private string phoneField;
+        
+        private string departmentField;
+        
+        private string organizationCodeField;
+        
+        private string givenNameField;
+        
+        private string familyNameField;
+        
+        private string streetField;
+        
+        private string postalBoxField;
+        
+        private string townField;
+        
+        private string stateRegionField;
+        
+        private string postalCodeField;
+        
+        private string countryField;
+        
+        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
+        public string Email {
+            get {
+                return this.emailField;
+            }
+            set {
+                this.emailField = value;
+            }
+        }
+        
+        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
+        public string Company {
+            get {
+                return this.companyField;
+            }
+            set {
+                this.companyField = value;
+            }
+        }
+        
+        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
+        public string Phone {
+            get {
+                return this.phoneField;
+            }
+            set {
+                this.phoneField = value;
+            }
+        }
+        
+        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
+        public string Department {
+            get {
+                return this.departmentField;
+            }
+            set {
+                this.departmentField = value;
+            }
+        }
+        
+        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
+        public string OrganizationCode {
+            get {
+                return this.organizationCodeField;
+            }
+            set {
+                this.organizationCodeField = value;
+            }
+        }
+        
+        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
+        public string GivenName {
+            get {
+                return this.givenNameField;
+            }
+            set {
+                this.givenNameField = value;
+            }
+        }
+        
+        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
+        public string FamilyName {
+            get {
+                return this.familyNameField;
+            }
+            set {
+                this.familyNameField = value;
+            }
+        }
+        
+        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
+        public string Street {
+            get {
+                return this.streetField;
+            }
+            set {
+                this.streetField = value;
+            }
+        }
+        
+        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
+        public string PostalBox {
+            get {
+                return this.postalBoxField;
+            }
+            set {
+                this.postalBoxField = value;
+            }
+        }
+        
+        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
+        public string Town {
+            get {
+                return this.townField;
+            }
+            set {
+                this.townField = value;
+            }
+        }
+        
+        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
+        public string StateRegion {
+            get {
+                return this.stateRegionField;
+            }
+            set {
+                this.stateRegionField = value;
+            }
+        }
+        
+        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
+        public string PostalCode {
+            get {
+                return this.postalCodeField;
+            }
+            set {
+                this.postalCodeField = value;
+            }
+        }
+        
+        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
+        public string Country {
+            get {
+                return this.countryField;
+            }
+            set {
+                this.countryField = value;
+            }
+        }
+    }
+    
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Xbim.COBieLiteUK.CodeGeneration", "1.0.0.0")]
+    [System.SerializableAttribute()]
+    [System.ComponentModel.DesignerCategoryAttribute("code")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://openbim.org/schemas/cobieliteuk")]
+    [System.Xml.Serialization.XmlRootAttribute(Namespace="http://openbim.org/schemas/cobieliteuk", IsNullable=true)]
+    [Xbim.COBieLiteUK.SheetMapping(Type="UK2012", Sheet="Job")]
+    [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="A", Header="Name", Required=true, List=false, PickList=null, Path="Name")]
+    [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="B", Header="CreatedBy", Required=true, List=false, PickList=null, Path="CreatedBy.Email")]
+    [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="C", Header="CreatedOn", Required=true, List=false, PickList=null, Path="CreatedOn")]
+    [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="D", Header="Category", Required=true, List=false, PickList="JobType", Path="Category")]
+    [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="E", Header="Status", Required=true, List=false, PickList="JobStatusType", Path="Status")]
+    [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="F", Header="TypeName", Required=true, List=false, PickList=null, Path="parent.Name")]
+    [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="G", Header="Description", Required=true, List=false, PickList=null, Path="Description")]
+    [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="H", Header="Duration", Required=true, List=false, PickList=null, Path="Duration")]
+    [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="I", Header="DurationUnit", Required=true, List=false, PickList="DurationUnit", Path="DurationUnit")]
+    [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="J", Header="Start", Required=true, List=false, PickList=null, Path="Start")]
+    [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="K", Header="TaskStartUnit", Required=true, List=false, PickList="DurationUnit", Path="TaskStartUnit")]
+    [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="L", Header="Frequency", Required=true, List=false, PickList=null, Path="Frequency")]
+    [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="M", Header="FrequencyUnit", Required=true, List=false, PickList="DurationUnit", Path="FrequencyUnit")]
+    [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="N", Header="ExtSystem", Required=false, List=false, PickList=null, Path="ExternalSystem")]
+    [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="O", Header="ExtObject", Required=false, List=false, PickList=null, Path="ExternalEntity")]
+    [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="P", Header="ExtIdentifier", Required=false, List=false, PickList=null, Path="ExternalId")]
+    [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="Q", Header="TaskNumber", Required=false, List=false, PickList=null, Path="TaskNumber")]
+    [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="R", Header="Priors", Required=false, List=true, PickList=null, Path="Priors.TaskNumber")]
+    [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="S", Header="ResourceNames", Required=false, List=true, PickList=null, Path="ResourceNames.Name")]
+    public partial class Job : CobieObject {
+        
+        private string statusField;
+        
+        private System.Nullable<double> durationField;
+        
+        private System.Nullable<DurationUnit> durationUnitField;
+        
+        private System.Nullable<double> startField;
+        
+        private System.Nullable<DurationUnit> taskStartUnitField;
+        
+        private System.Nullable<double> frequencyField;
+        
+        private System.Nullable<DurationUnit> frequencyUnitField;
+        
+        private string taskNumberField;
+        
+        private List<JobKey> priorsField;
+        
+        private List<ResourceKey> resourcesField;
+        
+        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
+        public string Status {
+            get {
+                return this.statusField;
+            }
+            set {
+                this.statusField = value;
+            }
+        }
+        
+        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified, IsNullable=true)]
+        public System.Nullable<double> Duration {
+            get {
+                return this.durationField;
+            }
+            set {
+                this.durationField = value;
+            }
+        }
+        
+        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified, IsNullable=true)]
+        public System.Nullable<DurationUnit> DurationUnit {
+            get {
+                return this.durationUnitField;
+            }
+            set {
+                this.durationUnitField = value;
+            }
+        }
+        
+        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified, IsNullable=true)]
+        public System.Nullable<double> Start {
+            get {
+                return this.startField;
+            }
+            set {
+                this.startField = value;
+            }
+        }
+        
+        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified, IsNullable=true)]
+        public System.Nullable<DurationUnit> TaskStartUnit {
+            get {
+                return this.taskStartUnitField;
+            }
+            set {
+                this.taskStartUnitField = value;
+            }
+        }
+        
+        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified, IsNullable=true)]
+        public System.Nullable<double> Frequency {
+            get {
+                return this.frequencyField;
+            }
+            set {
+                this.frequencyField = value;
+            }
+        }
+        
+        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified, IsNullable=true)]
+        public System.Nullable<DurationUnit> FrequencyUnit {
+            get {
+                return this.frequencyUnitField;
+            }
+            set {
+                this.frequencyUnitField = value;
+            }
+        }
+        
+        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
+        public string TaskNumber {
+            get {
+                return this.taskNumberField;
+            }
+            set {
+                this.taskNumberField = value;
+            }
+        }
+        
+        [System.Xml.Serialization.XmlArrayAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
+        [System.Xml.Serialization.XmlArrayItemAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified, IsNullable=false)]
+        public List<JobKey> Priors {
+            get {
+                return this.priorsField;
+            }
+            set {
+                this.priorsField = value;
+            }
+        }
+        
+        [System.Xml.Serialization.XmlArrayAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
+        [System.Xml.Serialization.XmlArrayItemAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified, IsNullable=false)]
+        public List<ResourceKey> Resources {
+            get {
+                return this.resourcesField;
+            }
+            set {
+                this.resourcesField = value;
+            }
+        }
+        
+        /// <summary>
+        /// Test whether Duration should be serialized
+        /// </summary>
+        public virtual bool ShouldSerializeDuration() {
+            return Duration.HasValue;
+        }
+        
+        /// <summary>
+        /// Test whether DurationUnit should be serialized
+        /// </summary>
+        public virtual bool ShouldSerializeDurationUnit() {
+            return DurationUnit.HasValue;
+        }
+        
+        /// <summary>
+        /// Test whether Start should be serialized
+        /// </summary>
+        public virtual bool ShouldSerializeStart() {
+            return Start.HasValue;
+        }
+        
+        /// <summary>
+        /// Test whether TaskStartUnit should be serialized
+        /// </summary>
+        public virtual bool ShouldSerializeTaskStartUnit() {
+            return TaskStartUnit.HasValue;
+        }
+        
+        /// <summary>
+        /// Test whether Frequency should be serialized
+        /// </summary>
+        public virtual bool ShouldSerializeFrequency() {
+            return Frequency.HasValue;
+        }
+        
+        /// <summary>
+        /// Test whether FrequencyUnit should be serialized
+        /// </summary>
+        public virtual bool ShouldSerializeFrequencyUnit() {
+            return FrequencyUnit.HasValue;
+        }
+    }
+    
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Xbim.COBieLiteUK.CodeGeneration", "1.0.0.0")]
+    [System.SerializableAttribute()]
+    [System.ComponentModel.DesignerCategoryAttribute("code")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://openbim.org/schemas/cobieliteuk")]
+    [System.Xml.Serialization.XmlRootAttribute(Namespace="http://openbim.org/schemas/cobieliteuk", IsNullable=true)]
+    [Xbim.COBieLiteUK.SheetMapping(Type="UK2012", Sheet="Spare")]
+    [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="A", Header="Name", Required=true, List=false, PickList=null, Path="Name")]
+    [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="B", Header="CreatedBy", Required=true, List=false, PickList=null, Path="CreatedBy.Email")]
+    [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="C", Header="CreatedOn", Required=true, List=false, PickList=null, Path="CreatedOn")]
+    [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="D", Header="Category", Required=true, List=false, PickList="SpareType", Path="Category")]
+    [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="E", Header="TypeName", Required=true, List=false, PickList=null, Path="parent.Name")]
+    [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="F", Header="Suppliers", Required=true, List=true, PickList=null, Path="Suppliers.Email")]
+    [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="G", Header="ExtSystem", Required=false, List=false, PickList=null, Path="ExternalSystem")]
+    [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="H", Header="ExtObject", Required=false, List=false, PickList=null, Path="ExternalEntity")]
+    [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="I", Header="ExtIdentifier", Required=false, List=false, PickList=null, Path="ExternalId")]
+    [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="J", Header="Description", Required=false, List=false, PickList=null, Path="Description")]
+    [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="K", Header="SetNumber", Required=false, List=false, PickList=null, Path="SetNumber")]
+    [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="L", Header="PartNumber", Required=false, List=false, PickList=null, Path="PartNumber")]
+    public partial class Spare : CobieObject {
+        
+        private List<ContactKey> suppliersField;
+        
+        private string setNumberField;
+        
+        private string partNumberField;
+        
+        [System.Xml.Serialization.XmlArrayAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
+        [System.Xml.Serialization.XmlArrayItemAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified, IsNullable=false)]
+        public List<ContactKey> Suppliers {
+            get {
+                return this.suppliersField;
+            }
+            set {
+                this.suppliersField = value;
+            }
+        }
+        
+        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
+        public string SetNumber {
+            get {
+                return this.setNumberField;
+            }
+            set {
+                this.setNumberField = value;
+            }
+        }
+        
+        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
+        public string PartNumber {
+            get {
+                return this.partNumberField;
+            }
+            set {
+                this.partNumberField = value;
+            }
+        }
+    }
+    
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Xbim.COBieLiteUK.CodeGeneration", "1.0.0.0")]
+    [System.SerializableAttribute()]
+    [System.ComponentModel.DesignerCategoryAttribute("code")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://openbim.org/schemas/cobieliteuk")]
+    [System.Xml.Serialization.XmlRootAttribute(Namespace="http://openbim.org/schemas/cobieliteuk", IsNullable=true)]
     [Xbim.COBieLiteUK.SheetMapping(Type="UK2012", Sheet="Type")]
     [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="A", Header="Name", Required=true, List=false, PickList=null, Path="Name")]
     [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="B", Header="CreatedBy", Required=true, List=false, PickList=null, Path="CreatedBy.Email")]
@@ -2389,7 +2688,7 @@ namespace Xbim.COBieLiteUK {
     [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="AG", Header="AccessibilityPerformance", Required=false, List=false, PickList=null, Path="AccessibilityPerformance")]
     [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="AH", Header="CodePerformance", Required=false, List=false, PickList=null, Path="CodePerformance")]
     [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="AI", Header="SustainabilityPerformance", Required=false, List=false, PickList=null, Path="SustainabilityPerformance")]
-    public partial class AssetType : ObjectInfo {
+    public partial class AssetType : CobieObject {
         
         private string assetType1Field;
         
@@ -2440,6 +2739,8 @@ namespace Xbim.COBieLiteUK {
         private List<Spare> sparesField;
         
         private List<Job> jobsField;
+        
+        private AssetTypeAssembly assemblyOfField;
         
         [System.Xml.Serialization.XmlElementAttribute("AssetType", Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
         public string AssetType1 {
@@ -2694,6 +2995,16 @@ namespace Xbim.COBieLiteUK {
             }
         }
         
+        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
+        public AssetTypeAssembly AssemblyOf {
+            get {
+                return this.assemblyOfField;
+            }
+            set {
+                this.assemblyOfField = value;
+            }
+        }
+        
         /// <summary>
         /// Test whether ReplacementCost should be serialized
         /// </summary>
@@ -2742,570 +3053,145 @@ namespace Xbim.COBieLiteUK {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://openbim.org/schemas/cobieliteuk")]
     [System.Xml.Serialization.XmlRootAttribute(Namespace="http://openbim.org/schemas/cobieliteuk", IsNullable=true)]
-    [Xbim.COBieLiteUK.SheetMapping(Type="UK2012", Sheet="Spare")]
+    [Xbim.COBieLiteUK.SheetMapping(Type="UK2012", Sheet="Component")]
     [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="A", Header="Name", Required=true, List=false, PickList=null, Path="Name")]
     [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="B", Header="CreatedBy", Required=true, List=false, PickList=null, Path="CreatedBy.Email")]
     [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="C", Header="CreatedOn", Required=true, List=false, PickList=null, Path="CreatedOn")]
-    [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="D", Header="Category", Required=true, List=false, PickList="SpareType", Path="Category")]
-    [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="E", Header="TypeName", Required=true, List=false, PickList=null, Path="parent.Name")]
-    [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="F", Header="Suppliers", Required=true, List=true, PickList=null, Path="Suppliers.Email")]
+    [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="D", Header="TypeName", Required=true, List=false, PickList=null, Path="parent.Name")]
+    [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="E", Header="Space", Required=true, List=false, PickList=null, Path="Space.Name")]
+    [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="F", Header="Description", Required=true, List=false, PickList=null, Path="Description")]
     [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="G", Header="ExtSystem", Required=false, List=false, PickList=null, Path="ExternalSystem")]
     [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="H", Header="ExtObject", Required=false, List=false, PickList=null, Path="ExternalEntity")]
     [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="I", Header="ExtIdentifier", Required=false, List=false, PickList=null, Path="ExternalId")]
-    [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="J", Header="Description", Required=false, List=false, PickList=null, Path="Description")]
-    [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="K", Header="SetNumber", Required=false, List=false, PickList=null, Path="SetNumber")]
-    [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="L", Header="PartNumber", Required=false, List=false, PickList=null, Path="PartNumber")]
-    public partial class Spare : CobieObject {
+    [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="J", Header="SerialNumber", Required=true, List=false, PickList=null, Path="SerialNumber")]
+    [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="K", Header="InstallationDate", Required=true, List=false, PickList=null, Path="InstallationDate")]
+    [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="L", Header="WarrantyStartDate", Required=true, List=false, PickList=null, Path="WarrantyStartDate")]
+    [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="M", Header="TagNumber", Required=false, List=false, PickList=null, Path="TagNumber")]
+    [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="N", Header="BarCode", Required=false, List=false, PickList=null, Path="BarCode")]
+    [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="O", Header="AssetIdentifier", Required=false, List=false, PickList=null, Path="AssetIdentifier")]
+    public partial class Asset : CobieObject {
         
-        private List<ContactKey> suppliersField;
+        private SpaceKey spaceField;
         
-        private string setNumberField;
+        private string serialNumberField;
         
-        private string partNumberField;
+        private System.Nullable<System.DateTime> installationDateField;
         
-        [System.Xml.Serialization.XmlArrayAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
-        [System.Xml.Serialization.XmlArrayItemAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified, IsNullable=false)]
-        public List<ContactKey> Suppliers {
+        private System.Nullable<System.DateTime> warrantyStartDateField;
+        
+        private string tagNumberField;
+        
+        private string barCodeField;
+        
+        private string assetIdentifierField;
+        
+        private List<Connection> connectionsField;
+        
+        private AssetAssembly assemblyOfField;
+        
+        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
+        public SpaceKey Space {
             get {
-                return this.suppliersField;
+                return this.spaceField;
             }
             set {
-                this.suppliersField = value;
+                this.spaceField = value;
             }
         }
         
         [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
-        public string SetNumber {
+        public string SerialNumber {
             get {
-                return this.setNumberField;
+                return this.serialNumberField;
             }
             set {
-                this.setNumberField = value;
+                this.serialNumberField = value;
+            }
+        }
+        
+        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified, IsNullable=true)]
+        public System.Nullable<System.DateTime> InstallationDate {
+            get {
+                return this.installationDateField;
+            }
+            set {
+                this.installationDateField = value;
+            }
+        }
+        
+        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified, IsNullable=true)]
+        public System.Nullable<System.DateTime> WarrantyStartDate {
+            get {
+                return this.warrantyStartDateField;
+            }
+            set {
+                this.warrantyStartDateField = value;
             }
         }
         
         [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
-        public string PartNumber {
+        public string TagNumber {
             get {
-                return this.partNumberField;
+                return this.tagNumberField;
             }
             set {
-                this.partNumberField = value;
-            }
-        }
-    }
-    
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Xbim.COBieLiteUK.CodeGeneration", "1.0.0.0")]
-    [System.SerializableAttribute()]
-    [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://openbim.org/schemas/cobieliteuk")]
-    [System.Xml.Serialization.XmlRootAttribute(Namespace="http://openbim.org/schemas/cobieliteuk", IsNullable=true)]
-    [Xbim.COBieLiteUK.SheetMapping(Type="UK2012", Sheet="Job")]
-    [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="A", Header="Name", Required=true, List=false, PickList=null, Path="Name")]
-    [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="B", Header="CreatedBy", Required=true, List=false, PickList=null, Path="CreatedBy.Email")]
-    [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="C", Header="CreatedOn", Required=true, List=false, PickList=null, Path="CreatedOn")]
-    [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="D", Header="Category", Required=true, List=false, PickList="JobType", Path="Category")]
-    [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="E", Header="Status", Required=true, List=false, PickList="JobStatusType", Path="Status")]
-    [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="F", Header="TypeName", Required=true, List=false, PickList=null, Path="parent.Name")]
-    [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="G", Header="Description", Required=true, List=false, PickList=null, Path="Description")]
-    [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="H", Header="Duration", Required=true, List=false, PickList=null, Path="Duration")]
-    [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="I", Header="DurationUnit", Required=true, List=false, PickList="DurationUnit", Path="DurationUnit")]
-    [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="J", Header="Start", Required=true, List=false, PickList=null, Path="Start")]
-    [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="K", Header="TaskStartUnit", Required=true, List=false, PickList="DurationUnit", Path="TaskStartUnit")]
-    [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="L", Header="Frequency", Required=true, List=false, PickList=null, Path="Frequency")]
-    [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="M", Header="FrequencyUnit", Required=true, List=false, PickList="DurationUnit", Path="FrequencyUnit")]
-    [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="N", Header="ExtSystem", Required=false, List=false, PickList=null, Path="ExternalSystem")]
-    [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="O", Header="ExtObject", Required=false, List=false, PickList=null, Path="ExternalEntity")]
-    [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="P", Header="ExtIdentifier", Required=false, List=false, PickList=null, Path="ExternalId")]
-    [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="Q", Header="TaskNumber", Required=false, List=false, PickList=null, Path="TaskNumber")]
-    [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="R", Header="Priors", Required=false, List=true, PickList=null, Path="Priors.TaskNumber")]
-    [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="S", Header="ResourceNames", Required=false, List=true, PickList=null, Path="ResourceNames.Name")]
-    public partial class Job : CobieObject {
-        
-        private string statusField;
-        
-        private System.Nullable<double> durationField;
-        
-        private System.Nullable<DurationUnit> durationUnitField;
-        
-        private System.Nullable<double> startField;
-        
-        private System.Nullable<DurationUnit> taskStartUnitField;
-        
-        private System.Nullable<double> frequencyField;
-        
-        private System.Nullable<DurationUnit> frequencyUnitField;
-        
-        private string taskNumberField;
-        
-        private List<JobKey> priorsField;
-        
-        private List<ResourceKey> resourcesField;
-        
-        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
-        public string Status {
-            get {
-                return this.statusField;
-            }
-            set {
-                this.statusField = value;
-            }
-        }
-        
-        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified, IsNullable=true)]
-        public System.Nullable<double> Duration {
-            get {
-                return this.durationField;
-            }
-            set {
-                this.durationField = value;
-            }
-        }
-        
-        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified, IsNullable=true)]
-        public System.Nullable<DurationUnit> DurationUnit {
-            get {
-                return this.durationUnitField;
-            }
-            set {
-                this.durationUnitField = value;
-            }
-        }
-        
-        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified, IsNullable=true)]
-        public System.Nullable<double> Start {
-            get {
-                return this.startField;
-            }
-            set {
-                this.startField = value;
-            }
-        }
-        
-        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified, IsNullable=true)]
-        public System.Nullable<DurationUnit> TaskStartUnit {
-            get {
-                return this.taskStartUnitField;
-            }
-            set {
-                this.taskStartUnitField = value;
-            }
-        }
-        
-        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified, IsNullable=true)]
-        public System.Nullable<double> Frequency {
-            get {
-                return this.frequencyField;
-            }
-            set {
-                this.frequencyField = value;
-            }
-        }
-        
-        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified, IsNullable=true)]
-        public System.Nullable<DurationUnit> FrequencyUnit {
-            get {
-                return this.frequencyUnitField;
-            }
-            set {
-                this.frequencyUnitField = value;
+                this.tagNumberField = value;
             }
         }
         
         [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
-        public string TaskNumber {
+        public string BarCode {
             get {
-                return this.taskNumberField;
+                return this.barCodeField;
             }
             set {
-                this.taskNumberField = value;
+                this.barCodeField = value;
+            }
+        }
+        
+        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
+        public string AssetIdentifier {
+            get {
+                return this.assetIdentifierField;
+            }
+            set {
+                this.assetIdentifierField = value;
             }
         }
         
         [System.Xml.Serialization.XmlArrayAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
         [System.Xml.Serialization.XmlArrayItemAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified, IsNullable=false)]
-        public List<JobKey> Priors {
+        public List<Connection> Connections {
             get {
-                return this.priorsField;
+                return this.connectionsField;
             }
             set {
-                this.priorsField = value;
+                this.connectionsField = value;
             }
         }
         
-        [System.Xml.Serialization.XmlArrayAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
-        [System.Xml.Serialization.XmlArrayItemAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified, IsNullable=false)]
-        public List<ResourceKey> Resources {
+        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
+        public AssetAssembly AssemblyOf {
             get {
-                return this.resourcesField;
+                return this.assemblyOfField;
             }
             set {
-                this.resourcesField = value;
+                this.assemblyOfField = value;
             }
         }
         
         /// <summary>
-        /// Test whether Duration should be serialized
+        /// Test whether InstallationDate should be serialized
         /// </summary>
-        public virtual bool ShouldSerializeDuration() {
-            return Duration.HasValue;
+        public virtual bool ShouldSerializeInstallationDate() {
+            return InstallationDate.HasValue;
         }
         
         /// <summary>
-        /// Test whether DurationUnit should be serialized
+        /// Test whether WarrantyStartDate should be serialized
         /// </summary>
-        public virtual bool ShouldSerializeDurationUnit() {
-            return DurationUnit.HasValue;
-        }
-        
-        /// <summary>
-        /// Test whether Start should be serialized
-        /// </summary>
-        public virtual bool ShouldSerializeStart() {
-            return Start.HasValue;
-        }
-        
-        /// <summary>
-        /// Test whether TaskStartUnit should be serialized
-        /// </summary>
-        public virtual bool ShouldSerializeTaskStartUnit() {
-            return TaskStartUnit.HasValue;
-        }
-        
-        /// <summary>
-        /// Test whether Frequency should be serialized
-        /// </summary>
-        public virtual bool ShouldSerializeFrequency() {
-            return Frequency.HasValue;
-        }
-        
-        /// <summary>
-        /// Test whether FrequencyUnit should be serialized
-        /// </summary>
-        public virtual bool ShouldSerializeFrequencyUnit() {
-            return FrequencyUnit.HasValue;
-        }
-    }
-    
-    [System.Xml.Serialization.XmlIncludeAttribute(typeof(AssetType))]
-    [System.Xml.Serialization.XmlIncludeAttribute(typeof(Asset))]
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Xbim.COBieLiteUK.CodeGeneration", "1.0.0.0")]
-    [System.SerializableAttribute()]
-    [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://openbim.org/schemas/cobieliteuk")]
-    [System.Xml.Serialization.XmlRootAttribute(Namespace="http://openbim.org/schemas/cobieliteuk", IsNullable=false)]
-    public partial class ObjectInfo : CobieObject {
-        
-        private List<Assembly> assembliesField;
-        
-        [System.Xml.Serialization.XmlArrayAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
-        [System.Xml.Serialization.XmlArrayItemAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified, IsNullable=false)]
-        public List<Assembly> Assemblies {
-            get {
-                return this.assembliesField;
-            }
-            set {
-                this.assembliesField = value;
-            }
-        }
-    }
-    
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Xbim.COBieLiteUK.CodeGeneration", "1.0.0.0")]
-    [System.SerializableAttribute()]
-    [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://openbim.org/schemas/cobieliteuk")]
-    [System.Xml.Serialization.XmlRootAttribute(Namespace="http://openbim.org/schemas/cobieliteuk", IsNullable=true)]
-    [Xbim.COBieLiteUK.SheetMapping(Type="UK2012", Sheet="Assembly")]
-    [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="A", Header="Name", Required=true, List=false, PickList=null, Path="Name")]
-    [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="B", Header="CreatedBy", Required=true, List=false, PickList=null, Path="CreatedBy.Email")]
-    [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="C", Header="CreatedOn", Required=true, List=false, PickList=null, Path="CreatedOn")]
-    [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="D", Header="SheetName", Required=true, List=false, PickList=null, Path="parent")]
-    [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="E", Header="ParentName", Required=true, List=false, PickList=null, Path="parent.Name")]
-    [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="F", Header="ChildNames", Required=true, List=true, PickList=null, Path="ChildAssets.Name")]
-    [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="G", Header="AssemblyType", Required=false, List=false, PickList="AssemblyType", Path="Category")]
-    [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="H", Header="ExtSystem", Required=false, List=false, PickList=null, Path="ExternalSystem")]
-    [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="I", Header="ExtObject", Required=false, List=false, PickList=null, Path="ExternalEntity")]
-    [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="J", Header="ExtIdentifier", Required=false, List=false, PickList=null, Path="ExternalId")]
-    [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="K", Header="Description", Required=false, List=false, PickList=null, Path="Description")]
-    public partial class Assembly : CobieObject {
-        
-        private string assemblyNameField;
-        
-        private List<Asset> childAssetsField;
-        
-        private List<AssetType> childAssetTypesField;
-        
-        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
-        public string AssemblyName {
-            get {
-                return this.assemblyNameField;
-            }
-            set {
-                this.assemblyNameField = value;
-            }
-        }
-        
-        [System.Xml.Serialization.XmlArrayAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
-        [System.Xml.Serialization.XmlArrayItemAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified, IsNullable=false)]
-        public List<Asset> ChildAssets {
-            get {
-                return this.childAssetsField;
-            }
-            set {
-                this.childAssetsField = value;
-            }
-        }
-        
-        [System.Xml.Serialization.XmlArrayAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
-        [System.Xml.Serialization.XmlArrayItemAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified, IsNullable=false)]
-        public List<AssetType> ChildAssetTypes {
-            get {
-                return this.childAssetTypesField;
-            }
-            set {
-                this.childAssetTypesField = value;
-            }
-        }
-    }
-    
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Xbim.COBieLiteUK.CodeGeneration", "1.0.0.0")]
-    [System.SerializableAttribute()]
-    [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://openbim.org/schemas/cobieliteuk")]
-    [System.Xml.Serialization.XmlRootAttribute(Namespace="http://openbim.org/schemas/cobieliteuk", IsNullable=true)]
-    [Xbim.COBieLiteUK.SheetMapping(Type="UK2012", Sheet="Contact")]
-    [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="A", Header="Email", Required=true, List=false, PickList=null, Path="Email")]
-    [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="B", Header="CreatedBy", Required=true, List=false, PickList=null, Path="CreatedBy.Email")]
-    [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="C", Header="CreatedOn", Required=true, List=false, PickList=null, Path="CreatedOn")]
-    [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="D", Header="Category", Required=true, List=false, PickList="Category-Role", Path="Category")]
-    [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="E", Header="Company", Required=true, List=false, PickList=null, Path="Company")]
-    [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="F", Header="Phone", Required=true, List=false, PickList=null, Path="Phone")]
-    [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="G", Header="ExtSystem", Required=false, List=false, PickList=null, Path="ExternalSystem")]
-    [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="H", Header="ExtObject", Required=false, List=false, PickList=null, Path="ExternalEntity")]
-    [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="I", Header="ExtIdentifier", Required=false, List=false, PickList=null, Path="ExternalId")]
-    [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="J", Header="Department", Required=false, List=false, PickList=null, Path="Department")]
-    [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="K", Header="OrganizationCode", Required=false, List=false, PickList=null, Path="OrganizationCode")]
-    [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="L", Header="GivenName", Required=false, List=false, PickList=null, Path="GivenName")]
-    [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="M", Header="FamilyName", Required=false, List=false, PickList=null, Path="FamilyName")]
-    [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="N", Header="Street", Required=false, List=false, PickList=null, Path="Street")]
-    [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="O", Header="PostalBox", Required=false, List=false, PickList=null, Path="PostalBox")]
-    [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="P", Header="Town", Required=false, List=false, PickList=null, Path="Town")]
-    [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="Q", Header="StateRegion", Required=false, List=false, PickList=null, Path="StateRegion")]
-    [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="R", Header="PostalCode", Required=false, List=false, PickList=null, Path="PostalCode")]
-    [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="S", Header="Country", Required=false, List=false, PickList=null, Path="Country")]
-    public partial class Contact : CobieObject {
-        
-        private string emailField;
-        
-        private string companyField;
-        
-        private string phoneField;
-        
-        private string departmentField;
-        
-        private string organizationCodeField;
-        
-        private string givenNameField;
-        
-        private string familyNameField;
-        
-        private string streetField;
-        
-        private string postalBoxField;
-        
-        private string townField;
-        
-        private string stateRegionField;
-        
-        private string postalCodeField;
-        
-        private string countryField;
-        
-        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
-        public string Email {
-            get {
-                return this.emailField;
-            }
-            set {
-                this.emailField = value;
-            }
-        }
-        
-        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
-        public string Company {
-            get {
-                return this.companyField;
-            }
-            set {
-                this.companyField = value;
-            }
-        }
-        
-        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
-        public string Phone {
-            get {
-                return this.phoneField;
-            }
-            set {
-                this.phoneField = value;
-            }
-        }
-        
-        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
-        public string Department {
-            get {
-                return this.departmentField;
-            }
-            set {
-                this.departmentField = value;
-            }
-        }
-        
-        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
-        public string OrganizationCode {
-            get {
-                return this.organizationCodeField;
-            }
-            set {
-                this.organizationCodeField = value;
-            }
-        }
-        
-        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
-        public string GivenName {
-            get {
-                return this.givenNameField;
-            }
-            set {
-                this.givenNameField = value;
-            }
-        }
-        
-        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
-        public string FamilyName {
-            get {
-                return this.familyNameField;
-            }
-            set {
-                this.familyNameField = value;
-            }
-        }
-        
-        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
-        public string Street {
-            get {
-                return this.streetField;
-            }
-            set {
-                this.streetField = value;
-            }
-        }
-        
-        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
-        public string PostalBox {
-            get {
-                return this.postalBoxField;
-            }
-            set {
-                this.postalBoxField = value;
-            }
-        }
-        
-        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
-        public string Town {
-            get {
-                return this.townField;
-            }
-            set {
-                this.townField = value;
-            }
-        }
-        
-        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
-        public string StateRegion {
-            get {
-                return this.stateRegionField;
-            }
-            set {
-                this.stateRegionField = value;
-            }
-        }
-        
-        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
-        public string PostalCode {
-            get {
-                return this.postalCodeField;
-            }
-            set {
-                this.postalCodeField = value;
-            }
-        }
-        
-        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
-        public string Country {
-            get {
-                return this.countryField;
-            }
-            set {
-                this.countryField = value;
-            }
-        }
-    }
-    
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Xbim.COBieLiteUK.CodeGeneration", "1.0.0.0")]
-    [System.SerializableAttribute()]
-    [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://openbim.org/schemas/cobieliteuk")]
-    [System.Xml.Serialization.XmlRootAttribute(Namespace="http://openbim.org/schemas/cobieliteuk", IsNullable=true)]
-    [Xbim.COBieLiteUK.SheetMapping(Type="UK2016", Sheet="Project")]
-    [Xbim.COBieLiteUK.Mapping(Type="UK2016", Column="A", Header="Name", Required=true, List=false, PickList=null, Path="Name")]
-    [Xbim.COBieLiteUK.Mapping(Type="UK2016", Column="B", Header="CreatedBy", Required=true, List=false, PickList=null, Path="CreatedBy.Email")]
-    [Xbim.COBieLiteUK.Mapping(Type="UK2016", Column="C", Header="CreatedOn", Required=true, List=false, PickList=null, Path="CreatedOn")]
-    [Xbim.COBieLiteUK.Mapping(Type="UK2016", Column="D", Header="Category", Required=true, List=false, PickList="Category-ProjectStage", Path="Category")]
-    [Xbim.COBieLiteUK.Mapping(Type="UK2016", Column="E", Header="Description", Required=false, List=false, PickList=null, Path="Description")]
-    [Xbim.COBieLiteUK.Mapping(Type="UK2016", Column="F", Header="ExtSystem", Required=false, List=false, PickList=null, Path="ExternalSystem")]
-    [Xbim.COBieLiteUK.Mapping(Type="UK2016", Column="G", Header="ExtObject", Required=false, List=false, PickList=null, Path="ExternalEntity")]
-    [Xbim.COBieLiteUK.Mapping(Type="UK2016", Column="H", Header="ExtIdentifier", Required=false, List=false, PickList=null, Path="ExternalId")]
-    [Xbim.COBieLiteUK.Mapping(Type="UK2016", Column="I", Header="Start", Required=false, List=false, PickList=null, Path="Start")]
-    [Xbim.COBieLiteUK.Mapping(Type="UK2016", Column="J", Header="End", Required=false, List=false, PickList=null, Path="End")]
-    public partial class ProjectStage : CobieObject {
-        
-        private System.Nullable<System.DateTime> startField;
-        
-        private System.Nullable<System.DateTime> endField;
-        
-        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified, DataType="date", IsNullable=true)]
-        public System.Nullable<System.DateTime> Start {
-            get {
-                return this.startField;
-            }
-            set {
-                this.startField = value;
-            }
-        }
-        
-        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified, DataType="date", IsNullable=true)]
-        public System.Nullable<System.DateTime> End {
-            get {
-                return this.endField;
-            }
-            set {
-                this.endField = value;
-            }
-        }
-        
-        /// <summary>
-        /// Test whether Start should be serialized
-        /// </summary>
-        public virtual bool ShouldSerializeStart() {
-            return Start.HasValue;
-        }
-        
-        /// <summary>
-        /// Test whether End should be serialized
-        /// </summary>
-        public virtual bool ShouldSerializeEnd() {
-            return End.HasValue;
+        public virtual bool ShouldSerializeWarrantyStartDate() {
+            return WarrantyStartDate.HasValue;
         }
     }
     
@@ -3377,6 +3263,129 @@ namespace Xbim.COBieLiteUK {
             set {
                 this.portName2Field = value;
             }
+        }
+    }
+    
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Xbim.COBieLiteUK.CodeGeneration", "1.0.0.0")]
+    [System.SerializableAttribute()]
+    [System.ComponentModel.DesignerCategoryAttribute("code")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://openbim.org/schemas/cobieliteuk")]
+    [System.Xml.Serialization.XmlRootAttribute(Namespace="http://openbim.org/schemas/cobieliteuk", IsNullable=true)]
+    [Xbim.COBieLiteUK.SheetMapping(Type="UK2012", Sheet="Assembly")]
+    [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="A", Header="Name", Required=true, List=false, PickList=null, Path="Name")]
+    [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="B", Header="CreatedBy", Required=true, List=false, PickList=null, Path="CreatedBy.Email")]
+    [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="C", Header="CreatedOn", Required=true, List=false, PickList=null, Path="CreatedOn")]
+    [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="D", Header="SheetName", Required=true, List=false, PickList=null, Path="parent")]
+    [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="E", Header="ParentName", Required=true, List=false, PickList=null, Path="parent.Name")]
+    [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="F", Header="ChildNames", Required=true, List=true, PickList=null, Path="ChildAssets.Name")]
+    [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="G", Header="AssemblyType", Required=false, List=false, PickList="AssemblyType", Path="Category")]
+    [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="H", Header="ExtSystem", Required=false, List=false, PickList=null, Path="ExternalSystem")]
+    [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="I", Header="ExtObject", Required=false, List=false, PickList=null, Path="ExternalEntity")]
+    [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="J", Header="ExtIdentifier", Required=false, List=false, PickList=null, Path="ExternalId")]
+    [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="K", Header="Description", Required=false, List=false, PickList=null, Path="Description")]
+    public partial class AssetAssembly : CobieObject {
+        
+        private List<Asset> childAssetsField;
+        
+        [System.Xml.Serialization.XmlArrayAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
+        [System.Xml.Serialization.XmlArrayItemAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified, IsNullable=false)]
+        public List<Asset> ChildAssets {
+            get {
+                return this.childAssetsField;
+            }
+            set {
+                this.childAssetsField = value;
+            }
+        }
+    }
+    
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Xbim.COBieLiteUK.CodeGeneration", "1.0.0.0")]
+    [System.SerializableAttribute()]
+    [System.ComponentModel.DesignerCategoryAttribute("code")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://openbim.org/schemas/cobieliteuk")]
+    [System.Xml.Serialization.XmlRootAttribute(Namespace="http://openbim.org/schemas/cobieliteuk", IsNullable=true)]
+    [Xbim.COBieLiteUK.SheetMapping(Type="UK2012", Sheet="Assembly")]
+    [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="A", Header="Name", Required=true, List=false, PickList=null, Path="Name")]
+    [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="B", Header="CreatedBy", Required=true, List=false, PickList=null, Path="CreatedBy.Email")]
+    [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="C", Header="CreatedOn", Required=true, List=false, PickList=null, Path="CreatedOn")]
+    [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="D", Header="SheetName", Required=true, List=false, PickList=null, Path="parent")]
+    [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="E", Header="ParentName", Required=true, List=false, PickList=null, Path="parent.Name")]
+    [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="F", Header="ChildNames", Required=true, List=true, PickList=null, Path="ChildAssetTypes.Name")]
+    [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="G", Header="AssemblyType", Required=false, List=false, PickList="AssemblyType", Path="Category")]
+    [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="H", Header="ExtSystem", Required=false, List=false, PickList=null, Path="ExternalSystem")]
+    [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="I", Header="ExtObject", Required=false, List=false, PickList=null, Path="ExternalEntity")]
+    [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="J", Header="ExtIdentifier", Required=false, List=false, PickList=null, Path="ExternalId")]
+    [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="K", Header="Description", Required=false, List=false, PickList=null, Path="Description")]
+    public partial class AssetTypeAssembly : CobieObject {
+        
+        private List<AssetType> childAssetTypesField;
+        
+        [System.Xml.Serialization.XmlArrayAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
+        [System.Xml.Serialization.XmlArrayItemAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified, IsNullable=false)]
+        public List<AssetType> ChildAssetTypes {
+            get {
+                return this.childAssetTypesField;
+            }
+            set {
+                this.childAssetTypesField = value;
+            }
+        }
+    }
+    
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Xbim.COBieLiteUK.CodeGeneration", "1.0.0.0")]
+    [System.SerializableAttribute()]
+    [System.ComponentModel.DesignerCategoryAttribute("code")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://openbim.org/schemas/cobieliteuk")]
+    [System.Xml.Serialization.XmlRootAttribute(Namespace="http://openbim.org/schemas/cobieliteuk", IsNullable=true)]
+    [Xbim.COBieLiteUK.SheetMapping(Type="UK2016", Sheet="Project")]
+    [Xbim.COBieLiteUK.Mapping(Type="UK2016", Column="A", Header="Name", Required=true, List=false, PickList=null, Path="Name")]
+    [Xbim.COBieLiteUK.Mapping(Type="UK2016", Column="B", Header="CreatedBy", Required=true, List=false, PickList=null, Path="CreatedBy.Email")]
+    [Xbim.COBieLiteUK.Mapping(Type="UK2016", Column="C", Header="CreatedOn", Required=true, List=false, PickList=null, Path="CreatedOn")]
+    [Xbim.COBieLiteUK.Mapping(Type="UK2016", Column="D", Header="Category", Required=true, List=false, PickList="Category-ProjectStage", Path="Category")]
+    [Xbim.COBieLiteUK.Mapping(Type="UK2016", Column="E", Header="Description", Required=false, List=false, PickList=null, Path="Description")]
+    [Xbim.COBieLiteUK.Mapping(Type="UK2016", Column="F", Header="ExtSystem", Required=false, List=false, PickList=null, Path="ExternalSystem")]
+    [Xbim.COBieLiteUK.Mapping(Type="UK2016", Column="G", Header="ExtObject", Required=false, List=false, PickList=null, Path="ExternalEntity")]
+    [Xbim.COBieLiteUK.Mapping(Type="UK2016", Column="H", Header="ExtIdentifier", Required=false, List=false, PickList=null, Path="ExternalId")]
+    [Xbim.COBieLiteUK.Mapping(Type="UK2016", Column="I", Header="Start", Required=false, List=false, PickList=null, Path="Start")]
+    [Xbim.COBieLiteUK.Mapping(Type="UK2016", Column="J", Header="End", Required=false, List=false, PickList=null, Path="End")]
+    public partial class ProjectStage : CobieObject {
+        
+        private System.Nullable<System.DateTime> startField;
+        
+        private System.Nullable<System.DateTime> endField;
+        
+        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified, DataType="date", IsNullable=true)]
+        public System.Nullable<System.DateTime> Start {
+            get {
+                return this.startField;
+            }
+            set {
+                this.startField = value;
+            }
+        }
+        
+        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified, DataType="date", IsNullable=true)]
+        public System.Nullable<System.DateTime> End {
+            get {
+                return this.endField;
+            }
+            set {
+                this.endField = value;
+            }
+        }
+        
+        /// <summary>
+        /// Test whether Start should be serialized
+        /// </summary>
+        public virtual bool ShouldSerializeStart() {
+            return Start.HasValue;
+        }
+        
+        /// <summary>
+        /// Test whether End should be serialized
+        /// </summary>
+        public virtual bool ShouldSerializeEnd() {
+            return End.HasValue;
         }
     }
     

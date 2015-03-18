@@ -48,7 +48,7 @@
   <!--End Project related content-->
 
   <!--Begin Assembly related content-->
-  <xs:complexType name="Assembly">
+  <xs:complexType name="AssetAssembly">
     <xs:annotation>
       <xs:appinfo source="sheet">UK2012|Assembly</xs:appinfo>
       <!--mapping, column, header, required/optional, list/item, pick/-, path-->
@@ -68,23 +68,40 @@
     <xs:complexContent>
       <xs:extension base="cobielite:CobieObject">
         <xs:sequence>
-          <xs:element name="AssemblyName" type="xs:string" minOccurs="0">
-            <xs:annotation>
-              <xs:appinfo source="mapping">UK2012|D|Assembly|false</xs:appinfo>
-            </xs:annotation>
-          </xs:element>
           <!-- Lists -->
           <xs:element name="ChildAssets" type="cobielite:AssetCollection" minOccurs="0" maxOccurs="1" />
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  
+  <xs:complexType name="AssetTypeAssembly">
+    <xs:annotation>
+      <xs:appinfo source="sheet">UK2012|Assembly</xs:appinfo>
+      <!--mapping, column, header, required/optional, list/item, pick/-, path-->
+      <xs:appinfo source="mapping">UK2012|A|Name|required|item|-|Name</xs:appinfo>
+      <xs:appinfo source="mapping">UK2012|B|CreatedBy|required|item|-|CreatedBy.Email</xs:appinfo>
+      <xs:appinfo source="mapping">UK2012|C|CreatedOn|required|item|-|CreatedOn</xs:appinfo>
+      <xs:appinfo source="mapping">UK2012|D|SheetName|required|item|-|parent</xs:appinfo>
+      <xs:appinfo source="mapping">UK2012|E|ParentName|required|item|-|parent.Name</xs:appinfo>
+      <xs:appinfo source="mapping">UK2012|F|ChildNames|required|list|-|ChildAssetTypes.Name</xs:appinfo>
+      <xs:appinfo source="mapping">UK2012|G|AssemblyType|optional|item|AssemblyType|Category</xs:appinfo>
+      <xs:appinfo source="mapping">UK2012|H|ExtSystem|optional|item|-|ExternalSystem</xs:appinfo>
+      <xs:appinfo source="mapping">UK2012|I|ExtObject|optional|item|-|ExternalEntity</xs:appinfo>
+      <xs:appinfo source="mapping">UK2012|J|ExtIdentifier|optional|item|-|ExternalId</xs:appinfo>
+      <xs:appinfo source="mapping">UK2012|K|Description|optional|item|-|Description</xs:appinfo>
+      <xs:documentation>The Assembly to which this Asset belongs</xs:documentation>
+    </xs:annotation>
+    <xs:complexContent>
+      <xs:extension base="cobielite:CobieObject">
+        <xs:sequence>
+          <!-- Lists -->
           <xs:element name="ChildAssetTypes" type="cobielite:AssetTypeCollection" minOccurs="0" maxOccurs="1" />
         </xs:sequence>
       </xs:extension>
     </xs:complexContent>
   </xs:complexType>
-  <xs:complexType name="AssemblyCollection">
-    <xs:sequence>
-      <xs:element name="Assembly" type="cobielite:Assembly" maxOccurs="unbounded" />
-    </xs:sequence>
-  </xs:complexType>
+  
   <!--End Assembly related content-->
 
   <!--Begin Asset related content-->
@@ -112,7 +129,7 @@
       </xs:documentation>
     </xs:annotation>
     <xs:complexContent>
-      <xs:extension base="cobielite:ObjectInfo">
+      <xs:extension base="cobielite:CobieObject">
         <xs:sequence>
           <xs:element name="Space" type="cobielite:SpaceKey" minOccurs="1" />
           <xs:element name="SerialNumber" type="xs:string" minOccurs="1" />
@@ -124,6 +141,7 @@
 
           <!-- Lists -->
           <xs:element name="Connections" type="cobielite:ConnectionCollection" minOccurs="0" maxOccurs="1" />
+          <xs:element name="AssemblyOf" type="cobielite:AssetAssembly" minOccurs="0" maxOccurs="1" />
         </xs:sequence>
       </xs:extension>
     </xs:complexContent>
@@ -144,7 +162,6 @@
       <xs:element name="AssetKey" type="cobielite:AssetKey" maxOccurs="unbounded" />
     </xs:sequence>
   </xs:complexType>
-  <xs:element name="Asset" type="cobielite:Asset" substitutionGroup="cobielite:ObjectInfo" />
   <!--End Asset related content-->
 
   <!--Begin AssetType related content-->
@@ -192,7 +209,7 @@
       </xs:documentation>
     </xs:annotation>
     <xs:complexContent>
-      <xs:extension base="cobielite:ObjectInfo">
+      <xs:extension base="cobielite:CobieObject">
         <xs:sequence>
           <xs:element name="AssetType" type="xs:string" minOccurs="1" />
           <xs:element name="Manufacturer" type="cobielite:ContactKey" minOccurs="1" />
@@ -221,6 +238,7 @@
           <xs:element name="Assets" type="cobielite:AssetCollection" maxOccurs="1" minOccurs="0" />
           <xs:element name="Spares" type="cobielite:SpareCollection" maxOccurs="1" minOccurs="0" />
           <xs:element name="Jobs" type="cobielite:JobCollection" maxOccurs="1" minOccurs="0" />
+          <xs:element name="AssemblyOf" type="cobielite:AssetTypeAssembly" maxOccurs="1" minOccurs="0" />
 
         </xs:sequence>
       </xs:extension>
@@ -231,7 +249,6 @@
       <xs:element name="AssetType" type="cobielite:AssetType" maxOccurs="unbounded" />
     </xs:sequence>
   </xs:complexType>
-  <xs:element name="AssetType" type="cobielite:AssetType" substitutionGroup="cobielite:ObjectInfo" />
   <!-- Warranty -->
   <xs:complexType name="Warranty">
     <xs:annotation>
@@ -921,24 +938,6 @@
       <xs:element name="ProjectStages" type="cobielite:ProjectStageKeyCollection" maxOccurs="1" minOccurs="0" />
     </xs:sequence>
   </xs:complexType>
-
-  <!-- Begin Object Info content-->
-  <xs:complexType name="ObjectInfo">
-    <xs:annotation>
-      <xs:documentation>
-        This is a base class for asset and asset type which can both act as similar objects in assemblies and connections
-      </xs:documentation>
-    </xs:annotation>
-    <xs:complexContent>
-      <xs:extension base="cobielite:CobieObject">
-        <xs:sequence>
-          <xs:element name="Assemblies" type="cobielite:AssemblyCollection" maxOccurs="1" minOccurs="0" />
-        </xs:sequence>
-      </xs:extension>
-    </xs:complexContent>
-  </xs:complexType>
-  <xs:element name="ObjectInfo" type="cobielite:ObjectInfo" />
-  <!-- End Object Info content -->
 
   <!-- Begin Attribute values -->
   <xs:complexType name="AttributeValue" abstract="true">
