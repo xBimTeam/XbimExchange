@@ -4,7 +4,7 @@
   targetNamespace="http://openbim.org/schemas/cobieliteuk"
   elementFormDefault="unqualified" attributeFormDefault="unqualified" version="RC1">
 
-  <!--Begin Project related content-->
+  <!--Begin ProjectStage related content-->
   <xs:complexType name="ProjectStage">
     <xs:annotation>
       <xs:appinfo source="sheet">UK2016|Project</xs:appinfo>
@@ -45,7 +45,7 @@
       <xs:element name="ProjectStageKey" type="cobielite:ProjectStageKey" minOccurs="0" maxOccurs="unbounded" />
     </xs:sequence>
   </xs:complexType>
-  <!--End Project related content-->
+  <!--End ProjectStage related content-->
 
   <!--Begin Assembly related content-->
   <xs:complexType name="AssetAssembly">
@@ -74,7 +74,6 @@
       </xs:extension>
     </xs:complexContent>
   </xs:complexType>
-  
   <xs:complexType name="AssetTypeAssembly">
     <xs:annotation>
       <xs:appinfo source="sheet">UK2012|Assembly</xs:appinfo>
@@ -101,7 +100,6 @@
       </xs:extension>
     </xs:complexContent>
   </xs:complexType>
-  
   <!--End Assembly related content-->
 
   <!--Begin Asset related content-->
@@ -265,6 +263,7 @@
       <xs:element name="DurationUnit" type="cobielite:DurationUnit" minOccurs="1" nillable="true" />
     </xs:sequence>
   </xs:complexType>
+  <!-- End Warranty -->
   <!--End AssetType related content-->
 
   <!--Begin Attribute related content-->
@@ -945,7 +944,8 @@
       <xs:element name="Unit" type="xs:string" minOccurs="0" />
     </xs:sequence>
   </xs:complexType>
-  <xs:element name="AttributeValue" type="cobielite:AttributeValue" />
+  <xs:element name="AttributeValue" 
+              type="cobielite:AttributeValue" />
 
   <xs:complexType name="StringAttributeValue">
     <xs:complexContent>
@@ -1034,7 +1034,6 @@
       <xs:enumeration value="Integer" />
     </xs:restriction>
   </xs:simpleType>
-
   <!-- End Attribute values -->
 
   <!-- Simple types -->
@@ -1218,6 +1217,7 @@
       <xs:enumeration value="ProjectStage" />
     </xs:restriction>
   </xs:simpleType>
+  
   <xs:simpleType name="DurationUnit">
     <xs:restriction base="xs:string">
       <xs:enumeration value="milisecond" />
