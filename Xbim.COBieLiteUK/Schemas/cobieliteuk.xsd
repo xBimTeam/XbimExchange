@@ -37,8 +37,8 @@
   <xs:complexType name="ProjectStageKey">
     <xs:sequence>
       <xs:element name="Name" type="xs:string" minOccurs="1" maxOccurs="1" />
-      <xs:element name="KeyType" type="cobielite:EntityType" fixed="ProjectStage" />
     </xs:sequence>
+      <xs:attribute name="KeyType" type="cobielite:EntityType" fixed="ProjectStage" />
   </xs:complexType>
   <xs:complexType name="ProjectStageKeyCollection">
     <xs:sequence>
@@ -147,8 +147,8 @@
   <xs:complexType name="AssetKey">
     <xs:sequence>
       <xs:element name="Name" type="xs:string" />
-      <xs:element name="KeyType" type="cobielite:EntityType" fixed="AssetType" />
     </xs:sequence>
+      <xs:attribute name="KeyType" type="cobielite:EntityType" fixed="AssetType" />
   </xs:complexType>
   <xs:complexType name="AssetCollection">
     <xs:sequence>
@@ -389,8 +389,8 @@
   <xs:complexType name="ContactKey">
     <xs:sequence>
       <xs:element name="Email" type="cobielite:EmailAddress" minOccurs="1" />
-      <xs:element name="KeyType" type="cobielite:EntityType" fixed="Contact" />
     </xs:sequence>
+      <xs:attribute name="KeyType" type="cobielite:EntityType" fixed="Contact" />
   </xs:complexType>
   <xs:complexType name="ContactCollection">
     <xs:sequence>
@@ -454,23 +454,23 @@
       <xs:appinfo source="mapping">UK2012|B|CreatedBy|required|item|-|CreatedBy.Email</xs:appinfo>
       <xs:appinfo source="mapping">UK2012|C|CreatedOn|required|item|-|CreatedOn</xs:appinfo>
       <xs:appinfo source="mapping">UK2012|D|Category|required|item|Category-Facility|Category</xs:appinfo>
-      <xs:appinfo source="mapping">UK2012|E|ProjectName|required|item|-|ProjectName</xs:appinfo>
-      <xs:appinfo source="mapping">UK2012|F|SiteName|required|item|-|SiteName</xs:appinfo>
+      <xs:appinfo source="mapping">UK2012|E|ProjectName|required|item|-|Project.Name</xs:appinfo>
+      <xs:appinfo source="mapping">UK2012|F|SiteName|required|item|-|Site.Name</xs:appinfo>
       <xs:appinfo source="mapping">UK2012|G|LinearUnits|required|item|LinearUnits|LinearUnits</xs:appinfo>
       <xs:appinfo source="mapping">UK2012|H|AreaUnits|required|item|AreaUnits|AreaUnits</xs:appinfo>
       <xs:appinfo source="mapping">UK2012|I|VolumeUnits|required|item|VolumeUnits|VolumeUnits</xs:appinfo>
       <xs:appinfo source="mapping">UK2012|J|CurrencyUnit|required|item|CostUnit|CurrencyUnit</xs:appinfo>
       <xs:appinfo source="mapping">UK2012|K|AreaMeasurement|required|item|-|AreaMeasurement</xs:appinfo>
       <xs:appinfo source="mapping">UK2012|L|ExternalSystem|optional|item|-|ExternalSystem</xs:appinfo>
-      <xs:appinfo source="mapping">UK2012|M|ExternalProjectObject|optional|item|-|ExternalProjectObject</xs:appinfo>
-      <xs:appinfo source="mapping">UK2012|N|ExternalProjectIdentifier|optional|item|-|ExternalProjectIdentifier</xs:appinfo>
-      <xs:appinfo source="mapping">UK2012|O|ExternalSiteObject|optional|item|-|ExternalSiteObject</xs:appinfo>
-      <xs:appinfo source="mapping">UK2012|P|ExternalSiteIdentifier|optional|item|-|ExternalSiteIdentifier</xs:appinfo>
+      <xs:appinfo source="mapping">UK2012|M|ExternalProjectObject|optional|item|-|Project.ExternalEntity</xs:appinfo>
+      <xs:appinfo source="mapping">UK2012|N|ExternalProjectIdentifier|optional|item|-|Project.ExternalId</xs:appinfo>
+      <xs:appinfo source="mapping">UK2012|O|ExternalSiteObject|optional|item|-|Site.ExternalEntity</xs:appinfo>
+      <xs:appinfo source="mapping">UK2012|P|ExternalSiteIdentifier|optional|item|-|Site.ExternalId</xs:appinfo>
       <xs:appinfo source="mapping">UK2012|Q|ExternalFacilityObject|optional|item|-|ExternalEntity</xs:appinfo>
       <xs:appinfo source="mapping">UK2012|R|ExternalFacilityIdentifier|optional|item|-|ExternalId</xs:appinfo>
       <xs:appinfo source="mapping">UK2012|S|Description|optional|item|-|Description</xs:appinfo>
-      <xs:appinfo source="mapping">UK2012|T|ProjectDescription|optional|item|-|ProjectDescription</xs:appinfo>
-      <xs:appinfo source="mapping">UK2012|U|SiteDescription|optional|item|-|SiteDescription</xs:appinfo>
+      <xs:appinfo source="mapping">UK2012|T|ProjectDescription|optional|item|-|Project.Description</xs:appinfo>
+      <xs:appinfo source="mapping">UK2012|U|SiteDescription|optional|item|-|Site.Description</xs:appinfo>
       <xs:appinfo source="mapping">UK2012|V|Phase|optional|item|-|Phase</xs:appinfo>
       <xs:documentation>
         A type for the Facility element that is the root of a COBie document.
@@ -483,19 +483,15 @@
     <xs:complexContent>
       <xs:extension base="cobielite:CobieObject">
         <xs:sequence>
-          <xs:element name="ProjectName" type="xs:string" minOccurs="1" />
-          <xs:element name="SiteName" type="xs:string" minOccurs="1" />
+          <xs:element name="Version" type="xs:string" minOccurs="1" fixed="COBieLiteUK_2015" />
+          <xs:element name="Project" type="cobielite:Project" minOccurs="1" maxOccurs="1" />
+          <xs:element name="Site" type="cobielite:Site" minOccurs="1" maxOccurs="1" />
+
           <xs:element name="LinearUnits" type="cobielite:LinearUnit" minOccurs="1" nillable="true" />
           <xs:element name="AreaUnits" type="cobielite:AreaUnit" minOccurs="1" nillable="true" />
           <xs:element name="VolumeUnits" type="cobielite:VolumeUnit" minOccurs="1" nillable="true" />
           <xs:element name="CurrencyUnit" type="cobielite:CurrencyUnit" minOccurs="1" nillable="true" />
           <xs:element name="AreaMeasurement" type="xs:string" minOccurs="1" />
-          <xs:element name="ExternalProjectEntity" type="xs:string" minOccurs="0" />
-          <xs:element name="ExternalProjectIdentifier" type="xs:string" minOccurs="0" />
-          <xs:element name="ExternalSiteEntity" type="xs:string" minOccurs="0" />
-          <xs:element name="ExternalSiteIdentifier" type="xs:string" minOccurs="0" />
-          <xs:element name="ProjectDescription" type="xs:string" minOccurs="0" />
-          <xs:element name="SiteDescription" type="xs:string" minOccurs="0" />
           <xs:element name="Phase" type="xs:string" minOccurs="0" />
 
           <!-- Lists of top level objects -->
@@ -506,10 +502,25 @@
           <xs:element name="Zones" type="cobielite:ZoneCollection" minOccurs="0" maxOccurs="1" />
           <xs:element name="Resources" type="cobielite:ResourceCollection" minOccurs="0" maxOccurs="1" />
           <xs:element name="Stages" type="cobielite:ProjectStageCollection" minOccurs="0" maxOccurs="1" />
-
         </xs:sequence>
       </xs:extension>
     </xs:complexContent>
+  </xs:complexType>
+  <xs:complexType name="Project">
+    <xs:sequence>
+      <xs:element name="Name" type="xs:string" minOccurs="1" />
+      <xs:element name="Description" type="xs:string" minOccurs="0" />
+      <xs:element name="ExternalEntity" type="xs:string" minOccurs="0" />
+      <xs:element name="ExternalId" type="xs:string" minOccurs="0" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="Site">
+    <xs:sequence>
+      <xs:element name="Name" type="xs:string" minOccurs="1" />
+      <xs:element name="Description" type="xs:string" minOccurs="0" />
+      <xs:element name="ExternalEntity" type="xs:string" minOccurs="0" />
+      <xs:element name="ExternalId" type="xs:string" minOccurs="0" />
+    </xs:sequence>
   </xs:complexType>
   <xs:element name="Facility" type="cobielite:Facility">
     <xs:annotation>
@@ -518,11 +529,6 @@
       </xs:documentation>
     </xs:annotation>
   </xs:element>
-  <xs:complexType name="FacilityCollection">
-    <xs:sequence>
-      <xs:element name="Facility" type="cobielite:Facility" maxOccurs="unbounded" />
-    </xs:sequence>
-  </xs:complexType>
   <!--End Facility Related Content-->
 
   <!--Begin Floor Related Content-->
@@ -712,8 +718,8 @@
     <xs:sequence>
       <xs:element name="Name" type="xs:string" />
       <xs:element name="TaskNumber" type="xs:string" />
-      <xs:element name="KeyType" type="cobielite:EntityType" fixed="Job" />
     </xs:sequence>
+      <xs:attribute name="KeyType" type="cobielite:EntityType" fixed="Job" />
   </xs:complexType>
   <!--End Job Related Content-->
 
@@ -744,8 +750,8 @@
   <xs:complexType name="ResourceKey">
     <xs:sequence>
       <xs:element name="Name" type="xs:string" minOccurs="1" />
-      <xs:element name="KeyType" type="cobielite:EntityType" fixed="Resource" />
     </xs:sequence>
+      <xs:attribute name="KeyType" type="cobielite:EntityType" fixed="Resource" />
   </xs:complexType>
   <xs:complexType name="ResourceCollection">
     <xs:sequence>
@@ -758,6 +764,52 @@
     </xs:sequence>
   </xs:complexType>
   <!--End Resource Related Content-->
+
+  <!--Begin Representation Related Content-->
+  <xs:complexType name="Representation">
+    <xs:annotation>
+      <xs:appinfo source="sheet">UK2012|Coordinate</xs:appinfo>
+      <xs:appinfo source="mapping">UK2012|A|Name|required|item|-|Name</xs:appinfo>
+      <xs:appinfo source="mapping">UK2012|B|CreatedBy|required|item|-|CreatedBy.Email</xs:appinfo>
+      <xs:appinfo source="mapping">UK2012|C|CreatedOn|required|item|-|CreatedOn</xs:appinfo>
+      <xs:appinfo source="mapping">UK2012|D|Category|required|item|CoordinateType|Category</xs:appinfo>
+      <xs:appinfo source="mapping">UK2012|E|SheetName|required|item|CoordinateSheet|parent</xs:appinfo>
+      <xs:appinfo source="mapping">UK2012|F|RowName|required|item|-|parent.Name</xs:appinfo>
+      <xs:appinfo source="mapping">UK2012|G|CoordinateXAxis|required|item|-|X</xs:appinfo>
+      <xs:appinfo source="mapping">UK2012|H|CoordinateYAxis|required|item|-|Y</xs:appinfo>
+      <xs:appinfo source="mapping">UK2012|I|CoordinateZAxis|required|item|-|Z</xs:appinfo>
+      <xs:appinfo source="mapping">UK2012|J|ExtSystem|optional|item|-|ExternalSystem</xs:appinfo>
+      <xs:appinfo source="mapping">UK2012|K|ExtObject|optional|item|-|ExternalEntity</xs:appinfo>
+      <xs:appinfo source="mapping">UK2012|L|ExtIdentifier|optional|item|-|ExternalId</xs:appinfo>
+      <xs:appinfo source="mapping">UK2012|M|ClockwiseRotation|optional|item|-|Roll</xs:appinfo>
+      <xs:appinfo source="mapping">UK2012|N|ElevationalRotation|optional|item|-|Pitch</xs:appinfo>
+      <xs:appinfo source="mapping">UK2012|O|YawRotation|optional|item|-|Yaw</xs:appinfo>
+      <xs:appinfo source="mapping">UK2012|P|SizeX|optional|item|-|SizeX</xs:appinfo>
+      <xs:appinfo source="mapping">UK2012|Q|SizeY|optional|item|-|SizeY</xs:appinfo>
+      <xs:appinfo source="mapping">UK2012|R|SizeZ|optional|item|-|SizeZ</xs:appinfo>
+    </xs:annotation>
+    <xs:complexContent>
+      <xs:extension base="cobielite:CobieObject">
+        <xs:sequence>
+          <xs:element name="X" type="xs:double" minOccurs="1" />
+          <xs:element name="Y" type="xs:double" minOccurs="1" />
+          <xs:element name="Z" type="xs:double" minOccurs="1" />
+          <xs:element name="SizeX" type="xs:double" minOccurs="1" />
+          <xs:element name="SizeY" type="xs:double" minOccurs="1" />
+          <xs:element name="SizeZ" type="xs:double" minOccurs="1" />
+          <xs:element name="Yaw" type="xs:double" minOccurs="1" />
+          <xs:element name="Pitch" type="xs:double" minOccurs="1" />
+          <xs:element name="Roll" type="xs:double" minOccurs="1" />
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:complexType name="RepresentationCollection">
+    <xs:sequence>
+      <xs:element name="Representation" type="cobielite:Representation" minOccurs="0" maxOccurs="unbounded"/>
+    </xs:sequence>
+  </xs:complexType>
+  <!--End Representation Related Content-->
 
   <!--Begin Space Related Content-->
   <xs:complexType name="Space">
@@ -795,8 +847,8 @@
   <xs:complexType name="SpaceKey">
     <xs:sequence>
       <xs:element name="Name" type="xs:string" />
-      <xs:element name="KeyType" type="cobielite:EntityType" fixed="Space" />
     </xs:sequence>
+      <xs:attribute name="KeyType" type="cobielite:EntityType" fixed="Space" />
   </xs:complexType>
   <xs:complexType name="SpaceCollection">
     <xs:sequence>
@@ -914,7 +966,7 @@
   </xs:complexType>
   <!--End Zone Related Content-->
 
-  <!-- Complex types -->
+  <!-- Begin CobieObject types -->
   <xs:complexType name="CobieObject" abstract="true">
     <xs:sequence>
       <!--  Common properties  -->
@@ -934,9 +986,11 @@
       <xs:element name="Attributes" type="cobielite:AttributeCollection" maxOccurs="1" minOccurs="0" />
       <xs:element name="Issues" type="cobielite:IssueCollection" maxOccurs="1" minOccurs="0" />
       <xs:element name="Impacts" type="cobielite:ImpactCollection" maxOccurs="1" minOccurs="0" />
+      <xs:element name="Representations" type="cobielite:RepresentationCollection" maxOccurs="1" minOccurs="0" />
       <xs:element name="ProjectStages" type="cobielite:ProjectStageKeyCollection" maxOccurs="1" minOccurs="0" />
     </xs:sequence>
   </xs:complexType>
+  <!-- End CobieObject types -->
 
   <!-- Begin Attribute values -->
   <xs:complexType name="AttributeValue" abstract="true">
@@ -944,7 +998,7 @@
       <xs:element name="Unit" type="xs:string" minOccurs="0" />
     </xs:sequence>
   </xs:complexType>
-  <xs:element name="AttributeValue" 
+  <xs:element name="AttributeValue"
               type="cobielite:AttributeValue" />
 
   <xs:complexType name="StringAttributeValue">
@@ -982,6 +1036,8 @@
       <xs:extension base="cobielite:AttributeValue">
         <xs:sequence>
           <xs:element name="Value" type="xs:dateTime" minOccurs="1" nillable="true" />
+          <xs:element name="MinimalValue" type="xs:dateTime" minOccurs="0" nillable="true" />
+          <xs:element name="MaximalValue" type="xs:dateTime" minOccurs="0" nillable="true" />
         </xs:sequence>
       </xs:extension>
     </xs:complexContent>
@@ -1200,7 +1256,7 @@
       <xs:enumeration value="ProjectStage" />
     </xs:restriction>
   </xs:simpleType>
-  
+
   <xs:simpleType name="DurationUnit">
     <xs:restriction base="xs:string">
       <xs:enumeration value="milisecond" />

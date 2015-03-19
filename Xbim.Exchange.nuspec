@@ -2,7 +2,7 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2011/10/nuspec.xsd">
     <metadata>
         <id>Xbim.Exchange</id>
-        <version>3.0.22-Prerelease</version>
+        <version>3.0.23-Prerelease</version>
         <title>xBIM Exchange</title>
         <authors>xBIM team</authors>
         <owners>Steve Lockley</owners>
@@ -17,7 +17,7 @@ xBIM reads and writes Ifc, IfcXMl and IfcZip formats.
 The xBIM project provides packages to convert IFC models to COBie spreadsheets in both UK and US cultures as well as a range of 3D viewing controls for use with Windows forms, WPF, WEBGL and OpenGL platforms.
 IOS and Android versions are under development.</description>
         <summary>The .Net toolkit for developing BIM applications based on the IFC standard. Essential support for the Ifc data model</summary>
-        <releaseNotes>3.0 contains an implementation of the COBieLite protocol as weel as the COBieLite Spreadsheet format.</releaseNotes>
+        <releaseNotes>3.0 contains an implementation of the COBieLite protocol as well as the COBieLite Spreadsheet format.</releaseNotes>
         <language>en-GB</language>
       <tags>BIM, IFC, IfcXml, IfcZip, COBie, COBieLite, .Net, C#, BuildingSmart</tags>
       <dependencies>
