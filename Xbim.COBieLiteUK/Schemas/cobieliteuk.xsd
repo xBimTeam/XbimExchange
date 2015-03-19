@@ -953,7 +953,6 @@
         <xs:sequence>
           <xs:element name="Value" type="xs:string" minOccurs="1" />
           <xs:element name="AllowedValues" type="cobielite:AllowedStringValuesCollection" minOccurs="0" maxOccurs="1" />
-          <xs:element name="Type" type="cobielite:ValueType" fixed="String" />
         </xs:sequence>
       </xs:extension>
     </xs:complexContent>
@@ -971,7 +970,6 @@
       <xs:extension base="cobielite:AttributeValue">
         <xs:sequence>
           <xs:element name="Value" type="xs:boolean" minOccurs="1" />
-          <xs:element name="Type" type="cobielite:ValueType" fixed="Boolean" />
         </xs:sequence>
       </xs:extension>
     </xs:complexContent>
@@ -984,7 +982,6 @@
       <xs:extension base="cobielite:AttributeValue">
         <xs:sequence>
           <xs:element name="Value" type="xs:dateTime" minOccurs="1" nillable="true" />
-          <xs:element name="Type" type="cobielite:ValueType" fixed="DateTime" />
         </xs:sequence>
       </xs:extension>
     </xs:complexContent>
@@ -999,7 +996,6 @@
           <xs:element name="Value" type="xs:double" minOccurs="1" nillable="true" />
           <xs:element name="MinimalValue" type="xs:double" minOccurs="0" nillable="true" />
           <xs:element name="MaximalValue" type="xs:double" minOccurs="0" nillable="true" />
-          <xs:element name="Type" type="cobielite:ValueType" fixed="Decimal" />
         </xs:sequence>
       </xs:extension>
     </xs:complexContent>
@@ -1014,7 +1010,6 @@
           <xs:element name="Value" type="xs:int" minOccurs="1" />
           <xs:element name="MinimalValue" type="xs:int" minOccurs="0" nillable="true" />
           <xs:element name="MaximalValue" type="xs:int" minOccurs="0" nillable="true" />
-          <xs:element name="Type" type="cobielite:ValueType" fixed="Integer" />
         </xs:sequence>
       </xs:extension>
     </xs:complexContent>
@@ -1022,18 +1017,6 @@
   <xs:element name="IntegerAttributeValue" type="cobielite:IntegerAttributeValue"
               substitutionGroup="cobielite:AttributeValue" />
 
-  <xs:simpleType name="ValueType">
-    <xs:annotation>
-      <xs:documentation>Data types of attributes.</xs:documentation>
-    </xs:annotation>
-    <xs:restriction base="xs:string">
-      <xs:enumeration value="String" />
-      <xs:enumeration value="Boolean" />
-      <xs:enumeration value="DateTime" />
-      <xs:enumeration value="Decimal" />
-      <xs:enumeration value="Integer" />
-    </xs:restriction>
-  </xs:simpleType>
   <!-- End Attribute values -->
 
   <!-- Simple types -->

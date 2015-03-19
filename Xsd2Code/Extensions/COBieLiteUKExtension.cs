@@ -19,6 +19,12 @@ namespace Xsd2Code.Library.Extensions
             var propertyMember = member as CodeMemberProperty;
             if (propertyMember == null) return;
 
+            //rename AttributeValue Item to Value
+            if (propertyMember.Name == "Item" && propertyMember.Type.BaseType == "AttributeValue")
+            {
+                propertyMember.Name = "Value";
+            }
+
             var xsdType =
                 schema.SchemaTypes.Values.OfType<XmlSchemaComplexType>().FirstOrDefault(ct => ct.Name == type.Name);
             if (xsdType == null) return;
@@ -41,6 +47,8 @@ namespace Xsd2Code.Library.Extensions
 
 //do any postprocessing here
             }
+
+            
         }
 
         protected override void ProcessClass(CodeNamespace codeNamespace, XmlSchema schema, CodeTypeDeclaration type)

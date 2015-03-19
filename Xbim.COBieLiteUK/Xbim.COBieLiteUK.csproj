@@ -51,6 +51,7 @@
     <Compile Include="Attribute.cs" />
     <Compile Include="Connection.cs" />
     <Compile Include="Contact.cs" />
+    <Compile Include="Converters\AttributeConverter.cs" />
     <Compile Include="Document.cs" />
     <Compile Include="Floor.cs" />
     <Compile Include="Impact.cs" />
@@ -68,7 +69,6 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
-    <None Include="Schemas\cobieliteuk.cd" />
     <None Include="Schemas\cobieliteuk.xsd">
       <SubType>Designer</SubType>
     </None>

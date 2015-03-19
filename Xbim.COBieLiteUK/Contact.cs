@@ -19,7 +19,7 @@ namespace Xbim.COBieLiteUK
                 var attr = Attributes.FirstOrDefault(a => a.Name == "Name");
                 if (attr == null) return null;
 
-                var strAttrVal = attr.Item as StringAttributeValue;
+                var strAttrVal = attr.Value as StringAttributeValue;
                 if (strAttrVal == null) return null;
 
                 return strAttrVal.Value;
@@ -36,15 +36,15 @@ namespace Xbim.COBieLiteUK
 
                 if (value == null)
                 {
-                    attr.Item = null;
+                    attr.Value = null;
                     return;
                 }
 
-                var strAttrVal = attr.Item as StringAttributeValue;
+                var strAttrVal = attr.Value as StringAttributeValue;
                 if (strAttrVal == null)
                 {
                     strAttrVal = new StringAttributeValue();
-                    attr.Item = strAttrVal;
+                    attr.Value = strAttrVal;
                 }
 
                 strAttrVal.Value = value;
@@ -64,7 +64,7 @@ namespace Xbim.COBieLiteUK
                 var attr = Attributes.FirstOrDefault(a => a.Name == "Description");
                 if (attr == null) return null;
 
-                var strAttrVal = attr.Item as StringAttributeValue;
+                var strAttrVal = attr.Value as StringAttributeValue;
                 if (strAttrVal == null) return null;
 
                 return strAttrVal.Value;
@@ -81,15 +81,15 @@ namespace Xbim.COBieLiteUK
 
                 if (value == null)
                 {
-                    attr.Item = null;
+                    attr.Value = null;
                     return;
                 }
 
-                var strAttrVal = attr.Item as StringAttributeValue;
+                var strAttrVal = attr.Value as StringAttributeValue;
                 if (strAttrVal == null)
                 {
                     strAttrVal = new StringAttributeValue();
-                    attr.Item = strAttrVal;
+                    attr.Value = strAttrVal;
                 }
 
                 strAttrVal.Value = value;

@@ -98,37 +98,26 @@ namespace Tests
                 },
                 Attributes = new List<Attribute>
                 {
-                    new Attribute{Name = "String attribute", Item = new StringAttributeValue{Value = "Almukantarant"}},
-                    new Attribute{Name = "Boolean attribute", Item = new BooleanAttributeValue{Value = true}},
-                    new Attribute{Name = "Datetime attribute", Item = new DateTimeAttributeValue{Value = DateTime.Now}},
-                    new Attribute{Name = "Decimal attribute", Item = new DecimalAttributeValue{Value = 256.2}},
-                    new Attribute{Name = "Integer attribute", Item = new IntegerAttributeValue{Value = 7}}
+                    new Attribute{Name = "String attribute", Value = new StringAttributeValue{Value = "Almukantarant"}},
+                    new Attribute{Name = "Boolean attribute", Value = new BooleanAttributeValue{Value = true}},
+                    new Attribute{Name = "Datetime attribute", Value = new DateTimeAttributeValue{Value = DateTime.Now}},
+                    new Attribute{Name = "Decimal attribute", Value = new DecimalAttributeValue{Value = 256.2}},
+                    new Attribute{Name = "Integer attribute", Value = new IntegerAttributeValue{Value = 7}},
+                    new Attribute{Name = "Null attribute"}
                 }
 
             };
 
             //save model to file to check it
-            var serializer = new XmlSerializer(typeof (Facility));
-            using (var writer = File.CreateText("facility.cobielite.xml"))
-            {
-                using (var xmlWriter = new XmlTextWriter(writer){Formatting = Formatting.Indented})
-                {
-                    serializer.Serialize(xmlWriter, facility, 
-                        new XmlSerializerNamespaces(new[]
-                        {
-                            new XmlQualifiedName("cobielite", "http://openbim.org/schemas/cobieliteuk"),
-                            new XmlQualifiedName("xsi", "http://www.w3.org/2001/XMLSchema-instance") 
-                        }));
-                    xmlWriter.Close();
-                }
-            }
+            const string xmlFile = "facility.cobielite.xml";
+            const string jsonFile = "facility.cobielite.json";
+            facility.WriteXml(xmlFile, true);
+            facility.WriteJson(jsonFile, true);
 
-            //read model back to prove nothing is broken in the middle
-            using (var reader = File.OpenText("facility.cobielite.xml"))
-            {
-                var facility2 = serializer.Deserialize(reader) as Facility;
+            var facility2 = Facility.ReadXml(xmlFile);
+            var facility3 = Facility.ReadJson(jsonFile);
 
-            }
+
         }
 
     }
