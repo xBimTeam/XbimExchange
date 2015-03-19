@@ -45,27 +45,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Assembly.cs" />
-    <Compile Include="Asset.cs" />
-    <Compile Include="AssetType.cs" />
-    <Compile Include="Attribute.cs" />
-    <Compile Include="Connection.cs" />
     <Compile Include="Contact.cs" />
     <Compile Include="Converters\AttributeConverter.cs" />
-    <Compile Include="Document.cs" />
-    <Compile Include="Floor.cs" />
-    <Compile Include="Impact.cs" />
-    <Compile Include="Issue.cs" />
-    <Compile Include="Job.cs" />
-    <Compile Include="Resource.cs" />
     <Compile Include="Schemas\Attributes.cs" />
     <Compile Include="Facility.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Schemas\cobieliteuk.designer.cs" />
-    <Compile Include="Space.cs" />
-    <Compile Include="Spare.cs" />
-    <Compile Include="SystemType.cs" />
-    <Compile Include="Zone.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

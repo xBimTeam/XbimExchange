@@ -89,6 +89,19 @@
     <Compile Include="COBieLiteToIfc\MappingProjectTypeToIfcProject.cs" />
     <Compile Include="COBieLiteToIfc\MappingSiteTypeToIfcSite.cs" />
     <Compile Include="COBieLiteToIfc\MappingSpaceTypeToIfcSpace.cs" />
+    <Compile Include="DPoWToCOBieLiteUK\DPoWToCOBieLiteUKExchanger.cs" />
+    <Compile Include="DPoWToCOBieLiteUK\DPoWToCOBieLiteUKMapping.cs" />
+    <Compile Include="DPoWToCOBieLiteUK\Extensions.cs" />
+    <Compile Include="DPoWToCOBieLiteUK\MappingAssemblyTypeToAssemblyType.cs" />
+    <Compile Include="DPoWToCOBieLiteUK\MappingAssetTypeToAssetType.cs" />
+    <Compile Include="DPoWToCOBieLiteUK\MappingAttributableObjectToCOBieObject.cs" />
+    <Compile Include="DPoWToCOBieLiteUK\MappingContactToContact.cs" />
+    <Compile Include="DPoWToCOBieLiteUK\MappingDocumentToDocumentType.cs" />
+    <Compile Include="DPoWToCOBieLiteUK\MappingDPoWObjectToCOBieObject.cs" />
+    <Compile Include="DPoWToCOBieLiteUK\MappingJobToIssueType.cs" />
+    <Compile Include="DPoWToCOBieLiteUK\MappingPlanOfWorkToFacilityType.cs" />
+    <Compile Include="DPoWToCOBieLiteUK\MappingRoleToContact.cs" />
+    <Compile Include="DPoWToCOBieLiteUK\MappingSpaceTypeToSpaceType.cs" />
     <Compile Include="DPoWToCOBieLite\ClassificationMappings.cs" />
     <Compile Include="DPoWToCOBieLite\DPoWToCOBieLiteExchanger.cs" />
     <Compile Include="DPoWToCOBieLite\DPoWToCOBieLiteMapping.cs" />
@@ -123,6 +136,10 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Xbim.COBieLiteUK\Xbim.COBieLiteUK.csproj">
+      <Project>{90def072-96c7-4972-835e-909c41169cb4}</Project>
+      <Name>Xbim.COBieLiteUK</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Xbim.COBieLite\Xbim.COBieLite.csproj">
       <Project>{E550C721-50AF-4AD0-998E-0C61F305EEC8}</Project>
       <Name>Xbim.COBieLite</Name>

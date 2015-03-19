@@ -48,7 +48,13 @@
   <!--End ProjectStage related content-->
 
   <!--Begin Assembly related content-->
-  <xs:complexType name="AssetAssembly">
+  <xs:complexType name="Assembly">
+    <xs:complexContent>
+      <xs:extension base="cobielite:CobieObject">
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+    <xs:complexType name="AssetAssembly">
     <xs:annotation>
       <xs:appinfo source="sheet">UK2012|Assembly</xs:appinfo>
       <!--mapping, column, header, required/optional, list/item, pick/-, path-->
@@ -66,10 +72,10 @@
       <xs:documentation>The Assembly to which this Asset belongs</xs:documentation>
     </xs:annotation>
     <xs:complexContent>
-      <xs:extension base="cobielite:CobieObject">
+      <xs:extension base="cobielite:Assembly">
         <xs:sequence>
           <!-- Lists -->
-          <xs:element name="ChildAssets" type="cobielite:AssetCollection" minOccurs="0" maxOccurs="1" />
+          <xs:element name="ChildAssets" type="cobielite:AssetKeyCollection" minOccurs="0" maxOccurs="1" />
         </xs:sequence>
       </xs:extension>
     </xs:complexContent>
@@ -92,10 +98,10 @@
       <xs:documentation>The Assembly to which this Asset belongs</xs:documentation>
     </xs:annotation>
     <xs:complexContent>
-      <xs:extension base="cobielite:CobieObject">
+      <xs:extension base="cobielite:Assembly">
         <xs:sequence>
           <!-- Lists -->
-          <xs:element name="ChildAssetTypes" type="cobielite:AssetTypeCollection" minOccurs="0" maxOccurs="1" />
+          <xs:element name="ChildAssetTypes" type="cobielite:AssetTypeKeyCollection" minOccurs="0" maxOccurs="1" />
         </xs:sequence>
       </xs:extension>
     </xs:complexContent>
@@ -242,9 +248,20 @@
       </xs:extension>
     </xs:complexContent>
   </xs:complexType>
+  <xs:complexType name="AssetTypeKey">
+    <xs:sequence>
+      <xs:element name="Name" type="xs:string" minOccurs="1"/>
+    </xs:sequence>
+    <xs:attribute name="KeyType" type="cobielite:EntityType" fixed="AssetType"/>
+  </xs:complexType>
   <xs:complexType name="AssetTypeCollection">
     <xs:sequence>
       <xs:element name="AssetType" type="cobielite:AssetType" maxOccurs="unbounded" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="AssetTypeKeyCollection">
+    <xs:sequence>
+      <xs:element name="AssetTypeKey" type="cobielite:AssetTypeKey" maxOccurs="unbounded" />
     </xs:sequence>
   </xs:complexType>
   <!-- Warranty -->
@@ -584,8 +601,8 @@
       <xs:appinfo source="mapping">UK2012|G|Impact|required|item|IssueImpact|Impact</xs:appinfo>
       <xs:appinfo source="mapping">UK2012|H|SheetName1|required|item|SheetType|parent</xs:appinfo>
       <xs:appinfo source="mapping">UK2012|I|RowName1|required|item|-|parent.Name</xs:appinfo>
-      <xs:appinfo source="mapping">UK2012|J|SheetName2|required|item|SheetType|SheetName2</xs:appinfo>
-      <xs:appinfo source="mapping">UK2012|K|RowName2|required|item|-|RowName2</xs:appinfo>
+      <xs:appinfo source="mapping">UK2012|J|SheetName2|required|item|SheetType|Contact.KeyType</xs:appinfo>
+      <xs:appinfo source="mapping">UK2012|K|RowName2|required|item|-|Contact.Email</xs:appinfo>
       <xs:appinfo source="mapping">UK2012|L|Description|required|item|-|Description</xs:appinfo>
       <xs:appinfo source="mapping">UK2012|M|Owner|required|item|-|Owner.Email</xs:appinfo>
       <xs:appinfo source="mapping">UK2012|N|Mitigation|required|item|-|Mitigation</xs:appinfo>
@@ -604,6 +621,7 @@
           <xs:element name="Impact" type="xs:string" minOccurs="1" />
           <xs:element name="Owner" type="cobielite:ContactKey" minOccurs="1" />
           <xs:element name="Mitigation" type="xs:string" minOccurs="1" />
+          <xs:element name="Contact" type="cobielite:ContactKey" minOccurs="1" />
         </xs:sequence>
       </xs:extension>
     </xs:complexContent>

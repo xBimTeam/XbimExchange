@@ -713,13 +713,49 @@ namespace Xbim.COBieLiteUK {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://openbim.org/schemas/cobieliteuk")]
     [System.Xml.Serialization.XmlRootAttribute(Namespace="http://openbim.org/schemas/cobieliteuk", IsNullable=true)]
-    public partial class AssetKey {
+    public partial class SpaceKey {
         
         private string nameField;
         
         private EntityType keyTypeField;
         
-        public AssetKey() {
+        public SpaceKey() {
+            this.keyTypeField = EntityType.Space;
+        }
+        
+        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
+        public string Name {
+            get {
+                return this.nameField;
+            }
+            set {
+                this.nameField = value;
+            }
+        }
+        
+        [System.Xml.Serialization.XmlAttributeAttribute()]
+        public EntityType KeyType {
+            get {
+                return this.keyTypeField;
+            }
+            set {
+                this.keyTypeField = value;
+            }
+        }
+    }
+    
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Xbim.COBieLiteUK.CodeGeneration", "1.0.0.0")]
+    [System.SerializableAttribute()]
+    [System.ComponentModel.DesignerCategoryAttribute("code")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://openbim.org/schemas/cobieliteuk")]
+    [System.Xml.Serialization.XmlRootAttribute(Namespace="http://openbim.org/schemas/cobieliteuk", IsNullable=true)]
+    public partial class AssetTypeKey {
+        
+        private string nameField;
+        
+        private EntityType keyTypeField;
+        
+        public AssetTypeKey() {
             this.keyTypeField = EntityType.AssetType;
         }
         
@@ -749,14 +785,14 @@ namespace Xbim.COBieLiteUK {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://openbim.org/schemas/cobieliteuk")]
     [System.Xml.Serialization.XmlRootAttribute(Namespace="http://openbim.org/schemas/cobieliteuk", IsNullable=true)]
-    public partial class SpaceKey {
+    public partial class AssetKey {
         
         private string nameField;
         
         private EntityType keyTypeField;
         
-        public SpaceKey() {
-            this.keyTypeField = EntityType.Space;
+        public AssetKey() {
+            this.keyTypeField = EntityType.AssetType;
         }
         
         [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
@@ -1092,9 +1128,10 @@ namespace Xbim.COBieLiteUK {
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(Job))]
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(Spare))]
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(AssetType))]
-    [System.Xml.Serialization.XmlIncludeAttribute(typeof(AssetTypeAssembly))]
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(Connection))]
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(Asset))]
+    [System.Xml.Serialization.XmlIncludeAttribute(typeof(Assembly))]
+    [System.Xml.Serialization.XmlIncludeAttribute(typeof(AssetTypeAssembly))]
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(AssetAssembly))]
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(ProjectStage))]
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(Representation))]
@@ -1429,8 +1466,8 @@ namespace Xbim.COBieLiteUK {
     [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="G", Header="Impact", Required=true, List=false, PickList="IssueImpact", Path="Impact")]
     [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="H", Header="SheetName1", Required=true, List=false, PickList="SheetType", Path="parent")]
     [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="I", Header="RowName1", Required=true, List=false, PickList=null, Path="parent.Name")]
-    [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="J", Header="SheetName2", Required=true, List=false, PickList="SheetType", Path="SheetName2")]
-    [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="K", Header="RowName2", Required=true, List=false, PickList=null, Path="RowName2")]
+    [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="J", Header="SheetName2", Required=true, List=false, PickList="SheetType", Path="Contact.KeyType")]
+    [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="K", Header="RowName2", Required=true, List=false, PickList=null, Path="Contact.Email")]
     [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="L", Header="Description", Required=true, List=false, PickList=null, Path="Description")]
     [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="M", Header="Owner", Required=true, List=false, PickList=null, Path="Owner.Email")]
     [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="N", Header="Mitigation", Required=true, List=false, PickList=null, Path="Mitigation")]
@@ -1448,6 +1485,8 @@ namespace Xbim.COBieLiteUK {
         private ContactKey ownerField;
         
         private string mitigationField;
+        
+        private ContactKey contactField;
         
         [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
         public string Risk {
@@ -1496,6 +1535,16 @@ namespace Xbim.COBieLiteUK {
             }
             set {
                 this.mitigationField = value;
+            }
+        }
+        
+        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
+        public ContactKey Contact {
+            get {
+                return this.contactField;
+            }
+            set {
+                this.contactField = value;
             }
         }
     }
@@ -3063,13 +3112,13 @@ namespace Xbim.COBieLiteUK {
     [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="I", Header="ExtObject", Required=false, List=false, PickList=null, Path="ExternalEntity")]
     [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="J", Header="ExtIdentifier", Required=false, List=false, PickList=null, Path="ExternalId")]
     [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="K", Header="Description", Required=false, List=false, PickList=null, Path="Description")]
-    public partial class AssetAssembly : CobieObject {
+    public partial class AssetAssembly : Assembly {
         
-        private List<Asset> childAssetsField;
+        private List<AssetKey> childAssetsField;
         
         [System.Xml.Serialization.XmlArrayAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
         [System.Xml.Serialization.XmlArrayItemAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified, IsNullable=false)]
-        public List<Asset> ChildAssets {
+        public List<AssetKey> ChildAssets {
             get {
                 return this.childAssetsField;
             }
@@ -3077,6 +3126,16 @@ namespace Xbim.COBieLiteUK {
                 this.childAssetsField = value;
             }
         }
+    }
+    
+    [System.Xml.Serialization.XmlIncludeAttribute(typeof(AssetTypeAssembly))]
+    [System.Xml.Serialization.XmlIncludeAttribute(typeof(AssetAssembly))]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Xbim.COBieLiteUK.CodeGeneration", "1.0.0.0")]
+    [System.SerializableAttribute()]
+    [System.ComponentModel.DesignerCategoryAttribute("code")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://openbim.org/schemas/cobieliteuk")]
+    [System.Xml.Serialization.XmlRootAttribute(Namespace="http://openbim.org/schemas/cobieliteuk", IsNullable=true)]
+    public partial class Assembly : CobieObject {
     }
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("Xbim.COBieLiteUK.CodeGeneration", "1.0.0.0")]
@@ -3096,13 +3155,13 @@ namespace Xbim.COBieLiteUK {
     [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="I", Header="ExtObject", Required=false, List=false, PickList=null, Path="ExternalEntity")]
     [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="J", Header="ExtIdentifier", Required=false, List=false, PickList=null, Path="ExternalId")]
     [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="K", Header="Description", Required=false, List=false, PickList=null, Path="Description")]
-    public partial class AssetTypeAssembly : CobieObject {
+    public partial class AssetTypeAssembly : Assembly {
         
-        private List<AssetType> childAssetTypesField;
+        private List<AssetTypeKey> childAssetTypesField;
         
         [System.Xml.Serialization.XmlArrayAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
         [System.Xml.Serialization.XmlArrayItemAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified, IsNullable=false)]
-        public List<AssetType> ChildAssetTypes {
+        public List<AssetTypeKey> ChildAssetTypes {
             get {
                 return this.childAssetTypesField;
             }
