@@ -25,7 +25,7 @@ namespace Xbim.COBie.Rows
         [COBieAttributes(3, COBieKeyType.ForeignKey, "PickLists.Category-Space", COBieAttributeState.Required_Reference_PickList, "Category", 255, COBieAllowedType.AlphaNumeric)]
         public string Category { get; set; }
 
-        [COBieAttributes(4, COBieKeyType.ForeignKey, "Floor.Name", COBieAttributeState.Required_Information, "FloorName", 255, COBieAllowedType.AlphaNumeric)]
+        [COBieAttributes(4, COBieKeyType.ForeignKey, "Floor.Name", COBieAttributeState.Required_Reference_ForeignKey, "FloorName", 255, COBieAllowedType.AlphaNumeric)]
         public string FloorName { get; set; }
 
         [COBieAttributes(5, COBieKeyType.None, "", COBieAttributeState.Required_Information, "Description", 255, COBieAllowedType.AlphaNumeric)]
