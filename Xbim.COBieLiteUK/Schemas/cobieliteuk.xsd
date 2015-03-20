@@ -306,7 +306,13 @@
     <xs:complexContent>
       <xs:extension base="cobielite:CobieObject">
         <xs:sequence>
-          <xs:element ref="cobielite:AttributeValue" minOccurs="1" />
+          <xs:choice>
+            <xs:element name="StringAttributeValue" type="cobielite:StringAttributeValue" minOccurs="1" />
+            <xs:element name="BooleanAttributeValue" type="cobielite:BooleanAttributeValue" minOccurs="1" />
+            <xs:element name="IntegerAttributeValue" type="cobielite:IntegerAttributeValue" minOccurs="1" />
+            <xs:element name="DateTimeAttributeValue" type="cobielite:DateTimeAttributeValue" minOccurs="1" />
+            <xs:element name="DecimalAttributeValue" type="cobielite:DecimalAttributeValue" minOccurs="1" />
+          </xs:choice>
         </xs:sequence>
       </xs:extension>
     </xs:complexContent>
@@ -1022,8 +1028,6 @@
       <xs:element name="Unit" type="xs:string" minOccurs="0" />
     </xs:sequence>
   </xs:complexType>
-  <xs:element name="AttributeValue"
-              type="cobielite:AttributeValue" />
 
   <xs:complexType name="StringAttributeValue">
     <xs:complexContent>
@@ -1040,8 +1044,6 @@
       <xs:element name="Value" type="xs:string" minOccurs="0" maxOccurs="unbounded" />
     </xs:sequence>
   </xs:complexType>
-  <xs:element name="StringAttributeValue" type="cobielite:StringAttributeValue"
-              substitutionGroup="cobielite:AttributeValue" />
 
   <xs:complexType name="BooleanAttributeValue">
     <xs:complexContent>
@@ -1052,8 +1054,6 @@
       </xs:extension>
     </xs:complexContent>
   </xs:complexType>
-  <xs:element name="BooleanAttributeValue" type="cobielite:BooleanAttributeValue"
-              substitutionGroup="cobielite:AttributeValue" />
 
   <xs:complexType name="DateTimeAttributeValue">
     <xs:complexContent>
@@ -1066,8 +1066,6 @@
       </xs:extension>
     </xs:complexContent>
   </xs:complexType>
-  <xs:element name="DateTimeAttributeValue" type="cobielite:DateTimeAttributeValue"
-              substitutionGroup="cobielite:AttributeValue" />
 
   <xs:complexType name="DecimalAttributeValue">
     <xs:complexContent>
@@ -1080,8 +1078,6 @@
       </xs:extension>
     </xs:complexContent>
   </xs:complexType>
-  <xs:element name="DecimalAttributeValue" type="cobielite:DecimalAttributeValue"
-              substitutionGroup="cobielite:AttributeValue" />
 
   <xs:complexType name="IntegerAttributeValue">
     <xs:complexContent>
@@ -1094,8 +1090,6 @@
       </xs:extension>
     </xs:complexContent>
   </xs:complexType>
-  <xs:element name="IntegerAttributeValue" type="cobielite:IntegerAttributeValue"
-              substitutionGroup="cobielite:AttributeValue" />
 
   <!-- End Attribute values -->
 

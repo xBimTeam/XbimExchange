@@ -893,7 +893,7 @@ namespace Xbim.COBieLiteUK {
     [System.SerializableAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://openbim.org/schemas/cobieliteuk")]
-    [System.Xml.Serialization.XmlRootAttribute(Namespace="http://openbim.org/schemas/cobieliteuk", IsNullable=false)]
+    [System.Xml.Serialization.XmlRootAttribute(Namespace="http://openbim.org/schemas/cobieliteuk", IsNullable=true)]
     public abstract partial class AttributeValue {
         
         private string unitField;
@@ -913,7 +913,7 @@ namespace Xbim.COBieLiteUK {
     [System.SerializableAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://openbim.org/schemas/cobieliteuk")]
-    [System.Xml.Serialization.XmlRootAttribute(Namespace="http://openbim.org/schemas/cobieliteuk", IsNullable=false)]
+    [System.Xml.Serialization.XmlRootAttribute(Namespace="http://openbim.org/schemas/cobieliteuk", IsNullable=true)]
     public partial class IntegerAttributeValue : AttributeValue {
         
         private int valueField;
@@ -971,7 +971,7 @@ namespace Xbim.COBieLiteUK {
     [System.SerializableAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://openbim.org/schemas/cobieliteuk")]
-    [System.Xml.Serialization.XmlRootAttribute(Namespace="http://openbim.org/schemas/cobieliteuk", IsNullable=false)]
+    [System.Xml.Serialization.XmlRootAttribute(Namespace="http://openbim.org/schemas/cobieliteuk", IsNullable=true)]
     public partial class DecimalAttributeValue : AttributeValue {
         
         private System.Nullable<double> valueField;
@@ -1036,7 +1036,7 @@ namespace Xbim.COBieLiteUK {
     [System.SerializableAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://openbim.org/schemas/cobieliteuk")]
-    [System.Xml.Serialization.XmlRootAttribute(Namespace="http://openbim.org/schemas/cobieliteuk", IsNullable=false)]
+    [System.Xml.Serialization.XmlRootAttribute(Namespace="http://openbim.org/schemas/cobieliteuk", IsNullable=true)]
     public partial class DateTimeAttributeValue : AttributeValue {
         
         private System.Nullable<System.DateTime> valueField;
@@ -1101,7 +1101,7 @@ namespace Xbim.COBieLiteUK {
     [System.SerializableAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://openbim.org/schemas/cobieliteuk")]
-    [System.Xml.Serialization.XmlRootAttribute(Namespace="http://openbim.org/schemas/cobieliteuk", IsNullable=false)]
+    [System.Xml.Serialization.XmlRootAttribute(Namespace="http://openbim.org/schemas/cobieliteuk", IsNullable=true)]
     public partial class BooleanAttributeValue : AttributeValue {
         
         private bool valueField;
@@ -1121,7 +1121,7 @@ namespace Xbim.COBieLiteUK {
     [System.SerializableAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://openbim.org/schemas/cobieliteuk")]
-    [System.Xml.Serialization.XmlRootAttribute(Namespace="http://openbim.org/schemas/cobieliteuk", IsNullable=false)]
+    [System.Xml.Serialization.XmlRootAttribute(Namespace="http://openbim.org/schemas/cobieliteuk", IsNullable=true)]
     public partial class StringAttributeValue : AttributeValue {
         
         private string valueField;
@@ -1467,12 +1467,11 @@ namespace Xbim.COBieLiteUK {
         
         private AttributeValue itemField;
         
-        [System.Xml.Serialization.XmlElementAttribute("AttributeValue", typeof(AttributeValue))]
-        [System.Xml.Serialization.XmlElementAttribute("BooleanAttributeValue", typeof(BooleanAttributeValue))]
-        [System.Xml.Serialization.XmlElementAttribute("DateTimeAttributeValue", typeof(DateTimeAttributeValue))]
-        [System.Xml.Serialization.XmlElementAttribute("DecimalAttributeValue", typeof(DecimalAttributeValue))]
-        [System.Xml.Serialization.XmlElementAttribute("IntegerAttributeValue", typeof(IntegerAttributeValue))]
-        [System.Xml.Serialization.XmlElementAttribute("StringAttributeValue", typeof(StringAttributeValue))]
+        [System.Xml.Serialization.XmlElementAttribute("BooleanAttributeValue", typeof(BooleanAttributeValue), Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
+        [System.Xml.Serialization.XmlElementAttribute("DateTimeAttributeValue", typeof(DateTimeAttributeValue), Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
+        [System.Xml.Serialization.XmlElementAttribute("DecimalAttributeValue", typeof(DecimalAttributeValue), Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
+        [System.Xml.Serialization.XmlElementAttribute("IntegerAttributeValue", typeof(IntegerAttributeValue), Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
+        [System.Xml.Serialization.XmlElementAttribute("StringAttributeValue", typeof(StringAttributeValue), Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
         public AttributeValue Value {
             get {
                 return this.itemField;
