@@ -222,7 +222,7 @@
           <xs:element name="ReplacementCost" type="xs:double" minOccurs="0" nillable="true" />
           <xs:element name="ExpectedLife" type="xs:double" minOccurs="0" nillable="true" />
           <xs:element name="DurationUnit" type="cobielite:DurationUnit" minOccurs="0" nillable="true" />
-          <xs:element name="NominalLenght" type="xs:double" minOccurs="1" nillable="true" />
+          <xs:element name="NominalLength" type="xs:double" minOccurs="1" nillable="true" />
           <xs:element name="NominalWidth" type="xs:double" minOccurs="1" nillable="true" />
           <xs:element name="NominalHeight" type="xs:double" minOccurs="1" nillable="true" />
           <xs:element name="ModelReference" type="xs:string" minOccurs="0" />
@@ -430,7 +430,7 @@
       <xs:appinfo source="mapping">UK2012|B|CreatedBy|required|item|-|CreatedBy.Email</xs:appinfo>
       <xs:appinfo source="mapping">UK2012|C|CreatedOn|required|item|-|CreatedOn</xs:appinfo>
       <xs:appinfo source="mapping">UK2012|D|Category|required|item|DocumentType|Category</xs:appinfo>
-      <xs:appinfo source="mapping">UK2012|E|ApprovalBy|required|item|ApprovalBy|ApprovalBy</xs:appinfo>
+      <xs:appinfo source="mapping">UK2012|E|ApprovalBy|required|item|ApprovalBy|ApprovalBy.Email</xs:appinfo>
       <xs:appinfo source="mapping">UK2012|F|Stage|required|item|StageType|Stage</xs:appinfo>
       <xs:appinfo source="mapping">UK2012|G|SheetName|required|item|SheetType|parent</xs:appinfo>
       <xs:appinfo source="mapping">UK2012|H|RowName|required|item|-|parent.Name</xs:appinfo>
@@ -446,7 +446,7 @@
     <xs:complexContent>
       <xs:extension base="cobielite:CobieObject">
         <xs:sequence>
-          <xs:element name="ApprovalBy" type="xs:string" minOccurs="1" />
+          <xs:element name="ApprovalBy" type="cobielite:ContactKey" minOccurs="1" />
           <xs:element name="Stage" type="xs:string" minOccurs="1" />
           <xs:element name="Directory" type="xs:string" minOccurs="1" />
           <xs:element name="File" type="xs:string" minOccurs="1" />
@@ -601,8 +601,8 @@
       <xs:appinfo source="mapping">UK2012|G|Impact|required|item|IssueImpact|Impact</xs:appinfo>
       <xs:appinfo source="mapping">UK2012|H|SheetName1|required|item|SheetType|parent</xs:appinfo>
       <xs:appinfo source="mapping">UK2012|I|RowName1|required|item|-|parent.Name</xs:appinfo>
-      <xs:appinfo source="mapping">UK2012|J|SheetName2|required|item|SheetType|Contact.KeyType</xs:appinfo>
-      <xs:appinfo source="mapping">UK2012|K|RowName2|required|item|-|Contact.Email</xs:appinfo>
+      <xs:appinfo source="mapping">UK2012|J|SheetName2|required|item|SheetType|IssueWith.KeyType</xs:appinfo>
+      <xs:appinfo source="mapping">UK2012|K|RowName2|required|item|-|IssueWith.Name</xs:appinfo>
       <xs:appinfo source="mapping">UK2012|L|Description|required|item|-|Description</xs:appinfo>
       <xs:appinfo source="mapping">UK2012|M|Owner|required|item|-|Owner.Email</xs:appinfo>
       <xs:appinfo source="mapping">UK2012|N|Mitigation|required|item|-|Mitigation</xs:appinfo>
@@ -621,7 +621,7 @@
           <xs:element name="Impact" type="xs:string" minOccurs="1" />
           <xs:element name="Owner" type="cobielite:ContactKey" minOccurs="1" />
           <xs:element name="Mitigation" type="xs:string" minOccurs="1" />
-          <xs:element name="Contact" type="cobielite:ContactKey" minOccurs="1" />
+          <xs:element name="IssueWith" type="cobielite:EntityKey" minOccurs="1"/>
         </xs:sequence>
       </xs:extension>
     </xs:complexContent>
@@ -1007,6 +1007,12 @@
       <xs:element name="Representations" type="cobielite:RepresentationCollection" maxOccurs="1" minOccurs="0" />
       <xs:element name="ProjectStages" type="cobielite:ProjectStageKeyCollection" maxOccurs="1" minOccurs="0" />
     </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="EntityKey">
+    <xs:sequence>
+      <xs:element name="Name" type="xs:string" minOccurs="1" maxOccurs="1"/>
+    </xs:sequence>
+    <xs:attribute name="KeyType" type="cobielite:EntityType"/>
   </xs:complexType>
   <!-- End CobieObject types -->
 

@@ -27,14 +27,14 @@ namespace XbimExchanger.DPoWToCOBieLiteUK
                     var cMap = Exchanger.GetOrCreateMappings<MappingContactToContact>();
                     Xbim.COBieLiteUK.Contact contact;
                     if (cMap.GetTargetObject(person.Id.ToString(), out contact))
-                        target.Contact = new ContactKey() { Email = contact.Email };    
+                        target.Owner = new ContactKey() { Email = contact.Email };    
                 }
                 else if (role != null)
                 {
                     var rMap = Exchanger.GetOrCreateMappings<MappingRoleToContact>();
                     Xbim.COBieLiteUK.Contact contact;
                     if (rMap.GetTargetObject(role.Id.ToString(), out contact))
-                        target.Contact = new ContactKey { Email = contact.Email };    
+                        target.Owner = new ContactKey { Email = contact.Email };    
                 }
             }
             return target;
