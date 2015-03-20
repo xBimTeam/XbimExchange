@@ -53,6 +53,7 @@
     <Compile Include="Schemas\cobieliteuk.designer.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Schemas\cobieliteuk.cd" />
     <None Include="packages.config" />
     <None Include="Schemas\cobieliteuk.xsd">
       <SubType>Designer</SubType>
