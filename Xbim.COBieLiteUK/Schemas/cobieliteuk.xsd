@@ -506,7 +506,7 @@
     <xs:complexContent>
       <xs:extension base="cobielite:CobieObject">
         <xs:sequence>
-          <xs:element name="Version" type="xs:string" minOccurs="1" fixed="COBieLiteUK_2015" />
+          <xs:element name="Metadata" type="cobielite:Metadata" minOccurs="1"/>
           <xs:element name="Project" type="cobielite:Project" minOccurs="1" maxOccurs="1" />
           <xs:element name="Site" type="cobielite:Site" minOccurs="1" maxOccurs="1" />
 
@@ -666,8 +666,8 @@
       <xs:extension base="cobielite:CobieObject">
         <xs:sequence>
           <xs:element name="ImpactStage" type="xs:string" minOccurs="1" />
-          <xs:element name="Value" type="xs:string" minOccurs="0" />
-          <xs:element name="ImpactUnit" type="xs:string" minOccurs="0" />
+          <xs:element name="Value" type="xs:string" minOccurs="1" />
+          <xs:element name="ImpactUnit" type="xs:string" minOccurs="1" />
           <xs:element name="LeadInTime" type="xs:double" minOccurs="0" nillable="true" />
           <xs:element name="Duration" type="xs:double" minOccurs="0" nillable="true" />
           <xs:element name="LeadOutTime" type="xs:double" minOccurs="0" nillable="true" />
@@ -990,6 +990,29 @@
   </xs:complexType>
   <!--End Zone Related Content-->
 
+  <!-- Begin COBie metadata -->
+  <xs:complexType name="Metadata">
+    <xs:annotation>
+      <xs:appinfo source="sheet">UK2012|Instruction</xs:appinfo>
+      <xs:appinfo source="mapping">UK2012|1|Title|required|item|-|Title</xs:appinfo>
+      <xs:appinfo source="mapping">UK2012|2|Version|required|item|-|Version</xs:appinfo>
+      <xs:appinfo source="mapping">UK2012|3|Release|required|item|-|Release</xs:appinfo>
+      <xs:appinfo source="mapping">UK2012|4|Status|required|item|-|Status</xs:appinfo>
+      <xs:appinfo source="mapping">UK2012|5|Region|required|item|-|Region</xs:appinfo>
+      <xs:documentation>
+        This object contains metadata about the COBie like its version, target region or status of the data.
+      </xs:documentation>
+    </xs:annotation>
+    <xs:sequence>
+      <xs:element name="Title" type="xs:string"/>
+      <xs:element name="Version" type="xs:int"/>
+      <xs:element name="Release" type="xs:int"/>
+      <xs:element name="Status" type="xs:string"/>
+      <xs:element name="Region" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+  <!-- End COBie metadata-->
+  
   <!-- Begin CobieObject types -->
   <xs:complexType name="CobieObject" abstract="true">
     <xs:sequence>

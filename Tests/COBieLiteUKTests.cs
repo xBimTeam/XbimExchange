@@ -265,5 +265,15 @@ namespace Tests
             var facility2 = Facility.ReadXml(xmlFile);
             var facility3 = Facility.ReadJson(jsonFile);
         }
+
+        [TestMethod]
+        [DeploymentItem("TestFiles\\2012-03-23-Duplex-Design.xlsx")]
+        public void ReadingSpreadsheet()
+        {
+            var facility = new Facility();
+            facility.ReadCobie("2012-03-23-Duplex-Design.xlsx");
+
+
+        }
     }
 }

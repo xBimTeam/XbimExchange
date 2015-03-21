@@ -44,7 +44,7 @@ namespace Xbim.COBieLiteUK {
     [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="V", Header="Phase", Required=false, List=false, PickList=null, Path="Phase")]
     public partial class Facility : CobieObject {
         
-        private string versionField;
+        private Metadata metadataField;
         
         private Project projectField;
         
@@ -76,17 +76,13 @@ namespace Xbim.COBieLiteUK {
         
         private List<ProjectStage> stagesField;
         
-        public Facility() {
-            this.versionField = "COBieLiteUK_2015";
-        }
-        
         [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
-        public string Version {
+        public Metadata Metadata {
             get {
-                return this.versionField;
+                return this.metadataField;
             }
             set {
-                this.versionField = value;
+                this.metadataField = value;
             }
         }
         
@@ -281,7 +277,81 @@ namespace Xbim.COBieLiteUK {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://openbim.org/schemas/cobieliteuk")]
     [System.Xml.Serialization.XmlRootAttribute(Namespace="http://openbim.org/schemas/cobieliteuk", IsNullable=true)]
-    public partial class Project {
+    [Xbim.COBieLiteUK.SheetMapping(Type="UK2012", Sheet="Instruction")]
+    [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="1", Header="Title", Required=true, List=false, PickList=null, Path="Title")]
+    [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="2", Header="Version", Required=true, List=false, PickList=null, Path="Version")]
+    [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="3", Header="Release", Required=true, List=false, PickList=null, Path="Release")]
+    [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="4", Header="Status", Required=true, List=false, PickList=null, Path="Status")]
+    [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="5", Header="Region", Required=true, List=false, PickList=null, Path="Region")]
+    public partial class Metadata {
+        
+        private string titleField;
+        
+        private int versionField;
+        
+        private int releaseField;
+        
+        private string statusField;
+        
+        private string regionField;
+        
+        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
+        public string Title {
+            get {
+                return this.titleField;
+            }
+            set {
+                this.titleField = value;
+            }
+        }
+        
+        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
+        public int Version {
+            get {
+                return this.versionField;
+            }
+            set {
+                this.versionField = value;
+            }
+        }
+        
+        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
+        public int Release {
+            get {
+                return this.releaseField;
+            }
+            set {
+                this.releaseField = value;
+            }
+        }
+        
+        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
+        public string Status {
+            get {
+                return this.statusField;
+            }
+            set {
+                this.statusField = value;
+            }
+        }
+        
+        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
+        public string Region {
+            get {
+                return this.regionField;
+            }
+            set {
+                this.regionField = value;
+            }
+        }
+    }
+    
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Xbim.COBieLiteUK.CodeGeneration", "1.0.0.0")]
+    [System.SerializableAttribute()]
+    [System.ComponentModel.DesignerCategoryAttribute("code")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://openbim.org/schemas/cobieliteuk")]
+    [System.Xml.Serialization.XmlRootAttribute(Namespace="http://openbim.org/schemas/cobieliteuk", IsNullable=true)]
+    public partial class Site {
         
         private string nameField;
         
@@ -337,7 +407,7 @@ namespace Xbim.COBieLiteUK {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://openbim.org/schemas/cobieliteuk")]
     [System.Xml.Serialization.XmlRootAttribute(Namespace="http://openbim.org/schemas/cobieliteuk", IsNullable=true)]
-    public partial class Site {
+    public partial class Project {
         
         private string nameField;
         

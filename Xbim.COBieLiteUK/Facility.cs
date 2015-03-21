@@ -1,8 +1,18 @@
-﻿using System.IO;
+﻿using System;
+using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
+using System.Globalization;
+using System.IO;
+using System.Linq;
+using System.Reflection;
 using System.Xml;
 using System.Xml.Serialization;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
+using NPOI.HSSF.UserModel;
+using NPOI.SS.UserModel;
+using NPOI.SS.Util;
+using NPOI.XSSF.UserModel;
 using Xbim.COBieLiteUK.Converters;
 using Formatting = System.Xml.Formatting;
 
@@ -11,6 +21,7 @@ namespace Xbim.COBieLiteUK
     public partial class Facility
     {
         #region XML serialization
+
         private static XmlSerializer GetXmlSerializer()
         {
             return new XmlSerializer(typeof (Facility));
@@ -30,13 +41,15 @@ namespace Xbim.COBieLiteUK
             var serializer = GetXmlSerializer();
             using (var w = new StreamWriter(stream))
             {
-                using (var xmlWriter = new XmlTextWriter(w) { Formatting =  indented ? Formatting.Indented : Formatting.None })
+                using (
+                    var xmlWriter = new XmlTextWriter(w) {Formatting = indented ? Formatting.Indented : Formatting.None}
+                    )
                 {
                     serializer.Serialize(xmlWriter, this,
                         new XmlSerializerNamespaces(new[]
                         {
                             new XmlQualifiedName("cobielite", "http://openbim.org/schemas/cobieliteuk"),
-                            new XmlQualifiedName("xsi", "http://www.w3.org/2001/XMLSchema-instance") 
+                            new XmlQualifiedName("xsi", "http://www.w3.org/2001/XMLSchema-instance")
                         }));
                 }
             }
@@ -45,7 +58,7 @@ namespace Xbim.COBieLiteUK
         public static Facility ReadXml(Stream stream)
         {
             var serializer = GetXmlSerializer();
-            return (Facility)serializer.Deserialize(stream);
+            return (Facility) serializer.Deserialize(stream);
         }
 
         public static Facility ReadXml(string path)
@@ -57,6 +70,7 @@ namespace Xbim.COBieLiteUK
                 return facility;
             }
         }
+
         #endregion
 
         #region JSON serialization
@@ -80,7 +94,7 @@ namespace Xbim.COBieLiteUK
             using (var textWriter = new StreamWriter(stream))
             {
                 var serialiser = GetJsonSerializer(indented);
-                serialiser.Serialize(textWriter, this);    
+                serialiser.Serialize(textWriter, this);
             }
         }
 
@@ -94,17 +108,16 @@ namespace Xbim.COBieLiteUK
         }
 
 
-        static public Facility ReadJson(Stream stream)
+        public static Facility ReadJson(Stream stream)
         {
             using (var textReader = new StreamReader(stream))
             {
                 var serialiser = GetJsonSerializer();
-                return (Facility)serialiser.Deserialize(textReader, typeof(Facility));    
+                return (Facility) serialiser.Deserialize(textReader, typeof (Facility));
             }
-            
         }
 
-        static public Facility ReadJson(string path)
+        public static Facility ReadJson(string path)
         {
             using (var stream = File.OpenRead(path))
             {
@@ -112,8 +125,65 @@ namespace Xbim.COBieLiteUK
                 stream.Close();
                 return facility;
             }
-
         }
+
         #endregion
+
+        #region Reading COBie Spreadsheet
+
+        [SuppressMessage("ReSharper", "InconsistentNaming")] 
+        private StringWriter log = new StringWriter();
+
+        public void ReadCobie(string path, string version = "UK2012")
+        {
+            if (path == null) throw new ArgumentNullException("path");
+            var ext = Path.GetExtension(path).ToLower().Trim('.');
+            if (ext != "xls" && ext != "xlsx") throw new Exception("File must be an MS Excel file.");
+            
+            using (var file = File.OpenRead(path))
+            {
+                var type = ext == "xlsx" ? ExcelTypeEnum.XLSX : ExcelTypeEnum.XLS;
+                ReadCobie(file, type, version);
+                file.Close();
+            }
+        }
+
+        public string ReadCobie(Stream stream, ExcelTypeEnum type, string version = "UK2012")
+        {
+            //refresh log for this run
+            log = new StringWriter();
+
+            //use NPOI to open and access spreadsheet data
+            IWorkbook workbook;
+            switch (type)
+            {
+                case ExcelTypeEnum.XLS:
+                    workbook = new HSSFWorkbook(stream);
+                    break;
+                case ExcelTypeEnum.XLSX:
+                    workbook = new XSSFWorkbook(stream);
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException("type");
+            }
+
+            var msg = LoadFromCobie(workbook, null, version);
+            if(!String.IsNullOrEmpty(msg))
+                log.Write(msg);
+
+            return log.ToString();
+        }
+
+       
+
+        #endregion
+    }
+
+    public enum ExcelTypeEnum
+    {
+        // ReSharper disable InconsistentNaming
+        XLS,
+        XLSX
+        // ReSharper restore InconsistentNaming
     }
 }
