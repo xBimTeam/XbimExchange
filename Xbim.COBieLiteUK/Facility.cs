@@ -138,24 +138,23 @@ namespace Xbim.COBieLiteUK
         [SuppressMessage("ReSharper", "InconsistentNaming")] 
         private StringWriter log = new StringWriter();
 
-        public void ReadCobie(string path, string version = "UK2012")
+        public static Facility ReadCobie(string path, out string message, string version = "UK2012")
         {
             if (path == null) throw new ArgumentNullException("path");
             var ext = Path.GetExtension(path).ToLower().Trim('.');
             if (ext != "xls" && ext != "xlsx") throw new Exception("File must be an MS Excel file.");
-            
             using (var file = File.OpenRead(path))
             {
                 var type = ext == "xlsx" ? ExcelTypeEnum.XLSX : ExcelTypeEnum.XLS;
-                ReadCobie(file, type, version);
+                var result = ReadCobie(file, type, out message, version);
                 file.Close();
+                return result;
             }
         }
 
-        public string ReadCobie(Stream stream, ExcelTypeEnum type, string version = "UK2012")
+        public static Facility ReadCobie(Stream stream, ExcelTypeEnum type, out string message, string version = "UK2012")
         {
             //refresh log for this run
-            log = new StringWriter();
 
             //use NPOI to open and access spreadsheet data
             IWorkbook workbook;
@@ -170,14 +169,47 @@ namespace Xbim.COBieLiteUK
                 default:
                     throw new ArgumentOutOfRangeException("type");
             }
+            string msg;
+            var flatList = ReadAllCobieObjects(workbook, out msg, version);
+            message = msg ?? "";
 
-            var msg = LoadFromCobie(workbook, null, version);
-            if(!String.IsNullOrEmpty(msg))
-                log.Write(msg);
+            //create structure hierarchy
+            foreach (var cobieObject in flatList)
+            {
+                cobieObject.AddToParent(flatList, out msg, version);
+                message += msg;
+            }
 
-            return log.ToString();
+            
+            //return first parent
+            var facility = flatList.OfType<Facility>().FirstOrDefault();
+            if (facility == null)
+            {
+                message = "There is no facility in the data. This is an invalid data structure. \n" + msg;
+                return null;
+            }
+
+
+
+            message = msg;
+            return facility;
         }
 
+        private static List<CobieObject> ReadAllCobieObjects(IWorkbook workbook, out string message, string version)
+        {
+            var result = new List<CobieObject>();
+            message = "";
+            var types =
+                typeof (CobieObject).Assembly.GetTypes()
+                    .Where(t => !t.IsAbstract && typeof (CobieObject).IsAssignableFrom(t));
+            foreach (var type in types)
+            {
+                string msg;
+                result.AddRange(CobieObject.LoadFromCobie(type, workbook, out msg, version));
+                message += msg;
+            }
+            return result;
+        }
        
 
         #endregion

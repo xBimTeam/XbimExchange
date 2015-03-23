@@ -95,9 +95,10 @@ namespace Xsd2Code.Library.Extensions
                         new CodeAttributeArgument("Path", new CodePrimitiveExpression(parts[6]))
                         ));
                 }
-                if (source == "list" && appInfo.Markup[0].InnerText.ToLower() == "true")
+                if (source == "parent")
                 {
-                    type.CustomAttributes.Add(new CodeAttributeDeclaration("Xbim.COBieLiteUK.List"));
+                    type.CustomAttributes.Add(new CodeAttributeDeclaration("Xbim.COBieLiteUK.Parent", 
+                        new CodeAttributeArgument("DataType", new CodeTypeOfExpression(appInfo.Markup[0].InnerText))));
                 }
             }
         }

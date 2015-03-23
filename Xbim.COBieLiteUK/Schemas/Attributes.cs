@@ -21,4 +21,10 @@ namespace Xbim.COBieLiteUK
         public string Type;
         public string Sheet;
     }
+
+    [AttributeUsage(AttributeTargets.Class, AllowMultiple = true)]
+    public class ParentAttribute : SAttribute
+    {
+        public Type DataType;
+    }
 }

@@ -2,6 +2,7 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Xbim.COBieLiteUK;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Xml;
 using System.Xml.Serialization;
@@ -274,8 +275,8 @@ namespace Tests
         [DeploymentItem("TestFiles\\2012-03-23-Duplex-Design.xlsx")]
         public void ReadingSpreadsheet()
         {
-            var facility = new Facility();
-            facility.ReadCobie("2012-03-23-Duplex-Design.xlsx");
+            string msg;
+            var facility = Facility.ReadCobie("2012-03-23-Duplex-Design.xlsx", out msg);
         }
     }
 }

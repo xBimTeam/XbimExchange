@@ -7,6 +7,7 @@
   <!--Begin ProjectStage related content-->
   <xs:complexType name="ProjectStage">
     <xs:annotation>
+      <xs:appinfo source="parent">Facility</xs:appinfo>
       <xs:appinfo source="sheet">UK2016|Project</xs:appinfo>
       <!--mapping, column, header, required/optional, list/item, pick/-, path-->
       <xs:appinfo source="mapping">UK2016|A|Name          |required|item|-                    |Name</xs:appinfo>
@@ -111,6 +112,7 @@
   <!--Begin Asset related content-->
   <xs:complexType name="Asset">
     <xs:annotation>
+      <xs:appinfo source="parent">AssetType</xs:appinfo>
       <xs:appinfo source="sheet">UK2012|Component</xs:appinfo>
       <!--mapping, column, header, required/optional, list/item, pick/-, path-->
       <xs:appinfo source="mapping">UK2012|A|Name|required|item|-|Name</xs:appinfo>
@@ -171,6 +173,7 @@
   <!--Begin AssetType related content-->
   <xs:complexType name="AssetType">
     <xs:annotation>
+      <xs:appinfo source="parent">Facility</xs:appinfo>
       <xs:appinfo source="sheet">UK2012|Type</xs:appinfo>
       <!--mapping, column, header, required/optional, list/item, pick/-, path-->
       <xs:appinfo source="mapping">UK2012|A|Name|required|item|-|Name</xs:appinfo>
@@ -366,6 +369,7 @@
   <!--Begin Contact Related Content-->
   <xs:complexType name="Contact">
     <xs:annotation>
+      <xs:appinfo source="parent">Facility</xs:appinfo>
       <xs:appinfo source="sheet">UK2012|Contact</xs:appinfo>
       <!--mapping, column, header, required/optional, list/item, pick/-, path-->
       <xs:appinfo source="mapping">UK2012|A|Email|required|item|-|Email</xs:appinfo>
@@ -557,6 +561,7 @@
   <!--Begin Floor Related Content-->
   <xs:complexType name="Floor">
     <xs:annotation>
+      <xs:appinfo source="parent">Facility</xs:appinfo>
       <xs:appinfo source="sheet">UK2012|Floor</xs:appinfo>
       <!--mapping, column, header, required/optional, list/item, pick/-, path-->
       <xs:appinfo source="mapping">UK2012|A|Name|required|item|-|Name</xs:appinfo>
@@ -685,6 +690,7 @@
   <!--Begin Job Related Content-->
   <xs:complexType name="Job">
     <xs:annotation>
+      <xs:appinfo source="parent">AssetType</xs:appinfo>
       <xs:appinfo source="sheet">UK2012|Job</xs:appinfo>
       <!--mapping, column, header, required/optional, list/item, pick/-, path-->
       <xs:appinfo source="mapping">UK2012|A|Name|required|item|-|Name</xs:appinfo>
@@ -752,6 +758,7 @@
   <!--Begin Resource Related Content-->
   <xs:complexType name="Resource">
     <xs:annotation>
+      <xs:appinfo source="parent">Facility</xs:appinfo>
       <xs:appinfo source="sheet">UK2012|Resource</xs:appinfo>
       <!--mapping, column, header, required/optional, list/item, pick/-, path-->
       <xs:appinfo source="mapping">UK2012|A|Name|required|item|-|Name</xs:appinfo>
@@ -810,9 +817,10 @@
       <xs:appinfo source="mapping">UK2012|M|ClockwiseRotation|optional|item|-|Roll</xs:appinfo>
       <xs:appinfo source="mapping">UK2012|N|ElevationalRotation|optional|item|-|Pitch</xs:appinfo>
       <xs:appinfo source="mapping">UK2012|O|YawRotation|optional|item|-|Yaw</xs:appinfo>
-      <xs:appinfo source="mapping">UK2012|P|SizeX|optional|item|-|SizeX</xs:appinfo>
-      <xs:appinfo source="mapping">UK2012|Q|SizeY|optional|item|-|SizeY</xs:appinfo>
-      <xs:appinfo source="mapping">UK2012|R|SizeZ|optional|item|-|SizeZ</xs:appinfo>
+      
+      <xs:appinfo source="mapping">UK2016|P|SizeX|optional|item|-|SizeX</xs:appinfo>
+      <xs:appinfo source="mapping">UK2016|Q|SizeY|optional|item|-|SizeY</xs:appinfo>
+      <xs:appinfo source="mapping">UK2016|R|SizeZ|optional|item|-|SizeZ</xs:appinfo>
     </xs:annotation>
     <xs:complexContent>
       <xs:extension base="cobielite:CobieObject">
@@ -840,6 +848,7 @@
   <!--Begin Space Related Content-->
   <xs:complexType name="Space">
     <xs:annotation>
+      <xs:appinfo source="parent">Floor</xs:appinfo>
       <xs:appinfo source="sheet">UK2012|Space</xs:appinfo>
       <!--mapping, column, header, required/optional, list/item, pick/-, path-->
       <xs:appinfo source="mapping">UK2012|A|Name|required|item|-|Name</xs:appinfo>
@@ -891,6 +900,7 @@
   <!--Begin Spare Related Content-->
   <xs:complexType name="Spare">
     <xs:annotation>
+      <xs:appinfo source="parent">AssetType</xs:appinfo>
       <xs:appinfo source="sheet">UK2012|Spare</xs:appinfo>
       <!--mapping, column, header, required/optional, list/item, pick/-, path-->
       <xs:appinfo source="mapping">UK2012|A|Name|required|item|-|Name</xs:appinfo>
@@ -927,6 +937,7 @@
   <!--Begin System Related Content-->
   <xs:complexType name="SystemType">
     <xs:annotation>
+      <xs:appinfo source="parent">Facility</xs:appinfo>
       <xs:appinfo source="sheet">UK2012|System</xs:appinfo>
       <!--mapping, column, header, required/optional, list/item, pick/-, path-->
       <xs:appinfo source="mapping">UK2012|A|Name|required|item|-|Name</xs:appinfo>
@@ -961,6 +972,7 @@
   <!--Begin Zone Related Content-->
   <xs:complexType name="Zone">
     <xs:annotation>
+      <xs:appinfo source="parent">Facility</xs:appinfo>
       <xs:appinfo source="sheet">UK2012|Zone</xs:appinfo>
       <!--mapping, column, header, required/optional, list/item, pick/-, path-->
       <xs:appinfo source="mapping">UK2012|A|Name|required|item|-|Name</xs:appinfo>
