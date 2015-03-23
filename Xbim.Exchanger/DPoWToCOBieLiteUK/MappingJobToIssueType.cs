@@ -8,11 +8,12 @@ using Xbim.DPoW;
 
 namespace XbimExchanger.DPoWToCOBieLiteUK
 {
-    class MappingJobToIssueType : DPoWToCOBieLiteUKMapping<Xbim.DPoW.Job, Issue>
+    class MappingJobToIssueType : DpoWtoCoBieLiteUkMapping<Xbim.DPoW.Job, Issue>
     {
         protected override Issue Mapping(Xbim.DPoW.Job source, Issue target)
         {
             target.ExternalId = source.Id.ToString();
+            target.ExternalSystem = "DPoW";
             target.Name = source.Name;
             target.Description = source.Description;
             

@@ -10,14 +10,13 @@ namespace XbimExchanger.DPoWToCOBieLiteUK
     public static class Extensions
     {
 
-        public static string GetEncodedClassification(this PlanOfWork pow, IEnumerable<Guid> classificationReferenceIds, string suffix = "")
+        public static IEnumerable<Category> GetEncodedClassification(this PlanOfWork pow, IEnumerable<Guid> classificationReferenceIds, string suffix = "")
         {
             var ids = classificationReferenceIds != null ? classificationReferenceIds.ToArray() : new Guid[]{};
             var idsNum = ids.Length;
             if (idsNum == 0)
-                return null;
+                yield break;
             
-            var result = "";
             var processedCount = 0;
 
             //itterate over ids and get it all together
@@ -27,14 +26,18 @@ namespace XbimExchanger.DPoWToCOBieLiteUK
                 {
                     if (!ids.Contains(reference.Id)) continue;
 
-                    result += String.Format("{0}:{1}:{2}|", classification.Name, reference.ClassificationCode,
-                        suffix);
-
+                    yield return new Category
+                    {
+                        Classification = classification.Name, 
+                        Code = reference.ClassificationCode + (String.IsNullOrEmpty(suffix) ? "" : "/" + suffix), 
+                        Description = reference.ClassificationDescription
+                    };
+                    
+                    //optimization: stop processing if all reference ids were found already.
                     processedCount++;
                     if (processedCount == ids.Length) break;
                 }
             }
-            return result.Trim('|');
         }
 
         public static void Add(this List<CAttribute> act, string name, string description, string value, string pset = null)

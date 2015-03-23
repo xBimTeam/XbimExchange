@@ -19,7 +19,11 @@ namespace Tests
             {
                 CreatedOn = DateTime.Now,
                 CreatedBy = new ContactKey {Email = "martin.cerny@northumbria.ac.uk"},
-                Category = "Schools",
+                Categories =
+                    new List<Category>
+                    {
+                        new Category {Code = "Bd_34_54", Description = "Schools", Classification = "Sample"}
+                    },
                 ExternalId = System.Guid.NewGuid().ToString(),
                 AreaUnits = AreaUnit.squaremeters,
                 CurrencyUnit = CurrencyUnit.GBP,
@@ -47,7 +51,7 @@ namespace Tests
                         CreatedBy = new ContactKey {Email = "martin.cerny@northumbria.ac.uk"},
                         ExternalId = Guid.NewGuid().ToString(),
                         Name = "Zone A",
-                        Category = "45.789.78",
+                        Categories = new List<Category> {new Category {Code = "45.789.78", Classification = "Sample"}},
                         Description = "Description of the zone A",
                         Spaces = new List<SpaceKey>
                         {
@@ -63,7 +67,7 @@ namespace Tests
                     {
                         CreatedOn = DateTime.Now,
                         CreatedBy = new ContactKey {Email = "martin.cerny@northumbria.ac.uk"},
-                        Category = "12.45.56",
+                        Categories = new List<Category> {new Category {Code = "12.45.56", Classification = "Sample"}},
                         FamilyName = "Martin",
                         Email = "martin.cerny@northumbria.ac.uk",
                         GivenName = "Cerny"
@@ -72,7 +76,7 @@ namespace Tests
                     {
                         CreatedOn = DateTime.Now,
                         CreatedBy = new ContactKey {Email = "martin.cerny@northumbria.ac.uk"},
-                        Category = "12.45.56",
+                        Categories = new List<Category> {new Category {Code = "12.45.56", Classification = "Sample"}},
                         FamilyName = "Peter",
                         Email = "peter.pan@northumbria.ac.uk",
                         GivenName = "Pan"
@@ -81,7 +85,7 @@ namespace Tests
                     {
                         CreatedOn = DateTime.Now,
                         CreatedBy = new ContactKey {Email = "martin.cerny@northumbria.ac.uk"},
-                        Category = "12.45.56",
+                        Categories = new List<Category> {new Category {Code = "12.45.56", Classification = "Sample"}},
                         FamilyName = "Paul",
                         Email = "paul.mccartney@northumbria.ac.uk",
                         GivenName = "McCartney"
@@ -101,7 +105,7 @@ namespace Tests
                             {
                                 CreatedOn = DateTime.Now,
                                 CreatedBy = new ContactKey {Email = "martin.cerny@northumbria.ac.uk"},
-                                Category = "Sp_02_78_98",
+                        Categories = new List<Category> {new Category {Code = "Sp_02_78_98", Classification = "Sample"}},
                                 Description = "First front room in COBieLiteUK ever",
                                 Name = "A001 - Front Room",
                                 UsableHeight = 3500,
@@ -111,7 +115,7 @@ namespace Tests
                             {
                                 CreatedOn = DateTime.Now,
                                 CreatedBy = new ContactKey {Email = "martin.cerny@northumbria.ac.uk"},
-                                Category = "Sp_02_78_98",
+                        Categories = new List<Category> {new Category {Code = "Sp_02_78_98", Classification = "Sample"}},
                                 Description = "First living room in COBieLiteUK ever",
                                 Name = "A002 - Living Room",
                                 UsableHeight = 4200,
@@ -121,7 +125,7 @@ namespace Tests
                             {
                                 CreatedOn = DateTime.Now,
                                 CreatedBy = new ContactKey {Email = "martin.cerny@northumbria.ac.uk"},
-                                Category = "Sp_02_78_98",
+                        Categories = new List<Category> {new Category {Code = "Sp_02_78_98", Classification = "Sample"}},
                                 Description = "First bedroom in COBieLiteUK ever",
                                 Name = "A003 - Bedroom",
                                 UsableHeight = 4100,
@@ -213,7 +217,7 @@ namespace Tests
                         CreatedBy = new ContactKey {Email = "martin.cerny@northumbria.ac.uk"},
                         Name = "String attribute",
                         Value = new StringAttributeValue {Value = "Almukantarant"},
-                        Category = "Submited"
+                        Categories = new List<Category> {new Category {Code = "Submitted", Classification = "Sample"}},
                     },
                     new Attribute
                     {
@@ -221,7 +225,7 @@ namespace Tests
                         CreatedBy = new ContactKey {Email = "martin.cerny@northumbria.ac.uk"},
                         Name = "Boolean attribute",
                         Value = new BooleanAttributeValue {Value = true},
-                        Category = "Submited"
+                        Categories = new List<Category> {new Category {Code = "Submitted", Classification = "Sample"}},
                     },
                     new Attribute
                     {
@@ -229,7 +233,7 @@ namespace Tests
                         CreatedBy = new ContactKey {Email = "martin.cerny@northumbria.ac.uk"},
                         Name = "Datetime attribute",
                         Value = new DateTimeAttributeValue {Value = DateTime.Now},
-                        Category = "Submited"
+                        Categories = new List<Category> {new Category {Code = "Submitted", Classification = "Sample"}},
                     },
                     new Attribute
                     {
@@ -237,7 +241,7 @@ namespace Tests
                         CreatedBy = new ContactKey {Email = "martin.cerny@northumbria.ac.uk"},
                         Name = "Decimal attribute",
                         Value = new DecimalAttributeValue {Value = 256.2},
-                        Category = "Submited"
+                        Categories = new List<Category> {new Category {Code = "Submitted", Classification = "Sample"}},
                     },
                     new Attribute
                     {
@@ -245,7 +249,7 @@ namespace Tests
                         CreatedBy = new ContactKey {Email = "martin.cerny@northumbria.ac.uk"},
                         Name = "Integer attribute",
                         Value = new IntegerAttributeValue {Value = 7},
-                        Category = "Submited"
+                        Categories = new List<Category> {new Category {Code = "Submitted", Classification = "Sample"}},
                     },
                     new Attribute
                     {
@@ -272,8 +276,6 @@ namespace Tests
         {
             var facility = new Facility();
             facility.ReadCobie("2012-03-23-Duplex-Design.xlsx");
-
-
         }
     }
 }

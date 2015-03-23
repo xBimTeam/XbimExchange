@@ -58,7 +58,9 @@ namespace Xbim.COBieLiteUK
         public static Facility ReadXml(Stream stream)
         {
             var serializer = GetXmlSerializer();
-            return (Facility) serializer.Deserialize(stream);
+            var facility = (Facility) serializer.Deserialize(stream);
+            facility.SetFacility(facility);
+            return facility;
         }
 
         public static Facility ReadXml(string path)
@@ -113,7 +115,9 @@ namespace Xbim.COBieLiteUK
             using (var textReader = new StreamReader(stream))
             {
                 var serialiser = GetJsonSerializer();
-                return (Facility) serialiser.Deserialize(textReader, typeof (Facility));
+                var facility = (Facility) serialiser.Deserialize(textReader, typeof (Facility));
+                facility.SetFacility(facility);
+                return facility;
             }
         }
 
@@ -177,6 +181,36 @@ namespace Xbim.COBieLiteUK
        
 
         #endregion
+
+        internal override IEnumerable<CobieObject> GetChildren()
+        {
+            //enumerate base
+            foreach (var child in base.GetChildren())
+                yield return child;
+
+            //enumerate own
+            if (Floors != null)
+                foreach (var floor in Floors)
+                    yield return floor;
+            if(AssetTypes != null)
+                foreach (var assetType in AssetTypes)
+                    yield return assetType;
+            if(Contacts != null)
+                foreach (var contact in Contacts)
+                    yield return contact;
+            if (Systems != null)
+                foreach (var system in Systems)
+                    yield return system;
+            if (Zones != null)
+                foreach (var zone in Zones)
+                    yield return zone;
+            if (Resources != null)
+                foreach (var resource in Resources)
+                    yield return resource;
+            if(Stages != null)
+                foreach (var stage in Stages)
+                    yield return stage;
+        }
     }
 
     public enum ExcelTypeEnum

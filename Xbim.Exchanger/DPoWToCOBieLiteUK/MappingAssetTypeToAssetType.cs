@@ -31,6 +31,7 @@ namespace XbimExchanger.DPoWToCOBieLiteUK
             tObject.Assets.Add(new Asset
             {
                 ExternalId = Guid.NewGuid().ToString(),
+                ExternalSystem = "DPoW",
                 Description = sObject.Description,
                 Name = sObject.Name
             });

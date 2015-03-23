@@ -21,6 +21,7 @@ namespace XbimExchanger.DPoWToCOBieLiteUK
             
 
             target.ExternalId = source.Id.ToString();
+            target.ExternalSystem = "DPoW";
             
             //convert fafility related information
             ConvertFacility(source, target);
@@ -74,7 +75,7 @@ namespace XbimExchanger.DPoWToCOBieLiteUK
             target.Description = sFacility.Description;
             target.Name = sFacility.Name;
             var sFacilityCategory = sFacility.GetCategory(source);
-            target.Category = sFacilityCategory != null ? sFacilityCategory.ClassificationCode : null;
+            target.Categories = new List<Category> { new Category { Code = sFacilityCategory != null ? sFacilityCategory.ClassificationCode : null } };
             if (!String.IsNullOrWhiteSpace(sFacility.SiteName))
                 target.Site = new Site
                 {
@@ -148,7 +149,10 @@ namespace XbimExchanger.DPoWToCOBieLiteUK
 
                 //set client role as a contact category
                 if (sContact.Id == clientId)
-                    tContact.Category = "Client";
+                {
+                    if (tContact.Categories == null) tContact.Categories = new List<Category>();
+                    tContact.Categories.Add(new Category() { Classification = "DPoW", Code = "Client" });
+                }
 
                 mappings.AddMapping(sContact, tContact);
                 target.Contacts.Add(tContact);
@@ -192,7 +196,8 @@ namespace XbimExchanger.DPoWToCOBieLiteUK
             {
                 Name = "Default floor",
                 Spaces = new List<Space>(),
-                ExternalId = Guid.NewGuid().ToString()
+                ExternalId = Guid.NewGuid().ToString(),
+                ExternalSystem = "DPoW"
             };
             target.Floors = new List<Floor> {tFloor};
 

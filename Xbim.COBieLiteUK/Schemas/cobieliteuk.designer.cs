@@ -23,7 +23,7 @@ namespace Xbim.COBieLiteUK {
     [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="A", Header="Name", Required=true, List=false, PickList=null, Path="Name")]
     [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="B", Header="CreatedBy", Required=true, List=false, PickList=null, Path="CreatedBy.Email")]
     [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="C", Header="CreatedOn", Required=true, List=false, PickList=null, Path="CreatedOn")]
-    [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="D", Header="Category", Required=true, List=false, PickList="Category-Facility", Path="Category")]
+    [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="D", Header="Category", Required=true, List=true, PickList="Category-Facility", Path="Categories.CategoryString")]
     [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="E", Header="ProjectName", Required=true, List=false, PickList=null, Path="Project.Name")]
     [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="F", Header="SiteName", Required=true, List=false, PickList=null, Path="Site.Name")]
     [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="G", Header="LinearUnits", Required=true, List=false, PickList="LinearUnits", Path="LinearUnits")]
@@ -1176,6 +1176,8 @@ namespace Xbim.COBieLiteUK {
         
         private bool valueField;
         
+        private System.Nullable<bool> allowedValueField;
+        
         [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
         public bool Value {
             get {
@@ -1184,6 +1186,23 @@ namespace Xbim.COBieLiteUK {
             set {
                 this.valueField = value;
             }
+        }
+        
+        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified, IsNullable=true)]
+        public System.Nullable<bool> AllowedValue {
+            get {
+                return this.allowedValueField;
+            }
+            set {
+                this.allowedValueField = value;
+            }
+        }
+        
+        /// <summary>
+        /// Test whether AllowedValue should be serialized
+        /// </summary>
+        public virtual bool ShouldSerializeAllowedValue() {
+            return AllowedValue.HasValue;
         }
     }
     
@@ -1216,6 +1235,50 @@ namespace Xbim.COBieLiteUK {
             }
             set {
                 this.allowedValuesField = value;
+            }
+        }
+    }
+    
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Xbim.COBieLiteUK.CodeGeneration", "1.0.0.0")]
+    [System.SerializableAttribute()]
+    [System.ComponentModel.DesignerCategoryAttribute("code")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://openbim.org/schemas/cobieliteuk")]
+    [System.Xml.Serialization.XmlRootAttribute(Namespace="http://openbim.org/schemas/cobieliteuk", IsNullable=true)]
+    public partial class Category {
+        
+        private string classificationField;
+        
+        private string codeField;
+        
+        private string descriptionField;
+        
+        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
+        public string Classification {
+            get {
+                return this.classificationField;
+            }
+            set {
+                this.classificationField = value;
+            }
+        }
+        
+        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
+        public string Code {
+            get {
+                return this.codeField;
+            }
+            set {
+                this.codeField = value;
+            }
+        }
+        
+        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
+        public string Description {
+            get {
+                return this.descriptionField;
+            }
+            set {
+                this.descriptionField = value;
             }
         }
     }
@@ -1256,7 +1319,7 @@ namespace Xbim.COBieLiteUK {
         
         private System.Nullable<System.DateTime> createdOnField;
         
-        private string categoryField;
+        private List<Category> categoriesField;
         
         private string externalSystemField;
         
@@ -1316,13 +1379,14 @@ namespace Xbim.COBieLiteUK {
             }
         }
         
-        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
-        public string Category {
+        [System.Xml.Serialization.XmlArrayAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
+        [System.Xml.Serialization.XmlArrayItemAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified, IsNullable=false)]
+        public List<Category> Categories {
             get {
-                return this.categoryField;
+                return this.categoriesField;
             }
             set {
-                this.categoryField = value;
+                this.categoriesField = value;
             }
         }
         
@@ -1439,7 +1503,7 @@ namespace Xbim.COBieLiteUK {
     [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="A", Header="Name", Required=true, List=false, PickList=null, Path="Name")]
     [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="B", Header="CreatedBy", Required=true, List=false, PickList=null, Path="CreatedBy.Email")]
     [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="C", Header="CreatedOn", Required=true, List=false, PickList=null, Path="CreatedOn")]
-    [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="D", Header="Category", Required=true, List=false, PickList="DocumentType", Path="Category")]
+    [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="D", Header="Category", Required=true, List=true, PickList="DocumentType", Path="Categories.CategoryString")]
     [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="E", Header="ApprovalBy", Required=true, List=false, PickList="ApprovalBy", Path="ApprovalBy.Email")]
     [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="F", Header="Stage", Required=true, List=false, PickList="StageType", Path="Stage")]
     [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="G", Header="SheetName", Required=true, List=false, PickList="SheetType", Path="parent")]
@@ -1523,7 +1587,7 @@ namespace Xbim.COBieLiteUK {
     [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="A", Header="Name", Required=true, List=false, PickList=null, Path="Name")]
     [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="B", Header="CreatedBy", Required=true, List=false, PickList=null, Path="CreatedBy.Email")]
     [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="C", Header="CreatedOn", Required=true, List=false, PickList=null, Path="CreatedOn")]
-    [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="D", Header="Category", Required=true, List=false, PickList="StageType", Path="Category")]
+    [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="D", Header="Category", Required=true, List=true, PickList="StageType", Path="Categories.CategoryString")]
     [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="E", Header="SheetName", Required=true, List=false, PickList="SheetType", Path="parent")]
     [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="F", Header="RowName", Required=true, List=false, PickList=null, Path="parent.Name")]
     [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="G", Header="Value", Required=true, List=false, PickList=null, Path="Value.Value")]
@@ -1532,7 +1596,7 @@ namespace Xbim.COBieLiteUK {
     [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="J", Header="ExtObject", Required=false, List=false, PickList=null, Path="ExternalEntity")]
     [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="K", Header="ExtIdentifier", Required=false, List=false, PickList=null, Path="ExternalId")]
     [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="L", Header="Description", Required=false, List=false, PickList=null, Path="Description")]
-    [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="M", Header="AllowedValues", Required=false, List=true, PickList=null, Path="Value.AllowedValues")]
+    [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="M", Header="AllowedValues", Required=false, List=true, PickList=null, Path="Value.AllowedValuesString")]
     public partial class Attribute : CobieObject {
         
         private AttributeValue itemField;
@@ -1561,7 +1625,7 @@ namespace Xbim.COBieLiteUK {
     [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="A", Header="Name", Required=true, List=false, PickList=null, Path="Name")]
     [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="B", Header="CreatedBy", Required=true, List=false, PickList=null, Path="CreatedBy.Email")]
     [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="C", Header="CreatedOn", Required=true, List=false, PickList=null, Path="CreatedOn")]
-    [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="D", Header="Type", Required=true, List=false, PickList="IssueCategory", Path="Category")]
+    [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="D", Header="Type", Required=true, List=true, PickList="IssueCategory", Path="Categories.CategoryString")]
     [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="E", Header="Risk", Required=true, List=false, PickList="IssueRisk", Path="Risk")]
     [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="F", Header="Chance", Required=true, List=false, PickList="IssueChance", Path="Chance")]
     [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="G", Header="Impact", Required=true, List=false, PickList="IssueImpact", Path="Impact")]
@@ -1659,7 +1723,7 @@ namespace Xbim.COBieLiteUK {
     [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="A", Header="Name", Required=true, List=false, PickList=null, Path="Name")]
     [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="B", Header="CreatedBy", Required=true, List=false, PickList=null, Path="CreatedBy.Email")]
     [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="C", Header="CreatedOn", Required=true, List=false, PickList=null, Path="CreatedOn")]
-    [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="D", Header="ImpactType", Required=true, List=false, PickList="ImpactType", Path="Category")]
+    [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="D", Header="ImpactType", Required=true, List=true, PickList="ImpactType", Path="Categories.CategoryString")]
     [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="E", Header="ImpactStage", Required=true, List=false, PickList="ImpactStage", Path="ImpactStage")]
     [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="F", Header="SheetName", Required=true, List=false, PickList="SheetType", Path="parent")]
     [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="G", Header="RowName", Required=true, List=false, PickList=null, Path="parent.Name")]
@@ -1777,7 +1841,7 @@ namespace Xbim.COBieLiteUK {
     [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="A", Header="Name", Required=true, List=false, PickList=null, Path="Name")]
     [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="B", Header="CreatedBy", Required=true, List=false, PickList=null, Path="CreatedBy.Email")]
     [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="C", Header="CreatedOn", Required=true, List=false, PickList=null, Path="CreatedOn")]
-    [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="D", Header="Category", Required=true, List=false, PickList="CoordinateType", Path="Category")]
+    [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="D", Header="Category", Required=true, List=true, PickList="CoordinateType", Path="Categories.CategoryString")]
     [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="E", Header="SheetName", Required=true, List=false, PickList="CoordinateSheet", Path="parent")]
     [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="F", Header="RowName", Required=true, List=false, PickList=null, Path="parent.Name")]
     [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="G", Header="CoordinateXAxis", Required=true, List=false, PickList=null, Path="X")]
@@ -1912,7 +1976,7 @@ namespace Xbim.COBieLiteUK {
     [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="A", Header="Name", Required=true, List=false, PickList=null, Path="Name")]
     [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="B", Header="CreatedBy", Required=true, List=false, PickList=null, Path="CreatedBy.Email")]
     [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="C", Header="CreatedOn", Required=true, List=false, PickList=null, Path="CreatedOn")]
-    [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="D", Header="Category", Required=true, List=false, PickList="ResourceType", Path="Category")]
+    [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="D", Header="Category", Required=true, List=true, PickList="ResourceType", Path="Categories.CategoryString")]
     [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="E", Header="ExtSystem", Required=false, List=false, PickList=null, Path="ExternalSystem")]
     [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="F", Header="ExtObject", Required=false, List=false, PickList=null, Path="ExternalEntity")]
     [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="G", Header="ExtIdentifier", Required=false, List=false, PickList=null, Path="ExternalId")]
@@ -1929,7 +1993,7 @@ namespace Xbim.COBieLiteUK {
     [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="A", Header="Name", Required=true, List=false, PickList=null, Path="Name")]
     [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="B", Header="CreatedBy", Required=true, List=false, PickList=null, Path="CreatedBy.Email")]
     [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="C", Header="CreatedOn", Required=true, List=false, PickList=null, Path="CreatedOn")]
-    [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="D", Header="Category", Required=true, List=false, PickList="ZoneType", Path="Category")]
+    [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="D", Header="Category", Required=true, List=true, PickList="ZoneType", Path="Categories.CategoryString")]
     [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="E", Header="SpaceNames", Required=true, List=true, PickList=null, Path="Spaces.Name")]
     [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="F", Header="ExtSystem", Required=false, List=false, PickList=null, Path="ExternalSystem")]
     [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="G", Header="ExtObject", Required=false, List=false, PickList=null, Path="ExternalEntity")]
@@ -1960,7 +2024,7 @@ namespace Xbim.COBieLiteUK {
     [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="A", Header="Name", Required=true, List=false, PickList=null, Path="Name")]
     [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="B", Header="CreatedBy", Required=true, List=false, PickList=null, Path="CreatedBy.Email")]
     [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="C", Header="CreatedOn", Required=true, List=false, PickList=null, Path="CreatedOn")]
-    [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="D", Header="Category", Required=true, List=false, PickList="Category-Element", Path="Category")]
+    [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="D", Header="Category", Required=true, List=true, PickList="Category-Element", Path="Categories.CategoryString")]
     [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="E", Header="ComponentNames", Required=true, List=true, PickList=null, Path="Components.Name")]
     [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="F", Header="ExtSystem", Required=false, List=false, PickList=null, Path="ExternalSystem")]
     [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="G", Header="ExtObject", Required=false, List=false, PickList=null, Path="ExternalEntity")]
@@ -1991,7 +2055,7 @@ namespace Xbim.COBieLiteUK {
     [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="A", Header="Name", Required=true, List=false, PickList=null, Path="Name")]
     [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="B", Header="CreatedBy", Required=true, List=false, PickList=null, Path="CreatedBy.Email")]
     [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="C", Header="CreatedOn", Required=true, List=false, PickList=null, Path="CreatedOn")]
-    [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="D", Header="Category", Required=true, List=false, PickList="Category-Space", Path="Category")]
+    [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="D", Header="Category", Required=true, List=true, PickList="Category-Space", Path="Categories.CategoryString")]
     [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="E", Header="FloorName", Required=true, List=false, PickList=null, Path="parent.Name")]
     [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="F", Header="Description", Required=true, List=false, PickList=null, Path="Description")]
     [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="G", Header="ExtSystem", Required=false, List=false, PickList=null, Path="ExternalSystem")]
@@ -2082,7 +2146,7 @@ namespace Xbim.COBieLiteUK {
     [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="A", Header="Name", Required=true, List=false, PickList=null, Path="Name")]
     [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="B", Header="CreatedBy", Required=true, List=false, PickList=null, Path="CreatedBy.Email")]
     [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="C", Header="CreatedOn", Required=true, List=false, PickList=null, Path="CreatedOn")]
-    [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="D", Header="Category", Required=true, List=false, PickList="FloorType", Path="Category")]
+    [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="D", Header="Category", Required=true, List=true, PickList="FloorType", Path="Categories.CategoryString")]
     [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="E", Header="ExtSystem", Required=false, List=false, PickList=null, Path="ExternalSystem")]
     [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="F", Header="ExtObject", Required=false, List=false, PickList=null, Path="ExternalEntity")]
     [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="G", Header="ExtIdentifier", Required=false, List=false, PickList=null, Path="ExternalId")]
@@ -2152,7 +2216,7 @@ namespace Xbim.COBieLiteUK {
     [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="A", Header="Email", Required=true, List=false, PickList=null, Path="Email")]
     [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="B", Header="CreatedBy", Required=true, List=false, PickList=null, Path="CreatedBy.Email")]
     [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="C", Header="CreatedOn", Required=true, List=false, PickList=null, Path="CreatedOn")]
-    [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="D", Header="Category", Required=true, List=false, PickList="Category-Role", Path="Category")]
+    [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="D", Header="Category", Required=true, List=true, PickList="Category-Role", Path="Categories.CategoryString")]
     [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="E", Header="Company", Required=true, List=false, PickList=null, Path="Company")]
     [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="F", Header="Phone", Required=true, List=false, PickList=null, Path="Phone")]
     [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="G", Header="ExtSystem", Required=false, List=false, PickList=null, Path="ExternalSystem")]
@@ -2336,7 +2400,7 @@ namespace Xbim.COBieLiteUK {
     [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="A", Header="Name", Required=true, List=false, PickList=null, Path="Name")]
     [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="B", Header="CreatedBy", Required=true, List=false, PickList=null, Path="CreatedBy.Email")]
     [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="C", Header="CreatedOn", Required=true, List=false, PickList=null, Path="CreatedOn")]
-    [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="D", Header="Category", Required=true, List=false, PickList="JobType", Path="Category")]
+    [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="D", Header="Category", Required=true, List=true, PickList="JobType", Path="Categories.CategoryString")]
     [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="E", Header="Status", Required=true, List=false, PickList="JobStatusType", Path="Status")]
     [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="F", Header="TypeName", Required=true, List=false, PickList=null, Path="parent.Name")]
     [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="G", Header="Description", Required=true, List=false, PickList=null, Path="Description")]
@@ -2528,7 +2592,7 @@ namespace Xbim.COBieLiteUK {
     [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="A", Header="Name", Required=true, List=false, PickList=null, Path="Name")]
     [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="B", Header="CreatedBy", Required=true, List=false, PickList=null, Path="CreatedBy.Email")]
     [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="C", Header="CreatedOn", Required=true, List=false, PickList=null, Path="CreatedOn")]
-    [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="D", Header="Category", Required=true, List=false, PickList="SpareType", Path="Category")]
+    [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="D", Header="Category", Required=true, List=true, PickList="SpareType", Path="Categories.CategoryString")]
     [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="E", Header="TypeName", Required=true, List=false, PickList=null, Path="parent.Name")]
     [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="F", Header="Suppliers", Required=true, List=true, PickList=null, Path="Suppliers.Email")]
     [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="G", Header="ExtSystem", Required=false, List=false, PickList=null, Path="ExternalSystem")]
@@ -2586,9 +2650,9 @@ namespace Xbim.COBieLiteUK {
     [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="A", Header="Name", Required=true, List=false, PickList=null, Path="Name")]
     [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="B", Header="CreatedBy", Required=true, List=false, PickList=null, Path="CreatedBy.Email")]
     [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="C", Header="CreatedOn", Required=true, List=false, PickList=null, Path="CreatedOn")]
-    [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="D", Header="Category", Required=true, List=false, PickList="Category-Product", Path="Category")]
+    [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="D", Header="Category", Required=true, List=true, PickList="Category-Product", Path="Categories.CategoryString")]
     [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="E", Header="Description", Required=true, List=false, PickList=null, Path="Description")]
-    [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="F", Header="AssetType", Required=true, List=false, PickList="AssetType", Path="AssetType")]
+    [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="F", Header="AssetType", Required=true, List=false, PickList="AssetType", Path="AssetTypeName")]
     [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="G", Header="Manufacturer", Required=true, List=false, PickList=null, Path="Manufacturer.Email")]
     [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="H", Header="ModelNumber", Required=true, List=false, PickList=null, Path="ModelNumber")]
     [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="I", Header="WarrantyGuarantorParts", Required=true, List=false, PickList=null, Path="Warranty.GuarantorParts.Email")]
@@ -2620,7 +2684,7 @@ namespace Xbim.COBieLiteUK {
     [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="AI", Header="SustainabilityPerformance", Required=false, List=false, PickList=null, Path="SustainabilityPerformance")]
     public partial class AssetType : CobieObject {
         
-        private string assetType1Field;
+        private string assetTypeNameField;
         
         private ContactKey manufacturerField;
         
@@ -2672,13 +2736,13 @@ namespace Xbim.COBieLiteUK {
         
         private AssetTypeAssembly assemblyOfField;
         
-        [System.Xml.Serialization.XmlElementAttribute("AssetType", Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
-        public string AssetType1 {
+        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
+        public string AssetTypeName {
             get {
-                return this.assetType1Field;
+                return this.assetTypeNameField;
             }
             set {
-                this.assetType1Field = value;
+                this.assetTypeNameField = value;
             }
         }
         
@@ -3134,7 +3198,7 @@ namespace Xbim.COBieLiteUK {
     [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="A", Header="Name", Required=true, List=false, PickList=null, Path="Name")]
     [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="B", Header="CreatedBy", Required=true, List=false, PickList=null, Path="CreatedBy.Email")]
     [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="C", Header="CreatedOn", Required=true, List=false, PickList=null, Path="CreatedOn")]
-    [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="D", Header="ConnectionType", Required=true, List=false, PickList="ConnectionType", Path="Category")]
+    [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="D", Header="ConnectionType", Required=true, List=true, PickList="ConnectionType", Path="Categories.CategoryString")]
     [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="E", Header="SheetName", Required=false, List=false, PickList="SheetType", Path="parent")]
     [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="F", Header="RowName1", Required=true, List=false, PickList=null, Path="parent.Name")]
     [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="G", Header="RowName2", Required=true, List=false, PickList=null, Path="ConnectedTo.Name")]
@@ -3208,7 +3272,7 @@ namespace Xbim.COBieLiteUK {
     [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="D", Header="SheetName", Required=true, List=false, PickList=null, Path="parent")]
     [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="E", Header="ParentName", Required=true, List=false, PickList=null, Path="parent.Name")]
     [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="F", Header="ChildNames", Required=true, List=true, PickList=null, Path="ChildAssets.Name")]
-    [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="G", Header="AssemblyType", Required=false, List=false, PickList="AssemblyType", Path="Category")]
+    [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="G", Header="AssemblyType", Required=false, List=true, PickList="AssemblyType", Path="Categories.CategoryString")]
     [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="H", Header="ExtSystem", Required=false, List=false, PickList=null, Path="ExternalSystem")]
     [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="I", Header="ExtObject", Required=false, List=false, PickList=null, Path="ExternalEntity")]
     [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="J", Header="ExtIdentifier", Required=false, List=false, PickList=null, Path="ExternalId")]
@@ -3251,7 +3315,7 @@ namespace Xbim.COBieLiteUK {
     [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="D", Header="SheetName", Required=true, List=false, PickList=null, Path="parent")]
     [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="E", Header="ParentName", Required=true, List=false, PickList=null, Path="parent.Name")]
     [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="F", Header="ChildNames", Required=true, List=true, PickList=null, Path="ChildAssetTypes.Name")]
-    [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="G", Header="AssemblyType", Required=false, List=false, PickList="AssemblyType", Path="Category")]
+    [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="G", Header="AssemblyType", Required=false, List=true, PickList="AssemblyType", Path="Categories.CategoryString")]
     [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="H", Header="ExtSystem", Required=false, List=false, PickList=null, Path="ExternalSystem")]
     [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="I", Header="ExtObject", Required=false, List=false, PickList=null, Path="ExternalEntity")]
     [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="J", Header="ExtIdentifier", Required=false, List=false, PickList=null, Path="ExternalId")]
@@ -3281,7 +3345,7 @@ namespace Xbim.COBieLiteUK {
     [Xbim.COBieLiteUK.Mapping(Type="UK2016", Column="A", Header="Name", Required=true, List=false, PickList=null, Path="Name")]
     [Xbim.COBieLiteUK.Mapping(Type="UK2016", Column="B", Header="CreatedBy", Required=true, List=false, PickList=null, Path="CreatedBy.Email")]
     [Xbim.COBieLiteUK.Mapping(Type="UK2016", Column="C", Header="CreatedOn", Required=true, List=false, PickList=null, Path="CreatedOn")]
-    [Xbim.COBieLiteUK.Mapping(Type="UK2016", Column="D", Header="Category", Required=true, List=false, PickList="Category-ProjectStage", Path="Category")]
+    [Xbim.COBieLiteUK.Mapping(Type="UK2016", Column="D", Header="Category", Required=true, List=true, PickList="Category-ProjectStage", Path="Categories.CategoryString")]
     [Xbim.COBieLiteUK.Mapping(Type="UK2016", Column="E", Header="Description", Required=false, List=false, PickList=null, Path="Description")]
     [Xbim.COBieLiteUK.Mapping(Type="UK2016", Column="F", Header="ExtSystem", Required=false, List=false, PickList=null, Path="ExternalSystem")]
     [Xbim.COBieLiteUK.Mapping(Type="UK2016", Column="G", Header="ExtObject", Required=false, List=false, PickList=null, Path="ExternalEntity")]

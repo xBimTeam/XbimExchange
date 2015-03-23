@@ -9,7 +9,7 @@ using FacilityType = Xbim.COBieLiteUK.Facility;
 
 namespace XbimExchanger.DPoWToCOBieLiteUK
 {
-    abstract class DPoWToCOBieLiteUKMapping<TSourceType, TTargetType> : XbimMappings<PlanOfWork, FacilityType, string, TSourceType, TTargetType> where TTargetType : new()
+    abstract class DpoWtoCoBieLiteUkMapping<TSourceType, TTargetType> : XbimMappings<PlanOfWork, FacilityType, string, TSourceType, TTargetType> where TTargetType : new()
     {
 
     }

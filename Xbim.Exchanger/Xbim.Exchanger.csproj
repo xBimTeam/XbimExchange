@@ -100,6 +100,7 @@
     <Compile Include="DPoWToCOBieLiteUK\MappingDPoWObjectToCOBieObject.cs" />
     <Compile Include="DPoWToCOBieLiteUK\MappingJobToIssueType.cs" />
     <Compile Include="DPoWToCOBieLiteUK\MappingPlanOfWorkToFacilityType.cs" />
+    <Compile Include="DPoWToCOBieLiteUK\MappingProjectStageToProjectStage.cs" />
     <Compile Include="DPoWToCOBieLiteUK\MappingRoleToContact.cs" />
     <Compile Include="DPoWToCOBieLiteUK\MappingSpaceTypeToSpaceType.cs" />
     <Compile Include="DPoWToCOBieLite\ClassificationMappings.cs" />

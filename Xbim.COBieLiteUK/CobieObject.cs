@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
@@ -7,6 +8,8 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
+using System.Xml.Serialization;
+using Newtonsoft.Json;
 using NPOI.HSSF.UserModel;
 using NPOI.SS.UserModel;
 using NPOI.SS.Util;
@@ -16,10 +19,41 @@ namespace Xbim.COBieLiteUK
 {
     public abstract partial class CobieObject
     {
+
+        // ReSharper disable InconsistentNaming
+        protected Facility _facility;
+        // ReSharper restore InconsistentNaming
+        internal void SetFacility(Facility facility)
+        {
+            _facility = facility;
+            foreach(var child in GetChildren())
+                child.SetFacility(facility);
+        }
+
+        [XmlIgnore][JsonIgnore]
+        internal virtual Facility Facility { get { return _facility; } }
+
         [SuppressMessage("ReSharper", "InconsistentNaming")]
         private StringWriter log = new StringWriter();
 
-        internal abstract IEnumerable<CobieObject> GetChildren();
+        internal virtual IEnumerable<CobieObject> GetChildren()
+        {
+            if (Documents != null)
+                foreach (var document in Documents)
+                    yield return document;
+            if (Attributes != null)
+                foreach (var attribute in Attributes)
+                    yield return attribute;
+            if(Issues != null)
+                foreach (var issue in Issues)
+                    yield return issue;
+            if (Impacts != null)
+                foreach (var impact in Impacts)
+                    yield return impact;
+            if (Representations != null)
+                foreach (var representation in Representations)
+                    yield return representation;
+        }
 
         public string LoadFromCobie(IWorkbook workbook, IEnumerable<CobieObject> potentialParents, string version = "UK2012")
         {
@@ -143,7 +177,7 @@ namespace Xbim.COBieLiteUK
                         date = cell.DateCellValue;
                         break;
                     case CellType.String:
-                        DateTime.TryParse(cell.StringCellValue, out date);
+                        DateTime.TryParse(cell.StringCellValue, null, DateTimeStyles.RoundtripKind,  out date);
                         break;
                 }
                 info.SetValue(obj, date);
@@ -177,6 +211,16 @@ namespace Xbim.COBieLiteUK
                             info.SetValue(obj, i);
                         break;
                 }
+            }
+
+            if (typeof (List<>).IsAssignableFrom(type))
+            {
+                //create an instance of generic type
+
+                //set a member of the type to the value (recursion)
+
+                //add the instance to the list
+                throw new NotImplementedException();
             }
         }
 
