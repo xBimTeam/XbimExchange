@@ -126,7 +126,7 @@ namespace Xbim.COBieLiteUK
                         break;
                     }
                 }
-                if(!anyValue) continue;
+                if (!anyValue) continue;
 
 
                 //fill facility values using reflection
@@ -322,16 +322,21 @@ namespace Xbim.COBieLiteUK
             //if it is a list, create instance of an item and set its member to the value.
             if (typeof (IList).IsAssignableFrom(type))
             {
-                //create an instance of generic type
-                var itemType = type.GetGenericArguments()[0];
-                var item = Activator.CreateInstance(itemType);
-
-                //set a member of the type to the value (recursion)
-                log.Write(SetMemberValue(item, actual, cell));
-
-                //add the instance to the list
                 var addMethod = type.GetMethod("Add");
-                addMethod.Invoke(obj, new[] {item});
+
+                var values = cell.StringCellValue.Split(new[] {','}, StringSplitOptions.RemoveEmptyEntries);
+                foreach (var value in values)
+                {
+                    //create an instance of generic type
+                    var itemType = type.GetGenericArguments()[0];
+                    var item = Activator.CreateInstance(itemType);
+                    addMethod.Invoke(obj, new[] {item});
+                    var memberInfo = itemType.GetProperty(actual);
+                    if (memberInfo == null)
+                        log.WriteLine("Object {0} doesn't have a property {1}.", itemType.Name, actual);
+                    else
+                        memberInfo.SetValue(item, value);
+                }
                 return log.ToString();
             }
 

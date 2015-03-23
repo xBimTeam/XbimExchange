@@ -277,6 +277,7 @@ namespace Tests
         {
             string msg;
             var facility = Facility.ReadCobie("2012-03-23-Duplex-Design.xlsx", out msg);
+            facility.WriteJson("..\\..\\2012-03-23-Duplex-Design.cobielite.json", true);
         }
     }
 }
