@@ -333,8 +333,15 @@ namespace Xbim.COBieLiteUK
                     addMethod.Invoke(obj, new[] {item});
                     var memberInfo = itemType.GetProperty(actual);
                     if (memberInfo == null)
-                        log.WriteLine("Object {0} doesn't have a property {1}.", itemType.Name, actual);
-                    else
+                    {
+                        //try to get internal member
+                        memberInfo = itemType.GetProperty(actual, BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.GetProperty);
+                        if (memberInfo == null)
+                        {
+                            log.WriteLine("Object {0} doesn't have a property {1}.", itemType.Name, actual);
+                            continue;
+                        }
+                    }
                         memberInfo.SetValue(item, value.Trim());
                 }
                 return log.ToString();
