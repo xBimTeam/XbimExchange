@@ -221,13 +221,13 @@ namespace Xbim.COBie.Client
 
             // Export
             LogBackground(String.Format("Formatting as XLS using {0} template...", Path.GetFileName(parameters.TemplateFile)));
-            COBieXLSSerialiser serialiser = new COBieXLSSerialiser(outputFile, parameters.TemplateFile);
+            COBieXLSXSerialiser serialiser = new COBieXLSXSerialiser(outputFile, parameters.TemplateFile);
             serialiser.Excludes = UserFilters;
             serialiser.Serialise(fedWorkBook, ValidationTemplate);
 
             LogBackground(String.Format("Export Complete: {0}", outputFile));
 
-            Process.Start(outputFile);
+            Process.Start(serialiser.FileName);
 
             LogBackground("Finished Federation COBie Generation");
         }
@@ -247,13 +247,13 @@ namespace Xbim.COBie.Client
 
             // Export
             LogBackground(String.Format("Formatting as XLS using {0} template...", Path.GetFileName(parameters.TemplateFile)));
-            COBieXLSSerialiser serialiser = new COBieXLSSerialiser(outputFile, parameters.TemplateFile);
+            COBieXLSXSerialiser serialiser = new COBieXLSXSerialiser(outputFile, parameters.TemplateFile);
             serialiser.Excludes = UserFilters;
             builder.Export(serialiser);
 
             LogBackground(String.Format("Export Complete: {0}", outputFile));
 
-            Process.Start(outputFile);
+            Process.Start(serialiser.FileName);
 
             LogBackground("Finished COBie Generation");
         }
@@ -372,13 +372,13 @@ namespace Xbim.COBie.Client
 
             // Export
             LogBackground(String.Format("Formatting as XLS using {0} template...", Path.GetFileName(parameters.TemplateFile)));
-            COBieXLSSerialiser serialiser = new COBieXLSSerialiser(parameters.ModelFile, parameters.TemplateFile);
+            COBieXLSXSerialiser serialiser = new COBieXLSXSerialiser(parameters.ModelFile, parameters.TemplateFile);
             serialiser.Excludes = UserFilters;
             serialiser.Serialise(Workbook, ValidationTemplate);
 
             LogBackground(String.Format("Export Complete: {0}", parameters.ModelFile));
 
-            Process.Start(parameters.ModelFile);
+            Process.Start(serialiser.FileName);
 
             LogBackground("Finished COBie Validation");
 
