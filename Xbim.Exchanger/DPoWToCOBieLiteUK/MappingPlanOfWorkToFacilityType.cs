@@ -96,14 +96,10 @@ namespace XbimExchanger.DPoWToCOBieLiteUK
 
             //get project attributes which are convertable to COBieLite facility
             bool converted;
-            target.AreaUnits = ConvertIdentEnum(sProject.AreaUnits, AreaUnit.squaremeters,
-                out converted);
-            target.CurrencyUnit = ConvertIdentEnum(sProject.CurrencyUnits,
-                CurrencyUnit.GBP, out converted);
-            target.LinearUnits = ConvertIdentEnum(sProject.LinearUnits,
-                LinearUnit.millimeters, out converted);
-            target.VolumeUnits = ConvertIdentEnum(sProject.VolumeUnits,
-                VolumeUnit.cubicmeters, out converted);
+            target.AreaUnitsCustom = sProject.AreaUnits.ToString();
+            target.CurrencyUnitCustom = sProject.CurrencyUnits.ToString();
+            target.LinearUnitsCustom = sProject.LinearUnits.ToString();
+            target.VolumeUnitsCustom = sProject.VolumeUnits.ToString();
 
             //add project free attributes to facility
             var projAttrs = sProject.GetCOBieAttributes();

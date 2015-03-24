@@ -25,12 +25,12 @@ namespace Tests
                     {
                         new Category {Code = "Bd_34_54", Description = "Schools", Classification = "Sample"}
                     },
-                ExternalId = System.Guid.NewGuid().ToString(),
+                ExternalId = Guid.NewGuid().ToString(),
                 AreaUnits = AreaUnit.squaremeters,
                 CurrencyUnit = CurrencyUnit.GBP,
                 LinearUnits = LinearUnit.millimeters,
-                AreaMeasurement = "NRM",
                 VolumeUnits = VolumeUnit.cubicmeters,
+                AreaMeasurement = "NRM",
                 Phase = "Phase A",
                 Description = "New facility description",
                 Name = "Ellison Building",
@@ -278,6 +278,8 @@ namespace Tests
             string msg;
             var facility = Facility.ReadCobie("2012-03-23-Duplex-Design.xlsx", out msg);
             facility.WriteJson("..\\..\\2012-03-23-Duplex-Design.cobielite.json", true);
+
+            Assert.AreEqual(AreaUnit.squaremeters, facility.AreaUnits);
         }
     }
 }

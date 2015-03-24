@@ -335,7 +335,7 @@ namespace Xbim.COBieLiteUK
                     if (memberInfo == null)
                         log.WriteLine("Object {0} doesn't have a property {1}.", itemType.Name, actual);
                     else
-                        memberInfo.SetValue(item, value);
+                        memberInfo.SetValue(item, value.Trim());
                 }
                 return log.ToString();
             }
