@@ -280,6 +280,7 @@ namespace Tests
             facility.WriteJson("..\\..\\2012-03-23-Duplex-Design.cobielite.json", true);
 
             Assert.AreEqual(AreaUnit.squaremeters, facility.AreaUnits);
+            Assert.IsTrue(String.IsNullOrEmpty(msg));
         }
     }
 }

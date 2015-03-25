@@ -364,7 +364,7 @@ namespace Xbim.COBieLiteUK
 
             //set the value if this is the last part of the path
             if (String.IsNullOrEmpty(rest))
-                SetSimpleValue(objPropertInfo, obj, cell);
+                SetSimpleValue(objPropertInfo, obj, cell, log);
             //or call this function recursively on the inner member
             else
             {
@@ -403,7 +403,7 @@ namespace Xbim.COBieLiteUK
             return log.ToString();
         }
 
-        private static void SetSimpleValue(PropertyInfo info, object obj, ICell cell)
+        private static void SetSimpleValue(PropertyInfo info, object obj, ICell cell, TextWriter log)
         {
             var type = info.PropertyType;
             type = type.IsGenericType && type.GetGenericTypeDefinition() == typeof (Nullable<>)
@@ -424,8 +424,13 @@ namespace Xbim.COBieLiteUK
                     case CellType.Boolean:
                         value = cell.BooleanCellValue.ToString();
                         break;
+                    default:
+                        log.WriteLine("There is no suitable value for {0} in cell {1}{2}, sheet {3}",
+                            info.Name, CellReference.ConvertNumToColString(cell.ColumnIndex), cell.RowIndex + 1, cell.Sheet.SheetName);
+                        break;
                 }
                 info.SetValue(obj, value);
+                return;
             }
 
             if (type == typeof (DateTime))
@@ -441,8 +446,13 @@ namespace Xbim.COBieLiteUK
                             //set to default value according to specification
                             date = DateTime.Parse("1900-12-31T23:59:59", null, DateTimeStyles.RoundtripKind);
                         break;
+                    default:
+                        log.WriteLine("There is no suitable value for {0} in cell {1}{2}, sheet {3}",
+                            info.Name, CellReference.ConvertNumToColString(cell.ColumnIndex), cell.RowIndex + 1, cell.Sheet.SheetName);
+                        break;
                 }
                 info.SetValue(obj, date);
+                return;
             }
 
             if (type == typeof (double))
@@ -457,7 +467,12 @@ namespace Xbim.COBieLiteUK
                         if (double.TryParse(cell.StringCellValue, out d))
                             info.SetValue(obj, d);
                         break;
+                    default:
+                        log.WriteLine("There is no suitable value for {0} in cell {1}{2}, sheet {3}",
+                            info.Name, CellReference.ConvertNumToColString(cell.ColumnIndex), cell.RowIndex + 1, cell.Sheet.SheetName);
+                        break;
                 }
+                return;
             }
 
             if (type == typeof (int))
@@ -472,8 +487,56 @@ namespace Xbim.COBieLiteUK
                         if (int.TryParse(cell.StringCellValue, out i))
                             info.SetValue(obj, i);
                         break;
+                    default:
+                        log.WriteLine("There is no suitable value for {0} in cell {1}{2}, sheet {3}",
+                            info.Name, CellReference.ConvertNumToColString(cell.ColumnIndex), cell.RowIndex + 1, cell.Sheet.SheetName);
+                        break;
+                }
+                return;
+            }
+
+            //enumeration
+            if (type.IsEnum)
+            {
+                if (cell.CellType != CellType.String)
+                {
+                    log.WriteLine("There is no suitable value for {0} in cell {1}{2}, sheet {3}",
+                            info.Name, CellReference.ConvertNumToColString(cell.ColumnIndex), cell.RowIndex + 1, cell.Sheet.SheetName);
+                    return;
+                }
+                try
+                {
+                    //try to use aliases
+                    var enumMembers = type.GetFields();
+                    foreach (var member in from member in enumMembers
+                        let alias = member.GetCustomAttributes<AliasAttribute>()
+                            .FirstOrDefault(
+                                a =>
+                                    String.Equals(a.Value, cell.StringCellValue,
+                                        StringComparison.CurrentCultureIgnoreCase))
+                        where alias != null
+                        select member)
+                    {
+                        var enumObj = Activator.CreateInstance(type);
+                        var enumVal = member.GetValue(enumObj);
+                        info.SetValue(obj, enumVal);
+                        return;
+                    }
+
+                    //if there was no alias try to parse the value
+                    var val = Enum.Parse(type, cell.StringCellValue, true);
+                    info.SetValue(obj, val);
+                    return;
+                }
+                catch (Exception)
+                {
+                    log.WriteLine("There is no suitable value for {0} in cell {1}{2}, sheet {3}",
+                            info.Name, CellReference.ConvertNumToColString(cell.ColumnIndex), cell.RowIndex + 1, cell.Sheet.SheetName);
                 }
             }
+
+            //if not suitable type was found, report it as a bug
+            throw new Exception("Unsupported type " + type.Name + " for value '" + cell.ToString() + "'");
         }
 
         private static IEnumerable<MappingAttribute> GetMapping(Type type, string mapping)
