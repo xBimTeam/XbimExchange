@@ -56,7 +56,7 @@ namespace SerialisationHelper
                 {
 // ReSharper disable UnusedVariable
                     var a = new XmlSerializer(typeof (Xbim.COBieLite.FacilityType));
-                    var b = new XmlSerializer(typeof (Xbim.COBieLiteUK.FacilityType));
+                    // var b = new XmlSerializer(typeof (Xbim.COBieLiteUK.FacilityType));
 // ReSharper restore UnusedVariable  
                 }
                 catch (Exception exception)
