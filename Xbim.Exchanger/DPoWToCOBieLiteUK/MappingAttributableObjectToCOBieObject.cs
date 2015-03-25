@@ -6,7 +6,7 @@ using Attribute = Xbim.COBieLiteUK.Attribute;
 
 namespace XbimExchanger.DPoWToCOBieLiteUK
 {
-    abstract class MappingAttributableObjectToCOBieObject<TFrom, TTo> : DPoWToCOBieLiteUKMapping<TFrom, TTo> where TFrom:DPoWAttributableObject where TTo : CobieObject, new()
+    abstract class MappingAttributableObjectToCOBieObject<TFrom, TTo> : DpoWtoCoBieLiteUkMapping<TFrom, TTo> where TFrom:DPoWAttributableObject where TTo : CobieObject, new()
     {
         protected override TTo Mapping(TFrom source, TTo target)
         {

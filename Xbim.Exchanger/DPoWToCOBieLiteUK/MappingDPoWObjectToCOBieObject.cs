@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Xbim.COBieLiteUK;
 using Xbim.DPoW;
 using Attribute = Xbim.COBieLiteUK.Attribute;
+using ProjectStage = Xbim.DPoW.ProjectStage;
 
 namespace XbimExchanger.DPoWToCOBieLiteUK
 {
@@ -19,11 +20,13 @@ namespace XbimExchanger.DPoWToCOBieLiteUK
             base.Mapping(sObject, tObject);
 
             tObject.ExternalId = sObject.Id.ToString();
+            tObject.ExternalSystem = "DPoW";
             tObject.Name = sObject.Name;
             tObject.Description = sObject.Description;
 
             var suffix = sObject is Xbim.DPoW.AssetType ? ((sObject as Xbim.DPoW.AssetType).Variant ?? "") : "";
-            tObject.Category = Exchanger.SourceRepository.GetEncodedClassification(sObject.ClassificationReferenceIds, suffix);
+            if(tObject.Categories == null) tObject.Categories = new List<Category>();
+            tObject.Categories.AddRange(Exchanger.SourceRepository.GetEncodedClassification(sObject.ClassificationReferenceIds, suffix));
 
             
             //LOD
@@ -47,8 +50,8 @@ namespace XbimExchanger.DPoWToCOBieLiteUK
                 foreach (var sAttr in loi.RequiredAttributes)
                     tObject.Attributes.Add(new Attribute
                     {
-                        ExternalEntity = sAttr.PropertySetName, 
-                        Category = "required",
+                        ExternalEntity = sAttr.PropertySetName,
+                        Categories = new List<Category> { new Category{ Code = "required" , Classification = "DPoW"} },
                         Name = sAttr.Name, 
                         Description = sAttr.Description,
                     });
@@ -65,6 +68,14 @@ namespace XbimExchanger.DPoWToCOBieLiteUK
                     jMap.AddMapping(job, issue);
                     tObject.Issues.Add(issue);
                 }
+            }
+
+            //project stage
+            var stage = Exchanger.Context as ProjectStage;
+            if (stage != null)
+            {
+                if (tObject.ProjectStages == null) tObject.ProjectStages = new List<ProjectStageKey>();
+                tObject.ProjectStages.Add(new ProjectStageKey{ Name = stage.Name });
             }
 
             return tObject;

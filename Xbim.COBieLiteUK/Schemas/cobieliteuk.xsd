@@ -7,12 +7,13 @@
   <!--Begin ProjectStage related content-->
   <xs:complexType name="ProjectStage">
     <xs:annotation>
+      <xs:appinfo source="parent">Facility</xs:appinfo>
       <xs:appinfo source="sheet">UK2016|Project</xs:appinfo>
       <!--mapping, column, header, required/optional, list/item, pick/-, path-->
       <xs:appinfo source="mapping">UK2016|A|Name          |required|item|-                    |Name</xs:appinfo>
       <xs:appinfo source="mapping">UK2016|B|CreatedBy     |required|item|-                    |CreatedBy.Email</xs:appinfo>
       <xs:appinfo source="mapping">UK2016|C|CreatedOn     |required|item|-                    |CreatedOn</xs:appinfo>
-      <xs:appinfo source="mapping">UK2016|D|Category      |required|item|Category-ProjectStage|Category</xs:appinfo>
+      <xs:appinfo source="mapping">UK2016|D|Category      |required|list|Category-ProjectStage|Categories.CategoryString</xs:appinfo>
       <xs:appinfo source="mapping">UK2016|E|Description   |optional|item|-                    |Description</xs:appinfo>
       <xs:appinfo source="mapping">UK2016|F|ExtSystem     |optional|item|-                    |ExternalSystem</xs:appinfo>
       <xs:appinfo source="mapping">UK2016|G|ExtObject     |optional|item|-                    |ExternalEntity</xs:appinfo>
@@ -64,7 +65,7 @@
       <xs:appinfo source="mapping">UK2012|D|SheetName|required|item|-|parent</xs:appinfo>
       <xs:appinfo source="mapping">UK2012|E|ParentName|required|item|-|parent.Name</xs:appinfo>
       <xs:appinfo source="mapping">UK2012|F|ChildNames|required|list|-|ChildAssets.Name</xs:appinfo>
-      <xs:appinfo source="mapping">UK2012|G|AssemblyType|optional|item|AssemblyType|Category</xs:appinfo>
+      <xs:appinfo source="mapping">UK2012|G|AssemblyType|optional|list|AssemblyType|Categories.CategoryString</xs:appinfo>
       <xs:appinfo source="mapping">UK2012|H|ExtSystem|optional|item|-|ExternalSystem</xs:appinfo>
       <xs:appinfo source="mapping">UK2012|I|ExtObject|optional|item|-|ExternalEntity</xs:appinfo>
       <xs:appinfo source="mapping">UK2012|J|ExtIdentifier|optional|item|-|ExternalId</xs:appinfo>
@@ -90,7 +91,7 @@
       <xs:appinfo source="mapping">UK2012|D|SheetName|required|item|-|parent</xs:appinfo>
       <xs:appinfo source="mapping">UK2012|E|ParentName|required|item|-|parent.Name</xs:appinfo>
       <xs:appinfo source="mapping">UK2012|F|ChildNames|required|list|-|ChildAssetTypes.Name</xs:appinfo>
-      <xs:appinfo source="mapping">UK2012|G|AssemblyType|optional|item|AssemblyType|Category</xs:appinfo>
+      <xs:appinfo source="mapping">UK2012|G|AssemblyType|optional|list|AssemblyType|Categories.CategoryString</xs:appinfo>
       <xs:appinfo source="mapping">UK2012|H|ExtSystem|optional|item|-|ExternalSystem</xs:appinfo>
       <xs:appinfo source="mapping">UK2012|I|ExtObject|optional|item|-|ExternalEntity</xs:appinfo>
       <xs:appinfo source="mapping">UK2012|J|ExtIdentifier|optional|item|-|ExternalId</xs:appinfo>
@@ -111,6 +112,7 @@
   <!--Begin Asset related content-->
   <xs:complexType name="Asset">
     <xs:annotation>
+      <xs:appinfo source="parent">AssetType</xs:appinfo>
       <xs:appinfo source="sheet">UK2012|Component</xs:appinfo>
       <!--mapping, column, header, required/optional, list/item, pick/-, path-->
       <xs:appinfo source="mapping">UK2012|A|Name|required|item|-|Name</xs:appinfo>
@@ -171,14 +173,15 @@
   <!--Begin AssetType related content-->
   <xs:complexType name="AssetType">
     <xs:annotation>
+      <xs:appinfo source="parent">Facility</xs:appinfo>
       <xs:appinfo source="sheet">UK2012|Type</xs:appinfo>
       <!--mapping, column, header, required/optional, list/item, pick/-, path-->
       <xs:appinfo source="mapping">UK2012|A|Name|required|item|-|Name</xs:appinfo>
       <xs:appinfo source="mapping">UK2012|B|CreatedBy|required|item|-|CreatedBy.Email</xs:appinfo>
       <xs:appinfo source="mapping">UK2012|C|CreatedOn|required|item|-|CreatedOn</xs:appinfo>
-      <xs:appinfo source="mapping">UK2012|D|Category|required|item|Category-Product|Category</xs:appinfo>
+      <xs:appinfo source="mapping">UK2012|D|Category|required|list|Category-Product|Categories.CategoryString</xs:appinfo>
       <xs:appinfo source="mapping">UK2012|E|Description|required|item|-|Description</xs:appinfo>
-      <xs:appinfo source="mapping">UK2012|F|AssetType|required|item|AssetType|AssetType</xs:appinfo>
+      <xs:appinfo source="mapping">UK2012|F|AssetType|required|item|AssetType|AssetTypeName</xs:appinfo>
       <xs:appinfo source="mapping">UK2012|G|Manufacturer|required|item|-|Manufacturer.Email</xs:appinfo>
       <xs:appinfo source="mapping">UK2012|H|ModelNumber|required|item|-|ModelNumber</xs:appinfo>
       <xs:appinfo source="mapping">UK2012|I|WarrantyGuarantorParts|required|item|-|Warranty.GuarantorParts.Email</xs:appinfo>
@@ -215,7 +218,7 @@
     <xs:complexContent>
       <xs:extension base="cobielite:CobieObject">
         <xs:sequence>
-          <xs:element name="AssetType" type="xs:string" minOccurs="1" />
+          <xs:element name="AssetTypeName" type="xs:string" minOccurs="1" />
           <xs:element name="Manufacturer" type="cobielite:ContactKey" minOccurs="1" />
           <xs:element name="ModelNumber" type="xs:string" minOccurs="1" />
           <xs:element name="Warranty" type="cobielite:Warranty" minOccurs="1" />
@@ -291,7 +294,7 @@
       <xs:appinfo source="mapping">UK2012|A|Name|required|item|-|Name</xs:appinfo>
       <xs:appinfo source="mapping">UK2012|B|CreatedBy|required|item|-|CreatedBy.Email</xs:appinfo>
       <xs:appinfo source="mapping">UK2012|C|CreatedOn|required|item|-|CreatedOn</xs:appinfo>
-      <xs:appinfo source="mapping">UK2012|D|Category|required|item|StageType|Category</xs:appinfo>
+      <xs:appinfo source="mapping">UK2012|D|Category|required|list|StageType|Categories.CategoryString</xs:appinfo>
       <xs:appinfo source="mapping">UK2012|E|SheetName|required|item|SheetType|parent</xs:appinfo>
       <xs:appinfo source="mapping">UK2012|F|RowName|required|item|-|parent.Name</xs:appinfo>
       <xs:appinfo source="mapping">UK2012|G|Value|required|item|-|Value.Value</xs:appinfo>
@@ -300,7 +303,7 @@
       <xs:appinfo source="mapping">UK2012|J|ExtObject|optional|item|-|ExternalEntity</xs:appinfo>
       <xs:appinfo source="mapping">UK2012|K|ExtIdentifier|optional|item|-|ExternalId</xs:appinfo>
       <xs:appinfo source="mapping">UK2012|L|Description|optional|item|-|Description</xs:appinfo>
-      <xs:appinfo source="mapping">UK2012|M|AllowedValues|optional|list|-|Value.AllowedValues</xs:appinfo>
+      <xs:appinfo source="mapping">UK2012|M|AllowedValues|optional|list|-|Value.AllowedValuesString</xs:appinfo>
       <xs:documentation>Information about a specific Attribute.</xs:documentation>
     </xs:annotation>
     <xs:complexContent>
@@ -332,7 +335,7 @@
       <xs:appinfo source="mapping">UK2012|A|Name|required|item|-|Name</xs:appinfo>
       <xs:appinfo source="mapping">UK2012|B|CreatedBy|required|item|-|CreatedBy.Email</xs:appinfo>
       <xs:appinfo source="mapping">UK2012|C|CreatedOn|required|item|-|CreatedOn</xs:appinfo>
-      <xs:appinfo source="mapping">UK2012|D|ConnectionType|required|item|ConnectionType|Category</xs:appinfo>
+      <xs:appinfo source="mapping">UK2012|D|ConnectionType|required|list|ConnectionType|Categories.CategoryString</xs:appinfo>
       <xs:appinfo source="mapping">UK2012|E|SheetName|optional|item|SheetType|parent</xs:appinfo>
       <xs:appinfo source="mapping">UK2012|F|RowName1|required|item|-|parent.Name</xs:appinfo>
       <xs:appinfo source="mapping">UK2012|G|RowName2|required|item|-|ConnectedTo.Name</xs:appinfo>
@@ -366,12 +369,13 @@
   <!--Begin Contact Related Content-->
   <xs:complexType name="Contact">
     <xs:annotation>
+      <xs:appinfo source="parent">Facility</xs:appinfo>
       <xs:appinfo source="sheet">UK2012|Contact</xs:appinfo>
       <!--mapping, column, header, required/optional, list/item, pick/-, path-->
       <xs:appinfo source="mapping">UK2012|A|Email|required|item|-|Email</xs:appinfo>
       <xs:appinfo source="mapping">UK2012|B|CreatedBy|required|item|-|CreatedBy.Email</xs:appinfo>
       <xs:appinfo source="mapping">UK2012|C|CreatedOn|required|item|-|CreatedOn</xs:appinfo>
-      <xs:appinfo source="mapping">UK2012|D|Category|required|item|Category-Role|Category</xs:appinfo>
+      <xs:appinfo source="mapping">UK2012|D|Category|required|list|Category-Role|Categories.CategoryString</xs:appinfo>
       <xs:appinfo source="mapping">UK2012|E|Company|required|item|-|Company</xs:appinfo>
       <xs:appinfo source="mapping">UK2012|F|Phone|required|item|-|Phone</xs:appinfo>
       <xs:appinfo source="mapping">UK2012|G|ExtSystem|optional|item|-|ExternalSystem</xs:appinfo>
@@ -435,7 +439,7 @@
       <xs:appinfo source="mapping">UK2012|A|Name|required|item|-|Name</xs:appinfo>
       <xs:appinfo source="mapping">UK2012|B|CreatedBy|required|item|-|CreatedBy.Email</xs:appinfo>
       <xs:appinfo source="mapping">UK2012|C|CreatedOn|required|item|-|CreatedOn</xs:appinfo>
-      <xs:appinfo source="mapping">UK2012|D|Category|required|item|DocumentType|Category</xs:appinfo>
+      <xs:appinfo source="mapping">UK2012|D|Category|required|list|DocumentType|Categories.CategoryString</xs:appinfo>
       <xs:appinfo source="mapping">UK2012|E|ApprovalBy|required|item|ApprovalBy|ApprovalBy.Email</xs:appinfo>
       <xs:appinfo source="mapping">UK2012|F|Stage|required|item|StageType|Stage</xs:appinfo>
       <xs:appinfo source="mapping">UK2012|G|SheetName|required|item|SheetType|parent</xs:appinfo>
@@ -476,13 +480,13 @@
       <xs:appinfo source="mapping">UK2012|A|Name|required|item|-|Name</xs:appinfo>
       <xs:appinfo source="mapping">UK2012|B|CreatedBy|required|item|-|CreatedBy.Email</xs:appinfo>
       <xs:appinfo source="mapping">UK2012|C|CreatedOn|required|item|-|CreatedOn</xs:appinfo>
-      <xs:appinfo source="mapping">UK2012|D|Category|required|item|Category-Facility|Category</xs:appinfo>
+      <xs:appinfo source="mapping">UK2012|D|Category|required|list|Category-Facility|Categories.CategoryString</xs:appinfo>
       <xs:appinfo source="mapping">UK2012|E|ProjectName|required|item|-|Project.Name</xs:appinfo>
       <xs:appinfo source="mapping">UK2012|F|SiteName|required|item|-|Site.Name</xs:appinfo>
-      <xs:appinfo source="mapping">UK2012|G|LinearUnits|required|item|LinearUnits|LinearUnits</xs:appinfo>
-      <xs:appinfo source="mapping">UK2012|H|AreaUnits|required|item|AreaUnits|AreaUnits</xs:appinfo>
-      <xs:appinfo source="mapping">UK2012|I|VolumeUnits|required|item|VolumeUnits|VolumeUnits</xs:appinfo>
-      <xs:appinfo source="mapping">UK2012|J|CurrencyUnit|required|item|CostUnit|CurrencyUnit</xs:appinfo>
+      <xs:appinfo source="mapping">UK2012|G|LinearUnits|required|item|LinearUnits|LinearUnitsCustom</xs:appinfo>
+      <xs:appinfo source="mapping">UK2012|H|AreaUnits|required|item|AreaUnits|AreaUnitsCustom</xs:appinfo>
+      <xs:appinfo source="mapping">UK2012|I|VolumeUnits|required|item|VolumeUnits|VolumeUnitsCustom</xs:appinfo>
+      <xs:appinfo source="mapping">UK2012|J|CurrencyUnit|required|item|CostUnit|CurrencyUnitCustom</xs:appinfo>
       <xs:appinfo source="mapping">UK2012|K|AreaMeasurement|required|item|-|AreaMeasurement</xs:appinfo>
       <xs:appinfo source="mapping">UK2012|L|ExternalSystem|optional|item|-|ExternalSystem</xs:appinfo>
       <xs:appinfo source="mapping">UK2012|M|ExternalProjectObject|optional|item|-|Project.ExternalEntity</xs:appinfo>
@@ -506,14 +510,20 @@
     <xs:complexContent>
       <xs:extension base="cobielite:CobieObject">
         <xs:sequence>
-          <xs:element name="Version" type="xs:string" minOccurs="1" fixed="COBieLiteUK_2015" />
+          <xs:element name="Metadata" type="cobielite:Metadata" minOccurs="1"/>
           <xs:element name="Project" type="cobielite:Project" minOccurs="1" maxOccurs="1" />
           <xs:element name="Site" type="cobielite:Site" minOccurs="1" maxOccurs="1" />
-
-          <xs:element name="LinearUnits" type="cobielite:LinearUnit" minOccurs="1" nillable="true" />
-          <xs:element name="AreaUnits" type="cobielite:AreaUnit" minOccurs="1" nillable="true" />
-          <xs:element name="VolumeUnits" type="cobielite:VolumeUnit" minOccurs="1" nillable="true" />
-          <xs:element name="CurrencyUnit" type="cobielite:CurrencyUnit" minOccurs="1" nillable="true" />
+          
+          <!-- Units -->
+          <xs:element name="LinearUnits" type="cobielite:LinearUnit" minOccurs="1" />
+          <xs:element name="LinearUnitsCustom" type="xs:string" minOccurs="1" nillable="true" />
+          <xs:element name="AreaUnits" type="cobielite:AreaUnit" minOccurs="1" />
+          <xs:element name="AreaUnitsCustom" type="xs:string" minOccurs="1" nillable="true" />
+          <xs:element name="VolumeUnits" type="cobielite:VolumeUnit" minOccurs="1" />
+          <xs:element name="VolumeUnitsCustom" type="xs:string" minOccurs="1" nillable="true" />
+          <xs:element name="CurrencyUnit" type="cobielite:CurrencyUnit" minOccurs="1" />
+          <xs:element name="CurrencyUnitCustom" type="xs:string" minOccurs="1" nillable="true" />
+          
           <xs:element name="AreaMeasurement" type="xs:string" minOccurs="1" />
           <xs:element name="Phase" type="xs:string" minOccurs="0" />
 
@@ -557,12 +567,13 @@
   <!--Begin Floor Related Content-->
   <xs:complexType name="Floor">
     <xs:annotation>
+      <xs:appinfo source="parent">Facility</xs:appinfo>
       <xs:appinfo source="sheet">UK2012|Floor</xs:appinfo>
       <!--mapping, column, header, required/optional, list/item, pick/-, path-->
       <xs:appinfo source="mapping">UK2012|A|Name|required|item|-|Name</xs:appinfo>
       <xs:appinfo source="mapping">UK2012|B|CreatedBy|required|item|-|CreatedBy.Email</xs:appinfo>
       <xs:appinfo source="mapping">UK2012|C|CreatedOn|required|item|-|CreatedOn</xs:appinfo>
-      <xs:appinfo source="mapping">UK2012|D|Category|required|item|FloorType|Category</xs:appinfo>
+      <xs:appinfo source="mapping">UK2012|D|Category|required|list|FloorType|Categories.CategoryString</xs:appinfo>
       <xs:appinfo source="mapping">UK2012|E|ExtSystem|optional|item|-|ExternalSystem</xs:appinfo>
       <xs:appinfo source="mapping">UK2012|F|ExtObject|optional|item|-|ExternalEntity</xs:appinfo>
       <xs:appinfo source="mapping">UK2012|G|ExtIdentifier|optional|item|-|ExternalId</xs:appinfo>
@@ -601,7 +612,7 @@
       <xs:appinfo source="mapping">UK2012|A|Name|required|item|-|Name</xs:appinfo>
       <xs:appinfo source="mapping">UK2012|B|CreatedBy|required|item|-|CreatedBy.Email</xs:appinfo>
       <xs:appinfo source="mapping">UK2012|C|CreatedOn|required|item|-|CreatedOn</xs:appinfo>
-      <xs:appinfo source="mapping">UK2012|D|Type|required|item|IssueCategory|Category</xs:appinfo>
+      <xs:appinfo source="mapping">UK2012|D|Type|required|list|IssueCategory|Categories.CategoryString</xs:appinfo>
       <xs:appinfo source="mapping">UK2012|E|Risk|required|item|IssueRisk|Risk</xs:appinfo>
       <xs:appinfo source="mapping">UK2012|F|Chance|required|item|IssueChance|Chance</xs:appinfo>
       <xs:appinfo source="mapping">UK2012|G|Impact|required|item|IssueImpact|Impact</xs:appinfo>
@@ -647,7 +658,7 @@
       <xs:appinfo source="mapping">UK2012|A|Name|required|item|-|Name</xs:appinfo>
       <xs:appinfo source="mapping">UK2012|B|CreatedBy|required|item|-|CreatedBy.Email</xs:appinfo>
       <xs:appinfo source="mapping">UK2012|C|CreatedOn|required|item|-|CreatedOn</xs:appinfo>
-      <xs:appinfo source="mapping">UK2012|D|ImpactType|required|item|ImpactType|Category</xs:appinfo>
+      <xs:appinfo source="mapping">UK2012|D|ImpactType|required|list|ImpactType|Categories.CategoryString</xs:appinfo>
       <xs:appinfo source="mapping">UK2012|E|ImpactStage|required|item|ImpactStage|ImpactStage</xs:appinfo>
       <xs:appinfo source="mapping">UK2012|F|SheetName|required|item|SheetType|parent</xs:appinfo>
       <xs:appinfo source="mapping">UK2012|G|RowName|required|item|-|parent.Name</xs:appinfo>
@@ -666,8 +677,8 @@
       <xs:extension base="cobielite:CobieObject">
         <xs:sequence>
           <xs:element name="ImpactStage" type="xs:string" minOccurs="1" />
-          <xs:element name="Value" type="xs:string" minOccurs="0" />
-          <xs:element name="ImpactUnit" type="xs:string" minOccurs="0" />
+          <xs:element name="Value" type="xs:string" minOccurs="1" />
+          <xs:element name="ImpactUnit" type="xs:string" minOccurs="1" />
           <xs:element name="LeadInTime" type="xs:double" minOccurs="0" nillable="true" />
           <xs:element name="Duration" type="xs:double" minOccurs="0" nillable="true" />
           <xs:element name="LeadOutTime" type="xs:double" minOccurs="0" nillable="true" />
@@ -685,12 +696,13 @@
   <!--Begin Job Related Content-->
   <xs:complexType name="Job">
     <xs:annotation>
+      <xs:appinfo source="parent">AssetType</xs:appinfo>
       <xs:appinfo source="sheet">UK2012|Job</xs:appinfo>
       <!--mapping, column, header, required/optional, list/item, pick/-, path-->
       <xs:appinfo source="mapping">UK2012|A|Name|required|item|-|Name</xs:appinfo>
       <xs:appinfo source="mapping">UK2012|B|CreatedBy|required|item|-|CreatedBy.Email</xs:appinfo>
       <xs:appinfo source="mapping">UK2012|C|CreatedOn|required|item|-|CreatedOn</xs:appinfo>
-      <xs:appinfo source="mapping">UK2012|D|Category|required|item|JobType|Category</xs:appinfo>
+      <xs:appinfo source="mapping">UK2012|D|Category|required|list|JobType|Categories.CategoryString</xs:appinfo>
       <xs:appinfo source="mapping">UK2012|E|Status|required|item|JobStatusType|Status</xs:appinfo>
       <xs:appinfo source="mapping">UK2012|F|TypeName|required|item|-|parent.Name</xs:appinfo>
       <xs:appinfo source="mapping">UK2012|G|Description|required|item|-|Description</xs:appinfo>
@@ -723,6 +735,8 @@
           <xs:element name="FrequencyUnit" type="cobielite:DurationUnit" minOccurs="1" nillable="true" />
           <xs:element name="TaskNumber" type="xs:string" minOccurs="0" />
           <xs:element name="Priors" type="cobielite:JobKeyCollection" minOccurs="0" maxOccurs="1" />
+          
+          <!-- Lists -->
           <xs:element name="Resources" type="cobielite:ResourceKeyCollection" minOccurs="0" maxOccurs="1" />
         </xs:sequence>
       </xs:extension>
@@ -750,12 +764,13 @@
   <!--Begin Resource Related Content-->
   <xs:complexType name="Resource">
     <xs:annotation>
+      <xs:appinfo source="parent">Facility</xs:appinfo>
       <xs:appinfo source="sheet">UK2012|Resource</xs:appinfo>
       <!--mapping, column, header, required/optional, list/item, pick/-, path-->
       <xs:appinfo source="mapping">UK2012|A|Name|required|item|-|Name</xs:appinfo>
       <xs:appinfo source="mapping">UK2012|B|CreatedBy|required|item|-|CreatedBy.Email</xs:appinfo>
       <xs:appinfo source="mapping">UK2012|C|CreatedOn|required|item|-|CreatedOn</xs:appinfo>
-      <xs:appinfo source="mapping">UK2012|D|Category|required|item|ResourceType|Category</xs:appinfo>
+      <xs:appinfo source="mapping">UK2012|D|Category|required|list|ResourceType|Categories.CategoryString</xs:appinfo>
       <xs:appinfo source="mapping">UK2012|E|ExtSystem|optional|item|-|ExternalSystem</xs:appinfo>
       <xs:appinfo source="mapping">UK2012|F|ExtObject|optional|item|-|ExternalEntity</xs:appinfo>
       <xs:appinfo source="mapping">UK2012|G|ExtIdentifier|optional|item|-|ExternalId</xs:appinfo>
@@ -796,7 +811,7 @@
       <xs:appinfo source="mapping">UK2012|A|Name|required|item|-|Name</xs:appinfo>
       <xs:appinfo source="mapping">UK2012|B|CreatedBy|required|item|-|CreatedBy.Email</xs:appinfo>
       <xs:appinfo source="mapping">UK2012|C|CreatedOn|required|item|-|CreatedOn</xs:appinfo>
-      <xs:appinfo source="mapping">UK2012|D|Category|required|item|CoordinateType|Category</xs:appinfo>
+      <xs:appinfo source="mapping">UK2012|D|Category|required|list|CoordinateType|Categories.CategoryString</xs:appinfo>
       <xs:appinfo source="mapping">UK2012|E|SheetName|required|item|CoordinateSheet|parent</xs:appinfo>
       <xs:appinfo source="mapping">UK2012|F|RowName|required|item|-|parent.Name</xs:appinfo>
       <xs:appinfo source="mapping">UK2012|G|CoordinateXAxis|required|item|-|X</xs:appinfo>
@@ -808,9 +823,10 @@
       <xs:appinfo source="mapping">UK2012|M|ClockwiseRotation|optional|item|-|Roll</xs:appinfo>
       <xs:appinfo source="mapping">UK2012|N|ElevationalRotation|optional|item|-|Pitch</xs:appinfo>
       <xs:appinfo source="mapping">UK2012|O|YawRotation|optional|item|-|Yaw</xs:appinfo>
-      <xs:appinfo source="mapping">UK2012|P|SizeX|optional|item|-|SizeX</xs:appinfo>
-      <xs:appinfo source="mapping">UK2012|Q|SizeY|optional|item|-|SizeY</xs:appinfo>
-      <xs:appinfo source="mapping">UK2012|R|SizeZ|optional|item|-|SizeZ</xs:appinfo>
+      
+      <xs:appinfo source="mapping">UK2016|P|SizeX|optional|item|-|SizeX</xs:appinfo>
+      <xs:appinfo source="mapping">UK2016|Q|SizeY|optional|item|-|SizeY</xs:appinfo>
+      <xs:appinfo source="mapping">UK2016|R|SizeZ|optional|item|-|SizeZ</xs:appinfo>
     </xs:annotation>
     <xs:complexContent>
       <xs:extension base="cobielite:CobieObject">
@@ -838,12 +854,13 @@
   <!--Begin Space Related Content-->
   <xs:complexType name="Space">
     <xs:annotation>
+      <xs:appinfo source="parent">Floor</xs:appinfo>
       <xs:appinfo source="sheet">UK2012|Space</xs:appinfo>
       <!--mapping, column, header, required/optional, list/item, pick/-, path-->
       <xs:appinfo source="mapping">UK2012|A|Name|required|item|-|Name</xs:appinfo>
       <xs:appinfo source="mapping">UK2012|B|CreatedBy|required|item|-|CreatedBy.Email</xs:appinfo>
       <xs:appinfo source="mapping">UK2012|C|CreatedOn|required|item|-|CreatedOn</xs:appinfo>
-      <xs:appinfo source="mapping">UK2012|D|Category|required|item|Category-Space|Category</xs:appinfo>
+      <xs:appinfo source="mapping">UK2012|D|Category|required|list|Category-Space|Categories.CategoryString</xs:appinfo>
       <xs:appinfo source="mapping">UK2012|E|FloorName|required|item|-|parent.Name</xs:appinfo>
       <xs:appinfo source="mapping">UK2012|F|Description|required|item|-|Description</xs:appinfo>
       <xs:appinfo source="mapping">UK2012|G|ExtSystem|optional|item|-|ExternalSystem</xs:appinfo>
@@ -889,12 +906,13 @@
   <!--Begin Spare Related Content-->
   <xs:complexType name="Spare">
     <xs:annotation>
+      <xs:appinfo source="parent">AssetType</xs:appinfo>
       <xs:appinfo source="sheet">UK2012|Spare</xs:appinfo>
       <!--mapping, column, header, required/optional, list/item, pick/-, path-->
       <xs:appinfo source="mapping">UK2012|A|Name|required|item|-|Name</xs:appinfo>
       <xs:appinfo source="mapping">UK2012|B|CreatedBy|required|item|-|CreatedBy.Email</xs:appinfo>
       <xs:appinfo source="mapping">UK2012|C|CreatedOn|required|item|-|CreatedOn</xs:appinfo>
-      <xs:appinfo source="mapping">UK2012|D|Category|required|item|SpareType|Category</xs:appinfo>
+      <xs:appinfo source="mapping">UK2012|D|Category|required|list|SpareType|Categories.CategoryString</xs:appinfo>
       <xs:appinfo source="mapping">UK2012|E|TypeName|required|item|-|parent.Name</xs:appinfo>
       <xs:appinfo source="mapping">UK2012|F|Suppliers|required|list|-|Suppliers.Email</xs:appinfo>
       <xs:appinfo source="mapping">UK2012|G|ExtSystem|optional|item|-|ExternalSystem</xs:appinfo>
@@ -923,14 +941,15 @@
   <!--End Spare Related Content-->
 
   <!--Begin System Related Content-->
-  <xs:complexType name="SystemType">
+  <xs:complexType name="System">
     <xs:annotation>
+      <xs:appinfo source="parent">Facility</xs:appinfo>
       <xs:appinfo source="sheet">UK2012|System</xs:appinfo>
       <!--mapping, column, header, required/optional, list/item, pick/-, path-->
       <xs:appinfo source="mapping">UK2012|A|Name|required|item|-|Name</xs:appinfo>
       <xs:appinfo source="mapping">UK2012|B|CreatedBy|required|item|-|CreatedBy.Email</xs:appinfo>
       <xs:appinfo source="mapping">UK2012|C|CreatedOn|required|item|-|CreatedOn</xs:appinfo>
-      <xs:appinfo source="mapping">UK2012|D|Category|required|item|Category-Element|Category</xs:appinfo>
+      <xs:appinfo source="mapping">UK2012|D|Category|required|list|Category-Element|Categories.CategoryString</xs:appinfo>
       <xs:appinfo source="mapping">UK2012|E|ComponentNames|required|list|-|Components.Name</xs:appinfo>
       <xs:appinfo source="mapping">UK2012|F|ExtSystem|optional|item|-|ExternalSystem</xs:appinfo>
       <xs:appinfo source="mapping">UK2012|G|ExtObject|optional|item|-|ExternalEntity</xs:appinfo>
@@ -951,7 +970,7 @@
   </xs:complexType>
   <xs:complexType name="SystemCollection">
     <xs:sequence>
-      <xs:element name="System" type="cobielite:SystemType" maxOccurs="unbounded" />
+      <xs:element name="System" type="cobielite:System" maxOccurs="unbounded" />
     </xs:sequence>
   </xs:complexType>
   <!--End System Related Content-->
@@ -959,12 +978,13 @@
   <!--Begin Zone Related Content-->
   <xs:complexType name="Zone">
     <xs:annotation>
+      <xs:appinfo source="parent">Facility</xs:appinfo>
       <xs:appinfo source="sheet">UK2012|Zone</xs:appinfo>
       <!--mapping, column, header, required/optional, list/item, pick/-, path-->
       <xs:appinfo source="mapping">UK2012|A|Name|required|item|-|Name</xs:appinfo>
       <xs:appinfo source="mapping">UK2012|B|CreatedBy|required|item|-|CreatedBy.Email</xs:appinfo>
       <xs:appinfo source="mapping">UK2012|C|CreatedOn|required|item|-|CreatedOn</xs:appinfo>
-      <xs:appinfo source="mapping">UK2012|D|Category|required|item|ZoneType|Category</xs:appinfo>
+      <xs:appinfo source="mapping">UK2012|D|Category|required|list|ZoneType|Categories.CategoryString</xs:appinfo>
       <xs:appinfo source="mapping">UK2012|E|SpaceNames|required|list|-|Spaces.Name</xs:appinfo>
       <xs:appinfo source="mapping">UK2012|F|ExtSystem|optional|item|-|ExternalSystem</xs:appinfo>
       <xs:appinfo source="mapping">UK2012|G|ExtObject|optional|item|-|ExternalEntity</xs:appinfo>
@@ -990,7 +1010,30 @@
   </xs:complexType>
   <!--End Zone Related Content-->
 
-  <!-- Begin CobieObject types -->
+  <!-- Begin COBie metadata -->
+  <xs:complexType name="Metadata">
+    <xs:annotation>
+      <xs:appinfo source="sheet">UK2012|Instruction</xs:appinfo>
+      <xs:appinfo source="mapping">UK2012|1|Title|required|item|-|Title</xs:appinfo>
+      <xs:appinfo source="mapping">UK2012|2|Version|required|item|-|Version</xs:appinfo>
+      <xs:appinfo source="mapping">UK2012|3|Release|required|item|-|Release</xs:appinfo>
+      <xs:appinfo source="mapping">UK2012|4|Status|required|item|-|Status</xs:appinfo>
+      <xs:appinfo source="mapping">UK2012|5|Region|required|item|-|Region</xs:appinfo>
+      <xs:documentation>
+        This object contains metadata about the COBie like its version, target region or status of the data.
+      </xs:documentation>
+    </xs:annotation>
+    <xs:sequence>
+      <xs:element name="Title" type="xs:string"/>
+      <xs:element name="Version" type="xs:int"/>
+      <xs:element name="Release" type="xs:int"/>
+      <xs:element name="Status" type="xs:string"/>
+      <xs:element name="Region" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+  <!-- End COBie metadata-->
+  
+  <!-- Begin CobieObject type -->
   <xs:complexType name="CobieObject" abstract="true">
     <xs:sequence>
       <!--  Common properties  -->
@@ -998,7 +1041,7 @@
       <xs:element name="Description" type="xs:string" minOccurs="0" />
       <xs:element name="CreatedBy" type="cobielite:ContactKey" minOccurs="1" />
       <xs:element name="CreatedOn" type="xs:dateTime" minOccurs="1" nillable="true" />
-      <xs:element name="Category" type="xs:string" minOccurs="0" />
+      <xs:element name="Categories" type="cobielite:CategoryCollection" minOccurs="0" />
 
       <!-- External system identifiers -->
       <xs:element name="ExternalSystem" type="xs:string" minOccurs="0" />
@@ -1020,7 +1063,19 @@
     </xs:sequence>
     <xs:attribute name="KeyType" type="cobielite:EntityType"/>
   </xs:complexType>
-  <!-- End CobieObject types -->
+  <xs:complexType name="Category">
+    <xs:sequence>
+      <xs:element name="Classification" type="xs:string" minOccurs="0"/>
+      <xs:element name="Code" type="xs:string" minOccurs="1"/>
+      <xs:element name="Description" type="xs:string" minOccurs="0"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="CategoryCollection">
+    <xs:sequence>
+      <xs:element name="Category" type="cobielite:Category" minOccurs="0" maxOccurs="unbounded"/>
+    </xs:sequence>
+  </xs:complexType>
+  <!-- End CobieObject type -->
 
   <!-- Begin Attribute values -->
   <xs:complexType name="AttributeValue" abstract="true">
@@ -1050,6 +1105,7 @@
       <xs:extension base="cobielite:AttributeValue">
         <xs:sequence>
           <xs:element name="Value" type="xs:boolean" minOccurs="1" />
+          <xs:element name="AllowedValue" type="xs:boolean" minOccurs="0" nillable="true"/>
         </xs:sequence>
       </xs:extension>
     </xs:complexContent>
@@ -1105,15 +1161,84 @@
       <xs:documentation>Acceptable area units for Facility default units.</xs:documentation>
     </xs:annotation>
     <xs:restriction base="xs:string">
-      <xs:enumeration value="square centimeters" />
-      <xs:enumeration value="square feet" />
-      <xs:enumeration value="square inches" />
-      <xs:enumeration value="square kilometers" />
-      <xs:enumeration value="square meters" />
-      <xs:enumeration value="square miles" />
-      <xs:enumeration value="square millimeters" />
-      <xs:enumeration value="square yards" />
-      <xs:enumeration value="" />
+      <xs:enumeration value="square centimeters" >
+        <xs:annotation>
+          <xs:appinfo source="alias">square centimeters</xs:appinfo>
+          <xs:appinfo source="alias">square centimeter</xs:appinfo>
+          <xs:appinfo source="alias">squarecentimeters</xs:appinfo>
+          <xs:appinfo source="alias">squarecentimeter</xs:appinfo>
+          <xs:appinfo source="alias">cm2</xs:appinfo>
+        </xs:annotation>
+      </xs:enumeration>
+      <xs:enumeration value="square feet" >
+        <xs:annotation>
+          <xs:appinfo source="alias">square feets</xs:appinfo>
+          <xs:appinfo source="alias">square feet</xs:appinfo>
+          <xs:appinfo source="alias">squarefeets</xs:appinfo>
+          <xs:appinfo source="alias">squarefeet</xs:appinfo>
+          <xs:appinfo source="alias">ft2</xs:appinfo>
+        </xs:annotation>
+      </xs:enumeration>
+      <xs:enumeration value="square inches" >
+        <xs:annotation>
+          <xs:appinfo source="alias">square inches</xs:appinfo>
+          <xs:appinfo source="alias">square inch</xs:appinfo>
+          <xs:appinfo source="alias">squareinches</xs:appinfo>
+          <xs:appinfo source="alias">squareinch</xs:appinfo>
+          <xs:appinfo source="alias">in2</xs:appinfo>
+        </xs:annotation>
+      </xs:enumeration>
+      <xs:enumeration value="square kilometers" >
+        <xs:annotation>
+          <xs:appinfo source="alias">square kilometers</xs:appinfo>
+          <xs:appinfo source="alias">square kilometer</xs:appinfo>
+          <xs:appinfo source="alias">squarekilometers</xs:appinfo>
+          <xs:appinfo source="alias">squarekilometer</xs:appinfo>
+          <xs:appinfo source="alias">km2</xs:appinfo>
+        </xs:annotation>
+      </xs:enumeration>
+      <xs:enumeration value="square meters" >
+        <xs:annotation>
+          <xs:appinfo source="alias">square meters</xs:appinfo>
+          <xs:appinfo source="alias">square meter</xs:appinfo>
+          <xs:appinfo source="alias">squaremeters</xs:appinfo>
+          <xs:appinfo source="alias">squaremeter</xs:appinfo>
+          <xs:appinfo source="alias">m2</xs:appinfo>
+        </xs:annotation>
+      </xs:enumeration>
+      <xs:enumeration value="square miles" >
+        <xs:annotation>
+          <xs:appinfo source="alias">square miles</xs:appinfo>
+          <xs:appinfo source="alias">square mile</xs:appinfo>
+          <xs:appinfo source="alias">squaremiles</xs:appinfo>
+          <xs:appinfo source="alias">squaremile</xs:appinfo>
+          <xs:appinfo source="alias">mile2</xs:appinfo>
+        </xs:annotation>
+      </xs:enumeration>
+      <xs:enumeration value="square millimeters" >
+        <xs:annotation>
+          <xs:appinfo source="alias">square milimeters</xs:appinfo>
+          <xs:appinfo source="alias">square milimeter</xs:appinfo>
+          <xs:appinfo source="alias">squaremilimeters</xs:appinfo>
+          <xs:appinfo source="alias">squaremilimeter</xs:appinfo>
+          <xs:appinfo source="alias">mm2</xs:appinfo>
+        </xs:annotation>
+      </xs:enumeration>
+      <xs:enumeration value="square yards" >
+        <xs:annotation>
+          <xs:appinfo source="alias">square yards</xs:appinfo>
+          <xs:appinfo source="alias">square yard</xs:appinfo>
+          <xs:appinfo source="alias">squareyards</xs:appinfo>
+          <xs:appinfo source="alias">squareyard</xs:appinfo>
+          <xs:appinfo source="alias">yd2</xs:appinfo>
+        </xs:annotation>
+      </xs:enumeration>
+      <xs:enumeration value="not defined" >
+        <xs:annotation>
+          <xs:appinfo source="alias">n/a</xs:appinfo>
+        </xs:annotation>
+      </xs:enumeration>
+      <xs:enumeration value="user defined" />
     </xs:restriction>
   </xs:simpleType>
 
@@ -1148,13 +1273,25 @@
       <xs:enumeration value="DKK" />
       <xs:enumeration value="EGL" />
       <xs:enumeration value="EST" />
-      <xs:enumeration value="EUR" />
+      <xs:enumeration value="EUR" >
+        <xs:annotation>
+          <xs:appinfo source="alias">Euro</xs:appinfo>
+          <xs:appinfo source="alias">Euros</xs:appinfo>
+          <xs:appinfo source="alias">&#8364;</xs:appinfo>
+        </xs:annotation>
+      </xs:enumeration>
       <xs:enumeration value="FAK" />
       <xs:enumeration value="FIM" />
       <xs:enumeration value="FJD" />
       <xs:enumeration value="FKP" />
       <xs:enumeration value="FRF" />
-      <xs:enumeration value="GBP" />
+      <xs:enumeration value="GBP" >
+        <xs:annotation>
+          <xs:appinfo source="alias">British pound</xs:appinfo>
+          <xs:appinfo source="alias">British pounds</xs:appinfo>
+          <xs:appinfo source="alias">&#163;</xs:appinfo>
+        </xs:annotation>
+      </xs:enumeration>
       <xs:enumeration value="GIP" />
       <xs:enumeration value="GMD" />
       <xs:enumeration value="GRX" />
@@ -1198,13 +1335,21 @@
       <xs:enumeration value="TRL" />
       <xs:enumeration value="TTD" />
       <xs:enumeration value="TWD" />
-      <xs:enumeration value="USD" />
+      <xs:enumeration value="USD" >
+        <xs:annotation>
+          <xs:appinfo source="alias">Dollar</xs:appinfo>
+          <xs:appinfo source="alias">Dollars</xs:appinfo>
+          <xs:appinfo source="alias">$</xs:appinfo>
+        </xs:annotation>
+      </xs:enumeration>
       <xs:enumeration value="VEB" />
       <xs:enumeration value="VND" />
       <xs:enumeration value="XEU" />
       <xs:enumeration value="ZAR" />
       <xs:enumeration value="ZWD" />
       <xs:enumeration value="NOK" />
+      <xs:enumeration value="not defined" />
+      <xs:enumeration value="user defined" />
     </xs:restriction>
   </xs:simpleType>
 
@@ -1213,14 +1358,55 @@
       <xs:documentation>Picklist of linear units acceptable for Facility default linear units.</xs:documentation>
     </xs:annotation>
     <xs:restriction base="xs:string">
-      <xs:enumeration value="centimeters" />
-      <xs:enumeration value="feet" />
-      <xs:enumeration value="inches" />
-      <xs:enumeration value="kilometers" />
-      <xs:enumeration value="meters" />
-      <xs:enumeration value="miles" />
-      <xs:enumeration value="millimeters" />
-      <xs:enumeration value="yards" />
+      <xs:enumeration value="centimeters" >
+        <xs:annotation>
+          <xs:appinfo source="alias">centimeter</xs:appinfo>
+          <xs:appinfo source="alias">cm</xs:appinfo>
+        </xs:annotation>
+      </xs:enumeration>
+      <xs:enumeration value="feet" >
+        <xs:annotation>
+          <xs:appinfo source="alias">feets</xs:appinfo>
+          <xs:appinfo source="alias">ft</xs:appinfo>
+        </xs:annotation>
+      </xs:enumeration>
+      <xs:enumeration value="inches" >
+        <xs:annotation>
+          <xs:appinfo source="alias">inch</xs:appinfo>
+          <xs:appinfo source="alias">in</xs:appinfo>
+        </xs:annotation>
+      </xs:enumeration>
+      <xs:enumeration value="kilometers" >
+        <xs:annotation>
+          <xs:appinfo source="alias">kilometer</xs:appinfo>
+          <xs:appinfo source="alias">km</xs:appinfo>
+        </xs:annotation>
+      </xs:enumeration>
+      <xs:enumeration value="meters" >
+        <xs:annotation>
+          <xs:appinfo source="alias">meter</xs:appinfo>
+          <xs:appinfo source="alias">m</xs:appinfo>
+        </xs:annotation>
+      </xs:enumeration>
+      <xs:enumeration value="miles" >
+        <xs:annotation>
+          <xs:appinfo source="alias">mile</xs:appinfo>
+        </xs:annotation>
+      </xs:enumeration>
+      <xs:enumeration value="millimeters" >
+        <xs:annotation>
+          <xs:appinfo source="alias">millimeter</xs:appinfo>
+          <xs:appinfo source="alias">mm</xs:appinfo>
+        </xs:annotation>
+      </xs:enumeration>
+      <xs:enumeration value="yards" >
+        <xs:annotation>
+          <xs:appinfo source="alias">yard</xs:appinfo>
+          <xs:appinfo source="alias">yd</xs:appinfo>
+        </xs:annotation>
+      </xs:enumeration>
+      <xs:enumeration value="not defined" />
+      <xs:enumeration value="user defined" />
     </xs:restriction>
   </xs:simpleType>
 
@@ -1229,12 +1415,62 @@
       <xs:documentation>Acceptable volume units for Facility default units.</xs:documentation>
     </xs:annotation>
     <xs:restriction base="xs:string">
-      <xs:enumeration value="cubic centimeters" />
-      <xs:enumeration value="cubic feet" />
-      <xs:enumeration value="cubic inches" />
-      <xs:enumeration value="cubic meters" />
-      <xs:enumeration value="cubic millimeters" />
-      <xs:enumeration value="cubic yards" />
+      <xs:enumeration value="cubic centimeters" >
+        <xs:annotation>
+          <xs:appinfo source="alias">cubic centimeters</xs:appinfo>
+          <xs:appinfo source="alias">cubic centimeter</xs:appinfo>
+          <xs:appinfo source="alias">cubiccentimeters</xs:appinfo>
+          <xs:appinfo source="alias">cubiccentimeter</xs:appinfo>
+          <xs:appinfo source="alias">cm3</xs:appinfo>
+        </xs:annotation>
+      </xs:enumeration>
+      <xs:enumeration value="cubic feet" >
+        <xs:annotation>
+          <xs:appinfo source="alias">cubic feets</xs:appinfo>
+          <xs:appinfo source="alias">cubic feet</xs:appinfo>
+          <xs:appinfo source="alias">cubicfeets</xs:appinfo>
+          <xs:appinfo source="alias">cubicfeet</xs:appinfo>
+          <xs:appinfo source="alias">ft3</xs:appinfo>
+        </xs:annotation>
+      </xs:enumeration>
+      <xs:enumeration value="cubic inches" >
+        <xs:annotation>
+          <xs:appinfo source="alias">cubic inchs</xs:appinfo>
+          <xs:appinfo source="alias">cubic inch</xs:appinfo>
+          <xs:appinfo source="alias">cubicinches</xs:appinfo>
+          <xs:appinfo source="alias">cubicinch</xs:appinfo>
+          <xs:appinfo source="alias">in3</xs:appinfo>
+        </xs:annotation>
+      </xs:enumeration>
+      <xs:enumeration value="cubic meters" >
+        <xs:annotation>
+          <xs:appinfo source="alias">cubic meters</xs:appinfo>
+          <xs:appinfo source="alias">cubic meter</xs:appinfo>
+          <xs:appinfo source="alias">cubicmeters</xs:appinfo>
+          <xs:appinfo source="alias">cubicmeter</xs:appinfo>
+          <xs:appinfo source="alias">m3</xs:appinfo>
+        </xs:annotation>
+      </xs:enumeration>
+      <xs:enumeration value="cubic millimeters" >
+        <xs:annotation>
+          <xs:appinfo source="alias">cubic millimeters</xs:appinfo>
+          <xs:appinfo source="alias">cubic millimeter</xs:appinfo>
+          <xs:appinfo source="alias">cubicmillimeters</xs:appinfo>
+          <xs:appinfo source="alias">cubicmillimeter</xs:appinfo>
+          <xs:appinfo source="alias">mm3</xs:appinfo>
+        </xs:annotation>
+      </xs:enumeration>
+      <xs:enumeration value="cubic yards" >
+        <xs:annotation>
+          <xs:appinfo source="alias">cubic yards</xs:appinfo>
+          <xs:appinfo source="alias">cubic yard</xs:appinfo>
+          <xs:appinfo source="alias">cubicyards</xs:appinfo>
+          <xs:appinfo source="alias">cubicyard</xs:appinfo>
+          <xs:appinfo source="alias">yd3</xs:appinfo>
+        </xs:annotation>
+      </xs:enumeration>
+      <xs:enumeration value="not defined" />
+      <xs:enumeration value="user defined" />
     </xs:restriction>
   </xs:simpleType>
 
@@ -1254,24 +1490,101 @@
       <xs:documentation>Acceptable volume units for Facility default units.</xs:documentation>
     </xs:annotation>
     <xs:restriction base="xs:string">
-      <xs:enumeration value="Contact" />
-      <xs:enumeration value="Facility" />
-      <xs:enumeration value="Floor" />
-      <xs:enumeration value="Space" />
-      <xs:enumeration value="Zone" />
-      <xs:enumeration value="AssetType" />
-      <xs:enumeration value="Asset" />
-      <xs:enumeration value="System" />
-      <xs:enumeration value="Assembly" />
-      <xs:enumeration value="Connection" />
-      <xs:enumeration value="Spare" />
-      <xs:enumeration value="Resource" />
-      <xs:enumeration value="Job" />
-      <xs:enumeration value="Impact" />
-      <xs:enumeration value="Document" />
-      <xs:enumeration value="Attribute" />
-      <xs:enumeration value="Issue" />
-      <xs:enumeration value="ProjectStage" />
+      <xs:enumeration value="Contact">
+        <xs:annotation>
+          <xs:appinfo source="alias">UK2012|Contact</xs:appinfo>
+        </xs:annotation>
+      </xs:enumeration>
+      <xs:enumeration value="Facility" >
+        <xs:annotation>
+          <xs:appinfo source="alias">UK2012|Facility</xs:appinfo>
+        </xs:annotation>
+      </xs:enumeration>
+      <xs:enumeration value="Floor" >
+        <xs:annotation>
+          <xs:appinfo source="alias">UK2012|Floor</xs:appinfo>
+        </xs:annotation>
+      </xs:enumeration>
+      <xs:enumeration value="Space" >
+        <xs:annotation>
+          <xs:appinfo source="alias">UK2012|Space</xs:appinfo>
+        </xs:annotation>
+      </xs:enumeration>
+      <xs:enumeration value="Zone" >
+        <xs:annotation>
+          <xs:appinfo source="alias">UK2012|Zone</xs:appinfo>
+        </xs:annotation>
+      </xs:enumeration>
+      <xs:enumeration value="AssetType" >
+        <xs:annotation>
+          <xs:appinfo source="alias">UK2012|Type</xs:appinfo>
+        </xs:annotation>
+      </xs:enumeration>
+      <xs:enumeration value="Asset" >
+        <xs:annotation>
+          <xs:appinfo source="alias">UK2012|Component</xs:appinfo>
+        </xs:annotation>
+      </xs:enumeration>
+      <xs:enumeration value="System" >
+        <xs:annotation>
+          <xs:appinfo source="alias">UK2012|System</xs:appinfo>
+        </xs:annotation>
+      </xs:enumeration>
+      <xs:enumeration value="Assembly" >
+        <xs:annotation>
+          <xs:appinfo source="alias">UK2012|Assembly</xs:appinfo>
+        </xs:annotation>
+      </xs:enumeration>
+      <xs:enumeration value="Connection" >
+        <xs:annotation>
+          <xs:appinfo source="alias">UK2012|Connection</xs:appinfo>
+        </xs:annotation>
+      </xs:enumeration>
+      <xs:enumeration value="Spare" >
+        <xs:annotation>
+          <xs:appinfo source="alias">UK2012|Spare</xs:appinfo>
+        </xs:annotation>
+      </xs:enumeration>
+      <xs:enumeration value="Resource" >
+        <xs:annotation>
+          <xs:appinfo source="alias">UK2012|Resource</xs:appinfo>
+        </xs:annotation>
+      </xs:enumeration>
+      <xs:enumeration value="Job" >
+        <xs:annotation>
+          <xs:appinfo source="alias">UK2012|Job</xs:appinfo>
+        </xs:annotation>
+      </xs:enumeration>
+      <xs:enumeration value="Impact" >
+        <xs:annotation>
+          <xs:appinfo source="alias">UK2012|Impact</xs:appinfo>
+        </xs:annotation>
+      </xs:enumeration>
+      <xs:enumeration value="Document" >
+        <xs:annotation>
+          <xs:appinfo source="alias">UK2012|Document</xs:appinfo>
+        </xs:annotation>
+      </xs:enumeration>
+      <xs:enumeration value="Attribute" >
+        <xs:annotation>
+          <xs:appinfo source="alias">UK2012|Attribute</xs:appinfo>
+        </xs:annotation>
+      </xs:enumeration>
+      <xs:enumeration value="Issue" >
+        <xs:annotation>
+          <xs:appinfo source="alias">UK2012|Issue</xs:appinfo>
+        </xs:annotation>
+      </xs:enumeration>
+      <xs:enumeration value="ProjectStage" >
+        <xs:annotation>
+          <xs:appinfo source="alias">UK2016|ProjectStage</xs:appinfo>
+        </xs:annotation>
+      </xs:enumeration>
+      <xs:enumeration value="Representation" >
+        <xs:annotation>
+          <xs:appinfo source="alias">UK2012|Coordinate</xs:appinfo>
+        </xs:annotation>
+      </xs:enumeration>
     </xs:restriction>
   </xs:simpleType>
 

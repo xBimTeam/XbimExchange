@@ -13,42 +13,8 @@ namespace Xbim.COBieLiteUK
         [XmlIgnore][JsonIgnore]
         new public string Name
         {
-            get
-            {
-                if (Attributes == null) return null;
-                var attr = Attributes.FirstOrDefault(a => a.Name == "Name");
-                if (attr == null) return null;
-
-                var strAttrVal = attr.Value as StringAttributeValue;
-                if (strAttrVal == null) return null;
-
-                return strAttrVal.Value;
-            }
-            set
-            {
-                if (Attributes == null) Attributes = new List<Attribute>();
-                var attr = Attributes.FirstOrDefault(a => a.Name == "Name");
-                if (attr == null)
-                {
-                    attr = new Attribute(){Name = "Name"};
-                    Attributes.Add(attr);
-                }
-
-                if (value == null)
-                {
-                    attr.Value = null;
-                    return;
-                }
-
-                var strAttrVal = attr.Value as StringAttributeValue;
-                if (strAttrVal == null)
-                {
-                    strAttrVal = new StringAttributeValue();
-                    attr.Value = strAttrVal;
-                }
-
-                strAttrVal.Value = value;
-            }
+            get { return Email; }
+            set { Email = value; }
         }
 
         /// <summary>

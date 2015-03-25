@@ -80,6 +80,9 @@
     <None Include="DemoFiles\LakesideRestaurant_stage6_Requirements.DPoW.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+    <None Include="TestFiles\2012-03-23-Duplex-Design.xlsx">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="TestFiles\NewtownHighSchool.new.dpow">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
