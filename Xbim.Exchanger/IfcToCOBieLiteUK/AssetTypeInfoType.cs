@@ -37,7 +37,7 @@ namespace XbimExchanger.IfcToCOBieLiteUK
                 CoBieLiteUkHelper.Logger.WarnFormat("AssetTypeAccountingCategory: An illegal value of [{0}] has been passed for the category of #{1}={2}. It has been replaced with a value of 'Item'", accCategoryString, ifcTypeObject.EntityLabel, ifcTypeObject.GetType().Name);
                 //Categories = new List<Category>(1) { new Category() { Code = "Item" } };
             }
-            if (!Categories.Any()) //try the asset assignment
+            if (Categories != null && !Categories.Any()) //try the asset assignment
             {
                 IfcAsset ifcAsset;
                 if (helper.AssetAsignments.TryGetValue(ifcTypeObject, out ifcAsset))
