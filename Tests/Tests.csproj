@@ -51,6 +51,7 @@
     <Compile Include="ConversionTests.cs" />
     <Compile Include="COBieLiteUKTests.cs" />
     <Compile Include="DPoWToCOBieLiteTests.cs" />
+    <Compile Include="IfcToCOBieLiteUKTests.cs" />
     <Compile Include="ValidationMockUp.cs" />
   </ItemGroup>
   <ItemGroup>

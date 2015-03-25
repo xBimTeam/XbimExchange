@@ -66,7 +66,7 @@ namespace Xbim.Tests.COBie
             using (var m = new XbimModel())
             {
                 var IfcTestFile = "2012-03-23-Duplex-Handover.ifc";
-                IfcTestFile = @"D:\Users\steve\My Documents\DPoW\001 NBS Lakeside Restaurant 2014.ifc";
+                //IfcTestFile = @"D:\Users\steve\My Documents\DPoW\001 NBS Lakeside Restaurant 2014.ifc";
                 var XbimTestFile = Path.ChangeExtension(IfcTestFile, "xbim");
                 var JsonFile = Path.ChangeExtension(IfcTestFile, "json");
                 m.CreateFrom(IfcTestFile, XbimTestFile, null, true, true);

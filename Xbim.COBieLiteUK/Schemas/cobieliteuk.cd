@@ -36,7 +36,7 @@
         <Point X="10.188" Y="4.5" />
       </Path>
     </AssociationLine>
-    <AssociationLine Name="Systems" Type="Xbim.COBieLiteUK.SystemType" FixedToPoint="true">
+    <AssociationLine Name="Systems" Type="Xbim.COBieLiteUK.System" FixedToPoint="true">
       <Path>
         <Point X="2" Y="6.812" />
         <Point X="3" Y="6.812" />
@@ -200,11 +200,10 @@
       <HashCode>AAIAAQAAACAAAAAAABAAAAAAAAAABAAAAAAAAAAAgAA=</HashCode>
     </TypeIdentifier>
   </Class>
-  <Class Name="Xbim.COBieLiteUK.SystemType" Collapsed="true" HideInheritanceLine="true">
+  <Class Name="Xbim.COBieLiteUK.System" Collapsed="true" HideInheritanceLine="true">
     <Position X="3" Y="6.5" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAAAAIAAAAAAAAAAAAAAAAAAAAQAAAAAAAA=</HashCode>
-      <FileName>SystemType.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="Xbim.COBieLiteUK.Floor" HideInheritanceLine="true">

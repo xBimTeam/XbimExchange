@@ -121,6 +121,18 @@
     <Compile Include="IfcHelpers\IfcPropertySetDefinitionExtensions.cs" />
     <Compile Include="IfcHelpers\IfcUnitComparer.cs" />
     <Compile Include="IfcHelpers\IfcUnitConverter.cs" />
+    <Compile Include="IfcToCOBieLiteUK\AssetInfoType.cs" />
+    <Compile Include="IfcToCOBieLiteUK\AssetTypeInfoType.cs" />
+    <Compile Include="IfcToCOBieLiteUK\COBieLiteUKHelper.cs" />
+    <Compile Include="IfcToCOBieLiteUK\ContactType.cs" />
+    <Compile Include="IfcToCOBieLiteUK\FacilityType.cs" />
+    <Compile Include="IfcToCOBieLiteUK\FloorType.cs" />
+    <Compile Include="IfcToCOBieLiteUK\ProjectType.cs" />
+    <Compile Include="IfcToCOBieLiteUK\SiteType.cs" />
+    <Compile Include="IfcToCOBieLiteUK\SpaceType.cs" />
+    <Compile Include="IfcToCOBieLiteUK\SystemType.cs" />
+    <Compile Include="IfcToCOBieLiteUK\XbimAttributedObject.cs" />
+    <Compile Include="IfcToCOBieLiteUK\ZoneType.cs" />
     <Compile Include="IXbimMappings.cs" />
     <Compile Include="XbimMappings.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -133,6 +145,9 @@
     </None>
     <EmbeddedResource Include="DPoWToCOBieLite\ClassificationMappings.config">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="IfcToCOBieLiteUK\COBieAttributes.config">
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <None Include="packages.config" />
   </ItemGroup>
