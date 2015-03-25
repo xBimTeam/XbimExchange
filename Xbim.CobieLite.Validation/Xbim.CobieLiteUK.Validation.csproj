@@ -5,7 +5,7 @@
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProjectGuid>{D2D0B192-93B2-409F-AAA0-47BD3038C87E}</ProjectGuid>
-    <OutputType>Exe</OutputType>
+    <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Xbim.CobieLite.Validation</RootNamespace>
     <AssemblyName>Xbim.CobieLite.Validation</AssemblyName>
@@ -38,6 +38,9 @@
     <DocumentationFile>..\Output\Release\Xbim.CobieLite.Validation.XML</DocumentationFile>
     <NoWarn>1591;1572;1573;1574</NoWarn>
   </PropertyGroup>
+  <PropertyGroup>
+    <StartupObject />
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -49,11 +52,13 @@
     <Reference Include="System.Xml.Serialization" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="IValidationRequirement.cs" />
-    <Compile Include="ValidationResult.cs" />
-    <Compile Include="Program.cs" />
+    <Compile Include="AssetTypeValidator.cs" />
+    <Compile Include="Extensions\AssetTypesExtensions.cs" />
+    <Compile Include="Extensions\CategoryExtensions.cs" />
+    <Compile Include="IValidator.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Validator.cs" />
+    <Compile Include="FacilityValidator.cs" />
+    <Compile Include="RequirementDetails\RequirmentDetail.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
@@ -65,9 +70,9 @@
     </Content>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Xbim.COBieLite\Xbim.COBieLite.csproj">
-      <Project>{e550c721-50af-4ad0-998e-0c61f305eec8}</Project>
-      <Name>Xbim.COBieLite</Name>
+    <ProjectReference Include="..\Xbim.COBieLiteUK\Xbim.COBieLiteUK.csproj">
+      <Project>{90def072-96c7-4972-835e-909c41169cb4}</Project>
+      <Name>Xbim.COBieLiteUK</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
