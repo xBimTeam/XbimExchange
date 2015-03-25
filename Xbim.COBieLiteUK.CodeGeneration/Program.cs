@@ -12,16 +12,18 @@ namespace Xbim.COBieLiteUK.CodeGeneration
     {
         static void Main(string[] args)
         {
-            if (!File.Exists(@"..\..\..\Xbim.COBieLiteUK\Schemas\cobieliteuk.xsd"))
+            const string outFile = @"cobieliteuk.designer.cs";
+            const string inFile = @"..\..\..\Xbim.COBieLiteUK\Schemas\cobieliteuk.xsd";
+            if (!File.Exists(inFile))
                 Console.WriteLine(@"COBieLiteUK schema not found.");
             
             var generatorParams = new GeneratorParams
             {
-                InputFilePath = @"..\..\..\Xbim.COBieLiteUK\Schemas\cobieliteuk.xsd",
+                InputFilePath = inFile,
                 CollectionObjectType = CollectionType.List,
                 Language = GenerationLanguage.CSharp,
                 NameSpace = "Xbim.COBieLiteUK",
-                OutputFilePath = @"cobieliteuk.designer.cs",
+                OutputFilePath = outFile,
                 TargetFramework = TargetFramework.CobieLiteUk,
                 EnableInitializeFields = false,
                 Serialization = new SerializeParams
@@ -53,7 +55,15 @@ namespace Xbim.COBieLiteUK.CodeGeneration
                 return;
             }
 
-            Console.WriteLine(@"Generated code has been saved into the file {0}.", result.Entity);
+            //do textual replacement
+            var outFileFullPath = Path.Combine(Path.GetDirectoryName(inFile), outFile);
+            var code = File.ReadAllText(outFileFullPath);
+            code = code.Replace("System.", "global::System.");
+            code = code.Replace("System;", "global::System;");
+            File.WriteAllText(outFileFullPath, code);
+
+
+            Console.WriteLine(@"Generated code has been saved to the file {0}.", result.Entity);
 
             Console.WriteLine();
             Console.WriteLine(@"Finished");

@@ -941,7 +941,7 @@
   <!--End Spare Related Content-->
 
   <!--Begin System Related Content-->
-  <xs:complexType name="SystemType">
+  <xs:complexType name="System">
     <xs:annotation>
       <xs:appinfo source="parent">Facility</xs:appinfo>
       <xs:appinfo source="sheet">UK2012|System</xs:appinfo>
@@ -970,7 +970,7 @@
   </xs:complexType>
   <xs:complexType name="SystemCollection">
     <xs:sequence>
-      <xs:element name="System" type="cobielite:SystemType" maxOccurs="unbounded" />
+      <xs:element name="System" type="cobielite:System" maxOccurs="unbounded" />
     </xs:sequence>
   </xs:complexType>
   <!--End System Related Content-->
@@ -1525,7 +1525,7 @@
           <xs:appinfo source="alias">UK2012|Component</xs:appinfo>
         </xs:annotation>
       </xs:enumeration>
-      <xs:enumeration value="SystemType" >
+      <xs:enumeration value="System" >
         <xs:annotation>
           <xs:appinfo source="alias">UK2012|System</xs:appinfo>
         </xs:annotation>
