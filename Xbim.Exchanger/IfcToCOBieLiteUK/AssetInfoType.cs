@@ -40,10 +40,16 @@ namespace XbimExchanger.IfcToCOBieLiteUK
             //System Assignments
 
              //Space Assignments
-            IfcSpatialStructureElement space;
-            if (helper.SpaceAssetLookup.TryGetValue(ifcElement, out space))
+            var spaces = helper.GetSpaces(ifcElement);
+            
+            if (spaces.Any())
             {
-                Space = new SpaceKey();
+                
+                foreach (var VARIABLE in spaces)
+                {
+                    var space = new SpaceKey();
+                }
+                
                 if (space != null)
                 {
                     Space.Name = space.Name;
