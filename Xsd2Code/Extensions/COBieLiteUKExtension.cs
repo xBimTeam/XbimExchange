@@ -24,7 +24,7 @@ namespace Xsd2Code.Library.Extensions
             {
                 propertyMember.Name = "Value";
             }
-
+            
             var xsdType =
                 schema.SchemaTypes.Values.OfType<XmlSchemaComplexType>().FirstOrDefault(ct => ct.Name == type.Name);
             if (xsdType == null) return;
@@ -95,9 +95,10 @@ namespace Xsd2Code.Library.Extensions
                         new CodeAttributeArgument("Path", new CodePrimitiveExpression(parts[6]))
                         ));
                 }
-                if (source == "list" && appInfo.Markup[0].InnerText.ToLower() == "true")
+                if (source == "parent")
                 {
-                    type.CustomAttributes.Add(new CodeAttributeDeclaration("Xbim.COBieLiteUK.List"));
+                    type.CustomAttributes.Add(new CodeAttributeDeclaration("Xbim.COBieLiteUK.Parent", 
+                        new CodeAttributeArgument("DataType", new CodeTypeOfExpression(appInfo.Markup[0].InnerText))));
                 }
             }
         }
@@ -112,6 +113,55 @@ namespace Xsd2Code.Library.Extensions
             foreach (var collection in collections)
             {
                 code.Types.Remove(collection);
+            }
+
+            //remove properties which will be implemented in partial classes
+            var toRemove = new[] { "AreaUnits", "LinearUnits", "VolumeUnits", "CurrencyUnit" };
+            foreach (CodeTypeDeclaration type in code.Types)
+            {
+                foreach (var member in type.Members.OfType<CodeMemberProperty>().ToList())
+                {
+                    if (toRemove.Contains(member.Name))
+                    {
+                        type.Members.Remove(member);
+                    }    
+                }
+            }
+            
+
+            //add attributes to enumeration members
+            var enums = code.Types.OfType<CodeTypeDeclaration>().Where(t => t.IsEnum);
+            var xsdEnums = schema.SchemaTypes.Values.OfType<XmlSchemaSimpleType>();
+            foreach (var @enum in enums)
+            {
+                var definition = xsdEnums.FirstOrDefault(t => t.Name == @enum.Name);
+                if (definition == null || !(definition.Content is XmlSchemaSimpleTypeRestriction))
+                    continue;
+                var facets = ((XmlSchemaSimpleTypeRestriction) definition.Content).Facets.OfType<XmlSchemaEnumerationFacet>();
+                foreach (CodeTypeMember member in @enum.Members)
+                {
+                    var facet = facets.FirstOrDefault(f => f.Value.Replace(" ", "") == member.Name);
+                    if(facet == null || facet.Annotation == null) continue;
+
+                    //parse all appinfo elements from annotation
+                    foreach (var item in facet.Annotation.Items.OfType<XmlSchemaAppInfo>())
+                    {
+                        if (item.Source == "alias")
+                        {
+                            var parts = item.Markup[0].InnerText.Split(new[] { '|' }, StringSplitOptions.RemoveEmptyEntries);
+                            var attr = parts.Length == 2 ? new CodeAttributeDeclaration("Xbim.COBieLiteUK.Alias",
+                                new CodeAttributeArgument("Type", new CodePrimitiveExpression(parts[0])),
+                                new CodeAttributeArgument("Value", new CodePrimitiveExpression(parts[1]))
+                                ) : 
+                                new CodeAttributeDeclaration("Xbim.COBieLiteUK.Alias",
+                                new CodeAttributeArgument("Value", new CodePrimitiveExpression(parts[0]))
+                                )
+                                ;
+                            member.CustomAttributes.Add(attr);
+                        }
+                    }
+
+                }
             }
         }
     }

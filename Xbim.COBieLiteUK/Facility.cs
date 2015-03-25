@@ -20,6 +20,170 @@ namespace Xbim.COBieLiteUK
 {
     public partial class Facility
     {
+        #region Enumerations
+
+        public AreaUnit AreaUnits
+        {
+            get
+            {
+                if (String.IsNullOrEmpty(AreaUnitsCustom)) return AreaUnit.notdefined;
+
+                //try to parse string value
+                AreaUnit result;
+                if (Enum.TryParse(AreaUnitsCustom, true, out result))
+                    return result;
+
+                //try to use aliases
+                var enumMembers = typeof (AreaUnit).GetFields();
+                foreach (var member in from member in enumMembers
+                    let alias = member.GetCustomAttributes<AliasAttribute>()
+                        .FirstOrDefault(
+                            a => String.Equals(a.Value, AreaUnitsCustom, StringComparison.CurrentCultureIgnoreCase))
+                    where alias != null
+                    select member)
+                    return (AreaUnit) member.GetValue(result);
+
+                //if nothing fits it is a user defined value
+                return AreaUnit.userdefined;
+            }
+            set
+            {
+                switch (value)
+                {
+                    case AreaUnit.notdefined:
+                        AreaUnitsCustom = null;
+                        break;
+                    case AreaUnit.userdefined:
+                        break;
+                    default:
+                        AreaUnitsCustom = Enum.GetName(typeof (AreaUnit), value);
+                        break;
+                }
+            }
+        }
+
+        public LinearUnit LinearUnits
+        {
+            get
+            {
+                if (String.IsNullOrEmpty(LinearUnitsCustom)) return LinearUnit.notdefined;
+
+                //try to parse string value
+                LinearUnit result;
+                if (Enum.TryParse(LinearUnitsCustom, true, out result))
+                    return result;
+
+                //try to use aliases
+                var enumMembers = typeof (LinearUnit).GetFields();
+                foreach (var member in from member in enumMembers
+                    let alias = member.GetCustomAttributes<AliasAttribute>()
+                        .FirstOrDefault(
+                            a => String.Equals(a.Value, LinearUnitsCustom, StringComparison.CurrentCultureIgnoreCase))
+                    where alias != null
+                    select member)
+                    return (LinearUnit) member.GetValue(result);
+
+                //if nothing fits it is a user defined value
+                return LinearUnit.userdefined;
+            }
+            set
+            {
+                switch (value)
+                {
+                    case LinearUnit.notdefined:
+                        LinearUnitsCustom = null;
+                        break;
+                    case LinearUnit.userdefined:
+                        break;
+                    default:
+                        LinearUnitsCustom = Enum.GetName(typeof (LinearUnit), value);
+                        break;
+                }
+            }
+        }
+
+        public VolumeUnit VolumeUnits
+        {
+            get
+            {
+                if (String.IsNullOrEmpty(VolumeUnitsCustom)) return VolumeUnit.notdefined;
+
+                //try to parse string value
+                VolumeUnit result;
+                if (Enum.TryParse(VolumeUnitsCustom, true, out result))
+                    return result;
+
+                //try to use aliases
+                var enumMembers = typeof(VolumeUnit).GetFields();
+                foreach (var member in from member in enumMembers
+                                       let alias = member.GetCustomAttributes<AliasAttribute>()
+                                           .FirstOrDefault(
+                                               a => String.Equals(a.Value, VolumeUnitsCustom, StringComparison.CurrentCultureIgnoreCase))
+                                       where alias != null
+                                       select member)
+                    return (VolumeUnit)member.GetValue(result);
+
+                //if nothing fits it is a user defined value
+                return VolumeUnit.userdefined;
+            }
+            set
+            {
+                switch (value)
+                {
+                    case VolumeUnit.notdefined:
+                        VolumeUnitsCustom = null;
+                        break;
+                    case VolumeUnit.userdefined:
+                        break;
+                    default:
+                        VolumeUnitsCustom = Enum.GetName(typeof(VolumeUnit), value);
+                        break;
+                }
+            }
+        }
+
+        public CurrencyUnit CurrencyUnit
+        {
+            get
+            {
+                if (String.IsNullOrEmpty(CurrencyUnitCustom)) return CurrencyUnit.notdefined;
+
+                //try to parse string value
+                CurrencyUnit result;
+                if (Enum.TryParse(CurrencyUnitCustom, true, out result))
+                    return result;
+
+                //try to use aliases
+                var enumMembers = typeof(CurrencyUnit).GetFields();
+                foreach (var member in from member in enumMembers
+                                       let alias = member.GetCustomAttributes<AliasAttribute>()
+                                           .FirstOrDefault(
+                                               a => String.Equals(a.Value, CurrencyUnitCustom, StringComparison.CurrentCultureIgnoreCase))
+                                       where alias != null
+                                       select member)
+                    return (CurrencyUnit)member.GetValue(result);
+
+                //if nothing fits it is a user defined value
+                return CurrencyUnit.userdefined;
+            }
+            set
+            {
+                switch (value)
+                {
+                    case CurrencyUnit.notdefined:
+                        CurrencyUnitCustom = null;
+                        break;
+                    case CurrencyUnit.userdefined:
+                        break;
+                    default:
+                        CurrencyUnitCustom = Enum.GetName(typeof(CurrencyUnit), value);
+                        break;
+                }
+            }
+        }
+
+        #endregion
+
         #region XML serialization
 
         private static XmlSerializer GetXmlSerializer()
@@ -135,27 +299,26 @@ namespace Xbim.COBieLiteUK
 
         #region Reading COBie Spreadsheet
 
-        [SuppressMessage("ReSharper", "InconsistentNaming")] 
-        private StringWriter log = new StringWriter();
+        [SuppressMessage("ReSharper", "InconsistentNaming")] private StringWriter log = new StringWriter();
 
-        public void ReadCobie(string path, string version = "UK2012")
+        public static Facility ReadCobie(string path, out string message, string version = "UK2012")
         {
             if (path == null) throw new ArgumentNullException("path");
             var ext = Path.GetExtension(path).ToLower().Trim('.');
             if (ext != "xls" && ext != "xlsx") throw new Exception("File must be an MS Excel file.");
-            
             using (var file = File.OpenRead(path))
             {
                 var type = ext == "xlsx" ? ExcelTypeEnum.XLSX : ExcelTypeEnum.XLS;
-                ReadCobie(file, type, version);
+                var result = ReadCobie(file, type, out message, version);
                 file.Close();
+                return result;
             }
         }
 
-        public string ReadCobie(Stream stream, ExcelTypeEnum type, string version = "UK2012")
+        public static Facility ReadCobie(Stream stream, ExcelTypeEnum type, out string message,
+            string version = "UK2012")
         {
             //refresh log for this run
-            log = new StringWriter();
 
             //use NPOI to open and access spreadsheet data
             IWorkbook workbook;
@@ -170,15 +333,46 @@ namespace Xbim.COBieLiteUK
                 default:
                     throw new ArgumentOutOfRangeException("type");
             }
+            string msg;
+            var flatList = ReadAllCobieObjects(workbook, out msg, version);
+            message = msg ?? "";
 
-            var msg = LoadFromCobie(workbook, null, version);
-            if(!String.IsNullOrEmpty(msg))
-                log.Write(msg);
+            //create structure hierarchy
+            foreach (var cobieObject in flatList)
+            {
+                cobieObject.AddToParent(flatList, out msg, version);
+                message += msg;
+            }
 
-            return log.ToString();
+
+            //return first parent
+            var facility = flatList.OfType<Facility>().FirstOrDefault();
+            if (facility == null)
+            {
+                message = "There is no facility in the data. This is an invalid data structure. \n" + msg;
+                return null;
+            }
+
+
+            message = msg;
+            return facility;
         }
 
-       
+        private static List<CobieObject> ReadAllCobieObjects(IWorkbook workbook, out string message, string version)
+        {
+            var result = new List<CobieObject>();
+            message = "";
+            var types =
+                typeof (CobieObject).Assembly.GetTypes()
+                    .Where(t => !t.IsAbstract && typeof (CobieObject).IsAssignableFrom(t));
+            foreach (var type in types)
+            {
+                string msg;
+                result.AddRange(CobieObject.LoadFromCobie(type, workbook, out msg, version));
+                message += msg;
+            }
+            return result;
+        }
 
         #endregion
 
@@ -192,10 +386,10 @@ namespace Xbim.COBieLiteUK
             if (Floors != null)
                 foreach (var floor in Floors)
                     yield return floor;
-            if(AssetTypes != null)
+            if (AssetTypes != null)
                 foreach (var assetType in AssetTypes)
                     yield return assetType;
-            if(Contacts != null)
+            if (Contacts != null)
                 foreach (var contact in Contacts)
                     yield return contact;
             if (Systems != null)
@@ -207,7 +401,7 @@ namespace Xbim.COBieLiteUK
             if (Resources != null)
                 foreach (var resource in Resources)
                     yield return resource;
-            if(Stages != null)
+            if (Stages != null)
                 foreach (var stage in Stages)
                     yield return stage;
         }

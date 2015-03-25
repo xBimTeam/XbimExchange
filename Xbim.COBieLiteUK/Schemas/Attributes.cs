@@ -1,6 +1,7 @@
 ﻿using System;
 using SAttribute = System.Attribute;
 
+// ReSharper disable once CheckNamespace
 namespace Xbim.COBieLiteUK
 {
     [AttributeUsage(AttributeTargets.Class, AllowMultiple = true)]
@@ -21,4 +22,18 @@ namespace Xbim.COBieLiteUK
         public string Type;
         public string Sheet;
     }
+
+    [AttributeUsage(AttributeTargets.Class, AllowMultiple = true)]
+    public class ParentAttribute : SAttribute
+    {
+        public Type DataType;
+    }
+
+    [AttributeUsage(AttributeTargets.Field, AllowMultiple = true)]
+    public class AliasAttribute : SAttribute
+    {
+        public string Type;
+        public string Value;
+    }
+
 }

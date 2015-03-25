@@ -51,6 +51,7 @@
             this.label3 = new System.Windows.Forms.Label();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
             this.btnClassFilter = new System.Windows.Forms.Button();
+            this.cmboxFiletype = new System.Windows.Forms.ComboBox();
             this.groupBox1.SuspendLayout();
             this.statusStrip1.SuspendLayout();
             this.groupBox2.SuspendLayout();
@@ -185,7 +186,7 @@
             // btnGenerate
             // 
             this.btnGenerate.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnGenerate.Location = new System.Drawing.Point(430, 418);
+            this.btnGenerate.Location = new System.Drawing.Point(430, 391);
             this.btnGenerate.Name = "btnGenerate";
             this.btnGenerate.Size = new System.Drawing.Size(75, 23);
             this.btnGenerate.TabIndex = 2;
@@ -196,7 +197,7 @@
             // btnClear
             // 
             this.btnClear.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnClear.Location = new System.Drawing.Point(430, 388);
+            this.btnClear.Location = new System.Drawing.Point(430, 361);
             this.btnClear.Name = "btnClear";
             this.btnClear.Size = new System.Drawing.Size(75, 23);
             this.btnClear.TabIndex = 4;
@@ -313,11 +314,24 @@
             this.btnClassFilter.UseVisualStyleBackColor = true;
             this.btnClassFilter.Click += new System.EventHandler(this.btnClassFilter_Click);
             // 
+            // cmboxFiletype
+            // 
+            this.cmboxFiletype.FormattingEnabled = true;
+            this.cmboxFiletype.Items.AddRange(new object[] {
+            "XLS",
+            "XLSX"});
+            this.cmboxFiletype.Location = new System.Drawing.Point(430, 420);
+            this.cmboxFiletype.Name = "cmboxFiletype";
+            this.cmboxFiletype.Size = new System.Drawing.Size(75, 21);
+            this.cmboxFiletype.TabIndex = 15;
+            this.cmboxFiletype.Text = "XLS";
+            // 
             // COBieGenerator
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(523, 472);
+            this.Controls.Add(this.cmboxFiletype);
             this.Controls.Add(this.btnClassFilter);
             this.Controls.Add(this.groupBox2);
             this.Controls.Add(this.label3);
@@ -369,6 +383,7 @@
         private System.Windows.Forms.GroupBox groupBox2;
         private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabel1;
         private System.Windows.Forms.Button btnClassFilter;
+        private System.Windows.Forms.ComboBox cmboxFiletype;
     }
 }
 
