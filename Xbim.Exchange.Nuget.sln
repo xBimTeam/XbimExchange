@@ -16,7 +16,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Xbim.COBieLite", "Xbim.COBi
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tests", "Tests\Tests.csproj", "{65C0C5FF-70D7-49CC-ACCF-057C91F382CC}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Xbim.CobieLite.Validation", "Xbim.CobieLite.Validation\Xbim.CobieLite.Validation.csproj", "{D2D0B192-93B2-409F-AAA0-47BD3038C87E}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Xbim.CobieLiteUK.Validation", "Xbim.CobieLite.Validation\Xbim.CobieLiteUK.Validation.csproj", "{D2D0B192-93B2-409F-AAA0-47BD3038C87E}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Xbim.Exchanger", "Xbim.Exchanger\Xbim.Exchanger.csproj", "{5540768D-8ACD-4CC0-B3CD-1951DEF54C20}"
 EndProject

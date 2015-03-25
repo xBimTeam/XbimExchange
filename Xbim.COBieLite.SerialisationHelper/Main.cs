@@ -5,7 +5,6 @@ using System.Runtime.Remoting.Messaging;
 using System.Security.Cryptography;
 using System.Text.RegularExpressions;
 using System.Xml.Serialization;
-using Xbim.COBieLite;
 
 
 namespace SerialisationHelper
@@ -56,8 +55,8 @@ namespace SerialisationHelper
                 try
                 {
 // ReSharper disable UnusedVariable
-                    var a = new XmlSerializer(typeof (FacilityType));
-                    var b = new XmlSerializer(typeof (FacilityType));
+                    var a = new XmlSerializer(typeof (Xbim.COBieLite.FacilityType));
+                    // var b = new XmlSerializer(typeof (Xbim.COBieLiteUK.FacilityType));
 // ReSharper restore UnusedVariable  
                 }
                 catch (Exception exception)
