@@ -80,8 +80,9 @@ namespace Xbim.COBie.Serialisers
         #endregion
 
         #region local variables
-        Dictionary<COBieAllowedType, ICellStyle> _cellStyles = new Dictionary<COBieAllowedType, ICellStyle>();
         Dictionary<string, IColor> _colours = new Dictionary<string, IColor>();
+        //need two keys to get correct style so used Tuple
+        Dictionary<Tuple<string, COBieAllowedType>, ICellStyle> _cellStyles = new Dictionary<Tuple<string, COBieAllowedType>, ICellStyle>();
         public int _commentCount = 0; 
         #endregion
 
@@ -94,7 +95,7 @@ namespace Xbim.COBie.Serialisers
 
         public COBieXLSXSerialiser(string fileName, string templateFileName)
         {
-            IsXlsx = true;
+            IsXlsx = false;
             FileName = fileName;
             TemplateFileName = templateFileName;
             hasErrorLevel = typeof(COBieError).GetProperties().Where(prop => prop.Name == "ErrorLevel").Any();
@@ -118,7 +119,7 @@ namespace Xbim.COBie.Serialisers
 
             ExcelWorkbook = IsXlsx ? new XSSFWorkbook(excelFile) as IWorkbook : new HSSFWorkbook(excelFile, true) as IWorkbook;
 
-            CreateFormats();
+            CreateCellStyles();
 
             foreach (var sheet in workbook)
             {
@@ -301,17 +302,30 @@ namespace Xbim.COBie.Serialisers
             }
         }
 
-        private void CreateFormats()
+        /// <summary>
+        /// Create Styles associated by colour and COBieAllowedType as keys in Dictionary
+        /// </summary>
+        private void CreateCellStyles()
         {
             CreateColours();
-            // TODO : Date hardwired to Yellow/Required for now. Only Date is set up for now. AlphaNumeric
-            CreateFormat(COBieAllowedType.ISODate, "yyyy-MM-dd", "Yellow");
-            CreateFormat(COBieAllowedType.ISODateTime, "yyyy-MM-ddThh:mm:ss", "Yellow");
-            
+            //create cell styles for all colours in Dictionary
+            //note that 
+            foreach (string colour in _colours.Keys)
+            {
+                foreach (COBieAllowedType type in Enum.GetValues(typeof(COBieAllowedType)))
+                {
+                    CreateStyle(colour, type);
+                }
+                
+            }
         }
 
+        /// <summary>
+        /// Set required colours for COBie Sheet
+        /// </summary>
         private void CreateColours()
         {
+            CreateColours("White", 0xFF, 0xFF, 0xFF);
             CreateColours("Yellow", 0xFF, 0xFF, 0x99);
             CreateColours("Purple", 0xCC, 0x99, 0xFF);
             CreateColours("Green", 0xCC, 0xFF, 0xCC);
@@ -319,6 +333,13 @@ namespace Xbim.COBie.Serialisers
             CreateColours("Grey", 0x96, 0x96, 0x96);
         }
 
+        /// <summary>
+        /// create the colours for the COBie sheet
+        /// </summary>
+        /// <param name="colourName"></param>
+        /// <param name="red"></param>
+        /// <param name="green"></param>
+        /// <param name="blue"></param>
         private void CreateColours(string colourName, byte red, byte green, byte blue)
         {
             IColor colour = null;
@@ -346,13 +367,82 @@ namespace Xbim.COBie.Serialisers
             _colours.Add(colourName, colour);
         }
 
-        private void CreateFormat( COBieAllowedType type, string formatString, string colourName)
+        /// <summary>
+        /// Append the required format depending on the COBieAllowedType
+        /// </summary>
+        /// <param name="type">COBieAllowedType</param>
+        /// <param name="cellStyle">ICellStyle, style to ally formate to</param>
+        private void AppendFormat(COBieAllowedType type, ICellStyle cellStyle)
+        {
+            string formatString = null;
+            switch (type)
+            {
+                case COBieAllowedType.ISODate:
+                    formatString = "yyyy-MM-dd";
+                    break;
+                case COBieAllowedType.ISODateTime:
+                    formatString = "yyyy-MM-ddThh:mm:ss";
+                    break;
+                case COBieAllowedType.AlphaNumeric:
+                    break;
+                case COBieAllowedType.Email:
+                    break;
+                case COBieAllowedType.Numeric:
+                    break;
+                case COBieAllowedType.Text:
+                    break;
+                case COBieAllowedType.AnyType:
+                    break;
+                default:
+                    break;
+            }
+            if (formatString != null)
+            {
+                IDataFormat dataFormat = ExcelWorkbook.CreateDataFormat();
+                cellStyle.DataFormat = dataFormat.GetFormat(formatString);
+            }
+        }
+
+        /// <summary>
+        /// Get required colour for the cell
+        /// </summary>
+        /// <param name="state">COBieAttributeState</param>
+        /// <returns>string</returns>
+        private string GetCellColour(COBieAttributeState state)
+        {
+            switch (state)
+            {
+                case COBieAttributeState.Required_PrimaryKey:
+                case COBieAttributeState.Required_CompoundKeyPart:
+                case COBieAttributeState.Required_Information:
+                    return "Yellow";
+                case COBieAttributeState.Required_Multi_PrimaryKey:
+                case COBieAttributeState.Required_Reference_PrimaryKey:
+                case COBieAttributeState.Required_Reference_ForeignKey:
+                case COBieAttributeState.Required_Reference_PickList:
+                    return "Puce";
+                case COBieAttributeState.Required_PrimaryKey_IfSpecified:
+                case COBieAttributeState.Required_System:
+                case COBieAttributeState.Required_System_IfSpecified:
+                    return "Purple";
+                case COBieAttributeState.Required_IfSpecified:
+                    return "Green";
+                default:
+                    return "White";
+            }
+            
+        }
+
+        /// <summary>
+        /// Create the cell style
+        /// </summary>
+        /// <param name="colourName">string</param>
+        /// <param name="type">COBieAllowedType</param>
+        private void CreateStyle(string colourName, COBieAllowedType type)
         {
             ICellStyle cellStyle;
             cellStyle = ExcelWorkbook.CreateCellStyle() ;
 
-            IDataFormat dataFormat = ExcelWorkbook.CreateDataFormat();
-            cellStyle.DataFormat = dataFormat.GetFormat(formatString);
             if (IsXlsx)
             {
                 ((XSSFCellStyle)cellStyle).FillForegroundXSSFColor = (XSSFColor)_colours[colourName];
@@ -368,9 +458,29 @@ namespace Xbim.COBie.Serialisers
             cellStyle.BorderLeft = BorderStyle.Thin;
             cellStyle.BorderRight = BorderStyle.Thin;
             cellStyle.BorderTop = BorderStyle.Thin;
+            AppendFormat(type,cellStyle); //add format for value display
 
             // TODO:maybe clone from the template?
-            _cellStyles.Add(type, cellStyle);
+            var tuple = new Tuple<string, COBieAllowedType>(colourName, type);
+            _cellStyles.Add(tuple, cellStyle);
+        }
+
+
+        /// <summary>
+        /// Set the cell to the correct colour and formate(as required)
+        /// </summary>
+        /// <param name="excelCell"></param>
+        /// <param name="cell"></param>
+        private void FormatCell(ICell excelCell, COBieCell cell)
+        {
+            string cellColour = GetCellColour(cell.COBieColumn.AttributeState);
+            var tuple = new Tuple<string, COBieAllowedType>(cellColour, cell.COBieColumn.AllowedType);
+            ICellStyle style;
+            if (_cellStyles.TryGetValue(tuple, out style))
+            {
+                excelCell.CellStyle = style;
+            }
+
         }
 
         private void UpdateInstructions()
@@ -637,15 +747,7 @@ namespace Xbim.COBie.Serialisers
 
         }
 
-        private void FormatCell(ICell excelCell, COBieCell cell)
-        {
-            ICellStyle style;
-            if (_cellStyles.TryGetValue(cell.COBieColumn.AllowedType, out style))
-            {
-                excelCell.CellStyle = style;
-            }
-
-        }
+        
 
         private void SetCellValue(ICell excelCell, COBieCell cell)
         {

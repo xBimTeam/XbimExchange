@@ -51,6 +51,15 @@ namespace Xbim.COBie.Client
             }
         }
 
+        public bool IsXLSX
+        {
+            get
+            {
+                return (cmboxFiletype.Text == "XLSX") ? true : false;
+            } 
+ 
+        }
+
         public COBieMergeRoles Roles { get; private set; }
 
         public XbimModel Model { get; set; }
@@ -105,11 +114,11 @@ namespace Xbim.COBie.Client
         {
             if (MergeChkBox.Checked)
             {
-                return new MergeParams() { MergeItemsList = MergeItemsList, ModelFile = MergeItemsList.FirstOrDefault(), TemplateFile = TemplateFile };
+                return new MergeParams() { MergeItemsList = MergeItemsList, ModelFile = MergeItemsList.FirstOrDefault(), TemplateFile = TemplateFile, IsXLSX = IsXLSX };
             }
             else
             {
-                return new Params() { ModelFile = ModelFile, TemplateFile = TemplateFile };
+                return new Params() { ModelFile = ModelFile, TemplateFile = TemplateFile, IsXLSX = IsXLSX };
             }
         }
 
@@ -220,9 +229,10 @@ namespace Xbim.COBie.Client
             LogBackground(String.Format("Time to generate Federated COBie data = {0} seconds", timer.Elapsed.TotalSeconds.ToString("F3")));
 
             // Export
-            LogBackground(String.Format("Formatting as XLS using {0} template...", Path.GetFileName(parameters.TemplateFile)));
+            LogBackground(String.Format("Formatting as {1} using {0} template...", Path.GetFileName(parameters.TemplateFile), parameters.IsXLSX ? "XLSX" : "XLS"));
             COBieXLSXSerialiser serialiser = new COBieXLSXSerialiser(outputFile, parameters.TemplateFile);
             serialiser.Excludes = UserFilters;
+            serialiser.IsXlsx = parameters.IsXLSX;
             serialiser.Serialise(fedWorkBook, ValidationTemplate);
 
             LogBackground(String.Format("Export Complete: {0}", outputFile));
@@ -246,9 +256,10 @@ namespace Xbim.COBie.Client
             LogBackground(String.Format("Time to generate COBie data = {0} seconds", timer.Elapsed.TotalSeconds.ToString("F3")));
 
             // Export
-            LogBackground(String.Format("Formatting as XLS using {0} template...", Path.GetFileName(parameters.TemplateFile)));
+            LogBackground(String.Format("Formatting as {1} using {0} template...", Path.GetFileName(parameters.TemplateFile), parameters.IsXLSX ? "XLSX" : "XLS"));
             COBieXLSXSerialiser serialiser = new COBieXLSXSerialiser(outputFile, parameters.TemplateFile);
             serialiser.Excludes = UserFilters;
+            serialiser.IsXlsx = parameters.IsXLSX;
             builder.Export(serialiser);
 
             LogBackground(String.Format("Export Complete: {0}", outputFile));
@@ -371,9 +382,10 @@ namespace Xbim.COBie.Client
             progress.Finalise();
 
             // Export
-            LogBackground(String.Format("Formatting as XLS using {0} template...", Path.GetFileName(parameters.TemplateFile)));
+            LogBackground(String.Format("Formatting as {1} using {0} template...", Path.GetFileName(parameters.TemplateFile), parameters.IsXLSX ? "XLSX" : "XLS"));
             COBieXLSXSerialiser serialiser = new COBieXLSXSerialiser(parameters.ModelFile, parameters.TemplateFile);
             serialiser.Excludes = UserFilters;
+            serialiser.IsXlsx = parameters.IsXLSX;
             serialiser.Serialise(Workbook, ValidationTemplate);
 
             LogBackground(String.Format("Export Complete: {0}", parameters.ModelFile));
@@ -652,6 +664,7 @@ namespace Xbim.COBie.Client
             public string ModelFile { get; set; }
             public string TemplateFile { get; set; }
             public string ValidaitonFile { get; set; }
+            public bool IsXLSX { get; set; }
         }
 
         private class MergeParams : Params
