@@ -43,7 +43,11 @@ namespace XbimExchanger.IfcToCOBieLiteUK
             IfcSpatialStructureElement space;
             if (helper.SpaceAssetLookup.TryGetValue(ifcElement, out space))
             {
-                Space = new SpaceKey();
+                if (Spaces == null)
+                    Spaces = new List<SpaceKey> { };
+                var Space = new SpaceKey();
+                Spaces.Add(Space);
+                
                 if (space != null)
                 {
                     Space.Name = space.Name;
@@ -61,6 +65,7 @@ namespace XbimExchanger.IfcToCOBieLiteUK
                     Space.Name = "Default External";
                     Space.KeyType = EntityType.Space;
                 }
+             
             }
            
             //Issues
