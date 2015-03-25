@@ -119,7 +119,7 @@
       <xs:appinfo source="mapping">UK2012|B|CreatedBy|required|item|-|CreatedBy.Email</xs:appinfo>
       <xs:appinfo source="mapping">UK2012|C|CreatedOn|required|item|-|CreatedOn</xs:appinfo>
       <xs:appinfo source="mapping">UK2012|D|TypeName|required|item|-|parent.Name</xs:appinfo>
-      <xs:appinfo source="mapping">UK2012|E|Space|required|item|-|Space.Name</xs:appinfo>
+      <xs:appinfo source="mapping">UK2012|E|Space|required|list|-|Spaces.Name</xs:appinfo>
       <xs:appinfo source="mapping">UK2012|F|Description|required|item|-|Description</xs:appinfo>
       <xs:appinfo source="mapping">UK2012|G|ExtSystem|optional|item|-|ExternalSystem</xs:appinfo>
       <xs:appinfo source="mapping">UK2012|H|ExtObject|optional|item|-|ExternalEntity</xs:appinfo>
@@ -137,7 +137,7 @@
     <xs:complexContent>
       <xs:extension base="cobielite:CobieObject">
         <xs:sequence>
-          <xs:element name="Space" type="cobielite:SpaceKey" minOccurs="1" />
+          <xs:element name="Spaces" type="cobielite:SpaceKeyCollection" minOccurs="1" />
           <xs:element name="SerialNumber" type="xs:string" minOccurs="1" />
           <xs:element name="InstallationDate" type="xs:dateTime" minOccurs="1" nillable="true" />
           <xs:element name="WarrantyStartDate" type="xs:dateTime" minOccurs="1" nillable="true" />

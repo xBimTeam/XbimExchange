@@ -3064,7 +3064,7 @@ namespace Xbim.COBieLiteUK {
     [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="B", Header="CreatedBy", Required=true, List=false, PickList=null, Path="CreatedBy.Email")]
     [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="C", Header="CreatedOn", Required=true, List=false, PickList=null, Path="CreatedOn")]
     [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="D", Header="TypeName", Required=true, List=false, PickList=null, Path="parent.Name")]
-    [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="E", Header="Space", Required=true, List=false, PickList=null, Path="Space.Name")]
+    [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="E", Header="Space", Required=true, List=true, PickList=null, Path="Spaces.Name")]
     [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="F", Header="Description", Required=true, List=false, PickList=null, Path="Description")]
     [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="G", Header="ExtSystem", Required=false, List=false, PickList=null, Path="ExternalSystem")]
     [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="H", Header="ExtObject", Required=false, List=false, PickList=null, Path="ExternalEntity")]
@@ -3077,7 +3077,7 @@ namespace Xbim.COBieLiteUK {
     [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="O", Header="AssetIdentifier", Required=false, List=false, PickList=null, Path="AssetIdentifier")]
     public partial class Asset : CobieObject {
         
-        private SpaceKey spaceField;
+        private List<SpaceKey> spacesField;
         
         private string serialNumberField;
         
@@ -3095,13 +3095,14 @@ namespace Xbim.COBieLiteUK {
         
         private AssetAssembly assemblyOfField;
         
-        [global::System.Xml.Serialization.XmlElementAttribute(Form=global::System.Xml.Schema.XmlSchemaForm.Unqualified)]
-        public SpaceKey Space {
+        [global::System.Xml.Serialization.XmlArrayAttribute(Form=global::System.Xml.Schema.XmlSchemaForm.Unqualified)]
+        [global::System.Xml.Serialization.XmlArrayItemAttribute(Form=global::System.Xml.Schema.XmlSchemaForm.Unqualified, IsNullable=false)]
+        public List<SpaceKey> Spaces {
             get {
-                return this.spaceField;
+                return this.spacesField;
             }
             set {
-                this.spaceField = value;
+                this.spacesField = value;
             }
         }
         
