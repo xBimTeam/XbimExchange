@@ -58,7 +58,7 @@
     <Compile Include="IValidator.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="FacilityValidator.cs" />
-    <Compile Include="RequirementDetails\RequirmentDetail.cs" />
+    <Compile Include="RequirementDetails\RequirementDetail.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

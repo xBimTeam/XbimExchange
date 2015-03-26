@@ -1,8 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Xbim.COBieLiteUK;
 
 namespace Xbim.CobieLite.Validation.Extensions
@@ -11,9 +8,11 @@ namespace Xbim.CobieLite.Validation.Extensions
     {
         static public IEnumerable<AssetType> GetClassificationSubset(this IEnumerable<AssetType> types, Category requiredCategory, bool includeCategoryChildren = true)
         {
+            if (requiredCategory == null)
+                return Enumerable.Empty<AssetType>();
             return includeCategoryChildren 
-                ? types.Where(x => x.Categories.ContainsChildOf(requiredCategory)) 
-                : types.Where(x => x.Categories.ContainsExactMatchTo(requiredCategory));
+                ? types.Where(x => x.Categories != null && x.Categories.ContainsChildOf(requiredCategory)) 
+                : types.Where(x => x.Categories != null && x.Categories.ContainsExactMatchTo(requiredCategory));
         }
     }
 }

@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-
-namespace Xbim.CobieLite.Validation
+﻿namespace Xbim.CobieLite.Validation
 {
     public enum TerminationMode
     {

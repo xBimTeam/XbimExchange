@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using Xbim.COBieLiteUK;
 
@@ -22,17 +21,23 @@ namespace Xbim.CobieLite.Validation
             foreach (var assetType in requirement.AssetTypes)
             {
                 var v = new AssetTypeValidator(assetType) { TerminationMode = TerminationMode };
+                if (! v.HasRequirements )
+                    continue;
                 var candidates = v.GetCandidates(submitted);
                 // ReSharper disable once PossibleMultipleEnumeration
                 if (candidates.Any())
                 {
                     foreach (var candidate in candidates)
                     {
+                        if (retFacility.AssetTypes == null)
+                            retFacility.AssetTypes  = new List<AssetType>();
                         retFacility.AssetTypes.Add(v.Validate(candidate));
                     }
                 }
                 else
                 {
+                    if (retFacility.AssetTypes == null)
+                        retFacility.AssetTypes = new List<AssetType>();
                     retFacility.AssetTypes.Add(v.Validate(null));
                 }
             }
