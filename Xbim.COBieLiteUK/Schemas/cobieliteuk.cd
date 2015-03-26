@@ -139,7 +139,7 @@
   <Class Name="Xbim.COBieLiteUK.Attribute" Collapsed="true" HideInheritanceLine="true">
     <Position X="4.25" Y="0.5" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAgAAAAAAA=</HashCode>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAgAAAAAgA=</HashCode>
       <FileName>Attribute.cs</FileName>
     </TypeIdentifier>
   </Class>
@@ -274,7 +274,7 @@
       <Compartment Name="Methods" Collapsed="true" />
     </Compartments>
     <TypeIdentifier>
-      <HashCode>ACgAgCAAAAACCMEBAAQAAAAAEAkAQAAAABAAACCAAhA=</HashCode>
+      <HashCode>ACgAgCAAAQAACMEBAAQAAAAAEAkAQAAAABAAACCAAhA=</HashCode>
       <FileName>Asset.cs</FileName>
     </TypeIdentifier>
   </Class>

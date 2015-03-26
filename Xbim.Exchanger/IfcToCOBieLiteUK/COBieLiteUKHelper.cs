@@ -121,7 +121,7 @@ namespace XbimExchanger.IfcToCOBieLiteUK
         private Dictionary<IfcSystem, ObjectDefinitionSet> _systemAssignment;
         private Dictionary<IfcObjectDefinition, List<IfcSystem>> _systemLookup;
         private HashSet<string> _cobieProperties = new HashSet<string>();
-        private Dictionary<IfcElement, IfcSpatialStructureElement> _spaceAssetLookup;
+        private Dictionary<IfcElement, List<IfcSpatialStructureElement>> _spaceAssetLookup;
         private Dictionary<IfcSpace, IfcBuildingStorey> _spaceFloorLookup;
         private Dictionary<IfcSpatialStructureElement, List<IfcSpatialStructureElement>> _spatialDecomposition;
 
@@ -491,7 +491,7 @@ namespace XbimExchanger.IfcToCOBieLiteUK
         /// <summary>
         /// 
         /// </summary>
-        public IDictionary<IfcElement, IfcSpatialStructureElement> SpaceAssetLookup
+        public IDictionary<IfcElement, List<IfcSpatialStructureElement>> SpaceAssetLookup
         {
             get { return _spaceAssetLookup; }
         }
@@ -861,16 +861,21 @@ namespace XbimExchanger.IfcToCOBieLiteUK
         {
           
             //get all elements that are contained in any spatial structure of this building
-            _spaceAssetLookup = new Dictionary<IfcElement, IfcSpatialStructureElement>(); 
+            _spaceAssetLookup = new Dictionary<IfcElement, List<IfcSpatialStructureElement>>(); 
            
             var ifcRelContainedInSpaces = _model.Instances.OfType<IfcRelContainedInSpatialStructure>().ToList();
             foreach (var ifcRelContainedInSpace in ifcRelContainedInSpaces)
             {
                 foreach (var element in ifcRelContainedInSpace.RelatedElements.OfType<IfcElement>())
-                {
-                    if (!SpaceAssetLookup.ContainsKey(element))
-                        _spaceAssetLookup[element] = ifcRelContainedInSpace.RelatingStructure;
-                       
+                { 
+                    List<IfcSpatialStructureElement> spaceList;
+                    if (!SpaceAssetLookup.TryGetValue(element, out spaceList))
+                    {
+                        spaceList = new List<IfcSpatialStructureElement>();
+                        SpaceAssetLookup[element] = spaceList;
+
+                    }
+                    spaceList.Add(ifcRelContainedInSpace.RelatingStructure);
                 }
             }
            
@@ -987,6 +992,19 @@ namespace XbimExchanger.IfcToCOBieLiteUK
                 return assignments;
             return Enumerable.Empty<IfcObjectDefinition>();
             
+        }
+
+        /// <summary>
+        /// Returns a list of spaces the element is in
+        /// </summary>
+        /// <param name="ifcElement"></param>
+        /// <returns></returns>
+        public IEnumerable<IfcSpatialStructureElement> GetSpaces(IfcElement ifcElement)
+        {
+            List<IfcSpatialStructureElement> spaceList;
+            if (_spaceAssetLookup.TryGetValue(ifcElement, out spaceList))
+                return spaceList;
+            return Enumerable.Empty<IfcSpatialStructureElement>();
         }
     }
 }

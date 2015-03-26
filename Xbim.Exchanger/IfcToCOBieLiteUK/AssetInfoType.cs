@@ -40,33 +40,37 @@ namespace XbimExchanger.IfcToCOBieLiteUK
             //System Assignments
 
              //Space Assignments
-            IfcSpatialStructureElement space;
-            if (helper.SpaceAssetLookup.TryGetValue(ifcElement, out space))
+            var spatialElements = helper.GetSpaces(ifcElement);
+
+            var ifcSpatialStructureElements = spatialElements as IList<IfcSpatialStructureElement> ?? spatialElements.ToList();
+            Spaces = new List<SpaceKey>();
+            if (ifcSpatialStructureElements.Any())
             {
-                if (Spaces == null)
-                    Spaces = new List<SpaceKey> { };
-                var Space = new SpaceKey();
-                Spaces.Add(Space);
-                
-                if (space != null)
+
+                foreach (var spatialElement in ifcSpatialStructureElements)
                 {
-                    Space.Name = space.Name;
-                    if (space is IfcSpace)
-                        Space.KeyType = EntityType.Space;
-                    else if (space is IfcBuildingStorey)
-                        Space.KeyType = EntityType.Floor;
-                    else if (space is IfcBuilding)
-                        Space.KeyType = EntityType.Facility;
-                    else if (space is IfcSite)
-                        Space.KeyType = EntityType.Space;
+                    var space = new SpaceKey();
+
+                    space.Name = spatialElement.Name;
+                    if (spatialElement is IfcSpace)
+                        space.KeyType = EntityType.Space;
+                    else if (spatialElement is IfcBuildingStorey)
+                        space.KeyType = EntityType.Floor;
+                    else if (spatialElement is IfcBuilding)
+                        space.KeyType = EntityType.Facility;
+                    else if (spatialElement is IfcSite)
+                        space.KeyType = EntityType.Space;
+                    Spaces.Add(space);
                 }
-                else //it is in nowhere land, assign it to a special space all Default External
-                {
-                    Space.Name = "Default External";
-                    Space.KeyType = EntityType.Space;
-                }
-             
             }
+            else //it is in nowhere land, assign it to a special space all Default External
+            {
+                var space = new SpaceKey();
+                space.Name = "Default External";
+                space.KeyType = EntityType.Space;
+                Spaces.Add(space);
+            }
+
            
             //Issues
 
