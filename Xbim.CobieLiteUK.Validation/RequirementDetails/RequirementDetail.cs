@@ -16,8 +16,11 @@
 
         public RequirementDetail(COBieLiteUK.Attribute attrib)
         {
+            Attribute = attrib;
             Name = attrib.Name;
             Description = attrib.Description;
         }
+
+        public COBieLiteUK.Attribute Attribute { get; private set; }
     }
 }
