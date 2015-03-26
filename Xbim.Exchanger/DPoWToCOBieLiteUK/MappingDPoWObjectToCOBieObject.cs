@@ -54,6 +54,7 @@ namespace XbimExchanger.DPoWToCOBieLiteUK
                         Categories = new List<Category> { new Category{ Code = "required" , Classification = "DPoW"} },
                         Name = sAttr.Name, 
                         Description = sAttr.Description,
+                        PropertySetName = "DPoW Required"
                     });
             }
             

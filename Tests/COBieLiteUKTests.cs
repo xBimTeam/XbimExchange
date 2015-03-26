@@ -284,20 +284,20 @@ namespace Tests
         }
 
         [TestMethod]
-        [DeploymentItem("TestFiles\\2012-03-23-Duplex-Handover.ifc")]
+        [DeploymentItem("ValidationFiles\\Lakeside_Restaurant.ifc")]
         public void IfcToCoBieLiteUkTest()
         {
             using (var m = new XbimModel())
             {
-                const string ifcTestFile = "2012-03-23-Duplex-Handover.ifc";   
+                const string ifcTestFile = @"Lakeside_Restaurant.ifc"; 
                 var xbimTestFile = Path.ChangeExtension(ifcTestFile, "xbim");
                 var jsonFile = Path.ChangeExtension(ifcTestFile, "json");
                 m.CreateFrom(ifcTestFile, xbimTestFile, null, true, true);
-                var helper = new CoBieLiteUkHelper(m, "UniClass");
+                var helper = new CoBieLiteUkHelper(m, "NBS Code");
                 var facilities = helper.GetFacilities();
                 foreach (var facilityType in facilities)
                 {
-                   facilityType.WriteJson(jsonFile);
+                    facilityType.WriteJson(jsonFile, true);
                     break;
                 }
             }
