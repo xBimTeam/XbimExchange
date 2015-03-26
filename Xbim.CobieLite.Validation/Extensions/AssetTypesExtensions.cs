@@ -2,7 +2,7 @@
 using System.Linq;
 using Xbim.COBieLiteUK;
 
-namespace Xbim.CobieLite.Validation.Extensions
+namespace Xbim.CobieLiteUK.Validation.Extensions
 {
     static public class AssetTypesExtensions
     {

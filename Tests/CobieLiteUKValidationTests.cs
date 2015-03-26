@@ -6,7 +6,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Xbim.CobieLite.Validation;
+using Xbim.CobieLiteUK.Validation;
 using Xbim.COBieLiteUK;
 
 namespace Tests

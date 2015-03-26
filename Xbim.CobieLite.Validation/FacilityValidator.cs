@@ -2,7 +2,7 @@
 using System.Linq;
 using Xbim.COBieLiteUK;
 
-namespace Xbim.CobieLite.Validation
+namespace Xbim.CobieLiteUK.Validation
 {
     public class FacilityValidator : IValidator
     {

@@ -7,8 +7,8 @@
     <ProjectGuid>{D2D0B192-93B2-409F-AAA0-47BD3038C87E}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Xbim.CobieLite.Validation</RootNamespace>
-    <AssemblyName>Xbim.CobieLite.Validation</AssemblyName>
+    <RootNamespace>Xbim.CobieLiteUK.Validation</RootNamespace>
+    <AssemblyName>Xbim.CobieLiteUK.Validation</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\</SolutionDir>
@@ -24,8 +24,7 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <Prefer32Bit>false</Prefer32Bit>
-    <DocumentationFile>
-    </DocumentationFile>
+    <DocumentationFile>..\Output\Debug\Xbim.CobieLiteUK.Validation.XML</DocumentationFile>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -35,7 +34,7 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <DocumentationFile>..\Output\Release\Xbim.CobieLite.Validation.XML</DocumentationFile>
+    <DocumentationFile>..\Output\Release\Xbim.CobieLiteUK.Validation.xml</DocumentationFile>
     <NoWarn>1591;1572;1573;1574</NoWarn>
   </PropertyGroup>
   <PropertyGroup>

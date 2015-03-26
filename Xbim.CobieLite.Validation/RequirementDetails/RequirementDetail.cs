@@ -1,4 +1,4 @@
-﻿namespace Xbim.CobieLite.Validation.RequirementDetails
+﻿namespace Xbim.CobieLiteUK.Validation.RequirementDetails
 {
     public class RequirementDetail
     {

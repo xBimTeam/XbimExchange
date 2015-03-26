@@ -1,4 +1,4 @@
-﻿namespace Xbim.CobieLite.Validation
+﻿namespace Xbim.CobieLiteUK.Validation
 {
     public enum TerminationMode
     {

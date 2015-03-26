@@ -3,12 +3,12 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Text;
-using Xbim.CobieLite.Validation.Extensions;
-using Xbim.CobieLite.Validation.RequirementDetails;
+using Xbim.CobieLiteUK.Validation.Extensions;
+using Xbim.CobieLiteUK.Validation.RequirementDetails;
 using Xbim.COBieLiteUK;
 using Attribute = Xbim.COBieLiteUK.Attribute;
 
-namespace Xbim.CobieLite.Validation
+namespace Xbim.CobieLiteUK.Validation
 {
     public class AssetTypeValidator : IValidator
     {
