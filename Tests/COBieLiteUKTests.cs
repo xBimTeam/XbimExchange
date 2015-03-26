@@ -284,13 +284,12 @@ namespace Tests
         }
 
         [TestMethod]
-        [DeploymentItem("TestFiles\\2012-03-23-Duplex-Handover.ifc")]
+        [DeploymentItem("ValidationFiles\\Lakeside_Restaurant.ifc")]
         public void IfcToCoBieLiteUkTest()
         {
             using (var m = new XbimModel())
             {
-                const string ifcTestFile =
-                    @"C:\Users\Bonghi\Google Drive\UNN\_Research\2014 12 01 - DPOW\_modelInfo\_UseData\NBS_LakesideRestaurant_EcoBuild2015_Revit2015_.ifc"; // "2012-03-23-Duplex-Handover.ifc";   
+                const string ifcTestFile = @"Lakeside_Restaurant.ifc"; 
                 var xbimTestFile = Path.ChangeExtension(ifcTestFile, "xbim");
                 var jsonFile = Path.ChangeExtension(ifcTestFile, "json");
                 m.CreateFrom(ifcTestFile, xbimTestFile, null, true, true);

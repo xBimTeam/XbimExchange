@@ -8,20 +8,34 @@ using System.Text;
 using System.Threading.Tasks;
 using Xbim.CobieLiteUK.Validation;
 using Xbim.COBieLiteUK;
+using Xbim.IO;
+using XbimExchanger.IfcToCOBieLiteUK;
 
 namespace Tests
 {
     [TestClass]
+    [DeploymentItem(@"ValidationFiles\")]
     public class CobieLiteUKValidationTests
     {
         [TestMethod]
         public void Validates()
         {
+            const string ifcTestFile = @"Lakeside_Restaurant.ifc";
+            Facility sub = null;
+            
+            //create validation file from IFC
+            using (var m = new XbimModel())
+            {
+                var xbimTestFile = Path.ChangeExtension(ifcTestFile, "xbim");
+                m.CreateFrom(ifcTestFile, xbimTestFile, null, true, true);
+                var helper = new CoBieLiteUkHelper(m, "NBS Code");
+                sub = helper.GetFacilities().FirstOrDefault();
+            }
+
             var vd = new FacilityValidator();
-            var req = Facility.ReadJson(@"C:\Users\Bonghi\Google Drive\UNN\_Research\2014 12 01 - DPOW\_modelInfo\_UseData\req\013-Lakeside_Restaurant-stage6-COBie.json");
-            var sub = Facility.ReadJson(@"C:\Users\Bonghi\Google Drive\UNN\_Research\2014 12 01 - DPOW\_modelInfo\_UseData\NBS_LakesideRestaurant_EcoBuild2015_Revit2015_.json");
+            var req = Facility.ReadJson(@"Lakeside_Restaurant-stage6-COBie.json");
             var validated = vd.Validate(req, sub);
-            validated.WriteJson(@"C:\Users\Bonghi\Google Drive\UNN\_Research\2014 12 01 - DPOW\_modelInfo\_UseData\validationReport.json", true);
+            validated.WriteJson(@"..\..\ValidationReport.json", true);
         }
 
         [TestMethod]
