@@ -13,7 +13,6 @@ using XbimExchanger.IfcToCOBieLiteUK;
 
 namespace Tests
 {
-    [DeploymentItem(@"DPoWValidationTestFiles\", @"DPoWValidationTestFiles\")]
     [TestClass]
     [DeploymentItem(@"ValidationFiles\")]
     public class CobieLiteUKValidationTests
@@ -37,13 +36,13 @@ namespace Tests
             var req = Facility.ReadJson(@"Lakeside_Restaurant-stage6-COBie.json");
             var validated = vd.Validate(req, sub);
             validated.WriteJson(@"..\..\ValidationReport.json", true);
-            validated.WriteXml(@"DPoWValidationTestFiles\validationReport.xml", true);
+            validated.WriteJson(@"ValidationReport.json", true);
         }
 
         [TestMethod]
         public void FindsRequirements()
         {
-            var fac = Facility.ReadJson(@"DPoWValidationTestFiles\013-Lakeside_Restaurant-stage6-COBie.json");
+            var fac = Facility.ReadJson(@"Lakeside_Restaurant-stage6-COBie.json");
             foreach (var ast in fac.AssetTypes)
             {
                 var atv = new AssetTypeValidator(ast);
