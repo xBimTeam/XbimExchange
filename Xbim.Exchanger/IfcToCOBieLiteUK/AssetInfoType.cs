@@ -24,16 +24,17 @@ namespace XbimExchanger.IfcToCOBieLiteUK
             ExternalId = helper.ExternalEntityIdentity(ifcElement);
             ExternalSystem = helper.ExternalSystemName(ifcElement);
             Name = ifcElement.Name;
-            Description = ifcElement.Description;
-       
-            SerialNumber = helper.GetCoBieProperty("AssetSerialNumber", ifcElement);
-            InstallationDate = helper.GetCoBieProperty<DateTime>("AssetInstallationDate", ifcElement);
-            TagNumber = helper.GetCoBieProperty("AssetInstalledModelNumber", ifcElement);
-            WarrantyStartDate = helper.GetCoBieProperty<DateTime>("AssetWarrantyStartDate", ifcElement);     
             
-            TagNumber = helper.GetCoBieProperty("AssetTagNumber", ifcElement);
-            BarCode = helper.GetCoBieProperty("AssetBarCode", ifcElement);
+      
             AssetIdentifier = helper.GetCoBieProperty("AssetIdentifier", ifcElement);
+            BarCode = helper.GetCoBieProperty("AssetBarCode", ifcElement);
+            Description = ifcElement.Description;
+            InstallationDate = helper.GetCoBieProperty<DateTime>("AssetInstallationDate", ifcElement);
+            SerialNumber = helper.GetCoBieProperty("AssetSerialNumber", ifcElement);          
+            TagNumber = helper.GetCoBieProperty("AssetTagNumber", ifcElement);
+            WarrantyStartDate = helper.GetCoBieProperty<DateTime>("AssetWarrantyStartDate", ifcElement);
+            
+            
             
             //Attributes
             Attributes = helper.GetAttributes(ifcElement);

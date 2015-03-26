@@ -1,14 +1,16 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using Xbim.COBieLite;
+using Xbim.COBieLiteUK;
 using Xbim.IO;
 using Xbim.ModelGeometry.Scene;
 using Xbim.XbimExtensions;
 using Xbim.XbimExtensions.Interfaces;
-using XbimExchanger.COBieLiteToIfc;
+using XbimExchanger.IfcToCOBieLiteUK;
 using XbimGeometry.Interfaces;
+
 
 namespace Xbim.Exchange
 {
@@ -48,10 +50,10 @@ namespace Xbim.Exchange
                     var fileNameWithoutExtension = Path.GetFileNameWithoutExtension(fileName);
                     var fileDirectoryName = Path.GetDirectoryName(fileName);
 
-                    var helper = new CoBieLiteHelper(model, "UniClass2015");
+                    var helper = new CoBieLiteUkHelper(model, "UniClass2015");
                     var facilities = helper.GetFacilities();
                     var facilityNumber = 0;
-                    var facilityTypes = facilities as IList<FacilityType> ?? facilities.ToList();
+                    var facilityTypes = facilities as IList<Facility> ?? facilities.ToList();
                     foreach (var facilityType in facilityTypes)
                     {
                         var dpow = "DPoW";
@@ -62,36 +64,32 @@ namespace Xbim.Exchange
 // ReSharper restore AssignNullToNotNullAttribute
                         dPoWFile = Path.ChangeExtension(dPoWFile, "json");
                         Console.WriteLine("Creating " + dPoWFile);
-                        using (var fs = new StreamWriter(dPoWFile))
-                        {
-                            CoBieLiteHelper.WriteJson(fs, facilityType);
-                            fs.Close();
-                        }
-                        dPoWFile = Path.ChangeExtension(dPoWFile, "xml");
-                        Console.WriteLine("Creating " + dPoWFile);
-                        using (var fs = new StreamWriter(dPoWFile))
-                        {
-                            CoBieLiteHelper.WriteXml(fs, facilityType);
-                            fs.Close();
-                        }
-                        dPoWFile = Path.ChangeExtension(dPoWFile, "xbim");
-                        Console.WriteLine("Creating " + dPoWFile);
-                        using (var ifcModel = XbimModel.CreateModel(dPoWFile))
-                        {
-                            ifcModel.Initialise("Xbim Tester", "XbimTeam", "Xbim.Exchanger", "Xbim Development Team", "3.0");
-                            ifcModel.ReloadModelFactors();
-                            using (var txn = ifcModel.BeginTransaction("Convert from COBieLite"))
-                            {
-                                var exchanger = new CoBieLiteToIfcExchanger(facilityType, ifcModel);
-                                exchanger.Convert();
-                                txn.Commit();
-                                //var err = model.Validate(model.Instances, Console.Out);
-                            }
-                            dPoWFile = Path.ChangeExtension(dPoWFile, "ifc");
-                            Console.WriteLine("Creating " + dPoWFile);
-                            ifcModel.SaveAs(dPoWFile, XbimStorageType.IFC);
-                            ifcModel.Close();
-                        }
+                        
+                            facilityType.WriteJson(dPoWFile);
+                           
+                        
+                        //dPoWFile = Path.ChangeExtension(dPoWFile, "xml");
+                        //Console.WriteLine("Creating " + dPoWFile);
+                        //facilityType.WriteXml(dPoWFile);
+                            
+                        //dPoWFile = Path.ChangeExtension(dPoWFile, "xbim");
+                        //Console.WriteLine("Creating " + dPoWFile);
+                        //using (var ifcModel = XbimModel.CreateModel(dPoWFile))
+                        //{
+                        //    ifcModel.Initialise("Xbim Tester", "XbimTeam", "Xbim.Exchanger", "Xbim Development Team", "3.0");
+                        //    ifcModel.ReloadModelFactors();
+                        //    using (var txn = ifcModel.BeginTransaction("Convert from COBieLite"))
+                        //    {
+                        //        var exchanger = new CoBieLiteToIfcExchanger(facilityType, ifcModel);
+                        //        exchanger.Convert();
+                        //        txn.Commit();
+                        //        //var err = model.Validate(model.Instances, Console.Out);
+                        //    }
+                        //    dPoWFile = Path.ChangeExtension(dPoWFile, "ifc");
+                        //    Console.WriteLine("Creating " + dPoWFile);
+                        //    ifcModel.SaveAs(dPoWFile, XbimStorageType.IFC);
+                        //    ifcModel.Close();
+                        //}
                     }
                     model.Close();
                 }

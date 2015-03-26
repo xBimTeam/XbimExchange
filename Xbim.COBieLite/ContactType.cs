@@ -116,10 +116,11 @@ namespace Xbim.COBieLite
                 var ifcTelecomAddresses = telecom as IfcTelecomAddress[] ?? telecom.ToArray();
                 if (ifcTelecomAddresses.Any())
                 {
-                    var emailAddresses = string.Join(";", ifcTelecomAddresses.SelectMany(t => t.ElectronicMailAddresses));
+                    var emailAddresses = string.Join(";", ifcTelecomAddresses.Where(t => t.ElectronicMailAddresses!=null).SelectMany(t => t.ElectronicMailAddresses));
                     if (!string.IsNullOrWhiteSpace(emailAddresses))
                         ContactEmail = string.Join(";", emailAddresses, ContactEmail ?? "");
-                    var phoneNums = string.Join(";", ifcTelecomAddresses.SelectMany(t => t.TelephoneNumbers));
+
+                    var phoneNums = string.Join(";", ifcTelecomAddresses.Where(t => t.TelephoneNumbers!=null).SelectMany(t => t.TelephoneNumbers));
                     if (!string.IsNullOrWhiteSpace(phoneNums))
                         ContactPhoneNumber = string.Join(";", phoneNums, ContactPhoneNumber ?? "");
                     var url = string.Join(";", ifcTelecomAddresses.Where(p => p.WWWHomePageURL.HasValue).SelectMany(p => p.WWWHomePageURL.ToString()));
