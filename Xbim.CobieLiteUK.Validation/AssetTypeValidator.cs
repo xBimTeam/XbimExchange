@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using Xbim.CobieLiteUK.Validation.Extensions;
 using Xbim.CobieLiteUK.Validation.RequirementDetails;
 using Xbim.COBieLiteUK;
@@ -10,6 +11,8 @@ using Attribute = Xbim.COBieLiteUK.Attribute;
 
 namespace Xbim.CobieLiteUK.Validation
 {
+
+
     public class AssetTypeValidator : IValidator
     {
         private readonly AssetType _requirementType;
@@ -76,12 +79,14 @@ namespace Xbim.CobieLiteUK.Validation
             if (!RequirementDetails.Any())
             {
                 retType.Description = "No requirement for the specific classification.\r\n";
+                retType.Categories.Add(FacilityValidator.PassedCat);
                 returnWithoutFurtherTests = true;
             }
 
             // if candidate is null then consider there's no match
             if (candidateType == null)
             {
+                retType.Categories.Add(FacilityValidator.FailedCat);
                 retType.Description = "No candidates in submission match the required classification.\r\n";
                 returnWithoutFurtherTests = true;    
             }
@@ -95,41 +100,46 @@ namespace Xbim.CobieLiteUK.Validation
             retType.Description = string.Format("{0} of {1} requirement addressed at type level.", RequirementDetails.Count - outstandingRequirementsCount, RequirementDetails.Count);
             // todo: can add list of succesful attributes at type level here
 
-            var failedCat = new Category()
-            {
-                Classification = "DPoW",
-                Code = "Failed"
-            };
 
-            var passedCat = new Category()
-            {
-                Classification = "DPoW",
-                Code = "Passed"
-            };
-
+            var anyAssetFails = false;
             retType.Assets = new List<Asset>();
             // perform tests at asset level
             foreach (var modelAsset in candidateType.Assets)
             {
-                var reportAsset = new Asset();
-                reportAsset.Attributes = new List<Attribute>();
-                reportAsset.Name = modelAsset.Name;
-                reportAsset.AssetIdentifier = modelAsset.AssetIdentifier;
+                var reportAsset = new Asset
+                {
+                    Attributes = new List<Attribute>(),
+                    Name = modelAsset.Name,
+                    AssetIdentifier = modelAsset.AssetIdentifier,
+                    Categories = new List<Category>(),
+                    ExternalId = modelAsset.ExternalId
+                };
                 // reportAsset.Description = modelAsset.Description;
-                reportAsset.Categories = new List<Category>();
                 if (modelAsset.Categories != null)
                     reportAsset.Categories.AddRange(modelAsset.Categories);    
-                reportAsset.ExternalId = modelAsset.ExternalId;
-
+                
+                // at this stage we are only validating for the existence of attributes.
+                //
                 var matching = outstandingRequirements.Select(x => x.Name).Intersect(modelAsset.Attributes.Select(at => at.Name));
-                var machCnt = matching.Count();
+                var matchingCount = matching.Count();
+                // add passes to the report.
+                foreach (var matched in matching)
+                {
+                    var att = new Attribute()
+                    {
+                        Name = matched,
+                        Categories = new List<Category>() { FacilityValidator.PassedCat }
+                    };
+                    reportAsset.Attributes.Add(att);
+                }
 
                 var sb = new StringBuilder();
+                sb.AppendFormat("{0} of {1} requirements matched at asset level.\r\n\r\n", matchingCount, outstandingRequirementsCount);
 
-                var pass = (outstandingRequirementsCount == machCnt);
+                var pass = (outstandingRequirementsCount == matchingCount);
                 if (!pass)
                 {
-                    sb.AppendFormat("{0} of {1} requirements matched at asset level.\r\n\r\n", machCnt, outstandingRequirementsCount);
+                    anyAssetFails = true;
                     sb.AppendLine("Missing attributes:");
                     foreach (var req in outstandingRequirements)
                     {
@@ -141,22 +151,27 @@ namespace Xbim.CobieLiteUK.Validation
                             {
                                 Name = req.Name,
                                 Description = req.Description,
-                                Categories = new List<Category>() { failedCat }
+                                Categories = new List<Category>() { FacilityValidator.FailedCat }
                             };
                             reportAsset.Attributes.Add(att);
                         }
                     }
-                    reportAsset.Categories.Add(failedCat);
+                    reportAsset.Categories.Add(FacilityValidator.FailedCat);
                 }
                 else
                 {
-                    reportAsset.Categories.Add(passedCat);
+                    reportAsset.Categories.Add(FacilityValidator.PassedCat);
                 }
                 reportAsset.Description = sb.ToString();
                 retType.Assets.Add(reportAsset);
             }
+            
+            retType.Categories.Add(
+                anyAssetFails ? FacilityValidator.FailedCat : FacilityValidator.PassedCat
+                );
             return retType;
         }
+
 
         private IEnumerable<RequirementDetail> MissingFrom(AssetType typeToTest)
         {
@@ -170,12 +185,27 @@ namespace Xbim.CobieLiteUK.Validation
             return req.Select(left => RequirementDetails.FirstOrDefault(x => x.Name == left));
         }
 
+        private  static readonly Regex NbsCodeCoreMatch= new Regex(@".*/\d+");
+
         internal IEnumerable<AssetType> GetCandidates(Facility submitted)
         {
             var reqClass = _requirementType.Categories.FirstOrDefault();
             if (reqClass == null)
                 return Enumerable.Empty<AssetType>();
             Debug.Write(string.Format("RequirementCode: {0}\r\n", reqClass.Code));
+
+            // todo: we need to clarify the rules for code matching
+            // I'm temporarily changing NBS codes to get more matches.
+
+            if (reqClass.Classification == @"NBS Code")
+            {
+                reqClass = new Category()
+                {
+                    Classification = @"NBS Code",
+                    Code = NbsCodeCoreMatch.Match(reqClass.Code).Value,
+                    Description = reqClass.Description
+                };
+            }
             return submitted.AssetTypes.GetClassificationSubset(reqClass);
         }
     }
