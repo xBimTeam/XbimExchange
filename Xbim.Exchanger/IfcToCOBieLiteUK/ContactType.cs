@@ -117,10 +117,10 @@ namespace XbimExchanger.IfcToCOBieLiteUK
                 var ifcTelecomAddresses = telecom as IfcTelecomAddress[] ?? telecom.ToArray();
                 if (ifcTelecomAddresses.Any())
                 {
-                    var emailAddresses = string.Join(";", ifcTelecomAddresses.SelectMany(t => t.ElectronicMailAddresses));
+                    var emailAddresses = string.Join(";", ifcTelecomAddresses.Where(t => t.ElectronicMailAddresses != null).SelectMany(t => t.ElectronicMailAddresses));
                     if (!string.IsNullOrWhiteSpace(emailAddresses))
                         Email = string.Join(";", emailAddresses, Email ?? "");
-                    var phoneNums = string.Join(";", ifcTelecomAddresses.SelectMany(t => t.TelephoneNumbers));
+                    var phoneNums = string.Join(";", ifcTelecomAddresses.Where(t => t.TelephoneNumbers!=null).SelectMany(t => t.TelephoneNumbers));
                     if (!string.IsNullOrWhiteSpace(phoneNums))
                         Phone = string.Join(";", phoneNums, Phone ?? "");
                     //var url = string.Join(";", ifcTelecomAddresses.Where(p => p.WWWHomePageURL.HasValue).SelectMany(p => p.WWWHomePageURL.ToString()));
