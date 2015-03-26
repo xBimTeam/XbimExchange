@@ -22,7 +22,20 @@ namespace Xbim.CobieLiteUK.Validation.Extensions
                 testedCategory.Code == requiredCategory.Code;
         }
 
+        public static Category Clone(this Category originalCategory)
+        {
+            return new Category()
+            {
+                Classification = originalCategory.Classification,
+                Code = originalCategory.Code,
+                Description = originalCategory.Description
+            };
+        }
 
+        public static IEnumerable<Category> Clone(this IEnumerable<Category> originalCategories)
+        {
+            return originalCategories.Select(originalCategory => originalCategory.Clone());
+        }
 
         public static bool ContainsChildOf(this IEnumerable<Category> testedCategories, Category requiredCategory)
         {

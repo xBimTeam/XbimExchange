@@ -61,7 +61,7 @@ namespace Xbim.CobieLiteUK.Validation
         {
             var retType = new AssetType
             {
-                Categories = _requirementType.Categories // classification comes from the requirement
+                Categories = new List<Category>(_requirementType.Categories.Clone()) // classification comes from the requirement
             };
             // improve returning assetType
             if (candidateType == null) // the following properties depend on the nullity of candidate
