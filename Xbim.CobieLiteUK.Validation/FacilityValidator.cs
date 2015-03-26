@@ -27,8 +27,7 @@ namespace Xbim.CobieLiteUK.Validation
 
         public Facility Validate(Facility requirement, Facility submitted)
         {
-            var retFacility = new Facility();
-            retFacility.Categories = new List<Category>();
+            var retFacility = new Facility {Categories = new List<Category>()};
             StringBuilder sb = new StringBuilder();
 
             // a facility validation passes is carried out through the validation of
@@ -38,20 +37,68 @@ namespace Xbim.CobieLiteUK.Validation
             // d) spaces (planned)
 
             // a)
-            bool FacilityPasses = true;
+            bool facilityPasses = true;
 
-            if (RequiredStringMatch(requirement.AreaUnitsCustom, submitted.AreaUnitsCustom, "Area units", retFacility.AreaUnitsCustom, sb))
-                FacilityPasses = false;
-            if (RequiredStringMatch(requirement.LinearUnitsCustom, submitted.LinearUnitsCustom, "Linear units", retFacility.LinearUnitsCustom, sb))
-                FacilityPasses = false;
-            if (RequiredStringMatch(requirement.VolumeUnitsCustom, submitted.VolumeUnitsCustom, "Volume units", retFacility.VolumeUnitsCustom, sb))
-                FacilityPasses = false;
-            if (RequiredStringMatch(requirement.CurrencyUnitCustom, submitted.CurrencyUnitCustom, "Currency units", retFacility.CurrencyUnitCustom, sb))
-                FacilityPasses = false;
-            
-            // to be added project level validation here.
-            
+            // area units
+            if (requirement.AreaUnitsCustom != submitted.AreaUnitsCustom)
+            {
+                retFacility.AreaUnitsCustom = string.Format("{0} (should be '{1}')", submitted.AreaUnitsCustom, requirement.AreaUnitsCustom);
+                sb.AppendFormat("{0} failure: {1}\r\n", "Area units", retFacility.AreaUnitsCustom);
+                facilityPasses = false;
+            }
+            else
+            {
+                retFacility.AreaUnitsCustom = submitted.AreaUnitsCustom;
+            }
 
+            // linear units
+            if (requirement.LinearUnitsCustom != submitted.LinearUnitsCustom)
+            {
+                retFacility.LinearUnitsCustom = string.Format("{0} (should be '{1}')", submitted.LinearUnitsCustom, requirement.LinearUnitsCustom);
+                sb.AppendFormat("{0} failure: {1}\r\n", "Linear units", retFacility.LinearUnitsCustom);
+                facilityPasses = false;
+            }
+            else
+            {
+                retFacility.LinearUnitsCustom = submitted.LinearUnitsCustom;
+            }
+
+            // Volume units
+            if (requirement.VolumeUnitsCustom != submitted.VolumeUnitsCustom)
+            {
+                retFacility.VolumeUnitsCustom = string.Format("{0} (should be '{1}')", submitted.VolumeUnitsCustom, requirement.VolumeUnitsCustom);
+                sb.AppendFormat("{0} failure: {1}\r\n", "Volume units", retFacility.VolumeUnitsCustom);
+                facilityPasses = false;
+            }
+            else
+            {
+                retFacility.VolumeUnitsCustom = submitted.VolumeUnitsCustom;
+            }
+
+            // Currency units
+            if (requirement.CurrencyUnitCustom != submitted.CurrencyUnitCustom)
+            {
+                retFacility.CurrencyUnitCustom = string.Format("{0} (should be '{1}')", submitted.CurrencyUnitCustom, requirement.CurrencyUnitCustom);
+                sb.AppendFormat("{0} failure: {1}\r\n", "Currency units", retFacility.CurrencyUnitCustom);
+                facilityPasses = false;
+            }
+            else
+            {
+                retFacility.CurrencyUnitCustom = submitted.CurrencyUnitCustom;
+            }
+
+            if (requirement.Project != null)
+            {
+                // to be added project level validation here.
+                var pv = new ProjectValidator(requirement.Project);
+                retFacility.Project = pv.Validate(submitted.Project);
+
+                if (!pv.IsPass)
+                {
+                    sb.AppendFormat("Validation of Project information fails, see project information for detail.\r\n");
+                    facilityPasses = false;
+                }
+            }
             // b)
             foreach (var assetType in requirement.AssetTypes)
             {
@@ -77,22 +124,9 @@ namespace Xbim.CobieLiteUK.Validation
                 }
             }
             retFacility.Description = sb.ToString();
-            retFacility.Categories.Add(FacilityPasses ? PassedCat : FailedCat);
+            retFacility.Categories.Add(facilityPasses ? PassedCat : FailedCat);
 
             return retFacility;
-        }
-
-        private static bool RequiredStringMatch(string requiredString, string providedString, string propertyName, String targetString, StringBuilder sb)
-        {
-            // todo: the calling mechanism needs to be changed.
-            if (requiredString == providedString)
-            {
-                targetString = requiredString;
-                return true;
-            }
-            targetString = string.Format("{0} (should be '{1}')", providedString, requiredString);
-            sb.AppendFormat("{0} failure: {1}\r\n", propertyName, targetString);
-            return false;
         }
 
         public TerminationMode TerminationMode { get; set; }

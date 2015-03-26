@@ -55,6 +55,7 @@
     <Compile Include="Extensions\AssetTypesExtensions.cs" />
     <Compile Include="Extensions\CategoryExtensions.cs" />
     <Compile Include="IValidator.cs" />
+    <Compile Include="ProjectValidator.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="FacilityValidator.cs" />
     <Compile Include="RequirementDetails\RequirementDetail.cs" />
