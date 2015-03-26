@@ -56,7 +56,7 @@
     <Compile Include="ValidationMockUp.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Xbim.CobieLite.Validation\Xbim.CobieLiteUK.Validation.csproj">
+    <ProjectReference Include="..\Xbim.CobieLiteUK.Validation\Xbim.CobieLiteUK.Validation.csproj">
       <Project>{d2d0b192-93b2-409f-aaa0-47bd3038c87e}</Project>
       <Name>Xbim.CobieLiteUK.Validation</Name>
     </ProjectReference>
