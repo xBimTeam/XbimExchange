@@ -108,7 +108,7 @@ namespace XbimExchanger.DPoWToCOBieLiteUK
             foreach (var sAttr in sAttrs)
             {
                 //create attribute in target
-                var tAttr = new CAttribute { Name = sAttr.Name, Description = sAttr.Definition };
+                var tAttr = new CAttribute { Name = sAttr.Name, Description = sAttr.Definition, PropertySetName = "DPoW Attributes"};
                 switch (sAttr.ValueType)
                 {
                     case ValueTypeEnum.NotDefined:

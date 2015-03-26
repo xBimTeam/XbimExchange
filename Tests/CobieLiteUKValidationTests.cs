@@ -8,28 +8,41 @@ using System.Text;
 using System.Threading.Tasks;
 using Xbim.CobieLiteUK.Validation;
 using Xbim.COBieLiteUK;
+using Xbim.IO;
+using XbimExchanger.IfcToCOBieLiteUK;
 
 namespace Tests
 {
-    [DeploymentItem(@"DPoWValidationTestFiles\", @"DPoWValidationTestFiles\")]
     [TestClass]
+    [DeploymentItem(@"ValidationFiles\")]
     public class CobieLiteUKValidationTests
     {
         [TestMethod]
         public void Validates()
         {
+            const string ifcTestFile = @"Lakeside_Restaurant.ifc";
+            Facility sub = null;
+            
+            //create validation file from IFC
+            using (var m = new XbimModel())
+            {
+                var xbimTestFile = Path.ChangeExtension(ifcTestFile, "xbim");
+                m.CreateFrom(ifcTestFile, xbimTestFile, null, true, true);
+                var helper = new CoBieLiteUkHelper(m, "NBS Code");
+                sub = helper.GetFacilities().FirstOrDefault();
+            }
+
             var vd = new FacilityValidator();
-            var req = Facility.ReadJson(@"DPoWValidationTestFiles\013-Lakeside_Restaurant-stage6-COBie.json");
-            var sub = Facility.ReadJson(@"DPoWValidationTestFiles\NBS_LakesideRestaurant_EcoBuild2015_Revit2015_.json");
+            var req = Facility.ReadJson(@"Lakeside_Restaurant-stage6-COBie.json");
             var validated = vd.Validate(req, sub);
-            validated.WriteJson(@"DPoWValidationTestFiles\validationReport.json", true);
-            validated.WriteXml(@"DPoWValidationTestFiles\validationReport.xml", true);
+            validated.WriteJson(@"..\..\ValidationReport.json", true);
+            validated.WriteJson(@"ValidationReport.json", true);
         }
 
         [TestMethod]
         public void FindsRequirements()
         {
-            var fac = Facility.ReadJson(@"DPoWValidationTestFiles\013-Lakeside_Restaurant-stage6-COBie.json");
+            var fac = Facility.ReadJson(@"Lakeside_Restaurant-stage6-COBie.json");
             foreach (var ast in fac.AssetTypes)
             {
                 var atv = new AssetTypeValidator(ast);
