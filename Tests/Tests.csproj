@@ -82,6 +82,12 @@
     <None Include="DemoFiles\LakesideRestaurant_Deliverables.DPoW.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+    <None Include="DPoWValidationTestFiles\013-Lakeside_Restaurant-stage6-COBie.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="DPoWValidationTestFiles\NBS_LakesideRestaurant_EcoBuild2015_Revit2015_.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Include="packages.config" />
     <None Include="DemoFiles\LakesideRestaurant_stage6_Requirements.DPoW.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
