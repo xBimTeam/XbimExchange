@@ -56,9 +56,11 @@ namespace Xbim.COBieLiteUK
                     yield return representation;
         }
 
-        private string _parentSheet;
-        private string _parentNameProperty;
-        private string _parentNameValue;
+        // ReSharper disable InconsistentNaming
+        protected string _parentSheet;
+        protected string _parentNameProperty;
+        protected string _parentNameValue;
+        // ReSharper restore InconsistentNaming
 
         internal static List<CobieObject> LoadFromCobie(Type cobieType, IWorkbook workbook, out string message,
             string version = "UK2012")
@@ -172,6 +174,18 @@ namespace Xbim.COBieLiteUK
                 result.Add(cObject);
             }
 
+            //merge duplicates (mostly caused by compound keys)
+            var toRemove = new List<CobieObject>();
+            foreach (var cobieObject in result)
+            {
+                if (toRemove.Contains(cobieObject)) continue; //this should always preserve the first original value
+                var duplicates = cobieObject.MergeDuplicates(result, log);
+                if (duplicates == null) continue;
+                toRemove.AddRange(duplicates);
+            }
+            foreach (var duplicate in toRemove)
+                result.Remove(duplicate);
+
             message = log.ToString();
             return result;
         }
@@ -221,6 +235,12 @@ namespace Xbim.COBieLiteUK
                 }
             }
             return log.ToString();
+        }
+
+        internal protected virtual List<CobieObject> MergeDuplicates(List<CobieObject> objects, TextWriter log)
+        {
+            //by default no objects are to be removed
+            return new List<CobieObject>();
         }
 
         internal virtual void AddToParent(IEnumerable<CobieObject> parents, out string message, string version)

@@ -21,7 +21,6 @@ namespace Xbim.COBieLiteUK
     public partial class Facility
     {
         #region Enumerations
-
         public AreaUnit AreaUnits
         {
             get

@@ -7,9 +7,9 @@ using AssemblyType = Xbim.DPoW.AssemblyType;
 
 namespace XbimExchanger.DPoWToCOBieLiteUK
 {
-    class MappingAssemblyTypeToAssemblyType : MappingDPoWObjectToCOBieObject<AssemblyType, AssetTypeAssembly>
+    class MappingAssemblyTypeToAssemblyType : MappingDPoWObjectToCOBieObject<AssemblyType, Assembly>
     {
-        protected override AssetTypeAssembly Mapping(AssemblyType sObject, AssetTypeAssembly tObject)
+        protected override Assembly Mapping(AssemblyType sObject, Assembly tObject)
         {
             //do basic mapping of the object
             base.Mapping(sObject, tObject);
@@ -18,12 +18,12 @@ namespace XbimExchanger.DPoWToCOBieLiteUK
             if (sObject.AggregationOfAssetTypes != null && sObject.AggregationOfAssetTypes.Any())
             {
                 var assetMap = Exchanger.GetOrCreateMappings<MappingAssetTypeToAssetType>();
-                tObject.ChildAssetTypes= new List<AssetTypeKey>();
+                tObject.ChildAssetsOrTypes= new List<EntityKey>();
                 foreach (var id in sObject.AggregationOfAssetTypes)
                 {
                     AssetType tAsset;
                     if (!assetMap.GetTargetObject(id.ToString(), out tAsset)) continue;
-                    tObject.ChildAssetTypes.Add(new AssetTypeKey{ Name = tAsset.Name });
+                    tObject.ChildAssetsOrTypes.Add(new EntityKey { Name = tAsset.Name , KeyType = EntityType.AssetType});
                 }
             }
 

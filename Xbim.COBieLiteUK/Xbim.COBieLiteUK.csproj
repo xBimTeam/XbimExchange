@@ -114,7 +114,7 @@
     <Compile Include="Space.cs" />
     <Compile Include="Spare.cs" />
     <Compile Include="AttributeValues\StringAttributeValue.cs" />
-    <Compile Include="SystemType.cs" />
+    <Compile Include="System.cs" />
     <Compile Include="Zone.cs" />
   </ItemGroup>
   <ItemGroup>
