@@ -37,9 +37,17 @@ namespace Xbim.CobieLiteUK.Validation
         private void RefreshRequirementDetails()
         {
             _requirementDetails = new List<RequirementDetail>();
-            foreach (var attrib in _requirementType.Attributes.Where(x => x.Categories != null && x.Categories.Any(c=>c.Classification=="DPoW" && c.Code=="required" )))
+            if (_requirementType.Attributes != null)
             {
-                _requirementDetails.Add(new RequirementDetail(attrib));
+                foreach (
+                    var attrib in
+                        _requirementType.Attributes.Where(
+                            x =>
+                                x.Categories != null &&
+                                x.Categories.Any(c => c.Classification == "DPoW" && c.Code == "required")))
+                {
+                    _requirementDetails.Add(new RequirementDetail(attrib));
+                }
             }
         }
 
