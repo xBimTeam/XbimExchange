@@ -102,6 +102,8 @@
     <Compile Include="ProjectValidator.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="FacilityValidator.cs" />
+    <Compile Include="Reporting\AssetTypeSummaryReport.cs" />
+    <Compile Include="RequirementDetails\AssetTypeCategoryMatch.cs" />
     <Compile Include="RequirementDetails\RequirementDetail.cs" />
     <Compile Include="XbimValidationReport.cs" />
   </ItemGroup>

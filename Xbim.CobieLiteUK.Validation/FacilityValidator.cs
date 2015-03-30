@@ -100,9 +100,9 @@ namespace Xbim.CobieLiteUK.Validation
                 }
             }
             // b)
-            foreach (var assetType in requirement.AssetTypes)
+            foreach (var assetTypeRequirement in requirement.AssetTypes)
             {
-                var v = new AssetTypeValidator(assetType) { TerminationMode = TerminationMode };
+                var v = new AssetTypeValidator(assetTypeRequirement) { TerminationMode = TerminationMode };
                 if (! v.HasRequirements )
                     continue;
                 var candidates = v.GetCandidates(submitted);
