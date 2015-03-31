@@ -692,16 +692,7 @@ namespace XbimExchanger.IfcToCOBieLiteUK
         #endregion
 
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <returns></returns>
-        public IEnumerable<Facility> GetFacilities()
-        {
-            var buildings = Model.Instances.OfType<IfcBuilding>();
-            foreach (IfcBuilding ifcBuilding in buildings)
-                yield return new FacilityType(ifcBuilding, this);
-        }
+
 
         /// <summary>
         /// 

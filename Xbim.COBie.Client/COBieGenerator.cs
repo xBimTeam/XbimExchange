@@ -532,10 +532,10 @@ namespace Xbim.COBie.Client
             {
                 context.UpdateStatus("Creating Geometry File", total, (total * percentProgress / 100));
             };
-            Xbim3DModelContext m3d = new Xbim3DModelContext(model);
+            var m3D = new Xbim3DModelContext(model);
             try
             {
-                m3d.CreateContext(progDelegate: progDelegate);
+                m3D.CreateContext(progDelegate: progDelegate);
             }
             catch (Exception ce)
             {
