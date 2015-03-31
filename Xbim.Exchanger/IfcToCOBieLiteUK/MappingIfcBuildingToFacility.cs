@@ -4,62 +4,67 @@ using Xbim.COBieLiteUK;
 using Xbim.Ifc2x3.Extensions;
 using Xbim.Ifc2x3.Kernel;
 using Xbim.Ifc2x3.ProductExtension;
+using Xbim.IO;
 using Xbim.XbimExtensions.SelectTypes;
-
 
 namespace XbimExchanger.IfcToCOBieLiteUK
 {
-
-    /// <summary>
-    /// 
-    /// </summary>
-    public class FacilityType: Facility
+    class MappingIfcBuildingToFacility : XbimMappings<XbimModel, List<Facility>, string, IfcBuilding,Facility> 
     {
-       
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="ifcBuilding"></param>
-        /// <param name="helper"></param>
-        public FacilityType(IfcBuilding ifcBuilding, CoBieLiteUkHelper helper) 
+        protected override Facility Mapping(IfcBuilding ifcBuilding, Facility facility)
         {
-            //   _ifcBuilding = ifcBuilding;
+            var helper = ((IfcToCOBieLiteUkExchanger)Exchanger).Helper;
             var model = ifcBuilding.ModelOf;
-            ExternalEntity = helper.ExternalEntityName(ifcBuilding);
-            ExternalId = helper.ExternalEntityIdentity(ifcBuilding);
-            ExternalSystem = helper.ExternalSystemName(ifcBuilding);
-            Name = ifcBuilding.Name;
-            Description = ifcBuilding.Description;
-            Categories =helper.GetCategories(ifcBuilding);
+            facility.ExternalEntity = helper.ExternalEntityName(ifcBuilding);
+            facility.ExternalId = helper.ExternalEntityIdentity(ifcBuilding);
+            facility.ExternalSystem = helper.ExternalSystemName(ifcBuilding);
+            facility.Name = ifcBuilding.Name;
+            facility.Description = ifcBuilding.Description;
+            facility.Categories = helper.GetCategories(ifcBuilding);
             var ifcProject = model.Instances.OfType<IfcProject>().FirstOrDefault();
             if (ifcProject != null)
             {
-                Project = new ProjectType(ifcProject, helper);
+                facility.Project = new Project();
+                var projectMapping = Exchanger.GetOrCreateMappings<MappingIfcProjectToProject>();
+                projectMapping.AddMapping(ifcProject, facility.Project);
                 var ifcSite = ifcProject.GetSpatialStructuralElements().FirstOrDefault(p => p is IfcSite) as IfcSite;
-                if (ifcSite != null) Site = new SiteType(ifcSite, helper);
+                var siteMapping = Exchanger.GetOrCreateMappings<MappingIfcSiteToSite>();
+                if (ifcSite != null)
+                {
+                    facility.Site = new Site();
+                    siteMapping.AddMapping(ifcSite, facility.Site);
+                }
                 else //create a default "External area"
                 {
-                    Site = new Site();
-                    Site.Description = "Default external area if no site has been defined in the model";
-                    Site.Name = "Default External";
+                    facility.Site = new Site
+                    {
+                        Description = "Default  area if no site has been defined in the model",
+                        Name = "Default"
+                    };
+                    
                 }
-                SetDefaultUnits(helper);
-                
+                facility.AreaUnits = helper.ModelAreaUnit ?? AreaUnit.notdefined;
+                facility.LinearUnits = helper.ModelLinearUnit ?? LinearUnit.notdefined;
+                facility.VolumeUnits = helper.ModelVolumeUnit ?? VolumeUnit.notdefined;
+                facility.CurrencyUnit = helper.ModelCurrencyUnit ?? CurrencyUnit.notdefined;
+
                 var storeys = ifcBuilding.GetBuildingStoreys(true);
                 var ifcBuildingStories = storeys as IList<IfcBuildingStorey> ?? storeys.ToList();
                 if (ifcBuildingStories.Any())
                 {
-                    Floors = new List<Floor>(ifcBuildingStories.Count);
+                    facility.Floors = new List<Floor>(ifcBuildingStories.Count);
+                    var floorMappings = Exchanger.GetOrCreateMappings<MappingIfcBuildingStoreyToFloor>();
                     for (int i = 0; i < ifcBuildingStories.Count; i++)
                     {
-                        Floors.Add(new FloorType(ifcBuildingStories[i], helper));
+                        var floor = new Floor();
+                        floor = floorMappings.AddMapping(ifcBuildingStories[i], floor);
+                        facility.Floors.Add(floor);
                     }
                 }
             }
             //Attributes
-            Attributes = helper.GetAttributes(ifcBuilding);
-           
+            facility.Attributes = helper.GetAttributes(ifcBuilding);
+
             //Zones
 
             var allSpaces = GetAllSpaces(ifcBuilding);
@@ -67,10 +72,13 @@ namespace XbimExchanger.IfcToCOBieLiteUK
             var ifcZones = allZones.ToArray();
             if (ifcZones.Any())
             {
-                Zones = new List<Zone>(ifcZones.Length);
+                facility.Zones = new List<Zone>(ifcZones.Length);
+                var zoneMappings = Exchanger.GetOrCreateMappings<MappingIfcZoneToZone>();
                 for (int i = 0; i < ifcZones.Length; i++)
                 {
-                    Zones.Add(new ZoneType(ifcZones[i], helper));
+                    var zone = new Zone();
+                    zone = zoneMappings.AddMapping(ifcZones[i], zone);
+                    facility.Zones.Add(zone);
                 }
             }
 
@@ -82,11 +90,13 @@ namespace XbimExchanger.IfcToCOBieLiteUK
             var allAssetTypesInThisFacility = AllAssetTypesInThisFacility(ifcBuilding, allAssetsinThisFacility, helper);
             if (allAssetTypesInThisFacility.Any())
             {
-                AssetTypes = new List<AssetType>(allAssetTypesInThisFacility.Count);
-                
+                facility.AssetTypes = new List<AssetType>(allAssetTypesInThisFacility.Count);
+                var assetTypeMappings = Exchanger.GetOrCreateMappings<MappingIfcTypeObjectToAssetType>();
                 for (int i = 0; i < allAssetTypesInThisFacility.Count; i++)
                 {
-                    AssetTypes.Add(new AssetTypeInfoType(allAssetTypesInThisFacility[i], helper));
+                    var assetType = new AssetType();
+                    assetType = assetTypeMappings.AddMapping(allAssetTypesInThisFacility[i], assetType);
+                    facility.AssetTypes.Add(assetType);
                 }
             }
 
@@ -96,11 +106,13 @@ namespace XbimExchanger.IfcToCOBieLiteUK
                 .Select(k => k.Key).ToArray();
             if (allSystemsInThisFacility.Any())
             {
-                Systems = new List<Xbim.COBieLiteUK.System>(allSystemsInThisFacility.Length);
-
+                facility.Systems = new List<Xbim.COBieLiteUK.System>(allSystemsInThisFacility.Length);
+                var systemMappings = Exchanger.GetOrCreateMappings<MappingIfcSystemToSystem>();
                 for (int i = 0; i < allSystemsInThisFacility.Length; i++)
                 {
-                    Systems.Add(new SystemType(allSystemsInThisFacility[i], helper));
+                    var system = new Xbim.COBieLiteUK.System();
+                    system = systemMappings.AddMapping(allSystemsInThisFacility[i], system);
+                    facility.Systems.Add(system);
                 }
             }
 
@@ -110,19 +122,21 @@ namespace XbimExchanger.IfcToCOBieLiteUK
             if (ifcActors.Any())
             {
 
-                Contacts = new List<Contact>(ifcActors.Length);
+                facility.Contacts = new List<Contact>(ifcActors.Length);
+                var contactMappings = Exchanger.GetOrCreateMappings<MappingIfcActorToContact>();
                 for (int i = 0; i < ifcActors.Length; i++)
                 {
-                    Contacts.Add(new ContactType(ifcActors[i], helper));
+                    var contact = new Contact();
+                    contact = contactMappings.AddMapping(ifcActors[i], contact);
+                    facility.Contacts.Add(contact);
                 }
             }
 
+            return facility;
         }
 
-
-
         private static List<IfcTypeObject> AllAssetTypesInThisFacility(IfcBuilding ifcBuilding,
-            HashSet<IfcElement> allAssetsinThisFacility, CoBieLiteUkHelper helper)
+        HashSet<IfcElement> allAssetsinThisFacility, CoBieLiteUkHelper helper)
         {
 
             var allAssetTypes = helper.DefiningTypeObjectMap;
@@ -161,15 +175,5 @@ namespace XbimExchanger.IfcToCOBieLiteUK
             }
             return spaces;
         }
-
-        private void SetDefaultUnits(CoBieLiteUkHelper helper)
-        {
-            AreaUnits = helper.ModelAreaUnit??AreaUnit.notdefined;
-            LinearUnits = helper.ModelLinearUnit??LinearUnit.notdefined;
-            VolumeUnits = helper.ModelVolumeUnit??VolumeUnit.notdefined;
-            CurrencyUnit = helper.ModelCurrencyUnit??CurrencyUnit.notdefined;
-        }
-
-        
     }
 }
