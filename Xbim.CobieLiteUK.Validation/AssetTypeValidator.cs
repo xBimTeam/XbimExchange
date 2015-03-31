@@ -195,26 +195,27 @@ namespace Xbim.CobieLiteUK.Validation
 
         private  static readonly Regex NbsCodeCoreMatch= new Regex(@".*/\d+");
 
+        /// <summary>
+        /// Identifies all the assetTypes in the submitted facility that match requirement classifications
+        /// </summary>
+        /// <param name="submitted"></param>
+        /// <returns></returns>
         internal IEnumerable<AssetType> GetCandidates(Facility submitted)
         {
-            var reqClass = _requirementType.Categories.FirstOrDefault();
-            if (reqClass == null)
+            if (_requirementType.Categories == null)
                 return Enumerable.Empty<AssetType>();
-            Debug.Write(string.Format("RequirementCode: {0}\r\n", reqClass.Code));
 
-            // todo: we need to clarify the rules for code matching
-            // I'm temporarily changing NBS codes to get more matches.
-
-            if (reqClass.Classification == @"NBS Code")
+            var ret = new HashSet<AssetType>();
+            foreach (var reqClass in _requirementType.Categories)
             {
-                reqClass = new Category()
+                var thisClassMatch = submitted.AssetTypes.GetClassificationSubset(reqClass);
+                foreach (var matchedAsset in thisClassMatch)
                 {
-                    Classification = @"NBS Code",
-                    Code = NbsCodeCoreMatch.Match(reqClass.Code).Value,
-                    Description = reqClass.Description
-                };
+                    if (!ret.Contains(matchedAsset))
+                        ret.Add(matchedAsset);
+                }
             }
-            return submitted.AssetTypes.GetClassificationSubset(reqClass);
+            return ret;    
         }
     }
 }
