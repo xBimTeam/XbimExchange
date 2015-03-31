@@ -20,6 +20,7 @@ namespace Xbim.COBieLiteUK
         {
             get
             {
+                if (MinimalValue == null && MaximalValue == null) return null;
                 var min = MinimalValue == null ? "-∞" : MinimalValue.ToString();
                 var max = MaximalValue == null ? "∞" : MaximalValue.ToString();
                 return String.Format("<{0},{1}>", min, max);

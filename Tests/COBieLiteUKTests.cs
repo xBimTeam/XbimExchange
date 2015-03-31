@@ -284,6 +284,17 @@ namespace Tests
         }
 
         [TestMethod]
+        [DeploymentItem("TestFiles\\2012-03-23-Duplex-Design.xlsx")]
+        public void WritingSpreadsheet()
+        {
+            string msg;
+            var facility = Facility.ReadCobie("2012-03-23-Duplex-Design.xlsx", out msg);
+            facility.WriteCobie("..\\..\\2012-03-23-Duplex-Design_enhanced.xlsx", out msg);
+        }
+
+
+
+        [TestMethod]
         [DeploymentItem("ValidationFiles\\Lakeside_Restaurant.ifc")]
         public void IfcToCoBieLiteUkTest()
         {

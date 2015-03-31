@@ -106,6 +106,7 @@
     <Compile Include="AttributeValues\IntegerAttributeValue.cs" />
     <Compile Include="Issue.cs" />
     <Compile Include="Job.cs" />
+    <Compile Include="Metadata.cs" />
     <Compile Include="Resource.cs" />
     <Compile Include="Schemas\Attributes.cs" />
     <Compile Include="Facility.cs" />
