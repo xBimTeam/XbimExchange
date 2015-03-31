@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
+using log4net.Util;
 using Xbim.CobieLiteUK.Validation.Extensions;
 using Xbim.CobieLiteUK.Validation.RequirementDetails;
 using Xbim.COBieLiteUK;
@@ -67,27 +68,39 @@ namespace Xbim.CobieLiteUK.Validation
         /// <returns></returns>
         internal AssetType Validate(AssetType candidateType)
         {
+            var iSubmitted = 0;
+            var iPassed = 0;
+
+
+            // initialisation
             var retType = new AssetType
             {
                 Categories = new List<Category>(_requirementType.Categories.Clone()) // classification comes from the requirement
             };
+
             // improve returning assetType
             if (candidateType == null) // the following properties depend on the nullity of candidate
             {
                 retType.Name = _requirementType.Name;
                 retType.ExternalId = _requirementType.ExternalId;
+                iSubmitted = 0;
             }
             else
             {
                 retType.Name = candidateType.Name;
                 retType.ExternalId = candidateType.ExternalId;
+                if (candidateType.Assets != null)
+                {
+                    iSubmitted = candidateType.Assets.Count;
+                }
             }
 
-            bool returnWithoutFurtherTests = false;
+            var returnWithoutFurtherTests = false;
             if (!RequirementDetails.Any())
             {
                 retType.Description = "No requirement for the specific classification.\r\n";
                 retType.Categories.Add(FacilityValidator.PassedCat);
+                iPassed = iSubmitted;
                 returnWithoutFurtherTests = true;
             }
 
@@ -98,9 +111,13 @@ namespace Xbim.CobieLiteUK.Validation
                 retType.Description = "No candidates in submission match the required classification.\r\n";
                 returnWithoutFurtherTests = true;    
             }
-
+            
             if (returnWithoutFurtherTests)
+            {
+                retType.SetSubmittedAssetsCount(iSubmitted);
+                retType.SetValidAssetsCount(iPassed);
                 return retType;
+            }
 
             // produce type level description
             var outstandingRequirements = MissingFrom(candidateType);
@@ -129,10 +146,11 @@ namespace Xbim.CobieLiteUK.Validation
                 // at this stage we are only validating for the existence of attributes.
                 //
                 var matching = outstandingRequirements.Select(x => x.Name).Intersect(modelAsset.Attributes.Select(at => at.Name));
-                var matchingCount = matching.Count();
+                var matchingCount = 0;
                 // add passes to the report.
                 foreach (var matched in matching)
                 {
+                    matchingCount++;
                     var att = new Attribute()
                     {
                         Name = matched,
@@ -148,26 +166,26 @@ namespace Xbim.CobieLiteUK.Validation
                 if (!pass)
                 {
                     anyAssetFails = true;
-                    sb.AppendLine("Missing attributes:");
+                    sb.AppendLine("Attributes are missing.");
                     foreach (var req in outstandingRequirements)
                     {
-                        if (!matching.Contains(req.Name))
-                        {
-                            sb.AppendFormat("{0}\r\n{1}\r\n\r\n", req.Name, req.Description);
+                        if (matching.Contains(req.Name)) 
+                            continue;
+                        // sb.AppendFormat("{0}\r\n{1}\r\n\r\n", req.Name, req.Description);
                             
-                            var att = new Attribute()
-                            {
-                                Name = req.Name,
-                                Description = req.Description,
-                                Categories = new List<Category>() { FacilityValidator.FailedCat }
-                            };
-                            reportAsset.Attributes.Add(att);
-                        }
+                        var att = new Attribute()
+                        {
+                            Name = req.Name,
+                            Description = req.Description,
+                            Categories = new List<Category>() { FacilityValidator.FailedCat }
+                        };
+                        reportAsset.Attributes.Add(att);
                     }
                     reportAsset.Categories.Add(FacilityValidator.FailedCat);
                 }
                 else
                 {
+                    iPassed++;
                     reportAsset.Categories.Add(FacilityValidator.PassedCat);
                 }
                 reportAsset.Description = sb.ToString();
@@ -177,6 +195,9 @@ namespace Xbim.CobieLiteUK.Validation
             retType.Categories.Add(
                 anyAssetFails ? FacilityValidator.FailedCat : FacilityValidator.PassedCat
                 );
+
+            retType.SetSubmittedAssetsCount(iSubmitted);
+            retType.SetValidAssetsCount(iPassed);
             return retType;
         }
 
@@ -193,29 +214,44 @@ namespace Xbim.CobieLiteUK.Validation
             return req.Select(left => RequirementDetails.FirstOrDefault(x => x.Name == left));
         }
 
-        private  static readonly Regex NbsCodeCoreMatch= new Regex(@".*/\d+");
-
         /// <summary>
         /// Identifies all the assetTypes in the submitted facility that match requirement classifications
         /// </summary>
         /// <param name="submitted"></param>
         /// <returns></returns>
-        internal IEnumerable<AssetType> GetCandidates(Facility submitted)
+        internal IEnumerable<AssetTypeCategoryMatch> GetCandidates(Facility submitted)
         {
             if (_requirementType.Categories == null)
-                return Enumerable.Empty<AssetType>();
-
-            var ret = new HashSet<AssetType>();
+                yield break;
+            
+            var ret = new Dictionary<AssetType, List<Category>>();
             foreach (var reqClass in _requirementType.Categories)
             {
-                var thisClassMatch = submitted.AssetTypes.GetClassificationSubset(reqClass);
+                var thisClassMatch = submitted.AssetTypes.GetClassificationMatches(reqClass);
                 foreach (var matchedAsset in thisClassMatch)
                 {
-                    if (!ret.Contains(matchedAsset))
-                        ret.Add(matchedAsset);
+                    if (!ret.ContainsKey(matchedAsset.MatchedAssetType))
+                    {
+                        ret.Add(matchedAsset.MatchedAssetType, matchedAsset.MatchingCategories);
+                    }
+                    else
+                    {
+                        ret[matchedAsset.MatchedAssetType].AddRange(matchedAsset.MatchingCategories);
+                    }
                 }
             }
-            return ret;    
+
+            foreach (var item in ret)
+            {
+                yield return new AssetTypeCategoryMatch(item.Key) { MatchingCategories = item.Value } ;
+            }
+        }
+
+        internal AssetType Validate(AssetTypeCategoryMatch candidate)
+        {
+            var validated = Validate(candidate.MatchedAssetType);
+            validated.SetMatchingCategories(candidate.MatchingCategories);
+            return validated;
         }
     }
 }

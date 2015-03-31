@@ -105,7 +105,7 @@ namespace Xbim.CobieLiteUK.Validation
                 var v = new AssetTypeValidator(assetTypeRequirement) { TerminationMode = TerminationMode };
                 if (! v.HasRequirements )
                     continue;
-                var candidates = v.GetCandidates(submitted);
+                var candidates = v.GetCandidates(submitted).ToList();
                 // ReSharper disable once PossibleMultipleEnumeration
                 if (candidates.Any())
                 {
@@ -120,7 +120,7 @@ namespace Xbim.CobieLiteUK.Validation
                 {
                     if (retFacility.AssetTypes == null)
                         retFacility.AssetTypes = new List<AssetType>();
-                    retFacility.AssetTypes.Add(v.Validate(null));
+                    retFacility.AssetTypes.Add(v.Validate((AssetType)null));
                 }
             }
             retFacility.Description = sb.ToString();

@@ -10,6 +10,12 @@ namespace Xbim.CobieLiteUK.Validation.RequirementDetails
     internal class AssetTypeCategoryMatch
     {
         public AssetType MatchedAssetType;
-        public Category CandidateMatchingCategory;
+        public List<Category> MatchingCategories;
+
+        public AssetTypeCategoryMatch(AssetType evaluatingType)
+        {
+            MatchedAssetType = evaluatingType;
+            MatchingCategories = new List<Category>();
+        }
     }
 }

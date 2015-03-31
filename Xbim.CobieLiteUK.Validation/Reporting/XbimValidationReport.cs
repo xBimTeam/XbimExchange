@@ -9,7 +9,7 @@ using NPOI.OpenXmlFormats.Spreadsheet;
 using Xbim.COBieLiteUK;
 using Xbim.Common.Logging;
 
-namespace Xbim.CobieLiteUK.Validation
+namespace Xbim.CobieLiteUK.Validation.Reporting
 {
 
     public class XbimValidationReport
@@ -69,6 +69,8 @@ namespace Xbim.CobieLiteUK.Validation
                 var excelCell = excelRow.GetCell(0) ?? excelRow.CreateCell(0);
                 excelCell.SetCellValue("Validation Report Summary");
                 excelRow = summaryPage.GetRow(3) ?? summaryPage.CreateRow(3);
+
+                var summaryReport = new AssetTypeSummaryReport(facility.AssetTypes);
                 //write the asset report summary
                 //foreach (var VARIABLE in COLLECTION)
                 //{

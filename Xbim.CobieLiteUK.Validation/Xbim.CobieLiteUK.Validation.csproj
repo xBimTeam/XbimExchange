@@ -105,7 +105,7 @@
     <Compile Include="Reporting\AssetTypeSummaryReport.cs" />
     <Compile Include="RequirementDetails\AssetTypeCategoryMatch.cs" />
     <Compile Include="RequirementDetails\RequirementDetail.cs" />
-    <Compile Include="XbimValidationReport.cs" />
+    <Compile Include="Reporting\XbimValidationReport.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

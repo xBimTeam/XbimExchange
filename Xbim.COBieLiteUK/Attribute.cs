@@ -11,7 +11,7 @@ namespace Xbim.COBieLiteUK
     public partial class Attribute
     {
         /// <summary>
-        /// This is a proxy property for ExternalEntity. It is not a part of the schema but it is part of the API to make sure the
+        /// PropertySetName is a proxy property for ExternalEntity. It is not a part of the schema but it is part of the API to make sure the
         /// data schema is used in an uniform way.
         /// </summary>
         [XmlIgnore][JsonIgnore]
