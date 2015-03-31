@@ -19,7 +19,11 @@ namespace Xbim.COBieLiteUK
         [JsonIgnore]
         internal override string AllowedValuesString
         {
-            get { return AllowedValue != null ? (AllowedValue??true).ToString(CultureInfo.InvariantCulture): ""; }
+            get
+            {
+                if (AllowedValue == null) return null;
+                return AllowedValue != null ? (AllowedValue??true).ToString(CultureInfo.InvariantCulture): "";
+            }
             set
             {
                 if (String.IsNullOrEmpty(value))

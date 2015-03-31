@@ -21,6 +21,7 @@ namespace Xbim.COBieLiteUK
         {
             get
             {
+                if (MinimalValue == null && MaximalValue == null) return null;
                 var min = MinimalValue == null ? "-∞" : (MinimalValue ?? new DateTime()).ToString("O").Substring(0, 19);
                 var max = MaximalValue == null ? "∞" : (MaximalValue ?? new DateTime()).ToString("O").Substring(0, 19);
                 return String.Format("<{0},{1}>", min, max);

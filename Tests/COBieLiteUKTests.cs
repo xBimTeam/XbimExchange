@@ -284,6 +284,17 @@ namespace Tests
         }
 
         [TestMethod]
+        [DeploymentItem("TestFiles\\2012-03-23-Duplex-Design.xlsx")]
+        public void WritingSpreadsheet()
+        {
+            string msg;
+            var facility = Facility.ReadCobie("2012-03-23-Duplex-Design.xlsx", out msg);
+            facility.WriteCobie("..\\..\\2012-03-23-Duplex-Design_enhanced.xlsx", out msg);
+        }
+
+
+
+        [TestMethod]
         [DeploymentItem("ValidationFiles\\Lakeside_Restaurant.ifc")]
         public void IfcToCoBieLiteUkTest()
         {
@@ -293,8 +304,10 @@ namespace Tests
                 var xbimTestFile = Path.ChangeExtension(ifcTestFile, "xbim");
                 var jsonFile = Path.ChangeExtension(ifcTestFile, "json");
                 m.CreateFrom(ifcTestFile, xbimTestFile, null, true, true);
-                var helper = new CoBieLiteUkHelper(m, "NBS Code");
-                var facilities = helper.GetFacilities();
+                var facilities = new List<Facility>();
+                var ifcToCoBieLiteUkExchanger = new IfcToCOBieLiteUkExchanger(m, facilities);
+                facilities = ifcToCoBieLiteUkExchanger.Convert();
+                    
                 foreach (var facilityType in facilities)
                 {
                     facilityType.WriteJson(jsonFile, true);

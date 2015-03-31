@@ -52,10 +52,12 @@ namespace Tests
             {
                 var xbimTestFile = Path.ChangeExtension(ifcTestFile, "xbim");
                 m.CreateFrom(ifcTestFile, xbimTestFile, null, true, true);
-                var helper = new CoBieLiteUkHelper(m, "NBS Code");
-                sub = helper.GetFacilities().FirstOrDefault();
+                var facilities = new List<Facility>();
+                var ifcToCoBieLiteUkExchanger = new IfcToCOBieLiteUkExchanger(m, facilities);
+                facilities = ifcToCoBieLiteUkExchanger.Convert();
+                sub = facilities.FirstOrDefault();
             }
-
+            Assert.IsTrue(sub!=null);
             var vd = new FacilityValidator();
             var req = Facility.ReadJson(@"Lakeside_Restaurant-stage6-COBie.json");
             var validated = vd.Validate(req, sub);

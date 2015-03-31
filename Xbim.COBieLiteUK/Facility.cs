@@ -317,8 +317,6 @@ namespace Xbim.COBieLiteUK
         public static Facility ReadCobie(Stream stream, ExcelTypeEnum type, out string message,
             string version = "UK2012")
         {
-            //refresh log for this run
-
             //use NPOI to open and access spreadsheet data
             IWorkbook workbook;
             switch (type)
@@ -352,6 +350,11 @@ namespace Xbim.COBieLiteUK
                 return null;
             }
 
+            //load metadate from the first sheet
+            facility.Metadata  = new Metadata();
+            var log = new StringWriter();
+            facility.Metadata.LoadFromCobie(workbook, log, version);
+            msg += log.ToString();
 
             message = msg;
             return facility;
@@ -374,6 +377,52 @@ namespace Xbim.COBieLiteUK
         }
 
         #endregion
+
+        #region Writing COBie Spreadsheet
+
+        public void WriteCobie(Stream stream, ExcelTypeEnum type, out string message,
+            string version = "UK2012")
+        {
+            IWorkbook workbook;
+            switch (type)
+            {
+                case ExcelTypeEnum.XLS:
+                    workbook = new HSSFWorkbook();
+                    break;
+                case ExcelTypeEnum.XLSX:
+                    workbook = new XSSFWorkbook();
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException("type");
+            }
+            
+            log = new StringWriter();
+            WriteToCobie(workbook, log, null, version);
+            message = log.ToString();
+            workbook.Write(stream);
+        }
+
+        public void WriteCobie(string path, out string message, string version = "UK2012")
+        {
+            if (path == null) throw new ArgumentNullException("path");
+            var ext = Path.GetExtension(path).ToLower().Trim('.');
+            if (ext != "xls" && ext != "xlsx") throw new Exception("File must be an MS Excel file.");
+            using (var file = File.Create(path))
+            {
+                var type = ext == "xlsx" ? ExcelTypeEnum.XLSX : ExcelTypeEnum.XLS;
+                WriteCobie(file, type, out message, version);
+                file.Close();
+            }
+        }
+        #endregion
+
+        internal override void WriteToCobie(IWorkbook workbook, TextWriter log, CobieObject parent, string version = "UK2012")
+        {
+            base.WriteToCobie(workbook, log, parent, version);
+
+            //write metadata out
+            Metadata.WriteToCobie(workbook, log, version);
+        }
 
         internal override IEnumerable<CobieObject> GetChildren()
         {

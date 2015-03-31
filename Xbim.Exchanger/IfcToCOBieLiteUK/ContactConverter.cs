@@ -9,17 +9,23 @@ namespace XbimExchanger.IfcToCOBieLiteUK
     /// <summary>
     /// 
     /// </summary>
-    public class ContactType: Contact
+    public class ContactConverter: Contact
     {
-    
 
 
+        /// <summary>
+        /// 
+        /// </summary>
+        public ContactConverter()
+        {
+            
+        }
         /// <summary>
         /// Writes out a contact, 
         /// </summary>
         /// <param name="actor"></param>
         /// <param name="helper"></param>
-        public ContactType(IfcActorSelect actor, CoBieLiteUkHelper helper)
+        public ContactConverter(IfcActorSelect actor, CoBieLiteUkHelper helper)
         {
             var personAndOrganization = actor as IfcPersonAndOrganization;
             var person = actor as IfcPerson;
