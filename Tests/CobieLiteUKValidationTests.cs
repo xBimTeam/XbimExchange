@@ -1,4 +1,5 @@
-﻿using System.Diagnostics;
+﻿using System.Data;
+using System.Diagnostics;
 using System.IO;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
@@ -8,6 +9,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Xbim.CobieLiteUK.Validation;
 using Xbim.COBieLiteUK;
+using Xbim.CobieLiteUK.Validation.Reporting;
 using Xbim.IO;
 using XbimExchanger.IfcToCOBieLiteUK;
 
@@ -18,11 +20,33 @@ namespace Tests
     public class CobieLiteUKValidationTests
     {
         [TestMethod]
-        public void Validates()
+        public void CanValidate()
+        {
+            var validated = GetValidated();
+            validated.WriteJson(@"..\..\ValidationReport.json", true);
+            validated.WriteJson(@"ValidationReport.json", true);
+        }
+
+        [TestMethod]
+        public void CanSaveValidationReport()
+        {
+            var validated = GetValidated();
+            var rep = new XbimValidationReport();
+
+            const string repName = @"..\..\ValidationReport.xlsx";
+
+            if (File.Exists(repName))
+            {
+                File.Delete(repName);
+            }
+            rep.Create(validated, repName, XbimValidationReport.SpreadSheetFormat.Xlsx);
+        }
+
+        private static Facility GetValidated()
         {
             const string ifcTestFile = @"Lakeside_Restaurant.ifc";
             Facility sub = null;
-            
+
             //create validation file from IFC
             using (var m = new XbimModel())
             {
@@ -35,8 +59,7 @@ namespace Tests
             var vd = new FacilityValidator();
             var req = Facility.ReadJson(@"Lakeside_Restaurant-stage6-COBie.json");
             var validated = vd.Validate(req, sub);
-            validated.WriteJson(@"..\..\ValidationReport.json", true);
-            validated.WriteJson(@"ValidationReport.json", true);
+            return validated;
         }
 
         [TestMethod]
