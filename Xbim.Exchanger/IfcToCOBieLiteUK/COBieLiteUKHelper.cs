@@ -69,7 +69,6 @@ namespace XbimExchanger.IfcToCOBieLiteUK
         internal static readonly ILogger Logger = LoggerFactory.GetLogger();
        
         private readonly XbimModel _model;
-        private List<IfcClassification> _classificationSystems; 
         private readonly string _creatingApplication;
 
         #region Model measurement units
@@ -133,16 +132,15 @@ namespace XbimExchanger.IfcToCOBieLiteUK
         /// 
         /// </summary>
         /// <param name="model"></param>
-        /// <param name="classificationSystemName"></param>
         /// <param name="configurationFile"></param>
-        public CoBieLiteUkHelper(XbimModel model, string classificationSystemName = null, string configurationFile = null)
+        public CoBieLiteUkHelper(XbimModel model, string configurationFile = null)
         {
             _configFileName = configurationFile;
 
             _model = model;
             _creatingApplication = model.Header.CreatingApplication;
             LoadCobieMaps();
-            GetClassificationDictionary(classificationSystemName);
+            GetClassificationDictionary();
             GetSpacesAndZones();
             GetUnits();
             GetTypeMaps();
@@ -564,7 +562,7 @@ namespace XbimExchanger.IfcToCOBieLiteUK
             return ret.Replace("_", "");
         }
 
-        private void GetClassificationDictionary(string classificationSystemName = null)
+        private void GetClassificationDictionary()
         {
 
 
@@ -585,7 +583,7 @@ namespace XbimExchanger.IfcToCOBieLiteUK
             }
         }
 
-        private List<Category> ConvertToCategories(List<IfcClassificationReference> classifications)
+        private List<Category> ConvertToCategories(IEnumerable<IfcClassificationReference> classifications)
         {
             var categories = new List<Category>();
             foreach (var classification in classifications)
