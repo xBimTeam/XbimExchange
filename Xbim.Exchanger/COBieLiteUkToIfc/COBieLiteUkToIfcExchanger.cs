@@ -610,7 +610,7 @@ namespace XbimExchanger.COBieLiteUkToIfc
                         {
                             var simpleIntProperty = (IfcPropertySingleValue)theProperty;
                             simpleIntProperty.NominalValue =
-                                new IfcInteger(attributeSimpleIntegerValueType.Value);
+                                new IfcInteger(attributeSimpleIntegerValueType.Value.Value);
                         }
                         break;
                     case XbimSimplePropertyType.BoundedInteger:
@@ -631,7 +631,7 @@ namespace XbimExchanger.COBieLiteUkToIfc
                         if (attributeBooleanValueType != null)
                         {
                             var simpleBooleanProperty = (IfcPropertySingleValue)theProperty;
-                            simpleBooleanProperty.NominalValue = new IfcBoolean(attributeBooleanValueType.Value);
+                            simpleBooleanProperty.NominalValue = new IfcBoolean(attributeBooleanValueType.Value.Value);
                         }
                         break;
                     //case XbimSimplePropertyType.SimpleMonetary:

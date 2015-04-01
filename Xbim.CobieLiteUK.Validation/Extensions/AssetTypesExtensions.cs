@@ -91,9 +91,9 @@ namespace Xbim.CobieLiteUK.Validation.Extensions
                 return 0;
 
             var integerValue = existingAttribute.Value as IntegerAttributeValue;
-            return integerValue == null
+            return integerValue == null || !integerValue.Value.HasValue
                 ? 0
-                : integerValue.Value;
+                : integerValue.Value.Value;
         }
 
         private static void SetIntegerValue(AssetType retType, int value, string propertyName, string propertyDescription)
