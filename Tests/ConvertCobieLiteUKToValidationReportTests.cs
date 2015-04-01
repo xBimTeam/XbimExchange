@@ -1,7 +1,7 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using NPOI.HSSF.UserModel;
 using Xbim.COBieLiteUK;
-using Xbim.CobieLiteUK.Validation;
+using Xbim.CobieLiteUK.Validation.Reporting;
 
 namespace Tests
 {
@@ -14,7 +14,8 @@ namespace Tests
         {
             var facility = Facility.ReadJson("ValidationReport.json");
             var validationReport = new XbimValidationReport();
-            Assert.IsTrue(validationReport.Create(facility, "ValidationReport",XbimValidationReport.SpreadSheetFormat.Xlsx ));
+            Assert.IsTrue(validationReport.Create(facility, "ValidationReport",
+                XbimValidationReport.SpreadSheetFormat.Xlsx));
         }
     }
 }

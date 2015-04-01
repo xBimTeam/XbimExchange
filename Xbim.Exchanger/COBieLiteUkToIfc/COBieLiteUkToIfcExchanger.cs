@@ -811,13 +811,13 @@ namespace XbimExchanger.COBieLiteUkToIfc
             }
             IfcClassificationReference classificationReference;
             if (!_classificationReferences.TryGetValue(category.Code, out classificationReference))
-            {
+        {
                 classificationReference = TargetRepository.Instances.New<IfcClassificationReference>();
                 classificationReference.ItemReference = category.Code;
                 classificationReference.Name = category.Description;
                 classificationReference.ReferencedSource = classificationSystem;
             }
-
+            
         }
 
 
