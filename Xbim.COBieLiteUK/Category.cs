@@ -21,11 +21,11 @@ namespace Xbim.COBieLiteUK
                 if (String.IsNullOrEmpty(value)) return;
                 var parts = value.Split(new[] { ':' }, StringSplitOptions.RemoveEmptyEntries);
                 if (parts.Length == 1)
-                    Code = parts[0];
+                    Code = parts[0].Trim();
                 if (parts.Length > 1)
                 {
-                    Code = parts[0];
-                    Description = parts[1];
+                    Code = parts[0].Trim();
+                    Description = parts[1].Trim();
                 }
             }
         }

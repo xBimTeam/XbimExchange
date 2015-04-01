@@ -62,6 +62,8 @@ namespace Xbim.COBieLiteUK
         protected string _parentNameValue;
         // ReSharper restore InconsistentNaming
 
+        private static IEnumerable<MappingAttribute> _mappings; 
+
         internal static List<CobieObject> LoadFromCobie(Type cobieType, IWorkbook workbook, out string message,
             string version = "UK2012")
         {
@@ -91,9 +93,8 @@ namespace Xbim.COBieLiteUK
             }
 
             //get mappings
-            var mappingAttributes = GetMapping(cobieType, version);
-            var mappings = mappingAttributes as MappingAttribute[] ?? mappingAttributes.ToArray();
-            if (!mappings.Any())
+            _mappings = GetMapping(cobieType, version).ToList();
+            if (!_mappings.Any())
             {
                 log.WriteLine("There is no mapping for a {0} parameters", cobieType.Name);
                 message = log.ToString();
@@ -104,7 +105,7 @@ namespace Xbim.COBieLiteUK
             var lastRowNum = sheet.LastRowNum;
 
             //fix mappings for the case columns are swapped for some reason
-            var msg = FixMappings(mappings, sheet);
+            var msg = FixMappings(_mappings, sheet);
             if (!String.IsNullOrEmpty(msg))
                 log.Write(msg);
 
@@ -132,10 +133,11 @@ namespace Xbim.COBieLiteUK
 
 
                 //fill facility values using reflection
-                foreach (var mapping in mappings)
+                foreach (var mapping in _mappings)
                 {
                     var cellIndex = CellReference.ConvertColStringToIndex(mapping.Column);
                     var cell = row.GetCell(cellIndex);
+                    if(cell == null) continue;
 
                     //use reflection to set the value if the value is available
                     if ((cell.CellType == CellType.Blank || cell.CellType == CellType.Error) && mapping.Required)
@@ -210,13 +212,16 @@ namespace Xbim.COBieLiteUK
                 //set up header if this is the very first row in the sheet
                 SetUpHeader(sheet.CreateRow(0), mappings);
             }
-            var row = sheet.CreateRow(sheet.LastRowNum + 1);
+            var row = GetNextEmptyRow(sheet);
 
             //write columns
             foreach (var mapping in mappings)
             {
                 var cellIndex = CellReference.ConvertColStringToIndex(mapping.Column);
                 var cell = row.GetCell(cellIndex) ?? row.CreateCell(cellIndex);
+                
+                //set default column style
+                cell.CellStyle = sheet.GetColumnStyle(cellIndex);
 
                 //if it is a parent or parent name, set it differently
                 if (mapping.Path.ToLower() == "parent")
@@ -318,6 +323,24 @@ namespace Xbim.COBieLiteUK
             {
                 child.WriteToCobie(workbook, log, this, version);
             }
+        }
+
+        private IRow GetNextEmptyRow(ISheet sheet)
+        {
+            foreach (IRow row in sheet)
+            {
+                var isEmpty = true;
+                foreach (ICell cell in row)
+                {
+                    if (cell.CellType != CellType.Blank)
+                    {
+                        isEmpty = false;
+                        break;
+                    }
+                }
+                if (isEmpty) return row;
+            }
+            return sheet.CreateRow(sheet.LastRowNum + 1);
         }
 
         private void WritePickListValue(IWorkbook workbook, MappingAttribute mapping, string value)
@@ -423,11 +446,11 @@ namespace Xbim.COBieLiteUK
                             }
                             : new CobieValue {StringValue = "n/a", ValueType = CobieValueType.String};
                     }
-                    //some other type. This shouldn't happen as the schema only uses basic types
+                    //some other type. This shouldn't happen as the schema only uses basic types and enumerations
                     return new CobieValue {ValueType = CobieValueType.Unknown};
                 }
 
-                //anything else needs to have an object for further access and iterations. Return null if the object is null
+                //anything else needs to have an object for further access and iterations. Return null if the object is null.
                 if (value == null) return null;
 
 
@@ -631,6 +654,8 @@ namespace Xbim.COBieLiteUK
                 var values = cell.StringCellValue.Split(new[] {','}, StringSplitOptions.RemoveEmptyEntries);
                 foreach (var value in values)
                 {
+                    if (value.Trim() == ":") continue; //this happens for some automatically created category strings
+                    
                     //create an instance of generic type
                     var itemType = type.GetGenericArguments()[0];
                     var item = Activator.CreateInstance(itemType);
@@ -648,6 +673,15 @@ namespace Xbim.COBieLiteUK
                         }
                     }
                     memberInfo.SetValue(item, value.Trim());
+
+                    //find a classification name for category
+                    if (actual == "CategoryString")
+                    {
+                        var clsInfo = itemType.GetProperty("Classification");
+                        var clsName = GetClassificationName(cell.Sheet.Workbook, value.Trim());
+                        if (clsName != null)
+                            clsInfo.SetValue(item, clsName);
+                    }
                 }
                 return log.ToString();
             }
@@ -706,6 +740,34 @@ namespace Xbim.COBieLiteUK
                 log.Write(SetMemberValue(propValue, rest, cell));
             }
             return log.ToString();
+        }
+
+        private static string GetClassificationName(IWorkbook workbook, string code)
+        {
+            var pickListAttr = _mappings.FirstOrDefault(m => !String.IsNullOrEmpty(m.PickList));
+            if (pickListAttr == null) return null;
+
+            var parts = pickListAttr.PickList.Split(new[] { '.' }, StringSplitOptions.RemoveEmptyEntries);
+            if (parts.Length == 0) return null;
+
+            var pickListName = parts[0];
+            var sheet = workbook.GetSheet(pickListName);
+            if (sheet == null) return null;
+
+            foreach (IRow row in sheet)
+            {
+                foreach (ICell cell in row)
+                {
+                    if(cell.CellType != CellType.String || cell.StringCellValue != code) continue;
+                    var index = cell.ColumnIndex;
+                    var header = sheet.GetRow(0);
+                    var headerCell = header.GetCell(index);
+                    if (headerCell.CellType == CellType.String)
+                        return headerCell.StringCellValue;
+                }
+            }
+
+            return null;
         }
 
         private static void SetSimpleValue(PropertyInfo info, object obj, ICell cell, TextWriter log)

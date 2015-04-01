@@ -284,6 +284,15 @@ namespace Tests
         }
 
         [TestMethod]
+        [DeploymentItem("TestFiles\\OBN1-COBie-UK-2014.xlsx")]
+        public void ReadingUkSpreadsheet()
+        {
+            string msg;
+            var facility = Facility.ReadCobie("OBN1-COBie-UK-2014.xlsx", out msg);
+            facility.WriteJson("..\\..\\OBN1-COBie-UK-2014.cobielite.json", true);
+        }
+
+        [TestMethod]
         [DeploymentItem("TestFiles\\2012-03-23-Duplex-Design.xlsx")]
         public void WritingSpreadsheet()
         {

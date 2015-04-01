@@ -100,8 +100,7 @@ namespace Xbim.COBieLiteUK
             info.SetValue(this, value);
         }
 
-
-        internal virtual void WriteToCobie(IWorkbook workbook, TextWriter log, string version = "UK2012")
+        internal void WriteToCobie(IWorkbook workbook, TextWriter log, string version = "UK2012")
         {
             var mappings = GetMapping(GetType(), version).ToList();
             if (!mappings.Any())

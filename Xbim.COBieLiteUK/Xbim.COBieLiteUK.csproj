@@ -124,6 +124,8 @@
     <None Include="Schemas\cobieliteuk.xsd">
       <SubType>Designer</SubType>
     </None>
+    <EmbeddedResource Include="Templates\UK2012.xls" />
+    <EmbeddedResource Include="Templates\UK2012.xlsx" />
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

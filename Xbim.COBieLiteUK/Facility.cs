@@ -381,16 +381,25 @@ namespace Xbim.COBieLiteUK
         #region Writing COBie Spreadsheet
 
         public void WriteCobie(Stream stream, ExcelTypeEnum type, out string message,
-            string version = "UK2012")
+            string version = "UK2012", bool useTemplate = true)
         {
+            Stream templateStream = null;
+            if (useTemplate)
+            {
+                var templateName = version + (type == ExcelTypeEnum.XLS ? ".xls" : ".xlsx");
+                templateStream =
+                    GetType()
+                        .Assembly.GetManifestResourceStream(String.Format("{0}.Templates.{1}", GetType().Namespace, templateName));
+            }
+
             IWorkbook workbook;
             switch (type)
             {
                 case ExcelTypeEnum.XLS:
-                    workbook = new HSSFWorkbook();
+                    workbook = templateStream == null ? new HSSFWorkbook() : new HSSFWorkbook(templateStream);
                     break;
                 case ExcelTypeEnum.XLSX:
-                    workbook = new XSSFWorkbook();
+                    workbook = templateStream == null ? new XSSFWorkbook() : new XSSFWorkbook(templateStream);
                     break;
                 default:
                     throw new ArgumentOutOfRangeException("type");
@@ -402,7 +411,7 @@ namespace Xbim.COBieLiteUK
             workbook.Write(stream);
         }
 
-        public void WriteCobie(string path, out string message, string version = "UK2012")
+        public void WriteCobie(string path, out string message, string version = "UK2012", bool useTemplate = true)
         {
             if (path == null) throw new ArgumentNullException("path");
             var ext = Path.GetExtension(path).ToLower().Trim('.');
@@ -410,7 +419,7 @@ namespace Xbim.COBieLiteUK
             using (var file = File.Create(path))
             {
                 var type = ext == "xlsx" ? ExcelTypeEnum.XLSX : ExcelTypeEnum.XLS;
-                WriteCobie(file, type, out message, version);
+                WriteCobie(file, type, out message, version, useTemplate);
                 file.Close();
             }
         }
