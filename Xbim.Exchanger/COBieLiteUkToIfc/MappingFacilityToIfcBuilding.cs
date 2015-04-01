@@ -30,6 +30,16 @@ namespace XbimExchanger.COBieLiteUkToIfc
             
             #endregion
 
+            #region Categories
+
+            foreach (var category in facility.Categories)
+            {
+                Exchanger.ConvertCategoryToClassification(category, ifcBuilding);
+            }
+
+            #endregion
+
+
             #region Project
             var projectMapping = Exchanger.GetOrCreateMappings<MappingProjectToIfcProject>();
             //COBie does nor require a project but Ifc does

@@ -18,7 +18,7 @@ namespace XbimExchanger.COBieLiteUkToIfc
 
             foreach (var category in asset.Categories)
             {
-                Exchanger.ConvertCategoryToClassification(category);
+                Exchanger.ConvertCategoryToClassification(category, ifcElement);
             }
 
             #endregion

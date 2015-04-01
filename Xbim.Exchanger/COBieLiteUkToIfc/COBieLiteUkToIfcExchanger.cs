@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Security.Authentication;
 using Xbim.Ifc2x3.ExternalReferenceResource;
 using SystemConvert = System.Convert;
 using System.Collections.Generic;
@@ -96,6 +95,9 @@ namespace XbimExchanger.COBieLiteUkToIfc
         private readonly Dictionary<string, IfcSpatialStructureElement> _spaceLookup = new Dictionary<string, IfcSpatialStructureElement>();
         private readonly Dictionary<string,IfcClassification> _classificationSystems = new Dictionary<string, IfcClassification>();
         private readonly Dictionary<string, IfcClassificationReference> _classificationReferences = new Dictionary<string, IfcClassificationReference>();
+      
+        private  Dictionary<IfcClassificationReference,IfcRelAssociatesClassification>  _classificationRelationships = new Dictionary<IfcClassificationReference, IfcRelAssociatesClassification>();
+        
         #endregion
 
         #region Properties
@@ -801,7 +803,12 @@ namespace XbimExchanger.COBieLiteUkToIfc
             return ifcSpace;
         }
 
-        public void ConvertCategoryToClassification(Category category)
+        /// <summary>
+        /// Converts a category to a classification
+        /// </summary>
+        /// <param name="category"></param>
+        /// <param name="ifcElement"></param>
+        public void ConvertCategoryToClassification(Category category, IfcRoot ifcElement)
         {
             IfcClassification classificationSystem;
             if (!_classificationSystems.TryGetValue(category.Classification, out classificationSystem))
@@ -811,13 +818,24 @@ namespace XbimExchanger.COBieLiteUkToIfc
             }
             IfcClassificationReference classificationReference;
             if (!_classificationReferences.TryGetValue(category.Code, out classificationReference))
-        {
+            {
                 classificationReference = TargetRepository.Instances.New<IfcClassificationReference>();
                 classificationReference.ItemReference = category.Code;
                 classificationReference.Name = category.Description;
                 classificationReference.ReferencedSource = classificationSystem;
             }
-            
+
+            IfcRelAssociatesClassification relationship;
+
+            if (!_classificationRelationships.TryGetValue(classificationReference, out relationship))
+            {
+                relationship = TargetRepository.Instances.New<IfcRelAssociatesClassification>();
+                relationship.RelatingClassification = classificationReference;
+                relationship.Name = category.Code;
+                relationship.Description = category.Description;
+            }
+
+            relationship.RelatedObjects.Add(ifcElement);
         }
 
 
