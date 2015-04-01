@@ -29,11 +29,11 @@ namespace XbimExchanger.COBieLiteUkToIfc
             }
             #endregion
             #region Categories
-
-            foreach (var category in assetType.Categories)
-            {
-                Exchanger.ConvertCategoryToClassification(category, ifcTypeObject);
-            }
+            if (assetType.Categories != null)
+                foreach (var category in assetType.Categories)
+                {
+                    Exchanger.ConvertCategoryToClassification(category, ifcTypeObject);
+                }
 
             #endregion
 

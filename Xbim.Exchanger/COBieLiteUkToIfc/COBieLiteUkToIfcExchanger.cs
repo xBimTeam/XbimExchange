@@ -1,5 +1,6 @@
 ﻿using System;
 using Xbim.Ifc2x3.ExternalReferenceResource;
+using Xbim.XbimExtensions;
 using SystemConvert = System.Convert;
 using System.Collections.Generic;
 using System.Configuration;
@@ -879,5 +880,18 @@ namespace XbimExchanger.COBieLiteUkToIfc
             return default(IfcText);
         }
 
+
+        internal void AddSpaceToZone(SpaceKey spaceKey, IfcZone ifcZone)
+        {           
+            var relationship = TargetRepository.Instances.OfType<IfcRelAssignsToGroup>().FirstOrDefault(r => r.RelatingGroup == ifcZone);
+            if (relationship == null)
+            {
+                relationship = TargetRepository.Instances.New<IfcRelAssignsToGroup>();
+                relationship.RelatingGroup = ifcZone;
+            }
+            var ifcSpace = GetIfcSpace(spaceKey);
+            relationship.RelatedObjects.Add(ifcSpace);
+            relationship.RelatedObjectsType = IfcObjectType.Product;
+        }
     }
 }

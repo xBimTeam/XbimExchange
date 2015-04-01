@@ -99,6 +99,7 @@
     <Compile Include="COBieLiteUkToIfc\MappingProjectToIfcProject.cs" />
     <Compile Include="COBieLiteUkToIfc\MappingSiteToIfcSite.cs" />
     <Compile Include="COBieLiteUkToIfc\MappingSpaceToIfcSpace.cs" />
+    <Compile Include="COBieLiteUkToIfc\MappingZoneToIfcZone.cs" />
     <Compile Include="DPoWToCOBieLiteUK\DPoWToCOBieLiteUKExchanger.cs" />
     <Compile Include="DPoWToCOBieLiteUK\DPoWToCOBieLiteUKMapping.cs" />
     <Compile Include="DPoWToCOBieLiteUK\Extensions.cs" />

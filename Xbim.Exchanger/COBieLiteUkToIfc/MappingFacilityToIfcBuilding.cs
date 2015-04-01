@@ -31,11 +31,11 @@ namespace XbimExchanger.COBieLiteUkToIfc
             #endregion
 
             #region Categories
-
-            foreach (var category in facility.Categories)
-            {
-                Exchanger.ConvertCategoryToClassification(category, ifcBuilding);
-            }
+            if (facility.Categories != null)
+                foreach (var category in facility.Categories)
+                {
+                    Exchanger.ConvertCategoryToClassification(category, ifcBuilding);
+                }
 
             #endregion
 
@@ -101,6 +101,22 @@ namespace XbimExchanger.COBieLiteUkToIfc
                     Exchanger.ConvertAttributeTypeToIfcObjectProperty(ifcBuilding, attribute);
             }
             #endregion
+
+            #region Zones
+
+            if (facility.Zones != null)
+            {
+                var zoneTypeMapping = Exchanger.GetOrCreateMappings<MappingZoneToIfcZone>();
+                foreach (var zone in facility.Zones)
+                {
+
+                    zoneTypeMapping.AddMapping(zone, zoneTypeMapping.GetOrCreateTargetObject(zone.ExternalId));
+                   
+                }
+            }
+
+             #endregion
+
 
             #region Add Space Geometry
 
