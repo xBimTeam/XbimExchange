@@ -108,9 +108,16 @@ namespace Xbim.COBie
             }
         }
 
-        
-       
+        /// <summary>
+        /// Object to hold any arbitrary data we might want to associate with the row.
+        /// </summary>
+        public object RowMetaData
+        {
+            get;
+            set;
+        }
 
+       
         /// <summary>
         /// Row hash value
         /// </summary>

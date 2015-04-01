@@ -13,23 +13,33 @@ namespace XbimExchanger.COBieLiteUkToIfc
         /// <summary>
         /// 
         /// </summary>
-        /// <param name="floorType"></param>
+        /// <param name="floor"></param>
         /// <param name="buildingStorey"></param>
         /// <returns></returns>
-        protected override IfcBuildingStorey Mapping(Floor floorType, IfcBuildingStorey buildingStorey)
+        protected override IfcBuildingStorey Mapping(Floor floor, IfcBuildingStorey buildingStorey)
         {
-            buildingStorey.Name = floorType.Name;
-            buildingStorey.Description = floorType.Description;
+            buildingStorey.Name = floor.Name;
+            buildingStorey.Description = floor.Description;
             buildingStorey.CompositionType = IfcElementCompositionEnum.ELEMENT;
-            buildingStorey.Elevation = floorType.Elevation;
+            buildingStorey.Elevation = floor.Elevation;
 
-            Exchanger.TryCreatePropertySingleValue(buildingStorey, new DecimalAttributeValue { Value = floorType.Height}, "FloorHeightValue", Exchanger.DefaultLinearUnit);
+            #region Categories
+
+            if (floor.Categories != null)
+                foreach (var category in floor.Categories)
+                {
+                    Exchanger.ConvertCategoryToClassification(category, buildingStorey);
+                }
+
+            #endregion
+
+            Exchanger.TryCreatePropertySingleValue(buildingStorey, new DecimalAttributeValue { Value = floor.Height}, "FloorHeightValue", Exchanger.DefaultLinearUnit);
             
             //write out the spaces
-            if (floorType.Spaces != null)
+            if (floor.Spaces != null)
             {
                 var spaceMapping = Exchanger.GetOrCreateMappings<MappingSpaceToIfcSpace>();
-                foreach (var space in floorType.Spaces)
+                foreach (var space in floor.Spaces)
                 {
                     var ifcSpace = spaceMapping.AddMapping(space, spaceMapping.GetOrCreateTargetObject(space.ExternalId));
                     buildingStorey.AddToSpatialDecomposition(ifcSpace);
@@ -40,10 +50,10 @@ namespace XbimExchanger.COBieLiteUkToIfc
 
             #region Attributes
 
-            if (floorType.Attributes != null)
+            if (floor.Attributes != null)
             {
 
-                foreach (var attribute in floorType.Attributes)
+                foreach (var attribute in floor.Attributes)
                 {
                    Exchanger.ConvertAttributeTypeToIfcObjectProperty(buildingStorey, attribute);
                 }

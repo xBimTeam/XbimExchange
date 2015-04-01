@@ -23,6 +23,19 @@ namespace XbimExchanger.COBieLiteUkToIfc
                 foreach (var attribute in spaceType.Attributes)
                     Exchanger.ConvertAttributeTypeToIfcObjectProperty(ifcSpace, attribute);
             }
+
+            #region Attributes
+
+            if (spaceType.Attributes != null)
+            {
+
+                foreach (var attribute in spaceType.Attributes)
+                {
+                    Exchanger.ConvertAttributeTypeToIfcObjectProperty(ifcSpace, attribute);
+                }
+            }
+            #endregion
+
             #endregion
             return ifcSpace;
         }

@@ -12,32 +12,39 @@ namespace XbimExchanger.COBieLiteUkToIfc
 {
     class MappingAssetTypeToIfcTypeObject : CoBieLiteUkIfcMappings<string, AssetType, IfcTypeObject>
     {
-        protected override IfcTypeObject Mapping(AssetType assetTypeInfoType, IfcTypeObject ifcTypeObject)
+        protected override IfcTypeObject Mapping(AssetType assetType, IfcTypeObject ifcTypeObject)
         {
-            ifcTypeObject.Name = assetTypeInfoType.Name;
-            ifcTypeObject.Description = assetTypeInfoType.Description;
+            ifcTypeObject.Name = assetType.Name;
+            ifcTypeObject.Description = assetType.Description;
 
             #region Attributes
 
-            if (assetTypeInfoType.Attributes != null)
+            if (assetType.Attributes != null)
             {
 
-                foreach (var attribute in assetTypeInfoType.Attributes)
+                foreach (var attribute in assetType.Attributes)
                 {
                     Exchanger.ConvertAttributeTypeToIfcObjectProperty(ifcTypeObject, attribute);
                 }
             }
             #endregion
+            #region Categories
+            if (assetType.Categories != null)
+                foreach (var category in assetType.Categories)
+                {
+                    Exchanger.ConvertCategoryToClassification(category, ifcTypeObject);
+                }
 
+            #endregion
 
-            if (assetTypeInfoType.Assets != null && assetTypeInfoType.Assets.Any())
+            if (assetType.Assets != null && assetType.Assets.Any())
             {
                 var relDefinesType = Exchanger.TargetRepository.Instances.New<IfcRelDefinesByType>();
                 relDefinesType.RelatingType = ifcTypeObject;
-                relDefinesType.Name = assetTypeInfoType.Name;
-                relDefinesType.Description = assetTypeInfoType.Description;
+                relDefinesType.Name = assetType.Name;
+                relDefinesType.Description = assetType.Description;
                 var index = 0;
-                foreach (var assetInfoType in assetTypeInfoType.Assets)
+                foreach (var assetInfoType in assetType.Assets)
                 {
                     IfcElement ifcElement;
                     if (!string.IsNullOrWhiteSpace(assetInfoType.ExternalEntity))

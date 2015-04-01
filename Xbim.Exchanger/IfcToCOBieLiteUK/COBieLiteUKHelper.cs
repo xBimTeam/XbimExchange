@@ -69,7 +69,6 @@ namespace XbimExchanger.IfcToCOBieLiteUK
         internal static readonly ILogger Logger = LoggerFactory.GetLogger();
        
         private readonly XbimModel _model;
-        private IfcClassification _classificationSystem; 
         private readonly string _creatingApplication;
 
         #region Model measurement units
@@ -100,7 +99,7 @@ namespace XbimExchanger.IfcToCOBieLiteUK
 
         #region Lookups
         //Classification for any root object
-        private Dictionary<IfcRoot, IfcClassificationReference> _classifiedObjects;
+        private Dictionary<IfcRoot, List<IfcClassificationReference>> _classifiedObjects;
 
         private Dictionary<IfcZone, HashSet<IfcSpace>>  _zoneSpaces;
         private Dictionary<IfcSpace, HashSet<IfcZone>> _spaceZones;
@@ -133,16 +132,15 @@ namespace XbimExchanger.IfcToCOBieLiteUK
         /// 
         /// </summary>
         /// <param name="model"></param>
-        /// <param name="classificationSystemName"></param>
         /// <param name="configurationFile"></param>
-        public CoBieLiteUkHelper(XbimModel model, string classificationSystemName = null, string configurationFile = null)
+        public CoBieLiteUkHelper(XbimModel model, string configurationFile = null)
         {
             _configFileName = configurationFile;
 
             _model = model;
             _creatingApplication = model.Header.CreatingApplication;
             LoadCobieMaps();
-            GetClassificationDictionary(classificationSystemName);
+            GetClassificationDictionary();
             GetSpacesAndZones();
             GetUnits();
             GetTypeMaps();
@@ -564,60 +562,54 @@ namespace XbimExchanger.IfcToCOBieLiteUK
             return ret.Replace("_", "");
         }
 
-        private void GetClassificationDictionary(string classificationSystemName = null)
+        private void GetClassificationDictionary()
         {
-            if (string.IsNullOrWhiteSpace(classificationSystemName))
-                _classificationSystem = null;
-            else
-            {
-                _classificationSystem =
-                    Model.Instances.OfType<IfcClassification>(true).FirstOrDefault(rel => rel.Name == classificationSystemName);
-            }
 
-            //get the relationships
-            var associations =
-                Model.Instances.OfType<IfcRelAssociatesClassification>()
-                    .Where<IfcRelAssociatesClassification>(rel => rel.RelatingClassification is IfcClassificationReference);
-            //filter them for our chosen classification system
-            associations =
-                associations.Where(
-                    assoc =>
-                        ((IfcClassificationReference)assoc.RelatingClassification).ReferencedSource ==
-                        _classificationSystem);
-            _classifiedObjects = new Dictionary<IfcRoot, IfcClassificationReference>();
+
+            _classifiedObjects = new Dictionary<IfcRoot, List<IfcClassificationReference>>();
             //create a dictionary of classified objects
-            foreach (var ifcRelAssociatesClassification in associations)
+            foreach (var ifcRelAssociatesClassification in Model.Instances.OfType<IfcRelAssociatesClassification>())
             {
                 foreach (var relatedObject in ifcRelAssociatesClassification.RelatedObjects)
                 {
-                    _classifiedObjects.Add(relatedObject,
-                        ((IfcClassificationReference)ifcRelAssociatesClassification.RelatingClassification));
+                    List<IfcClassificationReference> classificationList;
+                    if (!_classifiedObjects.TryGetValue(relatedObject, out classificationList))
+                    {
+                        classificationList = new List<IfcClassificationReference>();
+                        _classifiedObjects.Add(relatedObject, classificationList);
+                    }
+                    classificationList.Add(((IfcClassificationReference)ifcRelAssociatesClassification.RelatingClassification));
                 }
             }
-
         }
 
-        private Category ConvertToCategory(IfcClassificationReference classification)
+        private List<Category> ConvertToCategories(IEnumerable<IfcClassificationReference> classifications)
         {
-            var category = new Category() ;
-            if (classification.ReferencedSource != null)
-                category.Classification = classification.ReferencedSource.Name;
-            else
-                category.Classification = "Unspecified";
-            if (classification.ItemReference.HasValue && classification.Name.HasValue && string.CompareOrdinal(classification.ItemReference, classification.Name) == 0)
+            var categories = new List<Category>();
+            foreach (var classification in classifications)
             {
-                var strRef = classification.ItemReference.Value.ToString();
-                var parts = strRef.Split( new[] { ':' , ';' ,'/' ,'\\'}, StringSplitOptions.RemoveEmptyEntries);
-                if (parts.Length > 1)
-                    category.Description = parts[1];
-                category.Code = parts[0];
+                var category = new Category();
+                if (classification.ReferencedSource != null)
+                    category.Classification = classification.ReferencedSource.Name;
+                else
+                    category.Classification = "Unspecified";
+                if (classification.ItemReference.HasValue && classification.Name.HasValue &&
+                    string.CompareOrdinal(classification.ItemReference, classification.Name) == 0)
+                {
+                    var strRef = classification.ItemReference.Value.ToString();
+                    var parts = strRef.Split(new[] {':', ';', '/', '\\'}, StringSplitOptions.RemoveEmptyEntries);
+                    if (parts.Length > 1)
+                        category.Description = parts[1];
+                    category.Code = parts[0];
+                }
+                else
+                {
+                    category.Code = classification.ItemReference;
+                    category.Description = classification.Name;
+                }
+                categories.Add(category);
             }
-            else
-            {
-                category.Code = classification.ItemReference;
-                category.Description = classification.Name;
-            }
-            return category;
+            return categories;
         }
         /// <summary>
         /// Returns the COBie Category for this object, based on the Ifc Classification
@@ -626,9 +618,9 @@ namespace XbimExchanger.IfcToCOBieLiteUK
         /// <returns></returns>
         public List<Category> GetCategories(IfcRoot classifiedObject)
         {
-            IfcClassificationReference classification;
-            if (_classifiedObjects.TryGetValue(classifiedObject, out classification))
-                return new List<Category> { ConvertToCategory(classification) };
+            List<IfcClassificationReference> classifications;
+            if (_classifiedObjects.TryGetValue(classifiedObject, out classifications))
+                return  ConvertToCategories(classifications);
             //if the object is an IfcObject we might be able to get a classification from its aggregating type
             var ifcObject = classifiedObject as IfcObject;
             if (ifcObject != null)
@@ -636,8 +628,8 @@ namespace XbimExchanger.IfcToCOBieLiteUK
                 var definingTypeObject = GetDefiningTypeObject(ifcObject); //do we have a defining type
                 if (definingTypeObject != null)
                 {
-                    if (_classifiedObjects.TryGetValue(definingTypeObject, out classification))
-                        return new List<Category> { ConvertToCategory(classification)};
+                    if (_classifiedObjects.TryGetValue(definingTypeObject, out classifications))
+                        return ConvertToCategories(classifications);
                 }
             }
           

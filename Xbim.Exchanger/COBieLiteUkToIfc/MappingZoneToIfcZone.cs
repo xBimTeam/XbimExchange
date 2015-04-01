@@ -1,0 +1,60 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using Xbim.COBieLiteUK;
+using Xbim.Ifc2x3.ProductExtension;
+
+namespace XbimExchanger.COBieLiteUkToIfc
+{
+    class MappingZoneToIfcZone : CoBieLiteUkIfcMappings<string, Zone, IfcZone>
+    {
+        protected override IfcZone Mapping(Zone zone, IfcZone ifcZone)
+        {
+            ifcZone.Name = zone.Name;
+            ifcZone.Description = zone.Description;
+
+            #region Properties
+           
+            
+
+            #endregion
+
+            #region Categories
+
+            if (zone.Categories != null)
+                foreach (var category in zone.Categories)
+                {
+                    Exchanger.ConvertCategoryToClassification(category, ifcZone);
+                }
+
+            #endregion
+
+            #region Attributes
+
+            if (zone.Attributes != null)
+            {
+
+                foreach (var attribute in zone.Attributes)
+                {
+                    Exchanger.ConvertAttributeTypeToIfcObjectProperty(ifcZone, attribute);
+                }
+            }
+            #endregion
+
+            #region Spaces
+
+            if (zone.Spaces != null)
+                foreach (var spaceKey in zone.Spaces)
+                {
+                    Exchanger.AddSpaceToZone(spaceKey, ifcZone);
+                }
+
+            #endregion
+
+
+            return ifcZone;
+
+        }
+    }
+}

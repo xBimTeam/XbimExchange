@@ -15,6 +15,7 @@ namespace XbimExchanger.COBieLiteUkToIfc
             ifcProject.Name = projectType.Name;
             ifcProject.Description = projectType.Description; 
             ifcProject.RepresentationContexts.Add(Exchanger.Model3DContext);
+           
             return ifcProject;
         }
 

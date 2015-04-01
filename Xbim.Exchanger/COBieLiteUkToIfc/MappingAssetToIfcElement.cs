@@ -15,11 +15,11 @@ namespace XbimExchanger.COBieLiteUkToIfc
             ifcElement.Description = asset.Description;
 
             #region Categories
-
-            foreach (var category in asset.Categories)
-            {
-                Exchanger.ConvertCategoryToClassification(category);
-            }
+            if (asset.Categories != null)
+                foreach (var category in asset.Categories)
+                {
+                    Exchanger.ConvertCategoryToClassification(category, ifcElement);
+                }
 
             #endregion
 

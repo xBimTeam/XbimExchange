@@ -30,6 +30,16 @@ namespace XbimExchanger.COBieLiteUkToIfc
             
             #endregion
 
+            #region Categories
+            if (facility.Categories != null)
+                foreach (var category in facility.Categories)
+                {
+                    Exchanger.ConvertCategoryToClassification(category, ifcBuilding);
+                }
+
+            #endregion
+
+
             #region Project
             var projectMapping = Exchanger.GetOrCreateMappings<MappingProjectToIfcProject>();
             //COBie does nor require a project but Ifc does
@@ -91,6 +101,22 @@ namespace XbimExchanger.COBieLiteUkToIfc
                     Exchanger.ConvertAttributeTypeToIfcObjectProperty(ifcBuilding, attribute);
             }
             #endregion
+
+            #region Zones
+
+            if (facility.Zones != null)
+            {
+                var zoneTypeMapping = Exchanger.GetOrCreateMappings<MappingZoneToIfcZone>();
+                foreach (var zone in facility.Zones)
+                {
+
+                    zoneTypeMapping.AddMapping(zone, zoneTypeMapping.GetOrCreateTargetObject(zone.ExternalId));
+                   
+                }
+            }
+
+             #endregion
+
 
             #region Add Space Geometry
 
