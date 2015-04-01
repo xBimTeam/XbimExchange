@@ -169,13 +169,8 @@ namespace Xbim.CobieLiteUK.Validation
                     foreach (var matched in matching)
                     {
                         var attV = modelAsset.Attributes.FirstOrDefault(a => a.Name == matched);
-                        AttributeValue attributeV = null; 
-                        if (attV == null)
-                        {
-                            attributeV = new StringAttributeValue() {Value = "Unexpected error."};
-                        }
+                        var attributeV = attV == null ? new StringAttributeValue() { Value = "Unexpected error." } : attV.Value;
                         matchingCount++;
-
 
                         var att = new Attribute()
                         {
