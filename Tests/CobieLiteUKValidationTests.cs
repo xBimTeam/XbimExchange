@@ -20,10 +20,11 @@ namespace Tests
     public class CobieLiteUKValidationTests
     {
         [TestMethod]
-        public void CanValidate()
+        public void CanSaveValidatedVacility()
         {
             var validated = GetValidated();
             validated.WriteJson(@"..\..\ValidationReport.json", true);
+            validated.WriteXml(@"..\..\ValidationReport.xml", true);
             validated.WriteJson(@"ValidationReport.json", true);
         }
 
