@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Security.Authentication;
+using Xbim.Ifc2x3.ExternalReferenceResource;
 using SystemConvert = System.Convert;
 using System.Collections.Generic;
 using System.Configuration;
@@ -90,8 +92,10 @@ namespace XbimExchanger.COBieLiteUkToIfc
 
         private readonly Dictionary<IfcObjectDefinition, List<IfcPropertySetDefinition>> _objectsToPropertySets =
             new Dictionary<IfcObjectDefinition, List<IfcPropertySetDefinition>>();
-       // private readonly Dictionary<string, IfcUnit> _units = new Dictionary<string, IfcUnit>();
+        private readonly Dictionary<string, IfcUnit> _units = new Dictionary<string, IfcUnit>();
         private readonly Dictionary<string, IfcSpatialStructureElement> _spaceLookup = new Dictionary<string, IfcSpatialStructureElement>();
+        private readonly Dictionary<string,IfcClassification> _classificationSystems = new Dictionary<string, IfcClassification>();
+        private readonly Dictionary<string, IfcClassificationReference> _classificationReferences = new Dictionary<string, IfcClassificationReference>();
         #endregion
 
         #region Properties
@@ -528,7 +532,7 @@ namespace XbimExchanger.COBieLiteUkToIfc
         internal void ConvertAttributeTypeToIfcObjectProperty(IfcObjectDefinition ifcObjectDefinition, Attribute attributeType)
         {
             //need to add in consideration for quantities not just properties
-            var ifcSimpleProperty = ConvertAttributeTypeToIfcSimpleProperty(attributeType);
+            var ifcSimpleProperty = ConvertAttributeToIfcSimpleProperty(attributeType);
             var propertySet = GetOrCreatePropertySetDefinition(ifcObjectDefinition, attributeType.PropertySetName);
             propertySet.Add(ifcSimpleProperty);
         }
@@ -538,13 +542,13 @@ namespace XbimExchanger.COBieLiteUkToIfc
         /// </summary>
         /// <param name="attributeType"></param>
         /// <returns></returns>
-        internal IfcSimpleProperty ConvertAttributeTypeToIfcSimpleProperty(Attribute attributeType)
+        internal IfcSimpleProperty ConvertAttributeToIfcSimpleProperty(Attribute attributeType)
         {
-            var attributeValueType = attributeType.Value;
+            var attributeValue = attributeType.Value;
            
             IfcSimpleProperty theProperty;
 
-            var simplePropertyType = attributeValueType.SimplePropertyType();
+            var simplePropertyType = attributeValue.SimplePropertyType();
               switch (simplePropertyType)
             {
                 case XbimSimplePropertyType.SimpleDecimal:
@@ -569,52 +573,51 @@ namespace XbimExchanger.COBieLiteUkToIfc
             
             theProperty.Name = attributeType.Name;
             theProperty.Description = attributeType.Description;
-            if (attributeValueType != null)
+
+            if (attributeValue != null)
             {
+                var simpleProperty = theProperty as IfcPropertySingleValue;
+                if (simpleProperty != null)
+                {
+                    var unitConverter = new IfcUnitConverter(attributeValue.Unit);
+
+                    if (!unitConverter.IsUndefined)
+                    {
+                        simpleProperty.Unit = unitConverter.IfcUnit(_units, TargetRepository);
+                    }
+                }
                 switch (simplePropertyType)
                 {
                     case XbimSimplePropertyType.SimpleDecimal:
-                        var attributeDecimalValueType = attributeValueType as DecimalAttributeValue;
-                        double? decimalValue;
-                        if (attributeDecimalValueType != null)
-                            decimalValue = attributeDecimalValueType.Value;
-                        else decimalValue = null;
-                        var simpleProperty = (IfcPropertySingleValue) theProperty;
-                        if (decimalValue.HasValue) simpleProperty.NominalValue = new IfcReal(decimalValue.Value);
-                        //if (attributeDecimalValueType != null)
-                        //{
-                        //    var unitConverter = new IfcUnitConverter(attributeDecimalValueType.UnitName);
-                        //    if (!unitConverter.IsUndefined)
-                        //        simpleProperty.Unit = unitConverter.IfcUnit(TargetRepository);
-                        //}
+                        var decimalValue = attributeValue as DecimalAttributeValue;
+                        var simpleDecimalProperty = (IfcPropertySingleValue)theProperty;
+                        if (decimalValue != null)
+                        {
+                            if (decimalValue.Value.HasValue)
+                                simpleDecimalProperty.NominalValue = new IfcReal(decimalValue.Value.Value);
+                        }
                         break;
                     case XbimSimplePropertyType.BoundedDecimal:
-                        var attributeBoundedDecimalValueType = attributeValueType as DecimalAttributeValue;
-                        double? maxDecimalValue;
-                        double? minDecimalValue;
-                        if (attributeBoundedDecimalValueType != null )
-                            maxDecimalValue = attributeBoundedDecimalValueType.MaximalValue;
-                        else maxDecimalValue = null;
-                        if (attributeBoundedDecimalValueType != null)
-                            minDecimalValue = attributeBoundedDecimalValueType.MinimalValue;
-                        else minDecimalValue = null;
-                        var boundedProperty = (IfcPropertyBoundedValue)theProperty;
-                        if (maxDecimalValue.HasValue)
-                            boundedProperty.UpperBoundValue = new IfcReal(maxDecimalValue.Value);
-                        if (minDecimalValue.HasValue)
-                            boundedProperty.LowerBoundValue = new IfcReal(minDecimalValue.Value);
+                        var boundedDecimal = attributeValue as DecimalAttributeValue;
+                        if (boundedDecimal != null)
+                        {
+                            var boundedProperty = (IfcPropertyBoundedValue) theProperty;
+                            if (boundedDecimal.MaximalValue.HasValue)
+                                boundedProperty.UpperBoundValue = new IfcReal(boundedDecimal.MaximalValue.Value);
+                            if (boundedDecimal.MinimalValue.HasValue)
+                                boundedProperty.LowerBoundValue = new IfcReal(boundedDecimal.MinimalValue.Value);
+                        }
                         break;
                     case XbimSimplePropertyType.SimpleInteger:
-                        var attributeSimpleIntegerValueType = attributeValueType as IntegerAttributeValue;
-                        if (attributeSimpleIntegerValueType != null )
+                        var simpleInteger = attributeValue as IntegerAttributeValue;
+                        if (simpleInteger != null && simpleInteger.Value.HasValue)
                         {
                             var simpleIntProperty = (IfcPropertySingleValue)theProperty;
-                            simpleIntProperty.NominalValue =
-                                new IfcInteger(attributeSimpleIntegerValueType.Value);
+                            simpleIntProperty.NominalValue = new IfcInteger(simpleInteger.Value.Value);
                         }
                         break;
                     case XbimSimplePropertyType.BoundedInteger:
-                        var attributeBoundedIntegerValueType = attributeValueType as IntegerAttributeValue;                        
+                        var attributeBoundedIntegerValueType = attributeValue as IntegerAttributeValue;                        
                         if (attributeBoundedIntegerValueType != null)
                         {
                             var boundedIntegerProperty = (IfcPropertyBoundedValue)theProperty;
@@ -627,11 +630,12 @@ namespace XbimExchanger.COBieLiteUkToIfc
                         }
                         break;
                     case XbimSimplePropertyType.SimpleBoolean:
-                        var attributeBooleanValueType = attributeValueType as BooleanAttributeValue;
+                        var attributeBooleanValueType = attributeValue as BooleanAttributeValue;
                         if (attributeBooleanValueType != null)
                         {
                             var simpleBooleanProperty = (IfcPropertySingleValue)theProperty;
-                            simpleBooleanProperty.NominalValue = new IfcBoolean(attributeBooleanValueType.Value);
+                            if (attributeBooleanValueType.Value.HasValue)
+                                simpleBooleanProperty.NominalValue = new IfcBoolean(attributeBooleanValueType.Value.Value);
                         }
                         break;
                     //case XbimSimplePropertyType.SimpleMonetary:
@@ -647,7 +651,7 @@ namespace XbimExchanger.COBieLiteUkToIfc
                     //    }
                     //    break;
                     case XbimSimplePropertyType.EnumerationString:
-                        var attributeEnumStringValueType = attributeValueType as StringAttributeValue;
+                        var attributeEnumStringValueType = attributeValue as StringAttributeValue;
                         if (attributeEnumStringValueType != null)
                         {
                             var simpleEnumStringProperty = (IfcPropertyEnumeratedValue)theProperty;
@@ -669,7 +673,7 @@ namespace XbimExchanger.COBieLiteUkToIfc
                         break;
                     case XbimSimplePropertyType.SimpleString:
                     case XbimSimplePropertyType.Null:
-                        var attributeStringValueType = attributeValueType as StringAttributeValue;
+                        var attributeStringValueType = attributeValue as StringAttributeValue;
                         if (attributeStringValueType != null)
                         {
                             var simpleStringProperty = (IfcPropertySingleValue)theProperty;
@@ -677,7 +681,7 @@ namespace XbimExchanger.COBieLiteUkToIfc
                         }
                         break;
                     case XbimSimplePropertyType.SimpleDateTime:
-                        var attributeDateTimeValueType = attributeValueType as DateTimeAttributeValue;
+                        var attributeDateTimeValueType = attributeValue as DateTimeAttributeValue;
                         if (attributeDateTimeValueType != null && attributeDateTimeValueType.Value.HasValue)
                         {
                             var simpleDateTimeProperty = (IfcPropertySingleValue)theProperty;
@@ -770,7 +774,6 @@ namespace XbimExchanger.COBieLiteUkToIfc
         /// <summary>
         /// Adds the space to the space map if the storey name plus the space name is not unique returns false
         /// </summary>
-        /// <param name="storey"></param>
         /// <param name="space"></param>
         /// <returns></returns>
         public bool AddToSpaceMap( IfcSpatialStructureElement space)
@@ -798,9 +801,23 @@ namespace XbimExchanger.COBieLiteUkToIfc
             return ifcSpace;
         }
 
-        public void ConvertCategoryToClassification()
+        public void ConvertCategoryToClassification(Category category)
         {
-            
+            IfcClassification classificationSystem;
+            if (!_classificationSystems.TryGetValue(category.Classification, out classificationSystem))
+            {
+                classificationSystem = TargetRepository.Instances.New<IfcClassification>();
+                classificationSystem.Name = category.Classification;
+            }
+            IfcClassificationReference classificationReference;
+            if (!_classificationReferences.TryGetValue(category.Code, out classificationReference))
+            {
+                classificationReference = TargetRepository.Instances.New<IfcClassificationReference>();
+                classificationReference.ItemReference = category.Code;
+                classificationReference.Name = category.Description;
+                classificationReference.ReferencedSource = classificationSystem;
+            }
+
         }
 
 
