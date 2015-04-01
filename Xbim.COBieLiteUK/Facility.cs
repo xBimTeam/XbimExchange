@@ -407,6 +407,20 @@ namespace Xbim.COBieLiteUK
             
             log = new StringWriter();
             WriteToCobie(workbook, log, null, version);
+            
+            //refresh formulas
+            switch (type)
+            {
+                case ExcelTypeEnum.XLS:
+                    HSSFFormulaEvaluator.EvaluateAllFormulaCells(workbook);
+                    break;
+                case ExcelTypeEnum.XLSX:
+                    XSSFFormulaEvaluator.EvaluateAllFormulaCells(workbook);
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException("type");
+            }
+
             message = log.ToString();
             workbook.Write(stream);
         }
@@ -430,7 +444,8 @@ namespace Xbim.COBieLiteUK
             base.WriteToCobie(workbook, log, parent, version);
 
             //write metadata out
-            Metadata.WriteToCobie(workbook, log, version);
+            if(Metadata != null) 
+                Metadata.WriteToCobie(workbook, log, version);
         }
 
         internal override IEnumerable<CobieObject> GetChildren()

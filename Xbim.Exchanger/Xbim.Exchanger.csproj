@@ -112,7 +112,7 @@
     <Compile Include="DPoWToCOBieLiteUK\MappingPlanOfWorkToFacilityType.cs" />
     <Compile Include="DPoWToCOBieLiteUK\MappingProjectStageToProjectStage.cs" />
     <Compile Include="DPoWToCOBieLiteUK\MappingRoleToContact.cs" />
-    <Compile Include="DPoWToCOBieLiteUK\MappingSpaceTypeToSpaceType.cs" />
+    <Compile Include="DPoWToCOBieLiteUK\MappingSpaceTypeToZone.cs" />
     <Compile Include="DPoWToCOBieLite\ClassificationMappings.cs" />
     <Compile Include="DPoWToCOBieLite\DPoWToCOBieLiteExchanger.cs" />
     <Compile Include="DPoWToCOBieLite\DPoWToCOBieLiteMapping.cs" />

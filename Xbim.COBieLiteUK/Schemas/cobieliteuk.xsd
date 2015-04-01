@@ -467,7 +467,7 @@
       <xs:appinfo source="mapping">UK2012|S|Description|optional|item|-|Description</xs:appinfo>
       <xs:appinfo source="mapping">UK2012|T|ProjectDescription|optional|item|-|Project.Description</xs:appinfo>
       <xs:appinfo source="mapping">UK2012|U|SiteDescription|optional|item|-|Site.Description</xs:appinfo>
-      <xs:appinfo source="mapping">UK2012|V|Phase|optional|item|-|Phase</xs:appinfo>
+      <xs:appinfo source="mapping">UK2012|V|Phase|required|item|-|Phase</xs:appinfo>
       <xs:documentation>
         A type for the Facility element that is the root of a COBie document.
         Facility contains information about the facility being exchanged during a given COBie deliverable.
@@ -686,7 +686,7 @@
       <xs:appinfo source="mapping">UK2012|P|ExtIdentifier|optional|item|-|ExternalId</xs:appinfo>
       <xs:appinfo source="mapping">UK2012|Q|TaskNumber|optional|item|-|TaskNumber</xs:appinfo>
       <xs:appinfo source="mapping">UK2012|R|Priors|optional|list|-|Priors.TaskNumber</xs:appinfo>
-      <xs:appinfo source="mapping">UK2012|S|ResourceNames|optional|list|-|ResourceNames.Name</xs:appinfo>
+      <xs:appinfo source="mapping">UK2012|S|ResourceNames|optional|list|-|Resources.Name</xs:appinfo>
       <xs:documentation>
         A minimum of one COBie.Job record is required for all relevant COBie.Type objects submitted at the benefical occupancy or
         facility handover stage.

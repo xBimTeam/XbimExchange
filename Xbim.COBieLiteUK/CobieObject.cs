@@ -313,7 +313,22 @@ namespace Xbim.COBieLiteUK
                     }
                     if (!String.IsNullOrEmpty(mapping.PickList) && value.ValueType == CobieValueType.String)
                     {
-                        WritePickListValue(workbook, mapping, value.StringValue);
+                        if (mapping.Path.StartsWith("Categories")) //categories need to be handled differently
+                        {
+                            if(Categories != null)
+                                foreach (var category in Categories)
+                                {
+                                    if(string.IsNullOrEmpty(category.Classification))
+                                        WritePickListValue(workbook, mapping, category.CategoryString);
+                                    else
+                                    {
+                                        var alterMapping = new MappingAttribute { PickList = mapping.PickList.Substring(0, mapping.PickList.IndexOf('.') + 1) + category.Classification };
+                                        WritePickListValue(workbook, alterMapping, category.CategoryString);
+                                    }
+                                }
+                        }
+                        else
+                            WritePickListValue(workbook, mapping, value.StringValue);
                     }
                 }
             }

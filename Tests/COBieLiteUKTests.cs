@@ -301,7 +301,23 @@ namespace Tests
             facility.WriteCobie("..\\..\\2012-03-23-Duplex-Design_enhanced.xlsx", out msg);
         }
 
-
+        [TestMethod]
+        [DeploymentItem("TestFiles\\OBN1-COBie-UK-2014.xlsx")]
+        public void WritingUkSpreadsheet()
+        {
+            string msg;
+            var facility = Facility.ReadCobie("OBN1-COBie-UK-2014.xlsx", out msg);
+            facility.WriteCobie("..\\..\\OBN1-COBie-UK-2014_plain.xlsx", out msg, "UK2012", false);
+        }
+         
+        //[TestMethod]
+        [DeploymentItem("TestFiles\\OBN1-COBie-UK-2014.xlsx")]
+        public void WritingSpreadsheetFromJson()
+        {
+            string msg;
+            var facility = Facility.ReadJson(@"c:\CODE\XbimGit\XbimExchange\TestResults\COBieLiteUK\NBS_LakesideRestaurant_EcoBuild2015_Revit2014_WithZones_DPoW.json");
+            facility.WriteCobie("..\\..\\Lakeside.xlsx", out msg);
+        }
 
         [TestMethod]
         [DeploymentItem("ValidationFiles\\Lakeside_Restaurant.ifc")]
