@@ -63,6 +63,19 @@ namespace Xsd2Code.Library.Extensions
             //find mapping information in appinfo of the element and create Attribute definition
             foreach (var item in xsdType.Annotation.Items)
             {
+                //get documentation string
+                var doc = item as XmlSchemaDocumentation;
+                if (doc != null && doc.Markup != null && doc.Markup.Length != 0)
+                {
+                    var markup = doc.Markup[0].InnerText;
+                    type.Comments.Add(new CodeCommentStatement()
+                    {
+                        Comment = new CodeComment() {DocComment = true, Text = markup}
+                    });
+                }
+
+
+                //add meta attribtutes from AppInfo
                 var appInfo = item as XmlSchemaAppInfo;
                 if (appInfo == null) continue;
 
