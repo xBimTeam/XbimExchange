@@ -9,17 +9,26 @@ namespace XbimExchanger.COBieLiteUkToIfc
     class MappingAssetToIfcElement<TToObject> : CoBieLiteUkIfcMappings<string, Asset, TToObject> where TToObject : IfcElement, new()
     {
 
-        protected override TToObject Mapping(Asset assetInfoType, TToObject ifcElement)
+        protected override TToObject Mapping(Asset asset, TToObject ifcElement)
         {
-            ifcElement.Name = assetInfoType.Name;
-            ifcElement.Description = assetInfoType.Description;
-            
+            ifcElement.Name = asset.Name;
+            ifcElement.Description = asset.Description;
+
+            #region Categories
+
+            foreach (var category in asset.Categories)
+            {
+                Exchanger.ConvertCategoryToClassification(category);
+            }
+
+            #endregion
+
             #region Attributes
 
-            if (assetInfoType.Attributes != null)
+            if (asset.Attributes != null)
             {
 
-                foreach (var attribute in assetInfoType.Attributes)
+                foreach (var attribute in asset.Attributes)
                 {
                     Exchanger.ConvertAttributeTypeToIfcObjectProperty(ifcElement, attribute);
                 }
@@ -28,9 +37,9 @@ namespace XbimExchanger.COBieLiteUkToIfc
 
             #region Space Assignments
 
-            if (assetInfoType.Spaces != null && assetInfoType.Spaces.Any())
+            if (asset.Spaces != null && asset.Spaces.Any())
             {
-                foreach (var spaceAssignment in assetInfoType.Spaces)
+                foreach (var spaceAssignment in asset.Spaces)
                 {
                     var ifcSpace = Exchanger.GetIfcSpace(spaceAssignment);
                     if (ifcSpace == null) throw new Exception("Space " + spaceAssignment.Name + " - " + spaceAssignment.Name+" cannot be found");

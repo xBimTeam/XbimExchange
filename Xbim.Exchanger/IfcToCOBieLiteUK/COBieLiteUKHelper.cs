@@ -1,4 +1,5 @@
-﻿using System;
+﻿
+using System;
 using System.Collections.Generic;
 using System.Configuration;
 using System.Globalization;
@@ -16,9 +17,8 @@ using Xbim.Ifc2x3.QuantityResource;
 using Xbim.Ifc2x3.SharedFacilitiesElements;
 using Xbim.IO;
 using Xbim.XbimExtensions.SelectTypes;
-using Assembly = System.Reflection.Assembly;
 using Attribute = Xbim.COBieLiteUK.Attribute;
-using Facility = Xbim.COBieLiteUK.Facility;
+using SystemAssembly = System.Reflection.Assembly;
 
 namespace XbimExchanger.IfcToCOBieLiteUK
 {
@@ -120,7 +120,7 @@ namespace XbimExchanger.IfcToCOBieLiteUK
         private Dictionary<IfcTypeObject, IfcAsset> _assetAsignments;
         private Dictionary<IfcSystem, ObjectDefinitionSet> _systemAssignment;
         private Dictionary<IfcObjectDefinition, List<IfcSystem>> _systemLookup;
-        private HashSet<string> _cobieProperties = new HashSet<string>();
+        private readonly HashSet<string> _cobieProperties = new HashSet<string>();
         private Dictionary<IfcElement, List<IfcSpatialStructureElement>> _spaceAssetLookup;
         private Dictionary<IfcSpace, IfcBuildingStorey> _spaceFloorLookup;
         private Dictionary<IfcSpatialStructureElement, List<IfcSpatialStructureElement>> _spatialDecomposition;
@@ -224,7 +224,7 @@ namespace XbimExchanger.IfcToCOBieLiteUK
             {
                 tmpFile = Path.GetTempPath() + Guid.NewGuid().ToString() + ".csv";
 
-                var asss = Assembly.GetExecutingAssembly();
+                var asss = SystemAssembly.GetExecutingAssembly();
 
                 using (var input = asss.GetManifestResourceStream("XbimExchanger.IfcToCOBieLiteUK.COBieAttributes.config"))
                 using (var output = File.Create(tmpFile))
@@ -341,12 +341,12 @@ namespace XbimExchanger.IfcToCOBieLiteUK
             _spaceFloorLookup = new Dictionary<IfcSpace, IfcBuildingStorey>();
             foreach (var spatialElement in _spatialDecomposition)
             {
-                if (spatialElement.Key is IfcBuildingStorey) //only care if the space is on a floor (COBie rule)
+                var key = spatialElement.Key as IfcBuildingStorey;
+                if (key != null) //only care if the space is on a floor (COBie rule)
                 {
                     foreach (var ifcSpace in spatialElement.Value.OfType<IfcSpace>())
-                        _spaceFloorLookup[ifcSpace] = (IfcBuildingStorey)spatialElement.Key;
+                        _spaceFloorLookup[ifcSpace] = key;
                 }
-
             }
 
             var relZones = _model.Instances.OfType<IfcRelAssignsToGroup>().Where(r=>r.RelatingGroup is IfcZone).ToList();
@@ -504,6 +504,9 @@ namespace XbimExchanger.IfcToCOBieLiteUK
             get { return _spaceFloorLookup; }
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
         public Dictionary<IfcZone, HashSet<IfcSpace>> ZoneSpaces
         {
             get { return _zoneSpaces; }
@@ -625,7 +628,7 @@ namespace XbimExchanger.IfcToCOBieLiteUK
         {
             IfcClassificationReference classification;
             if (_classifiedObjects.TryGetValue(classifiedObject, out classification))
-                return new List<Category>() { ConvertToCategory(classification) };
+                return new List<Category> { ConvertToCategory(classification) };
             //if the object is an IfcObject we might be able to get a classification from its aggregating type
             var ifcObject = classifiedObject as IfcObject;
             if (ifcObject != null)
@@ -634,7 +637,7 @@ namespace XbimExchanger.IfcToCOBieLiteUK
                 if (definingTypeObject != null)
                 {
                     if (_classifiedObjects.TryGetValue(definingTypeObject, out classification))
-                        return new List<Category>() { ConvertToCategory(classification)};
+                        return new List<Category> { ConvertToCategory(classification)};
                 }
             }
           

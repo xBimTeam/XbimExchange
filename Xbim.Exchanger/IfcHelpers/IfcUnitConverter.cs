@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Text.RegularExpressions;
 using Xbim.Ifc2x3.MeasureResource;
 using Xbim.IO;
@@ -6,20 +7,45 @@ using Xbim.XbimExtensions.SelectTypes;
 
 namespace XbimExchanger.IfcHelpers
 {
+    /// <summary>
+    /// Helper to convert text descriptions to formal Units
+    /// </summary>
     public struct IfcUnitConverter
     {
         
+        /// <summary>
+        /// The name of the Unit, VOLUMEUNIT, LENGTHUNIT etc, 
+        /// </summary>
         public IfcUnitEnum UnitName;
+        /// <summary>
+        /// Name of the SI Unit, METRE, SQUARE_METRE etc null if not SI
+        /// </summary>
         public IfcSIUnitName? SiUnitName;
+        /// <summary>
+        /// User defined unit name
+        /// </summary>
         public string UserDefinedSiUnitName;
+        /// <summary>
+        /// Sub-dicsion of unit MILLI, PICA etc, null if none
+        /// </summary>
         public IfcSIPrefix? SiPrefix;
+        /// <summary>
+        /// Conversion factor between unit
+        /// </summary>
         public double ConversionFactor;
 
 
+        /// <summary>
+        /// The unit has no SIUnitName
+        /// </summary>
         public bool IsUndefined
         {
             get { return !SiUnitName.HasValue; }
         }
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="name"></param>
         public IfcUnitConverter(string name)
         {
            
@@ -32,6 +58,11 @@ namespace XbimExchanger.IfcHelpers
         }
         
 
+        /// <summary>
+        /// Converts a string
+        /// </summary>
+        /// <param name="name"></param>
+        /// <exception cref="ArgumentOutOfRangeException"></exception>
         public void Convert(string name)
         {
             Init(name);
@@ -306,6 +337,27 @@ namespace XbimExchanger.IfcHelpers
             ConversionFactor = 1;
         }
 
-       
+
+        /// <summary>
+        /// Creates an IfcUnit from the this object and adds it to the database, only works for SI at the moment
+        /// </summary>
+        /// <param name="units"></param>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        public IfcUnit IfcUnit(Dictionary<string, IfcUnit> units, XbimModel model)
+        {
+            if (SiUnitName == null) return null;
+            IfcUnit unit;
+            var key = SiPrefix.HasValue? SiPrefix.Value.ToString()  :"";
+            key += SiUnitName.Value;
+            if (units.TryGetValue(key, out unit)) return unit;
+            var siUnit = model.Instances.New<IfcSIUnit>();
+            siUnit.Name = SiUnitName.Value;
+            siUnit.Prefix = SiPrefix;
+            siUnit.UnitType = UnitName;
+            siUnit.Dimensions = IfcDimensionalExponents.DimensionsForSiUnit(SiUnitName.Value);
+            units.Add(key,siUnit);
+            return siUnit;
+        }
     }
 }
