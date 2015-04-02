@@ -15,7 +15,6 @@ using Xbim.Common.Logging;
 
 namespace Xbim.CobieLiteUK.Validation.Reporting
 {
-
     public class XbimValidationReport
     {
         internal static readonly ILogger Logger = LoggerFactory.GetLogger();
@@ -42,16 +41,15 @@ namespace Xbim.CobieLiteUK.Validation.Reporting
                 workBook = new HSSFWorkbook();
             }
 
-            // a(workBook);
+            var facReport = new FacilityReport(facility);
 
             var summaryPage = workBook.CreateSheet("Summary");
-
             if (!CreateSummarySheet(summaryPage, facility)) 
                 return false;
             var iRunningWorkBook = 1;
-            foreach (var assetType in facility.AssetTypes)
+            foreach (var assetType in facReport.RequirementGroups)
             {
-                // only report items with any assets submitted (a different report should be probablt be provided otherwise)
+                // only report items with any assets submitted (a different report should probably be provided otherwise)
                 if (assetType.GetSubmittedAssetsCount() < 1)
                     continue;
 
@@ -78,7 +76,7 @@ namespace Xbim.CobieLiteUK.Validation.Reporting
             return true;
         }
 
-        private static bool CreateDetailSheet(ISheet detailSheet, AssetType assetType)
+        private static bool CreateDetailSheet(ISheet detailSheet, AssetTypeRequirementPointer assetType)
         {
             try
             {
