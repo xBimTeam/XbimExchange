@@ -11,9 +11,9 @@ namespace Xbim.CobieLiteUK.Validation.Reporting
 {
     public class AssetTypeDetailedGridReport
     {
-        private AssetType _valideatedAssetType;
+        private AssetTypeRequirementPointer _valideatedAssetType;
 
-        public AssetTypeDetailedGridReport(AssetType assetType)
+        public AssetTypeDetailedGridReport(AssetTypeRequirementPointer assetType)
         {
             _valideatedAssetType = assetType;
         }
@@ -23,10 +23,8 @@ namespace Xbim.CobieLiteUK.Validation.Reporting
         internal void PrepareReport()
         {
             AttributesGrid = new DataTable();
-            if (_valideatedAssetType.Assets == null)
-                return;
             
-            foreach (var runningAsset in _valideatedAssetType.Assets)
+            foreach (var runningAsset in _valideatedAssetType.Assets())
             {
                 var r = GetRow(runningAsset);
                 while (r == null) // it's still preparing the columns as appropriate.

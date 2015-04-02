@@ -12,8 +12,6 @@ using Attribute = Xbim.COBieLiteUK.Attribute;
 
 namespace Xbim.CobieLiteUK.Validation
 {
-
-
     public class AssetTypeValidator : IValidator
     {
         private readonly AssetType _requirementType;
@@ -71,19 +69,19 @@ namespace Xbim.CobieLiteUK.Validation
             var iSubmitted = 0;
             var iPassed = 0;
 
-
             // initialisation
             var retType = new AssetType
             {
                 Categories = new List<Category>(_requirementType.Categories.Clone()) // classification comes from the requirement
             };
+            retType.SetRequirementExternalSystem(_requirementType.ExternalSystem);
+            retType.SetRequirementExternalId(_requirementType.ExternalId);
+            retType.SetRequirementName(_requirementType.ExternalId);
 
             // improve returning assetType
             if (candidateType == null) // the following properties depend on the nullity of candidate
             {
                 retType.Name = _requirementType.Name;
-                retType.ExternalId = _requirementType.ExternalId;
-                iSubmitted = 0;
             }
             else
             {
