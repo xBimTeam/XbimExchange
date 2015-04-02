@@ -311,13 +311,13 @@ namespace Tests
         }
          
         //[TestMethod]
-        [DeploymentItem("TestFiles\\OBN1-COBie-UK-2014.xlsx")]
-        public void WritingSpreadsheetFromJson()
-        {
-            string msg;
-            var facility = Facility.ReadJson(@"c:\CODE\XbimGit\XbimExchange\TestResults\COBieLiteUK\NBS_LakesideRestaurant_EcoBuild2015_Revit2014_WithZones_DPoW.json");
-            facility.WriteCobie("..\\..\\Lakeside.xlsx", out msg);
-        }
+        //[DeploymentItem("TestFiles\\OBN1-COBie-UK-2014.xlsx")]
+        //public void WritingSpreadsheetFromJson()
+        //{
+        //    string msg;
+        //    var facility = Facility.ReadJson(@"c:\CODE\XbimGit\XbimExchange\TestResults\COBieLiteUK\NBS_LakesideRestaurant_EcoBuild2015_Revit2014_WithZones_DPoW.json");
+        //    facility.WriteCobie("..\\..\\Lakeside.xlsx", out msg);
+        //}
 
         [TestMethod]
         [DeploymentItem("ValidationFiles\\Lakeside_Restaurant.ifc")]

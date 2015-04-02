@@ -815,10 +815,15 @@
       <xs:appinfo source="mapping">UK2012|M|ClockwiseRotation|optional|item|-|Roll</xs:appinfo>
       <xs:appinfo source="mapping">UK2012|N|ElevationalRotation|optional|item|-|Pitch</xs:appinfo>
       <xs:appinfo source="mapping">UK2012|O|YawRotation|optional|item|-|Yaw</xs:appinfo>
+      
+      <!-- BS1192-4 additions -->
+      <xs:appinfo source="mapping">UK2012|P|RelativeTo|optional|item|-|RelativeTo</xs:appinfo>
+      <xs:appinfo source="mapping">UK2012|R|LRM|optional|item|-|LRM</xs:appinfo>
 
-      <xs:appinfo source="mapping">UK2016|P|SizeX|optional|item|-|SizeX</xs:appinfo>
-      <xs:appinfo source="mapping">UK2016|Q|SizeY|optional|item|-|SizeY</xs:appinfo>
-      <xs:appinfo source="mapping">UK2016|R|SizeZ|optional|item|-|SizeZ</xs:appinfo>
+      <!-- Experimental additions -->
+      <xs:appinfo source="mapping">UK2016|S|SizeX|optional|item|-|SizeX</xs:appinfo>
+      <xs:appinfo source="mapping">UK2016|T|SizeY|optional|item|-|SizeY</xs:appinfo>
+      <xs:appinfo source="mapping">UK2016|U|SizeZ|optional|item|-|SizeZ</xs:appinfo>
 
       <xs:documentation>
         Representation (Coordinate) is a named position associated to Facility, Floor (region), Space (location), Component
@@ -837,6 +842,23 @@
           <xs:element name="Yaw" type="xs:double" minOccurs="1" />
           <xs:element name="Pitch" type="xs:double" minOccurs="1" />
           <xs:element name="Roll" type="xs:double" minOccurs="1" />
+          <xs:element name="RelativeTo" type="xs:string" minOccurs="0" >
+            <xs:annotation>
+              <xs:documentation>
+                (BS 1192-4) This refers to the name of earlier points.
+                This allows relative placements of Coordinates to be explicitly documented.
+                This overrides the default placement of Components relative to Spaces (locations), of
+                Spaces (locations) relative to Floors (regions) and Floors (regions) relative to the Facility.
+              </xs:documentation>
+            </xs:annotation>
+          </xs:element>
+          <xs:element name="LRM" type="xs:string" minOccurs="0" >
+            <xs:annotation>
+              <xs:documentation>
+                (BS 1192-4) Linear Referencing Method
+              </xs:documentation>
+            </xs:annotation>
+          </xs:element>
         </xs:sequence>
       </xs:extension>
     </xs:complexContent>

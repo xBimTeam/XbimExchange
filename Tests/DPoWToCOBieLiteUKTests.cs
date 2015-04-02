@@ -53,6 +53,44 @@ namespace Tests
                 var facility = Xbim.COBieLiteUK.Facility.ReadJson(output);
             }
         }
+
+        [TestMethod]
+        public void ConvertDPoWToAll()
+        {
+            var pow = PlanOfWork.OpenJson("013-Lakeside_Restaurant.dpow");
+            const string dir = "..\\..\\COBieLiteUK";
+            if (!Directory.Exists(dir)) Directory.CreateDirectory(dir);
+            string msg;
+            foreach (var stage in pow.ProjectStages)
+            {
+                var json = Path.Combine(dir, stage.Name + ".cobie.json");
+                var xlsx = Path.Combine(dir, stage.Name + ".xlsx");
+                var ifc = Path.Combine(dir, stage.Name + ".ifc");
+
+                var facility = new Xbim.COBieLiteUK.Facility();
+                var cobieExchanger = new DPoWToCOBieLiteUKExchanger(pow, facility, stage);
+                cobieExchanger.Convert();
+
+                facility.WriteJson(json, true);
+                facility.WriteCobie(xlsx, out msg);
+
+
+                using (var ifcModel = XbimModel.CreateTemporaryModel())
+                {
+                    ifcModel.Initialise("Xbim Tester", "XbimTeam", "Xbim.Exchanger", "Xbim Development Team", "3.0");
+                    ifcModel.Header.FileName.Name = stage.Name;
+                    ifcModel.ReloadModelFactors();
+                    using (var txn = ifcModel.BeginTransaction("Conversion from COBie"))
+                    {
+                        var ifcExchanger = new XbimExchanger.COBieLiteUkToIfc.CoBieLiteUkToIfcExchanger(facility, ifcModel);
+                        ifcExchanger.Convert();
+                        txn.Commit();
+                    }
+                    ifcModel.SaveAs(ifc, XbimStorageType.IFC);
+                    ifcModel.Close();
+                }
+            }
+        }
         
     }
 }

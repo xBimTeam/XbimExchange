@@ -1880,9 +1880,11 @@ namespace Xbim.COBieLiteUK {
     [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="M", Header="ClockwiseRotation", Required=false, List=false, PickList=null, Path="Roll")]
     [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="N", Header="ElevationalRotation", Required=false, List=false, PickList=null, Path="Pitch")]
     [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="O", Header="YawRotation", Required=false, List=false, PickList=null, Path="Yaw")]
-    [Xbim.COBieLiteUK.Mapping(Type="UK2016", Column="P", Header="SizeX", Required=false, List=false, PickList=null, Path="SizeX")]
-    [Xbim.COBieLiteUK.Mapping(Type="UK2016", Column="Q", Header="SizeY", Required=false, List=false, PickList=null, Path="SizeY")]
-    [Xbim.COBieLiteUK.Mapping(Type="UK2016", Column="R", Header="SizeZ", Required=false, List=false, PickList=null, Path="SizeZ")]
+    [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="P", Header="RelativeTo", Required=false, List=false, PickList=null, Path="RelativeTo")]
+    [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="R", Header="LRM", Required=false, List=false, PickList=null, Path="LRM")]
+    [Xbim.COBieLiteUK.Mapping(Type="UK2016", Column="S", Header="SizeX", Required=false, List=false, PickList=null, Path="SizeX")]
+    [Xbim.COBieLiteUK.Mapping(Type="UK2016", Column="T", Header="SizeY", Required=false, List=false, PickList=null, Path="SizeY")]
+    [Xbim.COBieLiteUK.Mapping(Type="UK2016", Column="U", Header="SizeZ", Required=false, List=false, PickList=null, Path="SizeZ")]
     public partial class Representation : CobieObject {
         
         private double xField;
@@ -1902,6 +1904,10 @@ namespace Xbim.COBieLiteUK {
         private double pitchField;
         
         private double rollField;
+        
+        private string relativeToField;
+        
+        private string lRMField;
         
         [global::System.Xml.Serialization.XmlElementAttribute(Form=global::System.Xml.Schema.XmlSchemaForm.Unqualified)]
         public double X {
@@ -1990,6 +1996,26 @@ namespace Xbim.COBieLiteUK {
             }
             set {
                 this.rollField = value;
+            }
+        }
+        
+        [global::System.Xml.Serialization.XmlElementAttribute(Form=global::System.Xml.Schema.XmlSchemaForm.Unqualified)]
+        public string RelativeTo {
+            get {
+                return this.relativeToField;
+            }
+            set {
+                this.relativeToField = value;
+            }
+        }
+        
+        [global::System.Xml.Serialization.XmlElementAttribute(Form=global::System.Xml.Schema.XmlSchemaForm.Unqualified)]
+        public string LRM {
+            get {
+                return this.lRMField;
+            }
+            set {
+                this.lRMField = value;
             }
         }
     }
