@@ -72,15 +72,14 @@ namespace XbimExchanger.IfcToCOBieLiteUK
 
             //The Assets
             var assetMappings = Exchanger.GetOrCreateMappings<MappingIfcElementToAsset>();
+            target.Assets = new List<Asset>();
             foreach (var typeObject in ifcTypeObjectList)
             {
                 List<IfcElement> allAssetsofThisType;
                 if (helper.DefiningTypeObjectMap.TryGetValue(typeObject, out allAssetsofThisType))
                     //should always work
                 {
-                    target.Assets = new List<Asset>(allAssetsofThisType.Count);
-
-                    
+           
                     foreach (IfcElement element in allAssetsofThisType)
                     {
                         var asset = new Asset();
