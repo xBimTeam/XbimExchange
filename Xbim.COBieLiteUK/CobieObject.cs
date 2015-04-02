@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics.CodeAnalysis;
+using System.Dynamic;
 using System.Globalization;
 using System.IO;
 using System.Linq;
@@ -30,11 +31,32 @@ namespace Xbim.COBieLiteUK
                 child.SetFacility(facility);
         }
 
+        protected CobieObject()
+        {
+            //create default unique name for the case no name is set.
+            Name = Guid.NewGuid().ToString();
+        }
+
         [XmlIgnore]
         [JsonIgnore]
         internal virtual Facility Facility
         {
             get { return _facility; }
+        }
+
+        internal IEnumerable<T> GetDeep<T>(Func<T, bool> condition = null) where T: CobieObject
+        {
+            var children = GetChildren().ToArray();
+            foreach (var child in children.OfType<T>())
+            {
+                if(condition == null) yield return child;
+                else if(condition(child)) yield return child;
+            }
+            //traverse tree down
+            foreach (var subChild in children.SelectMany(child => child.GetDeep(condition)))
+            {
+                yield return subChild;
+            }
         }
 
         internal virtual IEnumerable<CobieObject> GetChildren()

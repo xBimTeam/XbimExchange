@@ -288,6 +288,14 @@ namespace Xbim.COBieLiteUK {
         
         private string regionField;
         
+        public Metadata() {
+            this.titleField = "COBIE";
+            this.versionField = "2";
+            this.releaseField = "4";
+            this.statusField = "ifc2x3";
+            this.regionField = "EN-UK";
+        }
+        
         [global::System.Xml.Serialization.XmlElementAttribute(Form=global::System.Xml.Schema.XmlSchemaForm.Unqualified)]
         public string Title {
             get {
@@ -3499,6 +3507,8 @@ namespace Xbim.COBieLiteUK {
         
         /// <remarks/>
         [global::System.Xml.Serialization.XmlEnumAttribute("not defined")]
+        [Xbim.COBieLiteUK.Alias(Value="unknown")]
+        [Xbim.COBieLiteUK.Alias(Value="n/a")]
         notdefined,
         
         /// <remarks/>
@@ -3771,6 +3781,8 @@ namespace Xbim.COBieLiteUK {
         /// <remarks/>
         [Xbim.COBieLiteUK.Alias(Value="British pound")]
         [Xbim.COBieLiteUK.Alias(Value="British pounds")]
+        [Xbim.COBieLiteUK.Alias(Value="pounds")]
+        [Xbim.COBieLiteUK.Alias(Value="pound")]
         [Xbim.COBieLiteUK.Alias(Value="£")]
         GBP,
         

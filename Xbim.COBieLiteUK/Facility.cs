@@ -20,6 +20,16 @@ namespace Xbim.COBieLiteUK
 {
     public partial class Facility
     {
+        public Facility()
+        {
+            Metadata = new Metadata();
+        }
+
+        public IEnumerable<T> Get<T>(Func<T, bool> condition = null) where T : CobieObject
+        {
+            return GetDeep(condition);
+        }
+
         #region Enumerations
         public AreaUnit AreaUnits
         {
@@ -357,6 +367,10 @@ namespace Xbim.COBieLiteUK
             msg += log.ToString();
 
             message = msg;
+
+            //set facility for all objects
+            facility.SetFacility(facility);
+
             return facility;
         }
 
@@ -398,7 +412,7 @@ namespace Xbim.COBieLiteUK
                 case ExcelTypeEnum.XLS:
                     workbook = templateStream == null ? new HSSFWorkbook() : new HSSFWorkbook(templateStream);
                     break;
-                case ExcelTypeEnum.XLSX:
+                case ExcelTypeEnum.XLSX: //this is as it should be according to a standard
                     workbook = templateStream == null ? new XSSFWorkbook() : new XSSFWorkbook(templateStream);
                     break;
                 default:
@@ -429,7 +443,13 @@ namespace Xbim.COBieLiteUK
         {
             if (path == null) throw new ArgumentNullException("path");
             var ext = Path.GetExtension(path).ToLower().Trim('.');
-            if (ext != "xls" && ext != "xlsx") throw new Exception("File must be an MS Excel file.");
+            if (ext != "xls" && ext != "xlsx")
+            {
+                //XLSX is Spreadsheet XML representation which is the one which should be used according to BS1192-4
+                //therefore it is a default choice
+                path += ".xlsx";
+                ext = "xlsx";
+            }
             using (var file = File.Create(path))
             {
                 var type = ext == "xlsx" ? ExcelTypeEnum.XLSX : ExcelTypeEnum.XLS;
@@ -439,13 +459,13 @@ namespace Xbim.COBieLiteUK
         }
         #endregion
 
-        internal override void WriteToCobie(IWorkbook workbook, TextWriter log, CobieObject parent, string version = "UK2012")
+        internal override void WriteToCobie(IWorkbook workbook, TextWriter loger, CobieObject parent, string version = "UK2012")
         {
-            base.WriteToCobie(workbook, log, parent, version);
+            base.WriteToCobie(workbook, loger, parent, version);
 
             //write metadata out
             if(Metadata != null) 
-                Metadata.WriteToCobie(workbook, log, version);
+                Metadata.WriteToCobie(workbook, loger, version);
         }
 
         internal override IEnumerable<CobieObject> GetChildren()
@@ -477,6 +497,40 @@ namespace Xbim.COBieLiteUK
                 foreach (var stage in Stages)
                     yield return stage;
         }
+
+        #region Validation UK2012 (BS1192-4)
+        //The integrity of references should be ensured as follows:
+        //a) Every Space (location) should be assigned to one Floor (region).
+        //b) Every Space (location) should be assigned to at least one Zone.
+        //c) Every Floor and Zone should have at least one Space (location).
+        //d) Every Component should be assigned to at least one Space (location), from which it is used, inspected or maintained.
+        //e) Every Component should be assigned to one Type.
+        //f) Every Component should be assigned to at least one System, identifying its function.
+        //g) Every Type should apply to at least one Component.
+        //h) Every reference to other sheets should be valid.
+        //i) Every reference to PickList enumerations and classifications should be valid.
+        //j) Enumerations specified in the Attributes and PickLists should be adhered to.
+
+        //Clarity of naming
+        //To ensure the clarity of naming, the following should be done.
+        //• Names should use the characters A‑Z, a‑z and 0‑9 with spaces and full stops.
+        //• Contacts should be named by use of their valid email address, including “@”.
+        //• Names should not contain commas or double spaces, nor unusual characters(e.g. &,%, ‘, “, <, >).
+        //• Classifications should use the colon to separate code from description and should not use commas.
+
+        //Uniqueness of information should be ensured. Names should be unique within
+        //their sheet, except that the System, Zone and Attribute names should be unique in
+        //conjunction with other columns.
+        //a) On the “Attribute” sheet, every Attribute Name (column A), taken with Sheet‑Name (column E) and Row‑Name (column F) should be unique.
+        //b) On the “System” sheet, every System Name (column A) taken with Component‑Names (column E) should be unique.
+        //c) On the “Zone” sheet, every Zone Name (column A) taken with Space‑Names (column E) should be unique.
+
+        //Completeness - Groupings 
+        //Every identifiable Space (location) should be assigned to at least one Zone and to a Floor
+        //(region). Every manageable Component should be assigned to at least one System and to a Type.
+        //Category entries should be provided.
+
+        #endregion
     }
 
     public enum ExcelTypeEnum

@@ -1024,11 +1024,11 @@
       </xs:documentation>
     </xs:annotation>
     <xs:sequence>
-      <xs:element name="Title" type="xs:string" />
-      <xs:element name="Version" type="xs:string" />
-      <xs:element name="Release" type="xs:string" />
-      <xs:element name="Status" type="xs:string" />
-      <xs:element name="Region" type="xs:string" />
+      <xs:element name="Title" type="xs:string" default="COBIE"/>
+      <xs:element name="Version" type="xs:string" default="2"/>
+      <xs:element name="Release" type="xs:string" default="4"/>
+      <xs:element name="Status" type="xs:string" default="ifc2x3"/>
+      <xs:element name="Region" type="xs:string" default="EN-UK"/>
     </xs:sequence>
   </xs:complexType>
   <!-- End COBie metadata-->
@@ -1294,6 +1294,8 @@
         <xs:annotation>
           <xs:appinfo source="alias">British pound</xs:appinfo>
           <xs:appinfo source="alias">British pounds</xs:appinfo>
+          <xs:appinfo source="alias">pounds</xs:appinfo>
+          <xs:appinfo source="alias">pound</xs:appinfo>
           <xs:appinfo source="alias">&#163;</xs:appinfo>
         </xs:annotation>
       </xs:enumeration>
@@ -1410,7 +1412,12 @@
           <xs:appinfo source="alias">yd</xs:appinfo>
         </xs:annotation>
       </xs:enumeration>
-      <xs:enumeration value="not defined" />
+      <xs:enumeration value="not defined" >
+        <xs:annotation>
+          <xs:appinfo source="alias">unknown</xs:appinfo>
+          <xs:appinfo source="alias">n/a</xs:appinfo>
+        </xs:annotation>
+      </xs:enumeration>
       <xs:enumeration value="user defined" />
     </xs:restriction>
   </xs:simpleType>
