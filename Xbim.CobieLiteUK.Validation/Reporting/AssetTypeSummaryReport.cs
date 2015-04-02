@@ -19,7 +19,7 @@ namespace Xbim.CobieLiteUK.Validation.Reporting
             _validatedAssets = vaidatedAssets;
         }
 
-        public DataTable GetReport(string mainClassification = @"")
+        public DataTable GetReport(string mainClassification = @"Uniclass2015")
         {
             if (_validatedAssets == null || _validatedAssets.FirstOrDefault() == null)
                 return null;
@@ -117,17 +117,17 @@ namespace Xbim.CobieLiteUK.Validation.Reporting
         private static DataTable PrepareTable(string mainClassification)
         {
             var retTable = new DataTable("AssetTypes validation report", "DPoW");
-            var workCol = retTable.Columns.Add("ID", typeof (Int32));
+            var workCol = retTable.Columns.Add("DPoW_ID", typeof(Int32));
             workCol.AllowDBNull = false;
             workCol.Unique = true;
             workCol.AutoIncrement = true;
 
-            retTable.Columns.Add(mainClassification, typeof (String));
-            retTable.Columns.Add(mainClassification + " description", typeof (String));
+            retTable.Columns.Add(new DataColumn("DPoW_mainClassification", typeof (String)) {Caption = mainClassification });
+            retTable.Columns.Add(new DataColumn("DPoW_mainClassificationDescription", typeof(String)) { Caption = mainClassification + " description" });
             // retTable.Columns.Add("Matching classification", typeof (String));
-            retTable.Columns.Add("Matching type", typeof (String));
-            retTable.Columns.Add("No. Submitted", typeof (int));
-            retTable.Columns.Add("No. Valid", typeof (int));
+            retTable.Columns.Add(new DataColumn("DPoW_MatchingCode", typeof(String)) { Caption = "Matching code" });
+            retTable.Columns.Add(new DataColumn("DPoW_Submitted", typeof(int)) { Caption = "No. Submitted" });
+            retTable.Columns.Add(new DataColumn("DPoW_Valid", typeof(int)) { Caption = "No. Valid" });
             return retTable;
         }
     }

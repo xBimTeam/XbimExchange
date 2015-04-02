@@ -33,14 +33,13 @@ namespace Tests
         {
             var validated = GetValidated();
             var rep = new XbimValidationReport();
-
             const string repName = @"..\..\ValidationReport.xlsx";
-
             if (File.Exists(repName))
             {
                 File.Delete(repName);
             }
-            rep.Create(validated, repName, XbimValidationReport.SpreadSheetFormat.Xlsx);
+            var ret = rep.Create(validated, repName, XbimValidationReport.SpreadSheetFormat.Xlsx);
+            Assert.IsTrue(ret, "File not created");
         }
 
         private static Facility GetValidated()

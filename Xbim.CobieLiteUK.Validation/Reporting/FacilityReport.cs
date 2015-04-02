@@ -11,19 +11,21 @@ namespace Xbim.CobieLiteUK.Validation.Reporting
     public class FacilityReport
     {
         private Facility _facility;
+
         public FacilityReport(Facility facility)
         {
             _facility = facility;
         }
 
         private List<AssetTypeRequirementPointer> _RequirementGroups;
+
         internal List<AssetTypeRequirementPointer> RequirementGroups
         {
             get
             {
                 if (_RequirementGroups == null)
                 {
-                    var tmp = new Dictionary<Tuple<string,string>, AssetTypeRequirementPointer>();
+                    var tmp = new Dictionary<Tuple<string, string>, AssetTypeRequirementPointer>();
                     _RequirementGroups = new List<AssetTypeRequirementPointer>();
                     if (_facility.AssetTypes != null)
                     {
@@ -32,8 +34,8 @@ namespace Xbim.CobieLiteUK.Validation.Reporting
                             var sys = providedAsset.GetRequirementExternalSystem();
                             var id = providedAsset.GetRequirementExternalId();
                             var nm = providedAsset.GetRequirementName();
-                            
-                            var tryReq = new Tuple<string,string>(sys, id);
+
+                            var tryReq = new Tuple<string, string>(sys, id);
                             if (tmp.ContainsKey(tryReq))
                                 tmp[tryReq].AddSumission(providedAsset);
                             else
@@ -50,6 +52,5 @@ namespace Xbim.CobieLiteUK.Validation.Reporting
                 return _RequirementGroups;
             }
         }
-
     }
 }

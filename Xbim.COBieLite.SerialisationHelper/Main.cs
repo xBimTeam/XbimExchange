@@ -222,19 +222,18 @@ namespace SerialisationHelper
                 }
                 pos++;
             }
-
-             return sourcestring.Substring(start, pos - start + 1);
+            return sourcestring.Substring(start, pos - start + 1);
         }
 
         private static string CreateEmptyInitialiser(string file, string classname)
         {
-                        
+
             var oldCode = GetClassCode(classname, file);
             var newCode = oldCode;
             var firstBrace = newCode.IndexOf('{');
             newCode = newCode.Insert(firstBrace + 1, string.Format("\r\n        public {0}() {{}}", classname));
 
-            
+
             return file.Replace(oldCode, newCode);
         }
     }

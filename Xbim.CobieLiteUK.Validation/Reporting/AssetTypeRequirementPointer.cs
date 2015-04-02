@@ -43,16 +43,16 @@ namespace Xbim.CobieLiteUK.Validation.Reporting
             return (ExternalId + ExternalSystem).GetHashCode();
         }
 
-        public List<AssetType> ProvidedAssets = new List<AssetType>();
+        public List<AssetType> ProvidedAssetTypes = new List<AssetType>();
 
         public void AddSumission(AssetType providedAsset)
         {
-            ProvidedAssets.Add(providedAsset);
+            ProvidedAssetTypes.Add(providedAsset);
         }
 
         internal int GetSubmittedAssetsCount()
         {
-            return ProvidedAssets.Sum(providedAsset => providedAsset.GetSubmittedAssetsCount());
+            return ProvidedAssetTypes.Sum(providedAsset => providedAsset.GetSubmittedAssetsCount());
         }
 
         public string Name { get; set; }
@@ -60,7 +60,7 @@ namespace Xbim.CobieLiteUK.Validation.Reporting
         public IEnumerable<Asset> Assets()
         {
             return 
-                from providedAsset in ProvidedAssets 
+                from providedAsset in ProvidedAssetTypes 
                 where providedAsset.Assets != null 
                 from asset in providedAsset.Assets 
                 select asset;

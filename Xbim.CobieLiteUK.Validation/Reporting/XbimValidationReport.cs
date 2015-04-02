@@ -76,7 +76,7 @@ namespace Xbim.CobieLiteUK.Validation.Reporting
             return true;
         }
 
-        private static bool CreateDetailSheet(ISheet detailSheet, AssetTypeRequirementPointer assetType)
+        private static bool CreateDetailSheet(ISheet detailSheet, AssetTypeRequirementPointer requirementPointer)
         {
             try
             {
@@ -84,7 +84,7 @@ namespace Xbim.CobieLiteUK.Validation.Reporting
                 var excelCell = excelRow.GetCell(0) ?? excelRow.CreateCell(0);
                 excelCell.SetCellValue("Asset type report");
 
-                var rep = new AssetTypeDetailedGridReport(assetType);
+                var rep = new AssetTypeDetailedGridReport(requirementPointer);
                 rep.PrepareReport();
 
                 var iRunningRow = 2;
@@ -98,31 +98,34 @@ namespace Xbim.CobieLiteUK.Validation.Reporting
 
                 var table = rep.AttributesGrid;
 
-                var summaryRow = detailSheet.GetRow(iRunningRow) ?? detailSheet.CreateRow(iRunningRow);
+                excelRow = detailSheet.GetRow(iRunningRow) ?? detailSheet.CreateRow(iRunningRow);
                 foreach (DataColumn tCol in table.Columns)
                 {
                     if (tCol.AutoIncrement)
                         continue;
-                    var runCell = summaryRow.GetCell(iRunningColumn) ?? summaryRow.CreateCell(iRunningColumn);
+                    var runCell = excelRow.GetCell(iRunningColumn) ?? excelRow.CreateCell(iRunningColumn);
                     iRunningColumn++;
-                    runCell.SetCellValue(tCol.ColumnName);
+                    runCell.SetCellValue(tCol.Caption);
                     runCell.CellStyle = cellStyle;
                 }
                 iRunningRow++;
 
                 foreach (DataRow row in table.Rows)
                 {
-                    iRunningColumn = 0;
+                    
                     excelRow = detailSheet.GetRow(iRunningRow) ?? detailSheet.CreateRow(iRunningRow);
                     iRunningRow++;
 
+                    iRunningColumn = -1;
                     foreach (DataColumn tCol in table.Columns)
                     {
-                        if (tCol.AutoIncrement || row[tCol] == DBNull.Value)
+                        if (tCol.AutoIncrement)
+                            continue;
+                        iRunningColumn++;
+                        if (row[tCol] == DBNull.Value)
                             continue;
                         var runCell = excelRow.GetCell(iRunningColumn) ?? excelRow.CreateCell(iRunningColumn);
-                        iRunningColumn++;
-
+                        
                         switch (tCol.DataType.Name)
                         {
                             case "String":
@@ -178,14 +181,14 @@ namespace Xbim.CobieLiteUK.Validation.Reporting
                 failCellStyle.FillPattern = FillPattern.SolidForeground;
                 failCellStyle.FillForegroundColor = IndexedColors.Red.Index;
 
-                var summaryRow = summaryPage.GetRow(iRunningRow) ?? summaryPage.CreateRow(iRunningRow);
+                excelRow = summaryPage.GetRow(iRunningRow) ?? summaryPage.CreateRow(iRunningRow);
                 foreach (DataColumn tCol in table.Columns)
                 {
                     if (tCol.AutoIncrement)
                         continue;
-                    var runCell = summaryRow.GetCell(iRunningColumn) ?? summaryRow.CreateCell(iRunningColumn);
+                    var runCell = excelRow.GetCell(iRunningColumn) ?? excelRow.CreateCell(iRunningColumn);
                     iRunningColumn++;
-                    runCell.SetCellValue(tCol.ColumnName);
+                    runCell.SetCellValue(tCol.Caption);
                     runCell.CellStyle = cellStyle;
                 }
                 
@@ -193,16 +196,19 @@ namespace Xbim.CobieLiteUK.Validation.Reporting
                 iRunningRow++;
                 foreach (DataRow row in table.Rows)
                 {
-                    iRunningColumn = 0;
-                    summaryRow = summaryPage.GetRow(iRunningRow) ?? summaryPage.CreateRow(iRunningRow);
-                    iRunningRow++;
                     
+                    excelRow = summaryPage.GetRow(iRunningRow) ?? summaryPage.CreateRow(iRunningRow);
+                    iRunningRow++;
+                    iRunningColumn = -1;
                     foreach (DataColumn tCol in table.Columns)
                     {
                         if (tCol.AutoIncrement)
                             continue;
-                        var runCell = summaryRow.GetCell(iRunningColumn) ?? summaryRow.CreateCell(iRunningColumn);
                         iRunningColumn++;
+                        if (row[tCol] == DBNull.Value)
+                            continue;
+                        var runCell = excelRow.GetCell(iRunningColumn) ?? excelRow.CreateCell(iRunningColumn);
+                        
 
                         switch (tCol.DataType.Name)
                         {

@@ -87,6 +87,7 @@ namespace Xbim.CobieLiteUK.Validation
             {
                 retType.Name = candidateType.Name;
                 retType.ExternalId = candidateType.ExternalId;
+                retType.ExternalSystem = candidateType.ExternalSystem;
                 if (candidateType.Assets != null)
                 {
                     iSubmitted = candidateType.Assets.Count;
