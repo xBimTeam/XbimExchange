@@ -64,7 +64,11 @@
       <xs:appinfo source="mapping">UK2012|I|ExtObject|optional|item|-|ExternalEntity</xs:appinfo>
       <xs:appinfo source="mapping">UK2012|J|ExtIdentifier|optional|item|-|ExternalId</xs:appinfo>
       <xs:appinfo source="mapping">UK2012|K|Description|optional|item|-|Description</xs:appinfo>
-      <xs:documentation>The Assembly to which this Asset belongs</xs:documentation>
+      <xs:documentation>
+        Assembly is a named physical aggregation of a Type or Component into another Type or
+        Component where both the overall (owning) assembly part and the constituent
+        (owned) part has significance for their operation and use.
+      </xs:documentation>
     </xs:annotation>
     <xs:complexContent>
       <xs:extension base="cobielite:CobieObject">
@@ -99,7 +103,9 @@
       <xs:appinfo source="mapping">UK2012|N|BarCode|optional|item|-|BarCode</xs:appinfo>
       <xs:appinfo source="mapping">UK2012|O|AssetIdentifier|optional|item|-|AssetIdentifier</xs:appinfo>
       <xs:documentation>
-        A minimum of one COBie.Asset record is required for all COBie deliverables related to equpment Asset information.
+        Named and individually scheduled physical items and features that might require
+        management, such as inspection, maintenance, servicing or replacement, during
+        the in-use phase.
       </xs:documentation>
     </xs:annotation>
     <xs:complexContent>
@@ -180,6 +186,7 @@
       <xs:appinfo source="mapping">UK2012|AH|CodePerformance|optional|item|-|CodePerformance</xs:appinfo>
       <xs:appinfo source="mapping">UK2012|AI|SustainabilityPerformance|optional|item|-|SustainabilityPerformance</xs:appinfo>
       <xs:documentation>
+        Asset type is a named specification for Components including equipment, products and materials.
         A minimum of one COBie.Type record is required for all COBie deliverables related to equipment Type information.
       </xs:documentation>
     </xs:annotation>
@@ -273,7 +280,9 @@
       <xs:appinfo source="mapping">UK2012|K|ExtIdentifier|optional|item|-|ExternalId</xs:appinfo>
       <xs:appinfo source="mapping">UK2012|L|Description|optional|item|-|Description</xs:appinfo>
       <xs:appinfo source="mapping">UK2012|M|AllowedValues|optional|list|-|Value.AllowedValuesString</xs:appinfo>
-      <xs:documentation>Information about a specific Attribute.</xs:documentation>
+      <xs:documentation>
+        Attribute is a named specific characteristic associated to an asset or other information objects.
+      </xs:documentation>
     </xs:annotation>
     <xs:complexContent>
       <xs:extension base="cobielite:CobieObject">
@@ -315,7 +324,9 @@
       <xs:appinfo source="mapping">UK2012|L|ExtObject|optional|item|-|ExternalEntity</xs:appinfo>
       <xs:appinfo source="mapping">UK2012|M|ExtIdentifier|optional|item|-|ExternalId</xs:appinfo>
       <xs:appinfo source="mapping">UK2012|N|Description|optional|item|-|Description</xs:appinfo>
-      <xs:documentation>A type for representing Connection Information.</xs:documentation>
+      <xs:documentation>
+        Connection is a named logical relationship between two Components.
+      </xs:documentation>
     </xs:annotation>
     <xs:complexContent>
       <xs:extension base="cobielite:CobieObject">
@@ -360,7 +371,9 @@
       <xs:appinfo source="mapping">UK2012|Q|StateRegion|optional|item|-|StateRegion</xs:appinfo>
       <xs:appinfo source="mapping">UK2012|R|PostalCode|optional|item|-|PostalCode</xs:appinfo>
       <xs:appinfo source="mapping">UK2012|S|Country|optional|item|-|Country</xs:appinfo>
-      <xs:documentation>Information about a specific company who can provide the type of equipment.</xs:documentation>
+      <xs:documentation>
+        Contact is a named person and/or organization involved in the Facility lifecycle.
+      </xs:documentation>
     </xs:annotation>
     <xs:complexContent>
       <xs:extension base="cobielite:CobieObject">
@@ -420,7 +433,9 @@
       <xs:appinfo source="mapping">UK2012|M|ExtIdentifier|optional|item|-|ExternalId</xs:appinfo>
       <xs:appinfo source="mapping">UK2012|N|Description|optional|item|-|Description</xs:appinfo>
       <xs:appinfo source="mapping">UK2012|O|Reference|optional|item|-|Reference</xs:appinfo>
-      <xs:documentation>Information about a specific Document.</xs:documentation>
+      <xs:documentation>
+        Document is a named external document associated to an asset or other information object.
+      </xs:documentation>
     </xs:annotation>
     <xs:complexContent>
       <xs:extension base="cobielite:CobieObject">
@@ -467,13 +482,16 @@
       <xs:appinfo source="mapping">UK2012|S|Description|optional|item|-|Description</xs:appinfo>
       <xs:appinfo source="mapping">UK2012|T|ProjectDescription|optional|item|-|Project.Description</xs:appinfo>
       <xs:appinfo source="mapping">UK2012|U|SiteDescription|optional|item|-|Site.Description</xs:appinfo>
-      <xs:appinfo source="mapping">UK2012|V|Phase|optional|item|-|Phase</xs:appinfo>
+      <xs:appinfo source="mapping">UK2012|V|Phase|required|item|-|Phase</xs:appinfo>
       <xs:documentation>
         A type for the Facility element that is the root of a COBie document.
         Facility contains information about the facility being exchanged during a given COBie deliverable.
         Since COBie deliverables may be exchanged during planning, design, construction, handover, or operation
         phases there may be differences in facility designations.
         COBie files will typically contain a single facility.
+        Facility is a named distinct operational built or geographic asset, typically a building or section
+        of infrastructure along with details and extent of the geographic site and of the
+        temporal project
       </xs:documentation>
     </xs:annotation>
     <xs:complexContent>
@@ -550,7 +568,9 @@
       <xs:appinfo source="mapping">UK2012|I|Elevation|optional|item|-|Elevation</xs:appinfo>
       <xs:appinfo source="mapping">UK2012|J|Height|optional|item|-|Height</xs:appinfo>
       <xs:documentation>
-        A minimum of one COBie. Floor record is required for all COBie deliverables containing spatial information.
+        Floor is a named intermediate spatial subdivision, including distinct vertical levels and
+        horizontal areas and sections with Spaces allocated.
+        A minimum of one in COBie. Floor record is required for all COBie deliverables containing spatial information.
       </xs:documentation>
     </xs:annotation>
     <xs:complexContent>
@@ -596,7 +616,7 @@
       <xs:appinfo source="mapping">UK2012|P|ExtObject|optional|item|-|ExternalEntity</xs:appinfo>
       <xs:appinfo source="mapping">UK2012|Q|ExtIdentifier|optional|item|-|ExternalId</xs:appinfo>
       <xs:documentation>
-        A specific Issue related to a specific object (asset, asset type, facility, document etc.).
+        Issue is a named deficiency in the information or risk associated to the assets or other information objects.
       </xs:documentation>
     </xs:annotation>
     <xs:complexContent>
@@ -640,7 +660,9 @@
       <xs:appinfo source="mapping">UK2012|N|ExtObject|optional|item|-|ExternalEntity</xs:appinfo>
       <xs:appinfo source="mapping">UK2012|O|ExtIdentifier|optional|item|-|ExternalId</xs:appinfo>
       <xs:appinfo source="mapping">UK2012|P|Description|optional|item|-|Description</xs:appinfo>
-      <xs:documentation>A specific Impact within this set of Impacts.</xs:documentation>
+      <xs:documentation>
+        Impact is a named economic and environmental measure.
+      </xs:documentation>
     </xs:annotation>
     <xs:complexContent>
       <xs:extension base="cobielite:CobieObject">
@@ -686,8 +708,9 @@
       <xs:appinfo source="mapping">UK2012|P|ExtIdentifier|optional|item|-|ExternalId</xs:appinfo>
       <xs:appinfo source="mapping">UK2012|Q|TaskNumber|optional|item|-|TaskNumber</xs:appinfo>
       <xs:appinfo source="mapping">UK2012|R|Priors|optional|list|-|Priors.TaskNumber</xs:appinfo>
-      <xs:appinfo source="mapping">UK2012|S|ResourceNames|optional|list|-|ResourceNames.Name</xs:appinfo>
+      <xs:appinfo source="mapping">UK2012|S|ResourceNames|optional|list|-|Resources.Name</xs:appinfo>
       <xs:documentation>
+        Job is a named task or activity during the in-use phase associated to Types.
         A minimum of one COBie.Job record is required for all relevant COBie.Type objects submitted at the benefical occupancy or
         facility handover stage.
       </xs:documentation>
@@ -745,7 +768,7 @@
       <xs:appinfo source="mapping">UK2012|G|ExtIdentifier|optional|item|-|ExternalId</xs:appinfo>
       <xs:appinfo source="mapping">UK2012|H|Description|optional|item|-|Description</xs:appinfo>
       <xs:documentation>
-        Information about a specific resource.
+        Resource is a named material or skill required to execute Jobs.
       </xs:documentation>
     </xs:annotation>
     <xs:complexContent>
@@ -792,10 +815,20 @@
       <xs:appinfo source="mapping">UK2012|M|ClockwiseRotation|optional|item|-|Roll</xs:appinfo>
       <xs:appinfo source="mapping">UK2012|N|ElevationalRotation|optional|item|-|Pitch</xs:appinfo>
       <xs:appinfo source="mapping">UK2012|O|YawRotation|optional|item|-|Yaw</xs:appinfo>
+      
+      <!-- BS1192-4 additions -->
+      <xs:appinfo source="mapping">UK2012|P|RelativeTo|optional|item|-|RelativeTo</xs:appinfo>
+      <xs:appinfo source="mapping">UK2012|R|LRM|optional|item|-|LRM</xs:appinfo>
 
-      <xs:appinfo source="mapping">UK2016|P|SizeX|optional|item|-|SizeX</xs:appinfo>
-      <xs:appinfo source="mapping">UK2016|Q|SizeY|optional|item|-|SizeY</xs:appinfo>
-      <xs:appinfo source="mapping">UK2016|R|SizeZ|optional|item|-|SizeZ</xs:appinfo>
+      <!-- Experimental additions -->
+      <xs:appinfo source="mapping">UK2016|S|SizeX|optional|item|-|SizeX</xs:appinfo>
+      <xs:appinfo source="mapping">UK2016|T|SizeY|optional|item|-|SizeY</xs:appinfo>
+      <xs:appinfo source="mapping">UK2016|U|SizeZ|optional|item|-|SizeZ</xs:appinfo>
+
+      <xs:documentation>
+        Representation (Coordinate) is a named position associated to Facility, Floor (region), Space (location), Component
+        or Assembly.
+      </xs:documentation>
     </xs:annotation>
     <xs:complexContent>
       <xs:extension base="cobielite:CobieObject">
@@ -809,6 +842,23 @@
           <xs:element name="Yaw" type="xs:double" minOccurs="1" />
           <xs:element name="Pitch" type="xs:double" minOccurs="1" />
           <xs:element name="Roll" type="xs:double" minOccurs="1" />
+          <xs:element name="RelativeTo" type="xs:string" minOccurs="0" >
+            <xs:annotation>
+              <xs:documentation>
+                (BS 1192-4) This refers to the name of earlier points.
+                This allows relative placements of Coordinates to be explicitly documented.
+                This overrides the default placement of Components relative to Spaces (locations), of
+                Spaces (locations) relative to Floors (regions) and Floors (regions) relative to the Facility.
+              </xs:documentation>
+            </xs:annotation>
+          </xs:element>
+          <xs:element name="LRM" type="xs:string" minOccurs="0" >
+            <xs:annotation>
+              <xs:documentation>
+                (BS 1192-4) Linear Referencing Method
+              </xs:documentation>
+            </xs:annotation>
+          </xs:element>
         </xs:sequence>
       </xs:extension>
     </xs:complexContent>
@@ -840,6 +890,8 @@
       <xs:appinfo source="mapping">UK2012|L|GrossArea|optional|item|-|GrossArea</xs:appinfo>
       <xs:appinfo source="mapping">UK2012|M|NetArea|optional|item|-|NetArea</xs:appinfo>
       <xs:documentation>
+        Space is a named location for activities such as use, inspection or maintenance, including
+        un‑occupied or un‑inhabitable Spaces, but not necessarily inaccessible voids.
         A minimum of one COBie.Space record is required for all COBie deliverables related to Space information.
       </xs:documentation>
     </xs:annotation>
@@ -890,7 +942,9 @@
       <xs:appinfo source="mapping">UK2012|J|Description|optional|item|-|Description</xs:appinfo>
       <xs:appinfo source="mapping">UK2012|K|SetNumber|optional|item|-|SetNumber</xs:appinfo>
       <xs:appinfo source="mapping">UK2012|L|PartNumber|optional|item|-|PartNumber</xs:appinfo>
-      <xs:documentation>Information about a specific Spare.</xs:documentation>
+      <xs:documentation>
+        Spare is a named replaceable part associated to Types.
+      </xs:documentation>
     </xs:annotation>
     <xs:complexContent>
       <xs:extension base="cobielite:CobieObject">
@@ -925,8 +979,7 @@
       <xs:appinfo source="mapping">UK2012|H|ExtIdentifier|optional|item|-|ExternalId</xs:appinfo>
       <xs:appinfo source="mapping">UK2012|I|Description|optional|item|-|Description</xs:appinfo>
       <xs:documentation>
-        COBie.System information is considered to be required only as-specified.
-        Please refer to the COBie Guide for more information on specific system requirements.
+        System is a named set of manageable Components providing a common function.
       </xs:documentation>
     </xs:annotation>
     <xs:complexContent>
@@ -960,8 +1013,8 @@
       <xs:appinfo source="mapping">UK2012|H|ExtIdentifier|optional|item|-|ExternalId</xs:appinfo>
       <xs:appinfo source="mapping">UK2012|I|Description|optional|item|-|Description</xs:appinfo>
       <xs:documentation>
-        COBie.Zone information is considered to be required only as-specified.
-        Please refer to the COBie Guide for more information on specific zoning requirements.
+        Zone is a named set of Spaces (locations) sharing a specific Attribute, such as activity, access,
+        management or conditioning.
       </xs:documentation>
     </xs:annotation>
     <xs:complexContent>
@@ -993,11 +1046,11 @@
       </xs:documentation>
     </xs:annotation>
     <xs:sequence>
-      <xs:element name="Title" type="xs:string" />
-      <xs:element name="Version" type="xs:string" />
-      <xs:element name="Release" type="xs:string" />
-      <xs:element name="Status" type="xs:string" />
-      <xs:element name="Region" type="xs:string" />
+      <xs:element name="Title" type="xs:string" default="COBIE"/>
+      <xs:element name="Version" type="xs:string" default="2"/>
+      <xs:element name="Release" type="xs:string" default="4"/>
+      <xs:element name="Status" type="xs:string" default="ifc2x3"/>
+      <xs:element name="Region" type="xs:string" default="EN-UK"/>
     </xs:sequence>
   </xs:complexType>
   <!-- End COBie metadata-->
@@ -1263,6 +1316,8 @@
         <xs:annotation>
           <xs:appinfo source="alias">British pound</xs:appinfo>
           <xs:appinfo source="alias">British pounds</xs:appinfo>
+          <xs:appinfo source="alias">pounds</xs:appinfo>
+          <xs:appinfo source="alias">pound</xs:appinfo>
           <xs:appinfo source="alias">&#163;</xs:appinfo>
         </xs:annotation>
       </xs:enumeration>
@@ -1379,7 +1434,12 @@
           <xs:appinfo source="alias">yd</xs:appinfo>
         </xs:annotation>
       </xs:enumeration>
-      <xs:enumeration value="not defined" />
+      <xs:enumeration value="not defined" >
+        <xs:annotation>
+          <xs:appinfo source="alias">unknown</xs:appinfo>
+          <xs:appinfo source="alias">n/a</xs:appinfo>
+        </xs:annotation>
+      </xs:enumeration>
       <xs:enumeration value="user defined" />
     </xs:restriction>
   </xs:simpleType>

@@ -811,14 +811,19 @@ namespace XbimExchanger.COBieLiteUkToIfc
         /// <param name="ifcElement"></param>
         public void ConvertCategoryToClassification(Category category, IfcRoot ifcElement)
         {
+            if(String.IsNullOrEmpty(category.Classification) && string.IsNullOrEmpty(category.Code))
+                return;
+
             IfcClassification classificationSystem;
-            if (!_classificationSystems.TryGetValue(category.Classification, out classificationSystem))
+            if ( String.IsNullOrEmpty(category.Classification) ||  
+                !_classificationSystems.TryGetValue(category.Classification, out classificationSystem))
             {
                 classificationSystem = TargetRepository.Instances.New<IfcClassification>();
                 classificationSystem.Name = category.Classification;
             }
             IfcClassificationReference classificationReference;
-            if (!_classificationReferences.TryGetValue(category.Code, out classificationReference))
+            if (String.IsNullOrEmpty(category.Code) ||
+                !_classificationReferences.TryGetValue(category.Code, out classificationReference))
             {
                 classificationReference = TargetRepository.Instances.New<IfcClassificationReference>();
                 classificationReference.ItemReference = category.Code;

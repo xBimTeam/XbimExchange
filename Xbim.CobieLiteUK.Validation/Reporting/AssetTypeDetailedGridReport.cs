@@ -11,9 +11,9 @@ namespace Xbim.CobieLiteUK.Validation.Reporting
 {
     public class AssetTypeDetailedGridReport
     {
-        private AssetType _valideatedAssetType;
+        private AssetTypeRequirementPointer _valideatedAssetType;
 
-        public AssetTypeDetailedGridReport(AssetType assetType)
+        public AssetTypeDetailedGridReport(AssetTypeRequirementPointer assetType)
         {
             _valideatedAssetType = assetType;
         }
@@ -23,13 +23,14 @@ namespace Xbim.CobieLiteUK.Validation.Reporting
         internal void PrepareReport()
         {
             AttributesGrid = new DataTable();
-            if (_valideatedAssetType.Assets == null)
-                return;
             
-            foreach (var runningAsset in _valideatedAssetType.Assets)
+            foreach (var runningAsset in _valideatedAssetType.Assets())
             {
-                DataRow r;
-                while ((r = GetRow(runningAsset)) == null)  { }
+                var r = GetRow(runningAsset);
+                while (r == null) // it's still preparing the columns as appropriate.
+                {
+                    r = GetRow(runningAsset);
+                }
                 AttributesGrid.Rows.Add(r);
             }  
         }
@@ -52,8 +53,17 @@ namespace Xbim.CobieLiteUK.Validation.Reporting
                 }
                 if (!isInserting || attribute.Value == null) 
                     continue;
-                var value = attribute.Value as StringAttributeValue;
-                r[sName] = value.Value;
+
+                if (attribute.Value is StringAttributeValue)
+                    r[sName] = ((StringAttributeValue)attribute.Value).Value;
+                else if (attribute.Value is IntegerAttributeValue)
+                    r[sName] = ((IntegerAttributeValue)attribute.Value).Value;
+                else if (attribute.Value is DecimalAttributeValue)
+                    r[sName] = ((DecimalAttributeValue)attribute.Value).Value;
+                else if (attribute.Value is BooleanAttributeValue)
+                    r[sName] = ((BooleanAttributeValue)attribute.Value).Value.ToString();
+                else if (attribute.Value is DateTimeAttributeValue)
+                    r[sName] = ((DateTimeAttributeValue)attribute.Value).Value;
             }
             return !isInserting 
                 ? null 

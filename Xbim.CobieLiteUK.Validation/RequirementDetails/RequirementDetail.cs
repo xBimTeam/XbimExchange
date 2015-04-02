@@ -1,4 +1,6 @@
-﻿namespace Xbim.CobieLiteUK.Validation.RequirementDetails
+﻿using Xbim.COBieLiteUK;
+
+namespace Xbim.CobieLiteUK.Validation.RequirementDetails
 {
     public class RequirementDetail
     {
@@ -14,13 +16,13 @@
         public string Description;
         public EvaluationCriterion Criterion = EvaluationCriterion.IgnoreValue;
 
-        public RequirementDetail(COBieLiteUK.Attribute attrib)
+        public RequirementDetail(Attribute attrib)
         {
             Attribute = attrib;
             Name = attrib.Name;
             Description = attrib.Description;
         }
 
-        public COBieLiteUK.Attribute Attribute { get; private set; }
+        public Attribute Attribute { get; private set; }
     }
 }

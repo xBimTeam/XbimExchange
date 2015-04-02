@@ -51,7 +51,47 @@ namespace Xbim.CobieLiteUK.Validation.Extensions
         private const string MatchingCodesAttributeName = "DPoWMatchingCodes";
         private const string SubmittedAssetsAttributeName = "DPoWSubmittedAssetsCount";
         private const string ValidAssetsAttributeName = "DPoWValidSubmittedAssetsCount";
+        private const string RequirementExternalSystemAttributeName = "RefRequirementExternalSystem";
+        private const string RequirementExternalIdAttributeName = "RefRequirementExternalId";
+        private const string RequirementNameAttributeName = "RefRequirementName";
         private const string AttributesPropertySetName = "DPoW Attributes";
+
+        static public string GetRequirementExternalSystem(this AssetType retType)
+        {
+            return GetStringValue(retType, RequirementExternalSystemAttributeName);
+        }
+
+        static public string GetRequirementExternalId(this AssetType retType)
+        {
+            return GetStringValue(retType, RequirementExternalIdAttributeName);
+        }
+
+        static public string GetRequirementName(this AssetType retType)
+        {
+            return GetStringValue(retType, RequirementNameAttributeName);
+        }
+
+
+        static public void SetRequirementExternalSystem(this AssetType retType, string value)
+        {
+            if (retType == null)
+                return;
+            SetStringValue(retType, value, RequirementExternalSystemAttributeName, "ExternalSystem of the asset type containing the related requirement.");
+        }
+
+        static public void SetRequirementExternalId(this AssetType retType, string value)
+        {
+            if (retType == null)
+                return;
+            SetStringValue(retType, value, RequirementExternalIdAttributeName, "ExternalId of the asset type containing the related requirement.");
+        }
+
+        static public void SetRequirementName(this AssetType retType, string value)
+        {
+            if (retType == null)
+                return;
+            SetStringValue(retType, value, RequirementNameAttributeName, "Name of the asset type containing the related requirement.");
+        }
 
         static public void SetSubmittedAssetsCount(this AssetType retType, int value)
         {
@@ -78,6 +118,24 @@ namespace Xbim.CobieLiteUK.Validation.Extensions
             return GetIntegerValue(retType, ValidAssetsAttributeName);
         }
 
+        private static string GetStringValue(AssetType retType, string AttributeName)
+        {
+            if (retType.Attributes == null)
+                return "";
+
+            var existingAttribute =
+                retType.Attributes.FirstOrDefault(
+                    a => a.Name == AttributeName && a.PropertySetName == AttributesPropertySetName);
+
+            if (existingAttribute == null)
+                return "";
+
+            var stringValue = existingAttribute.Value as StringAttributeValue;
+            return stringValue == null 
+                ? @""
+                : stringValue.Value;
+        }
+
         private static int GetIntegerValue(AssetType retType, string AttributeName)
         {
             if (retType.Attributes == null)
@@ -94,6 +152,32 @@ namespace Xbim.CobieLiteUK.Validation.Extensions
             return integerValue == null || !integerValue.Value.HasValue
                 ? 0
                 : integerValue.Value.Value;
+        }
+
+        private static void SetStringValue(AssetType retType, string value, string propertyName, string propertyDescription)
+        {
+            if (retType.Attributes == null)
+                retType.Attributes = new List<Attribute>();
+
+            var existingAttribute =
+                retType.Attributes.FirstOrDefault(
+                    a => a.Name == propertyName && a.PropertySetName == AttributesPropertySetName);
+
+            if (existingAttribute != null)
+            {
+                existingAttribute.Value = new StringAttributeValue() { Value = value };
+            }
+            else
+            {
+                var matchingClassAttribute = new Attribute
+                {
+                    Name = propertyName,
+                    PropertySetName = AttributesPropertySetName,
+                    Description = propertyDescription,
+                    Value = new StringAttributeValue() { Value = value }
+                };
+                retType.Attributes.Add(matchingClassAttribute);
+            }
         }
 
         private static void SetIntegerValue(AssetType retType, int value, string propertyName, string propertyDescription)

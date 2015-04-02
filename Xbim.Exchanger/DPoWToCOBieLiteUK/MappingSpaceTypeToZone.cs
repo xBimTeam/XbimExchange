@@ -7,7 +7,7 @@ using Xbim.COBieLiteUK;
 
 namespace XbimExchanger.DPoWToCOBieLiteUK
 {
-    class MappingSpaceTypeToSpaceType : MappingDPoWObjectToCOBieObject<SpaceType, Space>
+    class MappingSpaceTypeToZone : MappingDPoWObjectToCOBieObject<SpaceType, Zone>
     {
         //implement any eventual specialities here
     }

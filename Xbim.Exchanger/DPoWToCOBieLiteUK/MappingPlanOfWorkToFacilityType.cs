@@ -11,6 +11,7 @@ using Attribute = Xbim.COBieLiteUK.Attribute;
 using Contact = Xbim.COBieLiteUK.Contact;
 using SpaceType = Xbim.DPoW.SpaceType;
 using FacilityType = Xbim.COBieLiteUK.Facility;
+using System = Xbim.COBieLiteUK.System;
 
 namespace XbimExchanger.DPoWToCOBieLiteUK
 {
@@ -18,8 +19,6 @@ namespace XbimExchanger.DPoWToCOBieLiteUK
     {
         protected override FacilityType Mapping(PlanOfWork source, FacilityType target)
         {
-            
-
             target.ExternalId = source.Id.ToString();
             target.ExternalSystem = "DPoW";
             
@@ -65,6 +64,27 @@ namespace XbimExchanger.DPoWToCOBieLiteUK
             //convert attributes
             base.Mapping(source, target);
 
+            //make sure all components live in at least one default system
+            foreach (var assetType in target.AssetTypes ?? new List<AssetType>())
+            {
+                if (assetType.Assets == null) continue;
+                foreach (var asset in assetType.Assets)
+                {
+                    if (target.Systems == null) target.Systems = new List<Xbim.COBieLiteUK.System>();
+                    var isInSystem = target.Systems.Any(system => system.Components != null && system.Components.Any(k => k.Name == asset.Name));
+                    if (isInSystem) continue;
+                    
+                    var defaultSystem = target.Systems.FirstOrDefault(s => s.Name == "Default system");
+                    if (defaultSystem == null)
+                    {
+                        defaultSystem = new Xbim.COBieLiteUK.System{Name = "Default system"};
+                        target.Systems.Add(defaultSystem);
+                    }
+                    if (defaultSystem.Components == null) defaultSystem.Components = new List<AssetKey>();
+                    defaultSystem.Components.Add(new AssetKey{Name = asset.Name});
+                }
+            }
+
             return target;
         }
 
@@ -75,7 +95,8 @@ namespace XbimExchanger.DPoWToCOBieLiteUK
             target.Description = sFacility.Description;
             target.Name = sFacility.Name;
             var sFacilityCategory = sFacility.GetCategory(source);
-            target.Categories = new List<Category> { new Category { Code = sFacilityCategory != null ? sFacilityCategory.ClassificationCode : null } };
+            if (sFacilityCategory != null)
+                target.Categories = new List<Category> { new Category { Code = sFacilityCategory.ClassificationCode} };
             if (!String.IsNullOrWhiteSpace(sFacility.SiteName))
                 target.Site = new Site
                 {
@@ -102,16 +123,28 @@ namespace XbimExchanger.DPoWToCOBieLiteUK
             target.VolumeUnitsCustom = sProject.VolumeUnits.ToString();
 
             //add project free attributes to facility
-            var projAttrs = sProject.GetCOBieAttributes();
-            var attrs = projAttrs as Attribute[] ?? projAttrs.ToArray();
+            var attrs = sProject.GetCOBieAttributes().ToArray();
             foreach (var attr in attrs)
-                attr.ExternalEntity = "ProjectAttributes";
+                attr.PropertySetName = "ProjectAttributes";
             if (attrs.Any())
             {
                 if (target.Attributes == null) target.Attributes = new List<Attribute>();
                 target.Attributes.AddRange(attrs);
             }
-            
+
+            //add project stage attributes
+            var stage = Exchanger.Context as Xbim.DPoW.ProjectStage;
+            if (stage != null)
+            {
+                var stageAttrs = stage.GetCOBieAttributes().ToArray();
+                foreach (var attr in stageAttrs)
+                    attr.PropertySetName = "ProjecStagetAttributes";
+                if (stageAttrs.Any())
+                {
+                    if (target.Attributes == null) target.Attributes = new List<Attribute>();
+                    target.Attributes.AddRange(attrs);
+                }    
+            }
         }
 
         private void ConvertRoles(PlanOfWork source, FacilityType target)
@@ -188,21 +221,23 @@ namespace XbimExchanger.DPoWToCOBieLiteUK
             var spaceTypes = spaces as IList<SpaceType> ?? spaces.ToList();
             if (spaces == null || !spaceTypes.Any()) return;
 
-            var tFloor = new Floor
-            {
-                Name = "Default floor",
-                Spaces = new List<Space>(),
-                ExternalId = Guid.NewGuid().ToString(),
-                ExternalSystem = "DPoW"
-            };
-            target.Floors = new List<Floor> {tFloor};
+            //var tFloor = new Floor
+            //{
+            //    Name = "Default floor",
+            //    Spaces = new List<Space>(),
+            //    ExternalId = Guid.NewGuid().ToString(),
+            //    ExternalSystem = "DPoW"
+            //};
+            //target.Floors = new List<Floor> {tFloor};
 
-            var sMap = Exchanger.GetOrCreateMappings<MappingSpaceTypeToSpaceType>();
+            var sMap = Exchanger.GetOrCreateMappings<MappingSpaceTypeToZone>();
             foreach (var spaceType in spaceTypes)
             {
                 var tType = sMap.GetOrCreateTargetObject(spaceType.Id.ToString());
                 sMap.AddMapping(spaceType, tType);
-                tFloor.Spaces.Add(tType);
+
+                if (target.Zones == null) target.Zones = new List<Zone>();
+                target.Zones.Add(tType);
             }
         }
 

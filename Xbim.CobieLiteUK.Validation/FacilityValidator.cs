@@ -28,7 +28,7 @@ namespace Xbim.CobieLiteUK.Validation
         public Facility Validate(Facility requirement, Facility submitted)
         {
             var retFacility = new Facility {Categories = new List<Category>()};
-            StringBuilder sb = new StringBuilder();
+            var sb = new StringBuilder();
 
             // a facility validation passes is carried out through the validation of
             // a) local values
