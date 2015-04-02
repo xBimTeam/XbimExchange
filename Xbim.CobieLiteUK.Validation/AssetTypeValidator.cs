@@ -119,79 +119,102 @@ namespace Xbim.CobieLiteUK.Validation
                 return retType;
             }
 
+            if (retType.Attributes == null)
+                retType.Attributes = new List<Attribute>();
+
             // produce type level description
-            var outstandingRequirements = MissingFrom(candidateType);
+            var outstandingRequirements = MissingFrom(candidateType).ToList();
             var outstandingRequirementsCount = outstandingRequirements.Count();
             retType.Description = string.Format("{0} of {1} requirement addressed at type level.", RequirementDetails.Count - outstandingRequirementsCount, RequirementDetails.Count);
-            // todo: can add list of succesful attributes at type level here
-
-
+            
+            
+            foreach (var provided in ProvidedRequirementValues(candidateType.Attributes))
+            {
+                // todo: need to clone the original attribute here.
+                var a = provided.Requirement.Attribute;
+                a.Value = provided.ProvidedValue.Value;
+                retType.Attributes.Add(a);
+            }
+            foreach (var missing in outstandingRequirements)
+            {
+                retType.Attributes.Add(missing.Attribute);
+            }
+            
             var anyAssetFails = false;
             retType.Assets = new List<Asset>();
             // perform tests at asset level
-            foreach (var modelAsset in candidateType.Assets)
+            if (candidateType.Assets != null)
             {
-                var reportAsset = new Asset
+                foreach (var modelAsset in candidateType.Assets)
                 {
-                    Attributes = new List<Attribute>(),
-                    Name = modelAsset.Name,
-                    AssetIdentifier = modelAsset.AssetIdentifier,
-                    Categories = new List<Category>(),
-                    ExternalId = modelAsset.ExternalId
-                };
-                // reportAsset.Description = modelAsset.Description;
-                if (modelAsset.Categories != null)
-                    reportAsset.Categories.AddRange(modelAsset.Categories);    
-                
-                // at this stage we are only validating for the existence of attributes.
-                //
-                var matching = outstandingRequirements.Select(x => x.Name).Intersect(modelAsset.Attributes.Select(at => at.Name));
-                var matchingCount = 0;
-                // add passes to the report.
-                foreach (var matched in matching)
-                {
-                    matchingCount++;
-                    var att = new Attribute()
+                    var reportAsset = new Asset
                     {
-                        Name = matched,
-                        Categories = new List<Category>() { FacilityValidator.PassedCat }
+                        Attributes = new List<Attribute>(),
+                        Name = modelAsset.Name,
+                        AssetIdentifier = modelAsset.AssetIdentifier,
+                        Categories = new List<Category>(),
+                        ExternalId = modelAsset.ExternalId
                     };
-                    reportAsset.Attributes.Add(att);
-                }
+                    // reportAsset.Description = modelAsset.Description;
+                    if (modelAsset.Categories != null)
+                        reportAsset.Categories.AddRange(modelAsset.Categories);
 
-                var sb = new StringBuilder();
-                sb.AppendFormat("{0} of {1} requirements matched at asset level.\r\n\r\n", matchingCount, outstandingRequirementsCount);
-
-                var pass = (outstandingRequirementsCount == matchingCount);
-                if (!pass)
-                {
-                    anyAssetFails = true;
-                    sb.AppendLine("Attributes are missing.");
-                    foreach (var req in outstandingRequirements)
+                    // at this stage we are only validating for the existence of attributes.
+                    //
+                    var matching =
+                        outstandingRequirements.Select(x => x.Name)
+                            .Intersect(modelAsset.Attributes.Select(at => at.Name));
+                    var matchingCount = 0;
+                    // add passes to the report.
+                    foreach (var matched in matching)
                     {
-                        if (matching.Contains(req.Name)) 
-                            continue;
-                        // sb.AppendFormat("{0}\r\n{1}\r\n\r\n", req.Name, req.Description);
-                            
+                        var attV = modelAsset.Attributes.FirstOrDefault(a => a.Name == matched);
+                        var attributeV = attV == null ? new StringAttributeValue() { Value = "Unexpected error." } : attV.Value;
+                        matchingCount++;
+
                         var att = new Attribute()
                         {
-                            Name = req.Name,
-                            Description = req.Description,
-                            Categories = new List<Category>() { FacilityValidator.FailedCat }
+                            Name = matched,
+                            Categories = new List<Category>() {FacilityValidator.PassedCat},
+                            Value = attributeV
                         };
                         reportAsset.Attributes.Add(att);
                     }
-                    reportAsset.Categories.Add(FacilityValidator.FailedCat);
+
+                    var sb = new StringBuilder();
+                    sb.AppendFormat("{0} of {1} requirements matched at asset level.\r\n\r\n", matchingCount,
+                        outstandingRequirementsCount);
+
+                    var pass = (outstandingRequirementsCount == matchingCount);
+                    if (!pass)
+                    {
+                        anyAssetFails = true;
+                        sb.AppendLine("Attributes are missing.");
+                        foreach (var req in outstandingRequirements)
+                        {
+                            if (matching.Contains(req.Name))
+                                continue;
+                            // sb.AppendFormat("{0}\r\n{1}\r\n\r\n", req.Name, req.Description);
+
+                            var att = new Attribute()
+                            {
+                                Name = req.Name,
+                                Description = req.Description,
+                                Categories = new List<Category>() {FacilityValidator.FailedCat}
+                            };
+                            reportAsset.Attributes.Add(att);
+                        }
+                        reportAsset.Categories.Add(FacilityValidator.FailedCat);
+                    }
+                    else
+                    {
+                        iPassed++;
+                        reportAsset.Categories.Add(FacilityValidator.PassedCat);
+                    }
+                    reportAsset.Description = sb.ToString();
+                    retType.Assets.Add(reportAsset);
                 }
-                else
-                {
-                    iPassed++;
-                    reportAsset.Categories.Add(FacilityValidator.PassedCat);
-                }
-                reportAsset.Description = sb.ToString();
-                retType.Assets.Add(reportAsset);
             }
-            
             retType.Categories.Add(
                 anyAssetFails ? FacilityValidator.FailedCat : FacilityValidator.PassedCat
                 );
@@ -201,6 +224,33 @@ namespace Xbim.CobieLiteUK.Validation
             return retType;
         }
 
+        private IEnumerable<RequirementProvision<Attribute>> ProvidedRequirementValues(List<Attribute> attributes)
+        {
+            if (attributes == null)
+                yield break;
+            foreach (var reqDetail in providedRequirementsList(attributes))
+            {
+                // fill in the value from the property
+                var found = attributes.FirstOrDefault(a => a.Name == reqDetail.Name);
+                if (found == null)
+                    continue;
+
+                yield return new RequirementProvision<Attribute>(reqDetail, found);
+            }
+        }
+
+        private IEnumerable<RequirementDetail> providedRequirementsList(List<Attribute> attributes)
+        {
+            if (attributes == null)
+                return Enumerable.Empty<RequirementDetail>();
+
+            var req = new HashSet<string>(RequirementDetails.Select(x => x.Name));
+            var got = new HashSet<string>(attributes.Select(x => x.Name));
+
+            got.IntersectWith(req);
+
+            return RequirementDetails.Where(creq => got.Contains(creq.Name));
+        }
 
         private IEnumerable<RequirementDetail> MissingFrom(AssetType typeToTest)
         {
