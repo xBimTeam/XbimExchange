@@ -127,6 +127,7 @@ namespace XbimExchanger.IfcToCOBieLiteUK
         #endregion
 
         private readonly string _configFileName;
+        private Dictionary<String, List<IfcTypeObject>> _assetTypes;
 
         /// <summary>
         /// 
@@ -174,6 +175,10 @@ namespace XbimExchanger.IfcToCOBieLiteUK
         }
         private void GetTypeMaps()
         {
+            _assetTypes = _model.Instances.OfType<IfcRelDefinesByType>().GroupBy(k => k.RelatingType.Name.HasValue ? k.RelatingType.Name.ToString() : "Undefined", v=>v.RelatingType).ToDictionary(group => group.Key, group => group.ToList());
+
+         
+
             _definingTypeObjectMap = _model.Instances.OfType<IfcRelDefinesByType>().ToDictionary(k => k.RelatingType, kv => kv.RelatedObjects.OfType<IfcElement>().ToList());
             _objectToTypeObjectMap = new Dictionary<IfcObject, IfcTypeObject>();
             foreach (var typeObjectToObjects in _definingTypeObjectMap)
@@ -508,6 +513,14 @@ namespace XbimExchanger.IfcToCOBieLiteUK
         public Dictionary<IfcZone, HashSet<IfcSpace>> ZoneSpaces
         {
             get { return _zoneSpaces; }
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        public Dictionary<string, List<IfcTypeObject>> AssetTypes
+        {
+            get { return _assetTypes; }
         }
 
         private void GetUnits()

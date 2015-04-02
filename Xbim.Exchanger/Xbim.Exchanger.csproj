@@ -143,7 +143,7 @@
     <Compile Include="IfcToCOBieLiteUK\MappingIfcSiteToSite.cs" />
     <Compile Include="IfcToCOBieLiteUK\MappingIfcSpaceToSpace.cs" />
     <Compile Include="IfcToCOBieLiteUK\MappingIfcSystemToSystem.cs" />
-    <Compile Include="IfcToCOBieLiteUK\MappingIfcTypeObjectToAssetType.cs" />
+    <Compile Include="IfcToCOBieLiteUK\MappingListOfIfcTypeObjectToAssetType.cs" />
     <Compile Include="IfcToCOBieLiteUK\MappingIfcZoneToZone.cs" />
     <Compile Include="IfcToCOBieLiteUK\XbimAttributedObject.cs" />
     <Compile Include="IXbimMappings.cs" />

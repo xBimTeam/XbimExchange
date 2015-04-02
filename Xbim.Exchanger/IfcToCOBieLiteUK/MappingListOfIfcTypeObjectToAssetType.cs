@@ -9,11 +9,15 @@ using Xbim.IO;
 
 namespace XbimExchanger.IfcToCOBieLiteUK
 {
-    internal class MappingIfcTypeObjectToAssetType :
-        XbimMappings<XbimModel, List<Facility>, string, IfcTypeObject, AssetType>
+    /// <summary>
+    /// Maps a list of IfcTypeObject that are all the same
+    /// </summary>
+    internal class MappingListOfIfcTypeObjectToAssetType :
+        XbimMappings<XbimModel, List<Facility>, string, IEnumerable<IfcTypeObject>, AssetType>
     {
-        protected override AssetType Mapping(IfcTypeObject ifcTypeObject, AssetType target)
+        protected override AssetType Mapping(IEnumerable<IfcTypeObject> ifcTypeObjectList, AssetType target)
         {
+            var ifcTypeObject = ifcTypeObjectList.First(); //all the same so first is as good as any
             var helper = ((IfcToCOBieLiteUkExchanger) Exchanger).Helper;
             target.ExternalEntity = helper.ExternalEntityName(ifcTypeObject);
             target.ExternalId = helper.ExternalEntityIdentity(ifcTypeObject);
@@ -67,26 +71,30 @@ namespace XbimExchanger.IfcToCOBieLiteUK
                 ifcTypeObject);
 
             //The Assets
-            List<IfcElement> allAssetsofThisType;
-            if (helper.DefiningTypeObjectMap.TryGetValue(ifcTypeObject, out allAssetsofThisType)) //should always work
+            var assetMappings = Exchanger.GetOrCreateMappings<MappingIfcElementToAsset>();
+            foreach (var typeObject in ifcTypeObjectList)
             {
-                target.Assets = new List<Asset>(allAssetsofThisType.Count);
-
-                var assetMappings = Exchanger.GetOrCreateMappings<MappingIfcElementToAsset>();
-                foreach (IfcElement element in allAssetsofThisType)
+                List<IfcElement> allAssetsofThisType;
+                if (helper.DefiningTypeObjectMap.TryGetValue(typeObject, out allAssetsofThisType))
+                    //should always work
                 {
-                    var asset = new Asset();
-                    asset = assetMappings.AddMapping(element, asset);
-                    target.Assets.Add(asset);
+                    target.Assets = new List<Asset>(allAssetsofThisType.Count);
+
+                    
+                    foreach (IfcElement element in allAssetsofThisType)
+                    {
+                        var asset = new Asset();
+                        asset = assetMappings.AddMapping(element, asset);
+                        target.Assets.Add(asset);
+                    }
+                }
+                else
+                {
+                    //just in case we have a problem
+                    CoBieLiteUkHelper.Logger.ErrorFormat("Asset Type: Failed to locate Asset Type #{0}={1}",
+                        ifcTypeObject.EntityLabel, ifcTypeObject.GetType().Name);
                 }
             }
-            else
-            {
-                //just in case we have a problem
-                CoBieLiteUkHelper.Logger.ErrorFormat("Asset Type: Failed to locate Asset Type #{0}={1}",
-                    ifcTypeObject.EntityLabel, ifcTypeObject.GetType().Name);
-            }
-
             //Attributes
             target.Attributes = helper.GetAttributes(ifcTypeObject);
             return target;
