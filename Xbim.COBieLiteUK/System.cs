@@ -4,12 +4,28 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Xml.Serialization;
+using Newtonsoft.Json;
 using Xbim.XbimExtensions.Transactions.Extensions;
 
 namespace Xbim.COBieLiteUK
 {
     public partial class System
     {
+        [XmlIgnore, JsonIgnore]
+        public IEnumerable<Asset> AssetObjects
+        {
+            get
+            {
+                if (_facility == null)
+                    throw new Exception(
+                        "You have to call 'Refresh()' method on Facility object before you use this property.");
+                if (Components == null) return new List<Asset>();
+                var names = Components.Select(s => s.Name);
+                return _facility.Get<Asset>(s => names.Contains(s.Name));
+            }
+        }
+
         internal protected override List<CobieObject> MergeDuplicates(List<CobieObject> objects, TextWriter log)
         {
             var candidates = objects.OfType<System>().ToList();
@@ -35,6 +51,15 @@ namespace Xbim.COBieLiteUK
             }
 
             return duplicates.Cast<CobieObject>().ToList();
+        }
+
+        internal override IEnumerable<IEntityKey> GetKeys()
+        {
+            foreach (var key in base.GetKeys())
+                yield return key;
+            if (Components == null) yield break;
+            foreach (var key in Components)
+                yield return key;
         }
     }
 }

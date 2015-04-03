@@ -24,7 +24,13 @@ namespace Xsd2Code.Library.Extensions
             {
                 propertyMember.Name = "Value";
             }
-            
+
+            //Make Name virtual property
+            if (type.Name == "CobieObject")
+            {
+                propertyMember.Attributes = MemberAttributes.Public;
+            }
+
             var xsdType =
                 schema.SchemaTypes.Values.OfType<XmlSchemaComplexType>().FirstOrDefault(ct => ct.Name == type.Name);
             if (xsdType == null) return;
@@ -40,13 +46,14 @@ namespace Xsd2Code.Library.Extensions
                 element.Annotation.Items.Count == 0) return;
 
             //find mapping information in appinfo of the element and create Attribute definition
-            foreach (var item in element.Annotation.Items)
-            {
-                var appInfo = item as XmlSchemaAppInfo;
-                if (appInfo == null) continue;
+            //foreach (var item in element.Annotation.Items)
+            //{
+            //    var appInfo = item as XmlSchemaAppInfo;
+            //    if (appInfo == null) continue;
+            //
+            //}
 
-//do any postprocessing here
-            }
+            //do any postprocessing here
 
             
         }

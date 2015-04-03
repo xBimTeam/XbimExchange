@@ -11,7 +11,7 @@ namespace Xbim.COBieLiteUK
     public partial class Contact
     {
         [XmlIgnore][JsonIgnore]
-        new public string Name
+        public override string Name
         {
             get { return Email; }
             set { Email = value; }
@@ -22,7 +22,7 @@ namespace Xbim.COBieLiteUK
         /// </summary>
         [XmlIgnore]
         [JsonIgnore]
-        new public string Description
+        public override string Description
         {
             get
             {

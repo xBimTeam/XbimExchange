@@ -59,6 +59,7 @@
       <xs:appinfo source="mapping">UK2012|D|SheetName|required|item|-|parent</xs:appinfo>
       <xs:appinfo source="mapping">UK2012|E|ParentName|required|item|-|parent.Name</xs:appinfo>
       <xs:appinfo source="mapping">UK2012|F|ChildNames|required|list|-|ChildAssetsOrTypes.Name</xs:appinfo>
+      <!-- AssemblyType is defined as a D column in BS 1192-4 but as a G column in referenced docs -->
       <xs:appinfo source="mapping">UK2012|G|AssemblyType|optional|list|PickLists.AssemblyType|Categories.CategoryString</xs:appinfo>
       <xs:appinfo source="mapping">UK2012|H|ExtSystem|optional|item|-|ExternalSystem</xs:appinfo>
       <xs:appinfo source="mapping">UK2012|I|ExtObject|optional|item|-|ExternalEntity</xs:appinfo>

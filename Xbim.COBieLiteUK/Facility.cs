@@ -5,6 +5,7 @@ using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using System.Text.RegularExpressions;
 using System.Xml;
 using System.Xml.Serialization;
 using Newtonsoft.Json;
@@ -14,6 +15,7 @@ using NPOI.SS.UserModel;
 using NPOI.SS.Util;
 using NPOI.XSSF.UserModel;
 using Xbim.COBieLiteUK.Converters;
+using Xbim.XbimExtensions.DataProviders;
 using Formatting = System.Xml.Formatting;
 
 namespace Xbim.COBieLiteUK
@@ -27,7 +29,15 @@ namespace Xbim.COBieLiteUK
 
         public IEnumerable<T> Get<T>(Func<T, bool> condition = null) where T : CobieObject
         {
-            return GetDeep(condition);
+            //make Facility part of the result
+            var self = this as T;
+            if (self != null)
+            {
+                if (condition == null) yield return self;
+                else if (condition(self)) yield return self;
+            }
+            foreach (var child in GetDeep(condition))
+                yield return child;
         }
 
         #region Enumerations
@@ -498,37 +508,340 @@ namespace Xbim.COBieLiteUK
                     yield return stage;
         }
 
+        /// <summary>
+        /// <p>
+        /// This function sets facility object to all CobieObjects in the model
+        /// so you can access referenced objects from keys as an enumerations.
+        /// If you create new objects in the model you should always call this 
+        /// method before you use any such enumerations. 
+        /// </p>
+        /// <p>
+        /// You don't have to call it after you read the model from JSON, COBie XLS or XML
+        /// as it is called automatically.
+        /// </p>
+        /// </summary>
+        public void Refresh()
+        {
+            SetFacility(this);
+        }
+
         #region Validation UK2012 (BS1192-4)
-        //The integrity of references should be ensured as follows:
-        //a) Every Space (location) should be assigned to one Floor (region).
-        //b) Every Space (location) should be assigned to at least one Zone.
-        //c) Every Floor and Zone should have at least one Space (location).
-        //d) Every Component should be assigned to at least one Space (location), from which it is used, inspected or maintained.
-        //e) Every Component should be assigned to one Type.
-        //f) Every Component should be assigned to at least one System, identifying its function.
-        //g) Every Type should apply to at least one Component.
-        //h) Every reference to other sheets should be valid.
-        //i) Every reference to PickList enumerations and classifications should be valid.
-        //j) Enumerations specified in the Attributes and PickLists should be adhered to.
 
-        //Clarity of naming
-        //To ensure the clarity of naming, the following should be done.
-        //• Names should use the characters A‑Z, a‑z and 0‑9 with spaces and full stops.
-        //• Contacts should be named by use of their valid email address, including “@”.
-        //• Names should not contain commas or double spaces, nor unusual characters(e.g. &,%, ‘, “, <, >).
-        //• Classifications should use the colon to separate code from description and should not use commas.
+        private int _counter;
+        public void ValidateUK2012(TextWriter logger, bool fixIfPossible)
+        {
+            //initial counter value for automatic unique names
+            _counter = 1001;
 
-        //Uniqueness of information should be ensured. Names should be unique within
-        //their sheet, except that the System, Zone and Attribute names should be unique in
-        //conjunction with other columns.
-        //a) On the “Attribute” sheet, every Attribute Name (column A), taken with Sheet‑Name (column E) and Row‑Name (column F) should be unique.
-        //b) On the “System” sheet, every System Name (column A) taken with Component‑Names (column E) should be unique.
-        //c) On the “Zone” sheet, every Zone Name (column A) taken with Space‑Names (column E) should be unique.
+            //Clarity of naming
+            //To ensure the clarity of naming, the following should be done.
+            //• Names should use the characters A‑Z, a‑z and 0‑9 with spaces and full stops.
+            //• Contacts should be named by use of their valid email address, including “@”.
+            //• Names should not contain commas or double spaces, nor unusual characters(e.g. &,%, ‘, “, <, >).
+            //• Classifications should use the colon to separate code from description and should not use commas.
+            //Category entries should be provided.
+            var all = Get<CobieObject>().ToArray();
+            var regex = new Regex("[,|&|%|‘|“|<|>]", RegexOptions.Compiled);
+            var catRegex = new Regex("[:|,]", RegexOptions.Compiled);
+            foreach (var o in all)
+            {
+                if (String.IsNullOrEmpty(o.Name))
+                {
+                    logger.WriteLine("Object of type {0} (description: {1}) doesn't have a 'Name'! This is illegal.", o.GetType().Name, o.Description);
+                    if (fixIfPossible) o.Name = String.Format("{0} {1}", o.GetType().Name, _counter++);    
+                }
+                if (regex.IsMatch(o.Name))
+                {
+                    logger.WriteLine("Name {0} of {1} contains forbidden characters.", o.Name, o.GetType().Name);
+                    if (fixIfPossible) o.Name = regex.Replace(o.Name, "");
+                }
+                foreach (var key in o.GetKeys().Where(key => regex.IsMatch(key.Name)))
+                {
+                    logger.WriteLine("Name {0} of {1} key contains forbidden characters.", key.Name, key.KeyType);
+                    if (fixIfPossible) key.Name = regex.Replace(key.Name, "");
+                }
 
-        //Completeness - Groupings 
-        //Every identifiable Space (location) should be assigned to at least one Zone and to a Floor
-        //(region). Every manageable Component should be assigned to at least one System and to a Type.
-        //Category entries should be provided.
+                if (o.Categories != null && o.Categories.Any())
+                {
+                    foreach (var category in o.Categories)
+                    {
+                        if (category.Code != null && catRegex.IsMatch(category.Code))
+                        {
+                            logger.WriteLine("Category code {0} contains forbidden characters.", category.Code);
+                            if (fixIfPossible) category.Code = catRegex.Replace(category.Code, "");
+                        }
+
+                        if (category.Description == null || !catRegex.IsMatch(category.Description)) continue;
+                        logger.WriteLine("Category description {0} contains forbidden characters.", category.Description);
+                        if (fixIfPossible) category.Description = catRegex.Replace(category.Description, "");
+                    }
+                }
+                //only Asset doesn't have a category in COBie XLS
+                if ((o.Categories == null || !o.Categories.Any()) && !(o is Asset))
+                {
+                    logger.WriteLine("{0} '{1}' doesn't have a category defined.", o.GetType().Name, o.Name);
+                    if (fixIfPossible)
+                    {
+                        if (o.Categories == null) o.Categories = new List<Category>();
+                        o.Categories.Add(new Category {Code = "unknown"});
+                    }
+                }
+            }
+
+            //The integrity of references should be ensured as follows:
+            //a) Every Space (location) should be assigned to one Floor (region). - If the name is unique this is granted by COBieLite data schema
+            //b) Every Space (location) should be assigned to at least one Zone.
+            var spaces = Get<Space>().ToList();
+            foreach (var space in spaces.Where(space => !Zones.Any(z => z.Spaces != null && z.Spaces.Select(s => s.Name).Contains(space.Name))))
+            {
+                logger.WriteLine("Space '{0}' is not in any zone.", space.Name);
+                if (!fixIfPossible) continue;
+
+                if (Zones == null) Zones = new List<Zone>();
+                var defaultZone = GetDefaultZone();
+                defaultZone.Spaces.Add(new SpaceKey{Name = space.Name});
+            }
+            //c) Every Floor and Zone should have at least one Space (location).
+            if (Floors != null)
+            {
+                foreach (var floor in Floors.Where(f => f.Spaces == null || !f.Spaces.Any()).ToArray())
+                {
+                    logger.WriteLine("Floor {0} doesn't have any space assigned.", floor.Name);
+                    if (fixIfPossible)
+                    {
+                        if (floor.Spaces == null) floor.Spaces = new List<Space>();
+                        floor.Spaces.Add(GetNewDefaultSpace(false));
+                    }
+                }
+            }
+            if (Zones != null)
+            {
+                foreach (var zone in Zones.Where(z => z.Spaces == null || !z.Spaces.Any()))
+                {
+                    logger.WriteLine("Zone {0} doesn't have any space assigned.", zone.Name);
+                    if (fixIfPossible)
+                    {
+                        if (zone.Spaces == null) zone.Spaces = new List<SpaceKey>();
+                        var defaultSpace = GetAnyDefaultSpace();
+                        zone.Spaces.Add(new SpaceKey { Name = defaultSpace.Name });
+                    }
+                }
+            }
+            
+            //d) Every Component should be assigned to at least one Space (location), from which it is used, inspected or maintained.
+            //e) Every Component should be assigned to one Type. - This is granted by design of COBieLite 
+            var assets = Get<Asset>().ToArray();
+            foreach (var asset in assets.Where(a => a.Spaces == null || !a.Spaces.Any()))
+            {
+                logger.WriteLine("Component {0} is not assigned to any space.", asset.Name);
+                if (fixIfPossible)
+                {
+                    var space = GetAnyDefaultSpace();
+                    if(asset.Spaces == null) asset.Spaces = new List<SpaceKey>();
+                    asset.Spaces.Add(new SpaceKey{Name = space.Name});
+                }
+            }
+
+            //f) Every Component should be assigned to at least one System, identifying its function.
+            foreach (var asset in assets.Where(a => Systems == null || !Systems.Any(s => s.Components != null && s.Components.Any(c => c.Name == a.Name))))
+            {
+                logger.WriteLine("Component {0} is not assigned to any system.", asset.Name);
+                if (fixIfPossible)
+                {
+                    GetDefaultSystem().Components.Add(new AssetKey{ Name = asset.Name });
+                }
+            }
+
+            //g) Every Type should apply to at least one Component.
+            var types = Get<AssetType>();
+            foreach (var type in types.Where(t => t.Assets == null || !t.Assets.Any()))
+            {
+                logger.WriteLine("Type {0} doesn't contain any components.", type.Name);
+                if (fixIfPossible)
+                {
+                    if(type.Assets == null) type.Assets = new List<Asset>();
+                    type.Assets.Add(GetNewDefaultAsset());
+                }
+            }
+
+            //h) Every reference to other sheets should be valid. - This is mostly granted by the schema itself. We only need to check the keys.
+            foreach (var o in all)
+            {
+                foreach (var key in o.GetKeys())
+                {
+                    var candidates = Get<CobieObject>(c => c.GetType() == key.ForType && c.Name == key.Name).ToArray();
+                    if (candidates.Length == 0)
+                    {
+                        logger.WriteLine("{0} key '{1}' from {2} '{3}' doesn't point to any object in the model.", key.ForType.Name, key.Name, o.GetType().Name, o.Name);
+                        if (fixIfPossible)
+                        {
+                            var contactKey = key as ContactKey;
+                            if (contactKey != null)
+                                contactKey.Email = GetDefaultContactKey().Email;
+                            var spaceKey = key as SpaceKey;
+                            if (spaceKey != null)
+                                spaceKey.Name = GetAnyDefaultSpace().Name;
+                        }
+                    }
+                    if (candidates.Length > 1)
+                        logger.WriteLine("{0} key '{1}' from {2} '{3}' points to more than one object in the model. Ambiguous reference can't be fixed.", key.ForType.Name, key.Name, o.GetType().Name, o.Name);
+                }
+            }
+            
+            //i) Every reference to PickList enumerations and classifications should be valid. - We don't store any specific pick lists like classifications etc. This depends on project specific settings.
+            //j) Enumerations specified in the Attributes and PickLists should be adhered to.
+
+
+
+            //Uniqueness of information should be ensured. Names should be unique within
+            //their sheet, except that the System, Zone and Attribute names should be unique in
+            //conjunction with other columns. (Martin Cerny: + Assembly, Connection, Job, Impact, Document, Coordinate, Issue)
+            //a) On the “Attribute” sheet, every Attribute Name (column A), taken with Sheet‑Name (column E) and Row‑Name (column F) should be unique.
+            //b) On the “System” sheet, every System Name (column A) taken with Component‑Names (column E) should be unique.
+            //c) On the “Zone” sheet, every Zone Name (column A) taken with Space‑Names (column E) should be unique.
+            //Martin Cerny: Unique names should be for: Contact, Facility, Floor, Space, Type, Component, Spare, Resource
+            CheckForUniqueNames(Contacts, logger, fixIfPossible);
+            CheckForUniqueNames(Floors, logger, fixIfPossible);
+            CheckForUniqueNames(Get<Space>(), logger, fixIfPossible);
+            CheckForUniqueNames(AssetTypes, logger, fixIfPossible);
+            CheckForUniqueNames(Get<Asset>(), logger, fixIfPossible);
+            CheckForUniqueNames(Get<Spare>(), logger, fixIfPossible);
+            CheckForUniqueNames(Resources, logger, fixIfPossible);
+
+        }
+
+        private Zone GetDefaultZone()
+        {
+            const string defaultName = "Default zone";
+            var zone = Zones.FirstOrDefault(z => z.Name == defaultName);
+            if (zone != null) return zone;
+
+            zone = new Zone
+            {
+                Name = defaultName,
+                CreatedOn = DateTime.Now,
+                CreatedBy = GetDefaultContactKey(),
+                Categories = GetDefaultCategories(),
+                Spaces = new List<SpaceKey>()
+            };
+            Zones.Add(zone);
+            return zone;
+        }
+
+        private void CheckForUniqueNames(IEnumerable<CobieObject> objects, TextWriter logger, bool fixIfPossible)
+        {
+            if(objects == null) return;
+            
+            var groups = objects.GroupBy(o => o.Name);
+            foreach (var g in groups.Where(g => g.Count() > 1))
+            {
+                logger.WriteLine("{0} {1} doesn't have an unique name. There are {2} instances with the same name. If fixed it may break key references.", g.First().GetType().Name, g.Key, g.Count());
+                if (!fixIfPossible) continue;
+                
+                var counter = 0;
+                foreach (var cobieObject in g)
+                    cobieObject.Name = String.Format("{0} ({1})", cobieObject.Name, counter++);
+            }
+        }
+
+        private Asset GetNewDefaultAsset()
+        {
+            return new Asset
+            {
+                Name = "Default component " + _counter++,
+                CreatedBy = GetDefaultContactKey(),
+                CreatedOn = DateTime.Now,
+                Spaces = new List<SpaceKey>(new[] { new SpaceKey { Name = GetAnyDefaultSpace().Name } }),
+                Description = "Default component"
+            };
+        }
+
+        private System GetDefaultSystem()
+        {
+            const string name = "Default system";
+            if(Systems == null) Systems = new List<System>();
+            var system = Systems.FirstOrDefault(s => s.Name == name);
+            if (system != null) return system;
+            system = new System
+            {
+                Name = name,
+                Categories = GetDefaultCategories(),
+                CreatedBy = GetDefaultContactKey(),
+                CreatedOn = DateTime.Now,
+                Components = new List<AssetKey>()
+            };
+            Systems.Add(system);
+            return system;
+        }
+
+        private Space GetAnyDefaultSpace()
+        {
+            var defaultSpace = Get<Space>(s => s.Name.StartsWith("Default space")).FirstOrDefault();
+            return defaultSpace ?? GetNewDefaultSpace(true);
+        }
+
+        private Space GetNewDefaultSpace(bool addToDefaultFloor)
+        {
+            var space = new Space
+            {
+                Name = "Default space " + _counter++,
+                CreatedOn = DateTime.Now,
+                CreatedBy = GetDefaultContactKey(),
+                Categories = GetDefaultCategories(),
+                Description = "Default description"
+            };
+            GetDefaultZone().Spaces.Add(new SpaceKey { Name = space.Name });
+
+            if (!addToDefaultFloor) return space;
+
+            if (Floors == null) Floors = new List<Floor>();
+            var defaultFloor = GetDefaultFloor();
+            defaultFloor.Spaces.Add(space);
+            return space;
+        }
+
+        private ContactKey GetDefaultContactKey()
+        {
+            const string defaultEmail = "default.contact@default.def";
+            if(Contacts == null) Contacts = new List<Contact>();
+            var contact = Contacts.FirstOrDefault(c => c.Email == defaultEmail);
+            if (contact != null) return new ContactKey {Email = defaultEmail};
+            contact = new Contact
+            {
+                Email = defaultEmail,
+                Categories = GetDefaultCategories(),
+                CreatedOn = DateTime.Now,
+                CreatedBy = new ContactKey{ Email = defaultEmail},
+                Company = "Default company",
+                Phone = "+00 0000 0000"
+            };
+            Contacts.Add(contact);
+            return new ContactKey { Email = defaultEmail };
+        }
+
+        private List<Category> GetDefaultCategories()
+        {
+            //unknown is the recomended value from BS 1192-4
+            return new List<Category>(new []{new Category{Code = "unknown"}});
+        }
+
+        private Floor GetDefaultFloor()
+        {
+            var defaultFloor = Floors.FirstOrDefault(f => f.Name == "Default floor");
+            if (defaultFloor == null)
+            {
+                defaultFloor = new Floor
+                {
+                    Name = "Default floor", 
+                    Spaces = new List<Space>(),
+                    CreatedOn = DateTime.Now,
+                    CreatedBy = GetDefaultContactKey(),
+                    Categories = GetDefaultCategories()
+                };
+                Floors.Add(defaultFloor);
+            }
+            return defaultFloor;
+        }
 
         #endregion
     }

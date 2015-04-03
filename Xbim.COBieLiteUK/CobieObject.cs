@@ -78,6 +78,15 @@ namespace Xbim.COBieLiteUK
                     yield return representation;
         }
 
+        internal virtual IEnumerable<IEntityKey> GetKeys()
+        {
+            if (CreatedBy != null)
+                yield return CreatedBy;
+            if (ProjectStages == null) yield break;
+            foreach (var key in ProjectStages)
+                yield return key;
+        }
+
         // ReSharper disable InconsistentNaming
         protected string _parentSheet;
         protected string _parentNameProperty;

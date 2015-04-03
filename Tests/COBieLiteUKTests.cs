@@ -3,6 +3,8 @@ using System.IO;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Xbim.COBieLiteUK;
 using System.Collections.Generic;
+using System.Diagnostics;
+using System.Linq;
 using Xbim.IO;
 using XbimExchanger.IfcToCOBieLiteUK;
 using Attribute = Xbim.COBieLiteUK.Attribute;
@@ -106,7 +108,8 @@ namespace Tests
                             {
                                 CreatedOn = DateTime.Now,
                                 CreatedBy = new ContactKey {Email = "martin.cerny@northumbria.ac.uk"},
-                        Categories = new List<Category> {new Category {Code = "Sp_02_78_98", Classification = "Sample"}},
+                                Categories =
+                                    new List<Category> {new Category {Code = "Sp_02_78_98", Classification = "Sample"}},
                                 Description = "First front room in COBieLiteUK ever",
                                 Name = "A001 - Front Room",
                                 UsableHeight = 3500,
@@ -116,7 +119,8 @@ namespace Tests
                             {
                                 CreatedOn = DateTime.Now,
                                 CreatedBy = new ContactKey {Email = "martin.cerny@northumbria.ac.uk"},
-                        Categories = new List<Category> {new Category {Code = "Sp_02_78_98", Classification = "Sample"}},
+                                Categories =
+                                    new List<Category> {new Category {Code = "Sp_02_78_98", Classification = "Sample"}},
                                 Description = "First living room in COBieLiteUK ever",
                                 Name = "A002 - Living Room",
                                 UsableHeight = 4200,
@@ -126,7 +130,8 @@ namespace Tests
                             {
                                 CreatedOn = DateTime.Now,
                                 CreatedBy = new ContactKey {Email = "martin.cerny@northumbria.ac.uk"},
-                        Categories = new List<Category> {new Category {Code = "Sp_02_78_98", Classification = "Sample"}},
+                                Categories =
+                                    new List<Category> {new Category {Code = "Sp_02_78_98", Classification = "Sample"}},
                                 Description = "First bedroom in COBieLiteUK ever",
                                 Name = "A003 - Bedroom",
                                 UsableHeight = 4100,
@@ -281,6 +286,18 @@ namespace Tests
 
             Assert.AreEqual(AreaUnit.squaremeters, facility.AreaUnits);
             Assert.IsTrue(String.IsNullOrEmpty(msg));
+
+            var log = new StringWriter();
+            facility.ValidateUK2012(log, true);
+            Debug.Write(log.ToString());
+            Debug.WriteLine("----------------------------------------------------------------------");
+            
+            //second run after fixings
+            log = new StringWriter();
+            facility.ValidateUK2012(log, true);
+            Debug.Write(log.ToString());
+
+            facility.WriteCobie("..\\..\\2012-03-23-Duplex-Design.fixed.xlsx", out msg);
         }
 
         [TestMethod]
@@ -290,6 +307,10 @@ namespace Tests
             string msg;
             var facility = Facility.ReadCobie("OBN1-COBie-UK-2014.xlsx", out msg);
             facility.WriteJson("..\\..\\OBN1-COBie-UK-2014.cobielite.json", true);
+
+            var log = new StringWriter();
+            facility.ValidateUK2012(log, true);
+            Debug.Write(log.ToString());
         }
 
         [TestMethod]
@@ -309,15 +330,123 @@ namespace Tests
             var facility = Facility.ReadCobie("OBN1-COBie-UK-2014.xlsx", out msg);
             facility.WriteCobie("..\\..\\OBN1-COBie-UK-2014_plain.xlsx", out msg, "UK2012", false);
         }
-         
+
         //[TestMethod]
         //[DeploymentItem("TestFiles\\OBN1-COBie-UK-2014.xlsx")]
         //public void WritingSpreadsheetFromJson()
         //{
         //    string msg;
-        //    var facility = Facility.ReadJson(@"c:\CODE\XbimGit\XbimExchange\TestResults\COBieLiteUK\NBS_LakesideRestaurant_EcoBuild2015_Revit2014_WithZones_DPoW.json");
+        //    var facility = Facility.ReadJson(@"c:\Users\mxfm2\Dropbox\Martin\NBS_LakesideRestaurant_EcoBuild2015_Revit2014_WithZones_DPoW.json");
         //    facility.WriteCobie("..\\..\\Lakeside.xlsx", out msg);
         //}
+
+        [TestMethod]
+        public void DeepSearchTest()
+        {
+            #region Model
+            var facility = new Facility
+            {
+                Contacts = new List<Contact>(new []{
+                    new Contact
+                {
+                Name    = "martin.cerny@northumbria.ac.uk"
+                } 
+                }),
+                Floors = new List<Floor>(new[]
+                {
+                    new Floor
+                    {
+                        Name = "Floor 0",
+                        Spaces = new List<Space>(new[]
+                        {
+                            new Space
+                            {
+                                Name = "Space A",
+                                Attributes = new List<Attribute>(new[]
+                                {
+                                    new Attribute {Name = "Space A attribute 1"},
+                                    new Attribute {Name = "Space A attribute 2"},
+                                })
+                            },
+                            new Space
+                            {
+                                Name = "Space B",
+                                Attributes = new List<Attribute>(new[]
+                                {
+                                    new Attribute {Name = "Space B attribute 1"},
+                                    new Attribute {Name = "Space B attribute 2"},
+                                })
+                            }
+                        })
+                    },
+                    new Floor
+                    {
+                        Name = "Floor 1",
+                        Spaces = new List<Space>(new[]
+                        {
+                            new Space
+                            {
+                                Name = "Space C",
+                                Attributes = new List<Attribute>(new[]
+                                {
+                                    new Attribute {Name = "Space C attribute 1"},
+                                    new Attribute {Name = "Space C attribute 2"},
+                                })
+                            },
+                            new Space
+                            {
+                                Name = "Space D",
+                                Attributes = new List<Attribute>(new[]
+                                {
+                                    new Attribute {Name = "Space D attribute 1"},
+                                    new Attribute {Name = "Space D attribute 2"},
+                                })
+                            }
+                        })
+                    },
+                    new Floor
+                    {
+                        Name = "Floor 2",
+                        Spaces = new List<Space>(new[]
+                        {
+                            new Space
+                            {
+                                Name = "Space E",
+                                Attributes = new List<Attribute>(new[]
+                                {
+                                    new Attribute {Name = "Space E attribute 1"},
+                                    new Attribute {Name = "Space E attribute 2"},
+                                })
+                            },
+                            new Space
+                            {
+                                Name = "Space F",
+                                Attributes = new List<Attribute>(new[]
+                                {
+                                    new Attribute {Name = "Space F attribute 1"},
+                                    new Attribute {Name = "Space F attribute 2"},
+                                })
+                            }
+                        })
+                    }
+                })
+            };
+            #endregion
+
+            var allAttributes = facility.Get<Attribute>();
+            Assert.AreEqual(12, allAttributes.Count());
+
+            var allSpaces = facility.Get<Space>();
+            Assert.AreEqual(6, allSpaces.Count());
+
+            var spaceA = facility.Get<Space>(s => s.Name == "Space A");
+            Assert.AreEqual(1, spaceA.Count());
+
+            var self = facility.Get<Facility>().FirstOrDefault();
+            Assert.IsNotNull(self);
+
+            var contact = facility.Get<CobieObject>(c => c.GetType() == typeof (Contact) && c.Name == "martin.cerny@northumbria.ac.uk");
+        }
 
         [TestMethod]
         [DeploymentItem("ValidationFiles\\Lakeside_Restaurant.ifc")]
@@ -325,14 +454,14 @@ namespace Tests
         {
             using (var m = new XbimModel())
             {
-                const string ifcTestFile = @"Lakeside_Restaurant.ifc"; 
+                const string ifcTestFile = @"Lakeside_Restaurant.ifc";
                 var xbimTestFile = Path.ChangeExtension(ifcTestFile, "xbim");
                 var jsonFile = Path.ChangeExtension(ifcTestFile, "json");
                 m.CreateFrom(ifcTestFile, xbimTestFile, null, true, true);
                 var facilities = new List<Facility>();
                 var ifcToCoBieLiteUkExchanger = new IfcToCOBieLiteUkExchanger(m, facilities);
                 facilities = ifcToCoBieLiteUkExchanger.Convert();
-                    
+
                 foreach (var facilityType in facilities)
                 {
                     facilityType.WriteJson(jsonFile, true);

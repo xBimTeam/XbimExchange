@@ -4,12 +4,37 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Xml.Serialization;
+using Newtonsoft.Json;
 
 namespace Xbim.COBieLiteUK
 {
     public partial class Zone
     {
-        internal protected override List<CobieObject> MergeDuplicates(List<CobieObject> objects, TextWriter log)
+        internal override IEnumerable<IEntityKey> GetKeys()
+        {
+            foreach (var key in base.GetKeys())
+                yield return key;
+            if (Spaces == null) yield break;
+            foreach (var key in Spaces)
+                yield return key;
+        }
+
+        [XmlIgnore, JsonIgnore]
+        public IEnumerable<Space> SpaceObjects
+        {
+            get
+            {
+                if (_facility == null)
+                    throw new Exception(
+                        "You have to call 'Refresh()' method on Facility object before you use this property.");
+                if (Spaces == null) return new List<Space>();
+                var names = Spaces.Select(s => s.Name);
+                return _facility.Get<Space>(s => names.Contains(s.Name));
+            }
+        }
+
+        protected internal override List<CobieObject> MergeDuplicates(List<CobieObject> objects, TextWriter log)
         {
             var candidates = objects.OfType<Zone>().ToList();
             if (!candidates.Any()) return new List<CobieObject>();
@@ -32,7 +57,9 @@ namespace Xbim.COBieLiteUK
                 //key but it would make any attached attributes ambiguous
                 var categoryDif = duplicate.Categories.Where(c => !categoryStrings.Contains(c.CategoryString)).ToList();
                 if (categoryDif.Any())
-                    log.WriteLine("There are multiple systems with the same name but different category. This is a legal in COBie sheet but will make any attributes related to this object ambiguous. Object: {0}, different category: {1}", duplicate.Name, String.Join("; ", categoryDif.Select(c => c.CategoryString)));
+                    log.WriteLine(
+                        "There are multiple systems with the same name but different category. This is a legal in COBie sheet but will make any attributes related to this object ambiguous. Object: {0}, different category: {1}",
+                        duplicate.Name, String.Join("; ", categoryDif.Select(c => c.CategoryString)));
             }
 
             return duplicates.Cast<CobieObject>().ToList();

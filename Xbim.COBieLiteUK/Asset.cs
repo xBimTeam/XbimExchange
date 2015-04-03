@@ -19,5 +19,14 @@ namespace Xbim.COBieLiteUK
             if(AssemblyOf != null)
                 yield return AssemblyOf;
         }
+
+        internal override IEnumerable<IEntityKey> GetKeys()
+        {
+            foreach (var key in base.GetKeys())
+                yield return key;
+            if (Spaces == null) yield break;
+            foreach (var key in Spaces)
+                yield return key;
+        }
     }
 }

@@ -13,7 +13,7 @@ namespace Xbim.COBieLiteUK
         [XmlIgnore][JsonIgnore]
         internal string CategoryString
         {
-            get { return String.Format("{0}:{1}", Code, Description).Trim(':'); }
+            get { return String.Format("{0} : {1}", Code, Description).Trim(':', ' '); }
             set 
             { 
                 Code = null;

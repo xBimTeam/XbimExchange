@@ -30,5 +30,14 @@ namespace Xbim.COBieLiteUK
 
             return duplicates.Cast<CobieObject>().ToList();
         }
+
+        internal override IEnumerable<IEntityKey> GetKeys()
+        {
+            foreach (var key in base.GetKeys())
+                yield return key;
+            if (ChildAssetsOrTypes == null) yield break;
+            foreach (var key in ChildAssetsOrTypes)
+                yield return key;
+        }
     }
 }

@@ -71,5 +71,20 @@ namespace Xbim.COBieLiteUK
             if (AssemblyOf != null)
                 yield return AssemblyOf;
         }
+
+        internal override IEnumerable<IEntityKey> GetKeys()
+        {
+            foreach (var key in base.GetKeys())
+                yield return key;
+            if (Manufacturer != null)
+                yield return Manufacturer;
+            if (Warranty != null)
+            {
+                if (Warranty.GuarantorLabor != null)
+                    yield return Warranty.GuarantorLabor;
+                if (Warranty.GuarantorParts != null)
+                    yield return Warranty.GuarantorParts;
+            }
+        }
     }
 }

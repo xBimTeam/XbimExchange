@@ -8,5 +8,12 @@ namespace Xbim.COBieLiteUK
 {
     public partial class Document
     {
+        internal override IEnumerable<IEntityKey> GetKeys()
+        {
+            foreach (var key in base.GetKeys())
+                yield return key;
+            if (ApprovalBy != null) 
+                yield return ApprovalBy;
+        }
     }
 }
