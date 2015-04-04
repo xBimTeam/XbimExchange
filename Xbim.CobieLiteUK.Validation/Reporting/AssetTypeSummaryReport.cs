@@ -9,7 +9,6 @@ using Xbim.CobieLiteUK.Validation.Extensions;
 
 namespace Xbim.CobieLiteUK.Validation.Reporting
 {
-    
     public class AssetTypeSummaryReport
     {
         private readonly IEnumerable<AssetType> _validatedAssets;
@@ -19,7 +18,7 @@ namespace Xbim.CobieLiteUK.Validation.Reporting
             _validatedAssets = vaidatedAssets;
         }
 
-        public DataTable GetReport(string mainClassification = @"Uniclass2015")
+        public DataTable GetReport(string mainClassification)
         {
             if (_validatedAssets == null || _validatedAssets.FirstOrDefault() == null)
                 return null;
@@ -44,7 +43,7 @@ namespace Xbim.CobieLiteUK.Validation.Reporting
             {
                 var mainCatCode = "";
                 var mainCat =
-                    reportingAsset.Categories.FirstOrDefault(c => c.Classification == mainClassification);
+                    reportingAsset.GetRequirementCategories().FirstOrDefault(c => c.Classification == mainClassification);
                 if (mainCat != null)
                 {
                     mainCatCode = mainCat.Code;
@@ -122,8 +121,8 @@ namespace Xbim.CobieLiteUK.Validation.Reporting
             workCol.Unique = true;
             workCol.AutoIncrement = true;
 
-            retTable.Columns.Add(new DataColumn("DPoW_mainClassification", typeof (String)) {Caption = mainClassification });
-            retTable.Columns.Add(new DataColumn("DPoW_mainClassificationDescription", typeof(String)) { Caption = mainClassification + " description" });
+            retTable.Columns.Add(new DataColumn("DPoW_mainClassification", typeof(String)) { Caption = mainClassification + " code" });
+            retTable.Columns.Add(new DataColumn("DPoW_mainClassificationDescription", typeof(String)) { Caption = mainClassification + " title" });
             // retTable.Columns.Add("Matching classification", typeof (String));
             retTable.Columns.Add(new DataColumn("DPoW_MatchingCode", typeof(String)) { Caption = "Matching code" });
             retTable.Columns.Add(new DataColumn("DPoW_Submitted", typeof(int)) { Caption = "No. Submitted" });

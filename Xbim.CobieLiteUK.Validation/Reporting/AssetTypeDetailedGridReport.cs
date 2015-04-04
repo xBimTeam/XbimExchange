@@ -2,29 +2,46 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using NPOI.SS.Formula.Functions;
 using Xbim.COBieLiteUK;
+using Xbim.CobieLiteUK.Validation.Extensions;
 
 namespace Xbim.CobieLiteUK.Validation.Reporting
 {
+    /// <summary>
+    /// Data preparation layer for the production or reports that group all AssetTypes/Assets associated with an assetType requirement
+    /// </summary>
     public class AssetTypeDetailedGridReport
     {
-        private AssetTypeRequirementPointer _valideatedAssetType;
+        private readonly AssetTypeRequirementPointer _valideatedAssetType;
 
+        /// <summary>
+        /// Initialise the reporting class with an AssetTypeRequirementPointer
+        /// </summary>
         public AssetTypeDetailedGridReport(AssetTypeRequirementPointer assetType)
         {
             _valideatedAssetType = assetType;
         }
 
-        internal DataTable AttributesGrid { get; private set; }
+        /// <summary>
+        /// Lists all categories that are verified for compliance with the requirement
+        /// </summary>
+        public IEnumerable<Category> RequirementCategories
+        {
+            get
+            {
+                return _valideatedAssetType.RequirementCategories;
+            }
+        }
+
+        /// <summary>
+        /// Datatable that contains all submitted assets with all available and missing properties
+        /// </summary>
+        public DataTable AttributesGrid { get; private set; }
 
         internal void PrepareReport()
         {
-            setBasicGrid();
+            SetBasicGrid();
 
-            
             foreach (var runningAssetType in _valideatedAssetType.ProvidedAssetTypes)
             {
                 if (runningAssetType.Assets == null)
@@ -52,7 +69,7 @@ namespace Xbim.CobieLiteUK.Validation.Reporting
         private const string DpowAssetExternalSystemColumnName = "DPoW_AssetExternalSystem";
         private const string DpowAssetExternalIdColumnName = "DPoW_AssetExternalID";
          
-        private void setBasicGrid()
+        private void SetBasicGrid()
         {
             AttributesGrid = new DataTable();
             // Id
@@ -75,7 +92,7 @@ namespace Xbim.CobieLiteUK.Validation.Reporting
         {
             var r = AttributesGrid.NewRow();
             var isInserting = true;
-            
+
             foreach (var attribute in runningAsset.Attributes)
             {
                 var sName = attribute.Name;
@@ -87,31 +104,29 @@ namespace Xbim.CobieLiteUK.Validation.Reporting
                         Namespace = attribute.PropertySetName
                     });
                 }
-                if (!isInserting || attribute.Value == null) 
+                if (!isInserting || attribute.Value == null)
                     continue;
 
+                // ReSharper disable CanBeReplacedWithTryCastAndCheckForNull
                 if (attribute.Value is StringAttributeValue)
-                    r[sName] = ((StringAttributeValue)attribute.Value).Value;
+                    r[sName] = ((StringAttributeValue) attribute.Value).Value;
                 else if (attribute.Value is IntegerAttributeValue)
-                    r[sName] = ((IntegerAttributeValue)attribute.Value).Value;
+                    r[sName] = ((IntegerAttributeValue) attribute.Value).Value;
                 else if (attribute.Value is DecimalAttributeValue)
-                    r[sName] = ((DecimalAttributeValue)attribute.Value).Value;
+                    r[sName] = ((DecimalAttributeValue) attribute.Value).Value;
                 else if (attribute.Value is BooleanAttributeValue)
-                    r[sName] = ((BooleanAttributeValue)attribute.Value).Value.ToString();
+                    r[sName] = ((BooleanAttributeValue) attribute.Value).Value.ToString();
                 else if (attribute.Value is DateTimeAttributeValue)
-                    r[sName] = ((DateTimeAttributeValue)attribute.Value).Value;
+                    r[sName] = ((DateTimeAttributeValue) attribute.Value).Value;
+                // ReSharper restore CanBeReplacedWithTryCastAndCheckForNull
             }
+            if (!isInserting)
+                return null;
 
-            if (isInserting) // saves time otherwise
-            {
-                r[DpowAssetNameColumnName] = runningAsset.Name;
-                r[DpowAssetExternalSystemColumnName] = runningAsset.ExternalSystem;
-                r[DpowAssetExternalIdColumnName] = runningAsset.ExternalId;
-            }
-
-            return !isInserting 
-                ? null 
-                : r;
+            r[DpowAssetNameColumnName] = runningAsset.Name;
+            r[DpowAssetExternalSystemColumnName] = runningAsset.ExternalSystem;
+            r[DpowAssetExternalIdColumnName] = runningAsset.ExternalId;
+            return r;
         }
     }
 }

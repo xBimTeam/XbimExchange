@@ -36,17 +36,16 @@ namespace Xbim.CobieLiteUK.Validation
         private void RefreshRequirementDetails()
         {
             _requirementDetails = new List<RequirementDetail>();
-            if (_requirementType.Attributes != null)
+            if (_requirementType.Attributes == null) 
+                return;
+            foreach (
+                var attrib in
+                    _requirementType.Attributes.Where(
+                        x =>
+                            x.Categories != null &&
+                            x.Categories.Any(c => c.Classification == "DPoW" && c.Code == "required")))
             {
-                foreach (
-                    var attrib in
-                        _requirementType.Attributes.Where(
-                            x =>
-                                x.Categories != null &&
-                                x.Categories.Any(c => c.Classification == "DPoW" && c.Code == "required")))
-                {
-                    _requirementDetails.Add(new RequirementDetail(attrib));
-                }
+                _requirementDetails.Add(new RequirementDetail(attrib));
             }
         }
 
@@ -72,11 +71,12 @@ namespace Xbim.CobieLiteUK.Validation
             // initialisation
             var retType = new AssetType
             {
-                Categories = new List<Category>(_requirementType.Categories.Clone()) // classification comes from the requirement
+                Categories = new List<Category>() 
             };
             retType.SetRequirementExternalSystem(_requirementType.ExternalSystem);
             retType.SetRequirementExternalId(_requirementType.ExternalId);
-            retType.SetRequirementName(_requirementType.ExternalId);
+            retType.SetRequirementName(_requirementType.Name);
+            retType.SetRequirementCategories(_requirementType.Categories);
 
             // improve returning assetType
             if (candidateType == null) // the following properties depend on the nullity of candidate
@@ -88,6 +88,7 @@ namespace Xbim.CobieLiteUK.Validation
                 retType.Name = candidateType.Name;
                 retType.ExternalId = candidateType.ExternalId;
                 retType.ExternalSystem = candidateType.ExternalSystem;
+                retType.Categories = candidateType.Categories.Clone().ToList();
                 if (candidateType.Assets != null)
                 {
                     iSubmitted = candidateType.Assets.Count;

@@ -10,6 +10,11 @@ namespace Xbim.CobieLiteUK.Validation.Reporting
 {
     public class FacilityReport
     {
+        /// <summary>
+        /// The specified classification takes precedence over others for reporting purposes, when appropriate.
+        /// </summary>
+        public string PreferredClassification = "Uniclass2015";
+
         private Facility _facility;
 
         public FacilityReport(Facility facility)
@@ -40,9 +45,8 @@ namespace Xbim.CobieLiteUK.Validation.Reporting
                                 tmp[tryReq].AddSumission(providedAsset);
                             else
                             {
-                                var newP = new AssetTypeRequirementPointer(sys, id);
+                                var newP = new AssetTypeRequirementPointer(sys, id, nm);
                                 newP.AddSumission(providedAsset);
-                                newP.Name = nm;
                                 tmp.Add(tryReq, newP);
                             }
                         }

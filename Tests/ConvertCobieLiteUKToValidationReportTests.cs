@@ -13,9 +13,9 @@ namespace Tests
         public void ConvertCobieLiteUkToValidationReportTest()
         {
             var facility = Facility.ReadJson("ValidationReport.json");
-            var validationReport = new XbimValidationReport();
-            Assert.IsTrue(validationReport.Create(facility, "ValidationReport",
-                XbimValidationReport.SpreadSheetFormat.Xlsx));
+            var rep = new ExcelValidationReport();
+            Assert.IsTrue(rep.Create(facility, "ValidationReport",
+                ExcelValidationReport.SpreadSheetFormat.Xlsx));
         }
     }
 }

@@ -46,6 +46,7 @@
   </Choose>
   <ItemGroup>
     <Compile Include="COBieLiteTests.cs" />
+    <Compile Include="CobieLiteUKValidationExtraTests.cs" />
     <Compile Include="CobieLiteUKValidationTests.cs" />
     <Compile Include="DPoWToCOBieLiteUKTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
