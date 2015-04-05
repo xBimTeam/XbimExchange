@@ -130,8 +130,7 @@ namespace Xbim.CobieLiteUK.Validation
             
             foreach (var provided in ProvidedRequirementValues(candidateType.Attributes))
             {
-                // todo: need to clone the original attribute here.
-                var a = provided.Requirement.Attribute;
+                var a = provided.Requirement.Attribute.Clone();
                 a.Value = provided.ProvidedValue.Value;
                 retType.Attributes.Add(a);
             }

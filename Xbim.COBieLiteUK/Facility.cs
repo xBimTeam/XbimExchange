@@ -274,6 +274,37 @@ namespace Xbim.COBieLiteUK
             return serialiser;
         }
 
+        #region Cloning through jsonSerialiser
+
+        internal static T Clone<T>(T source)
+        {
+            return ReadJsonFrom<T>(
+                WriteJsonToMemory(source)
+                );
+        }
+
+        private static MemoryStream WriteJsonToMemory<T>(T o)
+        {
+            var stream = new MemoryStream();
+            using (var textWriter = new StreamWriter(stream))
+            {
+                var serialiser = GetJsonSerializer();
+                serialiser.Serialize(textWriter, o);
+            }
+            return stream;
+        }
+
+        private static T ReadJsonFrom<T>(Stream stream)
+        {
+            using (var textReader = new StreamReader(stream))
+            {
+                var serialiser = GetJsonSerializer();
+                var deserialised = (T)serialiser.Deserialize(textReader, typeof(T));
+                return deserialised;
+            }
+        }
+        #endregion
+
         public void WriteJson(Stream stream, bool indented = false)
         {
             using (var textWriter = new StreamWriter(stream))
