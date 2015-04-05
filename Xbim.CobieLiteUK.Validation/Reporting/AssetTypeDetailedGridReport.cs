@@ -4,6 +4,7 @@ using System.Data;
 using System.Linq;
 using Xbim.COBieLiteUK;
 using Xbim.CobieLiteUK.Validation.Extensions;
+using Attribute = Xbim.COBieLiteUK.Attribute;
 
 namespace Xbim.CobieLiteUK.Validation.Reporting
 {
@@ -48,14 +49,13 @@ namespace Xbim.CobieLiteUK.Validation.Reporting
                     continue;
                 foreach (var runningAsset in runningAssetType.Assets)
                 {
-                    var r = GetRow(runningAsset);
+                    var r = GetRow(runningAssetType, runningAsset);
+                    
                     while (r == null) // it's still preparing the columns as appropriate.
                     {
-                        r = GetRow(runningAsset);
+                        r = GetRow(runningAssetType, runningAsset);
                     }
-                    r[DpowAssetTypeNameColumnName] = runningAssetType.Name;
-                    r[DpowAssetTypeExternalSystemColumnName] = runningAssetType.ExternalSystem;
-                    r[DpowAssetTypeExternalIdColumnName] = runningAssetType.ExternalId;
+                    
                     AttributesGrid.Rows.Add(r);
                 }
             }  
@@ -88,12 +88,32 @@ namespace Xbim.CobieLiteUK.Validation.Reporting
             AttributesGrid.Columns.Add(new DataColumn(DpowAssetExternalIdColumnName, typeof(String)) { Caption = "Asset ID" });
         }
 
-        private DataRow GetRow(Asset runningAsset)
+        private DataRow GetRow(AssetType parentAssetType, Asset runningAsset)
         {
             var r = AttributesGrid.NewRow();
-            var isInserting = true;
 
-            foreach (var attribute in runningAsset.Attributes)
+            var isInserting = FillRow(parentAssetType.Attributes, r);
+            if (!isInserting)
+                return null;
+
+            isInserting = FillRow(runningAsset.Attributes, r);
+            if (!isInserting)
+                return null;
+
+            r[DpowAssetNameColumnName] = runningAsset.Name;
+            r[DpowAssetExternalSystemColumnName] = runningAsset.ExternalSystem;
+            r[DpowAssetExternalIdColumnName] = runningAsset.ExternalId;
+
+            r[DpowAssetTypeNameColumnName] = parentAssetType.Name;
+            r[DpowAssetTypeExternalSystemColumnName] = parentAssetType.ExternalSystem;
+            r[DpowAssetTypeExternalIdColumnName] = parentAssetType.ExternalId;
+            return r;
+        }
+
+        private bool FillRow(List<Attribute> atts, DataRow r)
+        {
+            var isInserting = true;
+            foreach (var attribute in atts)
             {
                 var sName = attribute.Name;
                 if (!AttributesGrid.Columns.Contains(sName))
@@ -120,13 +140,7 @@ namespace Xbim.CobieLiteUK.Validation.Reporting
                     r[sName] = ((DateTimeAttributeValue) attribute.Value).Value;
                 // ReSharper restore CanBeReplacedWithTryCastAndCheckForNull
             }
-            if (!isInserting)
-                return null;
-
-            r[DpowAssetNameColumnName] = runningAsset.Name;
-            r[DpowAssetExternalSystemColumnName] = runningAsset.ExternalSystem;
-            r[DpowAssetExternalIdColumnName] = runningAsset.ExternalId;
-            return r;
+            return isInserting;
         }
     }
 }
