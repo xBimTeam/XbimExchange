@@ -274,6 +274,8 @@ namespace Tests
 
             var facility2 = Facility.ReadXml(xmlFile);
             var facility3 = Facility.ReadJson(jsonFile);
+
+            var cloned = facility.Attributes.FirstOrDefault().Clone();
         }
 
         [TestMethod]
@@ -464,6 +466,7 @@ namespace Tests
 
                 foreach (var facilityType in facilities)
                 {
+                    facilityType.WriteJson(@"..\..\" + jsonFile, true);
                     facilityType.WriteJson(jsonFile, true);
                     break;
                 }
