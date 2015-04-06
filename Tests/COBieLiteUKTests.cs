@@ -447,7 +447,7 @@ namespace Tests
 
             var contact = facility.Get<CobieObject>(c => c.GetType() == typeof (Contact) && c.Name == "martin.cerny@northumbria.ac.uk");
         }
-
+        [DeploymentItem("TestFiles\\OBN1-COBie-UK-2014.xlsx")]
         [TestMethod]
         [DeploymentItem("ValidationFiles\\Lakeside_Restaurant.ifc")]
         public void IfcToCoBieLiteUkTest()
@@ -464,7 +464,9 @@ namespace Tests
 
                 foreach (var facilityType in facilities)
                 {
+                    string msg;
                     facilityType.WriteJson(jsonFile, true);
+                    facilityType.WriteCobie("..\\..\\Lakeside_Restaurant.xlsx", out msg, "UK2012", true);
                     break;
                 }
             }
