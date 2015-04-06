@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Data;
 using System.IO;
+using System.Linq;
 using NPOI.HSSF.UserModel;
 using NPOI.SS.UserModel;
 using NPOI.SS.Util;
@@ -85,8 +86,9 @@ namespace Xbim.CobieLiteUK.Validation.Reporting
 
                 //if (assetType.GetSubmittedAssetsCount() < 1)
                 //    continue;
-
-                var validName = WorkbookUtil.CreateSafeSheetName(string.Format(@"{0} {1}", iRunningWorkBook++, assetType.Name));
+                var tName =
+                    assetType.RequirementCategories.FirstOrDefault(cat => cat.Classification == @"Uniclass2015").Code;
+                var validName = WorkbookUtil.CreateSafeSheetName(string.Format(@"{0} {1}", iRunningWorkBook++, tName));
 
                 var detailPage = workBook.CreateSheet(validName);
                 if (!CreateDetailSheet(detailPage, assetType))

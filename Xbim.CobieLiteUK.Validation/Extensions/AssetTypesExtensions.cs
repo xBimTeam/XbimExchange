@@ -13,6 +13,8 @@ namespace Xbim.CobieLiteUK.Validation.Extensions
     /// </summary>
     static internal class AssetTypesExtensions
     {
+
+       
         /// <summary>
         /// Filters a provided enumerable of AssetTypes matching a specified category
         /// </summary>

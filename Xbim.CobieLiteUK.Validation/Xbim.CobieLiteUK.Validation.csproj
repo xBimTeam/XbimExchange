@@ -98,6 +98,7 @@
     <Compile Include="AssetTypeValidator.cs" />
     <Compile Include="Extensions\AssetTypesExtensions.cs" />
     <Compile Include="Extensions\CategoryExtensions.cs" />
+    <Compile Include="Extensions\FacilityExtensions.cs" />
     <Compile Include="Extensions\StringExtensions.cs" />
     <Compile Include="IValidator.cs" />
     <Compile Include="ProjectValidator.cs" />

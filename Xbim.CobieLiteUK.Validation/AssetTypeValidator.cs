@@ -130,9 +130,16 @@ namespace Xbim.CobieLiteUK.Validation
             
             foreach (var provided in ProvidedRequirementValues(candidateType.Attributes))
             {
-                var a = provided.Requirement.Attribute.Clone();
-                a.Value = provided.ProvidedValue.Value;
-                retType.Attributes.Add(a);
+                try
+                {
+                    var a = provided.Requirement.Attribute.Clone();
+                    a.Value = provided.ProvidedValue.Value;
+                    retType.Attributes.Add(a);
+                }
+                catch (Exception ex)
+                {
+                    // todo: why does Clone() fail sometime?
+                }              
             }
             foreach (var missing in outstandingRequirements)
             {

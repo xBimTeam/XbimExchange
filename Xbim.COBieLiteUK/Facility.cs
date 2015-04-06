@@ -278,24 +278,25 @@ namespace Xbim.COBieLiteUK
 
         internal static T Clone<T>(T source)
         {
-            return ReadJsonFrom<T>(
-                WriteJsonToMemory(source)
-                );
+            var mem = WriteJsonToMemory(source);
+            return ReadJsonFrom<T>(mem);
         }
 
-        private static MemoryStream WriteJsonToMemory<T>(T o)
+        private static byte[] WriteJsonToMemory<T>(T o)
         {
             var stream = new MemoryStream();
             using (var textWriter = new StreamWriter(stream))
             {
                 var serialiser = GetJsonSerializer();
                 serialiser.Serialize(textWriter, o);
+                stream.Flush();
             }
-            return stream;
+            return stream.GetBuffer();
         }
 
-        private static T ReadJsonFrom<T>(Stream stream)
+        private static T ReadJsonFrom<T>(byte[] mem)
         {
+            Stream stream = new MemoryStream(mem);
             using (var textReader = new StreamReader(stream))
             {
                 var serialiser = GetJsonSerializer();
