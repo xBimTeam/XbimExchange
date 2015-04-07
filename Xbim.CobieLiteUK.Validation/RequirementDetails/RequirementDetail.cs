@@ -1,4 +1,5 @@
-﻿using Xbim.COBieLiteUK;
+﻿using System;
+using Attribute = Xbim.COBieLiteUK.Attribute;
 
 namespace Xbim.CobieLiteUK.Validation.RequirementDetails
 {
@@ -7,6 +8,7 @@ namespace Xbim.CobieLiteUK.Validation.RequirementDetails
         public enum EvaluationCriterion
         {
             IgnoreValue,
+            ValueIsMeaningful,
             ExactMatch,
             MinumumValue,
             MaximumValue
@@ -14,7 +16,7 @@ namespace Xbim.CobieLiteUK.Validation.RequirementDetails
 
         public string Name;
         public string Description;
-        public EvaluationCriterion Criterion = EvaluationCriterion.IgnoreValue;
+        public EvaluationCriterion Criterion = EvaluationCriterion.ValueIsMeaningful;
 
         public RequirementDetail(Attribute attrib)
         {
@@ -24,5 +26,22 @@ namespace Xbim.CobieLiteUK.Validation.RequirementDetails
         }
 
         public Attribute Attribute { get; private set; }
+
+        internal bool IsSatisfiedBy(Attribute attribute)
+        {
+            if (attribute == null)
+                return false;
+            
+            switch (Criterion)
+            {
+                case EvaluationCriterion.ValueIsMeaningful:
+                    var v = attribute.Value.GetStringValue();
+                    return v != "n/a" && v != "user to define";
+                    break;
+                default :
+                    throw new NotImplementedException();
+                    break;
+            }
+        }
     }
 }

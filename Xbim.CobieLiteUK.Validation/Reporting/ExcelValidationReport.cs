@@ -84,15 +84,18 @@ namespace Xbim.CobieLiteUK.Validation.Reporting
             {
                 // only report items with any assets submitted (a different report should probably be provided otherwise)
 
-                //if (assetType.GetSubmittedAssetsCount() < 1)
-                //    continue;
-                var tName =
-                    assetType.RequirementCategories.FirstOrDefault(cat => cat.Classification == @"Uniclass2015").Code;
-                var validName = WorkbookUtil.CreateSafeSheetName(string.Format(@"{0} {1}", iRunningWorkBook++, tName));
+                if (assetType.GetSubmittedAssetsCount() < 1)
+                    continue;
+                var firstOrDefault = assetType.RequirementCategories.FirstOrDefault(cat => cat.Classification == @"Uniclass2015");
+                if (firstOrDefault != null)
+                {
+                    var tName = firstOrDefault.Code;
+                    var validName = WorkbookUtil.CreateSafeSheetName(string.Format(@"{0} {1}", iRunningWorkBook++, tName));
 
-                var detailPage = workBook.CreateSheet(validName);
-                if (!CreateDetailSheet(detailPage, assetType))
-                    return false;
+                    var detailPage = workBook.CreateSheet(validName);
+                    if (!CreateDetailSheet(detailPage, assetType))
+                        return false;
+                }
             }
 
             try

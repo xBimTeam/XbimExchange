@@ -181,10 +181,16 @@ namespace Xbim.CobieLiteUK.Validation.Extensions
                     Name = propertyName,
                     PropertySetName = AttributesPropertySetName,
                     Description = propertyDescription,
-                    Value = new StringAttributeValue() { Value = value }
+                    Value = new StringAttributeValue() { Value = value },
+                    Categories = new List<Category>() { dpowValidatedAttributeClass }
                 };
                 retType.Attributes.Add(matchingClassAttribute);
             }
+        }
+
+        private static Category dpowValidatedAttributeClass
+        {
+            get { return new Category() {Classification = @"DPoW", Code = "reference"}; }
         }
 
         private static void SetIntegerValue(AssetType retType, int value, string propertyName, string propertyDescription)
@@ -207,7 +213,8 @@ namespace Xbim.CobieLiteUK.Validation.Extensions
                     Name = propertyName,
                     PropertySetName = AttributesPropertySetName,
                     Description = propertyDescription,
-                    Value = new IntegerAttributeValue() {Value = value}
+                    Value = new IntegerAttributeValue() {Value = value},
+                    Categories = new List<Category>() { dpowValidatedAttributeClass }
                 };
                 retType.Attributes.Add(matchingClassAttribute);
             }
@@ -360,10 +367,8 @@ namespace Xbim.CobieLiteUK.Validation.Extensions
                     Name = propName,
                     PropertySetName = AttributesPropertySetName,
                     Description = description,
-                    Value = new StringAttributeValue()
-                    {
-                        Value = newValue
-                    }
+                    Value = new StringAttributeValue() { Value = newValue },
+                    Categories = new List<Category>() { dpowValidatedAttributeClass }
                 };
                 retType.Attributes.Add(matchingClassAttribute);
             }

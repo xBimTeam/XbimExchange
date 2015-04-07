@@ -96,6 +96,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AssetTypeValidator.cs" />
+    <Compile Include="CachedPropertiesAndAttributesValidator.cs" />
     <Compile Include="Extensions\AssetTypesExtensions.cs" />
     <Compile Include="Extensions\CategoryExtensions.cs" />
     <Compile Include="Extensions\FacilityExtensions.cs" />
