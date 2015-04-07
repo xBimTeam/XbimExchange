@@ -523,7 +523,7 @@ namespace Xbim.COBieLiteUK
                         return value != null
                             ? new CobieValue
                             {
-                                StringValue = Enum.GetName(propType, value),
+                                StringValue = GetEnumAlias(value, mapping),
                                 ValueType = CobieValueType.String
                             }
                             : new CobieValue {StringValue = "n/a", ValueType = CobieValueType.String};
@@ -557,7 +557,7 @@ namespace Xbim.COBieLiteUK
                             result.Add(keyValue);
                     }
 
-                    return new CobieValue {StringValue = String.Join(",", result), ValueType = CobieValueType.String};
+                    return new CobieValue {StringValue = String.Join(", ", result), ValueType = CobieValueType.String};
                 }
 
                 //nested object - set new instance and let this to iterate over
@@ -566,6 +566,12 @@ namespace Xbim.COBieLiteUK
 
             //this should never happen.
             return null;
+        }
+
+        private string GetEnumAlias(object enu, MappingAttribute mapping)
+        {
+            var alias = enu.GetType().GetCustomAttributes<AliasAttribute>().FirstOrDefault(a => a.Type == mapping.Type);
+            return alias == null ? Enum.GetName(enu.GetType(), enu) : alias.Value;
         }
 
         private void SetUpHeader(IRow row, IEnumerable<MappingAttribute> mappings)
@@ -1013,7 +1019,7 @@ namespace Xbim.COBieLiteUK
             return result;
         }
 
-        private static string GetSheetName(Type type, string mapping)
+        protected static string GetSheetName(Type type, string mapping)
         {
             var attr =
                 type.GetCustomAttributes(typeof (SheetMappingAttribute), true)

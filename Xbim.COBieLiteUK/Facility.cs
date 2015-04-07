@@ -627,6 +627,36 @@ namespace Xbim.COBieLiteUK
                     o.CreatedBy = GetDefaultContactKey();
             }
 
+            //Uniqueness of information should be ensured. Names should be unique within
+            //their sheet, except that the System, Zone and Attribute names should be unique in
+            //conjunction with other columns. (Martin Cerny: + Assembly, Connection, Job, Impact, Document, Coordinate, Issue)
+            //a) On the “Attribute” sheet, every Attribute Name (column A), taken with Sheet‑Name (column E) and Row‑Name (column F) should be unique.
+            //b) On the “System” sheet, every System Name (column A) taken with Component‑Names (column E) should be unique.
+            //c) On the “Zone” sheet, every Zone Name (column A) taken with Space‑Names (column E) should be unique.
+            CheckForUniqueNames(Contacts, logger, fixIfPossible);
+            CheckForUniqueNames(Floors, logger, fixIfPossible);
+            CheckForUniqueNames(Get<Space>(), logger, fixIfPossible);
+            CheckForUniqueNames(AssetTypes, logger, fixIfPossible);
+            CheckForUniqueNames(Get<Asset>(), logger, fixIfPossible);
+            CheckForUniqueNames(Get<Spare>(), logger, fixIfPossible);
+            CheckForUniqueNames(Resources, logger, fixIfPossible);
+            CheckForUniqueNames(Zones, logger, fixIfPossible);
+            CheckForUniqueNames(Systems, logger, fixIfPossible);
+            CheckForUniqueNames(Stages, logger, fixIfPossible);
+
+            //Suplementary information
+            CheckForUniqueNames(Get<Assembly>(), logger, fixIfPossible);
+            CheckForUniqueNames(Get<Connection>(), logger, fixIfPossible);
+            CheckForUniqueNames(Get<Job>(), logger, fixIfPossible);
+            CheckForUniqueNames(Get<Impact>(), logger, fixIfPossible);
+            CheckForUniqueNames(Get<Document>(), logger, fixIfPossible);
+            CheckForUniqueNames(Get<Representation>(), logger, fixIfPossible);
+            CheckForUniqueNames(Get<Issue>(), logger, fixIfPossible);
+
+            //attributes are only unique within a containing object
+            foreach (var cobieObject in all.Where(cobieObject => cobieObject.Attributes != null))
+                CheckForUniqueNames(cobieObject.Attributes, logger, fixIfPossible);
+
             //The integrity of references should be ensured as follows:
             //a) Every Space (location) should be assigned to one Floor (region). - If the name is unique this is granted by COBieLite data schema
             //b) Every Space (location) should be assigned to at least one Zone.
@@ -646,11 +676,9 @@ namespace Xbim.COBieLiteUK
                 foreach (var floor in Floors.Where(f => f.Spaces == null || !f.Spaces.Any()).ToArray())
                 {
                     logger.WriteLine("Floor {0} doesn't have any space assigned.", floor.Name);
-                    if (fixIfPossible)
-                    {
-                        if (floor.Spaces == null) floor.Spaces = new List<Space>();
-                        floor.Spaces.Add(GetNewDefaultSpace(false));
-                    }
+                    if (!fixIfPossible) continue;
+                    if (floor.Spaces == null) floor.Spaces = new List<Space>();
+                    floor.Spaces.Add(GetNewDefaultSpace(false));
                 }
             }
             if (Zones != null)
@@ -658,12 +686,10 @@ namespace Xbim.COBieLiteUK
                 foreach (var zone in Zones.Where(z => z.Spaces == null || !z.Spaces.Any()))
                 {
                     logger.WriteLine("Zone {0} doesn't have any space assigned.", zone.Name);
-                    if (fixIfPossible)
-                    {
-                        if (zone.Spaces == null) zone.Spaces = new List<SpaceKey>();
-                        var defaultSpace = GetAnyDefaultSpace();
-                        zone.Spaces.Add(new SpaceKey { Name = defaultSpace.Name });
-                    }
+                    if (!fixIfPossible) continue;
+                    if (zone.Spaces == null) zone.Spaces = new List<SpaceKey>();
+                    var defaultSpace = GetAnyDefaultSpace();
+                    zone.Spaces.Add(new SpaceKey { Name = defaultSpace.Name });
                 }
             }
             
@@ -673,12 +699,10 @@ namespace Xbim.COBieLiteUK
             foreach (var asset in assets.Where(a => a.Spaces == null || !a.Spaces.Any()))
             {
                 logger.WriteLine("Component {0} is not assigned to any space.", asset.Name);
-                if (fixIfPossible)
-                {
-                    var space = GetAnyDefaultSpace();
-                    if(asset.Spaces == null) asset.Spaces = new List<SpaceKey>();
-                    asset.Spaces.Add(new SpaceKey{Name = space.Name});
-                }
+                if (!fixIfPossible) continue;
+                var space = GetAnyDefaultSpace();
+                if(asset.Spaces == null) asset.Spaces = new List<SpaceKey>();
+                asset.Spaces.Add(new SpaceKey{Name = space.Name});
             }
 
             //f) Every Component should be assigned to at least one System, identifying its function.
@@ -696,11 +720,9 @@ namespace Xbim.COBieLiteUK
             foreach (var type in types.Where(t => t.Assets == null || !t.Assets.Any()))
             {
                 logger.WriteLine("Type {0} doesn't contain any components.", type.Name);
-                if (fixIfPossible)
-                {
-                    if(type.Assets == null) type.Assets = new List<Asset>();
-                    type.Assets.Add(GetNewDefaultAsset());
-                }
+                if (!fixIfPossible) continue;
+                if(type.Assets == null) type.Assets = new List<Asset>();
+                type.Assets.Add(GetNewDefaultAsset());
             }
 
             //h) Every reference to other sheets should be valid. - This is mostly granted by the schema itself. We only need to check the keys.
@@ -711,9 +733,11 @@ namespace Xbim.COBieLiteUK
                     var candidates = Get<CobieObject>(c => c.GetType() == key.ForType && c.Name == key.Name).ToArray();
                     if (candidates.Length == 0)
                     {
-                        logger.WriteLine("{0} key '{1}' from {2} '{3}' doesn't point to any object in the model.", key.ForType.Name, key.Name, o.GetType().Name, o.Name);
+                        logger.WriteLine("{0} key '{1}' from {2} '{3}' doesn't point to any object in the model.",
+                            GetSheetName(key.ForType, "UK2012"), key.Name, GetSheetName(o.GetType(), "UK2012"), o.Name);
                         if (fixIfPossible)
                         {
+                            //these two are the most frequent keys
                             var contactKey = key as ContactKey;
                             if (contactKey != null)
                                 contactKey.Email = GetDefaultContactKey().Email;
@@ -729,31 +753,6 @@ namespace Xbim.COBieLiteUK
             
             //i) Every reference to PickList enumerations and classifications should be valid. - We don't store any specific pick lists like classifications etc. This depends on project specific settings.
             //j) Enumerations specified in the Attributes and PickLists should be adhered to.
-
-
-
-            //Uniqueness of information should be ensured. Names should be unique within
-            //their sheet, except that the System, Zone and Attribute names should be unique in
-            //conjunction with other columns. (Martin Cerny: + Assembly, Connection, Job, Impact, Document, Coordinate, Issue)
-            //a) On the “Attribute” sheet, every Attribute Name (column A), taken with Sheet‑Name (column E) and Row‑Name (column F) should be unique.
-            //b) On the “System” sheet, every System Name (column A) taken with Component‑Names (column E) should be unique.
-            //c) On the “Zone” sheet, every Zone Name (column A) taken with Space‑Names (column E) should be unique.
-            //Martin Cerny: Unique names should be for: Contact, Facility, Floor, Space, Type, Component, Spare, Resource
-            CheckForUniqueNames(Contacts, logger, fixIfPossible);
-            CheckForUniqueNames(Floors, logger, fixIfPossible);
-            CheckForUniqueNames(Get<Space>(), logger, fixIfPossible);
-            CheckForUniqueNames(AssetTypes, logger, fixIfPossible);
-            CheckForUniqueNames(Get<Asset>(), logger, fixIfPossible);
-            CheckForUniqueNames(Get<Spare>(), logger, fixIfPossible);
-            CheckForUniqueNames(Resources, logger, fixIfPossible);
-            CheckForUniqueNames(Zones, logger, fixIfPossible);
-            CheckForUniqueNames(Systems, logger, fixIfPossible);
-            CheckForUniqueNames(Stages, logger, fixIfPossible);
-
-            //We additionally need to check for a uniqueness of names for Assemblies, Connections, Jobs, Impacts, 
-            //Documents, Attributes, Coordinates ans Issues if they contain any name related information (Attributes, Documents, ...)
-            
-
         }
 
         private Zone GetDefaultZone()

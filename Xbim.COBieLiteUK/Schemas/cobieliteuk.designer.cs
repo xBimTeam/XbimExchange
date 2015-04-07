@@ -52,6 +52,7 @@ namespace Xbim.COBieLiteUK {
     [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="T", Header="ProjectDescription", Required=false, List=false, PickList=null, Path="Project.Description")]
     [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="U", Header="SiteDescription", Required=false, List=false, PickList=null, Path="Site.Description")]
     [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="V", Header="Phase", Required=true, List=false, PickList=null, Path="Phase")]
+    [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="W", Header="ProjectStages", Required=false, List=true, PickList=null, Path="ProjectStages.Name")]
     public partial class Facility : CobieObject {
         
         private Metadata metadataField;
@@ -1401,6 +1402,7 @@ namespace Xbim.COBieLiteUK {
     [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="M", Header="ExtIdentifier", Required=false, List=false, PickList=null, Path="ExternalId")]
     [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="N", Header="Description", Required=false, List=false, PickList=null, Path="Description")]
     [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="O", Header="Reference", Required=false, List=false, PickList=null, Path="Reference")]
+    [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="P", Header="ProjectStages", Required=false, List=true, PickList=null, Path="ProjectStages.Name")]
     public partial class Document : CobieObject {
         
         private ContactKey approvalByField;
@@ -1486,6 +1488,7 @@ namespace Xbim.COBieLiteUK {
     [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="K", Header="ExtIdentifier", Required=false, List=false, PickList=null, Path="ExternalId")]
     [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="L", Header="Description", Required=false, List=false, PickList=null, Path="Description")]
     [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="M", Header="AllowedValues", Required=false, List=true, PickList=null, Path="Value.AllowedValuesString")]
+    [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="N", Header="ProjectStages", Required=false, List=true, PickList=null, Path="ProjectStages.Name")]
     public partial class Attribute : CobieObject {
         
         private AttributeValue itemField;
@@ -1531,6 +1534,7 @@ namespace Xbim.COBieLiteUK {
     [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="O", Header="ExtSystem", Required=false, List=false, PickList=null, Path="ExternalSystem")]
     [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="P", Header="ExtObject", Required=false, List=false, PickList=null, Path="ExternalEntity")]
     [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="Q", Header="ExtIdentifier", Required=false, List=false, PickList=null, Path="ExternalId")]
+    [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="R", Header="ProjectStages", Required=false, List=true, PickList=null, Path="ProjectStages.Name")]
     public partial class Issue : CobieObject {
         
         private string riskField;
@@ -1631,6 +1635,7 @@ namespace Xbim.COBieLiteUK {
     [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="N", Header="ExtObject", Required=false, List=false, PickList=null, Path="ExternalEntity")]
     [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="O", Header="ExtIdentifier", Required=false, List=false, PickList=null, Path="ExternalId")]
     [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="P", Header="Description", Required=false, List=false, PickList=null, Path="Description")]
+    [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="Q", Header="ProjectStages", Required=false, List=true, PickList=null, Path="ProjectStages.Name")]
     public partial class Impact : CobieObject {
         
         private string impactStageField;
@@ -1753,10 +1758,11 @@ namespace Xbim.COBieLiteUK {
     [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="N", Header="ElevationalRotation", Required=false, List=false, PickList=null, Path="Pitch")]
     [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="O", Header="YawRotation", Required=false, List=false, PickList=null, Path="Yaw")]
     [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="P", Header="RelativeTo", Required=false, List=false, PickList=null, Path="RelativeTo")]
-    [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="R", Header="LRM", Required=false, List=false, PickList=null, Path="LRM")]
-    [Xbim.COBieLiteUK.Mapping(Type="UK2016", Column="S", Header="SizeX", Required=false, List=false, PickList=null, Path="SizeX")]
-    [Xbim.COBieLiteUK.Mapping(Type="UK2016", Column="T", Header="SizeY", Required=false, List=false, PickList=null, Path="SizeY")]
-    [Xbim.COBieLiteUK.Mapping(Type="UK2016", Column="U", Header="SizeZ", Required=false, List=false, PickList=null, Path="SizeZ")]
+    [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="Q", Header="LRM", Required=false, List=false, PickList=null, Path="LRM")]
+    [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="R", Header="SizeX", Required=false, List=false, PickList=null, Path="SizeX")]
+    [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="S", Header="SizeY", Required=false, List=false, PickList=null, Path="SizeY")]
+    [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="T", Header="SizeZ", Required=false, List=false, PickList=null, Path="SizeZ")]
+    [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="U", Header="ProjectStages", Required=false, List=true, PickList=null, Path="ProjectStages.Name")]
     public partial class Representation : CobieObject {
         
         private double xField;
@@ -1910,6 +1916,7 @@ namespace Xbim.COBieLiteUK {
     [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="F", Header="ExtObject", Required=false, List=false, PickList=null, Path="ExternalEntity")]
     [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="G", Header="ExtIdentifier", Required=false, List=false, PickList=null, Path="ExternalId")]
     [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="H", Header="Description", Required=false, List=false, PickList=null, Path="Description")]
+    [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="I", Header="ProjectStages", Required=false, List=true, PickList=null, Path="ProjectStages.Name")]
     public partial class Resource : CobieObject {
     }
     
@@ -1933,6 +1940,7 @@ namespace Xbim.COBieLiteUK {
     [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="G", Header="ExtObject", Required=false, List=false, PickList=null, Path="ExternalEntity")]
     [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="H", Header="ExtIdentifier", Required=false, List=false, PickList=null, Path="ExternalId")]
     [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="I", Header="Description", Required=false, List=false, PickList=null, Path="Description")]
+    [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="J", Header="ProjectStages", Required=false, List=true, PickList=null, Path="ProjectStages.Name")]
     public partial class Zone : CobieObject {
         
         private List<SpaceKey> spacesField;
@@ -1968,6 +1976,7 @@ namespace Xbim.COBieLiteUK {
     [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="G", Header="ExtObject", Required=false, List=false, PickList=null, Path="ExternalEntity")]
     [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="H", Header="ExtIdentifier", Required=false, List=false, PickList=null, Path="ExternalId")]
     [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="I", Header="Description", Required=false, List=false, PickList=null, Path="Description")]
+    [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="J", Header="ProjectStages", Required=false, List=true, PickList=null, Path="ProjectStages.Name")]
     public partial class System : CobieObject {
         
         private List<AssetKey> componentsField;
@@ -2009,6 +2018,7 @@ namespace Xbim.COBieLiteUK {
     [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="K", Header="UsableHeight", Required=false, List=false, PickList=null, Path="UsableHeight")]
     [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="L", Header="GrossArea", Required=false, List=false, PickList=null, Path="GrossArea")]
     [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="M", Header="NetArea", Required=false, List=false, PickList=null, Path="NetArea")]
+    [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="N", Header="ProjectStages", Required=false, List=true, PickList=null, Path="ProjectStages.Name")]
     public partial class Space : CobieObject {
         
         private string roomTagField;
@@ -2103,6 +2113,7 @@ namespace Xbim.COBieLiteUK {
     [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="H", Header="Description", Required=false, List=false, PickList=null, Path="Description")]
     [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="I", Header="Elevation", Required=false, List=false, PickList=null, Path="Elevation")]
     [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="J", Header="Height", Required=false, List=false, PickList=null, Path="Height")]
+    [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="K", Header="ProjectStages", Required=false, List=true, PickList=null, Path="ProjectStages.Name")]
     public partial class Floor : CobieObject {
         
         private global::System.Nullable<double> elevationField;
@@ -2186,6 +2197,7 @@ namespace Xbim.COBieLiteUK {
     [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="Q", Header="StateRegion", Required=false, List=false, PickList=null, Path="StateRegion")]
     [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="R", Header="PostalCode", Required=false, List=false, PickList=null, Path="PostalCode")]
     [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="S", Header="Country", Required=false, List=false, PickList=null, Path="Country")]
+    [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="T", Header="ProjectStages", Required=false, List=true, PickList=null, Path="ProjectStages.Name")]
     public partial class Contact : CobieObject {
         
         private string emailField;
@@ -2376,6 +2388,7 @@ namespace Xbim.COBieLiteUK {
     [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="Q", Header="TaskNumber", Required=false, List=false, PickList=null, Path="TaskNumber")]
     [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="R", Header="Priors", Required=false, List=true, PickList=null, Path="Priors.TaskNumber")]
     [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="S", Header="ResourceNames", Required=false, List=true, PickList=null, Path="Resources.Name")]
+    [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="T", Header="ProjectStages", Required=false, List=true, PickList=null, Path="ProjectStages.Name")]
     public partial class Job : CobieObject {
         
         private string statusField;
@@ -2565,6 +2578,7 @@ namespace Xbim.COBieLiteUK {
     [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="J", Header="Description", Required=false, List=false, PickList=null, Path="Description")]
     [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="K", Header="SetNumber", Required=false, List=false, PickList=null, Path="SetNumber")]
     [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="L", Header="PartNumber", Required=false, List=false, PickList=null, Path="PartNumber")]
+    [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="M", Header="ProjectStages", Required=false, List=true, PickList=null, Path="ProjectStages.Name")]
     public partial class Spare : CobieObject {
         
         private List<ContactKey> suppliersField;
@@ -2651,6 +2665,7 @@ namespace Xbim.COBieLiteUK {
     [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="AG", Header="AccessibilityPerformance", Required=false, List=false, PickList=null, Path="AccessibilityPerformance")]
     [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="AH", Header="CodePerformance", Required=false, List=false, PickList=null, Path="CodePerformance")]
     [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="AI", Header="SustainabilityPerformance", Required=false, List=false, PickList=null, Path="SustainabilityPerformance")]
+    [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="AJ", Header="ProjectStages", Required=false, List=true, PickList=null, Path="ProjectStages.Name")]
     public partial class AssetType : CobieObject {
         
         private string assetTypeCustomField;
@@ -3061,6 +3076,7 @@ namespace Xbim.COBieLiteUK {
     [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="M", Header="TagNumber", Required=false, List=false, PickList=null, Path="TagNumber")]
     [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="N", Header="BarCode", Required=false, List=false, PickList=null, Path="BarCode")]
     [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="O", Header="AssetIdentifier", Required=false, List=false, PickList=null, Path="AssetIdentifier")]
+    [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="P", Header="ProjectStages", Required=false, List=true, PickList=null, Path="ProjectStages.Name")]
     public partial class Asset : CobieObject {
         
         private List<SpaceKey> spacesField;
@@ -3211,6 +3227,7 @@ namespace Xbim.COBieLiteUK {
     [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="L", Header="ExtObject", Required=false, List=false, PickList=null, Path="ExternalEntity")]
     [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="M", Header="ExtIdentifier", Required=false, List=false, PickList=null, Path="ExternalId")]
     [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="N", Header="Description", Required=false, List=false, PickList=null, Path="Description")]
+    [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="O", Header="ProjectStages", Required=false, List=true, PickList=null, Path="ProjectStages.Name")]
     public partial class Connection : CobieObject {
         
         private AssetKey connectedToField;
@@ -3284,6 +3301,7 @@ namespace Xbim.COBieLiteUK {
     [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="I", Header="ExtObject", Required=false, List=false, PickList=null, Path="ExternalEntity")]
     [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="J", Header="ExtIdentifier", Required=false, List=false, PickList=null, Path="ExternalId")]
     [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="K", Header="Description", Required=false, List=false, PickList=null, Path="Description")]
+    [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="L", Header="ProjectStages", Required=false, List=true, PickList=null, Path="ProjectStages.Name")]
     public partial class Assembly : CobieObject {
         
         private List<EntityKey> childAssetsOrTypesField;
