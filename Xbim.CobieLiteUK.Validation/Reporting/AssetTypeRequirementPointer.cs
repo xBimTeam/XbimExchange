@@ -13,10 +13,11 @@ namespace Xbim.CobieLiteUK.Validation.Reporting
         public readonly string ExternalId;
         public readonly string ExternalSystem;
 
-        public AssetTypeRequirementPointer(string externalSystem, string externalId)
+        public AssetTypeRequirementPointer(string externalSystem, string externalId, string name)
         {
             ExternalId = externalId;
             ExternalSystem = externalSystem;
+            Name = name;
         }
 
         public override bool Equals(System.Object obj)
@@ -64,6 +65,29 @@ namespace Xbim.CobieLiteUK.Validation.Reporting
                 where providedAsset.Assets != null 
                 from asset in providedAsset.Assets 
                 select asset;
+        }
+
+        public IEnumerable<Category> MatchingCategories
+        {
+            get
+            {
+                var first = ProvidedAssetTypes.FirstOrDefault();
+                return first != null
+                    ? first.GetMatchingCategories()
+                    : Enumerable.Empty<Category>();
+            }
+        }
+
+
+        public IEnumerable<Category> RequirementCategories
+        {
+            get
+            {
+                var first = ProvidedAssetTypes.FirstOrDefault();
+                return first != null
+                    ? first.GetRequirementCategories()
+                    : Enumerable.Empty<Category>();
+            }
         }
     }
 }

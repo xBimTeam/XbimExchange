@@ -32,13 +32,13 @@ namespace Tests
         public void CanSaveValidationReport()
         {
             var validated = GetValidated();
-            var rep = new XbimValidationReport();
             const string repName = @"..\..\ValidationReport.xlsx";
             if (File.Exists(repName))
             {
                 File.Delete(repName);
             }
-            var ret = rep.Create(validated, repName, XbimValidationReport.SpreadSheetFormat.Xlsx);
+            var xRep = new ExcelValidationReport();
+            var ret = xRep.Create(validated, repName, ExcelValidationReport.SpreadSheetFormat.Xlsx);
             Assert.IsTrue(ret, "File not created");
         }
 
@@ -63,30 +63,5 @@ namespace Tests
             var validated = vd.Validate(req, sub);
             return validated;
         }
-
-        [TestMethod]
-        public void FindsRequirements()
-        {
-            var fac = Facility.ReadJson(@"Lakeside_Restaurant-stage6-COBie.json");
-            foreach (var ast in fac.AssetTypes)
-            {
-                var atv = new AssetTypeValidator(ast);
-                foreach (var rq in atv.RequirementDetails)
-                {
-                    Debug.WriteLine(rq.Name);
-                }
-            }
-        }
-
-        //[TestMethod]
-        //public void Indents()
-        //{
-        //    var infile =
-        //        @"C:\Users\Bonghi\Google Drive\UNN\_Research\2014 12 01 - DPOW\_modelInfo\_UseData\2012-03-23-Duplex-Handover.json";
-        //    var outfile = Path.ChangeExtension(infile, "indented.json");
-        //    var fac = Facility.ReadJson(infile);
-        //    fac.WriteJson(outfile, true);
-        //}
-
     }
 }

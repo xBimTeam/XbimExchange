@@ -13,16 +13,16 @@ namespace Xbim.CobieLiteUK.Validation.Extensions
         public static bool IsChildOf(this Category testedCategory, Category requiredCategory)
         {
             return 
-                testedCategory.Classification == requiredCategory.Classification 
-                && 
+                //testedCategory.Classification == requiredCategory.Classification 
+                //&& 
                 testedCategory.Code.StartsWith(requiredCategory.Code);
         }
 
         public static bool ExactlyMatches(this Category testedCategory, Category requiredCategory)
         {
             return
-                testedCategory.Classification == requiredCategory.Classification
-                &&
+                //testedCategory.Classification == requiredCategory.Classification
+                //&&
                 testedCategory.Code == requiredCategory.Code;
         }
 
@@ -38,7 +38,13 @@ namespace Xbim.CobieLiteUK.Validation.Extensions
 
         public static IEnumerable<Category> Clone(this IEnumerable<Category> originalCategories)
         {
-            return originalCategories.Select(originalCategory => originalCategory.Clone());
+            if (originalCategories == null)
+                yield break;
+
+            foreach (var cat in originalCategories)
+            {
+                yield return cat.Clone();
+            }
         }
 
         public static IEnumerable<string> MatchingClassifications(this IEnumerable<Category> initialList, IEnumerable<Category> otherList)

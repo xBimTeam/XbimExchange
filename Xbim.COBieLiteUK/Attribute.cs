@@ -1,10 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Xml.Serialization;
+﻿using System.Xml.Serialization;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Converters;
+using Xbim.COBieLiteUK.Converters;
+using System.IO;
 
 namespace Xbim.COBieLiteUK
 {
@@ -16,5 +14,10 @@ namespace Xbim.COBieLiteUK
         /// </summary>
         [XmlIgnore][JsonIgnore]
         public string PropertySetName { get { return ExternalEntity; } set { ExternalEntity = value; } }
+
+        public Attribute Clone()
+        {
+            return Facility.Clone(this);
+        }
     }
 }

@@ -7,6 +7,21 @@ using System.Threading.Tasks;
 
 namespace Xbim.COBieLiteUK
 {
+    public static class AssetTypeExtensions
+    {
+        static public IEnumerable<AssetType> Clone(this IEnumerable<AssetType> types)
+        {
+            // todo: retain jsonSerialiser for faster execution
+            if (types == null)
+                yield break;
+            foreach (var assetType in types)
+            {
+                yield return Facility.Clone(assetType);
+            }
+        }
+    }
+
+
     public partial class AssetType
     {
         public AssetPortability AssetTypeEnum
