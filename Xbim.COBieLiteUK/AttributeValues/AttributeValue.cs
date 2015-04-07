@@ -17,5 +17,7 @@ namespace Xbim.COBieLiteUK
         [XmlIgnore]
         [JsonIgnore]
         internal abstract string AllowedValuesString { get; set; }
+
+        public abstract string GetStringValue();
     }
 }
