@@ -795,10 +795,10 @@ namespace XbimExchanger.COBieLiteUkToIfc
         /// <returns></returns>
         public IfcSpatialStructureElement GetIfcSpace(SpaceKey spacekey)
         {
-            var key = spacekey.Name;
-            if (spacekey.KeyType == EntityType.Space) key = "IfcSpace:" + key;
-            else if (spacekey.KeyType == EntityType.Floor) key = "IfcBuildingStorey:" + key;
-            else if (spacekey.KeyType == EntityType.Facility) key = "IfcBuilding:" + key;
+            var key = "IfcSpace:" + spacekey.Name;
+            //if (spacekey.KeyType == EntityType.Space) key = "IfcSpace:" + key;
+            //else if (spacekey.KeyType == EntityType.Floor) key = "IfcBuildingStorey:" + key;
+            //else if (spacekey.KeyType == EntityType.Facility) key = "IfcBuilding:" + key;
             IfcSpatialStructureElement ifcSpace;
             _spaceLookup.TryGetValue(key, out ifcSpace);
             return ifcSpace;

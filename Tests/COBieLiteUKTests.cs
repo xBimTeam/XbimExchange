@@ -298,6 +298,8 @@ namespace Tests
             Debug.Write(log.ToString());
 
             facility.WriteCobie("..\\..\\2012-03-23-Duplex-Design.fixed.xlsx", out msg);
+
+            var f2 = Facility.ReadJson("..\\..\\2012-03-23-Duplex-Design.cobielite.json");
         }
 
         [TestMethod]

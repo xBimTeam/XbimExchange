@@ -32,7 +32,7 @@ namespace XbimExchanger.IfcToCOBieLiteUK
                 target.Spaces = new List<SpaceKey>();
                 foreach (var space in ifcSpaces)
                 {
-                    var spaceKey = new SpaceKey { KeyType = EntityType.Space, Name = space.Name };
+                    var spaceKey = new SpaceKey { Name = space.Name };
                     target.Spaces.Add(spaceKey);
                 }
             }

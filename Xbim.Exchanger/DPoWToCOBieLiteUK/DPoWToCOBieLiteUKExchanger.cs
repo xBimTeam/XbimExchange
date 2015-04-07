@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -44,7 +45,13 @@ namespace XbimExchanger.DPoWToCOBieLiteUK
         public override FacilityType Convert()
         {
             var mappings = GetOrCreateMappings<MappingPlanOfWorkToFacilityType>();
-            return mappings.AddMapping(SourceRepository, TargetRepository);
+            var result = mappings.AddMapping(SourceRepository, TargetRepository);
+
+            //run validate with optional fix to get data as good as possible
+            var log = new StringWriter();
+            result.ValidateUK2012(log, true);
+
+            return result;
         }
     }
 }

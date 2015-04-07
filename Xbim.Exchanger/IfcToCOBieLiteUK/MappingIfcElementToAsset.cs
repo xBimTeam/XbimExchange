@@ -43,17 +43,7 @@ namespace XbimExchanger.IfcToCOBieLiteUK
 
                 foreach (var spatialElement in ifcSpatialStructureElements)
                 {
-                    var space = new SpaceKey();
-
-                    space.Name = spatialElement.Name;
-                    if (spatialElement is IfcSpace)
-                        space.KeyType = EntityType.Space;
-                    else if (spatialElement is IfcBuildingStorey)
-                        space.KeyType = EntityType.Floor;
-                    else if (spatialElement is IfcBuilding)
-                        space.KeyType = EntityType.Facility;
-                    else if (spatialElement is IfcSite)
-                        space.KeyType = EntityType.Space;
+                    var space = new SpaceKey {Name = spatialElement.Name};
                     target.Spaces.Add(space);
                 }
             }

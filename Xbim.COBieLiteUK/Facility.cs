@@ -270,6 +270,7 @@ namespace Xbim.COBieLiteUK
             };
             serializerSettings.Converters.Add(new StringEnumConverter());
             serializerSettings.Converters.Add(new AttributeConverter());
+            serializerSettings.Converters.Add(new KeyConverter());
             var serialiser = JsonSerializer.Create(serializerSettings);
             return serialiser;
         }
@@ -528,6 +529,7 @@ namespace Xbim.COBieLiteUK
         #region Validation UK2012 (BS1192-4)
 
         private int _counter;
+        // ReSharper disable once InconsistentNaming
         public void ValidateUK2012(TextWriter logger, bool fixIfPossible)
         {
             //initial counter value for automatic unique names
@@ -539,7 +541,6 @@ namespace Xbim.COBieLiteUK
             //• Contacts should be named by use of their valid email address, including “@”.
             //• Names should not contain commas or double spaces, nor unusual characters(e.g. &,%, ‘, “, <, >).
             //• Classifications should use the colon to separate code from description and should not use commas.
-            //Category entries should be provided.
             var all = Get<CobieObject>().ToArray();
             var regex = new Regex("[,|&|%|‘|“|<|>]", RegexOptions.Compiled);
             var catRegex = new Regex("[:|,]", RegexOptions.Compiled);
@@ -557,7 +558,7 @@ namespace Xbim.COBieLiteUK
                 }
                 foreach (var key in o.GetKeys().Where(key => regex.IsMatch(key.Name)))
                 {
-                    logger.WriteLine("Name {0} of {1} key contains forbidden characters.", key.Name, key.KeyType);
+                    logger.WriteLine("Name {0} of {1} key contains forbidden characters.", key.Name, key.GetSheet("UK2012"));
                     if (fixIfPossible) key.Name = regex.Replace(key.Name, "");
                 }
 
@@ -576,7 +577,9 @@ namespace Xbim.COBieLiteUK
                         if (fixIfPossible) category.Description = catRegex.Replace(category.Description, "");
                     }
                 }
-                //only Asset doesn't have a category in COBie XLS
+
+                //Category entries should be provided.
+                //Only Asset doesn't have a category in COBie XLS
                 if ((o.Categories == null || !o.Categories.Any()) && !(o is Asset))
                 {
                     logger.WriteLine("{0} '{1}' doesn't have a category defined.", o.GetType().Name, o.Name);
@@ -586,6 +589,10 @@ namespace Xbim.COBieLiteUK
                         o.Categories.Add(new Category {Code = "unknown"});
                     }
                 }
+
+                //CreatedBy is a foreign key which should be defined for all objects
+                if (o.CreatedBy == null)
+                    o.CreatedBy = GetDefaultContactKey();
             }
 
             //The integrity of references should be ensured as follows:
@@ -707,6 +714,9 @@ namespace Xbim.COBieLiteUK
             CheckForUniqueNames(Get<Asset>(), logger, fixIfPossible);
             CheckForUniqueNames(Get<Spare>(), logger, fixIfPossible);
             CheckForUniqueNames(Resources, logger, fixIfPossible);
+            CheckForUniqueNames(Zones, logger, fixIfPossible);
+            CheckForUniqueNames(Systems, logger, fixIfPossible);
+            CheckForUniqueNames(Stages, logger, fixIfPossible);
 
         }
 

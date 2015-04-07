@@ -39,7 +39,6 @@
     <xs:sequence>
       <xs:element name="Name" type="xs:string" minOccurs="1" maxOccurs="1" />
     </xs:sequence>
-    <xs:attribute name="KeyType" type="cobielite:EntityType" fixed="ProjectStage" />
   </xs:complexType>
   <xs:complexType name="ProjectStageKeyCollection">
     <xs:sequence>
@@ -131,7 +130,6 @@
     <xs:sequence>
       <xs:element name="Name" type="xs:string" />
     </xs:sequence>
-    <xs:attribute name="KeyType" type="cobielite:EntityType" fixed="AssetType" />
   </xs:complexType>
   <xs:complexType name="AssetCollection">
     <xs:sequence>
@@ -232,7 +230,6 @@
     <xs:sequence>
       <xs:element name="Name" type="xs:string" minOccurs="1" />
     </xs:sequence>
-    <xs:attribute name="KeyType" type="cobielite:EntityType" fixed="AssetType" />
   </xs:complexType>
   <xs:complexType name="AssetTypeCollection">
     <xs:sequence>
@@ -400,7 +397,6 @@
     <xs:sequence>
       <xs:element name="Email" type="cobielite:EmailAddress" minOccurs="1" />
     </xs:sequence>
-    <xs:attribute name="KeyType" type="cobielite:EntityType" fixed="Contact" />
   </xs:complexType>
   <xs:complexType name="ContactCollection">
     <xs:sequence>
@@ -750,7 +746,6 @@
       <xs:element name="Name" type="xs:string" />
       <xs:element name="TaskNumber" type="xs:string" />
     </xs:sequence>
-    <xs:attribute name="KeyType" type="cobielite:EntityType" fixed="Job" />
   </xs:complexType>
   <!--End Job Related Content-->
 
@@ -783,7 +778,6 @@
     <xs:sequence>
       <xs:element name="Name" type="xs:string" minOccurs="1" />
     </xs:sequence>
-    <xs:attribute name="KeyType" type="cobielite:EntityType" fixed="Resource" />
   </xs:complexType>
   <xs:complexType name="ResourceCollection">
     <xs:sequence>
@@ -911,7 +905,6 @@
     <xs:sequence>
       <xs:element name="Name" type="xs:string" />
     </xs:sequence>
-    <xs:attribute name="KeyType" type="cobielite:EntityType" fixed="Space" />
   </xs:complexType>
   <xs:complexType name="SpaceCollection">
     <xs:sequence>
@@ -1056,6 +1049,24 @@
   </xs:complexType>
   <!-- End COBie metadata-->
 
+  <!-- Begin CobieUniqueObject type -->
+  <!--<xs:complexType name="CobieUniqueObject">
+    <xs:complexContent>
+      <xs:extension base="cobielite:CobieObject">
+        <xs:sequence>
+      <xs:element name="Documents" type="cobielite:DocumentCollection" maxOccurs="1" minOccurs="0" />
+      <xs:element name="Attributes" type="cobielite:AttributeCollection" maxOccurs="1" minOccurs="0" />
+      <xs:element name="Issues" type="cobielite:IssueCollection" maxOccurs="1" minOccurs="0" />
+      <xs:element name="Impacts" type="cobielite:ImpactCollection" maxOccurs="1" minOccurs="0" />
+      <xs:element name="Representations" type="cobielite:RepresentationCollection" maxOccurs="1" minOccurs="0" />
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+    
+  </xs:complexType>-->
+  <!-- End CobieUniqueObject type -->
+  
+  
   <!-- Begin CobieObject type -->
   <xs:complexType name="CobieObject" abstract="true">
     <xs:sequence>
@@ -1523,7 +1534,10 @@
 
   <xs:simpleType name="EntityType">
     <xs:annotation>
-      <xs:documentation>Acceptable volume units for Facility default units.</xs:documentation>
+      <xs:documentation>
+        Entity type for a keys which are not strong defined in COBie. 
+        Keys can only be defined for a types with unique name restriction.
+      </xs:documentation>
     </xs:annotation>
     <xs:restriction base="xs:string">
       <xs:enumeration value="Contact">
@@ -1566,16 +1580,6 @@
           <xs:appinfo source="alias">UK2012|System</xs:appinfo>
         </xs:annotation>
       </xs:enumeration>
-      <xs:enumeration value="Assembly">
-        <xs:annotation>
-          <xs:appinfo source="alias">UK2012|Assembly</xs:appinfo>
-        </xs:annotation>
-      </xs:enumeration>
-      <xs:enumeration value="Connection">
-        <xs:annotation>
-          <xs:appinfo source="alias">UK2012|Connection</xs:appinfo>
-        </xs:annotation>
-      </xs:enumeration>
       <xs:enumeration value="Spare">
         <xs:annotation>
           <xs:appinfo source="alias">UK2012|Spare</xs:appinfo>
@@ -1586,39 +1590,9 @@
           <xs:appinfo source="alias">UK2012|Resource</xs:appinfo>
         </xs:annotation>
       </xs:enumeration>
-      <xs:enumeration value="Job">
-        <xs:annotation>
-          <xs:appinfo source="alias">UK2012|Job</xs:appinfo>
-        </xs:annotation>
-      </xs:enumeration>
-      <xs:enumeration value="Impact">
-        <xs:annotation>
-          <xs:appinfo source="alias">UK2012|Impact</xs:appinfo>
-        </xs:annotation>
-      </xs:enumeration>
-      <xs:enumeration value="Document">
-        <xs:annotation>
-          <xs:appinfo source="alias">UK2012|Document</xs:appinfo>
-        </xs:annotation>
-      </xs:enumeration>
-      <xs:enumeration value="Attribute">
-        <xs:annotation>
-          <xs:appinfo source="alias">UK2012|Attribute</xs:appinfo>
-        </xs:annotation>
-      </xs:enumeration>
-      <xs:enumeration value="Issue">
-        <xs:annotation>
-          <xs:appinfo source="alias">UK2012|Issue</xs:appinfo>
-        </xs:annotation>
-      </xs:enumeration>
       <xs:enumeration value="ProjectStage">
         <xs:annotation>
           <xs:appinfo source="alias">UK2016|ProjectStage</xs:appinfo>
-        </xs:annotation>
-      </xs:enumeration>
-      <xs:enumeration value="Representation">
-        <xs:annotation>
-          <xs:appinfo source="alias">UK2012|Coordinate</xs:appinfo>
         </xs:annotation>
       </xs:enumeration>
       <xs:enumeration value="Not defined"/>

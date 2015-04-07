@@ -468,12 +468,6 @@ namespace Xbim.COBieLiteUK {
         
         private string nameField;
         
-        private EntityType keyTypeField;
-        
-        public ResourceKey() {
-            this.keyTypeField = EntityType.Resource;
-        }
-        
         [global::System.Xml.Serialization.XmlElementAttribute(Form=global::System.Xml.Schema.XmlSchemaForm.Unqualified)]
         public string Name {
             get {
@@ -483,103 +477,6 @@ namespace Xbim.COBieLiteUK {
                 this.nameField = value;
             }
         }
-        
-        [global::System.Xml.Serialization.XmlAttributeAttribute()]
-        public EntityType KeyType {
-            get {
-                return this.keyTypeField;
-            }
-            set {
-                this.keyTypeField = value;
-            }
-        }
-    }
-    
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Xbim.COBieLiteUK.CodeGeneration", "1.0.0.0")]
-    [global::System.SerializableAttribute()]
-    [global::System.Xml.Serialization.XmlTypeAttribute(Namespace="http://openbim.org/schemas/cobieliteuk")]
-    [global::System.Xml.Serialization.XmlRootAttribute(Namespace="http://openbim.org/schemas/cobieliteuk", IsNullable=false)]
-    public enum EntityType {
-        
-        /// <remarks/>
-        [Xbim.COBieLiteUK.Alias(Type="UK2012", Value="Contact")]
-        Contact,
-        
-        /// <remarks/>
-        [Xbim.COBieLiteUK.Alias(Type="UK2012", Value="Facility")]
-        Facility,
-        
-        /// <remarks/>
-        [Xbim.COBieLiteUK.Alias(Type="UK2012", Value="Floor")]
-        Floor,
-        
-        /// <remarks/>
-        [Xbim.COBieLiteUK.Alias(Type="UK2012", Value="Space")]
-        Space,
-        
-        /// <remarks/>
-        [Xbim.COBieLiteUK.Alias(Type="UK2012", Value="Zone")]
-        Zone,
-        
-        /// <remarks/>
-        [Xbim.COBieLiteUK.Alias(Type="UK2012", Value="Type")]
-        AssetType,
-        
-        /// <remarks/>
-        [Xbim.COBieLiteUK.Alias(Type="UK2012", Value="Component")]
-        Asset,
-        
-        /// <remarks/>
-        [Xbim.COBieLiteUK.Alias(Type="UK2012", Value="System")]
-        System,
-        
-        /// <remarks/>
-        [Xbim.COBieLiteUK.Alias(Type="UK2012", Value="Assembly")]
-        Assembly,
-        
-        /// <remarks/>
-        [Xbim.COBieLiteUK.Alias(Type="UK2012", Value="Connection")]
-        Connection,
-        
-        /// <remarks/>
-        [Xbim.COBieLiteUK.Alias(Type="UK2012", Value="Spare")]
-        Spare,
-        
-        /// <remarks/>
-        [Xbim.COBieLiteUK.Alias(Type="UK2012", Value="Resource")]
-        Resource,
-        
-        /// <remarks/>
-        [Xbim.COBieLiteUK.Alias(Type="UK2012", Value="Job")]
-        Job,
-        
-        /// <remarks/>
-        [Xbim.COBieLiteUK.Alias(Type="UK2012", Value="Impact")]
-        Impact,
-        
-        /// <remarks/>
-        [Xbim.COBieLiteUK.Alias(Type="UK2012", Value="Document")]
-        Document,
-        
-        /// <remarks/>
-        [Xbim.COBieLiteUK.Alias(Type="UK2012", Value="Attribute")]
-        Attribute,
-        
-        /// <remarks/>
-        [Xbim.COBieLiteUK.Alias(Type="UK2012", Value="Issue")]
-        Issue,
-        
-        /// <remarks/>
-        [Xbim.COBieLiteUK.Alias(Type="UK2016", Value="ProjectStage")]
-        ProjectStage,
-        
-        /// <remarks/>
-        [Xbim.COBieLiteUK.Alias(Type="UK2012", Value="Coordinate")]
-        Representation,
-        
-        /// <remarks/>
-        [global::System.Xml.Serialization.XmlEnumAttribute("Not defined")]
-        Notdefined,
     }
     
     [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Xbim.COBieLiteUK.CodeGeneration", "1.0.0.0")]
@@ -592,12 +489,6 @@ namespace Xbim.COBieLiteUK {
         private string nameField;
         
         private string taskNumberField;
-        
-        private EntityType keyTypeField;
-        
-        public JobKey() {
-            this.keyTypeField = EntityType.Job;
-        }
         
         [global::System.Xml.Serialization.XmlElementAttribute(Form=global::System.Xml.Schema.XmlSchemaForm.Unqualified)]
         public string Name {
@@ -616,16 +507,6 @@ namespace Xbim.COBieLiteUK {
             }
             set {
                 this.taskNumberField = value;
-            }
-        }
-        
-        [global::System.Xml.Serialization.XmlAttributeAttribute()]
-        public EntityType KeyType {
-            get {
-                return this.keyTypeField;
-            }
-            set {
-                this.keyTypeField = value;
             }
         }
     }
@@ -743,12 +624,6 @@ namespace Xbim.COBieLiteUK {
         
         private string emailField;
         
-        private EntityType keyTypeField;
-        
-        public ContactKey() {
-            this.keyTypeField = EntityType.Contact;
-        }
-        
         [global::System.Xml.Serialization.XmlElementAttribute(Form=global::System.Xml.Schema.XmlSchemaForm.Unqualified)]
         public string Email {
             get {
@@ -756,16 +631,6 @@ namespace Xbim.COBieLiteUK {
             }
             set {
                 this.emailField = value;
-            }
-        }
-        
-        [global::System.Xml.Serialization.XmlAttributeAttribute()]
-        public EntityType KeyType {
-            get {
-                return this.keyTypeField;
-            }
-            set {
-                this.keyTypeField = value;
             }
         }
     }
@@ -817,12 +682,6 @@ namespace Xbim.COBieLiteUK {
         
         private string nameField;
         
-        private EntityType keyTypeField;
-        
-        public AssetKey() {
-            this.keyTypeField = EntityType.AssetType;
-        }
-        
         [global::System.Xml.Serialization.XmlElementAttribute(Form=global::System.Xml.Schema.XmlSchemaForm.Unqualified)]
         public string Name {
             get {
@@ -830,16 +689,6 @@ namespace Xbim.COBieLiteUK {
             }
             set {
                 this.nameField = value;
-            }
-        }
-        
-        [global::System.Xml.Serialization.XmlAttributeAttribute()]
-        public EntityType KeyType {
-            get {
-                return this.keyTypeField;
-            }
-            set {
-                this.keyTypeField = value;
             }
         }
     }
@@ -853,12 +702,6 @@ namespace Xbim.COBieLiteUK {
         
         private string nameField;
         
-        private EntityType keyTypeField;
-        
-        public SpaceKey() {
-            this.keyTypeField = EntityType.Space;
-        }
-        
         [global::System.Xml.Serialization.XmlElementAttribute(Form=global::System.Xml.Schema.XmlSchemaForm.Unqualified)]
         public string Name {
             get {
@@ -866,16 +709,6 @@ namespace Xbim.COBieLiteUK {
             }
             set {
                 this.nameField = value;
-            }
-        }
-        
-        [global::System.Xml.Serialization.XmlAttributeAttribute()]
-        public EntityType KeyType {
-            get {
-                return this.keyTypeField;
-            }
-            set {
-                this.keyTypeField = value;
             }
         }
     }
@@ -889,12 +722,6 @@ namespace Xbim.COBieLiteUK {
         
         private string nameField;
         
-        private EntityType keyTypeField;
-        
-        public ProjectStageKey() {
-            this.keyTypeField = EntityType.ProjectStage;
-        }
-        
         [global::System.Xml.Serialization.XmlElementAttribute(Form=global::System.Xml.Schema.XmlSchemaForm.Unqualified)]
         public string Name {
             get {
@@ -902,16 +729,6 @@ namespace Xbim.COBieLiteUK {
             }
             set {
                 this.nameField = value;
-            }
-        }
-        
-        [global::System.Xml.Serialization.XmlAttributeAttribute()]
-        public EntityType KeyType {
-            get {
-                return this.keyTypeField;
-            }
-            set {
-                this.keyTypeField = value;
             }
         }
     }
@@ -951,6 +768,61 @@ namespace Xbim.COBieLiteUK {
                 this.keyTypeField = value;
             }
         }
+    }
+    
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Xbim.COBieLiteUK.CodeGeneration", "1.0.0.0")]
+    [global::System.SerializableAttribute()]
+    [global::System.Xml.Serialization.XmlTypeAttribute(Namespace="http://openbim.org/schemas/cobieliteuk")]
+    [global::System.Xml.Serialization.XmlRootAttribute(Namespace="http://openbim.org/schemas/cobieliteuk", IsNullable=false)]
+    public enum EntityType {
+        
+        /// <remarks/>
+        [Xbim.COBieLiteUK.Alias(Type="UK2012", Value="Contact")]
+        Contact,
+        
+        /// <remarks/>
+        [Xbim.COBieLiteUK.Alias(Type="UK2012", Value="Facility")]
+        Facility,
+        
+        /// <remarks/>
+        [Xbim.COBieLiteUK.Alias(Type="UK2012", Value="Floor")]
+        Floor,
+        
+        /// <remarks/>
+        [Xbim.COBieLiteUK.Alias(Type="UK2012", Value="Space")]
+        Space,
+        
+        /// <remarks/>
+        [Xbim.COBieLiteUK.Alias(Type="UK2012", Value="Zone")]
+        Zone,
+        
+        /// <remarks/>
+        [Xbim.COBieLiteUK.Alias(Type="UK2012", Value="Type")]
+        AssetType,
+        
+        /// <remarks/>
+        [Xbim.COBieLiteUK.Alias(Type="UK2012", Value="Component")]
+        Asset,
+        
+        /// <remarks/>
+        [Xbim.COBieLiteUK.Alias(Type="UK2012", Value="System")]
+        System,
+        
+        /// <remarks/>
+        [Xbim.COBieLiteUK.Alias(Type="UK2012", Value="Spare")]
+        Spare,
+        
+        /// <remarks/>
+        [Xbim.COBieLiteUK.Alias(Type="UK2012", Value="Resource")]
+        Resource,
+        
+        /// <remarks/>
+        [Xbim.COBieLiteUK.Alias(Type="UK2016", Value="ProjectStage")]
+        ProjectStage,
+        
+        /// <remarks/>
+        [global::System.Xml.Serialization.XmlEnumAttribute("Not defined")]
+        Notdefined,
     }
     
     [global::System.Xml.Serialization.XmlIncludeAttribute(typeof(IntegerAttributeValue))]
@@ -3983,12 +3855,6 @@ namespace Xbim.COBieLiteUK {
         
         private string nameField;
         
-        private EntityType keyTypeField;
-        
-        public AssetTypeKey() {
-            this.keyTypeField = EntityType.AssetType;
-        }
-        
         [global::System.Xml.Serialization.XmlElementAttribute(Form=global::System.Xml.Schema.XmlSchemaForm.Unqualified)]
         public string Name {
             get {
@@ -3996,16 +3862,6 @@ namespace Xbim.COBieLiteUK {
             }
             set {
                 this.nameField = value;
-            }
-        }
-        
-        [global::System.Xml.Serialization.XmlAttributeAttribute()]
-        public EntityType KeyType {
-            get {
-                return this.keyTypeField;
-            }
-            set {
-                this.keyTypeField = value;
             }
         }
     }
