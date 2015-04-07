@@ -117,6 +117,7 @@ namespace Xbim.CobieLiteUK.Validation.Reporting
             {
                 var excelRow = detailSheet.GetRow(0) ?? detailSheet.CreateRow(0);
                 var excelCell = excelRow.GetCell(0) ?? excelRow.CreateCell(0);
+                SetHeader(excelCell);
                 excelCell.SetCellValue("Asset type requirement report");
 
                 var rep = new AssetTypeDetailedGridReport(requirementPointer);
@@ -159,6 +160,9 @@ namespace Xbim.CobieLiteUK.Validation.Reporting
 
                 var cellStyle = detailSheet.Workbook.CreateCellStyle();
                 cellStyle.BorderBottom = BorderStyle.Thick;
+                cellStyle.BorderLeft = BorderStyle.Thin;
+                cellStyle.BorderRight = BorderStyle.Thin;
+                cellStyle.BorderTop = BorderStyle.Thin;
                 cellStyle.FillPattern = FillPattern.SolidForeground;
                 cellStyle.FillForegroundColor = IndexedColors.Grey50Percent.Index;
 
@@ -176,9 +180,9 @@ namespace Xbim.CobieLiteUK.Validation.Reporting
                 }
                 iRunningRow++;
 
+                var writer = new ExcelCellVisualValue(BorderStyle.Thin);
                 foreach (DataRow row in table.Rows)
                 {
-                    
                     excelRow = detailSheet.GetRow(iRunningRow) ?? detailSheet.CreateRow(iRunningRow);
                     iRunningRow++;
 
@@ -191,27 +195,34 @@ namespace Xbim.CobieLiteUK.Validation.Reporting
                         if (row[tCol] == DBNull.Value)
                             continue;
                         excelCell = excelRow.GetCell(iRunningColumn) ?? excelRow.CreateCell(iRunningColumn);
-                        
-                        switch (tCol.DataType.Name)
+
+                        if (row[tCol] is IVisualValue)
                         {
-                            case "String":
-                                excelCell.SetCellValue((string)row[tCol]);
-                                break;
-                            case "Int32":
-                                excelCell.SetCellValue(Convert.ToInt32(row[tCol]));
-                                break;
-                            default:
-                                excelCell.SetCellValue((string)row[tCol]);
-                                break;
+                            writer.SetCell(excelCell, (IVisualValue)row[tCol]);
+                        }
+                        else
+                        {
+                            switch (tCol.DataType.Name)
+                            {
+                                case "String":
+                                    excelCell.SetCellValue((string)row[tCol]);
+                                    break;
+                                case "Int32":
+                                    excelCell.SetCellValue(Convert.ToInt32(row[tCol]));
+                                    break;
+                                default:
+                                    excelCell.SetCellValue((string)row[tCol]);
+                                    break;
+                            }
                         }
                     }
                 }
 
-                // sets all used columns to autosize
-                for (var irun = 0; irun < iRunningColumn; irun++)
-                {
-                    detailSheet.AutoSizeColumn(irun);
-                }
+                //// sets all used columns to autosize
+                //for (var irun = 0; irun < iRunningColumn; irun++)
+                //{
+                //    detailSheet.AutoSizeColumn(irun);
+                //}
 
                 return true;
             }
@@ -234,6 +245,7 @@ namespace Xbim.CobieLiteUK.Validation.Reporting
             {
                 var excelRow = summaryPage.GetRow(0) ?? summaryPage.CreateRow(0);  
                 var excelCell = excelRow.GetCell(0) ?? excelRow.CreateCell(0);
+                SetHeader(excelCell);
                 excelCell.SetCellValue("Validation Report Summary");
                 
                 var summaryReport = new AssetTypeSummaryReport(facility.AssetTypes);
@@ -244,6 +256,10 @@ namespace Xbim.CobieLiteUK.Validation.Reporting
 
                 var cellStyle = summaryPage.Workbook.CreateCellStyle();
                 cellStyle.BorderBottom = BorderStyle.Thick;
+                cellStyle.BorderLeft = BorderStyle.Thin;
+                cellStyle.BorderRight = BorderStyle.Thin;
+                cellStyle.BorderTop = BorderStyle.Thin;
+
                 cellStyle.FillPattern = FillPattern.SolidForeground;
                 cellStyle.FillForegroundColor = IndexedColors.Grey50Percent.Index;
 
@@ -261,9 +277,9 @@ namespace Xbim.CobieLiteUK.Validation.Reporting
                     runCell.SetCellValue(tCol.Caption);
                     runCell.CellStyle = cellStyle;
                 }
-                
 
                 iRunningRow++;
+                var writer = new ExcelCellVisualValue(BorderStyle.Thin);
                 foreach (DataRow row in table.Rows)
                 {
                     
@@ -277,20 +293,27 @@ namespace Xbim.CobieLiteUK.Validation.Reporting
                         iRunningColumn++;
                         if (row[tCol] == DBNull.Value)
                             continue;
-                        var runCell = excelRow.GetCell(iRunningColumn) ?? excelRow.CreateCell(iRunningColumn);
-                        
+                        excelCell = excelRow.GetCell(iRunningColumn) ?? excelRow.CreateCell(iRunningColumn);
 
-                        switch (tCol.DataType.Name)
+                        if (row[tCol] is IVisualValue)
                         {
-                            case "String":
-                                runCell.SetCellValue((string)row[tCol]);
-                                break;
-                            case "Int32":
-                                runCell.SetCellValue(Convert.ToInt32(row[tCol]));
-                                break;
-                            default:
-                                runCell.SetCellValue((string)row[tCol]);
-                                break;
+                            writer.SetCell(excelCell, (IVisualValue)row[tCol]);
+                        }
+                        else
+                        {
+
+                            switch (tCol.DataType.Name)
+                            {
+                                case "String":
+                                    excelCell.SetCellValue((string) row[tCol]);
+                                    break;
+                                case "Int32":
+                                    excelCell.SetCellValue(Convert.ToInt32(row[tCol]));
+                                    break;
+                                default:
+                                    excelCell.SetCellValue((string) row[tCol]);
+                                    break;
+                            }
                         }
                     }
                 }
@@ -309,6 +332,15 @@ namespace Xbim.CobieLiteUK.Validation.Reporting
                 Logger.Error("Failed to create Summary Sheet", e);
                 return false;
             }
+        }
+
+        private static void SetHeader(ICell excelCell)
+        {
+            var font = excelCell.Sheet.Workbook.CreateFont();
+            font.FontHeightInPoints = 14;
+            font.Boldweight = (short) FontBoldWeight.Bold;
+            excelCell.CellStyle = excelCell.Sheet.Workbook.CreateCellStyle();
+            excelCell.CellStyle.SetFont(font);
         }
     }
 }

@@ -34,9 +34,8 @@ namespace Xbim.CobieLiteUK.Validation
             {
                 return Report(req, false);
             }
+            retValue = _dicAtt[req.Name].Value; // report value in any case.
             var ret = req.IsSatisfiedBy(_dicAtt[req.Name]);
-            if (ret)
-                retValue = _dicAtt[req.Name].Value;
             return Report(req, ret);
         }
 
