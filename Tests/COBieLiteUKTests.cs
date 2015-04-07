@@ -263,19 +263,59 @@ namespace Tests
                         CreatedBy = new ContactKey {Email = "martin.cerny@northumbria.ac.uk"},
                         Name = "Null attribute"
                     }
-                }
+                },
+                Stages = new List<ProjectStage>(new []
+                {
+                    new ProjectStage
+                    {
+                        Name = "Stage 0",
+                        CreatedOn = DateTime.Now,
+                        Start = DateTime.Now.AddDays(5),
+                        End = DateTime.Now.AddDays(10),
+                        CreatedBy = new ContactKey{Email = "martin.cerny@northumbria.ac.uk"}
+                    },
+                    new ProjectStage
+                    {
+                        Name = "Stage 1",
+                        CreatedOn = DateTime.Now,
+                        Start = DateTime.Now.AddDays(10),
+                        End = DateTime.Now.AddDays(20),
+                        CreatedBy = new ContactKey{Email = "martin.cerny@northumbria.ac.uk"}
+                    },
+                    new ProjectStage
+                    {
+                        Name = "Stage 2",
+                        CreatedOn = DateTime.Now,
+                        Start = DateTime.Now.AddDays(20),
+                        End = DateTime.Now.AddDays(110),
+                        CreatedBy = new ContactKey{Email = "martin.cerny@northumbria.ac.uk"}
+                    },
+                    new ProjectStage
+                    {
+                        Name = "Stage 3",
+                        CreatedOn = DateTime.Now,
+                        Start = DateTime.Now.AddDays(110),
+                        End = DateTime.Now.AddDays(300),
+                        CreatedBy = new ContactKey{Email = "martin.cerny@northumbria.ac.uk"}
+                    },
+                })
             };
 
             //save model to file to check it
+            string msg;
             const string xmlFile = "facility.cobielite.xml";
             const string jsonFile = "facility.cobielite.json";
+            const string xlsxFile = "facility.cobielite.xlsx";
             facility.WriteXml(xmlFile, true);
             facility.WriteJson(jsonFile, true);
+            facility.WriteCobie(xlsxFile, out msg);
 
             var facility2 = Facility.ReadXml(xmlFile);
             var facility3 = Facility.ReadJson(jsonFile);
 
             var cloned = facility.Attributes.FirstOrDefault().Clone();
+
+
         }
 
         [TestMethod]

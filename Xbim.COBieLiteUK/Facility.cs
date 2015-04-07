@@ -750,6 +750,10 @@ namespace Xbim.COBieLiteUK
             CheckForUniqueNames(Systems, logger, fixIfPossible);
             CheckForUniqueNames(Stages, logger, fixIfPossible);
 
+            //We additionally need to check for a uniqueness of names for Assemblies, Connections, Jobs, Impacts, 
+            //Documents, Attributes, Coordinates ans Issues if they contain any name related information (Attributes, Documents, ...)
+            
+
         }
 
         private Zone GetDefaultZone()

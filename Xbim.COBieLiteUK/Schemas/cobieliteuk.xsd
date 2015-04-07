@@ -8,18 +8,18 @@
   <xs:complexType name="ProjectStage">
     <xs:annotation>
       <xs:appinfo source="parent">Facility</xs:appinfo>
-      <xs:appinfo source="sheet">UK2016|Project</xs:appinfo>
+      <xs:appinfo source="sheet">UK2012|ProjectStage</xs:appinfo>
       <!--mapping, column, header, required/optional, list/item, pick/-, path-->
-      <xs:appinfo source="mapping">UK2016|A|Name          |required|item|-                              |Name</xs:appinfo>
-      <xs:appinfo source="mapping">UK2016|B|CreatedBy     |required|item|-                              |CreatedBy.Email</xs:appinfo>
-      <xs:appinfo source="mapping">UK2016|C|CreatedOn     |required|item|-                              |CreatedOn</xs:appinfo>
-      <xs:appinfo source="mapping">UK2016|D|Category      |required|list|PickLists.Category-ProjectStage|Categories.CategoryString</xs:appinfo>
-      <xs:appinfo source="mapping">UK2016|E|Description   |optional|item|-                              |Description</xs:appinfo>
-      <xs:appinfo source="mapping">UK2016|F|ExtSystem     |optional|item|-                              |ExternalSystem</xs:appinfo>
-      <xs:appinfo source="mapping">UK2016|G|ExtObject     |optional|item|-                              |ExternalEntity</xs:appinfo>
-      <xs:appinfo source="mapping">UK2016|H|ExtIdentifier |optional|item|-                              |ExternalId</xs:appinfo>
-      <xs:appinfo source="mapping">UK2016|I|Start         |optional|item|-                              |Start</xs:appinfo>
-      <xs:appinfo source="mapping">UK2016|J|End           |optional|item|-                              |End</xs:appinfo>
+      <xs:appinfo source="mapping">UK2012|A|Name          |required|item|-                              |Name</xs:appinfo>
+      <xs:appinfo source="mapping">UK2012|B|CreatedBy     |required|item|-                              |CreatedBy.Email</xs:appinfo>
+      <xs:appinfo source="mapping">UK2012|C|CreatedOn     |required|item|-                              |CreatedOn</xs:appinfo>
+      <xs:appinfo source="mapping">UK2012|D|Category      |required|list|PickLists.Category-ProjectStage|Categories.CategoryString</xs:appinfo>
+      <xs:appinfo source="mapping">UK2012|E|Description   |optional|item|-                              |Description</xs:appinfo>
+      <xs:appinfo source="mapping">UK2012|F|ExtSystem     |optional|item|-                              |ExternalSystem</xs:appinfo>
+      <xs:appinfo source="mapping">UK2012|G|ExtObject     |optional|item|-                              |ExternalEntity</xs:appinfo>
+      <xs:appinfo source="mapping">UK2012|H|ExtIdentifier |optional|item|-                              |ExternalId</xs:appinfo>
+      <xs:appinfo source="mapping">UK2012|I|Start         |optional|item|-                              |Start</xs:appinfo>
+      <xs:appinfo source="mapping">UK2012|J|End           |optional|item|-                              |End</xs:appinfo>
     </xs:annotation>
     <xs:complexContent>
       <xs:extension base="cobielite:CobieObject">

@@ -237,13 +237,18 @@ namespace Xbim.COBieLiteUK
             var sheetName = GetSheetName(GetType(), version);
             var sheet = workbook.GetSheet(sheetName) ?? workbook.CreateSheet(sheetName);
 
-            //get new row
-            if (sheet.PhysicalNumberOfRows == 0)
+            var row = GetNextEmptyRow(sheet);
+            if (row.RowNum == 0)
             {
                 //set up header if this is the very first row in the sheet
                 SetUpHeader(sheet.CreateRow(0), mappings);
+                row = sheet.CreateRow(1);
             }
-            var row = GetNextEmptyRow(sheet);
+            if (row.RowNum == 1)
+            {
+                //make sure all headers are in there
+                FixHeaderForWriting(sheet.GetRow(0), mappings);
+            }
 
             //write columns
             foreach (var mapping in mappings)
@@ -371,6 +376,23 @@ namespace Xbim.COBieLiteUK
             }
         }
 
+        private void FixHeaderForWriting(IRow row, List<MappingAttribute> mappings)
+        {
+            foreach (var mapping in mappings)
+            {
+                var cellIndex = CellReference.ConvertColStringToIndex(mapping.Column);
+                var cell = row.GetCell(cellIndex) ?? row.CreateCell(cellIndex);
+                if (cell.CellType == CellType.Blank)
+                {
+                    cell.CellStyle = row.RowStyle;
+                    cell.SetCellValue(mapping.Header);
+                }
+
+                if(cell.CellType == CellType.String && cell.StringCellValue.Trim() != mapping.Header)
+                    throw new Exception("Wrong template header!");
+            }
+        }
+
         private IRow GetNextEmptyRow(ISheet sheet)
         {
             foreach (IRow row in sheet)
@@ -407,37 +429,51 @@ namespace Xbim.COBieLiteUK
                     colIndex = col.ColumnIndex;
                     break;
                 }
+                else if (col.CellType == CellType.Blank)
+                {
+                    colIndex = col.ColumnIndex;
+                    col.SetCellValue(columnName);
+                    break;
+                }
             if (colIndex == -1) //create new header
             {
                 var headerCell = header.CreateCell(header.LastCellNum == -1 ? 0 : header.LastCellNum);
                 colIndex = headerCell.ColumnIndex;
                 headerCell.SetCellValue(columnName);
+                headerCell.CellStyle = header.RowStyle;
             }
-            var rowIndex = 0;
+            var rowIndex = 1;
             foreach (IRow row in sheet)
             {
                 var cell = row.GetCell(colIndex);
-                if (cell == null)
+                if (cell == null || cell.CellType == CellType.Blank)
                 {
                     rowIndex = row.RowNum;
                     break;
                 }
 
                 if (cell.CellType == CellType.String && cell.StringCellValue == value)
-                {
-                    rowIndex = -1;
-                    break; //break if the value exists already
-                }
+                    return; //do nothing if the value exists already
 
+                //set row index to the next cell
                 rowIndex = row.RowNum + 1;
             }
-            if (rowIndex != -1)
             {
                 var row = sheet.GetRow(rowIndex) ?? sheet.CreateRow(rowIndex);
                 var cell = row.GetCell(colIndex) ?? row.CreateCell(colIndex);
                 cell.SetCellValue(value);
+                cell.CellStyle = sheet.GetColumnStyle(colIndex);
             }
+        }
 
+        private ICell GetNextEmptyCell(IRow row)
+        {
+            foreach (ICell cell in row)
+            {
+                if (cell.CellType == CellType.Blank)
+                    return cell;
+            }
+            return row.CreateCell(row.LastCellNum);
         }
 
         public CobieValue GetCobieProperty(string name)
