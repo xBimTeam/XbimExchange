@@ -108,7 +108,11 @@
     <Compile Include="Reporting\AssetTypeDetailedGridReport.cs" />
     <Compile Include="Reporting\AssetTypeRequirementPointer.cs" />
     <Compile Include="Reporting\AssetTypeSummaryReport.cs" />
+    <Compile Include="Reporting\ExcelCellVisualValue.cs" />
     <Compile Include="Reporting\FacilityReport.cs" />
+    <Compile Include="Reporting\IVisualValue.cs" />
+    <Compile Include="Reporting\ValidatedAttribute.cs" />
+    <Compile Include="Reporting\VisualValue.cs" />
     <Compile Include="RequirementDetails\AssetTypeCategoryMatch.cs" />
     <Compile Include="RequirementDetails\RequirementDetail.cs" />
     <Compile Include="Reporting\ExcelValidationReport.cs" />

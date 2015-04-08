@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
+using ICSharpCode.SharpZipLib.Core;
 using Xbim.COBieLiteUK;
 using Xbim.CobieLiteUK.Validation.Extensions;
 using Attribute = Xbim.COBieLiteUK.Attribute;
@@ -115,11 +116,16 @@ namespace Xbim.CobieLiteUK.Validation.Reporting
             var isInserting = true;
             foreach (var attribute in atts)
             {
+                var vA = new ValidatedAttribute(attribute);
+                if (!vA.IsValidatedAttribute)
+                    continue;
+
+                // check for table columns
                 var sName = attribute.Name;
                 if (!AttributesGrid.Columns.Contains(sName))
                 {
                     isInserting = false;
-                    AttributesGrid.Columns.Add(new DataColumn(attribute.Name, typeof (string))
+                    AttributesGrid.Columns.Add(new DataColumn(attribute.Name, typeof(ValidatedAttribute))
                     {
                         Namespace = attribute.PropertySetName
                     });
@@ -127,18 +133,7 @@ namespace Xbim.CobieLiteUK.Validation.Reporting
                 if (!isInserting || attribute.Value == null)
                     continue;
 
-                // ReSharper disable CanBeReplacedWithTryCastAndCheckForNull
-                if (attribute.Value is StringAttributeValue)
-                    r[sName] = ((StringAttributeValue) attribute.Value).Value;
-                else if (attribute.Value is IntegerAttributeValue)
-                    r[sName] = ((IntegerAttributeValue) attribute.Value).Value;
-                else if (attribute.Value is DecimalAttributeValue)
-                    r[sName] = ((DecimalAttributeValue) attribute.Value).Value;
-                else if (attribute.Value is BooleanAttributeValue)
-                    r[sName] = ((BooleanAttributeValue) attribute.Value).Value.ToString();
-                else if (attribute.Value is DateTimeAttributeValue)
-                    r[sName] = ((DateTimeAttributeValue) attribute.Value).Value;
-                // ReSharper restore CanBeReplacedWithTryCastAndCheckForNull
+                r[sName] = vA;
             }
             return isInserting;
         }

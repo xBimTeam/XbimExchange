@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -11,20 +12,20 @@ namespace Xbim.CobieLiteUK.Validation.Reporting
 {
     public class AssetTypeSummaryReport
     {
-        private readonly IEnumerable<AssetType> _validatedAssets;
+        private readonly IEnumerable<AssetType> _validatedAssetTypes;
 
-        public AssetTypeSummaryReport(IEnumerable<AssetType> vaidatedAssets)
+        public AssetTypeSummaryReport(IEnumerable<AssetType> validatedAssetTypes)
         {
-            _validatedAssets = vaidatedAssets;
+            _validatedAssetTypes = validatedAssetTypes;
         }
 
         public DataTable GetReport(string mainClassification)
         {
-            if (_validatedAssets == null || _validatedAssets.FirstOrDefault() == null)
+            if (_validatedAssetTypes == null || _validatedAssetTypes.FirstOrDefault() == null)
                 return null;
             if (mainClassification == @"")
             {
-                var firstRequirement = _validatedAssets.FirstOrDefault();
+                var firstRequirement = _validatedAssetTypes.FirstOrDefault();
                 if (firstRequirement == null)
                     return null;
 
@@ -39,7 +40,7 @@ namespace Xbim.CobieLiteUK.Validation.Reporting
             // the progressive variable allows grouping by Maincategory and MatchingCategory values
             //
             var progressive = new Dictionary<Tuple<string, string>, ValidationSummary>();
-            foreach (var reportingAsset in _validatedAssets)
+            foreach (var reportingAsset in _validatedAssetTypes)
             {
                 var mainCatCode = "";
                 var mainCat =
@@ -53,7 +54,9 @@ namespace Xbim.CobieLiteUK.Validation.Reporting
                 {
                     Passes = reportingAsset.GetValidAssetsCount(),
                     Total = reportingAsset.GetSubmittedAssetsCount(),
-                    MainCatDescription = mainCat != null ? mainCat.Description : ""
+                    MainCatDescription = mainCat != null 
+                        ? mainCat.Description 
+                        : ""
                 };
                     
                 var matchingCat = reportingAsset.GetMatchingCategories().FirstOrDefault();
@@ -82,11 +85,19 @@ namespace Xbim.CobieLiteUK.Validation.Reporting
                 int i = 1;
                 var thisRow = retTable.NewRow();
 
+
+
                 thisRow[i++] = sortedKey.Item1; // main classification
                 thisRow[i++] = value.MainCatDescription; // main classification
                 thisRow[i++] = sortedKey.Item2;
                 thisRow[i++] = value.Total;
-                thisRow[i++] = value.Passes;
+
+                var aStyle = VisualAttentionStyle.Green;
+                if (value.Passes < value.Total)
+                    aStyle = VisualAttentionStyle.Red;
+                if (value.Total == 0)
+                    aStyle = VisualAttentionStyle.Amber;
+                thisRow[i++] = new VisualValue(value.Passes) { AttentionStyle = aStyle};
                 retTable.Rows.Add(thisRow);
             }
             return retTable;
@@ -126,7 +137,7 @@ namespace Xbim.CobieLiteUK.Validation.Reporting
             // retTable.Columns.Add("Matching classification", typeof (String));
             retTable.Columns.Add(new DataColumn("DPoW_MatchingCode", typeof(String)) { Caption = "Matching code" });
             retTable.Columns.Add(new DataColumn("DPoW_Submitted", typeof(int)) { Caption = "No. Submitted" });
-            retTable.Columns.Add(new DataColumn("DPoW_Valid", typeof(int)) { Caption = "No. Valid" });
+            retTable.Columns.Add(new DataColumn("DPoW_Valid", typeof(VisualValue)) { Caption = "No. Valid" });
             return retTable;
         }
     }

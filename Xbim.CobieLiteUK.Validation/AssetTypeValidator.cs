@@ -101,7 +101,7 @@ namespace Xbim.CobieLiteUK.Validation
             var returnWithoutFurtherTests = false;
             if (!RequirementDetails.Any())
             {
-                retType.Description = "No requirement for the specific classification.\r\n";
+                retType.Description = "Classification has no requirements.\r\n";
                 retType.Categories.Add(FacilityValidator.PassedCat);
                 iPassed = iSubmitted;
                 returnWithoutFurtherTests = true;
@@ -112,7 +112,6 @@ namespace Xbim.CobieLiteUK.Validation
             {
                 retType.Categories.Add(FacilityValidator.FailedCat);
                 retType.Description = "No candidates in submission match the required classification.\r\n";
-                retType.Attributes = new List<Attribute>();
                 retType.Attributes.AddRange(RequirementAttributes());
                 returnWithoutFurtherTests = true;    
             }
@@ -136,23 +135,24 @@ namespace Xbim.CobieLiteUK.Validation
             foreach (var req in RequirementDetails)
             {
                 object satValue;
-                if (cachedValidator.CanSatisfy(req, out satValue))
+                var pass = cachedValidator.CanSatisfy(req, out satValue);
+                var a = req.Attribute.Clone();
+                if (satValue is AttributeValue)
+                    a.Value = satValue as AttributeValue;
+                else
+                    a.Value = null;
+                if (pass)
                 {
-                    var a = req.Attribute.Clone();
-                    if (satValue is AttributeValue)
-                        a.Value = satValue as AttributeValue;
-                    else
-                        a.Value = null;
                     a.Categories = new List<Category>() { FacilityValidator.PassedCat };
-                    retType.Attributes.Add(a);    
                 }
                 else
                 {
-                    var a = req.Attribute.Clone();
                     a.Categories = new List<Category>() { FacilityValidator.FailedCat };
-                    retType.Attributes.Add(a);    
                     outstandingRequirementsCount++;
                 }
+                
+                retType.Attributes.Add(a);    
+
             }
 
             retType.Description = string.Format("{0} of {1} requirement addressed at type level.", RequirementDetails.Count - outstandingRequirementsCount, RequirementDetails.Count);
@@ -201,8 +201,12 @@ namespace Xbim.CobieLiteUK.Validation
                         else if (!cachedValidator.AlreadySatisfies(req)) // fails locally, and is not passed at higher level, then add to explicit report fail
                         {
                             var a = req.Attribute.Clone();
+                            if (satValue is AttributeValue)
+                                a.Value = satValue as AttributeValue;
+                            else
+                                a.Value = null;
                             a.Categories = new List<Category>() { FacilityValidator.FailedCat };
-                            retType.Attributes.Add(a);
+                            reportAsset.Attributes.Add(a);
                         }
                     }
 
