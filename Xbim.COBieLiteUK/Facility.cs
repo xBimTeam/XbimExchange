@@ -661,7 +661,8 @@ namespace Xbim.COBieLiteUK
             //a) Every Space (location) should be assigned to one Floor (region). - If the name is unique this is granted by COBieLite data schema
             //b) Every Space (location) should be assigned to at least one Zone.
             var spaces = Get<Space>().ToList();
-            foreach (var space in spaces.Where(space => !Zones.Any(z => z.Spaces != null && z.Spaces.Select(s => s.Name).Contains(space.Name))))
+            var zones = Zones ?? new List<Zone>();
+            foreach (var space in spaces.Where(space => !zones.Any(z => z.Spaces != null && z.Spaces.Select(s => s.Name).Contains(space.Name))))
             {
                 logger.WriteLine("Space '{0}' is not in any zone.", space.Name);
                 if (!fixIfPossible) continue;

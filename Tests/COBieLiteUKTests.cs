@@ -508,9 +508,14 @@ namespace Tests
 
                 foreach (var facilityType in facilities)
                 {
+                    var log = new StringWriter();
+                    facilityType.ValidateUK2012(log, true);
+
                     string msg;
                     facilityType.WriteJson(jsonFile, true);
                     facilityType.WriteCobie("..\\..\\Lakeside_Restaurant.xlsx", out msg, "UK2012", true);
+
+                    
                     break;
                 }
             }
