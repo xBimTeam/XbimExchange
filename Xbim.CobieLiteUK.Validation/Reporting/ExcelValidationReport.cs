@@ -44,6 +44,10 @@ namespace Xbim.CobieLiteUK.Validation.Reporting
         public bool Create(Facility facility, string suggestedFilename, SpreadSheetFormat format)
         {
             var ssFileName = Path.ChangeExtension(suggestedFilename, format == SpreadSheetFormat.Xlsx ? "xlsx" : "xls");
+            if (File.Exists(ssFileName))
+            {
+                File.Delete(ssFileName);
+            }
             try
             {
                 using (var spreadsheetStream = new FileStream(ssFileName, FileMode.Create, FileAccess.Write))
@@ -56,6 +60,27 @@ namespace Xbim.CobieLiteUK.Validation.Reporting
                 Logger.ErrorFormat("Failed to save {0}, {1}", ssFileName, e.Message);
                 return false;
             }
+        }
+
+        /// <summary>
+        /// Creates the report.
+        /// </summary>
+        /// <param name="facility">the result of a DPoW validation to be transformed into report form.</param>
+        /// <param name="filename">target file for the spreadsheet</param>
+        /// <returns>true if successful, errors are cought and passed to Logger</returns>
+        public bool Create(Facility facility, String filename)
+        {
+            if (filename == null)
+                return false;
+            SpreadSheetFormat format;
+            var ext = Path.GetExtension(filename).ToLowerInvariant();
+            if (ext != "xlsx")
+                format = SpreadSheetFormat.Xlsx;
+            else if (ext != "xls")
+                format = SpreadSheetFormat.Xls;
+            else
+                return false;
+            return Create(facility, filename, format);
         }
 
         /// <summary>
@@ -113,6 +138,7 @@ namespace Xbim.CobieLiteUK.Validation.Reporting
 
         private static bool CreateDetailSheet(ISheet detailSheet, AssetTypeRequirementPointer requirementPointer)
         {
+
             try
             {
                 var excelRow = detailSheet.GetRow(0) ?? detailSheet.CreateRow(0);

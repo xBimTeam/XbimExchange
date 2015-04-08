@@ -33,12 +33,8 @@ namespace Tests
         {
             var validated = GetValidated();
             const string repName = @"..\..\ValidationReport.xlsx";
-            if (File.Exists(repName))
-            {
-                File.Delete(repName);
-            }
             var xRep = new ExcelValidationReport();
-            var ret = xRep.Create(validated, repName, ExcelValidationReport.SpreadSheetFormat.Xlsx);
+            var ret = xRep.Create(validated, repName);
             Assert.IsTrue(ret, "File not created");
         }
 
