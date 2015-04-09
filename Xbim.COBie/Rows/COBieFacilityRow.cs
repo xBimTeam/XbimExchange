@@ -16,7 +16,7 @@ namespace Xbim.COBie.Rows
     public class COBieFacilityRow : COBieRow
     {
         public COBieFacilityRow(ICOBieSheet<COBieFacilityRow> parentSheet)
-            : base(parentSheet) { }
+            : base(parentSheet) { ExternalFacilityIdentifier = IFCGuid.ToIfcGuid(Guid.NewGuid()); ExternalProjectIdentifier = IFCGuid.ToIfcGuid(Guid.NewGuid()); ExternalSiteIdentifier = IFCGuid.ToIfcGuid(Guid.NewGuid()); }
 
         [COBieAttributes(0, COBieKeyType.PrimaryKey, "", COBieAttributeState.Required_PrimaryKey, "Name", 255, COBieAllowedType.AlphaNumeric)]
         public string Name { get; set; }
