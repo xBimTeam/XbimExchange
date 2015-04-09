@@ -311,11 +311,7 @@ namespace Tests
             facility.WriteCobie(xlsxFile, out msg);
 
             var facility2 = Facility.ReadXml(xmlFile);
-            var facility3 = Facility.ReadJson(jsonFile);
-
-            var cloned = facility.Attributes.FirstOrDefault().Clone();
-
-
+            var facility3 = Facility.ReadJson(jsonFile);    
         }
 
         [TestMethod]
