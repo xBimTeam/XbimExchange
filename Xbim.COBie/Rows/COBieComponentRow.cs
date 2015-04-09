@@ -11,7 +11,7 @@ namespace Xbim.COBie.Rows
     public class COBieComponentRow : COBieRow
     {
         public COBieComponentRow(ICOBieSheet<COBieComponentRow> parentSheet)
-            : base(parentSheet) { }
+            : base(parentSheet) { ExtIdentifier = IFCGuid.ToIfcGuid(Guid.NewGuid()); }
 
         
 
