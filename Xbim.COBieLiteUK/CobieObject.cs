@@ -44,13 +44,13 @@ namespace Xbim.COBieLiteUK
             get { return _facility; }
         }
 
-        internal IEnumerable<T> GetDeep<T>(Func<T, bool> condition = null) where T: CobieObject
+        internal IEnumerable<T> GetDeep<T>(Func<T, bool> condition = null) where T : CobieObject
         {
             var children = GetChildren().ToArray();
             foreach (var child in children.OfType<T>())
             {
-                if(condition == null) yield return child;
-                else if(condition(child)) yield return child;
+                if (condition == null) yield return child;
+                else if (condition(child)) yield return child;
             }
             //traverse tree down
             foreach (var subChild in children.SelectMany(child => child.GetDeep(condition)))
@@ -93,7 +93,7 @@ namespace Xbim.COBieLiteUK
         protected string _parentNameValue;
         // ReSharper restore InconsistentNaming
 
-        private static IEnumerable<MappingAttribute> _mappings; 
+        private static IEnumerable<MappingAttribute> _mappings;
 
         internal static List<CobieObject> LoadFromCobie(Type cobieType, IWorkbook workbook, out string message,
             string version = "UK2012")
@@ -168,7 +168,7 @@ namespace Xbim.COBieLiteUK
                 {
                     var cellIndex = CellReference.ConvertColStringToIndex(mapping.Column);
                     var cell = row.GetCell(cellIndex);
-                    if(cell == null) continue;
+                    if (cell == null) continue;
 
                     //use reflection to set the value if the value is available
                     if ((cell.CellType == CellType.Blank || cell.CellType == CellType.Error) && mapping.Required)
@@ -255,7 +255,7 @@ namespace Xbim.COBieLiteUK
             {
                 var cellIndex = CellReference.ConvertColStringToIndex(mapping.Column);
                 var cell = row.GetCell(cellIndex) ?? row.CreateCell(cellIndex);
-                
+
                 //set default column style
                 cell.CellStyle = sheet.GetColumnStyle(cellIndex);
 
@@ -351,14 +351,19 @@ namespace Xbim.COBieLiteUK
                     {
                         if (mapping.Path.StartsWith("Categories")) //categories need to be handled differently
                         {
-                            if(Categories != null)
+                            if (Categories != null)
                                 foreach (var category in Categories)
                                 {
-                                    if(string.IsNullOrEmpty(category.Classification))
+                                    if (string.IsNullOrEmpty(category.Classification))
                                         WritePickListValue(workbook, mapping, category.CategoryString);
                                     else
                                     {
-                                        var alterMapping = new MappingAttribute { PickList = mapping.PickList.Substring(0, mapping.PickList.IndexOf('.') + 1) + category.Classification };
+                                        var alterMapping = new MappingAttribute
+                                        {
+                                            PickList =
+                                                mapping.PickList.Substring(0, mapping.PickList.IndexOf('.') + 1) +
+                                                category.Classification
+                                        };
                                         WritePickListValue(workbook, alterMapping, category.CategoryString);
                                     }
                                 }
@@ -388,7 +393,7 @@ namespace Xbim.COBieLiteUK
                     cell.SetCellValue(mapping.Header);
                 }
 
-                if(cell.CellType == CellType.String && cell.StringCellValue.Trim() != mapping.Header)
+                if (cell.CellType == CellType.String && cell.StringCellValue.Trim() != mapping.Header)
                     throw new Exception("Wrong template header!");
             }
         }
@@ -743,7 +748,7 @@ namespace Xbim.COBieLiteUK
                 foreach (var value in values)
                 {
                     if (value.Trim() == ":") continue; //this happens for some automatically created category strings
-                    
+
                     //create an instance of generic type
                     var itemType = type.GetGenericArguments()[0];
                     var item = Activator.CreateInstance(itemType);
@@ -835,7 +840,7 @@ namespace Xbim.COBieLiteUK
             var pickListAttr = _mappings.FirstOrDefault(m => !String.IsNullOrEmpty(m.PickList));
             if (pickListAttr == null) return null;
 
-            var parts = pickListAttr.PickList.Split(new[] { '.' }, StringSplitOptions.RemoveEmptyEntries);
+            var parts = pickListAttr.PickList.Split(new[] {'.'}, StringSplitOptions.RemoveEmptyEntries);
             if (parts.Length == 0) return null;
 
             var pickListName = parts[0];
@@ -846,7 +851,7 @@ namespace Xbim.COBieLiteUK
             {
                 foreach (ICell cell in row)
                 {
-                    if(cell.CellType != CellType.String || cell.StringCellValue != code) continue;
+                    if (cell.CellType != CellType.String || cell.StringCellValue != code) continue;
                     var index = cell.ColumnIndex;
                     var header = sheet.GetRow(0);
                     var headerCell = header.GetCell(index);
@@ -944,6 +949,37 @@ namespace Xbim.COBieLiteUK
                         int i;
                         if (int.TryParse(cell.StringCellValue, out i))
                             info.SetValue(obj, i);
+                        break;
+                    default:
+                        log.WriteLine("There is no suitable value for {0} in cell {1}{2}, sheet {3}",
+                            info.Name, CellReference.ConvertNumToColString(cell.ColumnIndex), cell.RowIndex + 1,
+                            cell.Sheet.SheetName);
+                        break;
+                }
+                return;
+            }
+
+            if (type == typeof (Boolean))
+            {
+                switch (cell.CellType)
+                {
+                    case CellType.Numeric:
+                        info.SetValue(obj, ((int) cell.NumericCellValue) != 0);
+                        break;
+                    case CellType.String:
+                        bool i;
+                        if (bool.TryParse(cell.StringCellValue, out i))
+                            info.SetValue(obj, i);
+                        else
+                        {
+                            log.WriteLine("Wrong boolean format of {0} in cell {1}{2}, sheet {3}",
+                                cell.StringCellValue, CellReference.ConvertNumToColString(cell.ColumnIndex),
+                                cell.RowIndex + 1,
+                                cell.Sheet.SheetName);
+                        }
+                        break;
+                    case CellType.Boolean:
+                        info.SetValue(obj, cell.BooleanCellValue);
                         break;
                     default:
                         log.WriteLine("There is no suitable value for {0} in cell {1}{2}, sheet {3}",

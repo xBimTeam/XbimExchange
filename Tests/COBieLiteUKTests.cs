@@ -375,15 +375,6 @@ namespace Tests
             facility.WriteCobie("..\\..\\OBN1-COBie-UK-2014_plain.xlsx", out msg, "UK2012", false);
         }
 
-        //[TestMethod]
-        //[DeploymentItem("TestFiles\\OBN1-COBie-UK-2014.xlsx")]
-        //public void WritingSpreadsheetFromJson()
-        //{
-        //    string msg;
-        //    var facility = Facility.ReadJson(@"c:\Users\mxfm2\Dropbox\Martin\NBS_LakesideRestaurant_EcoBuild2015_Revit2014_WithZones_DPoW.json");
-        //    facility.WriteCobie("..\\..\\Lakeside.xlsx", out msg);
-        //}
-
         [TestMethod]
         public void DeepSearchTest()
         {
