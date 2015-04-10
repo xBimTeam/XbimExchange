@@ -59,5 +59,17 @@ namespace Tests
             var validated = vd.Validate(req, sub);
             return validated;
         }
+
+        [TestMethod]
+        public void ValidateXlsLakeside()
+        {
+            const string xlsx = @"Lakeside.xls";
+            string msg;
+            var cobie = Facility.ReadCobie(xlsx, out msg);
+            var req = Facility.ReadJson(@"Lakeside_Restaurant-stage6-COBie.json");
+            var validator = new FacilityValidator();
+            var result = validator.Validate(req, cobie);
+
+        }
     }
 }
