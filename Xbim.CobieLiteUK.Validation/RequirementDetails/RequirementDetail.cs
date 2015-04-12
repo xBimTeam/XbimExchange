@@ -35,8 +35,8 @@ namespace Xbim.CobieLiteUK.Validation.RequirementDetails
             switch (Criterion)
             {
                 case EvaluationCriterion.ValueIsMeaningful:
-                    var v = attribute.Value.GetStringValue();
-                    return v != "n/a" && v != "user to define";
+                    var v = attribute.Value.GetStringValue().ToLowerInvariant();
+                    return v != "n/a" && v != "user to populate";
                     break;
                 default :
                     throw new NotImplementedException();
