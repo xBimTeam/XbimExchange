@@ -5,7 +5,6 @@ using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 using log4net.Util;
-using NPOI.SS.Formula.Functions;
 using Xbim.CobieLiteUK.Validation.Extensions;
 using Xbim.CobieLiteUK.Validation.RequirementDetails;
 using Xbim.COBieLiteUK;
@@ -13,11 +12,13 @@ using Attribute = Xbim.COBieLiteUK.Attribute;
 
 namespace Xbim.CobieLiteUK.Validation
 {
-    public class AssetTypeValidator : IValidator
+    public class CobieObjectValidator<T, TSub> : IValidator
+        where T : CobieObject, new()
+        where TSub : CobieObject, new()
     {
-        private readonly AssetType _requirementType;
+        private readonly T _requirementType;
 
-        public AssetTypeValidator(AssetType requirementType)
+        public CobieObjectValidator(T requirementType)
         {
             _requirementType = requirementType;
         }
@@ -34,6 +35,8 @@ namespace Xbim.CobieLiteUK.Validation
             }
         }
 
+        
+
         private IEnumerable<Attribute> RequirementAttributes()
         {
             if (_requirementType.Attributes == null) 
@@ -42,7 +45,6 @@ namespace Xbim.CobieLiteUK.Validation
                 x.Categories != null &&
                 x.Categories.Any(c => c.Classification == "DPoW" && c.Code == "required"));
         }
-
 
         private void RefreshRequirementDetails()
         {
@@ -67,13 +69,15 @@ namespace Xbim.CobieLiteUK.Validation
         /// </summary>
         /// <param name="candidateType">If null provides a missing match report</param>
         /// <returns></returns>
-        internal AssetType Validate(AssetType candidateType)
+        internal T Validate(T candidateType)
         {
             var iSubmitted = 0;
             var iPassed = 0;
+            List<TSub> candidateChildren = null;
+            List<TSub> returnChildren = null;
 
             // initialisation
-            var retType = new AssetType
+            var retType = new T()
             {
                 Categories = new List<Category>() 
             };
@@ -93,9 +97,10 @@ namespace Xbim.CobieLiteUK.Validation
                 retType.ExternalId = candidateType.ExternalId;
                 retType.ExternalSystem = candidateType.ExternalSystem;
                 retType.Categories = candidateType.Categories.Clone().ToList();
-                if (candidateType.Assets != null)
+                candidateChildren = candidateType.GetChildObjects<TSub>();
+                if (candidateChildren != null)
                 {
-                    iSubmitted = candidateType.Assets.Count;
+                    iSubmitted = candidateChildren.Count;
                 }
             }
 
@@ -132,7 +137,7 @@ namespace Xbim.CobieLiteUK.Validation
             // produce type level description
             var outstandingRequirementsCount = 0;
             
-            var cachedValidator = new CachedPropertiesAndAttributesValidator<AssetType>(candidateType);
+            var cachedValidator = new CachedPropertiesAndAttributesValidator<T>(candidateType);
             foreach (var req in RequirementDetails)
             {
                 object satValue;
@@ -159,17 +164,19 @@ namespace Xbim.CobieLiteUK.Validation
             retType.Description = string.Format("{0} of {1} requirement addressed at type level.", RequirementDetails.Count - outstandingRequirementsCount, RequirementDetails.Count);
             
             var anyAssetFails = false;
-            retType.Assets = new List<Asset>();
+            returnChildren = new List<TSub>();
+            retType.SetChildObjects(returnChildren);
             // perform tests at asset level
-            if (candidateType.Assets != null)
+            if (candidateChildren != null)
             {
-                foreach (var modelAsset in candidateType.Assets)
+                foreach (var modelAsset in candidateChildren)
                 {
                     int iAssetRequirementsMatched = 0;
-                    var reportAsset = new Asset
+                    var reportAsset = new TSub()
                     {
                         Name = modelAsset.Name,
-                        AssetIdentifier = modelAsset.AssetIdentifier,
+                        // todo: restore
+                        // AssetIdentifier = modelAsset.AssetIdentifier,
                         ExternalId = modelAsset.ExternalId,
                         Categories = new List<Category>(),
                         Attributes = new List<Attribute>()
@@ -180,7 +187,7 @@ namespace Xbim.CobieLiteUK.Validation
                     if (modelAsset.Categories != null)
                         reportAsset.Categories.AddRange(modelAsset.Categories);
 
-                    var assetCachedValidator = new CachedPropertiesAndAttributesValidator<Asset>(modelAsset);
+                    var assetCachedValidator = new CachedPropertiesAndAttributesValidator<T>(modelAsset as T);
                     foreach (var req in RequirementDetails)
                     {
                         object satValue;
@@ -227,7 +234,7 @@ namespace Xbim.CobieLiteUK.Validation
                         reportAsset.Categories.Add(FacilityValidator.PassedCat);
                     }
                     reportAsset.Description = sb.ToString();
-                    retType.Assets.Add(reportAsset);
+                    returnChildren.Add(reportAsset);
                 }
             }
             retType.Categories.Add(
@@ -299,35 +306,39 @@ namespace Xbim.CobieLiteUK.Validation
         /// </summary>
         /// <param name="submitted"></param>
         /// <returns></returns>
-        internal IEnumerable<AssetTypeCategoryMatch<AssetType>> GetCandidates(Facility submitted)
+        internal IEnumerable<AssetTypeCategoryMatch<T>> GetCandidates(Facility submitted)
         {
             if (_requirementType.Categories == null)
                 yield break;
             
-            var ret = new Dictionary<AssetType, List<Category>>();
-            foreach (var reqClass in _requirementType.Categories)
-            {
-                var thisClassMatch = reqClass.GetClassificationMatches(submitted.AssetTypes);
-                foreach (var matchedAsset in thisClassMatch)
-                {
-                    if (!ret.ContainsKey(matchedAsset.MatchedAssetType))
-                    {
-                        ret.Add(matchedAsset.MatchedAssetType, matchedAsset.MatchingCategories);
-                    }
-                    else
-                    {
-                        ret[matchedAsset.MatchedAssetType].AddRange(matchedAsset.MatchingCategories);
-                    }
-                }
-            }
+            // todo: restore from here
+            //
+            //var ret = new Dictionary<T, List<Category>>();
+            //foreach (var reqClass in _requirementType.Categories)
+            //{
+            //    var thisClassMatch = submitted.AssetTypes.GetClassificationMatches(reqClass);
+            //    foreach (var matchedAsset in thisClassMatch)
+            //    {
+            //        if (!ret.ContainsKey(matchedAsset.MatchedAssetType))
+            //        {
+            //            ret.Add(matchedAsset.MatchedAssetType, matchedAsset.MatchingCategories);
+            //        }
+            //        else
+            //        {
+            //            ret[matchedAsset.MatchedAssetType].AddRange(matchedAsset.MatchingCategories);
+            //        }
+            //    }
+            //}
 
-            foreach (var item in ret)
-            {
-                yield return new AssetTypeCategoryMatch<AssetType>(item.Key) { MatchingCategories = item.Value } ;
-            }
+            //foreach (var item in ret)
+            //{
+            //    yield return new AssetTypeCategoryMatch<T>(item.Key) { MatchingCategories = item.Value } ;
+            //}
+            // todo: end restore from here
+            yield break;
         }
 
-        internal AssetType Validate(AssetTypeCategoryMatch<AssetType> candidate)
+        internal T Validate(AssetTypeCategoryMatch<T> candidate)
         {
             var validated = Validate(candidate.MatchedAssetType);
             validated.SetMatchingCategories(candidate.MatchingCategories);
