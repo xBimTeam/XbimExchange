@@ -165,29 +165,29 @@ namespace Xbim.CobieLiteUK.Validation
             
             var anyAssetFails = false;
             returnChildren = new List<TSub>();
-            retType.SetChildObjects(returnChildren);
+            
             // perform tests at asset level
             if (candidateChildren != null)
             {
-                foreach (var modelAsset in candidateChildren)
+                foreach (var modelChild in candidateChildren)
                 {
                     int iAssetRequirementsMatched = 0;
                     var reportAsset = new TSub()
                     {
-                        Name = modelAsset.Name,
+                        Name = modelChild.Name,
                         // todo: restore
                         // AssetIdentifier = modelAsset.AssetIdentifier,
-                        ExternalId = modelAsset.ExternalId,
+                        ExternalId = modelChild.ExternalId,
                         Categories = new List<Category>(),
                         Attributes = new List<Attribute>()
                     };
 
                     // asset classification can be copied from model
                     //
-                    if (modelAsset.Categories != null)
-                        reportAsset.Categories.AddRange(modelAsset.Categories);
+                    if (modelChild.Categories != null)
+                        reportAsset.Categories.AddRange(modelChild.Categories);
 
-                    var assetCachedValidator = new CachedPropertiesAndAttributesValidator<T>(modelAsset as T);
+                    var assetCachedValidator = new CachedPropertiesAndAttributesValidator<TSub>(modelChild);
                     foreach (var req in RequirementDetails)
                     {
                         object satValue;
@@ -237,6 +237,7 @@ namespace Xbim.CobieLiteUK.Validation
                     returnChildren.Add(reportAsset);
                 }
             }
+            retType.SetChildObjects(returnChildren);
             retType.Categories.Add(
                 anyAssetFails ? FacilityValidator.FailedCat : FacilityValidator.PassedCat
                 );

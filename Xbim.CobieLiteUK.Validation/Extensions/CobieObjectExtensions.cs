@@ -15,18 +15,27 @@ namespace Xbim.CobieLiteUK.Validation.Extensions
     {
         public static List<T> GetChildObjects<T>(this CobieObject obj)
         {
-            if (typeof(T) == typeof(AssetType))
+            if (obj.GetType() == typeof(AssetType))
             {
                 return ((AssetType)obj).Assets as List<T>;
+            }
+            else if (obj.GetType() == typeof(Zone))
+            {
+                return ((Zone)obj).SpaceObjects as List<T>;
             }
             return null;
         }
 
         public static void SetChildObjects<T>(this CobieObject obj, List<T> newChildrenSet)
         {
-            if (typeof(T) == typeof(AssetType))
+            if (obj.GetType() == typeof(AssetType))
             {
                 ((AssetType)obj).Assets = newChildrenSet as List<Asset>;
+            }
+            if (obj.GetType() == typeof(Zone))
+            {
+                // todo: restore 
+                // ((Zone)obj).Spaces = newChildrenSet as List<Space>;
             }
         }
 

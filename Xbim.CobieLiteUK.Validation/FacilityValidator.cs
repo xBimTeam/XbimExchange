@@ -33,7 +33,7 @@ namespace Xbim.CobieLiteUK.Validation
             // a facility validation passes is carried out through the validation of
             // a) local values
             // b) Project
-            // b) assetTypes (WIP)
+            // c) assetTypes (WIP)
             // d) spaces (planned)
 
             // a)
@@ -99,28 +99,64 @@ namespace Xbim.CobieLiteUK.Validation
                     facilityPasses = false;
                 }
             }
-            // b)
-            foreach (var assetTypeRequirement in requirement.AssetTypes)
+            // c) asset types
+            if (requirement.AssetTypes != null)
             {
-                var v = new AssetTypeValidator(assetTypeRequirement) { TerminationMode = TerminationMode };
-                if (! v.HasRequirements )
-                    continue;
-                var candidates = v.GetCandidates(submitted.AssetTypes).ToList();
-                // ReSharper disable once PossibleMultipleEnumeration
-                if (candidates.Any())
+                foreach (var assetTypeRequirement in requirement.AssetTypes)
                 {
-                    foreach (var candidate in candidates)
+                    var v = new CobieObjectValidator<AssetType, Asset>(assetTypeRequirement)
+                    {
+                        TerminationMode = TerminationMode
+                    };
+                    if (! v.HasRequirements)
+                        continue;
+                    var candidates = v.GetCandidates(submitted.AssetTypes).ToList();
+                    // ReSharper disable once PossibleMultipleEnumeration
+                    if (candidates.Any())
+                    {
+                        foreach (var candidate in candidates)
+                        {
+                            if (retFacility.AssetTypes == null)
+                                retFacility.AssetTypes = new List<AssetType>();
+                            retFacility.AssetTypes.Add(v.Validate(candidate));
+                        }
+                    }
+                    else
                     {
                         if (retFacility.AssetTypes == null)
-                            retFacility.AssetTypes  = new List<AssetType>();
-                        retFacility.AssetTypes.Add(v.Validate(candidate));
+                            retFacility.AssetTypes = new List<AssetType>();
+                        retFacility.AssetTypes.Add(v.Validate((AssetType) null));
                     }
                 }
-                else
+            }
+            // d) zones
+            if (requirement.Zones != null)
+            {
+                foreach (var assetTypeRequirement in requirement.Zones)
                 {
-                    if (retFacility.AssetTypes == null)
-                        retFacility.AssetTypes = new List<AssetType>();
-                    retFacility.AssetTypes.Add(v.Validate((AssetType)null));
+                    var v = new CobieObjectValidator<Zone, Space>(assetTypeRequirement)
+                    {
+                        TerminationMode = TerminationMode
+                    };
+                    if (! v.HasRequirements)
+                        continue;
+                    var candidates = v.GetCandidates(submitted.Zones).ToList();
+                    // ReSharper disable once PossibleMultipleEnumeration
+                    if (candidates.Any())
+                    {
+                        foreach (var candidate in candidates)
+                        {
+                            if (retFacility.Zones == null)
+                                retFacility.Zones = new List<Zone>();
+                            retFacility.Zones.Add(v.Validate(candidate));
+                        }
+                    }
+                    else
+                    {
+                        if (retFacility.Zones == null)
+                            retFacility.Zones = new List<Zone>();
+                        retFacility.Zones.Add(v.Validate((Zone)null));
+                    }
                 }
             }
             retFacility.Description = sb.ToString();
