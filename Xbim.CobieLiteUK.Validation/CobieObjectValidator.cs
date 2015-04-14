@@ -306,36 +306,36 @@ namespace Xbim.CobieLiteUK.Validation
         /// </summary>
         /// <param name="submitted"></param>
         /// <returns></returns>
-        internal IEnumerable<AssetTypeCategoryMatch<T>> GetCandidates(Facility submitted)
+        internal IEnumerable<AssetTypeCategoryMatch<T>> GetCandidates(List<T> submitted)
         {
             if (_requirementType.Categories == null)
                 yield break;
             
             // todo: restore from here
             //
-            //var ret = new Dictionary<T, List<Category>>();
-            //foreach (var reqClass in _requirementType.Categories)
-            //{
-            //    var thisClassMatch = submitted.AssetTypes.GetClassificationMatches(reqClass);
-            //    foreach (var matchedAsset in thisClassMatch)
-            //    {
-            //        if (!ret.ContainsKey(matchedAsset.MatchedAssetType))
-            //        {
-            //            ret.Add(matchedAsset.MatchedAssetType, matchedAsset.MatchingCategories);
-            //        }
-            //        else
-            //        {
-            //            ret[matchedAsset.MatchedAssetType].AddRange(matchedAsset.MatchingCategories);
-            //        }
-            //    }
-            //}
+            var ret = new Dictionary<T, List<Category>>();
+            foreach (var reqClass in _requirementType.Categories)
+            {
+                var thisClassMatch = reqClass.GetClassificationMatches(submitted);
+                foreach (var matchedAsset in thisClassMatch)
+                {
+                    if (!ret.ContainsKey(matchedAsset.MatchedAssetType))
+                    {
+                        ret.Add(matchedAsset.MatchedAssetType, matchedAsset.MatchingCategories);
+                    }
+                    else
+                    {
+                        ret[matchedAsset.MatchedAssetType].AddRange(matchedAsset.MatchingCategories);
+                    }
+                }
+            }
 
-            //foreach (var item in ret)
-            //{
-            //    yield return new AssetTypeCategoryMatch<T>(item.Key) { MatchingCategories = item.Value } ;
-            //}
+            foreach (var item in ret)
+            {
+                yield return new AssetTypeCategoryMatch<T>(item.Key) { MatchingCategories = item.Value };
+            }
             // todo: end restore from here
-            yield break;
+           
         }
 
         internal T Validate(AssetTypeCategoryMatch<T> candidate)

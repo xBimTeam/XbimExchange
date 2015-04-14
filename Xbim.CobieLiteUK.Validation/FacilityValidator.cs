@@ -105,7 +105,7 @@ namespace Xbim.CobieLiteUK.Validation
                 var v = new AssetTypeValidator(assetTypeRequirement) { TerminationMode = TerminationMode };
                 if (! v.HasRequirements )
                     continue;
-                var candidates = v.GetCandidates(submitted).ToList();
+                var candidates = v.GetCandidates(submitted.AssetTypes).ToList();
                 // ReSharper disable once PossibleMultipleEnumeration
                 if (candidates.Any())
                 {
