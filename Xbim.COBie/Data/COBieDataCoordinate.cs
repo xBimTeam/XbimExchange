@@ -141,7 +141,10 @@ namespace Xbim.COBie.Data
                 coordinate.CoordinateZAxis = string.Format("{0:F4}", (double)ifcCartesianPointLower[2]);
                     coordinate.ExtSystem = GetExternalSystem(ifcProduct);
                     coordinate.ExtObject = ifcProduct.GetType().Name;
-                    coordinate.ExtIdentifier = ifcProduct.GlobalId.ToString();
+                    if (!string.IsNullOrEmpty(ifcProduct.GlobalId))
+                    {
+                        coordinate.ExtIdentifier = ifcProduct.GlobalId.ToString();
+                    }
                 coordinate.ClockwiseRotation = transBox.ClockwiseRotation.ToString("F4");
                 coordinate.ElevationalRotation = transBox.ElevationalRotation.ToString("F4");
                 coordinate.YawRotation = transBox.YawRotation.ToString("F4");
