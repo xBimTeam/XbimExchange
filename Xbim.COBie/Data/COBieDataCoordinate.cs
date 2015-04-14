@@ -141,7 +141,10 @@ namespace Xbim.COBie.Data
                 coordinate.CoordinateZAxis = string.Format("{0}", (double)ifcCartesianPointLower[2]);
                     coordinate.ExtSystem = GetExternalSystem(ifcProduct);
                     coordinate.ExtObject = ifcProduct.GetType().Name;
-                    coordinate.ExtIdentifier = ifcProduct.GlobalId.ToString();
+                    if (!string.IsNullOrEmpty(ifcProduct.GlobalId))
+                    {
+                        coordinate.ExtIdentifier = ifcProduct.GlobalId.ToString();
+                    }
                 coordinate.ClockwiseRotation = transBox.ClockwiseRotation.ToString();
                 coordinate.ElevationalRotation = transBox.ElevationalRotation.ToString();
                 coordinate.YawRotation = transBox.YawRotation.ToString();
@@ -156,9 +159,9 @@ namespace Xbim.COBie.Data
                         coordinateUpper.RowName = coordinate.RowName;
                         coordinateUpper.SheetName = coordinate.SheetName;
                         coordinateUpper.Category = "box-upperright";
-                    coordinateUpper.CoordinateXAxis = string.Format("{0}", (double)ifcCartesianPointUpper[0]);
-                    coordinateUpper.CoordinateYAxis = string.Format("{0}", (double)ifcCartesianPointUpper[1]);
-                    coordinateUpper.CoordinateZAxis = string.Format("{0}", (double)ifcCartesianPointUpper[2]);
+                        coordinateUpper.CoordinateXAxis = string.Format("{0}", (double)ifcCartesianPointUpper[0]);
+                        coordinateUpper.CoordinateYAxis = string.Format("{0}", (double)ifcCartesianPointUpper[1]);
+                        coordinateUpper.CoordinateZAxis = string.Format("{0}", (double)ifcCartesianPointUpper[2]);
                         coordinateUpper.ExtSystem = coordinate.ExtSystem;
                         coordinateUpper.ExtObject = coordinate.ExtObject;
                         coordinateUpper.ExtIdentifier = coordinate.ExtIdentifier;
@@ -173,7 +176,7 @@ namespace Xbim.COBie.Data
 
             coordinates.OrderBy(s => s.Name);
             
-                ProgressIndicator.Finalise();
+            ProgressIndicator.Finalise();
                 
 
             return coordinates;
