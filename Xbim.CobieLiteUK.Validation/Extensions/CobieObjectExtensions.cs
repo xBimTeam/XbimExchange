@@ -34,7 +34,25 @@ namespace Xbim.CobieLiteUK.Validation.Extensions
             }
             if (obj.GetType() == typeof(Zone))
             {
-                // todo: restore 
+                // todo: resume from here.
+
+                // spaces need to come from a floor
+                // I probably need to copy floors and spaces first and then only add references to the key in the zone here.
+                //_facility.Floors.Contains();
+                //Floor myFlorr = _facility.Floors.FirstOrDefault()
+
+                //Space space;
+                //space.
+
+
+
+
+                //Spaces = new List<SpaceKey>();
+                //foreach (var space in value)
+                //{
+                //    if (!_facility.Get<Space>().Contains(space))
+                //        _facility.a
+                //}
                 // ((Zone)obj).Spaces = newChildrenSet as List<Space>;
             }
         }

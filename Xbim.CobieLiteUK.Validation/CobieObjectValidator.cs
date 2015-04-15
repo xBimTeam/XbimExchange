@@ -1,10 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Text.RegularExpressions;
-using log4net.Util;
 using Xbim.CobieLiteUK.Validation.Extensions;
 using Xbim.CobieLiteUK.Validation.RequirementDetails;
 using Xbim.COBieLiteUK;
@@ -68,19 +64,18 @@ namespace Xbim.CobieLiteUK.Validation
         /// 
         /// </summary>
         /// <param name="candidateType">If null provides a missing match report</param>
+        /// <param name="targetFacility">The target facility is required to ensure that the facility tree is properly referenced</param>
         /// <returns></returns>
-        internal T Validate(T candidateType)
+        internal T Validate(T candidateType, Facility targetFacility)
         {
             var iSubmitted = 0;
             var iPassed = 0;
             List<TSub> candidateChildren = null;
-            List<TSub> returnChildren = null;
+            var returnChildren = new List<TSub>();
 
             // initialisation
-            var retType = new T()
-            {
-                Categories = new List<Category>() 
-            };
+            var retType = targetFacility.Create<T>();
+            retType.Categories = new List<Category>();
             retType.SetRequirementExternalSystem(_requirementType.ExternalSystem);
             retType.SetRequirementExternalId(_requirementType.ExternalId);
             retType.SetRequirementName(_requirementType.Name);
@@ -142,7 +137,7 @@ namespace Xbim.CobieLiteUK.Validation
             {
                 object satValue;
                 var pass = cachedValidator.CanSatisfy(req, out satValue);
-                var a = req.Attribute.Clone();
+                var a = targetFacility.Clone(req.Attribute);
                 if (satValue is AttributeValue)
                     a.Value = satValue as AttributeValue;
                 else
@@ -164,24 +159,22 @@ namespace Xbim.CobieLiteUK.Validation
             retType.Description = string.Format("{0} of {1} requirement addressed at type level.", RequirementDetails.Count - outstandingRequirementsCount, RequirementDetails.Count);
             
             var anyAssetFails = false;
-            returnChildren = new List<TSub>();
+            
             
             // perform tests at asset level
             if (candidateChildren != null)
             {
                 foreach (var modelChild in candidateChildren)
                 {
-                    int iAssetRequirementsMatched = 0;
-                    var reportAsset = new TSub()
-                    {
-                        Name = modelChild.Name,
+                    var iAssetRequirementsMatched = 0;
+                    var reportAsset = targetFacility.Create<TSub>();
+                    reportAsset.Name = modelChild.Name;
                         // todo: restore
                         // AssetIdentifier = modelAsset.AssetIdentifier,
-                        ExternalId = modelChild.ExternalId,
-                        Categories = new List<Category>(),
-                        Attributes = new List<Attribute>()
-                    };
-
+                    reportAsset.ExternalId = modelChild.ExternalId;
+                    reportAsset.Categories = new List<Category>();
+                    reportAsset.Attributes = new List<Attribute>();
+                
                     // asset classification can be copied from model
                     //
                     if (modelChild.Categories != null)
@@ -198,7 +191,7 @@ namespace Xbim.CobieLiteUK.Validation
                             {
                                 iAssetRequirementsMatched++;
                             }
-                            var a = req.Attribute.Clone();
+                            var a = targetFacility.Clone(req.Attribute);
                             if (satValue is AttributeValue)
                                 a.Value = satValue as AttributeValue;
                             else
@@ -208,7 +201,7 @@ namespace Xbim.CobieLiteUK.Validation
                         }
                         else if (!cachedValidator.AlreadySatisfies(req)) // fails locally, and is not passed at higher level, then add to explicit report fail
                         {
-                            var a = req.Attribute.Clone();
+                            var a = targetFacility.Clone(req.Attribute);
                             if (satValue is AttributeValue)
                                 a.Value = satValue as AttributeValue;
                             else
@@ -307,41 +300,36 @@ namespace Xbim.CobieLiteUK.Validation
         /// </summary>
         /// <param name="submitted"></param>
         /// <returns></returns>
-        internal IEnumerable<AssetTypeCategoryMatch<T>> GetCandidates(List<T> submitted)
+        internal IEnumerable<CobieObjectCategoryMatch<T>> GetCandidates(List<T> submitted)
         {
             if (_requirementType.Categories == null)
                 yield break;
-            
-            // todo: restore from here
-            //
+ 
             var ret = new Dictionary<T, List<Category>>();
             foreach (var reqClass in _requirementType.Categories)
             {
                 var thisClassMatch = reqClass.GetClassificationMatches(submitted);
                 foreach (var matchedAsset in thisClassMatch)
                 {
-                    if (!ret.ContainsKey(matchedAsset.MatchedAssetType))
+                    if (!ret.ContainsKey(matchedAsset.MatchedObject))
                     {
-                        ret.Add(matchedAsset.MatchedAssetType, matchedAsset.MatchingCategories);
+                        ret.Add(matchedAsset.MatchedObject, matchedAsset.MatchingCategories);
                     }
                     else
                     {
-                        ret[matchedAsset.MatchedAssetType].AddRange(matchedAsset.MatchingCategories);
+                        ret[matchedAsset.MatchedObject].AddRange(matchedAsset.MatchingCategories);
                     }
                 }
             }
-
             foreach (var item in ret)
             {
-                yield return new AssetTypeCategoryMatch<T>(item.Key) { MatchingCategories = item.Value };
+                yield return new CobieObjectCategoryMatch<T>(item.Key) { MatchingCategories = item.Value };
             }
-            // todo: end restore from here
-           
         }
 
-        internal T Validate(AssetTypeCategoryMatch<T> candidate)
+        internal T Validate(CobieObjectCategoryMatch<T> candidate, Facility targetFacility)
         {
-            var validated = Validate(candidate.MatchedAssetType);
+            var validated = Validate(candidate.MatchedObject, targetFacility);
             validated.SetMatchingCategories(candidate.MatchingCategories);
             return validated;
         }

@@ -22,7 +22,7 @@ namespace Tests
         [TestMethod]
         public void CanSaveValidatedVacility()
         {
-            var validated = GetValidated();
+            var validated = GetValidated(@"Lakeside_Restaurant-stage1-COBie.json");
             validated.WriteJson(@"..\..\ValidationReport.json", true);
             validated.WriteXml(@"..\..\ValidationReport.xml", true);
             validated.WriteJson(@"ValidationReport.json", true);
@@ -31,14 +31,14 @@ namespace Tests
         [TestMethod]
         public void CanSaveValidationReport()
         {
-            var validated = GetValidated();
+            var validated = GetValidated(@"Lakeside_Restaurant-stage6-COBie.json");
             const string repName = @"..\..\ValidationReport.xlsx";
             var xRep = new ExcelValidationReport();
             var ret = xRep.Create(validated, repName);
             Assert.IsTrue(ret, "File not created");
         }
 
-        private static Facility GetValidated()
+        private static Facility GetValidated(string requirementFile)
         {
             const string ifcTestFile = @"Lakeside_Restaurant.ifc";
             Facility sub = null;
@@ -55,7 +55,7 @@ namespace Tests
             }
             Assert.IsTrue(sub!=null);
             var vd = new FacilityValidator();
-            var req = Facility.ReadJson(@"Lakeside_Restaurant-stage6-COBie.json");
+            var req = Facility.ReadJson(requirementFile);
             var validated = vd.Validate(req, sub);
             return validated;
         }

@@ -94,28 +94,28 @@ namespace Tests
             }
         }
 
-        [TestMethod]
-        [DeploymentItem("ValidationFiles\\Lakeside_Restaurant-stage6-COBie.json")]
-        public void MegaReport()
-        {
-            var requirement = Facility.ReadJson("Lakeside_Restaurant-stage6-COBie.json");
-            var submitted = Facility.ReadJson(@"..\..\Lakeside_Restaurant.json");
-            var retFacility = new Facility {AssetTypes = new List<AssetType>()};
+        //[TestMethod]
+        //[DeploymentItem("ValidationFiles\\Lakeside_Restaurant-stage6-COBie.json")]
+        //public void MegaReport()
+        //{
+        //    var requirement = Facility.ReadJson("Lakeside_Restaurant-stage6-COBie.json");
+        //    var submitted = Facility.ReadJson(@"..\..\Lakeside_Restaurant.json");
+        //    var retFacility = new Facility {AssetTypes = new List<AssetType>()};
 
-            foreach (var assetTypeRequirement in requirement.AssetTypes)
-            {
-                var v = new AssetTypeValidator(assetTypeRequirement) { TerminationMode = TerminationMode.ExecuteCompletely };
-                if (!v.HasRequirements)
-                    continue;
-                var candidates = submitted.AssetTypes;
-                foreach (var candidate in candidates)
-                {
-                    if (retFacility.AssetTypes == null)
-                        retFacility.AssetTypes = new List<AssetType>();
-                    retFacility.AssetTypes.Add(v.Validate(candidate));
-                }
-            }
-            retFacility.WriteJson(@"..\..\megareport.json");
-        }
+        //    foreach (var assetTypeRequirement in requirement.AssetTypes)
+        //    {
+        //        var v = new AssetTypeValidator(assetTypeRequirement) { TerminationMode = TerminationMode.ExecuteCompletely };
+        //        if (!v.HasRequirements)
+        //            continue;
+        //        var candidates = submitted.AssetTypes;
+        //        foreach (var candidate in candidates)
+        //        {
+        //            if (retFacility.AssetTypes == null)
+        //                retFacility.AssetTypes = new List<AssetType>();
+        //            retFacility.AssetTypes.Add(v.Validate(candidate));
+        //        }
+        //    }
+        //    retFacility.WriteJson(@"..\..\megareport.json");
+        //}
     }
 }

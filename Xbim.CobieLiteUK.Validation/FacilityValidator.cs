@@ -118,14 +118,14 @@ namespace Xbim.CobieLiteUK.Validation
                         {
                             if (retFacility.AssetTypes == null)
                                 retFacility.AssetTypes = new List<AssetType>();
-                            retFacility.AssetTypes.Add(v.Validate(candidate));
+                            retFacility.AssetTypes.Add(v.Validate(candidate, retFacility));
                         }
                     }
                     else
                     {
                         if (retFacility.AssetTypes == null)
                             retFacility.AssetTypes = new List<AssetType>();
-                        retFacility.AssetTypes.Add(v.Validate((AssetType) null));
+                        retFacility.AssetTypes.Add(v.Validate((AssetType)null, retFacility));
                     }
                 }
             }
@@ -141,6 +141,10 @@ namespace Xbim.CobieLiteUK.Validation
                     if (! v.HasRequirements)
                         continue;
                     var candidates = v.GetCandidates(submitted.Zones).ToList();
+
+                    // hack: get candidates from spaces.
+                    // submitted.Get<Space>(sp=>sp.Categories)
+
                     // ReSharper disable once PossibleMultipleEnumeration
                     if (candidates.Any())
                     {
@@ -148,14 +152,14 @@ namespace Xbim.CobieLiteUK.Validation
                         {
                             if (retFacility.Zones == null)
                                 retFacility.Zones = new List<Zone>();
-                            retFacility.Zones.Add(v.Validate(candidate));
+                            retFacility.Zones.Add(v.Validate(candidate, retFacility));
                         }
                     }
                     else
                     {
                         if (retFacility.Zones == null)
                             retFacility.Zones = new List<Zone>();
-                        retFacility.Zones.Add(v.Validate((Zone)null));
+                        retFacility.Zones.Add(v.Validate((Zone)null, retFacility));
                     }
                 }
             }
