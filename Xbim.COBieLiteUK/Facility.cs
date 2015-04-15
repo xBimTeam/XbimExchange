@@ -304,25 +304,36 @@ namespace Xbim.COBieLiteUK
             return cloned;
         }
 
-        private static byte[] WriteJsonToMemory<T>(T o)
+        public IEnumerable<TNewCobieObject> Clone<TNewCobieObject>(IEnumerable<TNewCobieObject> originalCobieObjects) where TNewCobieObject : CobieObject, new()
+        {
+            return originalCobieObjects.Select(Clone);
+        }
+
+        private JsonSerializer _cachedCloningSerialiser;
+
+        private JsonSerializer CachedCloningSerialiser
+        {
+            get { return _cachedCloningSerialiser ?? (_cachedCloningSerialiser = GetJsonSerializer()); }
+        }
+        
+
+        private byte[] WriteJsonToMemory<T>(T o)
         {
             var stream = new MemoryStream();
             using (var textWriter = new StreamWriter(stream))
             {
-                var serialiser = GetJsonSerializer();
-                serialiser.Serialize(textWriter, o);
+                CachedCloningSerialiser.Serialize(textWriter, o);
                 stream.Flush();
             }
             return stream.GetBuffer();
         }
 
-        private static T ReadJsonFrom<T>(byte[] mem)
+        private T ReadJsonFrom<T>(byte[] mem)
         {
             Stream stream = new MemoryStream(mem);
             using (var textReader = new StreamReader(stream))
             {
-                var serialiser = GetJsonSerializer();
-                var deserialised = (T)serialiser.Deserialize(textReader, typeof(T));
+                var deserialised = (T)CachedCloningSerialiser.Deserialize(textReader, typeof(T));
                 return deserialised;
             }
         }
