@@ -22,8 +22,27 @@ namespace Xbim.COBieLiteUK
     }
 
 
+
     public partial class AssetType
     {
+        public AssetType()
+        {
+            //init inner object for warranty.
+            Warranty = new Warranty{GuarantorLabor = new ContactKey(), GuarantorParts = new ContactKey()};
+        }
+
+        internal override void AfterCobieRead()
+        {
+            base.AfterCobieRead();
+            if (AssemblyOf != null && AssemblyOf.ChildAssetsOrTypes != null)
+            {
+                foreach (var key in AssemblyOf.ChildAssetsOrTypes)
+                {
+                    key.KeyType = EntityType.AssetType;
+                }
+            }
+        }
+
         public AssetPortability AssetTypeEnum
         {
             get
@@ -93,13 +112,24 @@ namespace Xbim.COBieLiteUK
                 yield return key;
             if (Manufacturer != null)
                 yield return Manufacturer;
-            if (Warranty != null)
-            {
-                if (Warranty.GuarantorLabor != null)
-                    yield return Warranty.GuarantorLabor;
-                if (Warranty.GuarantorParts != null)
-                    yield return Warranty.GuarantorParts;
-            }
+
+            if (Warranty == null) yield break;
+            if (Warranty.GuarantorLabor != null)
+                yield return Warranty.GuarantorLabor;
+            if (Warranty.GuarantorParts != null)
+                yield return Warranty.GuarantorParts;
+        }
+
+        internal override void RemoveKey(IEntityKey key)
+        {
+            base.RemoveKey(key);
+            if (Manufacturer == key)
+                Manufacturer = null;
+            if(Warranty == null) return;
+            if (Warranty.GuarantorLabor == key)
+                Warranty.GuarantorLabor = null;
+            if (Warranty.GuarantorParts == key)
+                Warranty.GuarantorParts = null;
         }
     }
 }

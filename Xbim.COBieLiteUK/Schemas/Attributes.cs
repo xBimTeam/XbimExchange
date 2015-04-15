@@ -14,6 +14,11 @@ namespace Xbim.COBieLiteUK
         public bool List;
         public string PickList;
         public string Path;
+
+        internal MappingAttribute Clone()
+        {
+            return (MappingAttribute)MemberwiseClone();
+        }
     }
 
     [AttributeUsage(AttributeTargets.Class, AllowMultiple = true)]

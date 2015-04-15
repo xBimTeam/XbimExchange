@@ -353,6 +353,66 @@ namespace Tests
             Debug.Write(log.ToString());
         }
 
+        //[TestMethod]
+        public void CobieFix()
+        {
+            var files = new[]
+            {
+                //@"C:\Users\mxfm2\Downloads\Bad Cobie\Ext01.fixed.xlsx",
+                //@"C:\Users\mxfm2\Downloads\Bad Cobie\Ext01.xlsx",
+                @"C:\Users\mxfm2\Downloads\Bad Cobie\Ext01.xls",
+                @"C:\Users\mxfm2\Downloads\Bad Cobie\Struc.xls",
+                @"C:\Users\mxfm2\Downloads\Bad Cobie\Site.xls",
+                @"C:\Users\mxfm2\Downloads\Bad Cobie\INT02.xls",
+                @"C:\Users\mxfm2\Downloads\Bad Cobie\Int01.xls"
+            };
+            foreach (var file in files)
+            {
+                Stopwatch completeWatch = new Stopwatch();
+                completeWatch.Start();
+
+                var dir = Path.GetDirectoryName(file);
+                var name = Path.GetFileNameWithoutExtension(file);
+                var newFile = Path.Combine(dir ?? "", name + ".fixed.xlsx");
+                Debug.WriteLine("============ Processing: " + (name ?? ""));
+
+                using (var log = File.CreateText(Path.Combine(dir ?? "", name + ".fixed.txt")))
+                {
+                    Stopwatch stopWatch = new Stopwatch();
+                    stopWatch.Start();
+                    string msg;
+                    var facility = Facility.ReadCobie(file, out msg);
+                    stopWatch.Stop();
+
+                    if(!String.IsNullOrEmpty(msg))
+                        log.WriteLine(msg);
+                    Debug.WriteLine("Reading COBie: " + stopWatch.ElapsedMilliseconds);
+
+                    stopWatch.Reset();
+                    stopWatch.Start();
+                    facility.ValidateUK2012(log, true);
+                    stopWatch.Stop();
+
+                    Debug.WriteLine("Validating COBie: " + stopWatch.ElapsedMilliseconds);
+
+
+                    stopWatch.Reset();
+                    stopWatch.Start();
+                    //Debug.Write(msg);
+                    //Debug.Write(log.ToString());    
+                    facility.WriteCobie(newFile, out  msg);
+                    stopWatch.Stop();
+                    if (!String.IsNullOrEmpty(msg))
+                        log.WriteLine(msg);
+                    Debug.WriteLine("Writing COBie: " + stopWatch.ElapsedMilliseconds);
+                    log.Close();
+                }
+
+                completeWatch.Stop();
+                Debug.WriteLine("========== Complete processing of {0}: {1}ms", name, completeWatch.ElapsedMilliseconds);
+            }
+        }
+
         [TestMethod]
         [DeploymentItem("TestFiles\\2012-03-23-Duplex-Design.xlsx")]
         public void WritingSpreadsheet()

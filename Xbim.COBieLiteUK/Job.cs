@@ -17,9 +17,18 @@ namespace Xbim.COBieLiteUK
                 yield return key;
             if (Resources == null) yield break;
             foreach (var key in Resources)
-            {
                 yield return key;
-            }
+        }
+
+        internal override void RemoveKey(IEntityKey key)
+        {
+            base.RemoveKey(key);
+            var job = key as JobKey;
+            if (job != null && Priors != null)
+                Priors.Remove(job);
+            var res = key as ResourceKey;
+            if (res != null && Resources != null)
+                Resources.Remove(res);
         }
     }
 }

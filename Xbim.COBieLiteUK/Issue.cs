@@ -17,5 +17,14 @@ namespace Xbim.COBieLiteUK
             if(IssueWith != null)
                 yield return IssueWith;
         }
+
+        internal override void RemoveKey(IEntityKey key)
+        {
+            base.RemoveKey(key);
+            if (Owner == key)
+                Owner = null;
+            if (IssueWith == key)
+                IssueWith = null;
+        }
     }
 }
