@@ -10,7 +10,7 @@ namespace Xbim.COBie.Rows
     public class COBieSpareRow : COBieRow
     {
         public COBieSpareRow(ICOBieSheet<COBieSpareRow> parentSheet)
-            : base(parentSheet) { }
+            : base(parentSheet) { ExtIdentifier = IFCGuid.ToIfcGuid(Guid.NewGuid()); }
 
         [COBieAttributes(0, COBieKeyType.PrimaryKey, "", COBieAttributeState.Required_PrimaryKey, "Name", 255, COBieAllowedType.AlphaNumeric)]
         public string Name { get; set; }

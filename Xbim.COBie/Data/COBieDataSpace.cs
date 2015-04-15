@@ -140,7 +140,7 @@ namespace Xbim.COBie.Data
                     //if ((!string.IsNullOrEmpty(areaUnit)) && (areaUnit.ToLower().Contains("milli")) && (areavalue > 250000.0)) //we are using millimetres, and areavalue is lightly to be in mmsq if over 250000(0.5msq)
                     //    areavalue = areavalue / 1000000.0;
 
-                    return areavalue.ToString("F4");
+                    return areavalue.ToString();
                 }
             }
 
@@ -165,7 +165,7 @@ namespace Xbim.COBie.Data
                 {
                     //if ((!string.IsNullOrEmpty(areaUnit)) && (areaUnit.ToLower().Contains("milli")) && (areavalue > 250000.0))//we are using millimetres, and areavalue is lightly to be in mmsq if over 250000(0.5msq)
                     //    areavalue = areavalue / 1000000.0;
-                    return areavalue.ToString("F4");
+                    return areavalue.ToString();
                 }
                 return value;
             }
@@ -200,7 +200,7 @@ namespace Xbim.COBie.Data
                 //if ((!string.IsNullOrEmpty(areaUnit)) && (areaUnit.ToLower().Contains("milli")) && (areavalue > 250000.0)) //we are using millimetres, and areavalue is lightly to be in mmsq if over 250000(0.5msq)
                 //    areavalue = areavalue / 1000000.0;
                 
-		         return areavalue.ToString("F4");
+		         return areavalue.ToString();
 	        }
             
             //Fall back to properties
@@ -223,7 +223,7 @@ namespace Xbim.COBie.Data
                 {
                     //if ((!string.IsNullOrEmpty(areaUnit)) && (areaUnit.ToLower().Contains("milli")) && (areavalue > 250000.0))//we are using millimetres, and areavalue is lightly to be in mmsq if over 250000(0.5msq)
                     //    areavalue = areavalue / 1000000.0;
-                    return areavalue.ToString("F4");
+                    return areavalue.ToString();
                 }
                 return value; 
             }
@@ -240,7 +240,7 @@ namespace Xbim.COBie.Data
         {
             IfcLengthMeasure usableHt = ifcSpace.GetHeight();
             if (usableHt != null)
-            return ((double)usableHt).ToString("F3");
+            return ((double)usableHt).ToString();
             
             //Fall back to properties
             //get the property single values for this ifcSpace

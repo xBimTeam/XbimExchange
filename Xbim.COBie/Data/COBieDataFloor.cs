@@ -92,7 +92,7 @@ namespace Xbim.COBie.Data
                 floor.ExtIdentifier = ifcBuildingStorey.GlobalId;
                 string description = allPropertyValues.GetPropertySingleValueValue("COBieDescription", false);//support for COBie Toolkit for Autodesk Revit
                 floor.Description = ValidateString(description) ? description : GetFloorDescription(ifcBuildingStorey);
-                floor.Elevation = (string.IsNullOrEmpty(ifcBuildingStorey.Elevation.ToString())) ? DEFAULT_NUMERIC : string.Format("{0:F4}", (double)ifcBuildingStorey.Elevation);
+                floor.Elevation = (string.IsNullOrEmpty(ifcBuildingStorey.Elevation.ToString())) ? DEFAULT_NUMERIC : string.Format("{0}", (double)ifcBuildingStorey.Elevation);
 
                 floor.Height = GetFloorHeight(ifcBuildingStorey, allPropertyValues);
 
@@ -149,7 +149,7 @@ namespace Xbim.COBie.Data
                 //check it is a number and then format it
                 double dblvalue = 0;
                 if (double.TryParse(value, out dblvalue))
-                    return string.Format("{0:F4}", dblvalue); 
+                    return string.Format("{0}", dblvalue); 
             }
                 
             return DEFAULT_NUMERIC;

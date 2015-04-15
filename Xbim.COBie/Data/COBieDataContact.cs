@@ -84,7 +84,10 @@ namespace Xbim.COBie.Data
                 contact.ExtSystem = DEFAULT_STRING;   // TODO: Person is not a Root object so has no Owner. What should this be?
                 
                 contact.ExtObject = "IfcPersonAndOrganization";
-                contact.ExtIdentifier = ifcPerson.Id;
+                if (!string.IsNullOrEmpty(ifcPerson.Id))
+                {
+                    contact.ExtIdentifier = ifcPerson.Id;
+                }
                 //get department
                 string department = "";
                 if (ifcPerson.Addresses != null)
@@ -134,7 +137,6 @@ namespace Xbim.COBie.Data
                 contact.ExtSystem = DEFAULT_STRING;
 
                 contact.ExtObject = "IfcPropertySingleValue";
-                contact.ExtIdentifier = DEFAULT_STRING;
                 contact.Department = DEFAULT_STRING;
 
                 contact.OrganizationCode = DEFAULT_STRING;

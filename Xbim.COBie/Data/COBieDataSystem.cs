@@ -95,7 +95,10 @@ namespace Xbim.COBie.Data
                     sys.ComponentNames = product.Name;
                     sys.ExtSystem = GetExternalSystem(ifcGroup);
                     sys.ExtObject = ifcGroup.GetType().Name; //need to create product if filtered out in the components sheet
-                    sys.ExtIdentifier = ifcGroup.GlobalId;//need to create product if filtered out in the components sheet
+                    if (!string.IsNullOrEmpty(ifcGroup.GlobalId))
+                    {
+                        sys.ExtIdentifier = ifcGroup.GlobalId;//need to create product if filtered out in the components sheet
+                    }
                     sys.Description = GetSystemDescription(ifcGroup);
 
                     systems.AddRow(sys);
@@ -114,7 +117,10 @@ namespace Xbim.COBie.Data
                     sys.ComponentNames = DEFAULT_STRING;
                     sys.ExtSystem = GetExternalSystem(ifcGroup);
                     sys.ExtObject = ifcGroup.GetType().Name;
-                    sys.ExtIdentifier = ifcGroup.GlobalId;
+                    if (!string.IsNullOrEmpty(ifcGroup.GlobalId))
+                    {
+                        sys.ExtIdentifier = ifcGroup.GlobalId;
+                    }
                     sys.Description = GetSystemDescription(ifcGroup);
 
                     systems.AddRow(sys);
@@ -177,7 +183,6 @@ namespace Xbim.COBie.Data
                         sys.ComponentNames = ifcObject.Name;
                         sys.ExtSystem = GetExternalSystem(ifcPropertySet);
                         sys.ExtObject = ifcPropertySingleValue.GetType().Name;
-                        sys.ExtIdentifier = DEFAULT_STRING; //used IfcPropertySingleValue, has no GlobalId
                         sys.Description = string.IsNullOrEmpty(name) ? DEFAULT_STRING : name; ;
 
                         systems.AddRow(sys);

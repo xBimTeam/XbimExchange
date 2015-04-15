@@ -7,14 +7,14 @@ using Xbim.COBieLiteUK;
 
 namespace Xbim.CobieLiteUK.Validation.RequirementDetails
 {
-    internal class AssetTypeCategoryMatch
+    internal class CobieObjectCategoryMatch 
     {
-        public AssetType MatchedAssetType;
+        public CobieObject MatchedObject;
         public List<Category> MatchingCategories;
 
-        public AssetTypeCategoryMatch(AssetType evaluatingType)
+        public CobieObjectCategoryMatch(CobieObject evaluatingType)
         {
-            MatchedAssetType = evaluatingType;
+            MatchedObject = evaluatingType;
             MatchingCategories = new List<Category>();
         }
     }

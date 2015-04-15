@@ -7,20 +7,14 @@ using Xbim.CobieLiteUK.Validation.RequirementDetails;
 
 namespace Xbim.CobieLiteUK.Validation
 {
-    class CachedPropertiesAndAttributesValidator
+    class CachedPropertiesAndAttributesValidator<T> where T : CobieObject, new()
     {
-        private Asset _modelAsset;
-        private AssetType _candidateType;
+        private T _modelAsset;
+        
         private readonly Dictionary<string, Attribute> _dicAtt;
-        private  Dictionary<RequirementDetail, bool> _dicReqs = new Dictionary<RequirementDetail, bool>();
+        private readonly Dictionary<RequirementDetail, bool> _dicReqs = new Dictionary<RequirementDetail, bool>();
 
-        public CachedPropertiesAndAttributesValidator(AssetType typeToTest)
-        {
-            _candidateType = typeToTest;
-            _dicAtt = typeToTest.Attributes.ToDictionary(att => att.Name, att => att);
-        }
-
-        public CachedPropertiesAndAttributesValidator(Asset assetToTest)
+        public CachedPropertiesAndAttributesValidator(T assetToTest)
         {
 
             this._modelAsset = assetToTest;

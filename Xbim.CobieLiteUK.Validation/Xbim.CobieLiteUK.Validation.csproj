@@ -95,9 +95,9 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AssetTypeValidator.cs" />
+    <Compile Include="CobieObjectValidator.cs" />
     <Compile Include="CachedPropertiesAndAttributesValidator.cs" />
-    <Compile Include="Extensions\AssetTypesExtensions.cs" />
+    <Compile Include="Extensions\CobieObjectExtensions.cs" />
     <Compile Include="Extensions\CategoryExtensions.cs" />
     <Compile Include="Extensions\FacilityExtensions.cs" />
     <Compile Include="Extensions\StringExtensions.cs" />
@@ -113,7 +113,7 @@
     <Compile Include="Reporting\IVisualValue.cs" />
     <Compile Include="Reporting\ValidatedAttribute.cs" />
     <Compile Include="Reporting\VisualValue.cs" />
-    <Compile Include="RequirementDetails\AssetTypeCategoryMatch.cs" />
+    <Compile Include="RequirementDetails\CobieObjectCategoryMatch.cs" />
     <Compile Include="RequirementDetails\RequirementDetail.cs" />
     <Compile Include="Reporting\ExcelValidationReport.cs" />
     <Compile Include="RequirementDetails\RequirementProvision.cs" />

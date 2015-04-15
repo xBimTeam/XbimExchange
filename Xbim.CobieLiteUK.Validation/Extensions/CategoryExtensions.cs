@@ -1,7 +1,9 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using NPOI.SS.Formula.Functions;
 using Xbim.COBieLiteUK;
+using Xbim.CobieLiteUK.Validation.RequirementDetails;
 
 namespace Xbim.CobieLiteUK.Validation.Extensions
 {
@@ -10,12 +12,46 @@ namespace Xbim.CobieLiteUK.Validation.Extensions
     /// </summary>
     public  static class CategoryExtensions
     {
+
+        /// <summary>
+        /// Filters a provided enumerable of AssetTypes matching a specified category
+        /// </summary>
+        /// <param name="types">The initial enumerable</param>
+        /// <param name="requiredCategory">Classification and Codes of the provided categories will be tested for matches</param>
+        /// <param name="includeCategoryChildren">if true extends the matching rule to include all categories starting with the required code</param>
+        /// <returns></returns>
+        static internal IEnumerable<CobieObjectCategoryMatch> GetClassificationMatches<T>(this Category requiredCategory, IEnumerable<T> types, bool includeCategoryChildren = true) where T : CobieObject
+        {
+            if (requiredCategory == null)
+                return Enumerable.Empty<CobieObjectCategoryMatch>();
+
+            var buildingDictionary = new Dictionary<T, CobieObjectCategoryMatch>();
+
+            foreach (var evaluatingType in types)
+            {
+                if (evaluatingType.Categories == null)
+                    continue;
+
+                var buffer = includeCategoryChildren
+                    ? evaluatingType.Categories.MatchingChildrenOf(requiredCategory).ToList()
+                    : evaluatingType.Categories.Matching(requiredCategory).ToList();
+
+                if (!buffer.Any())
+                    continue;
+                if (!buildingDictionary.ContainsKey(evaluatingType))
+                    buildingDictionary.Add(evaluatingType, new CobieObjectCategoryMatch(evaluatingType));
+                buildingDictionary[evaluatingType].MatchingCategories.AddRange(buffer);
+            }
+
+            return buildingDictionary.Values;
+        }
+
         public static bool IsChildOf(this Category testedCategory, Category requiredCategory)
         {
-            return 
+            return
                 //testedCategory.Classification == requiredCategory.Classification 
                 //&& 
-                testedCategory.Code.StartsWith(requiredCategory.Code);
+                testedCategory.Code.StartsWith(requiredCategory.Code, StringComparison.InvariantCultureIgnoreCase);
         }
 
         public static bool ExactlyMatches(this Category testedCategory, Category requiredCategory)
@@ -73,7 +109,5 @@ namespace Xbim.CobieLiteUK.Validation.Extensions
         {
             return testedCategories.Any(testedCategory => testedCategory.ExactlyMatches(requiredCategory));
         }
-
-        
     }
 }

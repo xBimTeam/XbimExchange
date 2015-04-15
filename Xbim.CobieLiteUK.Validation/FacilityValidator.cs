@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using Xbim.COBieLiteUK;
@@ -33,7 +34,7 @@ namespace Xbim.CobieLiteUK.Validation
             // a facility validation passes is carried out through the validation of
             // a) local values
             // b) Project
-            // b) assetTypes (WIP)
+            // c) assetTypes (WIP)
             // d) spaces (planned)
 
             // a)
@@ -99,28 +100,78 @@ namespace Xbim.CobieLiteUK.Validation
                     facilityPasses = false;
                 }
             }
-            // b)
-            foreach (var assetTypeRequirement in requirement.AssetTypes)
+            // c) asset types
+            if (requirement.AssetTypes != null)
             {
-                var v = new AssetTypeValidator(assetTypeRequirement) { TerminationMode = TerminationMode };
-                if (! v.HasRequirements )
-                    continue;
-                var candidates = v.GetCandidates(submitted).ToList();
-                // ReSharper disable once PossibleMultipleEnumeration
-                if (candidates.Any())
+                foreach (var assetTypeRequirement in requirement.AssetTypes)
                 {
-                    foreach (var candidate in candidates)
+                    var v = new CobieObjectValidator<AssetType, Asset>(assetTypeRequirement)
+                    {
+                        TerminationMode = TerminationMode
+                    };
+                    if (! v.HasRequirements)
+                        continue;
+                    var candidates = v.GetCandidates(submitted.AssetTypes).ToList();
+                    // ReSharper disable once PossibleMultipleEnumeration
+                    if (candidates.Any())
+                    {
+                        foreach (var candidate in candidates)
+                        {
+                            if (retFacility.AssetTypes == null)
+                                retFacility.AssetTypes = new List<AssetType>();
+                            retFacility.AssetTypes.Add(v.Validate(candidate, retFacility));
+                        }
+                    }
+                    else
                     {
                         if (retFacility.AssetTypes == null)
-                            retFacility.AssetTypes  = new List<AssetType>();
-                        retFacility.AssetTypes.Add(v.Validate(candidate));
+                            retFacility.AssetTypes = new List<AssetType>();
+                        retFacility.AssetTypes.Add(v.Validate((AssetType)null, retFacility));
                     }
                 }
-                else
+            }
+            // d) zones
+            if (requirement.Zones != null)
+            {
+                // hack: create a fake modelFacility candidates from spaces.
+                var fakeSubmittedFacility = new Facility();
+                fakeSubmittedFacility.Floors = fakeSubmittedFacility.Clone(submitted.Floors as IEnumerable<Floor>).ToList();
+
+                foreach (var zoneRequirement in requirement.Zones)
                 {
-                    if (retFacility.AssetTypes == null)
-                        retFacility.AssetTypes = new List<AssetType>();
-                    retFacility.AssetTypes.Add(v.Validate((AssetType)null));
+                    var v = new CobieObjectValidator<Zone, Space>(zoneRequirement)
+                    {
+                        TerminationMode = TerminationMode
+                    };
+                    if (! v.HasRequirements)
+                        continue;
+                    // var candidates = v.GetCandidates(submitted.Zones).ToList();
+                    // hack: now create a fake Zone based on candidates from spaces.
+                    var lSpaces = submitted.Get<Space>().ToList();
+                    var candidateSpaces = v.GetCandidates(lSpaces);
+
+                    foreach (var spaceMatch in candidateSpaces)
+                    {
+                        Debug.WriteLine(spaceMatch);
+                    }
+
+
+                    //// ReSharper disable once PossibleMultipleEnumeration
+                    //if (candidates.Any())
+                    //{
+                    //    foreach (var candidate in candidates)
+                    //    {
+                    //        if (retFacility.Zones == null)
+                    //            retFacility.Zones = new List<Zone>();
+                    //        retFacility.Zones.Add(v.Validate(candidate, retFacility));
+                    //    }
+                    //}
+                    //else
+                    //{
+                    //    if (retFacility.Zones == null)
+                    //        retFacility.Zones = new List<Zone>();
+                    //    retFacility.Zones.Add(v.Validate((Zone)null, retFacility));
+                    //}
                 }
             }
             retFacility.Description = sb.ToString();
