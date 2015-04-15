@@ -169,7 +169,7 @@ namespace Xbim.CobieLiteUK.Validation
                     var reportAsset = new Asset
                     {
                         Name = modelAsset.Name,
-                        AssetIdentifier = modelAsset.AssetIdentifier,
+                        // AssetIdentifier = modelAsset.AssetIdentifier,
                         ExternalId = modelAsset.ExternalId,
                         Categories = new List<Category>(),
                         Attributes = new List<Attribute>()
@@ -299,7 +299,7 @@ namespace Xbim.CobieLiteUK.Validation
         /// </summary>
         /// <param name="submitted"></param>
         /// <returns></returns>
-        internal IEnumerable<AssetTypeCategoryMatch<AssetType>> GetCandidates(Facility submitted)
+        internal IEnumerable<AssetTypeCategoryMatch<AssetType>> GetCandidates(List<AssetType> submitted)
         {
             if (_requirementType.Categories == null)
                 yield break;
@@ -307,7 +307,7 @@ namespace Xbim.CobieLiteUK.Validation
             var ret = new Dictionary<AssetType, List<Category>>();
             foreach (var reqClass in _requirementType.Categories)
             {
-                var thisClassMatch = reqClass.GetClassificationMatches(submitted.AssetTypes);
+                var thisClassMatch = reqClass.GetClassificationMatches(submitted);
                 foreach (var matchedAsset in thisClassMatch)
                 {
                     if (!ret.ContainsKey(matchedAsset.MatchedAssetType))

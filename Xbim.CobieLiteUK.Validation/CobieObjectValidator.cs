@@ -1,10 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Text.RegularExpressions;
-using log4net.Util;
 using Xbim.CobieLiteUK.Validation.Extensions;
 using Xbim.CobieLiteUK.Validation.RequirementDetails;
 using Xbim.COBieLiteUK;
@@ -68,19 +64,18 @@ namespace Xbim.CobieLiteUK.Validation
         /// 
         /// </summary>
         /// <param name="candidateType">If null provides a missing match report</param>
+        /// <param name="targetFacility">The target facility is required to ensure that the facility tree is properly referenced</param>
         /// <returns></returns>
-        internal T Validate(T candidateType)
+        internal T Validate(T candidateType, Facility targetFacility)
         {
             var iSubmitted = 0;
             var iPassed = 0;
             List<TSub> candidateChildren = null;
-            List<TSub> returnChildren = null;
+            var returnChildren = new List<TSub>();
 
             // initialisation
-            var retType = new T()
-            {
-                Categories = new List<Category>() 
-            };
+            var retType = targetFacility.Create<T>();
+            retType.Categories = new List<Category>();
             retType.SetRequirementExternalSystem(_requirementType.ExternalSystem);
             retType.SetRequirementExternalId(_requirementType.ExternalId);
             retType.SetRequirementName(_requirementType.Name);
@@ -142,7 +137,7 @@ namespace Xbim.CobieLiteUK.Validation
             {
                 object satValue;
                 var pass = cachedValidator.CanSatisfy(req, out satValue);
-                var a = req.Attribute.Clone();
+                var a = targetFacility.Clone(req.Attribute);
                 if (satValue is AttributeValue)
                     a.Value = satValue as AttributeValue;
                 else
@@ -164,30 +159,28 @@ namespace Xbim.CobieLiteUK.Validation
             retType.Description = string.Format("{0} of {1} requirement addressed at type level.", RequirementDetails.Count - outstandingRequirementsCount, RequirementDetails.Count);
             
             var anyAssetFails = false;
-            returnChildren = new List<TSub>();
-            retType.SetChildObjects(returnChildren);
+            
+            
             // perform tests at asset level
             if (candidateChildren != null)
             {
-                foreach (var modelAsset in candidateChildren)
+                foreach (var modelChild in candidateChildren)
                 {
-                    int iAssetRequirementsMatched = 0;
-                    var reportAsset = new TSub()
-                    {
-                        Name = modelAsset.Name,
+                    var iAssetRequirementsMatched = 0;
+                    var reportAsset = targetFacility.Create<TSub>();
+                    reportAsset.Name = modelChild.Name;
                         // todo: restore
                         // AssetIdentifier = modelAsset.AssetIdentifier,
-                        ExternalId = modelAsset.ExternalId,
-                        Categories = new List<Category>(),
-                        Attributes = new List<Attribute>()
-                    };
-
+                    reportAsset.ExternalId = modelChild.ExternalId;
+                    reportAsset.Categories = new List<Category>();
+                    reportAsset.Attributes = new List<Attribute>();
+                
                     // asset classification can be copied from model
                     //
-                    if (modelAsset.Categories != null)
-                        reportAsset.Categories.AddRange(modelAsset.Categories);
+                    if (modelChild.Categories != null)
+                        reportAsset.Categories.AddRange(modelChild.Categories);
 
-                    var assetCachedValidator = new CachedPropertiesAndAttributesValidator<T>(modelAsset as T);
+                    var assetCachedValidator = new CachedPropertiesAndAttributesValidator<TSub>(modelChild);
                     foreach (var req in RequirementDetails)
                     {
                         object satValue;
@@ -198,7 +191,7 @@ namespace Xbim.CobieLiteUK.Validation
                             {
                                 iAssetRequirementsMatched++;
                             }
-                            var a = req.Attribute.Clone();
+                            var a = targetFacility.Clone(req.Attribute);
                             if (satValue is AttributeValue)
                                 a.Value = satValue as AttributeValue;
                             else
@@ -208,7 +201,7 @@ namespace Xbim.CobieLiteUK.Validation
                         }
                         else if (!cachedValidator.AlreadySatisfies(req)) // fails locally, and is not passed at higher level, then add to explicit report fail
                         {
-                            var a = req.Attribute.Clone();
+                            var a = targetFacility.Clone(req.Attribute);
                             if (satValue is AttributeValue)
                                 a.Value = satValue as AttributeValue;
                             else
@@ -237,6 +230,7 @@ namespace Xbim.CobieLiteUK.Validation
                     returnChildren.Add(reportAsset);
                 }
             }
+            retType.SetChildObjects(returnChildren);
             retType.Categories.Add(
                 anyAssetFails ? FacilityValidator.FailedCat : FacilityValidator.PassedCat
                 );
@@ -306,42 +300,43 @@ namespace Xbim.CobieLiteUK.Validation
         /// </summary>
         /// <param name="submitted"></param>
         /// <returns></returns>
-        internal IEnumerable<AssetTypeCategoryMatch<T>> GetCandidates(Facility submitted)
+        internal IEnumerable<CobieObjectCategoryMatch> GetCandidates<TReq>(List<TReq> submitted) where TReq : CobieObject
         {
             if (_requirementType.Categories == null)
                 yield break;
-            
-            // todo: restore from here
-            //
-            //var ret = new Dictionary<T, List<Category>>();
-            //foreach (var reqClass in _requirementType.Categories)
-            //{
-            //    var thisClassMatch = submitted.AssetTypes.GetClassificationMatches(reqClass);
-            //    foreach (var matchedAsset in thisClassMatch)
-            //    {
-            //        if (!ret.ContainsKey(matchedAsset.MatchedAssetType))
-            //        {
-            //            ret.Add(matchedAsset.MatchedAssetType, matchedAsset.MatchingCategories);
-            //        }
-            //        else
-            //        {
-            //            ret[matchedAsset.MatchedAssetType].AddRange(matchedAsset.MatchingCategories);
-            //        }
-            //    }
-            //}
-
-            //foreach (var item in ret)
-            //{
-            //    yield return new AssetTypeCategoryMatch<T>(item.Key) { MatchingCategories = item.Value } ;
-            //}
-            // todo: end restore from here
-            yield break;
+ 
+            var ret = new Dictionary<T, List<Category>>();
+            foreach (var reqClass in _requirementType.Categories)
+            {
+                var thisClassMatch = reqClass.GetClassificationMatches(submitted);
+                foreach (var matchedAsset in thisClassMatch)
+                {
+                    var matchedObjectAsT = matchedAsset.MatchedObject as T;
+                    if (matchedObjectAsT == null)
+                        continue;
+                    if (!ret.ContainsKey(matchedObjectAsT))
+                    {
+                        ret.Add(matchedObjectAsT, matchedAsset.MatchingCategories);
+                    }
+                    else
+                    {
+                        ret[matchedObjectAsT].AddRange(matchedAsset.MatchingCategories);
+                    }
+                }
+            }
+            foreach (var item in ret)
+            {
+                yield return new CobieObjectCategoryMatch(item.Key) { MatchingCategories = item.Value };
+            }
         }
 
-        internal T Validate(AssetTypeCategoryMatch<T> candidate)
+        internal T Validate(CobieObjectCategoryMatch candidateMatch, Facility targetFacility)
         {
-            var validated = Validate(candidate.MatchedAssetType);
-            validated.SetMatchingCategories(candidate.MatchingCategories);
+            var candidateT = candidateMatch.MatchedObject as T;
+            if (candidateT == null)
+                return null;
+            var validated = Validate(candidateT, targetFacility);
+            validated.SetMatchingCategories(candidateMatch.MatchingCategories);
             return validated;
         }
     }

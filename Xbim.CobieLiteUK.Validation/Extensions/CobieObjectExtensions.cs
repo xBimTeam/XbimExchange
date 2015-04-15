@@ -15,18 +15,45 @@ namespace Xbim.CobieLiteUK.Validation.Extensions
     {
         public static List<T> GetChildObjects<T>(this CobieObject obj)
         {
-            if (typeof(T) == typeof(AssetType))
+            if (obj.GetType() == typeof(AssetType))
             {
                 return ((AssetType)obj).Assets as List<T>;
+            }
+            else if (obj.GetType() == typeof(Zone))
+            {
+                return ((Zone)obj).SpaceObjects as List<T>;
             }
             return null;
         }
 
         public static void SetChildObjects<T>(this CobieObject obj, List<T> newChildrenSet)
         {
-            if (typeof(T) == typeof(AssetType))
+            if (obj.GetType() == typeof(AssetType))
             {
                 ((AssetType)obj).Assets = newChildrenSet as List<Asset>;
+            }
+            if (obj.GetType() == typeof(Zone))
+            {
+                // todo: resume from here.
+
+                // spaces need to come from a floor
+                // I probably need to copy floors and spaces first and then only add references to the key in the zone here.
+                //_facility.Floors.Contains();
+                //Floor myFlorr = _facility.Floors.FirstOrDefault()
+
+                //Space space;
+                //space.
+
+
+
+
+                //Spaces = new List<SpaceKey>();
+                //foreach (var space in value)
+                //{
+                //    if (!_facility.Get<Space>().Contains(space))
+                //        _facility.a
+                //}
+                // ((Zone)obj).Spaces = newChildrenSet as List<Space>;
             }
         }
 

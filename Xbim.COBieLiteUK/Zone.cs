@@ -29,8 +29,8 @@ namespace Xbim.COBieLiteUK
                     throw new Exception(
                         "You have to call 'Refresh()' method on Facility object before you use this property.");
                 if (Spaces == null) return new List<Space>();
-                var names = Spaces.Select(s => s.Name);
-                return _facility.Get<Space>(s => names.Contains(s.Name));
+                var keyNames = Spaces.Select(s => s.Name);
+                return _facility.Get<Space>(s => keyNames.Contains(s.Name));
             }
         }
 
