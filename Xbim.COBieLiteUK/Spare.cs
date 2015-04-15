@@ -16,5 +16,13 @@ namespace Xbim.COBieLiteUK
             foreach (var key in Suppliers)
                 yield return key;
         }
+
+        internal override void RemoveKey(IEntityKey key)
+        {
+            base.RemoveKey(key);
+            var contact = key as ContactKey;
+            if (contact != null && Suppliers != null)
+                Suppliers.Remove(contact);
+        }
     }
 }

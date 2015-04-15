@@ -28,5 +28,25 @@ namespace Xbim.COBieLiteUK
             foreach (var key in Spaces)
                 yield return key;
         }
+
+        internal override void RemoveKey(IEntityKey key)
+        {
+            base.RemoveKey(key);
+            var space = key as SpaceKey;
+            if(space == null || Spaces == null) return;
+            Spaces.Remove(space);
+        }
+
+        internal override void AfterCobieRead()
+        {
+            base.AfterCobieRead();
+            if (AssemblyOf != null && AssemblyOf.ChildAssetsOrTypes != null)
+            {
+                foreach (var key in AssemblyOf.ChildAssetsOrTypes)
+                {
+                    key.KeyType = EntityType.Asset;
+                }
+            }
+        }
     }
 }

@@ -87,13 +87,24 @@ namespace Xbim.COBieLiteUK
                 yield return key;
         }
 
+        internal virtual void RemoveKey(IEntityKey key)
+        {
+            if (CreatedBy == key)
+                CreatedBy = null;
+
+            var stage = key as ProjectStageKey;
+            if (ProjectStages == null || stage == null) return;
+            ProjectStages.Remove(stage);
+        }
+
+        internal virtual void AfterCobieRead()
+        {
+        }
+
         // ReSharper disable InconsistentNaming
         protected string _parentSheet;
-        protected string _parentNameProperty;
         protected string _parentNameValue;
         // ReSharper restore InconsistentNaming
-
-        private static IEnumerable<MappingAttribute> _mappings;
 
         internal static List<CobieObject> LoadFromCobie(Type cobieType, IWorkbook workbook, out string message,
             string version = "UK2012")
@@ -104,6 +115,7 @@ namespace Xbim.COBieLiteUK
             //refresh log for this run
             var log = new StringWriter();
             var result = new List<CobieObject>();
+            var classificationNameCache = new Dictionary<string, string>();
 
             //fill in object attributes first
             var sheetName = GetSheetName(cobieType, version);
@@ -118,53 +130,46 @@ namespace Xbim.COBieLiteUK
             var sheet = workbook.GetSheet(sheetName);
             if (sheet == null)
             {
-                log.WriteLine("There is no {0} sheet for a {1}.", sheetName, cobieType.Name);
                 message = log.ToString();
                 return result;
             }
 
             //get mappings
-            _mappings = GetMapping(cobieType, version).ToList();
-            if (!_mappings.Any())
+            var mappings = GetMapping(cobieType, version, true).ToList();
+            if (!mappings.Any())
             {
                 log.WriteLine("There is no mapping for a {0} parameters", cobieType.Name);
                 message = log.ToString();
                 return result;
             }
 
-            var firstRowNum = sheet.FirstRowNum;
-            var lastRowNum = sheet.LastRowNum;
-
             //fix mappings for the case columns are swapped for some reason
-            var msg = FixMappings(_mappings, sheet);
+            var msg = FixMappings(mappings, sheet);
             if (!String.IsNullOrEmpty(msg))
                 log.Write(msg);
 
             //iterate over rows in the sheet (skip the header)
-            for (int i = firstRowNum + 1; i <= lastRowNum; i++)
+            foreach (IRow row in sheet)
             {
-                //create new object per row
-                var row = sheet.GetRow(i);
-                var cObject = Activator.CreateInstance(cobieType) as CobieObject;
-                if (cObject == null)
-                    break;
+                //skip header
+                if (row.RowNum == 0) continue;
 
-                //check if there is any value in the row
-                var anyValue = false;
-                foreach (ICell cell in row)
-                {
-                    if (cell.CellType != CellType.Blank && cell.CellType != CellType.Error &&
-                        cell.CellType != CellType.Formula)
-                    {
-                        anyValue = true;
-                        break;
-                    }
-                }
+                //check if there is any value in the row, skip empty rows
+                var anyValue =
+                    row.Cells != null &&
+                    row.Cells.Any(c =>
+                        c.CellType != CellType.Blank &&
+                        c.CellType != CellType.Error &&
+                        c.CellType != CellType.Formula);
                 if (!anyValue) continue;
 
+                //create new object per row
+                var cObject = Activator.CreateInstance(cobieType) as CobieObject;
+                if (cObject == null)
+                    throw new Exception("It wasn't possible to create type " + cobieType.Name);
 
                 //fill facility values using reflection
-                foreach (var mapping in _mappings)
+                foreach (var mapping in mappings)
                 {
                     var cellIndex = CellReference.ConvertColStringToIndex(mapping.Column);
                     var cell = row.GetCell(cellIndex);
@@ -185,7 +190,7 @@ namespace Xbim.COBieLiteUK
                         {
                             log.WriteLine(
                                 "Cell {0}{1} (sheet {2}) is a parent key. It must have a value. Resulting data will be incomplete.",
-                                CellReference.ConvertNumToColString(cellIndex), i, sheet.SheetName);
+                                CellReference.ConvertNumToColString(cellIndex), row.RowNum + 1, sheet.SheetName);
                             continue;
                         }
 
@@ -194,15 +199,12 @@ namespace Xbim.COBieLiteUK
                             cObject._parentSheet = cell.StringCellValue.Trim();
 
                         if (mapping.Path.StartsWith("parent."))
-                        {
-                            cObject._parentNameProperty = mapping.Path.Replace("parent.", "");
                             cObject._parentNameValue = cell.StringCellValue.Trim();
-                        }
                         continue;
                     }
 
                     if (cell.CellType != CellType.Blank && cell.CellType != CellType.Error)
-                        log.Write(SetMemberValue(cObject, mapping.Path, cell));
+                        log.Write(SetMemberValue(cObject, mapping.Path, cell, mappings, classificationNameCache));
                 }
                 result.Add(cObject);
             }
@@ -224,9 +226,10 @@ namespace Xbim.COBieLiteUK
         }
 
         internal virtual void WriteToCobie(IWorkbook workbook, TextWriter log, CobieObject parent,
+            Dictionary<Type, int> rowNumCache, List<string> pickValuesCache, Dictionary<string, int> headerCache,
             string version = "UK2012")
         {
-            var mappings = GetMapping(GetType(), version).ToList();
+            var mappings = GetMapping(GetType(), version, false).ToList();
             if (!mappings.Any())
             {
                 log.WriteLine("There are no mappings for a type '{0}'", GetType().Name);
@@ -237,7 +240,16 @@ namespace Xbim.COBieLiteUK
             var sheetName = GetSheetName(GetType(), version);
             var sheet = workbook.GetSheet(sheetName) ?? workbook.CreateSheet(sheetName);
 
-            var row = GetNextEmptyRow(sheet);
+            //get the next row in rowNumber is less than 1 or use the argument to get or create new row
+            int lastIndex;
+            if (!rowNumCache.TryGetValue(GetType(), out lastIndex))
+            {
+                lastIndex = -1;
+                rowNumCache.Add(GetType(), -1);
+            }
+            var row = lastIndex < 0
+                ? GetNextEmptyRow(sheet)
+                : (sheet.GetRow(lastIndex + 1) ?? sheet.CreateRow(lastIndex + 1));
             if (row.RowNum == 0)
             {
                 //set up header if this is the very first row in the sheet
@@ -249,6 +261,9 @@ namespace Xbim.COBieLiteUK
                 //make sure all headers are in there
                 FixHeaderForWriting(sheet.GetRow(0), mappings);
             }
+
+            //cache the latest row index
+            rowNumCache[GetType()] = row.RowNum;
 
             //write columns
             foreach (var mapping in mappings)
@@ -277,7 +292,7 @@ namespace Xbim.COBieLiteUK
 
                     if (!String.IsNullOrEmpty(mapping.PickList))
                     {
-                        WritePickListValue(workbook, mapping, parentSheet);
+                        WritePickListValue(workbook, mapping, parentSheet, pickValuesCache, headerCache);
                     }
                     continue;
                 }
@@ -306,7 +321,7 @@ namespace Xbim.COBieLiteUK
 
                     if (!String.IsNullOrEmpty(mapping.PickList))
                     {
-                        WritePickListValue(workbook, mapping, parentKeyValue);
+                        WritePickListValue(workbook, mapping, parentKeyValue, pickValuesCache, headerCache);
                     }
                     continue;
                 }
@@ -355,7 +370,7 @@ namespace Xbim.COBieLiteUK
                                 foreach (var category in Categories)
                                 {
                                     if (string.IsNullOrEmpty(category.Classification))
-                                        WritePickListValue(workbook, mapping, category.CategoryString);
+                                        WritePickListValue(workbook, mapping, category.CategoryString, pickValuesCache, headerCache);
                                     else
                                     {
                                         var alterMapping = new MappingAttribute
@@ -364,12 +379,13 @@ namespace Xbim.COBieLiteUK
                                                 mapping.PickList.Substring(0, mapping.PickList.IndexOf('.') + 1) +
                                                 category.Classification
                                         };
-                                        WritePickListValue(workbook, alterMapping, category.CategoryString);
+                                        WritePickListValue(workbook, alterMapping, category.CategoryString,
+                                            pickValuesCache, headerCache);
                                     }
                                 }
                         }
                         else
-                            WritePickListValue(workbook, mapping, value.StringValue);
+                            WritePickListValue(workbook, mapping, value.StringValue, pickValuesCache, headerCache);
                     }
                 }
             }
@@ -377,7 +393,7 @@ namespace Xbim.COBieLiteUK
             //call for all child objects but with this as a parent
             foreach (var child in GetChildren())
             {
-                child.WriteToCobie(workbook, log, this, version);
+                child.WriteToCobie(workbook, log, this, rowNumCache, pickValuesCache, headerCache, version);
             }
         }
 
@@ -389,7 +405,7 @@ namespace Xbim.COBieLiteUK
                 var cell = row.GetCell(cellIndex) ?? row.CreateCell(cellIndex);
                 if (cell.CellType == CellType.Blank)
                 {
-                    cell.CellStyle = row.RowStyle;
+                    if (row.RowStyle != null) cell.CellStyle = row.RowStyle;
                     cell.SetCellValue(mapping.Header);
                 }
 
@@ -416,37 +432,48 @@ namespace Xbim.COBieLiteUK
             return sheet.CreateRow(sheet.LastRowNum + 1);
         }
 
-        private void WritePickListValue(IWorkbook workbook, MappingAttribute mapping, string value)
+        private void WritePickListValue(IWorkbook workbook, MappingAttribute mapping, string value,
+            List<string> pickValuesCache, Dictionary<string, int> headerCache)
         {
             if (string.IsNullOrEmpty(mapping.PickList) || string.IsNullOrEmpty(value) || value == "n/a")
                 return;
 
+            var pickKey = String.Format("{0}.{1}", mapping.PickList, value);
+            if (pickValuesCache.Contains(pickKey))
+                return;
+
             var pickPath = mapping.PickList.Split('.');
             var sheetName = pickPath[0];
+            var sheet = workbook.GetSheet(sheetName) ?? workbook.CreateSheet(sheetName);
             var columnName = pickPath[1];
 
-            var sheet = workbook.GetSheet(sheetName) ?? workbook.CreateSheet(sheetName);
-            var header = sheet.GetRow(0) ?? sheet.CreateRow(0);
-            var colIndex = -1;
-            foreach (ICell col in header)
-                if (col.CellType == CellType.String && col.StringCellValue.ToLower() == columnName.ToLower())
-                {
-                    colIndex = col.ColumnIndex;
-                    break;
-                }
-                else if (col.CellType == CellType.Blank)
-                {
-                    colIndex = col.ColumnIndex;
-                    col.SetCellValue(columnName);
-                    break;
-                }
-            if (colIndex == -1) //create new header
+            int colIndex;
+            if (!headerCache.TryGetValue(columnName, out colIndex))
             {
-                var headerCell = header.CreateCell(header.LastCellNum == -1 ? 0 : header.LastCellNum);
-                colIndex = headerCell.ColumnIndex;
-                headerCell.SetCellValue(columnName);
-                headerCell.CellStyle = header.RowStyle;
+                var header = sheet.GetRow(0) ?? sheet.CreateRow(0);
+                foreach (ICell col in header)
+                    if (col.CellType == CellType.String && col.StringCellValue.ToLower() == columnName.ToLower())
+                    {
+                        colIndex = col.ColumnIndex;
+                        break;
+                    }
+                    else if (col.CellType == CellType.Blank)
+                    {
+                        colIndex = col.ColumnIndex;
+                        col.SetCellValue(columnName);
+                        break;
+                    }
+                if (colIndex == -1) //create new header
+                {
+                    var headerCell = header.CreateCell(header.LastCellNum == -1 ? 0 : header.LastCellNum);
+                    colIndex = headerCell.ColumnIndex;
+                    headerCell.SetCellValue(columnName);
+                    headerCell.CellStyle = header.RowStyle;
+                }
+                headerCache.Add(columnName, colIndex);
             }
+            
+            
             var rowIndex = 1;
             foreach (IRow row in sheet)
             {
@@ -468,6 +495,7 @@ namespace Xbim.COBieLiteUK
                 var cell = row.GetCell(colIndex) ?? row.CreateCell(colIndex);
                 cell.SetCellValue(value);
                 cell.CellStyle = sheet.GetColumnStyle(colIndex);
+                pickValuesCache.Add(pickKey);
             }
         }
 
@@ -488,25 +516,34 @@ namespace Xbim.COBieLiteUK
             return mapping == null ? null : GetCobieProperty(mapping, new StringWriter());
         }
 
+
+        private static Dictionary<string, PropertyInfo> _propertyInfoCache = new Dictionary<string, PropertyInfo>();
+
         protected internal CobieValue GetCobieProperty(MappingAttribute mapping, TextWriter log)
         {
             var path = mapping.Path;
-            var parts = path.Split('.').ToList();
+            var parts = path.Split('.');
             object instance = this;
 
-            for (var i = 0; i < parts.Count; i++)
+            for (var i = 0; i < parts.Length; i++)
             {
                 var type = instance.GetType();
                 var part = parts[i];
-                var propInfo = type.GetProperty(part) ?? type.GetProperty(part,
-                    BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.GetProperty);
-                if (propInfo == null)
-                    throw new Exception(String.Format("Member {0} is not defined in {1}", part, type.Name));
+                var propKey = String.Format("{0}.{1}", type.Name, part);
+                PropertyInfo propInfo;
+                if (!_propertyInfoCache.TryGetValue(propKey, out propInfo))
+                {
+                    propInfo = type.GetProperty(part) ?? type.GetProperty(part,
+                        BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.GetProperty);
+                    if (propInfo == null)
+                        throw new Exception(String.Format("Member {0} is not defined in {1}", part, type.Name));
+                    _propertyInfoCache.Add(propKey, propInfo);
+                }
 
                 var value = propInfo.GetValue(instance);
 
                 //simple values (there is no further path)
-                if (i == parts.Count - 1)
+                if (i == parts.Length - 1)
                 {
                     //get non nullable base type of property
                     var propType = propInfo.PropertyType;
@@ -600,39 +637,29 @@ namespace Xbim.COBieLiteUK
                 //Check column header for the case it is swapped and fix it if it is possible
                 var cellIndex = CellReference.ConvertColStringToIndex(mapping.Column);
                 var headerCell = headerRow.GetCell(cellIndex);
-                if (headerCell != null && headerCell.CellType == CellType.String)
+                if (headerCell == null || headerCell.CellType != CellType.String) continue;
+                var header = headerCell.StringCellValue.Trim().ToLower();
+                if (header == mapping.Header.ToLower()) continue;
+                //try to find the right one
+                var indexFixed = false;
+                foreach (ICell hCell in headerRow)
                 {
-                    var header = headerCell.StringCellValue.Trim().ToLower();
-                    if (header != mapping.Header.ToLower())
+                    if (hCell.CellType == CellType.String &&
+                        hCell.StringCellValue.Trim().ToLower() == mapping.Header.ToLower())
                     {
-                        //try to find the right one
-                        var indexFixed = false;
-                        foreach (ICell hCell in headerRow)
-                        {
-                            if (hCell.CellType == CellType.String &&
-                                hCell.StringCellValue.Trim().ToLower() == mapping.Header.ToLower())
-                            {
-                                cellIndex = hCell.ColumnIndex;
-                                //fix fur future passes
-                                mapping.Column = CellReference.ConvertNumToColString(cellIndex);
-                                indexFixed = true;
-                                log.WriteLine(
-                                    "Sheet {0} has {1} defined as a column {2} where it should be {3}. Data will be processed but this is a wrongly structured COBie spreadsheet.",
-                                    sheet.SheetName, mapping.Header, CellReference.ConvertNumToColString(cellIndex),
-                                    mapping.Column);
-                                break;
-                            }
-                        }
-                        if (!indexFixed)
-                        {
-                            log.WriteLine(
-                                "Sheet {0} should have a column {1} defined as {2} but it is {3} instead. Data will be processed but this is a wrongly structured COBie spreadsheet.",
-                                sheet.SheetName, mapping.Column, mapping.Header, header);
-                            //fix fur future passes
-                            mapping.Header = header;
-                        }
+                        cellIndex = hCell.ColumnIndex;
+                        //fix fur future passes
+                        mapping.Column = CellReference.ConvertNumToColString(cellIndex);
+                        indexFixed = true;
+                        break;
                     }
                 }
+                if (indexFixed) continue;
+                log.WriteLine(
+                    "Sheet {0} should have a column {1} defined as {2} but it is {3} instead. Data will be processed but this is a wrongly structured COBie spreadsheet.",
+                    sheet.SheetName, mapping.Column, mapping.Header, header);
+                //fix fur future passes
+                mapping.Header = header;
             }
             return log.ToString();
         }
@@ -643,88 +670,156 @@ namespace Xbim.COBieLiteUK
             return new List<CobieObject>();
         }
 
-        internal virtual void AddToParent(IEnumerable<CobieObject> parents, out string message, string version)
+
+        private static Dictionary<string, Type> _typeSheetMappingsCache = new Dictionary<string, Type>();
+
+        internal virtual void AddToParent(Dictionary<Type, CobieObject[]> parents, Facility facility,
+            List<AssetType> newTypes,
+            out string message, string version)
         {
             var log = new StringWriter();
             Type parentType = null;
             //try to set parent type from custom attributes
             var parentAttribute = GetType().GetCustomAttribute<ParentAttribute>();
             if (parentAttribute != null)
+            {
                 parentType = parentAttribute.DataType;
+                if (_parentSheet == null) _parentSheet = GetSheetName(parentType, version);
+            }
             else
             //set parent type from sheet information
-                parentType =
-                    GetType()
-                        .Assembly.GetTypes()
-                        .FirstOrDefault(
-                            t =>
-                                t.GetCustomAttributes<SheetMappingAttribute>()
-                                    .Any(a => a.Type == version && a.Sheet == _parentSheet));
+            {
+                //try to get it from the cache
+                var key = String.Format("{0}.{1}", version, _parentSheet);
+
+                if (!_typeSheetMappingsCache.TryGetValue(key, out parentType))
+                {
+                    //get the type from assembly
+                    parentType =
+                        GetType()
+                            .Assembly.GetTypes()
+                            .FirstOrDefault(
+                                t =>
+                                    t.GetCustomAttributes<SheetMappingAttribute>()
+                                        .Any(a => a.Type == version && a.Sheet == _parentSheet));
+                    lock (_typeSheetMappingsCache)
+                    {
+                        if (parentType != null)
+                            //add mapping to cache
+                            if (!_typeSheetMappingsCache.ContainsKey(key)) _typeSheetMappingsCache.Add(key, parentType);
+                    }
+                }
+            }
             if (parentType == null)
             {
-                log.WriteLine(
-                    "There is no type mapping for a {0} sheet. Resulting data model will be incomplete as this {1} won't have a place to live in.",
-                    _parentSheet, GetType().Name);
+                if (GetType() != typeof (Facility))
+                    log.WriteLine(
+                        "There is no type mapping for a {0} sheet. Resulting data model will be incomplete as this {1} won't have a place to live in.",
+                        _parentSheet, GetType().Name);
                 message = log.ToString();
                 return;
             }
             CobieObject parent;
             if (parentType == typeof (Facility))
             {
-                parent = parents.OfType<Facility>().FirstOrDefault();
+                parent = facility;
             }
             else
             {
-                var parentProperty = parentType.GetProperty(_parentNameProperty);
-                if (parentProperty == null)
-                {
-                    log.WriteLine(
-                        "{0} is not defined within a sheet {1}. Resulting data will be incomplete as this {2}({3}) won't have a place to live in.",
-                        _parentNameProperty, _parentSheet, GetType().Name, Name);
-                    message = log.ToString();
-                    return;
-                }
-
-                var cobieObjects = parents as CobieObject[] ?? parents.ToArray();
+                //this is the most important part to paralelize
                 parent =
-                    cobieObjects.FirstOrDefault(
-                        p => p.GetType() == parentType && parentProperty.GetValue(p).Equals(_parentNameValue));
+                    parents[parentType].FirstOrDefault(
+                        p => p.Name == _parentNameValue);
             }
 
             if (parent == null)
             {
-                log.WriteLine(
-                    "This {0}({1}) doesn't have a parent from sheet {2} with name {3}. It won't exist in the resulting data. This is an invalid COBie record.",
-                    GetType().Name, Name, _parentSheet, _parentNameValue);
+                if (parentType == typeof (AssetType) && !String.IsNullOrEmpty(_parentNameValue))
+                {
+                    lock (newTypes)
+                    {
+                        //try to get a parent again for the case other thread has created it in the meanwhile
+                        parent = newTypes.FirstOrDefault(t => t.Name == _parentNameValue);
+                        if (parent == null)
+                        {
+                            //Create new asset type even if it doesn't exist on the Type sheet. Asset might contain a lot of information
+                            //so it is worth create new AssetType for it.
+                            parent = new AssetType {Name = _parentNameValue};
+                            //add to facility so that it exists in the model scope
+                            lock (facility)
+                            {
+                                if (facility.AssetTypes == null) facility.AssetTypes = new List<AssetType>();
+                                facility.AssetTypes.Add((AssetType) parent);
+                            }
+                            //add to parents list so that other objects refering to this can find it and assign themself to that.
+                            newTypes.Add((AssetType) parent);
+
+                            log.WriteLine(
+                                "{0} {1} doesn't have a parent from sheet {2} with name {3}. It will be created but will only have a name and no attributes or properties. This is an invalid COBie record.",
+                                GetType().Name, Name, _parentSheet, _parentNameValue);
+                        }
+                    }
+                }
+                else
+                {
+                    log.WriteLine(
+                        "{0} {1} doesn't have a parent from sheet {2} with name {3}. It won't exist in the resulting data. This is an invalid COBie record.",
+                        GetType().Name, Name, _parentSheet, _parentNameValue);
+                    message = log.ToString();
+                    return;
+                }
+            }
+
+            //this might be just an object within a parent or a list
+            //find a list for this type
+            var listType = typeof (List<>);
+            listType = listType.MakeGenericType(GetType());
+            var listPropInfo = parentType.GetProperties().FirstOrDefault(l => l.PropertyType == listType);
+            if (listPropInfo == null)
+            {
+                //try to gen a non-list property
+                var propInfo = parentType.GetProperties().FirstOrDefault(l => l.PropertyType == GetType());
+                if (propInfo == null)
+                    throw new Exception(
+                        String.Format(
+                            "Type {0} doesn't have a list or property of of type {1} which would accomodate this object.",
+                            parentType.Name, GetType().Name));
+                var existChildren = propInfo.GetValue(parent);
+                if (existChildren != null)
+                {
+                    log.WriteLine(
+                        "{0}({1}) contains {2} with name {3} already. It will be replaced with a new object. This is an invalid COBie record.",
+                        GetType().Name, Name, _parentSheet, _parentNameValue);
+                }
+
+                lock (parent)
+                {
+                    propInfo.SetValue(parent, this);
+                }
                 message = log.ToString();
                 return;
             }
 
-            //find a list for this type
-            var listType = typeof (List<>);
-            listType = listType.MakeGenericType(new[] {GetType()});
-            var listPropInfo = parentType.GetProperties().FirstOrDefault(l => l.PropertyType == listType);
-            if (listPropInfo == null)
-                throw new Exception(
-                    String.Format("Type {0} doesn't have a list of type {1} which would accomodate this object.",
-                        parentType.Name, GetType().Name));
-
             //create list if it is null
-            var list = listPropInfo.GetValue(parent);
-            if (list == null)
+            lock (parent)
             {
-                list = Activator.CreateInstance(listType);
-                listPropInfo.SetValue(parent, list);
+                var list = listPropInfo.GetValue(parent);
+                if (list == null)
+                {
+                    list = Activator.CreateInstance(listType);
+                    listPropInfo.SetValue(parent, list);
+                }
+                //add this object
+                var addMethod = listType.GetMethod("Add");
+                addMethod.Invoke(list, new object[] {this});
             }
-            //add this object
-            var addMethod = listType.GetMethod("Add");
-            addMethod.Invoke(list, new object[] {this});
 
             //report any problems
             message = log.ToString();
         }
 
-        private static string SetMemberValue(object obj, string path, ICell cell)
+        private static string SetMemberValue(object obj, string path, ICell cell, IEnumerable<MappingAttribute> mappings,
+            Dictionary<string, string> classificationNameCache)
         {
             var log = new StringWriter();
 
@@ -771,7 +866,8 @@ namespace Xbim.COBieLiteUK
                     if (actual == "CategoryString")
                     {
                         var clsInfo = itemType.GetProperty("Classification");
-                        var clsName = GetClassificationName(cell.Sheet.Workbook, value.Trim());
+                        var clsName = GetClassificationName(cell.Sheet.Workbook, mappings, value.Trim(),
+                            classificationNameCache);
                         if (clsName != null)
                             clsInfo.SetValue(item, clsName);
                     }
@@ -830,14 +926,20 @@ namespace Xbim.COBieLiteUK
                 }
 
                 //call SetMemberValue recursively
-                log.Write(SetMemberValue(propValue, rest, cell));
+                log.Write(SetMemberValue(propValue, rest, cell, mappings, classificationNameCache));
             }
             return log.ToString();
         }
 
-        private static string GetClassificationName(IWorkbook workbook, string code)
+        private static string GetClassificationName(IWorkbook workbook, IEnumerable<MappingAttribute> mappings,
+            string code, Dictionary<string, string> classificationNameCache)
         {
-            var pickListAttr = _mappings.FirstOrDefault(m => !String.IsNullOrEmpty(m.PickList));
+            if (string.IsNullOrEmpty(code)) return null;
+
+            string name;
+            if (classificationNameCache.TryGetValue(code, out name)) return name;
+
+            var pickListAttr = mappings.FirstOrDefault(m => !String.IsNullOrEmpty(m.PickList));
             if (pickListAttr == null) return null;
 
             var parts = pickListAttr.PickList.Split(new[] {'.'}, StringSplitOptions.RemoveEmptyEntries);
@@ -855,8 +957,11 @@ namespace Xbim.COBieLiteUK
                     var index = cell.ColumnIndex;
                     var header = sheet.GetRow(0);
                     var headerCell = header.GetCell(index);
-                    if (headerCell.CellType == CellType.String)
-                        return headerCell.StringCellValue;
+                    if (headerCell.CellType != CellType.String) continue;
+
+                    name = headerCell.StringCellValue;
+                    classificationNameCache.Add(code, name);
+                    return name;
                 }
             }
 
@@ -1036,9 +1141,19 @@ namespace Xbim.COBieLiteUK
             throw new Exception("Unsupported type " + type.Name + " for value '" + cell.ToString() + "'");
         }
 
-        private static IEnumerable<MappingAttribute> GetMapping(Type type, string mapping)
+        private static Dictionary<string, List<MappingAttribute>> _mappingAttrsCache =
+            new Dictionary<string, List<MappingAttribute>>();
+
+        private static IEnumerable<MappingAttribute> GetMapping(Type type, string mapping, bool clone)
         {
-            var result = type.GetCustomAttributes(typeof (MappingAttribute))
+            var key = String.Format("{0}.{1}", mapping, type.Name);
+            List<MappingAttribute> result;
+            if (_mappingAttrsCache.TryGetValue(key, out result))
+                return clone
+                    ? result.Select(a => a.Clone())
+                    : result;
+
+            result = type.GetCustomAttributes(typeof (MappingAttribute))
                 .Where(a => ((MappingAttribute) a).Type == mapping)
                 .Cast<MappingAttribute>().ToList();
 
@@ -1052,15 +1167,27 @@ namespace Xbim.COBieLiteUK
                 result.Insert(0, valueField);
             }
 
-            return result;
+            //cache for the next use
+            _mappingAttrsCache.Add(key, result);
+            return clone
+                ? result.Select(a => a.Clone())
+                : result;
         }
 
         protected static string GetSheetName(Type type, string mapping)
         {
+            var entry = _typeSheetMappingsCache.FirstOrDefault(kvp => kvp.Key.StartsWith(mapping) && kvp.Value == type);
+            if (!String.IsNullOrEmpty(entry.Key))
+                return entry.Key.Replace(mapping + ".", "");
+
             var attr =
                 type.GetCustomAttributes(typeof (SheetMappingAttribute), true)
                     .FirstOrDefault(a => ((SheetMappingAttribute) a).Type == mapping) as SheetMappingAttribute;
-            return attr == null ? null : attr.Sheet;
+            if (attr == null) return null;
+
+            var key = String.Format("{0}.{1}", mapping, attr.Sheet);
+            _typeSheetMappingsCache.Add(key, type);
+            return attr.Sheet;
         }
     }
 
