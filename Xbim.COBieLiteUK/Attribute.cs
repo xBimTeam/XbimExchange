@@ -15,9 +15,6 @@ namespace Xbim.COBieLiteUK
         [XmlIgnore][JsonIgnore]
         public string PropertySetName { get { return ExternalEntity; } set { ExternalEntity = value; } }
 
-        public Attribute Clone()
-        {
-            return Facility.Clone(this);
-        }
+     
     }
 }

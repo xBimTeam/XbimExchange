@@ -11,6 +11,7 @@ using System.Xml.Serialization;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 using NPOI.HSSF.UserModel;
+using NPOI.SS.Formula.Functions;
 using NPOI.SS.UserModel;
 using NPOI.SS.Util;
 using NPOI.XSSF.UserModel;
@@ -26,6 +27,21 @@ namespace Xbim.COBieLiteUK
         {
             Metadata = new Metadata();
         }
+
+        /// <summary>
+        /// Creates a new class inheryting from CobieObject and sets it to belong to the facility.
+        /// </summary>
+        /// <typeparam name="TNewCobieObject">The CobieObject type to create</typeparam>
+        /// <returns></returns>
+        public TNewCobieObject Create<TNewCobieObject>() where TNewCobieObject : CobieObject, new()
+        {
+            var retObject = new TNewCobieObject();
+            retObject.SetFacility(this);
+            return  retObject;
+        }
+
+        
+
 
         public IEnumerable<T> Get<T>(Func<T, bool> condition = null) where T : CobieObject
         {
@@ -277,10 +293,18 @@ namespace Xbim.COBieLiteUK
 
         #region Cloning through jsonSerialiser
 
-        internal static T Clone<T>(T source)
+        /// <summary>
+        /// Clones a provided cobieobject via JsonSeriliser and then sets the result to belong to the cloning facility.
+        /// </summary>
+        /// <typeparam name="TNewCobieObject">The type of the object to clone.</typeparam>
+        /// <param name="originalCobieObject">The CobieObject to be cloned via Json in memory.</param>
+        /// <returns></returns>
+        public TNewCobieObject Clone<TNewCobieObject>(TNewCobieObject originalCobieObject) where TNewCobieObject : CobieObject, new()
         {
-            var mem = WriteJsonToMemory(source);
-            return ReadJsonFrom<T>(mem);
+            var mem = WriteJsonToMemory(originalCobieObject);
+            var cloned = ReadJsonFrom<TNewCobieObject>(mem);
+            cloned.SetFacility(this);
+            return cloned;
         }
 
         private static byte[] WriteJsonToMemory<T>(T o)
