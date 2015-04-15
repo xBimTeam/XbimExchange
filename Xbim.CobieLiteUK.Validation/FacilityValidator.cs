@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using Xbim.COBieLiteUK;
@@ -132,35 +133,45 @@ namespace Xbim.CobieLiteUK.Validation
             // d) zones
             if (requirement.Zones != null)
             {
-                foreach (var assetTypeRequirement in requirement.Zones)
+                // hack: create a fake modelFacility candidates from spaces.
+                var fakeSubmittedFacility = new Facility();
+                fakeSubmittedFacility.Floors = fakeSubmittedFacility.Clone(submitted.Floors as IEnumerable<Floor>).ToList();
+
+                foreach (var zoneRequirement in requirement.Zones)
                 {
-                    var v = new CobieObjectValidator<Zone, Space>(assetTypeRequirement)
+                    var v = new CobieObjectValidator<Zone, Space>(zoneRequirement)
                     {
                         TerminationMode = TerminationMode
                     };
                     if (! v.HasRequirements)
                         continue;
-                    var candidates = v.GetCandidates(submitted.Zones).ToList();
+                    // var candidates = v.GetCandidates(submitted.Zones).ToList();
+                    // hack: now create a fake Zone based on candidates from spaces.
+                    var lSpaces = submitted.Get<Space>().ToList();
+                    var candidateSpaces = v.GetCandidates(lSpaces);
 
-                    // hack: get candidates from spaces.
-                    // submitted.Get<Space>(sp=>sp.Categories)
+                    foreach (var spaceMatch in candidateSpaces)
+                    {
+                        Debug.WriteLine(spaceMatch);
+                    }
 
-                    // ReSharper disable once PossibleMultipleEnumeration
-                    if (candidates.Any())
-                    {
-                        foreach (var candidate in candidates)
-                        {
-                            if (retFacility.Zones == null)
-                                retFacility.Zones = new List<Zone>();
-                            retFacility.Zones.Add(v.Validate(candidate, retFacility));
-                        }
-                    }
-                    else
-                    {
-                        if (retFacility.Zones == null)
-                            retFacility.Zones = new List<Zone>();
-                        retFacility.Zones.Add(v.Validate((Zone)null, retFacility));
-                    }
+
+                    //// ReSharper disable once PossibleMultipleEnumeration
+                    //if (candidates.Any())
+                    //{
+                    //    foreach (var candidate in candidates)
+                    //    {
+                    //        if (retFacility.Zones == null)
+                    //            retFacility.Zones = new List<Zone>();
+                    //        retFacility.Zones.Add(v.Validate(candidate, retFacility));
+                    //    }
+                    //}
+                    //else
+                    //{
+                    //    if (retFacility.Zones == null)
+                    //        retFacility.Zones = new List<Zone>();
+                    //    retFacility.Zones.Add(v.Validate((Zone)null, retFacility));
+                    //}
                 }
             }
             retFacility.Description = sb.ToString();

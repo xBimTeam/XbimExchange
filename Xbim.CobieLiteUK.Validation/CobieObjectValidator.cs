@@ -300,7 +300,7 @@ namespace Xbim.CobieLiteUK.Validation
         /// </summary>
         /// <param name="submitted"></param>
         /// <returns></returns>
-        internal IEnumerable<CobieObjectCategoryMatch> GetCandidates(List<T> submitted)
+        internal IEnumerable<CobieObjectCategoryMatch> GetCandidates<TReq>(List<TReq> submitted) where TReq : CobieObject
         {
             if (_requirementType.Categories == null)
                 yield break;
