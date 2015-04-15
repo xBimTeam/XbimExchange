@@ -305,22 +305,22 @@ namespace Xbim.CobieLiteUK.Validation
             if (_requirementType.Categories == null)
                 yield break;
  
-            var ret = new Dictionary<T, List<Category>>();
+            var ret = new Dictionary<TReq, List<Category>>();
             foreach (var reqClass in _requirementType.Categories)
             {
                 var thisClassMatch = reqClass.GetClassificationMatches(submitted);
                 foreach (var matchedAsset in thisClassMatch)
                 {
-                    var matchedObjectAsT = matchedAsset.MatchedObject as T;
-                    if (matchedObjectAsT == null)
+                    var matchedObjectAsTReq = matchedAsset.MatchedObject as TReq;
+                    if (matchedObjectAsTReq == null)
                         continue;
-                    if (!ret.ContainsKey(matchedObjectAsT))
+                    if (!ret.ContainsKey(matchedObjectAsTReq))
                     {
-                        ret.Add(matchedObjectAsT, matchedAsset.MatchingCategories);
+                        ret.Add(matchedObjectAsTReq, matchedAsset.MatchingCategories);
                     }
                     else
                     {
-                        ret[matchedObjectAsT].AddRange(matchedAsset.MatchingCategories);
+                        ret[matchedObjectAsTReq].AddRange(matchedAsset.MatchingCategories);
                     }
                 }
             }

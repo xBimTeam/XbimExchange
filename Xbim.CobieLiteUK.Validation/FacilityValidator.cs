@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using Xbim.COBieLiteUK;
+using Xbim.CobieLiteUK.Validation.Extensions;
 
 namespace Xbim.CobieLiteUK.Validation
 {
@@ -101,6 +102,18 @@ namespace Xbim.CobieLiteUK.Validation
                 }
             }
             // c) asset types
+            ValidateAssetTypes(requirement, submitted, retFacility);
+            // d) zones
+            ValidateZones(requirement, submitted, retFacility);
+
+            retFacility.Description = sb.ToString();
+            retFacility.Categories.Add(facilityPasses ? PassedCat : FailedCat);
+
+            return retFacility;
+        }
+
+        private void ValidateAssetTypes(Facility requirement, Facility submitted, Facility retFacility)
+        {
             if (requirement.AssetTypes != null)
             {
                 foreach (var assetTypeRequirement in requirement.AssetTypes)
@@ -126,16 +139,21 @@ namespace Xbim.CobieLiteUK.Validation
                     {
                         if (retFacility.AssetTypes == null)
                             retFacility.AssetTypes = new List<AssetType>();
-                        retFacility.AssetTypes.Add(v.Validate((AssetType)null, retFacility));
+                        retFacility.AssetTypes.Add(v.Validate((AssetType) null, retFacility));
                     }
                 }
             }
-            // d) zones
+        }
+
+        private void ValidateZones(Facility requirement, Facility submitted, Facility retFacility)
+        {
             if (requirement.Zones != null)
             {
                 // hack: create a fake modelFacility candidates from spaces.
                 var fakeSubmittedFacility = new Facility();
                 fakeSubmittedFacility.Floors = fakeSubmittedFacility.Clone(submitted.Floors as IEnumerable<Floor>).ToList();
+                fakeSubmittedFacility.Zones = new List<Zone>();
+                var lSpaces = submitted.Get<Space>().ToList();
 
                 foreach (var zoneRequirement in requirement.Zones)
                 {
@@ -145,39 +163,41 @@ namespace Xbim.CobieLiteUK.Validation
                     };
                     if (! v.HasRequirements)
                         continue;
-                    // var candidates = v.GetCandidates(submitted.Zones).ToList();
+
                     // hack: now create a fake Zone based on candidates from spaces.
-                    var lSpaces = submitted.Get<Space>().ToList();
-                    var candidateSpaces = v.GetCandidates(lSpaces);
+                    var fakeZone = fakeSubmittedFacility.Create<Zone>();
+                    fakeZone.Categories = zoneRequirement.Categories.Clone().ToList();
+                    fakeZone.Name = zoneRequirement.Name;
+                    fakeZone.ExternalEntity = zoneRequirement.ExternalEntity;
+                    fakeZone.ExternalSystem = zoneRequirement.ExternalSystem;
+                    fakeZone.ExternalId = zoneRequirement.ExternalId;
+                    fakeZone.Spaces = new List<SpaceKey>();
 
-                    foreach (var spaceMatch in candidateSpaces)
+                    var candidateSpaces = v.GetCandidates(lSpaces).ToList();
+
+                    // ReSharper disable once PossibleMultipleEnumeration
+                    if (candidateSpaces.Any())
                     {
-                        Debug.WriteLine(spaceMatch);
+                        foreach (var spaceMatch in candidateSpaces)
+                        {
+                            var mSpace = spaceMatch.MatchedObject as Space;
+                            if (mSpace == null)
+                                continue;
+                            var sk = new SpaceKey() {Name = mSpace.Name};
+                            fakeZone.Spaces.Add(sk);
+                        }
+                        if (retFacility.Zones == null)
+                            retFacility.Zones = new List<Zone>();
+                        retFacility.Zones.Add(v.Validate(fakeZone, retFacility));
                     }
-
-
-                    //// ReSharper disable once PossibleMultipleEnumeration
-                    //if (candidates.Any())
-                    //{
-                    //    foreach (var candidate in candidates)
-                    //    {
-                    //        if (retFacility.Zones == null)
-                    //            retFacility.Zones = new List<Zone>();
-                    //        retFacility.Zones.Add(v.Validate(candidate, retFacility));
-                    //    }
-                    //}
-                    //else
-                    //{
-                    //    if (retFacility.Zones == null)
-                    //        retFacility.Zones = new List<Zone>();
-                    //    retFacility.Zones.Add(v.Validate((Zone)null, retFacility));
-                    //}
+                    else
+                    {
+                        if (retFacility.Zones == null)
+                            retFacility.Zones = new List<Zone>();
+                        retFacility.Zones.Add(v.Validate((Zone) null, retFacility));
+                    }
                 }
             }
-            retFacility.Description = sb.ToString();
-            retFacility.Categories.Add(facilityPasses ? PassedCat : FailedCat);
-
-            return retFacility;
         }
 
         public TerminationMode TerminationMode { get; set; }

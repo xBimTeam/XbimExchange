@@ -1,9 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using Xbim.COBieLiteUK;
-using Attribute = Xbim.COBieLiteUK.Attribute;
-using Xbim.CobieLiteUK.Validation.RequirementDetails;
 
 namespace Xbim.CobieLiteUK.Validation.Extensions
 {
@@ -15,17 +12,16 @@ namespace Xbim.CobieLiteUK.Validation.Extensions
         public static List<T> GetChildObjects<T>(this CobieObject obj)
         {
             if (obj.GetType() == typeof(AssetType))
-            {
                 return ((AssetType)obj).Assets as List<T>;
-            }
-            else if (obj.GetType() == typeof(Zone))
+            if (obj.GetType() == typeof (Zone))
             {
-                return ((Zone)obj).SpaceObjects as List<T>;
+                return ((Zone)obj).SpaceObjects.ToList() as List<T>;
             }
+                
             return null;
         }
 
-        public static void SetChildObjects<T>(this CobieObject obj, List<T> newChildrenSet)
+        public static void SetChildObjects<TChild>(this CobieObject obj, List<TChild> newChildrenSet)
         {
             if (obj.GetType() == typeof(AssetType))
             {
@@ -33,26 +29,15 @@ namespace Xbim.CobieLiteUK.Validation.Extensions
             }
             if (obj.GetType() == typeof(Zone))
             {
-                // todo: resume from here.
-
-                // spaces need to come from a floor
-                // I probably need to copy floors and spaces first and then only add references to the key in the zone here.
-                //_facility.Floors.Contains();
-                //Floor myFlorr = _facility.Floors.FirstOrDefault()
-
-                //Space space;
-                //space.
+                
+                ((Zone)obj).Spaces = new List<SpaceKey>();
+                foreach (var child in newChildrenSet.OfType<Space>() )
+                {
+                    // todo: resume from here; we need to ensure that the floor and spaces of the provided spaceKey are avalialale in the report facility
 
 
-
-
-                //Spaces = new List<SpaceKey>();
-                //foreach (var space in value)
-                //{
-                //    if (!_facility.Get<Space>().Contains(space))
-                //        _facility.a
-                //}
-                // ((Zone)obj).Spaces = newChildrenSet as List<Space>;
+                    ((Zone)obj).Spaces.Add(new SpaceKey() { Name = child.Name} );    
+                }
             }
         }
 

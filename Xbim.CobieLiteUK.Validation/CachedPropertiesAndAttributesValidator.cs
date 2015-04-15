@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using System.Runtime.InteropServices;
 using Xbim.COBieLiteUK;
 using Xbim.CobieLiteUK.Validation.RequirementDetails;
 
@@ -9,22 +8,20 @@ namespace Xbim.CobieLiteUK.Validation
 {
     class CachedPropertiesAndAttributesValidator<T> where T : CobieObject, new()
     {
-        private T _modelAsset;
-        
         private readonly Dictionary<string, Attribute> _dicAtt;
         private readonly Dictionary<RequirementDetail, bool> _dicReqs = new Dictionary<RequirementDetail, bool>();
 
         public CachedPropertiesAndAttributesValidator(T assetToTest)
         {
-
-            this._modelAsset = assetToTest;
+            if (assetToTest.Attributes == null)
+                return;
             _dicAtt = assetToTest.Attributes.ToDictionary(att => att.Name, att => att);
         }
 
         internal bool CanSatisfy(RequirementDetail req, out object retValue)
         {
             retValue = null;
-            if (!_dicAtt.ContainsKey(req.Name))
+            if (_dicAtt == null || !_dicAtt.ContainsKey(req.Name))
             {
                 return Report(req, false);
             }
