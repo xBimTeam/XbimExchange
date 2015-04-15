@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using NPOI.SS.Formula.Functions;
 using Xbim.COBieLiteUK;
@@ -45,13 +46,12 @@ namespace Xbim.CobieLiteUK.Validation.Extensions
             return buildingDictionary.Values;
         }
 
-
         public static bool IsChildOf(this Category testedCategory, Category requiredCategory)
         {
-            return 
+            return
                 //testedCategory.Classification == requiredCategory.Classification 
                 //&& 
-                testedCategory.Code.StartsWith(requiredCategory.Code);
+                testedCategory.Code.StartsWith(requiredCategory.Code, StringComparison.InvariantCultureIgnoreCase);
         }
 
         public static bool ExactlyMatches(this Category testedCategory, Category requiredCategory)
