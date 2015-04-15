@@ -33,7 +33,7 @@ namespace Xbim.COBie
         public const int DOUBLE_MAXSIZE = 16;
         public const string DEFAULT_EMAIL = "unknown.unknown@unknown.com";
         public const string DATE_FORMAT = "yyyy-MM-dd";
-        public const string DATETIME_FORMAT = "s"; //use sortable, ISO 8601 format http://msdn.microsoft.com/en-us/library/az4se3k1.aspx#Sortable
+        public const string DATETIME_FORMAT = "yyyy-MM-dd hh:mm:ss"; //use sortable, ISO 8601 format http://msdn.microsoft.com/en-us/library/az4se3k1.aspx#Sortable
 
 	}
 }

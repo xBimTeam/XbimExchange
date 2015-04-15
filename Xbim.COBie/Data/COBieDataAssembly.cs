@@ -217,7 +217,7 @@ namespace Xbim.COBie.Data
                     {
                         
                         strBuilder.Append(" (");
-                        strBuilder.Append(((double)thick).ToString("F1"));
+                        strBuilder.Append(((double)thick).ToString());
                         strBuilder.Append(")");
                     }
                     if (ifcMaterialLayers.Count > i)
@@ -251,7 +251,7 @@ namespace Xbim.COBie.Data
                     double? thick = ifcMaterialLayer.LayerThickness;
                     if (thick != null)
                     {
-                        name += " (" + ((double)thick).ToString("F1") + ")";
+                        name += " (" + ((double)thick).ToString() + ")";
                     }
                     childNamesFilter.Add(name);
                 }

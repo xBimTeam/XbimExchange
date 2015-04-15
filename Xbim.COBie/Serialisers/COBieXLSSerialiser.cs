@@ -223,7 +223,7 @@ namespace Xbim.COBie.Serialisers
             CreateColours();
             // TODO : Date hardwired to Yellow/Required for now. Only Date is set up for now.
             CreateFormat(COBieAllowedType.ISODate, "yyyy-MM-dd", "Yellow");
-            CreateFormat(COBieAllowedType.ISODateTime, "yyyy-MM-ddThh:mm:ss", "Yellow");
+            CreateFormat(COBieAllowedType.ISODateTime, "yyyy-MM-dd hh:mm:ss", "Yellow");
         }
 
         private void CreateColours()
