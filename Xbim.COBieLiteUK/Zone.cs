@@ -32,26 +32,6 @@ namespace Xbim.COBieLiteUK
                 var keyNames = Spaces.Select(s => s.Name);
                 return _facility.Get<Space>(s => keyNames.Contains(s.Name));
             }
-            set
-            {
-                // todo: ask Martin if this can work.
-                // todo: should i delete all existing spaces?
-                if (_facility == null)
-                    throw new Exception(
-                        "You have to call 'Refresh()' method on Facility object before you use this property.");
-                
-                // todo: resume from here.
-
-                // spaces need to come from a floor
-                // I probably need to copy floors and spaces first and then only add references to the key in the zone here.
-
-                //Spaces = new List<SpaceKey>();
-                //foreach (var space in value)
-                //{
-                //    if (!_facility.Get<Space>().Contains(space))
-                //        _facility.a
-                //}
-            }
         }
 
         protected internal override List<CobieObject> MergeDuplicates(List<CobieObject> objects, TextWriter log)
