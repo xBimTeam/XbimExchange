@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using NPOI.SS.Formula.Functions;
+
 using Xbim.COBieLiteUK;
 using Xbim.CobieLiteUK.Validation;
 using Xbim.CobieLiteUK.Validation.Extensions;

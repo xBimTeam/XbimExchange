@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using NPOI.SS.Formula.Functions;
 using Xbim.COBieLiteUK;
 using Attribute = Xbim.COBieLiteUK.Attribute;
 using Xbim.CobieLiteUK.Validation.RequirementDetails;
