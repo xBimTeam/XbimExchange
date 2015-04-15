@@ -40,9 +40,6 @@ namespace Xbim.COBieLiteUK
             return  retObject;
         }
 
-        
-
-
         public IEnumerable<T> Get<T>(Func<T, bool> condition = null) where T : CobieObject
         {
             //make Facility part of the result

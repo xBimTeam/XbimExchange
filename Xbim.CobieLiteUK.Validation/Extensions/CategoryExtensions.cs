@@ -19,12 +19,12 @@ namespace Xbim.CobieLiteUK.Validation.Extensions
         /// <param name="requiredCategory">Classification and Codes of the provided categories will be tested for matches</param>
         /// <param name="includeCategoryChildren">if true extends the matching rule to include all categories starting with the required code</param>
         /// <returns></returns>
-        static internal IEnumerable<CobieObjectCategoryMatch<T>> GetClassificationMatches<T>(this Category requiredCategory, IEnumerable<T> types, bool includeCategoryChildren = true) where T : CobieObject
+        static internal IEnumerable<CobieObjectCategoryMatch> GetClassificationMatches<T>(this Category requiredCategory, IEnumerable<T> types, bool includeCategoryChildren = true) where T : CobieObject
         {
             if (requiredCategory == null)
-                return Enumerable.Empty<CobieObjectCategoryMatch<T>>();
+                return Enumerable.Empty<CobieObjectCategoryMatch>();
 
-            var buildingDictionary = new Dictionary<T, CobieObjectCategoryMatch<T>>();
+            var buildingDictionary = new Dictionary<T, CobieObjectCategoryMatch>();
 
             foreach (var evaluatingType in types)
             {
@@ -38,7 +38,7 @@ namespace Xbim.CobieLiteUK.Validation.Extensions
                 if (!buffer.Any())
                     continue;
                 if (!buildingDictionary.ContainsKey(evaluatingType))
-                    buildingDictionary.Add(evaluatingType, new CobieObjectCategoryMatch<T>(evaluatingType));
+                    buildingDictionary.Add(evaluatingType, new CobieObjectCategoryMatch(evaluatingType));
                 buildingDictionary[evaluatingType].MatchingCategories.AddRange(buffer);
             }
 

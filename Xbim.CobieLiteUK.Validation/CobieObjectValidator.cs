@@ -300,7 +300,7 @@ namespace Xbim.CobieLiteUK.Validation
         /// </summary>
         /// <param name="submitted"></param>
         /// <returns></returns>
-        internal IEnumerable<CobieObjectCategoryMatch<T>> GetCandidates(List<T> submitted)
+        internal IEnumerable<CobieObjectCategoryMatch> GetCandidates(List<T> submitted)
         {
             if (_requirementType.Categories == null)
                 yield break;
@@ -311,26 +311,32 @@ namespace Xbim.CobieLiteUK.Validation
                 var thisClassMatch = reqClass.GetClassificationMatches(submitted);
                 foreach (var matchedAsset in thisClassMatch)
                 {
-                    if (!ret.ContainsKey(matchedAsset.MatchedObject))
+                    var matchedObjectAsT = matchedAsset.MatchedObject as T;
+                    if (matchedObjectAsT == null)
+                        continue;
+                    if (!ret.ContainsKey(matchedObjectAsT))
                     {
-                        ret.Add(matchedAsset.MatchedObject, matchedAsset.MatchingCategories);
+                        ret.Add(matchedObjectAsT, matchedAsset.MatchingCategories);
                     }
                     else
                     {
-                        ret[matchedAsset.MatchedObject].AddRange(matchedAsset.MatchingCategories);
+                        ret[matchedObjectAsT].AddRange(matchedAsset.MatchingCategories);
                     }
                 }
             }
             foreach (var item in ret)
             {
-                yield return new CobieObjectCategoryMatch<T>(item.Key) { MatchingCategories = item.Value };
+                yield return new CobieObjectCategoryMatch(item.Key) { MatchingCategories = item.Value };
             }
         }
 
-        internal T Validate(CobieObjectCategoryMatch<T> candidate, Facility targetFacility)
+        internal T Validate(CobieObjectCategoryMatch candidateMatch, Facility targetFacility)
         {
-            var validated = Validate(candidate.MatchedObject, targetFacility);
-            validated.SetMatchingCategories(candidate.MatchingCategories);
+            var candidateT = candidateMatch.MatchedObject as T;
+            if (candidateT == null)
+                return null;
+            var validated = Validate(candidateT, targetFacility);
+            validated.SetMatchingCategories(candidateMatch.MatchingCategories);
             return validated;
         }
     }
