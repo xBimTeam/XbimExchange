@@ -19,6 +19,7 @@ namespace Xbim.CobieLiteUK.Validation
         public FacilityValidator()
         {
             TerminationMode = TerminationMode.ExecuteCompletely;
+            HasFailures = false;
         }
 
         internal static readonly Category FailedCat = new Category
@@ -51,14 +52,14 @@ namespace Xbim.CobieLiteUK.Validation
             // d) spaces (planned)
 
             // a)
-            bool facilityPasses = true;
+            
 
             // area units
             if (requirement.AreaUnitsCustom != submitted.AreaUnitsCustom)
             {
                 retFacility.AreaUnitsCustom = string.Format("{0} (should be '{1}')", submitted.AreaUnitsCustom, requirement.AreaUnitsCustom);
                 sb.AppendFormat("{0} failure: {1}\r\n", "Area units", retFacility.AreaUnitsCustom);
-                facilityPasses = false;
+                HasFailures = true;
             }
             else
             {
@@ -70,7 +71,7 @@ namespace Xbim.CobieLiteUK.Validation
             {
                 retFacility.LinearUnitsCustom = string.Format("{0} (should be '{1}')", submitted.LinearUnitsCustom, requirement.LinearUnitsCustom);
                 sb.AppendFormat("{0} failure: {1}\r\n", "Linear units", retFacility.LinearUnitsCustom);
-                facilityPasses = false;
+                HasFailures = true;
             }
             else
             {
@@ -82,7 +83,7 @@ namespace Xbim.CobieLiteUK.Validation
             {
                 retFacility.VolumeUnitsCustom = string.Format("{0} (should be '{1}')", submitted.VolumeUnitsCustom, requirement.VolumeUnitsCustom);
                 sb.AppendFormat("{0} failure: {1}\r\n", "Volume units", retFacility.VolumeUnitsCustom);
-                facilityPasses = false;
+                HasFailures = true;
             }
             else
             {
@@ -94,7 +95,7 @@ namespace Xbim.CobieLiteUK.Validation
             {
                 retFacility.CurrencyUnitCustom = string.Format("{0} (should be '{1}')", submitted.CurrencyUnitCustom, requirement.CurrencyUnitCustom);
                 sb.AppendFormat("{0} failure: {1}\r\n", "Currency units", retFacility.CurrencyUnitCustom);
-                facilityPasses = false;
+                HasFailures = true;
             }
             else
             {
@@ -110,23 +111,26 @@ namespace Xbim.CobieLiteUK.Validation
                 if (!pv.IsPass)
                 {
                     sb.AppendFormat("Validation of Project information fails, see project information for detail.\r\n");
-                    facilityPasses = false;
+                    HasFailures = true;
                 }
             }
             // c) asset types
-            ValidateAssetTypes(requirement, submitted, retFacility);
+            HasFailures |= ValidateAssetTypes(requirement, submitted, retFacility);
             // d) zones
-            ValidateZones(requirement, submitted, retFacility);
+            HasFailures |= ValidateZones(requirement, submitted, retFacility);
 
             retFacility.Description = sb.ToString();
-            retFacility.Categories.Add(facilityPasses ? PassedCat : FailedCat);
+            retFacility.Categories.Add(HasFailures ? FailedCat : PassedCat);
 
             return retFacility;
         }
 
+        
+        
+        /// <returns>true if it has failures</returns>
         private bool ValidateAssetTypes(Facility requirement, Facility submitted, Facility retFacility)
         {
-            var ret = true;
+            var ret = false;
             if (requirement.AssetTypes == null) 
                 return true;
             foreach (var assetTypeRequirement in requirement.AssetTypes)
@@ -138,7 +142,7 @@ namespace Xbim.CobieLiteUK.Validation
                 if (! v.HasRequirements)
                     continue;
                 var candidates = v.GetCandidates(submitted.AssetTypes).ToList();
-                // ReSharper disable once PossibleMultipleEnumeration
+                
                 if (candidates.Any())
                 {
                     foreach (var candidate in candidates)
@@ -154,99 +158,103 @@ namespace Xbim.CobieLiteUK.Validation
                         retFacility.AssetTypes = new List<AssetType>();
                     retFacility.AssetTypes.Add(v.Validate((AssetType) null, retFacility));
                 }
+                ret |= v.HasFailures;
             }
             return ret;
         }
 
-        private void ValidateZones(Facility requirement, Facility submitted, Facility retFacility)
+        /// <returns>true if it has failures</returns>
+        private bool ValidateZones(Facility requirement, Facility submitted, Facility retFacility)
         {
-            if (requirement.Zones != null)
+            if (requirement.Zones == null) 
+                return false;
+            var ret = false;
+            // hack: create a fake modelFacility candidates from spaces.
+            var fakeSubmittedFacility = new Facility();
+            fakeSubmittedFacility.Floors = fakeSubmittedFacility.Clone(submitted.Floors as IEnumerable<Floor>).ToList();
+            fakeSubmittedFacility.Zones = new List<Zone>();
+            var lSpaces = submitted.Get<Space>().ToList();
+
+            foreach (var zoneRequirement in requirement.Zones)
             {
-                // hack: create a fake modelFacility candidates from spaces.
-                var fakeSubmittedFacility = new Facility();
-                fakeSubmittedFacility.Floors = fakeSubmittedFacility.Clone(submitted.Floors as IEnumerable<Floor>).ToList();
-                fakeSubmittedFacility.Zones = new List<Zone>();
-                var lSpaces = submitted.Get<Space>().ToList();
-
-                foreach (var zoneRequirement in requirement.Zones)
+                var v = new CobieObjectValidator<Zone, Space>(zoneRequirement)
                 {
-                    var v = new CobieObjectValidator<Zone, Space>(zoneRequirement)
+                    TerminationMode = TerminationMode
+                };
+                if (! v.HasRequirements)
+                    continue;
+
+                // hack: now create a fake Zone based on candidates from spaces.
+                var fakeZone = fakeSubmittedFacility.Create<Zone>();
+                fakeZone.Categories = zoneRequirement.Categories.Clone().ToList();
+                fakeZone.Name = zoneRequirement.Name;
+                fakeZone.ExternalEntity = zoneRequirement.ExternalEntity;
+                fakeZone.ExternalSystem = zoneRequirement.ExternalSystem;
+                fakeZone.ExternalId = zoneRequirement.ExternalId;
+                fakeZone.Spaces = new List<SpaceKey>();
+
+                var candidateSpaces = v.GetCandidates(lSpaces).ToList();
+
+                if (candidateSpaces.Any())
+                {
+                    foreach (var spaceMatch in candidateSpaces)
                     {
-                        TerminationMode = TerminationMode
-                    };
-                    if (! v.HasRequirements)
-                        continue;
-
-                    // hack: now create a fake Zone based on candidates from spaces.
-                    var fakeZone = fakeSubmittedFacility.Create<Zone>();
-                    fakeZone.Categories = zoneRequirement.Categories.Clone().ToList();
-                    fakeZone.Name = zoneRequirement.Name;
-                    fakeZone.ExternalEntity = zoneRequirement.ExternalEntity;
-                    fakeZone.ExternalSystem = zoneRequirement.ExternalSystem;
-                    fakeZone.ExternalId = zoneRequirement.ExternalId;
-                    fakeZone.Spaces = new List<SpaceKey>();
-
-                    var candidateSpaces = v.GetCandidates(lSpaces).ToList();
-
-                    // ReSharper disable once PossibleMultipleEnumeration
-                    if (candidateSpaces.Any())
-                    {
-                        foreach (var spaceMatch in candidateSpaces)
-                        {
-                            var mSpace = spaceMatch.MatchedObject as Space;
-                            if (mSpace == null)
-                                continue;
-                            var sk = new SpaceKey() {Name = mSpace.Name};
-                            fakeZone.Spaces.Add(sk);
-                        }
-                        if (retFacility.Zones == null)
-                            retFacility.Zones = new List<Zone>();
-                        var validatedZone = v.Validate(fakeZone, retFacility);
-                        retFacility.Zones.Add(validatedZone);
-                        var tmpFloor = retFacility.Get<Floor>(fl => fl.Name == TemporaryFloorName).FirstOrDefault();
-                        if (tmpFloor == null)
+                        var mSpace = spaceMatch.MatchedObject as Space;
+                        if (mSpace == null)
                             continue;
-                        // ensure that the floor and spaces are avalialale in the report facility
-                        foreach (var spaceKey in validatedZone.Spaces)
-                        {
-                            // 1) on the floor
-                            var submissionOwningFloor =
-                                submitted.Get<Floor>(f => f.Spaces != null && f.Spaces.Any(sp => sp.Name == spaceKey.Name)).FirstOrDefault();
-                            if (submissionOwningFloor == null)
-                                continue;
-                            var destFloor = retFacility.Get<Floor>(f => f.Name == submissionOwningFloor.Name).FirstOrDefault();
-                            if (destFloor == null)
-                            {
-                                destFloor = retFacility.Create<Floor>();
-                                destFloor.Name = submissionOwningFloor.Name;
-                                destFloor.ExternalEntity = submissionOwningFloor.ExternalEntity;
-                                destFloor.ExternalId = submissionOwningFloor.ExternalId;
-                                destFloor.ExternalSystem = submissionOwningFloor.ExternalSystem;
-                                destFloor.Elevation = submissionOwningFloor.Elevation;
-                                destFloor.Spaces = new List<Space>();
-                                retFacility.Floors.Add(destFloor); // finally add it in the facility tree
-                            }
-                            // 2) now on the space.
-
-                            var sourceSpace = tmpFloor.Spaces.FirstOrDefault(sp => sp.Name == spaceKey.Name);
-                            if (sourceSpace != null)
-                            {
-                                destFloor.Spaces.Add(sourceSpace);        
-                            }
-                        }
-                        retFacility.Floors.Remove(tmpFloor);
+                        var sk = new SpaceKey {Name = mSpace.Name};
+                        fakeZone.Spaces.Add(sk);
                     }
-                    else
+                    if (retFacility.Zones == null)
+                        retFacility.Zones = new List<Zone>();
+                    var validatedZone = v.Validate(fakeZone, retFacility);
+                    retFacility.Zones.Add(validatedZone);
+                    var tmpFloor = retFacility.Get<Floor>(fl => fl.Name == TemporaryFloorName).FirstOrDefault();
+                    if (tmpFloor == null)
+                        continue;
+                    // ensure that the floor and spaces are avalialale in the report facility
+                    foreach (var spaceKey in validatedZone.Spaces)
                     {
-                        if (retFacility.Zones == null)
-                            retFacility.Zones = new List<Zone>();
-                        retFacility.Zones.Add(v.Validate((Zone) null, retFacility));
+                        // 1) on the floor
+                        var submissionOwningFloor =
+                            submitted.Get<Floor>(f => f.Spaces != null && f.Spaces.Any(sp => sp.Name == spaceKey.Name)).FirstOrDefault();
+                        if (submissionOwningFloor == null)
+                            continue;
+                        var destFloor = retFacility.Get<Floor>(f => f.Name == submissionOwningFloor.Name).FirstOrDefault();
+                        if (destFloor == null)
+                        {
+                            destFloor = retFacility.Create<Floor>();
+                            destFloor.Name = submissionOwningFloor.Name;
+                            destFloor.ExternalEntity = submissionOwningFloor.ExternalEntity;
+                            destFloor.ExternalId = submissionOwningFloor.ExternalId;
+                            destFloor.ExternalSystem = submissionOwningFloor.ExternalSystem;
+                            destFloor.Elevation = submissionOwningFloor.Elevation;
+                            destFloor.Spaces = new List<Space>();
+                            retFacility.Floors.Add(destFloor); // finally add it in the facility tree
+                        }
+                        // 2) now on the space.
+
+                        var sourceSpace = tmpFloor.Spaces.FirstOrDefault(sp => sp.Name == spaceKey.Name);
+                        if (sourceSpace != null)
+                        {
+                            destFloor.Spaces.Add(sourceSpace);        
+                        }
                     }
+                    retFacility.Floors.Remove(tmpFloor);
                 }
+                else
+                {
+                    if (retFacility.Zones == null)
+                        retFacility.Zones = new List<Zone>();
+                    retFacility.Zones.Add(v.Validate((Zone) null, retFacility));
+                }
+                ret |= v.HasFailures;   
             }
+            return ret;
         }
 
         public TerminationMode TerminationMode { get; set; }
-        public bool HasFailures { get; set; }
+        
+        public bool HasFailures { get; private set; }
     }
 }

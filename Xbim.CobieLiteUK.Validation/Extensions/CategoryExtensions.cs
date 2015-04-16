@@ -9,7 +9,7 @@ namespace Xbim.CobieLiteUK.Validation.Extensions
     /// <summary>
     /// Provides extension methods to simplify the execution of validation algorithms on CobieLiteUK categories.
     /// </summary>
-    public  static class CategoryExtensions
+    internal static class CategoryExtensions
     {
 
         /// <summary>
@@ -63,7 +63,7 @@ namespace Xbim.CobieLiteUK.Validation.Extensions
 
         public static Category Clone(this Category originalCategory)
         {
-            return new Category()
+            return new Category
             {
                 Classification = originalCategory.Classification,
                 Code = originalCategory.Code,

@@ -8,7 +8,7 @@ using Attribute = Xbim.COBieLiteUK.Attribute;
 
 namespace Xbim.CobieLiteUK.Validation
 {
-    public class CobieObjectValidator<T, TSub> : IValidator
+    internal class CobieObjectValidator<T, TSub> : IValidator
         where T : CobieObject, new()
         where TSub : CobieObject, new()
     {
@@ -16,6 +16,7 @@ namespace Xbim.CobieLiteUK.Validation
 
         public CobieObjectValidator(T requirementType)
         {
+            HasFailures = false;
             _requirementType = requirementType;
         }
 
@@ -52,7 +53,6 @@ namespace Xbim.CobieLiteUK.Validation
         }
 
         public TerminationMode TerminationMode { get; set; }
-
         public bool HasFailures { get; private set; }
 
         public bool HasRequirements 
@@ -60,9 +60,6 @@ namespace Xbim.CobieLiteUK.Validation
             get { return RequirementDetails.Any(); }
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
         /// <param name="candidateParent">If null provides a missing match report</param>
         /// <param name="targetFacility">The target facility is required to ensure that the facility tree is properly referenced</param>
         /// <returns></returns>
@@ -144,11 +141,11 @@ namespace Xbim.CobieLiteUK.Validation
                     a.Value = null;
                 if (pass)
                 {
-                    a.Categories = new List<Category>() { FacilityValidator.PassedCat };
+                    a.Categories = new List<Category> { FacilityValidator.PassedCat };
                 }
                 else
                 {
-                    a.Categories = new List<Category>() { FacilityValidator.FailedCat };
+                    a.Categories = new List<Category> { FacilityValidator.FailedCat };
                     outstandingRequirementsCount++;
                 }
                 
@@ -189,14 +186,14 @@ namespace Xbim.CobieLiteUK.Validation
                             }
                             var a = targetFacility.Clone(req.Attribute);
                             a.Value = AttributeValue.CreateFromObject(satValue);
-                            a.Categories = new List<Category>() {FacilityValidator.PassedCat};
+                            a.Categories = new List<Category> {FacilityValidator.PassedCat};
                             reportChild.Attributes.Add(a);
                         }
                         else if (!parentCachedValidator.AlreadySatisfies(req)) // fails locally, and is not passed at higher level, then add to explicit report fail
                         {
                             var a = targetFacility.Clone(req.Attribute);
                             a.Value = AttributeValue.CreateFromObject(satValue);
-                            a.Categories = new List<Category>() { FacilityValidator.FailedCat };
+                            a.Categories = new List<Category> { FacilityValidator.FailedCat };
                             reportChild.Attributes.Add(a);
                         }
                     }
@@ -228,64 +225,9 @@ namespace Xbim.CobieLiteUK.Validation
             retType.SetValidChildrenCount(iPassed);
             return retType;
         }
-
-        private IEnumerable<RequirementProvision<Attribute>> ProvidedRequirementValues(List<Attribute> attributes)
-        {
-            if (attributes == null)
-                yield break;
-            foreach (var reqDetail in providedRequirementsList(attributes))
-            {
-                // fill in the value from the property
-                var found = attributes.FirstOrDefault(a => a.Name == reqDetail.Name);
-                if (found == null)
-                    continue;
-
-                yield return new RequirementProvision<Attribute>(reqDetail, found);
-            }
-        }
-
-        private IEnumerable<RequirementDetail> providedRequirementsList(List<Attribute> attributes)
-        {
-            if (attributes == null)
-                return Enumerable.Empty<RequirementDetail>();
-
-            var req = new HashSet<string>(RequirementDetails.Select(x => x.Name));
-            var got = new HashSet<string>(attributes.Select(x => x.Name));
-
-            got.IntersectWith(req);
-
-            return RequirementDetails.Where(creq => got.Contains(creq.Name));
-        }
-
-        private IEnumerable<RequirementDetail> RequirementsNotSatisfiedFrom(AssetType typeToTest)
-        {
-            if (typeToTest.Attributes == null)
-            {
-                foreach (var req in RequirementDetails)
-                {
-                    yield return req;
-                }
-                yield break;
-            }
-
-            // prepare a dictionary of attributes for speed
-            var dicAtt = typeToTest.Attributes.ToDictionary(att => att.Name, att => att);
-            foreach (var requirement in RequirementDetails)
-            {
-                if (!dicAtt.ContainsKey(requirement.Name))
-                {
-                    yield return requirement;
-                    continue;
-                }
-                if (!requirement.IsSatisfiedBy(dicAtt[requirement.Name]))
-                {
-                    yield return requirement;
-                }
-            }
-        }
-
+        
         /// <summary>
-        /// Identifies all the assetTypes in the submitted facility that match requirement classifications
+        /// Identifies the subset of submitted items that match requirement classifications
         /// </summary>
         /// <param name="submitted"></param>
         /// <returns></returns>
@@ -298,18 +240,18 @@ namespace Xbim.CobieLiteUK.Validation
             foreach (var reqClass in _requirementType.Categories)
             {
                 var thisClassMatch = reqClass.GetClassificationMatches(submitted);
-                foreach (var matchedAsset in thisClassMatch)
+                foreach (var matchedItem in thisClassMatch)
                 {
-                    var matchedObjectAsTReq = matchedAsset.MatchedObject as TReq;
+                    var matchedObjectAsTReq = matchedItem.MatchedObject as TReq;
                     if (matchedObjectAsTReq == null)
                         continue;
                     if (!ret.ContainsKey(matchedObjectAsTReq))
                     {
-                        ret.Add(matchedObjectAsTReq, matchedAsset.MatchingCategories);
+                        ret.Add(matchedObjectAsTReq, matchedItem.MatchingCategories);
                     }
                     else
                     {
-                        ret[matchedObjectAsTReq].AddRange(matchedAsset.MatchingCategories);
+                        ret[matchedObjectAsTReq].AddRange(matchedItem.MatchingCategories);
                     }
                 }
             }

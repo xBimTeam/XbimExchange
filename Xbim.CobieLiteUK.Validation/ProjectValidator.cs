@@ -1,15 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Xbim.COBieLiteUK;
+﻿using Xbim.COBieLiteUK;
 
 namespace Xbim.CobieLiteUK.Validation
 {
-    public class ProjectValidator
+    internal class ProjectValidator
     {
-        private Project _requirementsProject;
+        private readonly Project _requirementsProject;
         public ProjectValidator(Project requirementsProject)
         {
             _requirementsProject = requirementsProject;
@@ -22,7 +17,7 @@ namespace Xbim.CobieLiteUK.Validation
             var retP = new Project();
             if (candidateProject == null)
             {
-                candidateProject = new Project() {Name = "Undefined", ExternalId = "Undefined"};
+                candidateProject = new Project {Name = "Undefined", ExternalId = "Undefined"};
             }
             // check project name
             if (candidateProject.Name == _requirementsProject.Name)

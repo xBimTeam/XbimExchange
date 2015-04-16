@@ -4,7 +4,7 @@ namespace Xbim.CobieLiteUK.Validation.Reporting
 {
     class VisualValue : IVisualValue
     {
-        private object _object;
+        private readonly object _object;
 
         public VisualValue(object baseObject)
         {
@@ -21,13 +21,13 @@ namespace Xbim.CobieLiteUK.Validation.Reporting
                 switch (_object.GetType().Name)
                 {
                     case "DateTime":
-                        return new IntegerAttributeValue() { Value = (int)_object };
+                        return new IntegerAttributeValue { Value = (int)_object };
                     case "Int32":
-                        return new IntegerAttributeValue() {Value = (int) _object};
+                        return new IntegerAttributeValue {Value = (int) _object};
                     case "String":
-                        return new IntegerAttributeValue() { Value = (int)_object };
+                        return new IntegerAttributeValue { Value = (int)_object };
                     default:
-                        return new StringAttributeValue() { Value = _object.ToString()};
+                        return new StringAttributeValue { Value = _object.ToString()};
                 }
             }
         }

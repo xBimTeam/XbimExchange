@@ -9,7 +9,7 @@ namespace Xbim.CobieLiteUK.Validation
 {
     class CachedPropertiesAndAttributesValidator<T> where T : CobieObject, new()
     {
-        private T _assetToTest = null;
+        private readonly T _assetToTest;
         private readonly Dictionary<string, Attribute> _dicAtt;
         private readonly Dictionary<RequirementDetail, bool> _dicReqs = new Dictionary<RequirementDetail, bool>();
 

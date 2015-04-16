@@ -1,16 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data;
-using System.Diagnostics;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Xbim.COBieLiteUK;
 using Xbim.CobieLiteUK.Validation.Extensions;
 
 namespace Xbim.CobieLiteUK.Validation.Reporting
 {
-    public class SummaryReport<T> where T : CobieObject
+    internal class SummaryReport<T> where T : CobieObject
     {
         private readonly IEnumerable<T> _validatedAssetTypes;
 
@@ -50,7 +47,7 @@ namespace Xbim.CobieLiteUK.Validation.Reporting
                     mainCatCode = mainCat.Code;
                 }
 
-                var thisQuantities = new ValidationSummary()
+                var thisQuantities = new ValidationSummary
                 {
                     Passes = reportingAsset.GetValidChildrenCount(),
                     Total = reportingAsset.GetSubmittedChildrenCount(),
@@ -95,17 +92,18 @@ namespace Xbim.CobieLiteUK.Validation.Reporting
                     aStyle = VisualAttentionStyle.Red;
                 if (value.Total == 0)
                     aStyle = VisualAttentionStyle.Amber;
+                // ReSharper disable once RedundantAssignment (reduces risk for future edits)
                 thisRow[i++] = new VisualValue(value.Passes) { AttentionStyle = aStyle};
                 retTable.Rows.Add(thisRow);
             }
             return retTable;
         }
 
-        private int Comparison(Tuple<string, string> tuple, Tuple<string, string> tuple1)
+        private static int Comparison(Tuple<string, string> tuple, Tuple<string, string> tuple1)
         {
             return tuple.Item1 == tuple1.Item1 
-                ? System.String.Compare(tuple.Item2, tuple1.Item2, System.StringComparison.Ordinal) 
-                : System.String.Compare(tuple.Item1, tuple1.Item1, System.StringComparison.Ordinal);
+                ? String.Compare(tuple.Item2, tuple1.Item2, StringComparison.Ordinal) 
+                : String.Compare(tuple.Item1, tuple1.Item1, StringComparison.Ordinal);
         }
 
         private class ValidationSummary

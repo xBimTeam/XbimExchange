@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Xbim.COBieLiteUK;
 
 namespace Xbim.CobieLiteUK.Validation.Extensions
@@ -33,10 +31,7 @@ namespace Xbim.CobieLiteUK.Validation.Extensions
                     }
                 }
             }
-            foreach (var tuple in l)
-            {
-                yield return tuple.Item1 + "\t" + tuple.Item2;
-            }
+            return l.Select(tuple => tuple.Item1 + "\t" + tuple.Item2);
         }
     }
 }

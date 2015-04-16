@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Xbim.COBieLiteUK;
+﻿using Xbim.COBieLiteUK;
 
 namespace Xbim.CobieLiteUK.Validation.Extensions
 {

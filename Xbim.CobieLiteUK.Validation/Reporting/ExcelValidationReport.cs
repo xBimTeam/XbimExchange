@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Data;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using NPOI.HSSF.UserModel;
@@ -93,7 +94,9 @@ namespace Xbim.CobieLiteUK.Validation.Reporting
         public bool Create(Facility facility, Stream destinationStream, SpreadSheetFormat format)
         {
             var workBook = format == SpreadSheetFormat.Xlsx
+                // ReSharper disable once RedundantCast
                 ? (IWorkbook)new XSSFWorkbook()
+                // ReSharper disable once RedundantCast
                 : (IWorkbook)new HSSFWorkbook();
             
 
@@ -144,7 +147,6 @@ namespace Xbim.CobieLiteUK.Validation.Reporting
                         return false;
                 }
             }
-
             try
             {
                 workBook.Write(destinationStream);
@@ -154,7 +156,6 @@ namespace Xbim.CobieLiteUK.Validation.Reporting
                 Logger.ErrorFormat("Failed to stream excel report: {1}", e.Message);
                 return false;
             }
-
             return true;
         }
 
@@ -169,7 +170,6 @@ namespace Xbim.CobieLiteUK.Validation.Reporting
 
                 var rep = new AssetTypeDetailedGridReport<AssetType, Asset>(requirementPointer);
                 rep.PrepareReport();
-
 
                 var iRunningRow = 2;
                 var iRunningColumn = 0;
@@ -243,6 +243,7 @@ namespace Xbim.CobieLiteUK.Validation.Reporting
                             continue;
                         excelCell = excelRow.GetCell(iRunningColumn) ?? excelRow.CreateCell(iRunningColumn);
 
+                        // ReSharper disable once CanBeReplacedWithTryCastAndCheckForNull
                         if (row[tCol] is IVisualValue)
                         {
                             writer.SetCell(excelCell, (IVisualValue)row[tCol]);
@@ -366,6 +367,7 @@ namespace Xbim.CobieLiteUK.Validation.Reporting
                             continue;
                         excelCell = excelRow.GetCell(iRunningColumn) ?? excelRow.CreateCell(iRunningColumn);
 
+                        // ReSharper disable once CanBeReplacedWithTryCastAndCheckForNull
                         if (row[tCol] is IVisualValue)
                         {
                             writer.SetCell(excelCell, (IVisualValue)row[tCol]);
@@ -426,6 +428,7 @@ namespace Xbim.CobieLiteUK.Validation.Reporting
                 var zonesReport = new SummaryReport<CobieObject>(facility.Zones);
                 iRunningRow = WriteReportToPage(summaryPage, zonesReport, iRunningRow);
 
+                Debug.WriteLine(iRunningRow);
                 return true;
             }
             catch (Exception e)

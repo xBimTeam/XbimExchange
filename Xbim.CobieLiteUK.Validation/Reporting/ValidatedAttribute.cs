@@ -1,5 +1,4 @@
 ﻿using System.Linq;
-using NPOI.SS.UserModel;
 using Xbim.COBieLiteUK;
 
 namespace Xbim.CobieLiteUK.Validation.Reporting
@@ -28,7 +27,7 @@ namespace Xbim.CobieLiteUK.Validation.Reporting
 
         private readonly Attribute _attribute;
 
-        public ValidatedAttribute(COBieLiteUK.Attribute attribute)
+        public ValidatedAttribute(Attribute attribute)
         {
             _attribute = attribute;
         }

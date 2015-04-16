@@ -36,6 +36,7 @@ namespace Xbim.CobieLiteUK.Validation.Reporting
                 var v = ((IntegerAttributeValue) (attribute)).Value;
                 if (v.HasValue)
                 {
+                    // ReSharper disable once RedundantCast
                     excelCell.SetCellValue((double) v.Value);
                 }
             }
@@ -45,6 +46,7 @@ namespace Xbim.CobieLiteUK.Validation.Reporting
                 var v = ((DecimalAttributeValue) (attribute)).Value;
                 if (v.HasValue)
                 {
+                    // ReSharper disable once RedundantCast
                     excelCell.SetCellValue((double) v.Value);
                 }
             }

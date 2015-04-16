@@ -1,14 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Xbim.COBieLiteUK;
 using Xbim.CobieLiteUK.Validation.Extensions;
 
 namespace Xbim.CobieLiteUK.Validation.Reporting
 {
-    public class AssetTypeRequirementPointer<T, TSub> 
+    internal class AssetTypeRequirementPointer<T, TSub> 
         where T : CobieObject
         where TSub : CobieObject
     {

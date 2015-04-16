@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using NPOI.OpenXmlFormats.Spreadsheet;
 using Xbim.COBieLiteUK;
 
 namespace Xbim.CobieLiteUK.Validation.Extensions
@@ -48,7 +47,7 @@ namespace Xbim.CobieLiteUK.Validation.Extensions
                 foreach (var child in newChildrenSet.OfType<Space>() )
                 {
                     // add reference to the space in the zone
-                    destZone.Spaces.Add(new SpaceKey() { Name = child.Name} );
+                    destZone.Spaces.Add(new SpaceKey { Name = child.Name} );
                     // the outer function will then ensure that floor and spaces are avalialale in the report facility
                     tmpStorey.Spaces.Add(child);
                 }
@@ -131,14 +130,14 @@ namespace Xbim.CobieLiteUK.Validation.Extensions
             return GetIntegerValue(retType, ValidChildrenAttributeName);
         }
 
-        private static string GetStringValue(CobieObject retType, string AttributeName)
+        private static string GetStringValue(CobieObject retType, string attributeName)
         {
             if (retType.Attributes == null)
                 return "";
 
             var existingAttribute =
                 retType.Attributes.FirstOrDefault(
-                    a => a.Name == AttributeName && a.PropertySetName == AttributesPropertySetName);
+                    a => a.Name == attributeName && a.PropertySetName == AttributesPropertySetName);
 
             if (existingAttribute == null)
                 return "";
@@ -149,14 +148,14 @@ namespace Xbim.CobieLiteUK.Validation.Extensions
                 : stringValue.Value;
         }
 
-        private static int GetIntegerValue(CobieObject retType, string AttributeName)
+        private static int GetIntegerValue(CobieObject retType, string attributeName)
         {
             if (retType.Attributes == null)
                 return 0;
 
             var existingAttribute =
                 retType.Attributes.FirstOrDefault(
-                    a => a.Name == AttributeName && a.PropertySetName == AttributesPropertySetName);
+                    a => a.Name == attributeName && a.PropertySetName == AttributesPropertySetName);
 
             if (existingAttribute == null)
                 return 0;
@@ -178,7 +177,7 @@ namespace Xbim.CobieLiteUK.Validation.Extensions
 
             if (existingAttribute != null)
             {
-                existingAttribute.Value = new StringAttributeValue() { Value = value };
+                existingAttribute.Value = new StringAttributeValue { Value = value };
             }
             else
             {
@@ -187,16 +186,16 @@ namespace Xbim.CobieLiteUK.Validation.Extensions
                     Name = propertyName,
                     PropertySetName = AttributesPropertySetName,
                     Description = propertyDescription,
-                    Value = new StringAttributeValue() { Value = value },
-                    Categories = new List<Category>() { dpowValidatedAttributeClass }
+                    Value = new StringAttributeValue { Value = value },
+                    Categories = new List<Category> { DpowValidatedAttributeClass }
                 };
                 retType.Attributes.Add(matchingClassAttribute);
             }
         }
 
-        private static Category dpowValidatedAttributeClass
+        private static Category DpowValidatedAttributeClass
         {
-            get { return new Category() {Classification = @"DPoW", Code = "reference"}; }
+            get { return new Category {Classification = @"DPoW", Code = "reference"}; }
         }
 
         private static void SetIntegerValue(CobieObject retType, int value, string propertyName, string propertyDescription)
@@ -210,7 +209,7 @@ namespace Xbim.CobieLiteUK.Validation.Extensions
 
             if (existingAttribute != null)
             {
-                existingAttribute.Value = new IntegerAttributeValue() {Value = value};
+                existingAttribute.Value = new IntegerAttributeValue {Value = value};
             }
             else
             {
@@ -219,8 +218,8 @@ namespace Xbim.CobieLiteUK.Validation.Extensions
                     Name = propertyName,
                     PropertySetName = AttributesPropertySetName,
                     Description = propertyDescription,
-                    Value = new IntegerAttributeValue() {Value = value},
-                    Categories = new List<Category>() { dpowValidatedAttributeClass }
+                    Value = new IntegerAttributeValue {Value = value},
+                    Categories = new List<Category> { DpowValidatedAttributeClass }
                 };
                 retType.Attributes.Add(matchingClassAttribute);
             }
@@ -233,7 +232,7 @@ namespace Xbim.CobieLiteUK.Validation.Extensions
 
             while (cls.MoveNext() && codes.MoveNext())
             {
-                yield return new Category()
+                yield return new Category
                 {
                     Classification = cls.Current,
                     Code = codes.Current
@@ -249,7 +248,7 @@ namespace Xbim.CobieLiteUK.Validation.Extensions
 
             while (cls.MoveNext() && codes.MoveNext() && descs.MoveNext())
             {
-                yield return new Category()
+                yield return new Category
                 {
                     Classification = cls.Current,
                     Code = codes.Current,
@@ -361,7 +360,7 @@ namespace Xbim.CobieLiteUK.Validation.Extensions
 
             if (existingAttribute != null)
             {
-                existingAttribute.Value = new StringAttributeValue()
+                existingAttribute.Value = new StringAttributeValue
                 {
                     Value = newValue
                 };
@@ -373,8 +372,8 @@ namespace Xbim.CobieLiteUK.Validation.Extensions
                     Name = propName,
                     PropertySetName = AttributesPropertySetName,
                     Description = description,
-                    Value = new StringAttributeValue() { Value = newValue },
-                    Categories = new List<Category>() { dpowValidatedAttributeClass }
+                    Value = new StringAttributeValue { Value = newValue },
+                    Categories = new List<Category> { DpowValidatedAttributeClass }
                 };
                 retType.Attributes.Add(matchingClassAttribute);
             }
