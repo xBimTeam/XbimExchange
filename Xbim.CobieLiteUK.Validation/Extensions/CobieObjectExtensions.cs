@@ -62,8 +62,8 @@ namespace Xbim.CobieLiteUK.Validation.Extensions
         private const string RequirementCodesAttributeName = "DPoWRequirementCodes";
         private const string RequirementDescsAttributeName = "DPoWRequirementDescs";
 
-        private const string SubmittedAssetsAttributeName = "DPoWSubmittedAssetsCount";
-        private const string ValidAssetsAttributeName = "DPoWValidSubmittedAssetsCount";
+        private const string SubmittedChildrenAttributeName = "DPoWSubmittedChildrenCount";
+        private const string ValidChildrenAttributeName = "DPoWValidSubmittedChildrenCount";
         private const string RequirementExternalSystemAttributeName = "RefRequirementExternalSystem";
         private const string RequirementExternalIdAttributeName = "RefRequirementExternalId";
         private const string RequirementNameAttributeName = "RefRequirementName";
@@ -106,29 +106,29 @@ namespace Xbim.CobieLiteUK.Validation.Extensions
             SetStringValue(retType, value, RequirementNameAttributeName, "Name of the requirement group.");
         }
 
-        static public void SetSubmittedAssetsCount(this CobieObject retType, int value)
+        static public void SetSubmittedChildrenCount(this CobieObject retType, int value)
         {
             if (retType == null)
                 return;
-            SetIntegerValue(retType, value, SubmittedAssetsAttributeName, "Count of submitted items.");
+            SetIntegerValue(retType, value, SubmittedChildrenAttributeName, "Count of submitted items.");
         }
 
-        static public int GetSubmittedAssetsCount(this CobieObject retType)
+        static public int GetSubmittedChildrenCount(this CobieObject retType)
         {
-            return GetIntegerValue(retType, SubmittedAssetsAttributeName);
+            return GetIntegerValue(retType, SubmittedChildrenAttributeName);
         }
 
 
-        static public void SetValidAssetsCount(this CobieObject retType, int value)
+        static public void SetValidChildrenCount(this CobieObject retType, int value)
         {
             if (retType == null)
                 return;
-            SetIntegerValue(retType, value, ValidAssetsAttributeName, "Count of submitted items that satisfy requirements.");
+            SetIntegerValue(retType, value, ValidChildrenAttributeName, "Count of submitted items that satisfy requirements.");
         }
 
-        static public int GetValidAssetsCount(this CobieObject retType)
+        static public int GetValidChildrenCount(this CobieObject retType)
         {
-            return GetIntegerValue(retType, ValidAssetsAttributeName);
+            return GetIntegerValue(retType, ValidChildrenAttributeName);
         }
 
         private static string GetStringValue(CobieObject retType, string AttributeName)

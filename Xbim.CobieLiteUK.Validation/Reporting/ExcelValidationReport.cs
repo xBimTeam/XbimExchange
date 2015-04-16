@@ -165,7 +165,7 @@ namespace Xbim.CobieLiteUK.Validation.Reporting
                 var excelRow = detailSheet.GetRow(0) ?? detailSheet.CreateRow(0);
                 var excelCell = excelRow.GetCell(0) ?? excelRow.CreateCell(0);
                 SetHeader(excelCell);
-                excelCell.SetCellValue("Asset type requirement report");
+                excelCell.SetCellValue("Requirement report");
 
                 var rep = new AssetTypeDetailedGridReport<AssetType, Asset>(requirementPointer);
                 rep.PrepareReport();

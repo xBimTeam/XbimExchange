@@ -55,7 +55,7 @@ namespace Xbim.CobieLiteUK.Validation.Reporting
 
         internal int GetSubmittedAssetsCount()
         {
-            return ProvidedAssetTypes.Sum(providedAsset => providedAsset.GetSubmittedAssetsCount());
+            return ProvidedAssetTypes.Sum(providedAsset => providedAsset.GetSubmittedChildrenCount());
         }
 
         public string Name { get; set; }

@@ -52,8 +52,8 @@ namespace Xbim.CobieLiteUK.Validation.Reporting
 
                 var thisQuantities = new ValidationSummary()
                 {
-                    Passes = reportingAsset.GetValidAssetsCount(),
-                    Total = reportingAsset.GetSubmittedAssetsCount(),
+                    Passes = reportingAsset.GetValidChildrenCount(),
+                    Total = reportingAsset.GetSubmittedChildrenCount(),
                     MainCatDescription = mainCat != null 
                         ? mainCat.Description 
                         : ""

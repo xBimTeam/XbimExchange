@@ -8,15 +8,10 @@ using Attribute = Xbim.COBieLiteUK.Attribute;
 
 namespace Xbim.CobieLiteUK.Validation
 {
-
-
     public class CobieObjectValidator<T, TSub> : IValidator
         where T : CobieObject, new()
         where TSub : CobieObject, new()
     {
-
-        
-
         private readonly T _requirementType;
 
         public CobieObjectValidator(T requirementType)
@@ -26,7 +21,7 @@ namespace Xbim.CobieLiteUK.Validation
 
         private List<RequirementDetail> _requirementDetails;
 
-        public List<RequirementDetail> RequirementDetails
+        internal List<RequirementDetail> RequirementDetails
         {
             get
             {
@@ -68,10 +63,10 @@ namespace Xbim.CobieLiteUK.Validation
         /// <summary>
         /// 
         /// </summary>
-        /// <param name="candidateType">If null provides a missing match report</param>
+        /// <param name="candidateParent">If null provides a missing match report</param>
         /// <param name="targetFacility">The target facility is required to ensure that the facility tree is properly referenced</param>
         /// <returns></returns>
-        internal T Validate(T candidateType, Facility targetFacility)
+        internal T Validate(T candidateParent, Facility targetFacility)
         {
             var iSubmitted = 0;
             var iPassed = 0;
@@ -86,18 +81,18 @@ namespace Xbim.CobieLiteUK.Validation
             retType.SetRequirementName(_requirementType.Name);
             retType.SetRequirementCategories(_requirementType.Categories);
 
-            // improve returning assetType
-            if (candidateType == null) // the following properties depend on the nullity of candidate
+            // improve returning Parent
+            if (candidateParent == null) // the following properties depend on the nullity of candidate
             {
                 retType.Name = _requirementType.Name;
             }
             else
             {
-                retType.Name = candidateType.Name;
-                retType.ExternalId = candidateType.ExternalId;
-                retType.ExternalSystem = candidateType.ExternalSystem;
-                retType.Categories = candidateType.Categories.Clone().ToList();
-                candidateChildren = candidateType.GetChildObjects<TSub>();
+                retType.Name = candidateParent.Name;
+                retType.ExternalId = candidateParent.ExternalId;
+                retType.ExternalSystem = candidateParent.ExternalSystem;
+                retType.Categories = candidateParent.Categories.Clone().ToList();
+                candidateChildren = candidateParent.GetChildObjects<TSub>();
                 if (candidateChildren != null)
                 {
                     iSubmitted = candidateChildren.Count;
@@ -114,7 +109,7 @@ namespace Xbim.CobieLiteUK.Validation
             }
 
             // if candidate is null then consider there's no match
-            if (candidateType == null)
+            if (candidateParent == null)
             {
                 retType.Categories.Add(FacilityValidator.FailedCat);
                 retType.Description = "No candidates in submission match the required classification.\r\n";
@@ -124,24 +119,24 @@ namespace Xbim.CobieLiteUK.Validation
             
             if (returnWithoutFurtherTests)
             {
-                retType.SetSubmittedAssetsCount(iSubmitted);
-                retType.SetValidAssetsCount(iPassed);
+                retType.SetSubmittedChildrenCount(iSubmitted);
+                retType.SetValidChildrenCount(iPassed);
                 return retType;
             }
 
-            // ==================== begin Assets testing
+            // ==================== begin testing
 
             if (retType.Attributes == null)
                 retType.Attributes = new List<Attribute>();
 
-            // produce type level description
+            // produce parent level description
             var outstandingRequirementsCount = 0;
             
-            var cachedValidator = new CachedPropertiesAndAttributesValidator<T>(candidateType);
+            var parentCachedValidator = new CachedPropertiesAndAttributesValidator<T>(candidateParent);
             foreach (var req in RequirementDetails)
             {
                 object satValue;
-                var pass = cachedValidator.CanSatisfy(req, out satValue);
+                var pass = parentCachedValidator.CanSatisfy(req, out satValue);
                 var a = targetFacility.Clone(req.Attribute);
                 if (satValue is AttributeValue)
                     a.Value = satValue as AttributeValue;
@@ -162,86 +157,75 @@ namespace Xbim.CobieLiteUK.Validation
             }
 
             retType.Description = string.Format("{0} of {1} requirement addressed.", RequirementDetails.Count - outstandingRequirementsCount, RequirementDetails.Count);
+            var anyChildFails = false;
             
-            var anyAssetFails = false;
-            
-            
-            // perform tests at asset level
+            // perform tests at child level
             if (candidateChildren != null)
             {
                 foreach (var modelChild in candidateChildren)
                 {
-                    var iAssetRequirementsMatched = 0;
-                    var reportAsset = targetFacility.Create<TSub>();
-                    reportAsset.Name = modelChild.Name;
-                        // todo: restore
-                        // AssetIdentifier = modelAsset.AssetIdentifier,
-                    reportAsset.ExternalId = modelChild.ExternalId;
-                    reportAsset.Categories = new List<Category>();
-                    reportAsset.Attributes = new List<Attribute>();
+                    var iChildRequirementsMatched = 0;
+                    var reportChild = targetFacility.Create<TSub>();
+                    reportChild.Name = modelChild.Name;
+                    reportChild.ExternalId = modelChild.ExternalId;
+                    reportChild.Categories = new List<Category>();
+                    reportChild.Attributes = new List<Attribute>();
                 
-                    // asset classification can be copied from model
+                    // child classification can be copied from model
                     //
                     if (modelChild.Categories != null)
-                        reportAsset.Categories.AddRange(modelChild.Categories);
+                        reportChild.Categories.AddRange(modelChild.Categories);
 
-                    var assetCachedValidator = new CachedPropertiesAndAttributesValidator<TSub>(modelChild);
+                    var childCachedValidator = new CachedPropertiesAndAttributesValidator<TSub>(modelChild);
                     foreach (var req in RequirementDetails)
                     {
                         object satValue;
-                        if (assetCachedValidator.CanSatisfy(req, out satValue))
+                        if (childCachedValidator.CanSatisfy(req, out satValue))
                         {
                             // passes locally
-                            if (!cachedValidator.AlreadySatisfies(req))
+                            if (!parentCachedValidator.AlreadySatisfies(req))
                             {
-                                iAssetRequirementsMatched++;
+                                iChildRequirementsMatched++;
                             }
                             var a = targetFacility.Clone(req.Attribute);
-                            if (satValue is AttributeValue)
-                                a.Value = satValue as AttributeValue;
-                            else
-                                a.Value = null;
+                            a.Value = AttributeValue.CreateFromObject(satValue);
                             a.Categories = new List<Category>() {FacilityValidator.PassedCat};
-                            reportAsset.Attributes.Add(a);
+                            reportChild.Attributes.Add(a);
                         }
-                        else if (!cachedValidator.AlreadySatisfies(req)) // fails locally, and is not passed at higher level, then add to explicit report fail
+                        else if (!parentCachedValidator.AlreadySatisfies(req)) // fails locally, and is not passed at higher level, then add to explicit report fail
                         {
                             var a = targetFacility.Clone(req.Attribute);
-                            if (satValue is AttributeValue)
-                                a.Value = satValue as AttributeValue;
-                            else
-                                a.Value = null;
+                            a.Value = AttributeValue.CreateFromObject(satValue);
                             a.Categories = new List<Category>() { FacilityValidator.FailedCat };
-                            reportAsset.Attributes.Add(a);
+                            reportChild.Attributes.Add(a);
                         }
                     }
 
-
                     var sb = new StringBuilder();
-                    sb.AppendFormat("{0} of {1} outstanding requirements addressed.", iAssetRequirementsMatched, outstandingRequirementsCount);
+                    sb.AppendFormat("{0} of {1} outstanding requirements addressed.", iChildRequirementsMatched, outstandingRequirementsCount);
 
-                    var pass = (outstandingRequirementsCount == iAssetRequirementsMatched);
+                    var pass = (outstandingRequirementsCount == iChildRequirementsMatched);
                     if (!pass)
                     {
-                        anyAssetFails = true;
-                        reportAsset.Categories.Add(FacilityValidator.FailedCat);
+                        anyChildFails = true;
+                        reportChild.Categories.Add(FacilityValidator.FailedCat);
                     }
                     else
                     {
                         iPassed++;
-                        reportAsset.Categories.Add(FacilityValidator.PassedCat);
+                        reportChild.Categories.Add(FacilityValidator.PassedCat);
                     }
-                    reportAsset.Description = sb.ToString();
-                    returnChildren.Add(reportAsset);
+                    reportChild.Description = sb.ToString();
+                    returnChildren.Add(reportChild);
                 }
             }
             retType.SetChildObjects(returnChildren);
             retType.Categories.Add(
-                anyAssetFails ? FacilityValidator.FailedCat : FacilityValidator.PassedCat
+                anyChildFails ? FacilityValidator.FailedCat : FacilityValidator.PassedCat
                 );
 
-            retType.SetSubmittedAssetsCount(iSubmitted);
-            retType.SetValidAssetsCount(iPassed);
+            retType.SetSubmittedChildrenCount(iSubmitted);
+            retType.SetValidChildrenCount(iPassed);
             return retType;
         }
 
