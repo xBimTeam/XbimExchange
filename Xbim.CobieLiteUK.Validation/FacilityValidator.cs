@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Xbim.COBieLiteUK;
@@ -8,27 +6,39 @@ using Xbim.CobieLiteUK.Validation.Extensions;
 
 namespace Xbim.CobieLiteUK.Validation
 {
+    /// <summary>
+    /// Used to produce a COBieLiteUK Facility with validation information of a submitted facility against a requirement facility. 
+    /// </summary>
     public class FacilityValidator : IValidator
     {
         internal const string TemporaryFloorName = @"DPoWTemporaryZoneValidationSpaceHoldingFloor";
 
+        /// <summary>
+        /// Empty default constructor.
+        /// </summary>
         public FacilityValidator()
         {
             TerminationMode = TerminationMode.ExecuteCompletely;
         }
 
-        internal static readonly Category FailedCat = new Category()
+        internal static readonly Category FailedCat = new Category
         {
             Classification = "DPoW",
             Code = "Failed"
         };
 
-        internal static readonly Category PassedCat = new Category()
+        internal static readonly Category PassedCat = new Category
         {
             Classification = "DPoW",
             Code = "Passed"
         };
 
+        /// <summary>
+        /// Performs the validation
+        /// </summary>
+        /// <param name="requirement">a requirement facility</param>
+        /// <param name="submitted">the submission model to be validated</param>
+        /// <returns></returns>
         public Facility Validate(Facility requirement, Facility submitted)
         {
             var retFacility = new Facility {Categories = new List<Category>()};
@@ -114,37 +124,38 @@ namespace Xbim.CobieLiteUK.Validation
             return retFacility;
         }
 
-        private void ValidateAssetTypes(Facility requirement, Facility submitted, Facility retFacility)
+        private bool ValidateAssetTypes(Facility requirement, Facility submitted, Facility retFacility)
         {
-            if (requirement.AssetTypes != null)
+            var ret = true;
+            if (requirement.AssetTypes == null) 
+                return true;
+            foreach (var assetTypeRequirement in requirement.AssetTypes)
             {
-                foreach (var assetTypeRequirement in requirement.AssetTypes)
+                var v = new CobieObjectValidator<AssetType, Asset>(assetTypeRequirement)
                 {
-                    var v = new CobieObjectValidator<AssetType, Asset>(assetTypeRequirement)
-                    {
-                        TerminationMode = TerminationMode
-                    };
-                    if (! v.HasRequirements)
-                        continue;
-                    var candidates = v.GetCandidates(submitted.AssetTypes).ToList();
-                    // ReSharper disable once PossibleMultipleEnumeration
-                    if (candidates.Any())
-                    {
-                        foreach (var candidate in candidates)
-                        {
-                            if (retFacility.AssetTypes == null)
-                                retFacility.AssetTypes = new List<AssetType>();
-                            retFacility.AssetTypes.Add(v.Validate(candidate, retFacility));
-                        }
-                    }
-                    else
+                    TerminationMode = TerminationMode
+                };
+                if (! v.HasRequirements)
+                    continue;
+                var candidates = v.GetCandidates(submitted.AssetTypes).ToList();
+                // ReSharper disable once PossibleMultipleEnumeration
+                if (candidates.Any())
+                {
+                    foreach (var candidate in candidates)
                     {
                         if (retFacility.AssetTypes == null)
                             retFacility.AssetTypes = new List<AssetType>();
-                        retFacility.AssetTypes.Add(v.Validate((AssetType) null, retFacility));
+                        retFacility.AssetTypes.Add(v.Validate(candidate, retFacility));
                     }
                 }
+                else
+                {
+                    if (retFacility.AssetTypes == null)
+                        retFacility.AssetTypes = new List<AssetType>();
+                    retFacility.AssetTypes.Add(v.Validate((AssetType) null, retFacility));
+                }
             }
+            return ret;
         }
 
         private void ValidateZones(Facility requirement, Facility submitted, Facility retFacility)
