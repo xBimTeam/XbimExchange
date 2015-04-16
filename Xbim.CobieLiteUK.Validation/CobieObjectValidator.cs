@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Xbim.CobieLiteUK.Validation.Extensions;
@@ -32,8 +31,6 @@ namespace Xbim.CobieLiteUK.Validation
                 return _requirementDetails;
             }
         }
-
-        
 
         private IEnumerable<Attribute> RequirementAttributes()
         {

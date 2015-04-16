@@ -69,7 +69,19 @@ namespace Tests
             var req = Facility.ReadJson(@"Lakeside_Restaurant-stage6-COBie.json");
             var validator = new FacilityValidator();
             var result = validator.Validate(req, cobie);
-            result.WriteJson(@"..\..\XlsLakesideWithDocumentsValidation.json", true);
+            result.WriteJson(@"..\..\XlsLakesideWithDocumentsValidationStage6.json", true);
+        }
+
+        [TestMethod]
+        public void ValidateXlsLakesideForStage1()
+        {
+            const string xlsx = @"LakesideWithDocuments.xls";
+            string msg;
+            var cobie = Facility.ReadCobie(xlsx, out msg);
+            var req = Facility.ReadJson(@"Lakeside_Restaurant-stage1-COBie.json");
+            var validator = new FacilityValidator();
+            var result = validator.Validate(req, cobie);
+            result.WriteJson(@"..\..\XlsLakesideWithDocumentsValidationStage1.json", true);
         }
     }
 }

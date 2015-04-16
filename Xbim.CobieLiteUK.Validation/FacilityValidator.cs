@@ -45,15 +45,14 @@ namespace Xbim.CobieLiteUK.Validation
             var retFacility = new Facility {Categories = new List<Category>()};
             var sb = new StringBuilder();
 
-            // a facility validation passes is carried out through the validation of
+            // facility validation is carried out through the validation of:
             // a) local values
             // b) Project
-            // c) assetTypes (WIP)
-            // d) spaces (planned)
+            // c) AssetTypes/Assets
+            // d) Zones/Spaces 
+            // e) Documents
 
             // a)
-            
-
             // area units
             if (requirement.AreaUnitsCustom != submitted.AreaUnitsCustom)
             {
@@ -108,16 +107,19 @@ namespace Xbim.CobieLiteUK.Validation
                 var pv = new ProjectValidator(requirement.Project);
                 retFacility.Project = pv.Validate(submitted.Project);
 
-                if (!pv.IsPass)
+                if (pv.HasFailures)
                 {
                     sb.AppendFormat("Validation of Project information fails, see project information for detail.\r\n");
                     HasFailures = true;
                 }
             }
-            // c) asset types
+            // c) AssetTypes/Assets
             HasFailures |= ValidateAssetTypes(requirement, submitted, retFacility);
-            // d) zones
+            // d) Zones/Spaces
             HasFailures |= ValidateZones(requirement, submitted, retFacility);
+
+            // e) Documents
+            HasFailures |= ValidateDocuments(requirement, submitted, retFacility);
 
             retFacility.Description = sb.ToString();
             retFacility.Categories.Add(HasFailures ? FailedCat : PassedCat);
@@ -125,14 +127,32 @@ namespace Xbim.CobieLiteUK.Validation
             return retFacility;
         }
 
+        private bool ValidateDocuments(Facility requirement, Facility submitted, Facility retFacility)
+        {
+            if (requirement.Documents == null)
+                return true;
+            var dv = new DocumentsValidator(requirement.Documents, retFacility) {TerminationMode = TerminationMode};
+            if (retFacility.Documents == null)
+                retFacility.Documents = new List<Document>();
+            var bAnyDocs = false;
+            foreach (var doc in dv.ValidatedDocs(submitted.Documents))
+            {
+                bAnyDocs = true;
+                retFacility.Documents.Add(doc);
+            }
+            if (!bAnyDocs)
+                retFacility.Documents = null; // if empty then remove the list for cleanness
+            return dv.HasFailures;
+        }
+
         
         
         /// <returns>true if it has failures</returns>
         private bool ValidateAssetTypes(Facility requirement, Facility submitted, Facility retFacility)
         {
-            var ret = false;
             if (requirement.AssetTypes == null) 
                 return true;
+            var ret = false;
             foreach (var assetTypeRequirement in requirement.AssetTypes)
             {
                 var v = new CobieObjectValidator<AssetType, Asset>(assetTypeRequirement)
@@ -253,8 +273,14 @@ namespace Xbim.CobieLiteUK.Validation
             return ret;
         }
 
+        /// <summary>
+        /// Determines behaviour that regulate the conclusion of the validation process.
+        /// </summary>
         public TerminationMode TerminationMode { get; set; }
-        
+
+        /// <summary>
+        /// true if the validator has encountered failures in the data.
+        /// </summary>
         public bool HasFailures { get; private set; }
     }
 }

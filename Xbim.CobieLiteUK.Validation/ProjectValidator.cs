@@ -2,15 +2,18 @@
 
 namespace Xbim.CobieLiteUK.Validation
 {
-    internal class ProjectValidator
+    internal class ProjectValidator : IValidator
     {
         private readonly Project _requirementsProject;
         public ProjectValidator(Project requirementsProject)
         {
+            HasFailures = false;
             _requirementsProject = requirementsProject;
         }
 
-        internal bool IsPass = true;
+        public TerminationMode TerminationMode { get; set; }
+
+        public bool HasFailures { get; private set; }
 
         public Project Validate(Project candidateProject)
         {
@@ -27,7 +30,7 @@ namespace Xbim.CobieLiteUK.Validation
             else
             {
                 retP.Name = string.Format("'{0}' (should be '{1}')", candidateProject.Name, _requirementsProject.Name);
-                IsPass = false;
+                HasFailures = true;
             }
 
             // check project ExternalId
@@ -38,7 +41,7 @@ namespace Xbim.CobieLiteUK.Validation
             else
             {
                 retP.ExternalId = string.Format("{0} (should be '{1}')", candidateProject.ExternalId, _requirementsProject.ExternalId);
-                IsPass = false;
+                HasFailures = true;
             }
             return retP;
         }

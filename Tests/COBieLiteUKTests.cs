@@ -15,8 +15,6 @@ namespace Tests
     [TestClass]
     public class CoBieLiteUkTests
     {
-
-
         [TestMethod]
         public void CoBieLiteUkCreation()
         {
