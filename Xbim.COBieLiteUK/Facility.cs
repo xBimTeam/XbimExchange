@@ -30,7 +30,7 @@ namespace Xbim.COBieLiteUK
         /// Creates a new class inheryting from CobieObject and sets it to belong to the facility.
         /// </summary>
         /// <typeparam name="TNewCobieObject">The CobieObject type to create</typeparam>
-        /// <returns></returns>
+        /// <returns>the created object, which will have to be added to a collection as appropriate to be in the facility tree</returns>
         public TNewCobieObject Create<TNewCobieObject>() where TNewCobieObject : CobieObject, new()
         {
             var retObject = new TNewCobieObject();

@@ -39,9 +39,15 @@ namespace Xbim.COBieLiteUK
 
         [XmlIgnore]
         [JsonIgnore]
-        internal virtual Facility Facility
+        public virtual Facility Facility
         {
-            get { return _facility; }
+            get
+            {
+                if (_facility == null)
+                    throw new Exception(
+                        "You have to call 'Refresh()' method on Facility object before you use this property.");
+                return _facility;
+            }
         }
 
         internal IEnumerable<T> GetDeep<T>(Func<T, bool> condition = null) where T : CobieObject

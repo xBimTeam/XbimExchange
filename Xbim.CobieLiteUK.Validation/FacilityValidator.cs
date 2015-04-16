@@ -10,6 +10,8 @@ namespace Xbim.CobieLiteUK.Validation
 {
     public class FacilityValidator : IValidator
     {
+        internal const string TemporaryFloorName = @"DPoWTemporaryZoneValidationSpaceHoldingFloor";
+
         public FacilityValidator()
         {
             TerminationMode = TerminationMode.ExecuteCompletely;
@@ -188,7 +190,40 @@ namespace Xbim.CobieLiteUK.Validation
                         }
                         if (retFacility.Zones == null)
                             retFacility.Zones = new List<Zone>();
-                        retFacility.Zones.Add(v.Validate(fakeZone, retFacility));
+                        var validatedZone = v.Validate(fakeZone, retFacility);
+                        retFacility.Zones.Add(validatedZone);
+                        var tmpFloor = retFacility.Get<Floor>(fl => fl.Name == TemporaryFloorName).FirstOrDefault();
+                        if (tmpFloor == null)
+                            continue;
+                        // ensure that the floor and spaces are avalialale in the report facility
+                        foreach (var spaceKey in validatedZone.Spaces)
+                        {
+                            // 1) on the floor
+                            var submissionOwningFloor =
+                                submitted.Get<Floor>(f => f.Spaces != null && f.Spaces.Any(sp => sp.Name == spaceKey.Name)).FirstOrDefault();
+                            if (submissionOwningFloor == null)
+                                continue;
+                            var destFloor = retFacility.Get<Floor>(f => f.Name == submissionOwningFloor.Name).FirstOrDefault();
+                            if (destFloor == null)
+                            {
+                                destFloor = retFacility.Create<Floor>();
+                                destFloor.Name = submissionOwningFloor.Name;
+                                destFloor.ExternalEntity = submissionOwningFloor.ExternalEntity;
+                                destFloor.ExternalId = submissionOwningFloor.ExternalId;
+                                destFloor.ExternalSystem = submissionOwningFloor.ExternalSystem;
+                                destFloor.Elevation = submissionOwningFloor.Elevation;
+                                destFloor.Spaces = new List<Space>();
+                                retFacility.Floors.Add(destFloor); // finally add it in the facility tree
+                            }
+                            // 2) now on the space.
+
+                            var sourceSpace = tmpFloor.Spaces.FirstOrDefault(sp => sp.Name == spaceKey.Name);
+                            if (sourceSpace != null)
+                            {
+                                destFloor.Spaces.Add(sourceSpace);        
+                            }
+                        }
+                        retFacility.Floors.Remove(tmpFloor);
                     }
                     else
                     {

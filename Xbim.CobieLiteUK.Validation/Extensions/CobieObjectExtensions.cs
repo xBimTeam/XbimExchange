@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using NPOI.OpenXmlFormats.Spreadsheet;
 using Xbim.COBieLiteUK;
 
 namespace Xbim.CobieLiteUK.Validation.Extensions
@@ -27,16 +28,29 @@ namespace Xbim.CobieLiteUK.Validation.Extensions
             {
                 ((AssetType)obj).Assets = newChildrenSet as List<Asset>;
             }
-            if (obj.GetType() == typeof(Zone))
+            else if (obj.GetType() == typeof(Zone))
             {
-                
-                ((Zone)obj).Spaces = new List<SpaceKey>();
+                var destZone = obj as Zone;
+                if (destZone == null)
+                    return;
+                destZone.Spaces = new List<SpaceKey>(); // since this is a setter it's ok to create new.
+                var destFaclity = destZone.Facility;
+                if (destFaclity.Floors == null) // we dont' wipe floors away, only prepare if it's null
+                    destFaclity.Floors = new List<Floor>();
+                var tmpStorey = destFaclity.Get<Floor>(fl => fl.Name == @"DPoWTemporaryHoldingStorey").FirstOrDefault();
+                if (tmpStorey == null)
+                {
+                    tmpStorey = destFaclity.Create<Floor>();
+                    tmpStorey.Name = FacilityValidator.TemporaryFloorName;
+                    tmpStorey.Spaces = new List<Space>();
+                    destFaclity.Floors.Add(tmpStorey);
+                }
                 foreach (var child in newChildrenSet.OfType<Space>() )
                 {
-                    // todo: resume from here; we need to ensure that the floor and spaces of the provided spaceKey are avalialale in the report facility
-
-
-                    ((Zone)obj).Spaces.Add(new SpaceKey() { Name = child.Name} );    
+                    // add reference to the space in the zone
+                    destZone.Spaces.Add(new SpaceKey() { Name = child.Name} );
+                    // the outer function will then ensure that floor and spaces are avalialale in the report facility
+                    tmpStorey.Spaces.Add(child);
                 }
             }
         }

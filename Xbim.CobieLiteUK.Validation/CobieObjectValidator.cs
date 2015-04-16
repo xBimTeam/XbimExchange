@@ -8,10 +8,15 @@ using Attribute = Xbim.COBieLiteUK.Attribute;
 
 namespace Xbim.CobieLiteUK.Validation
 {
+
+
     public class CobieObjectValidator<T, TSub> : IValidator
         where T : CobieObject, new()
         where TSub : CobieObject, new()
     {
+
+        
+
         private readonly T _requirementType;
 
         public CobieObjectValidator(T requirementType)
@@ -156,7 +161,7 @@ namespace Xbim.CobieLiteUK.Validation
 
             }
 
-            retType.Description = string.Format("{0} of {1} requirement addressed at type level.", RequirementDetails.Count - outstandingRequirementsCount, RequirementDetails.Count);
+            retType.Description = string.Format("{0} of {1} requirement addressed.", RequirementDetails.Count - outstandingRequirementsCount, RequirementDetails.Count);
             
             var anyAssetFails = false;
             
@@ -213,7 +218,7 @@ namespace Xbim.CobieLiteUK.Validation
 
 
                     var sb = new StringBuilder();
-                    sb.AppendFormat("{0} of {1} outstanding requirements addressed at asset level.", iAssetRequirementsMatched, outstandingRequirementsCount);
+                    sb.AppendFormat("{0} of {1} outstanding requirements addressed.", iAssetRequirementsMatched, outstandingRequirementsCount);
 
                     var pass = (outstandingRequirementsCount == iAssetRequirementsMatched);
                     if (!pass)
