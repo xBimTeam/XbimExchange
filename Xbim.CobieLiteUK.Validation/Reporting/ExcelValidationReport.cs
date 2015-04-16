@@ -104,8 +104,10 @@ namespace Xbim.CobieLiteUK.Validation.Reporting
                 return false;
             var iRunningWorkBook = 1;
 
+            // reports on AssetTypes details
+
             // ReSharper disable once LoopCanBeConvertedToQuery // might restore once code is stable
-            foreach (var assetType in facReport.RequirementGroups)
+            foreach (var assetType in facReport.AssetRequirementGroups)
             {
                 // only report items with any assets submitted (a different report should probably be provided otherwise)
 
@@ -123,6 +125,26 @@ namespace Xbim.CobieLiteUK.Validation.Reporting
                 }
             }
 
+            // reports on Zones details
+
+            // ReSharper disable once LoopCanBeConvertedToQuery // might restore once code is stable
+            foreach (var zoneGroup in facReport.ZoneRequirementGroups)
+            {
+                // only report items with any assets submitted (a different report should probably be provided otherwise)
+                if (zoneGroup.GetSubmittedAssetsCount() < 1)
+                    continue;
+                var firstOrDefault = zoneGroup.RequirementCategories.FirstOrDefault(cat => cat.Classification == @"Uniclass2015");
+                if (firstOrDefault != null)
+                {
+                    var tName = firstOrDefault.Code;
+                    var validName = WorkbookUtil.CreateSafeSheetName(string.Format(@"{0} {1}", iRunningWorkBook++, tName));
+
+                    var detailPage = workBook.CreateSheet(validName);
+                    if (!CreateDetailSheet(detailPage, zoneGroup))
+                        return false;
+                }
+            }
+
             try
             {
                 workBook.Write(destinationStream);
@@ -136,9 +158,8 @@ namespace Xbim.CobieLiteUK.Validation.Reporting
             return true;
         }
 
-        private static bool CreateDetailSheet(ISheet detailSheet, AssetTypeRequirementPointer requirementPointer)
+        private static bool CreateDetailSheet(ISheet detailSheet, AssetTypeRequirementPointer<AssetType, Asset> requirementPointer)
         {
-
             try
             {
                 var excelRow = detailSheet.GetRow(0) ?? detailSheet.CreateRow(0);
@@ -146,7 +167,7 @@ namespace Xbim.CobieLiteUK.Validation.Reporting
                 SetHeader(excelCell);
                 excelCell.SetCellValue("Asset type requirement report");
 
-                var rep = new AssetTypeDetailedGridReport(requirementPointer);
+                var rep = new AssetTypeDetailedGridReport<AssetType, Asset>(requirementPointer);
                 rep.PrepareReport();
 
 
@@ -260,57 +281,81 @@ namespace Xbim.CobieLiteUK.Validation.Reporting
             }
         }
 
-        /// <summary>
-        /// sets the Classification preferred for priority purposes.
-        /// </summary>
-        public string PreferredClassification = "Uniclass2015";
-
-        private bool CreateSummarySheet(ISheet summaryPage, Facility facility)
+        private static bool CreateDetailSheet(ISheet detailSheet, AssetTypeRequirementPointer<Zone, Space> requirementPointer)
         {
             try
             {
-                var excelRow = summaryPage.GetRow(0) ?? summaryPage.CreateRow(0);  
+                var excelRow = detailSheet.GetRow(0) ?? detailSheet.CreateRow(0);
                 var excelCell = excelRow.GetCell(0) ?? excelRow.CreateCell(0);
                 SetHeader(excelCell);
-                excelCell.SetCellValue("Validation Report Summary");
-                
-                var summaryReport = new AssetTypeSummaryReport(facility.AssetTypes);
-                var table = summaryReport.GetReport(PreferredClassification);
+                excelCell.SetCellValue("Asset type requirement report");
+
+                var rep = new AssetTypeDetailedGridReport<Zone, Space>(requirementPointer);
+                rep.PrepareReport();
+
 
                 var iRunningRow = 2;
                 var iRunningColumn = 0;
+                excelRow = detailSheet.GetRow(iRunningRow++) ?? detailSheet.CreateRow(iRunningRow - 1); // prepares a row and moves index forward
+                (excelRow.GetCell(iRunningColumn++) ?? excelRow.CreateCell(iRunningColumn - 1)).SetCellValue(@"Name:"); // writes cell and moves index forward
+                (excelRow.GetCell(iRunningColumn++) ?? excelRow.CreateCell(iRunningColumn - 1)).SetCellValue(requirementPointer.Name); // writes cell and moves index forward
 
-                var cellStyle = summaryPage.Workbook.CreateCellStyle();
+                iRunningColumn = 0;
+                excelRow = detailSheet.GetRow(iRunningRow++) ?? detailSheet.CreateRow(iRunningRow - 1); // prepares a row and moves index forward
+                (excelRow.GetCell(iRunningColumn++) ?? excelRow.CreateCell(iRunningColumn - 1)).SetCellValue(@"External system:"); // writes cell and moves index forward
+                (excelRow.GetCell(iRunningColumn++) ?? excelRow.CreateCell(iRunningColumn - 1)).SetCellValue(requirementPointer.ExternalSystem); // writes cell and moves index forward
+
+                iRunningColumn = 0;
+                excelRow = detailSheet.GetRow(iRunningRow++) ?? detailSheet.CreateRow(iRunningRow - 1); // prepares a row and moves index forward
+                (excelRow.GetCell(iRunningColumn++) ?? excelRow.CreateCell(iRunningColumn - 1)).SetCellValue(@"External id:"); // writes cell and moves index forward
+                (excelRow.GetCell(iRunningColumn++) ?? excelRow.CreateCell(iRunningColumn - 1)).SetCellValue(requirementPointer.ExternalId); // writes cell and moves index forward
+
+                iRunningRow++; // one empty row
+
+                iRunningColumn = 0;
+                excelRow = detailSheet.GetRow(iRunningRow++) ?? detailSheet.CreateRow(iRunningRow - 1); // prepares a row and moves index forward
+                (excelRow.GetCell(iRunningColumn++) ?? excelRow.CreateCell(iRunningColumn - 1)).SetCellValue(@"Matching categories:"); // writes cell and moves index forward
+
+                foreach (var cat in rep.RequirementCategories)
+                {
+                    iRunningColumn = 0;
+                    excelRow = detailSheet.GetRow(iRunningRow++) ?? detailSheet.CreateRow(iRunningRow - 1); // prepares a row and moves index forward
+                    (excelRow.GetCell(iRunningColumn++) ?? excelRow.CreateCell(iRunningColumn - 1)).SetCellValue(cat.Classification); // writes cell and moves index forward
+                    (excelRow.GetCell(iRunningColumn++) ?? excelRow.CreateCell(iRunningColumn - 1)).SetCellValue(cat.Code); // writes cell and moves index forward
+                    (excelRow.GetCell(iRunningColumn++) ?? excelRow.CreateCell(iRunningColumn - 1)).SetCellValue(cat.Description); // writes cell and moves index forward
+                }
+
+                iRunningRow++; // one empty row
+                iRunningColumn = 0;
+
+                var cellStyle = detailSheet.Workbook.CreateCellStyle();
                 cellStyle.BorderBottom = BorderStyle.Thick;
                 cellStyle.BorderLeft = BorderStyle.Thin;
                 cellStyle.BorderRight = BorderStyle.Thin;
                 cellStyle.BorderTop = BorderStyle.Thin;
-
                 cellStyle.FillPattern = FillPattern.SolidForeground;
                 cellStyle.FillForegroundColor = IndexedColors.Grey50Percent.Index;
 
-                var failCellStyle = summaryPage.Workbook.CreateCellStyle();
-                failCellStyle.FillPattern = FillPattern.SolidForeground;
-                failCellStyle.FillForegroundColor = IndexedColors.Red.Index;
+                var table = rep.AttributesGrid;
 
-                excelRow = summaryPage.GetRow(iRunningRow) ?? summaryPage.CreateRow(iRunningRow);
+                excelRow = detailSheet.GetRow(iRunningRow) ?? detailSheet.CreateRow(iRunningRow);
                 foreach (DataColumn tCol in table.Columns)
                 {
                     if (tCol.AutoIncrement)
                         continue;
-                    var runCell = excelRow.GetCell(iRunningColumn) ?? excelRow.CreateCell(iRunningColumn);
+                    excelCell = excelRow.GetCell(iRunningColumn) ?? excelRow.CreateCell(iRunningColumn);
                     iRunningColumn++;
-                    runCell.SetCellValue(tCol.Caption);
-                    runCell.CellStyle = cellStyle;
+                    excelCell.SetCellValue(tCol.Caption);
+                    excelCell.CellStyle = cellStyle;
                 }
-
                 iRunningRow++;
+
                 var writer = new ExcelCellVisualValue(BorderStyle.Thin);
                 foreach (DataRow row in table.Rows)
                 {
-                    
-                    excelRow = summaryPage.GetRow(iRunningRow) ?? summaryPage.CreateRow(iRunningRow);
+                    excelRow = detailSheet.GetRow(iRunningRow) ?? detailSheet.CreateRow(iRunningRow);
                     iRunningRow++;
+
                     iRunningColumn = -1;
                     foreach (DataColumn tCol in table.Columns)
                     {
@@ -327,28 +372,59 @@ namespace Xbim.CobieLiteUK.Validation.Reporting
                         }
                         else
                         {
-
                             switch (tCol.DataType.Name)
                             {
                                 case "String":
-                                    excelCell.SetCellValue((string) row[tCol]);
+                                    excelCell.SetCellValue((string)row[tCol]);
                                     break;
                                 case "Int32":
                                     excelCell.SetCellValue(Convert.ToInt32(row[tCol]));
                                     break;
                                 default:
-                                    excelCell.SetCellValue((string) row[tCol]);
+                                    excelCell.SetCellValue((string)row[tCol]);
                                     break;
                             }
                         }
                     }
                 }
 
-                // sets all used columns to autosize
-                for (int irun = 0; irun < iRunningColumn; irun++)
-                {
-                    summaryPage.AutoSizeColumn(irun);
-                }
+                //// sets all used columns to autosize
+                //for (var irun = 0; irun < iRunningColumn; irun++)
+                //{
+                //    detailSheet.AutoSizeColumn(irun);
+                //}
+
+                return true;
+            }
+            catch (Exception e)
+            {
+                //log the error
+                Logger.Error("Failed to create detail Sheet", e);
+                return false;
+            }
+        }
+
+
+        /// <summary>
+        /// sets the Classification preferred for priority purposes.
+        /// </summary>
+        public string PreferredClassification = "Uniclass2015";
+
+        private bool CreateSummarySheet(ISheet summaryPage, Facility facility)
+        {
+            try
+            {
+                var excelRow = summaryPage.GetRow(0) ?? summaryPage.CreateRow(0);  
+                var excelCell = excelRow.GetCell(0) ?? excelRow.CreateCell(0);
+                SetHeader(excelCell);
+                excelCell.SetCellValue("Validation Report Summary");
+                var iRunningRow = 2;
+                
+                var assetTypesReport = new SummaryReport<CobieObject>(facility.AssetTypes);
+                iRunningRow = WriteReportToPage(summaryPage, assetTypesReport, iRunningRow);
+
+                var zonesReport = new SummaryReport<CobieObject>(facility.Zones);
+                iRunningRow = WriteReportToPage(summaryPage, zonesReport, iRunningRow);
 
                 return true;
             }
@@ -358,6 +434,85 @@ namespace Xbim.CobieLiteUK.Validation.Reporting
                 Logger.Error("Failed to create Summary Sheet", e);
                 return false;
             }
+        }
+
+        private int WriteReportToPage(ISheet summaryPage, SummaryReport<CobieObject> summaryReport, int startingRow)
+        {
+            IRow excelRow;
+            ICell excelCell;
+            var table = summaryReport.GetReport(PreferredClassification);
+            if (table == null)
+                return startingRow;
+            var iRunningColumn = 0;
+
+            var cellStyle = summaryPage.Workbook.CreateCellStyle();
+            cellStyle.BorderBottom = BorderStyle.Thick;
+            cellStyle.BorderLeft = BorderStyle.Thin;
+            cellStyle.BorderRight = BorderStyle.Thin;
+            cellStyle.BorderTop = BorderStyle.Thin;
+
+            cellStyle.FillPattern = FillPattern.SolidForeground;
+            cellStyle.FillForegroundColor = IndexedColors.Grey50Percent.Index;
+
+            var failCellStyle = summaryPage.Workbook.CreateCellStyle();
+            failCellStyle.FillPattern = FillPattern.SolidForeground;
+            failCellStyle.FillForegroundColor = IndexedColors.Red.Index;
+
+            excelRow = summaryPage.GetRow(startingRow) ?? summaryPage.CreateRow(startingRow);
+            foreach (DataColumn tCol in table.Columns)
+            {
+                if (tCol.AutoIncrement)
+                    continue;
+                var runCell = excelRow.GetCell(iRunningColumn) ?? excelRow.CreateCell(iRunningColumn);
+                iRunningColumn++;
+                runCell.SetCellValue(tCol.Caption);
+                runCell.CellStyle = cellStyle;
+            }
+
+            startingRow++;
+            var writer = new ExcelCellVisualValue(BorderStyle.Thin);
+            foreach (DataRow row in table.Rows)
+            {
+                excelRow = summaryPage.GetRow(startingRow) ?? summaryPage.CreateRow(startingRow);
+                startingRow++;
+                iRunningColumn = -1;
+                foreach (DataColumn tCol in table.Columns)
+                {
+                    if (tCol.AutoIncrement)
+                        continue;
+                    iRunningColumn++;
+                    if (row[tCol] == DBNull.Value)
+                        continue;
+                    excelCell = excelRow.GetCell(iRunningColumn) ?? excelRow.CreateCell(iRunningColumn);
+
+                    if (row[tCol] is IVisualValue)
+                    {
+                        writer.SetCell(excelCell, (IVisualValue) row[tCol]);
+                    }
+                    else
+                    {
+                        switch (tCol.DataType.Name)
+                        {
+                            case "String":
+                                excelCell.SetCellValue((string) row[tCol]);
+                                break;
+                            case "Int32":
+                                excelCell.SetCellValue(Convert.ToInt32(row[tCol]));
+                                break;
+                            default:
+                                excelCell.SetCellValue((string) row[tCol]);
+                                break;
+                        }
+                    }
+                }
+            }
+
+            // sets all used columns to autosize
+            for (int irun = 0; irun < iRunningColumn; irun++)
+            {
+                summaryPage.AutoSizeColumn(irun);
+            }
+            return startingRow + 1;
         }
 
         private static void SetHeader(ICell excelCell)

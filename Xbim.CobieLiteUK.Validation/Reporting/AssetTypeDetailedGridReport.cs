@@ -12,14 +12,16 @@ namespace Xbim.CobieLiteUK.Validation.Reporting
     /// <summary>
     /// Data preparation layer for the production or reports that group all AssetTypes/Assets associated with an assetType requirement
     /// </summary>
-    public class AssetTypeDetailedGridReport
+    public class AssetTypeDetailedGridReport<T, TSub>
+        where T : CobieObject
+        where TSub : CobieObject
     {
-        private readonly AssetTypeRequirementPointer _valideatedAssetType;
+        private readonly AssetTypeRequirementPointer<T, TSub> _valideatedAssetType;
 
         /// <summary>
         /// Initialise the reporting class with an AssetTypeRequirementPointer
         /// </summary>
-        public AssetTypeDetailedGridReport(AssetTypeRequirementPointer assetType)
+        public AssetTypeDetailedGridReport(AssetTypeRequirementPointer<T, TSub> assetType)
         {
             _valideatedAssetType = assetType;
         }
@@ -44,17 +46,34 @@ namespace Xbim.CobieLiteUK.Validation.Reporting
         {
             SetBasicGrid();
 
-            foreach (var runningAssetType in _valideatedAssetType.ProvidedAssetTypes)
+            foreach (var runningParent in _valideatedAssetType.ProvidedAssetTypes)
             {
-                if (runningAssetType.Assets == null)
-                    continue;
-                foreach (var runningAsset in runningAssetType.Assets)
+                List<TSub> toConsider = null;
+                if (runningParent.GetType() == typeof (AssetType))
                 {
-                    var r = GetRow(runningAssetType, runningAsset);
+                    var asAssetType = runningParent as AssetType;
+                    if (asAssetType != null && asAssetType.Assets != null)
+                    {
+                        toConsider = asAssetType.Assets as List<TSub>;
+                    }
+                }
+                else if (runningParent.GetType() == typeof(Zone))
+                {
+                    var asZone = runningParent as Zone;
+                    if (asZone != null && asZone.SpaceObjects != null)
+                    {
+                        toConsider = asZone.SpaceObjects.ToList() as List<TSub>;
+                    }
+                }
+                if (toConsider == null)
+                    continue;
+                foreach (var runningChild in toConsider)
+                {
+                    var r = GetRow(runningParent, runningChild);
                     
                     while (r == null) // it's still preparing the columns as appropriate.
                     {
-                        r = GetRow(runningAssetType, runningAsset);
+                        r = GetRow(runningParent, runningChild);
                     }
                     
                     AttributesGrid.Rows.Add(r);
@@ -89,7 +108,7 @@ namespace Xbim.CobieLiteUK.Validation.Reporting
             AttributesGrid.Columns.Add(new DataColumn(DpowAssetExternalIdColumnName, typeof(String)) { Caption = "Asset ID" });
         }
 
-        private DataRow GetRow(AssetType parentAssetType, Asset runningAsset)
+        private DataRow GetRow(CobieObject parentAssetType, CobieObject runningAsset)
         {
             var r = AttributesGrid.NewRow();
 

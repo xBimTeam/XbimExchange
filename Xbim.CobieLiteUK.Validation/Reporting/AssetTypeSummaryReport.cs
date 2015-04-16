@@ -10,11 +10,11 @@ using Xbim.CobieLiteUK.Validation.Extensions;
 
 namespace Xbim.CobieLiteUK.Validation.Reporting
 {
-    public class AssetTypeSummaryReport
+    public class SummaryReport<T> where T : CobieObject
     {
-        private readonly IEnumerable<AssetType> _validatedAssetTypes;
+        private readonly IEnumerable<T> _validatedAssetTypes;
 
-        public AssetTypeSummaryReport(IEnumerable<AssetType> validatedAssetTypes)
+        public SummaryReport(IEnumerable<T> validatedAssetTypes)
         {
             _validatedAssetTypes = validatedAssetTypes;
         }
@@ -85,8 +85,6 @@ namespace Xbim.CobieLiteUK.Validation.Reporting
                 int i = 1;
                 var thisRow = retTable.NewRow();
 
-
-
                 thisRow[i++] = sortedKey.Item1; // main classification
                 thisRow[i++] = value.MainCatDescription; // main classification
                 thisRow[i++] = sortedKey.Item2;
@@ -126,7 +124,8 @@ namespace Xbim.CobieLiteUK.Validation.Reporting
 
         private static DataTable PrepareTable(string mainClassification)
         {
-            var retTable = new DataTable("AssetTypes validation report", "DPoW");
+            var repName = typeof (T).Name + "s validation report";
+            var retTable = new DataTable(repName, "DPoW");
             var workCol = retTable.Columns.Add("DPoW_ID", typeof(Int32));
             workCol.AllowDBNull = false;
             workCol.Unique = true;

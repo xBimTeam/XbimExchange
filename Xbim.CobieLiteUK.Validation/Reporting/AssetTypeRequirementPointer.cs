@@ -8,7 +8,9 @@ using Xbim.CobieLiteUK.Validation.Extensions;
 
 namespace Xbim.CobieLiteUK.Validation.Reporting
 {
-    public class AssetTypeRequirementPointer
+    public class AssetTypeRequirementPointer<T, TSub> 
+        where T : CobieObject
+        where TSub : CobieObject
     {
         public readonly string ExternalId;
         public readonly string ExternalSystem;
@@ -20,7 +22,7 @@ namespace Xbim.CobieLiteUK.Validation.Reporting
             Name = name;
         }
 
-        public override bool Equals(System.Object obj)
+        public override bool Equals(Object obj)
         {
             // If parameter is null return false.
             if (obj == null)
@@ -29,8 +31,8 @@ namespace Xbim.CobieLiteUK.Validation.Reporting
             }
 
             // If parameter cannot be cast to AssetTypeRequirementPointer return false.
-            var p = obj as AssetTypeRequirementPointer;
-            if ((System.Object)p == null)
+            var p = obj as AssetTypeRequirementPointer<T, TSub>;
+            if (p == null)
             {
                 return false;
             }
@@ -44,9 +46,9 @@ namespace Xbim.CobieLiteUK.Validation.Reporting
             return (ExternalId + ExternalSystem).GetHashCode();
         }
 
-        public List<AssetType> ProvidedAssetTypes = new List<AssetType>();
+        public List<CobieObject> ProvidedAssetTypes = new List<CobieObject>();
 
-        public void AddSumission(AssetType providedAsset)
+        public void AddSumission(CobieObject providedAsset)
         {
             ProvidedAssetTypes.Add(providedAsset);
         }
@@ -58,13 +60,9 @@ namespace Xbim.CobieLiteUK.Validation.Reporting
 
         public string Name { get; set; }
 
-        public IEnumerable<Asset> Assets()
+        public IEnumerable<TSub> Assets()
         {
-            return 
-                from providedAsset in ProvidedAssetTypes 
-                where providedAsset.Assets != null 
-                from asset in providedAsset.Assets 
-                select asset;
+            return ProvidedAssetTypes.SelectMany(providedAssetType => providedAssetType.GetChildObjects<TSub>());
         }
 
         public IEnumerable<Category> MatchingCategories

@@ -1,13 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Xbim.COBieLiteUK;
 using Xbim.CobieLiteUK.Validation.Extensions;
 
 namespace Xbim.CobieLiteUK.Validation.Reporting
 {
+    /// <summary>
+    /// Used to produce facility reports in formats other than the standards provided.
+    /// See ExcelValidationReport for the excel format.
+    /// </summary>
     public class FacilityReport
     {
         /// <summary>
@@ -15,45 +17,80 @@ namespace Xbim.CobieLiteUK.Validation.Reporting
         /// </summary>
         public string PreferredClassification = "Uniclass2015";
 
-        private Facility _facility;
+        private readonly Facility _validationResult;
 
-        public FacilityReport(Facility facility)
+        /// <summary>
+        /// Default constructor.
+        /// </summary>
+        /// <param name="validationResultFacility">The result of a validation process to report over.</param>
+        public FacilityReport(Facility validationResultFacility)
         {
-            _facility = facility;
+            _validationResult = validationResultFacility;
         }
 
-        private List<AssetTypeRequirementPointer> _RequirementGroups;
+        private List<AssetTypeRequirementPointer<AssetType, Asset>> _assetRequirementGroups;
 
-        internal List<AssetTypeRequirementPointer> RequirementGroups
+        internal List<AssetTypeRequirementPointer<AssetType, Asset>> AssetRequirementGroups
         {
             get
             {
-                if (_RequirementGroups == null)
+                if (_assetRequirementGroups != null) 
+                    return _assetRequirementGroups;
+                var tmp = new Dictionary<Tuple<string, string>, AssetTypeRequirementPointer<AssetType, Asset>>();
+                _assetRequirementGroups = new List<AssetTypeRequirementPointer<AssetType, Asset>>();
+                if (_validationResult.AssetTypes == null) 
+                    return _assetRequirementGroups;
+                foreach (var providedAsset in _validationResult.AssetTypes)
                 {
-                    var tmp = new Dictionary<Tuple<string, string>, AssetTypeRequirementPointer>();
-                    _RequirementGroups = new List<AssetTypeRequirementPointer>();
-                    if (_facility.AssetTypes != null)
-                    {
-                        foreach (var providedAsset in _facility.AssetTypes)
-                        {
-                            var sys = providedAsset.GetRequirementExternalSystem();
-                            var id = providedAsset.GetRequirementExternalId();
-                            var nm = providedAsset.GetRequirementName();
+                    var sys = providedAsset.GetRequirementExternalSystem();
+                    var id = providedAsset.GetRequirementExternalId();
+                    var nm = providedAsset.GetRequirementName();
 
-                            var tryReq = new Tuple<string, string>(sys, id);
-                            if (tmp.ContainsKey(tryReq))
-                                tmp[tryReq].AddSumission(providedAsset);
-                            else
-                            {
-                                var newP = new AssetTypeRequirementPointer(sys, id, nm);
-                                newP.AddSumission(providedAsset);
-                                tmp.Add(tryReq, newP);
-                            }
-                        }
-                        _RequirementGroups = tmp.Values.ToList();
+                    var tryReq = new Tuple<string, string>(sys, id);
+                    if (tmp.ContainsKey(tryReq))
+                        tmp[tryReq].AddSumission(providedAsset);
+                    else
+                    {
+                        var newP = new AssetTypeRequirementPointer<AssetType, Asset>(sys, id, nm);
+                        newP.AddSumission(providedAsset);
+                        tmp.Add(tryReq, newP);
                     }
                 }
-                return _RequirementGroups;
+                _assetRequirementGroups = tmp.Values.ToList();
+                return _assetRequirementGroups;
+            }
+        }
+
+        private List<AssetTypeRequirementPointer<Zone, Space>> _zoneRequirementGroups;
+
+        internal List<AssetTypeRequirementPointer<Zone, Space>> ZoneRequirementGroups
+        {
+            get
+            {
+                if (_zoneRequirementGroups != null)
+                    return _zoneRequirementGroups;
+                var tmp = new Dictionary<Tuple<string, string>, AssetTypeRequirementPointer<Zone, Space>>();
+                _zoneRequirementGroups = new List<AssetTypeRequirementPointer<Zone, Space>>();
+                if (_validationResult.Zones == null)
+                    return _zoneRequirementGroups;
+                foreach (var providedAsset in _validationResult.Zones)
+                {
+                    var sys = providedAsset.GetRequirementExternalSystem();
+                    var id = providedAsset.GetRequirementExternalId();
+                    var nm = providedAsset.GetRequirementName();
+
+                    var tryReq = new Tuple<string, string>(sys, id);
+                    if (tmp.ContainsKey(tryReq))
+                        tmp[tryReq].AddSumission(providedAsset);
+                    else
+                    {
+                        var newP = new AssetTypeRequirementPointer<Zone, Space>(sys, id, nm);
+                        newP.AddSumission(providedAsset);
+                        tmp.Add(tryReq, newP);
+                    }
+                }
+                _zoneRequirementGroups = tmp.Values.ToList();
+                return _zoneRequirementGroups;
             }
         }
     }

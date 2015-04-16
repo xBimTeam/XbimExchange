@@ -31,7 +31,7 @@ namespace Tests
         [TestMethod]
         public void CanSaveValidationReport()
         {
-            var validated = GetValidated(@"Lakeside_Restaurant-stage6-COBie.json");
+            var validated = GetValidated(@"Lakeside_Restaurant-stage1-COBie.json");
             const string repName = @"..\..\ValidationReport.xlsx";
             var xRep = new ExcelValidationReport();
             var ret = xRep.Create(validated, repName);
