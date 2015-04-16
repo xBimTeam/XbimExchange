@@ -63,13 +63,13 @@ namespace Tests
         [TestMethod]
         public void ValidateXlsLakeside()
         {
-            const string xlsx = @"Lakeside.xls";
+            const string xlsx = @"LakesideWithDocuments.xls";
             string msg;
             var cobie = Facility.ReadCobie(xlsx, out msg);
             var req = Facility.ReadJson(@"Lakeside_Restaurant-stage6-COBie.json");
             var validator = new FacilityValidator();
             var result = validator.Validate(req, cobie);
-
+            result.WriteJson(@"..\..\XlsLakesideWithDocumentsValidation.json", true);
         }
     }
 }

@@ -119,7 +119,7 @@
     <None Include="TestFiles\ValidationReport.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="ValidationFiles\Lakeside.xls">
+    <None Include="ValidationFiles\LakesideWithDocuments.xls">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="ValidationFiles\Lakeside_Restaurant-stage0-COBie.json" />

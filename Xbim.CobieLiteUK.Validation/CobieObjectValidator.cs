@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Xbim.CobieLiteUK.Validation.Extensions;
@@ -113,7 +114,6 @@ namespace Xbim.CobieLiteUK.Validation
                 retType.Attributes.AddRange(RequirementAttributes());
                 returnWithoutFurtherTests = true;    
             }
-            
             if (returnWithoutFurtherTests)
             {
                 retType.SetSubmittedChildrenCount(iSubmitted);
@@ -123,13 +123,26 @@ namespace Xbim.CobieLiteUK.Validation
 
             // ==================== begin testing
 
+            CachedPropertiesAndAttributesValidator<T> parentCachedValidator;
+            try
+            {
+                parentCachedValidator = new CachedPropertiesAndAttributesValidator<T>(candidateParent);
+            }
+            catch (ValidationException ex)
+            {
+                retType.Categories.Add(FacilityValidator.FailedCat);
+                retType.Description += ex.Message;
+                return retType;
+            }
+
             if (retType.Attributes == null)
                 retType.Attributes = new List<Attribute>();
 
             // produce parent level description
             var outstandingRequirementsCount = 0;
             
-            var parentCachedValidator = new CachedPropertiesAndAttributesValidator<T>(candidateParent);
+            
+
             foreach (var req in RequirementDetails)
             {
                 object satValue;

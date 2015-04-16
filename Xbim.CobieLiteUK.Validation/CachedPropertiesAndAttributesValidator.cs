@@ -1,8 +1,11 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using Xbim.COBieLiteUK;
 using Xbim.CobieLiteUK.Validation.Extensions;
 using Xbim.CobieLiteUK.Validation.RequirementDetails;
+using Attribute = Xbim.COBieLiteUK.Attribute;
 
 
 namespace Xbim.CobieLiteUK.Validation
@@ -18,7 +21,27 @@ namespace Xbim.CobieLiteUK.Validation
             _assetToTest = assetToTest;
             if (assetToTest.Attributes == null)
                 return;
-            _dicAtt = assetToTest.Attributes.ToDictionary(att => att.Name, att => att);
+            try
+            {
+                _dicAtt = assetToTest.Attributes.ToDictionary(att => att.Name, att => att);
+            }
+            catch (ArgumentException ex)
+            {
+                var names = _assetToTest.Attributes.Select(att => att.Name);
+                var grps = names.GroupBy( i => i );
+                var sb = new StringBuilder();
+                sb.AppendLine("Invalid cobie data.");
+                sb.AppendLine("Properties:");
+                foreach( var grp in grps )
+                {
+                    if (grp.Count() > 1)
+                    {
+                        sb.AppendFormat(" - {0}\r\n", grp.Key);
+                    }
+                }
+                sb.AppendFormat("Appear more than once in {0}", _assetToTest.Name);
+                throw new ValidationException(sb.ToString(), ex);
+            }
         }
 
         internal bool CanSatisfy(RequirementDetail req, out object retValue)

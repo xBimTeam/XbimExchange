@@ -118,6 +118,7 @@
     <Compile Include="RequirementDetails\RequirementDetail.cs" />
     <Compile Include="Reporting\ExcelValidationReport.cs" />
     <Compile Include="RequirementDetails\RequirementProvision.cs" />
+    <Compile Include="ValidationException.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
