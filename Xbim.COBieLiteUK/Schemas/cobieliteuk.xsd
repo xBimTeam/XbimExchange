@@ -8,7 +8,7 @@
   <xs:complexType name="ProjectStage">
     <xs:annotation>
       <xs:appinfo source="parent">Facility</xs:appinfo>
-      <xs:appinfo source="sheet">UK2012|ProjectStage</xs:appinfo>
+      <xs:appinfo source="sheet">UK2012|ProjectStage|extension</xs:appinfo>
       <!--mapping, column, header, required/optional, list/item, pick/-, path-->
       <xs:appinfo source="mapping">UK2012|A|Name          |required|item|-                              |Name</xs:appinfo>
       <xs:appinfo source="mapping">UK2012|B|CreatedBy     |required|item|-                              |CreatedBy.Email</xs:appinfo>
@@ -66,7 +66,7 @@
       <xs:appinfo source="mapping">UK2012|K|Description|optional|item|-|Description</xs:appinfo>
       
       <!-- Experimental extensions -->
-      <xs:appinfo source="mapping">UK2012|L|ProjectStages|optional|list|-|ProjectStages.Name</xs:appinfo>
+      <xs:appinfo source="mapping">UK2012|L|ProjectStages|optional|list|-|ProjectStages.Name|extension</xs:appinfo>
 
       <xs:documentation>
         Assembly is a named physical aggregation of a Type or Component into another Type or
@@ -107,7 +107,7 @@
       <xs:appinfo source="mapping">UK2012|N|BarCode|optional|item|-|BarCode</xs:appinfo>
       <xs:appinfo source="mapping">UK2012|O|AssetIdentifier|optional|item|-|AssetIdentifier</xs:appinfo>
       <!-- Experimental extensions -->
-      <xs:appinfo source="mapping">UK2012|P|ProjectStages|optional|list|-|ProjectStages.Name</xs:appinfo>
+      <xs:appinfo source="mapping">UK2012|P|ProjectStages|optional|list|-|ProjectStages.Name|extension</xs:appinfo>
       
       <xs:documentation>
         Named and individually scheduled physical items and features that might require
@@ -192,7 +192,7 @@
       <xs:appinfo source="mapping">UK2012|AH|CodePerformance|optional|item|-|CodePerformance</xs:appinfo>
       <xs:appinfo source="mapping">UK2012|AI|SustainabilityPerformance|optional|item|-|SustainabilityPerformance</xs:appinfo>
       <!-- Experimental extensions -->
-      <xs:appinfo source="mapping">UK2012|AJ|ProjectStages|optional|list|-|ProjectStages.Name</xs:appinfo>
+      <xs:appinfo source="mapping">UK2012|AJ|ProjectStages|optional|list|-|ProjectStages.Name|extension</xs:appinfo>
       <xs:documentation>
         Asset type is a named specification for Components including equipment, products and materials.
         A minimum of one COBie.Type record is required for all COBie deliverables related to equipment Type information.
@@ -288,7 +288,7 @@
       <xs:appinfo source="mapping">UK2012|L|Description|optional|item|-|Description</xs:appinfo>
       <xs:appinfo source="mapping">UK2012|M|AllowedValues|optional|list|-|Value.AllowedValuesString</xs:appinfo>
       <!-- Experimental extensions -->
-      <xs:appinfo source="mapping">UK2012|N|ProjectStages|optional|list|-|ProjectStages.Name</xs:appinfo>
+      <xs:appinfo source="mapping">UK2012|N|ProjectStages|optional|list|-|ProjectStages.Name|extension</xs:appinfo>
       <xs:documentation>
         Attribute is a named specific characteristic associated to an asset or other information objects.
       </xs:documentation>
@@ -334,7 +334,7 @@
       <xs:appinfo source="mapping">UK2012|M|ExtIdentifier|optional|item|-|ExternalId</xs:appinfo>
       <xs:appinfo source="mapping">UK2012|N|Description|optional|item|-|Description</xs:appinfo>
       <!-- Experimental extensions -->
-      <xs:appinfo source="mapping">UK2012|O|ProjectStages|optional|list|-|ProjectStages.Name</xs:appinfo>
+      <xs:appinfo source="mapping">UK2012|O|ProjectStages|optional|list|-|ProjectStages.Name|extension</xs:appinfo>
       <xs:documentation>
         Connection is a named logical relationship between two Components.
       </xs:documentation>
@@ -383,7 +383,7 @@
       <xs:appinfo source="mapping">UK2012|R|PostalCode|optional|item|-|PostalCode</xs:appinfo>
       <xs:appinfo source="mapping">UK2012|S|Country|optional|item|-|Country</xs:appinfo>
       <!-- Experimental extensions -->
-      <xs:appinfo source="mapping">UK2012|T|ProjectStages|optional|list|-|ProjectStages.Name</xs:appinfo>
+      <xs:appinfo source="mapping">UK2012|T|ProjectStages|optional|list|-|ProjectStages.Name|extension</xs:appinfo>
       <xs:documentation>
         Contact is a named person and/or organization involved in the Facility lifecycle.
       </xs:documentation>
@@ -446,7 +446,7 @@
       <xs:appinfo source="mapping">UK2012|N|Description|optional|item|-|Description</xs:appinfo>
       <xs:appinfo source="mapping">UK2012|O|Reference|optional|item|-|Reference</xs:appinfo>
       <!-- Experimental extensions -->
-      <xs:appinfo source="mapping">UK2012|P|ProjectStages|optional|list|-|ProjectStages.Name</xs:appinfo>
+      <xs:appinfo source="mapping">UK2012|P|ProjectStages|optional|list|-|ProjectStages.Name|extension</xs:appinfo>
       <xs:documentation>
         Document is a named external document associated to an asset or other information object.
       </xs:documentation>
@@ -498,7 +498,7 @@
       <xs:appinfo source="mapping">UK2012|U|SiteDescription|optional|item|-|Site.Description</xs:appinfo>
       <xs:appinfo source="mapping">UK2012|V|Phase|required|item|-|Phase</xs:appinfo>
       <!-- Experimental extensions -->
-      <xs:appinfo source="mapping">UK2012|W|ProjectStages|optional|list|-|ProjectStages.Name</xs:appinfo>
+      <xs:appinfo source="mapping">UK2012|W|ProjectStages|optional|list|-|ProjectStages.Name|extension</xs:appinfo>
       <xs:documentation>
         A type for the Facility element that is the root of a COBie document.
         Facility contains information about the facility being exchanged during a given COBie deliverable.
@@ -584,7 +584,7 @@
       <xs:appinfo source="mapping">UK2012|I|Elevation|optional|item|-|Elevation</xs:appinfo>
       <xs:appinfo source="mapping">UK2012|J|Height|optional|item|-|Height</xs:appinfo>
       <!-- Experimental extensions -->
-      <xs:appinfo source="mapping">UK2012|K|ProjectStages|optional|list|-|ProjectStages.Name</xs:appinfo>
+      <xs:appinfo source="mapping">UK2012|K|ProjectStages|optional|list|-|ProjectStages.Name|extension</xs:appinfo>
       <xs:documentation>
         Floor is a named intermediate spatial subdivision, including distinct vertical levels and
         horizontal areas and sections with Spaces allocated.
@@ -634,7 +634,7 @@
       <xs:appinfo source="mapping">UK2012|P|ExtObject|optional|item|-|ExternalEntity</xs:appinfo>
       <xs:appinfo source="mapping">UK2012|Q|ExtIdentifier|optional|item|-|ExternalId</xs:appinfo>
       <!-- Experimental extensions -->
-      <xs:appinfo source="mapping">UK2012|R|ProjectStages|optional|list|-|ProjectStages.Name</xs:appinfo>
+      <xs:appinfo source="mapping">UK2012|R|ProjectStages|optional|list|-|ProjectStages.Name|extension</xs:appinfo>
       <xs:documentation>
         Issue is a named deficiency in the information or risk associated to the assets or other information objects.
       </xs:documentation>
@@ -681,7 +681,7 @@
       <xs:appinfo source="mapping">UK2012|O|ExtIdentifier|optional|item|-|ExternalId</xs:appinfo>
       <xs:appinfo source="mapping">UK2012|P|Description|optional|item|-|Description</xs:appinfo>
       <!-- Experimental extensions -->
-      <xs:appinfo source="mapping">UK2012|Q|ProjectStages|optional|list|-|ProjectStages.Name</xs:appinfo>
+      <xs:appinfo source="mapping">UK2012|Q|ProjectStages|optional|list|-|ProjectStages.Name|extension</xs:appinfo>
       <xs:documentation>
         Impact is a named economic and environmental measure.
       </xs:documentation>
@@ -732,7 +732,7 @@
       <xs:appinfo source="mapping">UK2012|R|Priors|optional|list|-|Priors.TaskNumber</xs:appinfo>
       <xs:appinfo source="mapping">UK2012|S|ResourceNames|optional|list|-|Resources.Name</xs:appinfo>
       <!-- Experimental extensions -->
-      <xs:appinfo source="mapping">UK2012|T|ProjectStages|optional|list|-|ProjectStages.Name</xs:appinfo>
+      <xs:appinfo source="mapping">UK2012|T|ProjectStages|optional|list|-|ProjectStages.Name|extension</xs:appinfo>
       <xs:documentation>
         Job is a named task or activity during the in-use phase associated to Types.
         A minimum of one COBie.Job record is required for all relevant COBie.Type objects submitted at the benefical occupancy or
@@ -791,7 +791,7 @@
       <xs:appinfo source="mapping">UK2012|G|ExtIdentifier|optional|item|-|ExternalId</xs:appinfo>
       <xs:appinfo source="mapping">UK2012|H|Description|optional|item|-|Description</xs:appinfo>
       <!-- Experimental extensions -->
-      <xs:appinfo source="mapping">UK2012|I|ProjectStages|optional|list|-|ProjectStages.Name</xs:appinfo>
+      <xs:appinfo source="mapping">UK2012|I|ProjectStages|optional|list|-|ProjectStages.Name|extension</xs:appinfo>
       <xs:documentation>
         Resource is a named material or skill required to execute Jobs.
       </xs:documentation>
@@ -845,10 +845,10 @@
       <xs:appinfo source="mapping">UK2012|Q|LRM|optional|item|-|LRM</xs:appinfo>
 
       <!-- Experimental additions -->
-      <xs:appinfo source="mapping">UK2012|R|SizeX|optional|item|-|SizeX</xs:appinfo>
-      <xs:appinfo source="mapping">UK2012|S|SizeY|optional|item|-|SizeY</xs:appinfo>
-      <xs:appinfo source="mapping">UK2012|T|SizeZ|optional|item|-|SizeZ</xs:appinfo>
-      <xs:appinfo source="mapping">UK2012|U|ProjectStages|optional|list|-|ProjectStages.Name</xs:appinfo>
+      <xs:appinfo source="mapping">UK2012|R|SizeX|optional|item|-|SizeX|extension</xs:appinfo>
+      <xs:appinfo source="mapping">UK2012|S|SizeY|optional|item|-|SizeY|extension</xs:appinfo>
+      <xs:appinfo source="mapping">UK2012|T|SizeZ|optional|item|-|SizeZ|extension</xs:appinfo>
+      <xs:appinfo source="mapping">UK2012|U|ProjectStages|optional|list|-|ProjectStages.Name|extension</xs:appinfo>
 
       <xs:documentation>
         Representation (Coordinate) is a named position associated to Facility, Floor (region), Space (location), Component
@@ -915,7 +915,7 @@
       <xs:appinfo source="mapping">UK2012|L|GrossArea|optional|item|-|GrossArea</xs:appinfo>
       <xs:appinfo source="mapping">UK2012|M|NetArea|optional|item|-|NetArea</xs:appinfo>
       <!-- Experimental extensions -->
-      <xs:appinfo source="mapping">UK2012|N|ProjectStages|optional|list|-|ProjectStages.Name</xs:appinfo>
+      <xs:appinfo source="mapping">UK2012|N|ProjectStages|optional|list|-|ProjectStages.Name|extension</xs:appinfo>
       <xs:documentation>
         Space is a named location for activities such as use, inspection or maintenance, including
         un‑occupied or un‑inhabitable Spaces, but not necessarily inaccessible voids.
@@ -969,7 +969,7 @@
       <xs:appinfo source="mapping">UK2012|K|SetNumber|optional|item|-|SetNumber</xs:appinfo>
       <xs:appinfo source="mapping">UK2012|L|PartNumber|optional|item|-|PartNumber</xs:appinfo>
       <!-- Experimental extensions -->
-      <xs:appinfo source="mapping">UK2012|M|ProjectStages|optional|list|-|ProjectStages.Name</xs:appinfo>
+      <xs:appinfo source="mapping">UK2012|M|ProjectStages|optional|list|-|ProjectStages.Name|extension</xs:appinfo>
       <xs:documentation>
         Spare is a named replaceable part associated to Types.
       </xs:documentation>
@@ -1007,7 +1007,7 @@
       <xs:appinfo source="mapping">UK2012|H|ExtIdentifier|optional|item|-|ExternalId</xs:appinfo>
       <xs:appinfo source="mapping">UK2012|I|Description|optional|item|-|Description</xs:appinfo>
       <!-- Experimental extensions -->
-      <xs:appinfo source="mapping">UK2012|J|ProjectStages|optional|list|-|ProjectStages.Name</xs:appinfo>
+      <xs:appinfo source="mapping">UK2012|J|ProjectStages|optional|list|-|ProjectStages.Name|extension</xs:appinfo>
       <xs:documentation>
         System is a named set of manageable Components providing a common function.
       </xs:documentation>
@@ -1043,7 +1043,7 @@
       <xs:appinfo source="mapping">UK2012|H|ExtIdentifier|optional|item|-|ExternalId</xs:appinfo>
       <xs:appinfo source="mapping">UK2012|I|Description|optional|item|-|Description</xs:appinfo>
       <!-- Experimental extensions -->
-      <xs:appinfo source="mapping">UK2012|J|ProjectStages|optional|list|-|ProjectStages.Name</xs:appinfo>
+      <xs:appinfo source="mapping">UK2012|J|ProjectStages|optional|list|-|ProjectStages.Name|extension</xs:appinfo>
       <xs:documentation>
         Zone is a named set of Spaces (locations) sharing a specific Attribute, such as activity, access,
         management or conditioning.

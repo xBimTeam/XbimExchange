@@ -360,11 +360,11 @@ namespace Tests
             {
                 //@"C:\Users\mxfm2\Downloads\Bad Cobie\Ext01.fixed.xlsx",
                 //@"C:\Users\mxfm2\Downloads\Bad Cobie\Ext01.xlsx",
-                @"C:\Users\mxfm2\Downloads\Bad Cobie\Ext01.xls",
-                @"C:\Users\mxfm2\Downloads\Bad Cobie\Struc.xls",
+                //@"C:\Users\mxfm2\Downloads\Bad Cobie\Ext01.xls",
+                //@"C:\Users\mxfm2\Downloads\Bad Cobie\Struc.xls",
                 @"C:\Users\mxfm2\Downloads\Bad Cobie\Site.xls",
-                @"C:\Users\mxfm2\Downloads\Bad Cobie\INT02.xls",
-                @"C:\Users\mxfm2\Downloads\Bad Cobie\Int01.xls"
+                //@"C:\Users\mxfm2\Downloads\Bad Cobie\INT02.xls",
+                //@"C:\Users\mxfm2\Downloads\Bad Cobie\Int01.xls"
             };
             foreach (var file in files)
             {

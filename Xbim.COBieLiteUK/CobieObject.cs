@@ -130,6 +130,11 @@ namespace Xbim.COBieLiteUK
             var sheet = workbook.GetSheet(sheetName);
             if (sheet == null)
             {
+                var sMapping = GetSheetMapping(cobieType, version);
+                //only log an error if it is not an extension
+                if (sMapping != null && !sMapping.IsExtension)
+                    log.WriteLine("There is not a {0} sheet in the workbook.", sheetName);
+
                 message = log.ToString();
                 return result;
             }
@@ -638,8 +643,8 @@ namespace Xbim.COBieLiteUK
                 var cellIndex = CellReference.ConvertColStringToIndex(mapping.Column);
                 var headerCell = headerRow.GetCell(cellIndex);
                 if (headerCell == null || headerCell.CellType != CellType.String) continue;
-                var header = headerCell.StringCellValue.Trim().ToLower();
-                if (header == mapping.Header.ToLower()) continue;
+                var header = headerCell.StringCellValue.Trim();
+                if (String.Equals(header, mapping.Header, (StringComparison) StringComparison.InvariantCultureIgnoreCase)) continue;
                 //try to find the right one
                 var indexFixed = false;
                 foreach (ICell hCell in headerRow)
@@ -655,11 +660,26 @@ namespace Xbim.COBieLiteUK
                     }
                 }
                 if (indexFixed) continue;
-                log.WriteLine(
-                    "Sheet {0} should have a column {1} defined as {2} but it is {3} instead. Data will be processed but this is a wrongly structured COBie spreadsheet.",
-                    sheet.SheetName, mapping.Column, mapping.Header, header);
-                //fix fur future passes
-                mapping.Header = header;
+
+                //only log if it is not an extension
+                if(!mapping.IsExtension)
+                    log.WriteLine(
+                        "Sheet {0} should have a column {1} defined as {2} but it is {3} instead. Data will be processed but this is a wrongly structured COBie spreadsheet.",
+                        sheet.SheetName, mapping.Column, mapping.Header, header);
+                
+                //fix for future passes
+                if (mapping.IsExtension)
+                {
+                    //if it is an extension and wasn't found it should look into the empty new row
+                    var nextCellIndex = headerRow.LastCellNum + 1;
+                    var nextCell = headerRow.CreateCell(nextCellIndex);
+                    nextCell.SetCellValue(mapping.Header);
+                    if (headerRow.RowStyle != null) nextCell.CellStyle = headerRow.RowStyle;
+                    mapping.Column = CellReference.ConvertNumToColString(nextCellIndex);
+                }
+                else
+                    //If it is a different header it should change what it is looking for
+                    mapping.Header = header;
             }
             return log.ToString();
         }
@@ -1188,6 +1208,13 @@ namespace Xbim.COBieLiteUK
             var key = String.Format("{0}.{1}", mapping, attr.Sheet);
             _typeSheetMappingsCache.Add(key, type);
             return attr.Sheet;
+        }
+
+        protected static SheetMappingAttribute GetSheetMapping(Type type, string mapping)
+        {
+            return
+                type.GetCustomAttributes(typeof(SheetMappingAttribute), true)
+                    .FirstOrDefault(a => ((SheetMappingAttribute)a).Type == mapping) as SheetMappingAttribute;
         }
     }
 

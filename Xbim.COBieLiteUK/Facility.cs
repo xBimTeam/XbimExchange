@@ -383,8 +383,6 @@ namespace Xbim.COBieLiteUK
 
         #region Reading COBie Spreadsheet
 
-        [SuppressMessage("ReSharper", "InconsistentNaming")] private StringWriter log = new StringWriter();
-
         public static Facility ReadCobie(string path, out string message, string version = "UK2012")
         {
             if (path == null) throw new ArgumentNullException("path");
@@ -546,7 +544,7 @@ namespace Xbim.COBieLiteUK
                     throw new ArgumentOutOfRangeException("type");
             }
 
-            log = new StringWriter();
+            var log = new StringWriter();
             var watch = new Stopwatch();
             watch.Start();
 

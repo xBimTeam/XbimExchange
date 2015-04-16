@@ -90,20 +90,23 @@ namespace Xsd2Code.Library.Extensions
                 if (source == "sheet")
                 {
                     var parts = appInfo.Markup[0].InnerText.Split('|');
+                    var isExtension = parts.Length > 2 && parts[2].Trim().ToLower() == "extension";
                     type.CustomAttributes.Add(new CodeAttributeDeclaration("Xbim.COBieLiteUK.SheetMapping",
                         new CodeAttributeArgument("Type", new CodePrimitiveExpression(parts[0])),
-                        new CodeAttributeArgument("Sheet", new CodePrimitiveExpression(parts[1]))
+                        new CodeAttributeArgument("Sheet", new CodePrimitiveExpression(parts[1])),
+                        new CodeAttributeArgument("IsExtension", new CodePrimitiveExpression(isExtension))
                         ));
                 }
                 if (source == "mapping")
                 {
                     var parts = appInfo.Markup[0].InnerText.Split(new[] { '|' }, StringSplitOptions.RemoveEmptyEntries);
-                    if (parts.Length != 7) 
+                    if (parts.Length < 7) 
                         throw new Exception("Unexpected number of arguments for Xbim.COBieLiteUK.Mapping");
 
                     //trim all parts
                     for (var i = 0; i < parts.Length; i++)
                         parts[i] = parts[i].Trim();
+                    var isExtension = parts.Length > 7 && parts[7].Trim().ToLower() == "extension";
 
                     type.CustomAttributes.Add(new CodeAttributeDeclaration("Xbim.COBieLiteUK.Mapping",
                         new CodeAttributeArgument("Type", new CodePrimitiveExpression(parts[0])),
@@ -112,7 +115,8 @@ namespace Xsd2Code.Library.Extensions
                         new CodeAttributeArgument("Required", new CodePrimitiveExpression(parts[3].ToLower() == "required")),
                         new CodeAttributeArgument("List", new CodePrimitiveExpression(parts[4].ToLower() == "list")),
                         new CodeAttributeArgument("PickList", new CodePrimitiveExpression(parts[5]== "-" ? null : parts[5])),
-                        new CodeAttributeArgument("Path", new CodePrimitiveExpression(parts[6]))
+                        new CodeAttributeArgument("Path", new CodePrimitiveExpression(parts[6])),
+                        new CodeAttributeArgument("IsExtension", new CodePrimitiveExpression(isExtension))
                         ));
                 }
                 if (source == "parent")
