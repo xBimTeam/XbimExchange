@@ -19,5 +19,32 @@ namespace Xbim.COBieLiteUK
         internal abstract string AllowedValuesString { get; set; }
 
         public abstract string GetStringValue();
+
+        public static AttributeValue CreateFromObject(object underlyingValue)
+        {
+            if (underlyingValue == null)
+                return null;
+            if (underlyingValue is AttributeValue)
+                return underlyingValue as AttributeValue;
+
+            var sw = underlyingValue.GetType().Name.ToLowerInvariant(); 
+
+            switch (sw)
+            {
+                case "int32":
+                case "int16":
+                    return new IntegerAttributeValue() {Value = Convert.ToInt32(underlyingValue)};
+                case "double":
+                case "decimal":
+                    return new DecimalAttributeValue(){ Value = Convert.ToDouble(underlyingValue) };
+                case "string":
+                    return new StringAttributeValue() {  Value  = underlyingValue.ToString() };
+                case "boolean":
+                    return new BooleanAttributeValue() { Value = underlyingValue as bool? };
+                case "datetime":
+                    return new DateTimeAttributeValue() { Value = Convert.ToDateTime(underlyingValue) };        
+            }
+            throw new ArgumentException(underlyingValue.GetType().Name + " cannot be converted to AttributeValue.");
+        }
     }
 }

@@ -15,6 +15,8 @@ namespace Tests
     [TestClass]
     public class CoBieLiteUkTests
     {
+
+
         [TestMethod]
         public void CoBieLiteUkCreation()
         {
@@ -411,6 +413,34 @@ namespace Tests
                 completeWatch.Stop();
                 Debug.WriteLine("========== Complete processing of {0}: {1}ms", name, completeWatch.ElapsedMilliseconds);
             }
+        }
+
+        [TestMethod]
+        public void CobieAttributesCreation()
+        {
+            int i = 1;
+            var attI = AttributeValue.CreateFromObject(i);
+
+            Int16 i16 = 13;
+            attI = AttributeValue.CreateFromObject(i16);
+
+            Int32 i32 = 13;
+            attI = AttributeValue.CreateFromObject(i32);
+
+            DateTime d = DateTime.Now;
+            var attD = AttributeValue.CreateFromObject(i);
+
+            string s = "Yes";
+            var attS = AttributeValue.CreateFromObject(s);
+
+            bool b = true;
+            var attB = AttributeValue.CreateFromObject(b);
+
+            double dbl = 3.14;
+            var attDbl = AttributeValue.CreateFromObject(dbl);
+
+            AttributeValue dAt = new DecimalAttributeValue() {Value = Math.E };
+            var fromA = AttributeValue.CreateFromObject(dAt);
         }
 
         [TestMethod]
