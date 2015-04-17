@@ -423,10 +423,13 @@ namespace Xbim.CobieLiteUK.Validation.Reporting
                 var iRunningRow = 2;
                 
                 var assetTypesReport = new SummaryReport<CobieObject>(facility.AssetTypes);
-                iRunningRow = WriteReportToPage(summaryPage, assetTypesReport, iRunningRow);
+                iRunningRow = WriteReportToPage(summaryPage, assetTypesReport.GetReport(PreferredClassification), iRunningRow);
 
                 var zonesReport = new SummaryReport<CobieObject>(facility.Zones);
-                iRunningRow = WriteReportToPage(summaryPage, zonesReport, iRunningRow);
+                iRunningRow = WriteReportToPage(summaryPage, zonesReport.GetReport(PreferredClassification), iRunningRow);
+
+                var docReport = new DocumentsReport(facility.Documents);
+                iRunningRow = WriteReportToPage(summaryPage, docReport.GetReport("ResponsibleRole"), iRunningRow);
 
                 Debug.WriteLine(iRunningRow);
                 return true;
@@ -439,13 +442,11 @@ namespace Xbim.CobieLiteUK.Validation.Reporting
             }
         }
 
-        private int WriteReportToPage(ISheet summaryPage, SummaryReport<CobieObject> summaryReport, int startingRow)
+        private int WriteReportToPage(ISheet summaryPage, DataTable table, int startingRow)
         {
-            IRow excelRow;
-            ICell excelCell;
-            var table = summaryReport.GetReport(PreferredClassification);
             if (table == null)
                 return startingRow;
+            
             var iRunningColumn = 0;
 
             var cellStyle = summaryPage.Workbook.CreateCellStyle();
@@ -461,7 +462,8 @@ namespace Xbim.CobieLiteUK.Validation.Reporting
             failCellStyle.FillPattern = FillPattern.SolidForeground;
             failCellStyle.FillForegroundColor = IndexedColors.Red.Index;
 
-            excelRow = summaryPage.GetRow(startingRow) ?? summaryPage.CreateRow(startingRow);
+            IRow excelRow = summaryPage.GetRow(startingRow) ?? summaryPage.CreateRow(startingRow);
+            ICell excelCell;
             foreach (DataColumn tCol in table.Columns)
             {
                 if (tCol.AutoIncrement)

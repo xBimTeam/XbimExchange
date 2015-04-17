@@ -73,15 +73,31 @@ namespace Tests
         }
 
         [TestMethod]
-        public void ValidateXlsLakesideForStage1()
+        public void ValidateXlsLakesideForStage0()
+        {
+            var result = LakeSide0();
+            result.WriteJson(@"..\..\XlsLakesideWithDocumentsValidationStage0.json", true);
+        }
+
+        [TestMethod]
+        public void LakeSideXls0ValidationReport()
+        {
+            var validated = LakeSide0();
+            const string repName = @"..\..\LakeSideXls0ValidationReport.xlsx";
+            var xRep = new ExcelValidationReport();
+            var ret = xRep.Create(validated, repName);
+            Assert.IsTrue(ret, "File not created");
+        }
+
+        private static Facility LakeSide0()
         {
             const string xlsx = @"LakesideWithDocuments.xls";
             string msg;
             var cobie = Facility.ReadCobie(xlsx, out msg);
-            var req = Facility.ReadJson(@"Lakeside_Restaurant-stage1-COBie.json");
+            var req = Facility.ReadJson(@"Lakeside_Restaurant-stage0-COBie.json");
             var validator = new FacilityValidator();
             var result = validator.Validate(req, cobie);
-            result.WriteJson(@"..\..\XlsLakesideWithDocumentsValidationStage1.json", true);
+            return result;
         }
     }
 }

@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using Xbim.COBieLiteUK;
+using Xbim.CobieLiteUK.Validation.Extensions;
+using Attribute = Xbim.COBieLiteUK.Attribute;
 
 namespace Xbim.CobieLiteUK.Validation
 {
@@ -66,23 +68,31 @@ namespace Xbim.CobieLiteUK.Validation
                 {
                     submitted = _dicDocs[requiredDocument.Name];
                 }
+                Document tmp = null;
                 if (IsValid(submitted))
                 {
-                    var tmp = _destinationFacility.Clone(submitted);
-                    if (tmp.Categories == null)
-                        tmp.Categories = new List<Category>();
-                    tmp.Categories.Add(FacilityValidator.PassedCat);
-                    yield return tmp;
+                    tmp = _destinationFacility.Clone(submitted);
+                    tmp.Categories = new List<Category> { FacilityValidator.PassedCat };
+                    tmp.Attributes =
+                        _destinationFacility.Clone(requiredDocument.Attributes as IEnumerable<Attribute>)
+                            .ToList();
                 }
                 else
                 {
-                    var tmp = _destinationFacility.Clone(requiredDocument);
-                    if (tmp.Categories == null)
-                        tmp.Categories = new List<Category>();
-                    tmp.Categories.Add(FacilityValidator.FailedCat);
+                    tmp = _destinationFacility.Clone(requiredDocument);
+                    tmp.Directory = submitted != null 
+                        ? submitted.Directory 
+                        : "";
+                    tmp.File = submitted != null
+                        ? submitted.File
+                        : "";
+                    tmp.Categories = new List<Category> { FacilityValidator.FailedCat };
                     HasFailures = true;
-                    yield return tmp;
                 }
+                tmp.SetRequirementExternalSystem(requiredDocument.ExternalSystem);
+                tmp.SetRequirementExternalId(requiredDocument.ExternalId);
+                
+                yield return tmp;
             }
         }
 

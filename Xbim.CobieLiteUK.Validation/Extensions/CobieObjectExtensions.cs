@@ -21,6 +21,22 @@ namespace Xbim.CobieLiteUK.Validation.Extensions
             return null;
         }
 
+        public static StatusOptions ValidationResult(this CobieObject obj)
+        {
+            if (obj.Categories == null)
+                return StatusOptions.Invalid;
+            var firstCat =
+                obj.Categories.FirstOrDefault(
+                    c => c.Classification == @"DPoW" && (c.Code == "Passed" || c.Code == "Failed"));
+            if (firstCat == null)
+            {
+                return StatusOptions.Invalid;
+            }
+            return firstCat.Code == "Passed"
+                ? StatusOptions.Passed
+                : StatusOptions.Failed;
+        }
+
         public static void SetChildObjects<TChild>(this CobieObject obj, List<TChild> newChildrenSet)
         {
             if (obj.GetType() == typeof(AssetType))

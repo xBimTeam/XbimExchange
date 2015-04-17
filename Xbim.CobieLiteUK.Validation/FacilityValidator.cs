@@ -6,6 +6,14 @@ using Xbim.CobieLiteUK.Validation.Extensions;
 
 namespace Xbim.CobieLiteUK.Validation
 {
+    internal enum StatusOptions
+    {
+        NotEvaluated,
+        Passed,
+        Failed,
+        Invalid
+    }
+
     /// <summary>
     /// Used to produce a COBieLiteUK Facility with validation information of a submitted facility against a requirement facility. 
     /// </summary>

@@ -110,6 +110,7 @@
     <Compile Include="Reporting\AssetTypeDetailedGridReport.cs" />
     <Compile Include="Reporting\AssetTypeRequirementPointer.cs" />
     <Compile Include="Reporting\AssetTypeSummaryReport.cs" />
+    <Compile Include="Reporting\DocumentReport.cs" />
     <Compile Include="Reporting\ExcelCellVisualValue.cs" />
     <Compile Include="Reporting\FacilityReport.cs" />
     <Compile Include="Reporting\IVisualValue.cs" />

@@ -1,5 +1,6 @@
 ﻿using System.Linq;
 using Xbim.COBieLiteUK;
+using Xbim.CobieLiteUK.Validation.Extensions;
 
 namespace Xbim.CobieLiteUK.Validation.Reporting
 {
@@ -7,56 +8,39 @@ namespace Xbim.CobieLiteUK.Validation.Reporting
     {
         private StatusOptions _status = StatusOptions.NotEvaluated;
 
+        public ValidatedAttribute(Attribute attribute)
+        {
+            _attribute = attribute;
+        }
+
         public StatusOptions Status
         {
             get
             {
                 if (_status == StatusOptions.NotEvaluated)
-                    Evaluate();
+                    _status = _attribute.ValidationResult();
                 return _status;
             }
         }
 
-        internal enum StatusOptions
+        public AttributeValue VisualValue
         {
-            NotEvaluated,
-            Passed,
-            Failed,
-            Invalid
+            get { return _attribute.Value; }
         }
-
+  
         private readonly Attribute _attribute;
 
-        public ValidatedAttribute(Attribute attribute)
-        {
-            _attribute = attribute;
-        }
 
         public bool IsValidatedAttribute
         {
             get
             {
                 if (_status == StatusOptions.NotEvaluated)
-                    Evaluate();
+                    _status = _attribute.ValidationResult();
                 return (_status != StatusOptions.Invalid);
             }
         }
         
-        private void Evaluate()
-        {
-            var firstCat = _attribute.Categories.FirstOrDefault(c => c.Classification == @"DPoW" && (c.Code == "Passed" || c.Code == "Failed"));
-            if (firstCat == null)
-            {
-                _status = StatusOptions.Invalid;
-                return;
-            }
-            _status = firstCat.Code == "Passed" 
-                ? StatusOptions.Passed 
-                : StatusOptions.Failed;
-        }
-
-      
-
         public VisualAttentionStyle AttentionStyle
         {
             get
@@ -71,11 +55,6 @@ namespace Xbim.CobieLiteUK.Validation.Reporting
                         return VisualAttentionStyle.Amber;
                 }                
             }
-        }
-
-        public AttributeValue VisualValue
-        {
-            get { return _attribute.Value; }
         }
     }
 }
