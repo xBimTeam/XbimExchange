@@ -15,7 +15,7 @@ namespace Xbim.COBie.Rows
     public class COBieContactRow : COBieRow
     {
         public COBieContactRow(ICOBieSheet<COBieContactRow> parentSheet)
-            : base(parentSheet) { }    
+            : base(parentSheet) { ExtIdentifier = IFCGuid.ToIfcGuid(Guid.NewGuid()); }    
 
         [COBieAttributes(0, COBieKeyType.PrimaryKey, "", COBieAttributeState.Required_PrimaryKey, "Email", 255, COBieAllowedType.AlphaNumeric)]
         public string Email { get; set; }

@@ -28,7 +28,7 @@ namespace XbimExchanger.IfcToCOBieLiteUK
                 target.Components = new List<AssetKey>();
                 foreach (var ifcObjectDefinition in ifcObjectDefinitions)
                 {
-                    var assetKey = new AssetKey { KeyType = EntityType.Asset, Name = ifcObjectDefinition.Name };
+                    var assetKey = new AssetKey { Name = ifcObjectDefinition.Name };
                     target.Components.Add(assetKey);
                 }
             }

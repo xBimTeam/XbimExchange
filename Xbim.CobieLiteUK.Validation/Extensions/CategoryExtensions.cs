@@ -1,34 +1,69 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
-using NPOI.SS.Formula.Functions;
 using Xbim.COBieLiteUK;
+using Xbim.CobieLiteUK.Validation.RequirementDetails;
 
 namespace Xbim.CobieLiteUK.Validation.Extensions
 {
     /// <summary>
     /// Provides extension methods to simplify the execution of validation algorithms on CobieLiteUK categories.
     /// </summary>
-    public  static class CategoryExtensions
+    internal static class CategoryExtensions
     {
+
+        /// <summary>
+        /// Filters a provided enumerable of AssetTypes matching a specified category
+        /// </summary>
+        /// <param name="types">The initial enumerable</param>
+        /// <param name="requiredCategory">Classification and Codes of the provided categories will be tested for matches</param>
+        /// <param name="includeCategoryChildren">if true extends the matching rule to include all categories starting with the required code</param>
+        /// <returns></returns>
+        static internal IEnumerable<CobieObjectCategoryMatch> GetClassificationMatches<T>(this Category requiredCategory, IEnumerable<T> types, bool includeCategoryChildren = true) where T : CobieObject
+        {
+            if (requiredCategory == null)
+                return Enumerable.Empty<CobieObjectCategoryMatch>();
+
+            var buildingDictionary = new Dictionary<T, CobieObjectCategoryMatch>();
+
+            foreach (var evaluatingType in types)
+            {
+                if (evaluatingType.Categories == null)
+                    continue;
+
+                var buffer = includeCategoryChildren
+                    ? evaluatingType.Categories.MatchingChildrenOf(requiredCategory).ToList()
+                    : evaluatingType.Categories.Matching(requiredCategory).ToList();
+
+                if (!buffer.Any())
+                    continue;
+                if (!buildingDictionary.ContainsKey(evaluatingType))
+                    buildingDictionary.Add(evaluatingType, new CobieObjectCategoryMatch(evaluatingType));
+                buildingDictionary[evaluatingType].MatchingCategories.AddRange(buffer);
+            }
+
+            return buildingDictionary.Values;
+        }
+
         public static bool IsChildOf(this Category testedCategory, Category requiredCategory)
         {
-            return 
-                testedCategory.Classification == requiredCategory.Classification 
-                && 
-                testedCategory.Code.StartsWith(requiredCategory.Code);
+            return
+                //testedCategory.Classification == requiredCategory.Classification 
+                //&& 
+                testedCategory.Code.StartsWith(requiredCategory.Code, StringComparison.InvariantCultureIgnoreCase);
         }
 
         public static bool ExactlyMatches(this Category testedCategory, Category requiredCategory)
         {
             return
-                testedCategory.Classification == requiredCategory.Classification
-                &&
+                //testedCategory.Classification == requiredCategory.Classification
+                //&&
                 testedCategory.Code == requiredCategory.Code;
         }
 
         public static Category Clone(this Category originalCategory)
         {
-            return new Category()
+            return new Category
             {
                 Classification = originalCategory.Classification,
                 Code = originalCategory.Code,
@@ -38,7 +73,13 @@ namespace Xbim.CobieLiteUK.Validation.Extensions
 
         public static IEnumerable<Category> Clone(this IEnumerable<Category> originalCategories)
         {
-            return originalCategories.Select(originalCategory => originalCategory.Clone());
+            if (originalCategories == null)
+                yield break;
+
+            foreach (var cat in originalCategories)
+            {
+                yield return cat.Clone();
+            }
         }
 
         public static IEnumerable<string> MatchingClassifications(this IEnumerable<Category> initialList, IEnumerable<Category> otherList)
@@ -67,7 +108,5 @@ namespace Xbim.CobieLiteUK.Validation.Extensions
         {
             return testedCategories.Any(testedCategory => testedCategory.ExactlyMatches(requiredCategory));
         }
-
-        
     }
 }

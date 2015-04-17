@@ -14,6 +14,12 @@ namespace Xbim.COBieLiteUK
         public bool List;
         public string PickList;
         public string Path;
+        public bool IsExtension = false;
+
+        internal MappingAttribute Clone()
+        {
+            return (MappingAttribute)MemberwiseClone();
+        }
     }
 
     [AttributeUsage(AttributeTargets.Class, AllowMultiple = true)]
@@ -21,6 +27,7 @@ namespace Xbim.COBieLiteUK
     {
         public string Type;
         public string Sheet;
+        public bool IsExtension = false;
     }
 
     [AttributeUsage(AttributeTargets.Class, AllowMultiple = true)]

@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using NPOI.SS.Formula.Functions;
 using Xbim.COBie.Rows;
 using Xbim.Ifc2x3.Kernel;
 using Xbim.Ifc2x3.ProductExtension;
@@ -136,12 +135,15 @@ namespace Xbim.COBie.Data
 
                     }
 
-                coordinate.CoordinateXAxis = string.Format("{0:F4}", (double)ifcCartesianPointLower[0]);
-                coordinate.CoordinateYAxis = string.Format("{0:F4}", (double)ifcCartesianPointLower[1]);
-                coordinate.CoordinateZAxis = string.Format("{0:F4}", (double)ifcCartesianPointLower[2]);
+                coordinate.CoordinateXAxis = string.Format("{0}", (double)ifcCartesianPointLower[0]);
+                coordinate.CoordinateYAxis = string.Format("{0}", (double)ifcCartesianPointLower[1]);
+                coordinate.CoordinateZAxis = string.Format("{0}", (double)ifcCartesianPointLower[2]);
                     coordinate.ExtSystem = GetExternalSystem(ifcProduct);
                     coordinate.ExtObject = ifcProduct.GetType().Name;
-                    coordinate.ExtIdentifier = ifcProduct.GlobalId.ToString();
+                    if (!string.IsNullOrEmpty(ifcProduct.GlobalId))
+                    {
+                        coordinate.ExtIdentifier = ifcProduct.GlobalId.ToString();
+                    }
                 coordinate.ClockwiseRotation = transBox.ClockwiseRotation.ToString("F4");
                 coordinate.ElevationalRotation = transBox.ElevationalRotation.ToString("F4");
                 coordinate.YawRotation = transBox.YawRotation.ToString("F4");
@@ -156,9 +158,9 @@ namespace Xbim.COBie.Data
                         coordinateUpper.RowName = coordinate.RowName;
                         coordinateUpper.SheetName = coordinate.SheetName;
                         coordinateUpper.Category = "box-upperright";
-                    coordinateUpper.CoordinateXAxis = string.Format("{0:F4}", (double)ifcCartesianPointUpper[0]);
-                    coordinateUpper.CoordinateYAxis = string.Format("{0:F4}", (double)ifcCartesianPointUpper[1]);
-                    coordinateUpper.CoordinateZAxis = string.Format("{0:F4}", (double)ifcCartesianPointUpper[2]);
+                    coordinateUpper.CoordinateXAxis = string.Format("{0}", (double)ifcCartesianPointUpper[0]);
+                    coordinateUpper.CoordinateYAxis = string.Format("{0}", (double)ifcCartesianPointUpper[1]);
+                    coordinateUpper.CoordinateZAxis = string.Format("{0}", (double)ifcCartesianPointUpper[2]);
                         coordinateUpper.ExtSystem = coordinate.ExtSystem;
                         coordinateUpper.ExtObject = coordinate.ExtObject;
                         coordinateUpper.ExtIdentifier = coordinate.ExtIdentifier;

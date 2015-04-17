@@ -15,5 +15,12 @@ namespace Xbim.COBieLiteUK
             if (ApprovalBy != null) 
                 yield return ApprovalBy;
         }
+
+        internal override void RemoveKey(IEntityKey key)
+        {
+            base.RemoveKey(key);
+            if (ApprovalBy == key)
+                ApprovalBy = null;
+        }
     }
 }

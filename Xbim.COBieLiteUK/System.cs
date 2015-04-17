@@ -61,5 +61,13 @@ namespace Xbim.COBieLiteUK
             foreach (var key in Components)
                 yield return key;
         }
+
+        internal override void RemoveKey(IEntityKey key)
+        {
+            base.RemoveKey(key);
+            var comp = key as AssetKey;
+            if (comp != null && Components != null)
+                Components.Remove(comp);
+        }
     }
 }

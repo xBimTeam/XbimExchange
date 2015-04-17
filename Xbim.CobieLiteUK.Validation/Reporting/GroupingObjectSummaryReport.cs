@@ -2,29 +2,27 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Xbim.COBieLiteUK;
 using Xbim.CobieLiteUK.Validation.Extensions;
 
 namespace Xbim.CobieLiteUK.Validation.Reporting
 {
-    public class AssetTypeSummaryReport
+    internal class GroupingObjectSummaryReport<T> where T : CobieObject
     {
-        private readonly IEnumerable<AssetType> _validatedAssets;
+        private readonly IEnumerable<T> _validatedAssetTypes;
 
-        public AssetTypeSummaryReport(IEnumerable<AssetType> vaidatedAssets)
+        public GroupingObjectSummaryReport(IEnumerable<T> validatedAssetTypes)
         {
-            _validatedAssets = vaidatedAssets;
+            _validatedAssetTypes = validatedAssetTypes;
         }
 
         public DataTable GetReport(string mainClassification)
         {
-            if (_validatedAssets == null || _validatedAssets.FirstOrDefault() == null)
+            if (_validatedAssetTypes == null || _validatedAssetTypes.FirstOrDefault() == null)
                 return null;
             if (mainClassification == @"")
             {
-                var firstRequirement = _validatedAssets.FirstOrDefault();
+                var firstRequirement = _validatedAssetTypes.FirstOrDefault();
                 if (firstRequirement == null)
                     return null;
 
@@ -39,7 +37,7 @@ namespace Xbim.CobieLiteUK.Validation.Reporting
             // the progressive variable allows grouping by Maincategory and MatchingCategory values
             //
             var progressive = new Dictionary<Tuple<string, string>, ValidationSummary>();
-            foreach (var reportingAsset in _validatedAssets)
+            foreach (var reportingAsset in _validatedAssetTypes)
             {
                 var mainCatCode = "";
                 var mainCat =
@@ -49,11 +47,13 @@ namespace Xbim.CobieLiteUK.Validation.Reporting
                     mainCatCode = mainCat.Code;
                 }
 
-                var thisQuantities = new ValidationSummary()
+                var thisQuantities = new ValidationSummary
                 {
-                    Passes = reportingAsset.GetValidAssetsCount(),
-                    Total = reportingAsset.GetSubmittedAssetsCount(),
-                    MainCatDescription = mainCat != null ? mainCat.Description : ""
+                    Passes = reportingAsset.GetValidChildrenCount(),
+                    Total = reportingAsset.GetSubmittedChildrenCount(),
+                    MainCatDescription = mainCat != null 
+                        ? mainCat.Description 
+                        : ""
                 };
                     
                 var matchingCat = reportingAsset.GetMatchingCategories().FirstOrDefault();
@@ -86,17 +86,24 @@ namespace Xbim.CobieLiteUK.Validation.Reporting
                 thisRow[i++] = value.MainCatDescription; // main classification
                 thisRow[i++] = sortedKey.Item2;
                 thisRow[i++] = value.Total;
-                thisRow[i++] = value.Passes;
+
+                var aStyle = VisualAttentionStyle.Green;
+                if (value.Passes < value.Total)
+                    aStyle = VisualAttentionStyle.Red;
+                if (value.Total == 0)
+                    aStyle = VisualAttentionStyle.Amber;
+                // ReSharper disable once RedundantAssignment (reduces risk for future edits)
+                thisRow[i++] = new VisualValue(value.Passes) { AttentionStyle = aStyle};
                 retTable.Rows.Add(thisRow);
             }
             return retTable;
         }
 
-        private int Comparison(Tuple<string, string> tuple, Tuple<string, string> tuple1)
+        private static int Comparison(Tuple<string, string> tuple, Tuple<string, string> tuple1)
         {
             return tuple.Item1 == tuple1.Item1 
-                ? System.String.Compare(tuple.Item2, tuple1.Item2, System.StringComparison.Ordinal) 
-                : System.String.Compare(tuple.Item1, tuple1.Item1, System.StringComparison.Ordinal);
+                ? String.Compare(tuple.Item2, tuple1.Item2, StringComparison.Ordinal) 
+                : String.Compare(tuple.Item1, tuple1.Item1, StringComparison.Ordinal);
         }
 
         private class ValidationSummary
@@ -115,7 +122,8 @@ namespace Xbim.CobieLiteUK.Validation.Reporting
 
         private static DataTable PrepareTable(string mainClassification)
         {
-            var retTable = new DataTable("AssetTypes validation report", "DPoW");
+            var repName = typeof (T).Name + "s validation report";
+            var retTable = new DataTable(repName, "DPoW");
             var workCol = retTable.Columns.Add("DPoW_ID", typeof(Int32));
             workCol.AllowDBNull = false;
             workCol.Unique = true;
@@ -126,7 +134,7 @@ namespace Xbim.CobieLiteUK.Validation.Reporting
             // retTable.Columns.Add("Matching classification", typeof (String));
             retTable.Columns.Add(new DataColumn("DPoW_MatchingCode", typeof(String)) { Caption = "Matching code" });
             retTable.Columns.Add(new DataColumn("DPoW_Submitted", typeof(int)) { Caption = "No. Submitted" });
-            retTable.Columns.Add(new DataColumn("DPoW_Valid", typeof(int)) { Caption = "No. Valid" });
+            retTable.Columns.Add(new DataColumn("DPoW_Valid", typeof(VisualValue)) { Caption = "No. Valid" });
             return retTable;
         }
     }

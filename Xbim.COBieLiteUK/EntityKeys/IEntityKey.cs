@@ -11,6 +11,6 @@ namespace Xbim.COBieLiteUK
     {
         Type ForType { get; }
         string Name { get; set; }
-        EntityType KeyType { get; }
+        string GetSheet(string mapping);
     }
 }

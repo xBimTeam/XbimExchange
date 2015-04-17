@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Xml.Serialization;
 using Newtonsoft.Json;
 
@@ -8,7 +9,7 @@ namespace Xbim.COBieLiteUK
     public partial class ContactKey : IEntityKey
     {
         [XmlIgnore, JsonIgnore]
-        Type IEntityKey.ForType
+        public Type ForType
         {
             get { return typeof(Contact); }
         }
@@ -19,6 +20,14 @@ namespace Xbim.COBieLiteUK
         {
             get { return Email; }
             set { Email = value; }
+        }
+
+        public string GetSheet(string mapping)
+        {
+            var attr =
+                ForType.GetCustomAttributes(typeof(SheetMappingAttribute), true)
+                    .FirstOrDefault(a => ((SheetMappingAttribute)a).Type == mapping) as SheetMappingAttribute;
+            return attr == null ? null : attr.Sheet;
         }
     }
 }

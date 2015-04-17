@@ -8,18 +8,18 @@
   <xs:complexType name="ProjectStage">
     <xs:annotation>
       <xs:appinfo source="parent">Facility</xs:appinfo>
-      <xs:appinfo source="sheet">UK2016|Project</xs:appinfo>
+      <xs:appinfo source="sheet">UK2012|ProjectStage|extension</xs:appinfo>
       <!--mapping, column, header, required/optional, list/item, pick/-, path-->
-      <xs:appinfo source="mapping">UK2016|A|Name          |required|item|-                              |Name</xs:appinfo>
-      <xs:appinfo source="mapping">UK2016|B|CreatedBy     |required|item|-                              |CreatedBy.Email</xs:appinfo>
-      <xs:appinfo source="mapping">UK2016|C|CreatedOn     |required|item|-                              |CreatedOn</xs:appinfo>
-      <xs:appinfo source="mapping">UK2016|D|Category      |required|list|PickLists.Category-ProjectStage|Categories.CategoryString</xs:appinfo>
-      <xs:appinfo source="mapping">UK2016|E|Description   |optional|item|-                              |Description</xs:appinfo>
-      <xs:appinfo source="mapping">UK2016|F|ExtSystem     |optional|item|-                              |ExternalSystem</xs:appinfo>
-      <xs:appinfo source="mapping">UK2016|G|ExtObject     |optional|item|-                              |ExternalEntity</xs:appinfo>
-      <xs:appinfo source="mapping">UK2016|H|ExtIdentifier |optional|item|-                              |ExternalId</xs:appinfo>
-      <xs:appinfo source="mapping">UK2016|I|Start         |optional|item|-                              |Start</xs:appinfo>
-      <xs:appinfo source="mapping">UK2016|J|End           |optional|item|-                              |End</xs:appinfo>
+      <xs:appinfo source="mapping">UK2012|A|Name          |required|item|-                              |Name</xs:appinfo>
+      <xs:appinfo source="mapping">UK2012|B|CreatedBy     |required|item|-                              |CreatedBy.Email</xs:appinfo>
+      <xs:appinfo source="mapping">UK2012|C|CreatedOn     |required|item|-                              |CreatedOn</xs:appinfo>
+      <xs:appinfo source="mapping">UK2012|D|Category      |required|list|PickLists.Category-ProjectStage|Categories.CategoryString</xs:appinfo>
+      <xs:appinfo source="mapping">UK2012|E|Description   |optional|item|-                              |Description</xs:appinfo>
+      <xs:appinfo source="mapping">UK2012|F|ExtSystem     |optional|item|-                              |ExternalSystem</xs:appinfo>
+      <xs:appinfo source="mapping">UK2012|G|ExtObject     |optional|item|-                              |ExternalEntity</xs:appinfo>
+      <xs:appinfo source="mapping">UK2012|H|ExtIdentifier |optional|item|-                              |ExternalId</xs:appinfo>
+      <xs:appinfo source="mapping">UK2012|I|Start         |optional|item|-                              |Start</xs:appinfo>
+      <xs:appinfo source="mapping">UK2012|J|End           |optional|item|-                              |End</xs:appinfo>
     </xs:annotation>
     <xs:complexContent>
       <xs:extension base="cobielite:CobieObject">
@@ -39,7 +39,6 @@
     <xs:sequence>
       <xs:element name="Name" type="xs:string" minOccurs="1" maxOccurs="1" />
     </xs:sequence>
-    <xs:attribute name="KeyType" type="cobielite:EntityType" fixed="ProjectStage" />
   </xs:complexType>
   <xs:complexType name="ProjectStageKeyCollection">
     <xs:sequence>
@@ -65,6 +64,10 @@
       <xs:appinfo source="mapping">UK2012|I|ExtObject|optional|item|-|ExternalEntity</xs:appinfo>
       <xs:appinfo source="mapping">UK2012|J|ExtIdentifier|optional|item|-|ExternalId</xs:appinfo>
       <xs:appinfo source="mapping">UK2012|K|Description|optional|item|-|Description</xs:appinfo>
+      
+      <!-- Experimental extensions -->
+      <xs:appinfo source="mapping">UK2012|L|ProjectStages|optional|list|-|ProjectStages.Name|extension</xs:appinfo>
+
       <xs:documentation>
         Assembly is a named physical aggregation of a Type or Component into another Type or
         Component where both the overall (owning) assembly part and the constituent
@@ -103,6 +106,9 @@
       <xs:appinfo source="mapping">UK2012|M|TagNumber|optional|item|-|TagNumber</xs:appinfo>
       <xs:appinfo source="mapping">UK2012|N|BarCode|optional|item|-|BarCode</xs:appinfo>
       <xs:appinfo source="mapping">UK2012|O|AssetIdentifier|optional|item|-|AssetIdentifier</xs:appinfo>
+      <!-- Experimental extensions -->
+      <xs:appinfo source="mapping">UK2012|P|ProjectStages|optional|list|-|ProjectStages.Name|extension</xs:appinfo>
+      
       <xs:documentation>
         Named and individually scheduled physical items and features that might require
         management, such as inspection, maintenance, servicing or replacement, during
@@ -131,7 +137,6 @@
     <xs:sequence>
       <xs:element name="Name" type="xs:string" />
     </xs:sequence>
-    <xs:attribute name="KeyType" type="cobielite:EntityType" fixed="AssetType" />
   </xs:complexType>
   <xs:complexType name="AssetCollection">
     <xs:sequence>
@@ -186,6 +191,8 @@
       <xs:appinfo source="mapping">UK2012|AG|AccessibilityPerformance|optional|item|-|AccessibilityPerformance</xs:appinfo>
       <xs:appinfo source="mapping">UK2012|AH|CodePerformance|optional|item|-|CodePerformance</xs:appinfo>
       <xs:appinfo source="mapping">UK2012|AI|SustainabilityPerformance|optional|item|-|SustainabilityPerformance</xs:appinfo>
+      <!-- Experimental extensions -->
+      <xs:appinfo source="mapping">UK2012|AJ|ProjectStages|optional|list|-|ProjectStages.Name|extension</xs:appinfo>
       <xs:documentation>
         Asset type is a named specification for Components including equipment, products and materials.
         A minimum of one COBie.Type record is required for all COBie deliverables related to equipment Type information.
@@ -232,7 +239,6 @@
     <xs:sequence>
       <xs:element name="Name" type="xs:string" minOccurs="1" />
     </xs:sequence>
-    <xs:attribute name="KeyType" type="cobielite:EntityType" fixed="AssetType" />
   </xs:complexType>
   <xs:complexType name="AssetTypeCollection">
     <xs:sequence>
@@ -281,6 +287,8 @@
       <xs:appinfo source="mapping">UK2012|K|ExtIdentifier|optional|item|-|ExternalId</xs:appinfo>
       <xs:appinfo source="mapping">UK2012|L|Description|optional|item|-|Description</xs:appinfo>
       <xs:appinfo source="mapping">UK2012|M|AllowedValues|optional|list|-|Value.AllowedValuesString</xs:appinfo>
+      <!-- Experimental extensions -->
+      <xs:appinfo source="mapping">UK2012|N|ProjectStages|optional|list|-|ProjectStages.Name|extension</xs:appinfo>
       <xs:documentation>
         Attribute is a named specific characteristic associated to an asset or other information objects.
       </xs:documentation>
@@ -325,6 +333,8 @@
       <xs:appinfo source="mapping">UK2012|L|ExtObject|optional|item|-|ExternalEntity</xs:appinfo>
       <xs:appinfo source="mapping">UK2012|M|ExtIdentifier|optional|item|-|ExternalId</xs:appinfo>
       <xs:appinfo source="mapping">UK2012|N|Description|optional|item|-|Description</xs:appinfo>
+      <!-- Experimental extensions -->
+      <xs:appinfo source="mapping">UK2012|O|ProjectStages|optional|list|-|ProjectStages.Name|extension</xs:appinfo>
       <xs:documentation>
         Connection is a named logical relationship between two Components.
       </xs:documentation>
@@ -372,6 +382,8 @@
       <xs:appinfo source="mapping">UK2012|Q|StateRegion|optional|item|-|StateRegion</xs:appinfo>
       <xs:appinfo source="mapping">UK2012|R|PostalCode|optional|item|-|PostalCode</xs:appinfo>
       <xs:appinfo source="mapping">UK2012|S|Country|optional|item|-|Country</xs:appinfo>
+      <!-- Experimental extensions -->
+      <xs:appinfo source="mapping">UK2012|T|ProjectStages|optional|list|-|ProjectStages.Name|extension</xs:appinfo>
       <xs:documentation>
         Contact is a named person and/or organization involved in the Facility lifecycle.
       </xs:documentation>
@@ -400,7 +412,6 @@
     <xs:sequence>
       <xs:element name="Email" type="cobielite:EmailAddress" minOccurs="1" />
     </xs:sequence>
-    <xs:attribute name="KeyType" type="cobielite:EntityType" fixed="Contact" />
   </xs:complexType>
   <xs:complexType name="ContactCollection">
     <xs:sequence>
@@ -434,6 +445,8 @@
       <xs:appinfo source="mapping">UK2012|M|ExtIdentifier|optional|item|-|ExternalId</xs:appinfo>
       <xs:appinfo source="mapping">UK2012|N|Description|optional|item|-|Description</xs:appinfo>
       <xs:appinfo source="mapping">UK2012|O|Reference|optional|item|-|Reference</xs:appinfo>
+      <!-- Experimental extensions -->
+      <xs:appinfo source="mapping">UK2012|P|ProjectStages|optional|list|-|ProjectStages.Name|extension</xs:appinfo>
       <xs:documentation>
         Document is a named external document associated to an asset or other information object.
       </xs:documentation>
@@ -484,6 +497,8 @@
       <xs:appinfo source="mapping">UK2012|T|ProjectDescription|optional|item|-|Project.Description</xs:appinfo>
       <xs:appinfo source="mapping">UK2012|U|SiteDescription|optional|item|-|Site.Description</xs:appinfo>
       <xs:appinfo source="mapping">UK2012|V|Phase|required|item|-|Phase</xs:appinfo>
+      <!-- Experimental extensions -->
+      <xs:appinfo source="mapping">UK2012|W|ProjectStages|optional|list|-|ProjectStages.Name|extension</xs:appinfo>
       <xs:documentation>
         A type for the Facility element that is the root of a COBie document.
         Facility contains information about the facility being exchanged during a given COBie deliverable.
@@ -568,6 +583,8 @@
       <xs:appinfo source="mapping">UK2012|H|Description|optional|item|-|Description</xs:appinfo>
       <xs:appinfo source="mapping">UK2012|I|Elevation|optional|item|-|Elevation</xs:appinfo>
       <xs:appinfo source="mapping">UK2012|J|Height|optional|item|-|Height</xs:appinfo>
+      <!-- Experimental extensions -->
+      <xs:appinfo source="mapping">UK2012|K|ProjectStages|optional|list|-|ProjectStages.Name|extension</xs:appinfo>
       <xs:documentation>
         Floor is a named intermediate spatial subdivision, including distinct vertical levels and
         horizontal areas and sections with Spaces allocated.
@@ -616,6 +633,8 @@
       <xs:appinfo source="mapping">UK2012|O|ExtSystem|optional|item|-|ExternalSystem</xs:appinfo>
       <xs:appinfo source="mapping">UK2012|P|ExtObject|optional|item|-|ExternalEntity</xs:appinfo>
       <xs:appinfo source="mapping">UK2012|Q|ExtIdentifier|optional|item|-|ExternalId</xs:appinfo>
+      <!-- Experimental extensions -->
+      <xs:appinfo source="mapping">UK2012|R|ProjectStages|optional|list|-|ProjectStages.Name|extension</xs:appinfo>
       <xs:documentation>
         Issue is a named deficiency in the information or risk associated to the assets or other information objects.
       </xs:documentation>
@@ -661,6 +680,8 @@
       <xs:appinfo source="mapping">UK2012|N|ExtObject|optional|item|-|ExternalEntity</xs:appinfo>
       <xs:appinfo source="mapping">UK2012|O|ExtIdentifier|optional|item|-|ExternalId</xs:appinfo>
       <xs:appinfo source="mapping">UK2012|P|Description|optional|item|-|Description</xs:appinfo>
+      <!-- Experimental extensions -->
+      <xs:appinfo source="mapping">UK2012|Q|ProjectStages|optional|list|-|ProjectStages.Name|extension</xs:appinfo>
       <xs:documentation>
         Impact is a named economic and environmental measure.
       </xs:documentation>
@@ -710,6 +731,8 @@
       <xs:appinfo source="mapping">UK2012|Q|TaskNumber|optional|item|-|TaskNumber</xs:appinfo>
       <xs:appinfo source="mapping">UK2012|R|Priors|optional|list|-|Priors.TaskNumber</xs:appinfo>
       <xs:appinfo source="mapping">UK2012|S|ResourceNames|optional|list|-|Resources.Name</xs:appinfo>
+      <!-- Experimental extensions -->
+      <xs:appinfo source="mapping">UK2012|T|ProjectStages|optional|list|-|ProjectStages.Name|extension</xs:appinfo>
       <xs:documentation>
         Job is a named task or activity during the in-use phase associated to Types.
         A minimum of one COBie.Job record is required for all relevant COBie.Type objects submitted at the benefical occupancy or
@@ -750,7 +773,6 @@
       <xs:element name="Name" type="xs:string" />
       <xs:element name="TaskNumber" type="xs:string" />
     </xs:sequence>
-    <xs:attribute name="KeyType" type="cobielite:EntityType" fixed="Job" />
   </xs:complexType>
   <!--End Job Related Content-->
 
@@ -768,6 +790,8 @@
       <xs:appinfo source="mapping">UK2012|F|ExtObject|optional|item|-|ExternalEntity</xs:appinfo>
       <xs:appinfo source="mapping">UK2012|G|ExtIdentifier|optional|item|-|ExternalId</xs:appinfo>
       <xs:appinfo source="mapping">UK2012|H|Description|optional|item|-|Description</xs:appinfo>
+      <!-- Experimental extensions -->
+      <xs:appinfo source="mapping">UK2012|I|ProjectStages|optional|list|-|ProjectStages.Name|extension</xs:appinfo>
       <xs:documentation>
         Resource is a named material or skill required to execute Jobs.
       </xs:documentation>
@@ -783,7 +807,6 @@
     <xs:sequence>
       <xs:element name="Name" type="xs:string" minOccurs="1" />
     </xs:sequence>
-    <xs:attribute name="KeyType" type="cobielite:EntityType" fixed="Resource" />
   </xs:complexType>
   <xs:complexType name="ResourceCollection">
     <xs:sequence>
@@ -819,12 +842,13 @@
       
       <!-- BS1192-4 additions -->
       <xs:appinfo source="mapping">UK2012|P|RelativeTo|optional|item|-|RelativeTo</xs:appinfo>
-      <xs:appinfo source="mapping">UK2012|R|LRM|optional|item|-|LRM</xs:appinfo>
+      <xs:appinfo source="mapping">UK2012|Q|LRM|optional|item|-|LRM</xs:appinfo>
 
       <!-- Experimental additions -->
-      <xs:appinfo source="mapping">UK2016|S|SizeX|optional|item|-|SizeX</xs:appinfo>
-      <xs:appinfo source="mapping">UK2016|T|SizeY|optional|item|-|SizeY</xs:appinfo>
-      <xs:appinfo source="mapping">UK2016|U|SizeZ|optional|item|-|SizeZ</xs:appinfo>
+      <xs:appinfo source="mapping">UK2012|R|SizeX|optional|item|-|SizeX|extension</xs:appinfo>
+      <xs:appinfo source="mapping">UK2012|S|SizeY|optional|item|-|SizeY|extension</xs:appinfo>
+      <xs:appinfo source="mapping">UK2012|T|SizeZ|optional|item|-|SizeZ|extension</xs:appinfo>
+      <xs:appinfo source="mapping">UK2012|U|ProjectStages|optional|list|-|ProjectStages.Name|extension</xs:appinfo>
 
       <xs:documentation>
         Representation (Coordinate) is a named position associated to Facility, Floor (region), Space (location), Component
@@ -890,6 +914,8 @@
       <xs:appinfo source="mapping">UK2012|K|UsableHeight|optional|item|-|UsableHeight</xs:appinfo>
       <xs:appinfo source="mapping">UK2012|L|GrossArea|optional|item|-|GrossArea</xs:appinfo>
       <xs:appinfo source="mapping">UK2012|M|NetArea|optional|item|-|NetArea</xs:appinfo>
+      <!-- Experimental extensions -->
+      <xs:appinfo source="mapping">UK2012|N|ProjectStages|optional|list|-|ProjectStages.Name|extension</xs:appinfo>
       <xs:documentation>
         Space is a named location for activities such as use, inspection or maintenance, including
         un‑occupied or un‑inhabitable Spaces, but not necessarily inaccessible voids.
@@ -911,7 +937,6 @@
     <xs:sequence>
       <xs:element name="Name" type="xs:string" />
     </xs:sequence>
-    <xs:attribute name="KeyType" type="cobielite:EntityType" fixed="Space" />
   </xs:complexType>
   <xs:complexType name="SpaceCollection">
     <xs:sequence>
@@ -943,6 +968,8 @@
       <xs:appinfo source="mapping">UK2012|J|Description|optional|item|-|Description</xs:appinfo>
       <xs:appinfo source="mapping">UK2012|K|SetNumber|optional|item|-|SetNumber</xs:appinfo>
       <xs:appinfo source="mapping">UK2012|L|PartNumber|optional|item|-|PartNumber</xs:appinfo>
+      <!-- Experimental extensions -->
+      <xs:appinfo source="mapping">UK2012|M|ProjectStages|optional|list|-|ProjectStages.Name|extension</xs:appinfo>
       <xs:documentation>
         Spare is a named replaceable part associated to Types.
       </xs:documentation>
@@ -979,6 +1006,8 @@
       <xs:appinfo source="mapping">UK2012|G|ExtObject|optional|item|-|ExternalEntity</xs:appinfo>
       <xs:appinfo source="mapping">UK2012|H|ExtIdentifier|optional|item|-|ExternalId</xs:appinfo>
       <xs:appinfo source="mapping">UK2012|I|Description|optional|item|-|Description</xs:appinfo>
+      <!-- Experimental extensions -->
+      <xs:appinfo source="mapping">UK2012|J|ProjectStages|optional|list|-|ProjectStages.Name|extension</xs:appinfo>
       <xs:documentation>
         System is a named set of manageable Components providing a common function.
       </xs:documentation>
@@ -1013,6 +1042,8 @@
       <xs:appinfo source="mapping">UK2012|G|ExtObject|optional|item|-|ExternalEntity</xs:appinfo>
       <xs:appinfo source="mapping">UK2012|H|ExtIdentifier|optional|item|-|ExternalId</xs:appinfo>
       <xs:appinfo source="mapping">UK2012|I|Description|optional|item|-|Description</xs:appinfo>
+      <!-- Experimental extensions -->
+      <xs:appinfo source="mapping">UK2012|J|ProjectStages|optional|list|-|ProjectStages.Name|extension</xs:appinfo>
       <xs:documentation>
         Zone is a named set of Spaces (locations) sharing a specific Attribute, such as activity, access,
         management or conditioning.
@@ -1056,6 +1087,24 @@
   </xs:complexType>
   <!-- End COBie metadata-->
 
+  <!-- Begin CobieUniqueObject type -->
+  <!--<xs:complexType name="CobieUniqueObject">
+    <xs:complexContent>
+      <xs:extension base="cobielite:CobieObject">
+        <xs:sequence>
+      <xs:element name="Documents" type="cobielite:DocumentCollection" maxOccurs="1" minOccurs="0" />
+      <xs:element name="Attributes" type="cobielite:AttributeCollection" maxOccurs="1" minOccurs="0" />
+      <xs:element name="Issues" type="cobielite:IssueCollection" maxOccurs="1" minOccurs="0" />
+      <xs:element name="Impacts" type="cobielite:ImpactCollection" maxOccurs="1" minOccurs="0" />
+      <xs:element name="Representations" type="cobielite:RepresentationCollection" maxOccurs="1" minOccurs="0" />
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+    
+  </xs:complexType>-->
+  <!-- End CobieUniqueObject type -->
+  
+  
   <!-- Begin CobieObject type -->
   <xs:complexType name="CobieObject" abstract="true">
     <xs:sequence>
@@ -1523,7 +1572,10 @@
 
   <xs:simpleType name="EntityType">
     <xs:annotation>
-      <xs:documentation>Acceptable volume units for Facility default units.</xs:documentation>
+      <xs:documentation>
+        Entity type for a keys which are not strong defined in COBie. 
+        Keys can only be defined for a types with unique name restriction.
+      </xs:documentation>
     </xs:annotation>
     <xs:restriction base="xs:string">
       <xs:enumeration value="Contact">
@@ -1566,16 +1618,6 @@
           <xs:appinfo source="alias">UK2012|System</xs:appinfo>
         </xs:annotation>
       </xs:enumeration>
-      <xs:enumeration value="Assembly">
-        <xs:annotation>
-          <xs:appinfo source="alias">UK2012|Assembly</xs:appinfo>
-        </xs:annotation>
-      </xs:enumeration>
-      <xs:enumeration value="Connection">
-        <xs:annotation>
-          <xs:appinfo source="alias">UK2012|Connection</xs:appinfo>
-        </xs:annotation>
-      </xs:enumeration>
       <xs:enumeration value="Spare">
         <xs:annotation>
           <xs:appinfo source="alias">UK2012|Spare</xs:appinfo>
@@ -1586,39 +1628,9 @@
           <xs:appinfo source="alias">UK2012|Resource</xs:appinfo>
         </xs:annotation>
       </xs:enumeration>
-      <xs:enumeration value="Job">
-        <xs:annotation>
-          <xs:appinfo source="alias">UK2012|Job</xs:appinfo>
-        </xs:annotation>
-      </xs:enumeration>
-      <xs:enumeration value="Impact">
-        <xs:annotation>
-          <xs:appinfo source="alias">UK2012|Impact</xs:appinfo>
-        </xs:annotation>
-      </xs:enumeration>
-      <xs:enumeration value="Document">
-        <xs:annotation>
-          <xs:appinfo source="alias">UK2012|Document</xs:appinfo>
-        </xs:annotation>
-      </xs:enumeration>
-      <xs:enumeration value="Attribute">
-        <xs:annotation>
-          <xs:appinfo source="alias">UK2012|Attribute</xs:appinfo>
-        </xs:annotation>
-      </xs:enumeration>
-      <xs:enumeration value="Issue">
-        <xs:annotation>
-          <xs:appinfo source="alias">UK2012|Issue</xs:appinfo>
-        </xs:annotation>
-      </xs:enumeration>
       <xs:enumeration value="ProjectStage">
         <xs:annotation>
           <xs:appinfo source="alias">UK2016|ProjectStage</xs:appinfo>
-        </xs:annotation>
-      </xs:enumeration>
-      <xs:enumeration value="Representation">
-        <xs:annotation>
-          <xs:appinfo source="alias">UK2012|Coordinate</xs:appinfo>
         </xs:annotation>
       </xs:enumeration>
       <xs:enumeration value="Not defined"/>

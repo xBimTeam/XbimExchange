@@ -11,6 +11,7 @@ using Xbim.IO;
 using Xbim.XbimExtensions.Interfaces;
 using XbimExchanger.COBieLiteToIfc;
 using XbimExchanger.DPoWToCOBieLiteUK;
+using ProjectStage = Xbim.DPoW.ProjectStage;
 
 namespace Tests
 {
@@ -90,6 +91,22 @@ namespace Tests
                     ifcModel.Close();
                 }
             }
+        }
+
+        [TestMethod]
+        public void CheckDocumentsInDPoW()
+        {
+            var pow = PlanOfWork.OpenJson("013-Lakeside_Restaurant.dpow");
+            var num = 0;
+            foreach (var stage in pow.ProjectStages ?? new List<ProjectStage>())
+            {
+                foreach (var documentation in stage.DocumentationSet ?? new List<Documentation>())
+                {
+                    if (documentation.Attributes != null) 
+                        num += documentation.Attributes.Count;
+                }
+            }
+            //Assert.AreEqual(0, num);
         }
         
     }

@@ -50,5 +50,12 @@ namespace Xbim.COBieLiteUK
                 }
             }
         }
+
+        public override string GetStringValue()
+        {
+            return Value.HasValue
+                ? Value.ToString()
+                : "undefined integer";
+        }
     }
 }

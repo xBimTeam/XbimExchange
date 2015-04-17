@@ -145,6 +145,7 @@
     <Compile Include="Federate\FederateCOBie.cs" />
     <Compile Include="FilterValues.cs" />
     <Compile Include="FilterValuesOnMerge.cs" />
+    <Compile Include="IFCGuid.cs" />
     <Compile Include="Resources\ErrorDescription.en-GB.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -220,7 +221,9 @@
   <ItemGroup>
     <None Include="app.config" />
     <None Include="ClassDiagram1.cd" />
-    <None Include="packages.config" />
+    <None Include="packages.config">
+      <SubType>Designer</SubType>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Content Include="PickLists.xml" />

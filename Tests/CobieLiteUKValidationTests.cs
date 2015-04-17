@@ -22,7 +22,7 @@ namespace Tests
         [TestMethod]
         public void CanSaveValidatedVacility()
         {
-            var validated = GetValidated();
+            var validated = GetValidated(@"Lakeside_Restaurant-stage1-COBie.json");
             validated.WriteJson(@"..\..\ValidationReport.json", true);
             validated.WriteXml(@"..\..\ValidationReport.xml", true);
             validated.WriteJson(@"ValidationReport.json", true);
@@ -31,18 +31,14 @@ namespace Tests
         [TestMethod]
         public void CanSaveValidationReport()
         {
-            var validated = GetValidated();
+            var validated = GetValidated(@"Lakeside_Restaurant-stage1-COBie.json");
             const string repName = @"..\..\ValidationReport.xlsx";
-            if (File.Exists(repName))
-            {
-                File.Delete(repName);
-            }
             var xRep = new ExcelValidationReport();
-            var ret = xRep.Create(validated, repName, ExcelValidationReport.SpreadSheetFormat.Xlsx);
+            var ret = xRep.Create(validated, repName);
             Assert.IsTrue(ret, "File not created");
         }
 
-        private static Facility GetValidated()
+        private static Facility GetValidated(string requirementFile)
         {
             const string ifcTestFile = @"Lakeside_Restaurant.ifc";
             Facility sub = null;
@@ -59,9 +55,49 @@ namespace Tests
             }
             Assert.IsTrue(sub!=null);
             var vd = new FacilityValidator();
-            var req = Facility.ReadJson(@"Lakeside_Restaurant-stage6-COBie.json");
+            var req = Facility.ReadJson(requirementFile);
             var validated = vd.Validate(req, sub);
             return validated;
+        }
+
+        [TestMethod]
+        public void ValidateXlsLakeside()
+        {
+            const string xlsx = @"LakesideWithDocuments.xls";
+            string msg;
+            var cobie = Facility.ReadCobie(xlsx, out msg);
+            var req = Facility.ReadJson(@"Lakeside_Restaurant-stage6-COBie.json");
+            var validator = new FacilityValidator();
+            var result = validator.Validate(req, cobie);
+            result.WriteJson(@"..\..\XlsLakesideWithDocumentsValidationStage6.json", true);
+        }
+
+        [TestMethod]
+        public void ValidateXlsLakesideForStage0()
+        {
+            var result = LakeSide0();
+            result.WriteJson(@"..\..\XlsLakesideWithDocumentsValidationStage0.json", true);
+        }
+
+        [TestMethod]
+        public void LakeSideXls0ValidationReport()
+        {
+            var validated = LakeSide0();
+            const string repName = @"..\..\LakeSideXls0ValidationReport.xlsx";
+            var xRep = new ExcelValidationReport();
+            var ret = xRep.Create(validated, repName);
+            Assert.IsTrue(ret, "File not created");
+        }
+
+        private static Facility LakeSide0()
+        {
+            const string xlsx = @"LakesideWithDocuments.xls";
+            string msg;
+            var cobie = Facility.ReadCobie(xlsx, out msg);
+            var req = Facility.ReadJson(@"Lakeside_Restaurant-stage0-COBie.json");
+            var validator = new FacilityValidator();
+            var result = validator.Validate(req, cobie);
+            return result;
         }
     }
 }

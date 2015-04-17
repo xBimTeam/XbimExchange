@@ -263,17 +263,55 @@ namespace Tests
                         CreatedBy = new ContactKey {Email = "martin.cerny@northumbria.ac.uk"},
                         Name = "Null attribute"
                     }
-                }
+                },
+                Stages = new List<ProjectStage>(new []
+                {
+                    new ProjectStage
+                    {
+                        Name = "Stage 0",
+                        CreatedOn = DateTime.Now,
+                        Start = DateTime.Now.AddDays(5),
+                        End = DateTime.Now.AddDays(10),
+                        CreatedBy = new ContactKey{Email = "martin.cerny@northumbria.ac.uk"}
+                    },
+                    new ProjectStage
+                    {
+                        Name = "Stage 1",
+                        CreatedOn = DateTime.Now,
+                        Start = DateTime.Now.AddDays(10),
+                        End = DateTime.Now.AddDays(20),
+                        CreatedBy = new ContactKey{Email = "martin.cerny@northumbria.ac.uk"}
+                    },
+                    new ProjectStage
+                    {
+                        Name = "Stage 2",
+                        CreatedOn = DateTime.Now,
+                        Start = DateTime.Now.AddDays(20),
+                        End = DateTime.Now.AddDays(110),
+                        CreatedBy = new ContactKey{Email = "martin.cerny@northumbria.ac.uk"}
+                    },
+                    new ProjectStage
+                    {
+                        Name = "Stage 3",
+                        CreatedOn = DateTime.Now,
+                        Start = DateTime.Now.AddDays(110),
+                        End = DateTime.Now.AddDays(300),
+                        CreatedBy = new ContactKey{Email = "martin.cerny@northumbria.ac.uk"}
+                    },
+                })
             };
 
             //save model to file to check it
+            string msg;
             const string xmlFile = "facility.cobielite.xml";
             const string jsonFile = "facility.cobielite.json";
+            const string xlsxFile = "facility.cobielite.xlsx";
             facility.WriteXml(xmlFile, true);
             facility.WriteJson(jsonFile, true);
+            facility.WriteCobie(xlsxFile, out msg);
 
             var facility2 = Facility.ReadXml(xmlFile);
-            var facility3 = Facility.ReadJson(jsonFile);
+            var facility3 = Facility.ReadJson(jsonFile);    
         }
 
         [TestMethod]
@@ -298,6 +336,8 @@ namespace Tests
             Debug.Write(log.ToString());
 
             facility.WriteCobie("..\\..\\2012-03-23-Duplex-Design.fixed.xlsx", out msg);
+
+            var f2 = Facility.ReadJson("..\\..\\2012-03-23-Duplex-Design.cobielite.json");
         }
 
         [TestMethod]
@@ -311,6 +351,94 @@ namespace Tests
             var log = new StringWriter();
             facility.ValidateUK2012(log, true);
             Debug.Write(log.ToString());
+        }
+
+        //[TestMethod]
+        public void CobieFix()
+        {
+            var files = new[]
+            {
+                //@"C:\Users\mxfm2\Downloads\Bad Cobie\Ext01.fixed.xlsx",
+                //@"C:\Users\mxfm2\Downloads\Bad Cobie\Ext01.xlsx",
+                //@"C:\Users\mxfm2\Downloads\Bad Cobie\Ext01.xls",
+                //@"C:\Users\mxfm2\Downloads\Bad Cobie\Struc.xls",
+                @"C:\Users\mxfm2\Downloads\Bad Cobie\Site.xls",
+                //@"C:\Users\mxfm2\Downloads\Bad Cobie\INT02.xls",
+                //@"C:\Users\mxfm2\Downloads\Bad Cobie\Int01.xls"
+            };
+            foreach (var file in files)
+            {
+                Stopwatch completeWatch = new Stopwatch();
+                completeWatch.Start();
+
+                var dir = Path.GetDirectoryName(file);
+                var name = Path.GetFileNameWithoutExtension(file);
+                var newFile = Path.Combine(dir ?? "", name + ".fixed.xlsx");
+                Debug.WriteLine("============ Processing: " + (name ?? ""));
+
+                using (var log = File.CreateText(Path.Combine(dir ?? "", name + ".fixed.txt")))
+                {
+                    Stopwatch stopWatch = new Stopwatch();
+                    stopWatch.Start();
+                    string msg;
+                    var facility = Facility.ReadCobie(file, out msg);
+                    stopWatch.Stop();
+
+                    if(!String.IsNullOrEmpty(msg))
+                        log.WriteLine(msg);
+                    Debug.WriteLine("Reading COBie: " + stopWatch.ElapsedMilliseconds);
+
+                    stopWatch.Reset();
+                    stopWatch.Start();
+                    facility.ValidateUK2012(log, true);
+                    stopWatch.Stop();
+
+                    Debug.WriteLine("Validating COBie: " + stopWatch.ElapsedMilliseconds);
+
+
+                    stopWatch.Reset();
+                    stopWatch.Start();
+                    //Debug.Write(msg);
+                    //Debug.Write(log.ToString());    
+                    facility.WriteCobie(newFile, out  msg);
+                    stopWatch.Stop();
+                    if (!String.IsNullOrEmpty(msg))
+                        log.WriteLine(msg);
+                    Debug.WriteLine("Writing COBie: " + stopWatch.ElapsedMilliseconds);
+                    log.Close();
+                }
+
+                completeWatch.Stop();
+                Debug.WriteLine("========== Complete processing of {0}: {1}ms", name, completeWatch.ElapsedMilliseconds);
+            }
+        }
+
+        [TestMethod]
+        public void CobieAttributesCreation()
+        {
+            int i = 1;
+            var attI = AttributeValue.CreateFromObject(i);
+
+            Int16 i16 = 13;
+            attI = AttributeValue.CreateFromObject(i16);
+
+            Int32 i32 = 13;
+            attI = AttributeValue.CreateFromObject(i32);
+
+            DateTime d = DateTime.Now;
+            var attD = AttributeValue.CreateFromObject(i);
+
+            string s = "Yes";
+            var attS = AttributeValue.CreateFromObject(s);
+
+            bool b = true;
+            var attB = AttributeValue.CreateFromObject(b);
+
+            double dbl = 3.14;
+            var attDbl = AttributeValue.CreateFromObject(dbl);
+
+            AttributeValue dAt = new DecimalAttributeValue() {Value = Math.E };
+            var fromA = AttributeValue.CreateFromObject(dAt);
         }
 
         [TestMethod]
@@ -330,15 +458,6 @@ namespace Tests
             var facility = Facility.ReadCobie("OBN1-COBie-UK-2014.xlsx", out msg);
             facility.WriteCobie("..\\..\\OBN1-COBie-UK-2014_plain.xlsx", out msg, "UK2012", false);
         }
-
-        //[TestMethod]
-        //[DeploymentItem("TestFiles\\OBN1-COBie-UK-2014.xlsx")]
-        //public void WritingSpreadsheetFromJson()
-        //{
-        //    string msg;
-        //    var facility = Facility.ReadJson(@"c:\Users\mxfm2\Dropbox\Martin\NBS_LakesideRestaurant_EcoBuild2015_Revit2014_WithZones_DPoW.json");
-        //    facility.WriteCobie("..\\..\\Lakeside.xlsx", out msg);
-        //}
 
         [TestMethod]
         public void DeepSearchTest()
@@ -464,9 +583,14 @@ namespace Tests
 
                 foreach (var facilityType in facilities)
                 {
+                    var log = new StringWriter();
+                    facilityType.ValidateUK2012(log, true);
+
                     string msg;
                     facilityType.WriteJson(jsonFile, true);
                     facilityType.WriteCobie("..\\..\\Lakeside_Restaurant.xlsx", out msg, "UK2012", true);
+
+                    
                     break;
                 }
             }

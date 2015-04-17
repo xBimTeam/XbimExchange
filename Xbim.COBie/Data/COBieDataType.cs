@@ -176,7 +176,7 @@ namespace Xbim.COBie.Data
                     {
                         string name = ifcMaterialLayer.Material.Name.ToString().Trim();
                         double thickness = ifcMaterialLayer.LayerThickness;
-                        string keyName = name + " (" + thickness.ToString("F1") + ")";
+                        string keyName = name + " (" + thickness.ToString() + ")";
                         if (!rowHolderLayerChildNames.Contains(keyName.ToLower())) //check we do not already have it
                         {
                             COBieTypeRow matRow = new COBieTypeRow(types);
@@ -187,7 +187,7 @@ namespace Xbim.COBie.Data
                             matRow.ExtSystem = extSystem;
                             matRow.ExtObject = ifcMaterialLayer.GetType().Name;
                             matRow.AssetType = "Fixed";
-                            matRow.NominalWidth = thickness.ToString("F1");
+                            matRow.NominalWidth = thickness.ToString();
 
                             rowHolderLayerChildNames.Add(keyName.ToLower());
 
@@ -800,7 +800,7 @@ namespace Xbim.COBie.Data
             if ((typeValue.NominalValue != null) && (typeValue.NominalValue is IfcReal)) //if a number then we can calculate
             {
                 double val = (double)typeValue.NominalValue.Value; 
-                result.Value = val.ToString("F1");
+                result.Value = val.ToString();
             }
             else if (typeValue.NominalValue != null) //no number value so just show value for passed in propName
                 result.Value = typeValue.NominalValue.Value.ToString();

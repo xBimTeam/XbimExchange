@@ -12,7 +12,10 @@ namespace Xbim.COBie.Rows
     public class COBieAssemblyRow : COBieRow
     {
         public COBieAssemblyRow(ICOBieSheet<COBieAssemblyRow> parentSheet)
-            : base(parentSheet) { }
+            : base(parentSheet)
+        {
+            ExtIdentifier = IFCGuid.ToIfcGuid(Guid.NewGuid());
+        }
 
         [COBieAttributes(0, COBieKeyType.CompoundKey, "", COBieAttributeState.Required_PrimaryKey, "Name", 255, COBieAllowedType.AlphaNumeric)]
         public string Name { get; set; }

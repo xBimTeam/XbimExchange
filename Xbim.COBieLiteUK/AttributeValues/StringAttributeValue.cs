@@ -25,5 +25,9 @@ namespace Xbim.COBieLiteUK
                     AllowedValues[i] = AllowedValues[i].Trim();
             }
         }
+        public override string GetStringValue()
+        {
+            return Value;
+        }
     }
 }

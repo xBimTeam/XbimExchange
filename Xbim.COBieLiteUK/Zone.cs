@@ -20,6 +20,14 @@ namespace Xbim.COBieLiteUK
                 yield return key;
         }
 
+        internal override void RemoveKey(IEntityKey key)
+        {
+            base.RemoveKey(key);
+            var space = key as SpaceKey;
+            if (space != null && Spaces != null)
+                Spaces.Remove(space);
+        }
+
         [XmlIgnore, JsonIgnore]
         public IEnumerable<Space> SpaceObjects
         {
@@ -28,9 +36,10 @@ namespace Xbim.COBieLiteUK
                 if (_facility == null)
                     throw new Exception(
                         "You have to call 'Refresh()' method on Facility object before you use this property.");
-                if (Spaces == null) return new List<Space>();
-                var names = Spaces.Select(s => s.Name);
-                return _facility.Get<Space>(s => names.Contains(s.Name));
+                if (Spaces == null) 
+                    return Enumerable.Empty<Space>();
+                var keyNames = Spaces.Select(s => s.Name);
+                return _facility.Get<Space>(s => keyNames.Contains(s.Name));
             }
         }
 

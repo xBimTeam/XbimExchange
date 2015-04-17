@@ -101,6 +101,7 @@
     <Compile Include="Converters\AttributeConverter.cs" />
     <Compile Include="AttributeValues\DateTimeAttributeValue.cs" />
     <Compile Include="AttributeValues\DecimalAttributeValue.cs" />
+    <Compile Include="Converters\KeyConverter.cs" />
     <Compile Include="Document.cs" />
     <Compile Include="EntityKeys\AssetKey.cs" />
     <Compile Include="EntityKeys\AssetTypeKey.cs" />

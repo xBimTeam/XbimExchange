@@ -1,50 +1,73 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using NPOI.SS.Formula.Functions;
 using Xbim.COBieLiteUK;
-using Attribute = Xbim.COBieLiteUK.Attribute;
-using Xbim.CobieLiteUK.Validation.RequirementDetails;
 
 namespace Xbim.CobieLiteUK.Validation.Extensions
 {
     /// <summary>
     /// Provides extension methods to simplify the execution of validation algorithms on CobieLiteUK AssetTypes.
     /// </summary>
-    static internal class AssetTypesExtensions
+    static internal class CobieObjectExtensions
     {
-        /// <summary>
-        /// Filters a provided enumerable of AssetTypes matching a specified category
-        /// </summary>
-        /// <param name="types">The initial enumerable</param>
-        /// <param name="requiredCategory">Classification and Codes of the provided categories will be tested for matches</param>
-        /// <param name="includeCategoryChildren">if true extends the matching rule to include all categories starting with the required code</param>
-        /// <returns></returns>
-        static public IEnumerable<AssetTypeCategoryMatch> GetClassificationMatches(this IEnumerable<AssetType> types, Category requiredCategory, bool includeCategoryChildren = true)
+        public static List<T> GetChildObjects<T>(this CobieObject obj)
         {
-            if (requiredCategory == null)
-                return Enumerable.Empty<AssetTypeCategoryMatch>();
-
-
-            var buildingDictionary = new Dictionary<AssetType, AssetTypeCategoryMatch>();
-
-            foreach (var evaluatingType in types)
+            if (obj.GetType() == typeof(AssetType))
+                return ((AssetType)obj).Assets as List<T>;
+            if (obj.GetType() == typeof (Zone))
             {
-                if (evaluatingType.Categories == null)
-                    continue;
-
-                var buffer = includeCategoryChildren
-                    ? evaluatingType.Categories.MatchingChildrenOf(requiredCategory).ToList()
-                    : evaluatingType.Categories.Matching(requiredCategory).ToList();
-
-                if (!buffer.Any()) 
-                    continue;
-                if (!buildingDictionary.ContainsKey(evaluatingType))
-                    buildingDictionary.Add(evaluatingType, new AssetTypeCategoryMatch(evaluatingType));
-                buildingDictionary[evaluatingType].MatchingCategories.AddRange(buffer);
+                return ((Zone)obj).SpaceObjects.ToList() as List<T>;
             }
+                
+            return null;
+        }
 
-            return buildingDictionary.Values;    
+        public static StatusOptions ValidationResult(this CobieObject obj)
+        {
+            if (obj.Categories == null)
+                return StatusOptions.Invalid;
+            var firstCat =
+                obj.Categories.FirstOrDefault(
+                    c => c.Classification == @"DPoW" && (c.Code == "Passed" || c.Code == "Failed"));
+            if (firstCat == null)
+            {
+                return StatusOptions.Invalid;
+            }
+            return firstCat.Code == "Passed"
+                ? StatusOptions.Passed
+                : StatusOptions.Failed;
+        }
+
+        public static void SetChildObjects<TChild>(this CobieObject obj, List<TChild> newChildrenSet)
+        {
+            if (obj.GetType() == typeof(AssetType))
+            {
+                ((AssetType)obj).Assets = newChildrenSet as List<Asset>;
+            }
+            else if (obj.GetType() == typeof(Zone))
+            {
+                var destZone = obj as Zone;
+                if (destZone == null)
+                    return;
+                destZone.Spaces = new List<SpaceKey>(); // since this is a setter it's ok to create new.
+                var destFaclity = destZone.Facility;
+                if (destFaclity.Floors == null) // we dont' wipe floors away, only prepare if it's null
+                    destFaclity.Floors = new List<Floor>();
+                var tmpStorey = destFaclity.Get<Floor>(fl => fl.Name == @"DPoWTemporaryHoldingStorey").FirstOrDefault();
+                if (tmpStorey == null)
+                {
+                    tmpStorey = destFaclity.Create<Floor>();
+                    tmpStorey.Name = FacilityValidator.TemporaryFloorName;
+                    tmpStorey.Spaces = new List<Space>();
+                    destFaclity.Floors.Add(tmpStorey);
+                }
+                foreach (var child in newChildrenSet.OfType<Space>() )
+                {
+                    // add reference to the space in the zone
+                    destZone.Spaces.Add(new SpaceKey { Name = child.Name} );
+                    // the outer function will then ensure that floor and spaces are avalialale in the report facility
+                    tmpStorey.Spaces.Add(child);
+                }
+            }
         }
 
         private const string MatchingCategoriesAttributeName = "DPoWMatchingCategories";
@@ -54,83 +77,83 @@ namespace Xbim.CobieLiteUK.Validation.Extensions
         private const string RequirementCodesAttributeName = "DPoWRequirementCodes";
         private const string RequirementDescsAttributeName = "DPoWRequirementDescs";
 
-        private const string SubmittedAssetsAttributeName = "DPoWSubmittedAssetsCount";
-        private const string ValidAssetsAttributeName = "DPoWValidSubmittedAssetsCount";
+        private const string SubmittedChildrenAttributeName = "DPoWSubmittedChildrenCount";
+        private const string ValidChildrenAttributeName = "DPoWValidSubmittedChildrenCount";
         private const string RequirementExternalSystemAttributeName = "RefRequirementExternalSystem";
         private const string RequirementExternalIdAttributeName = "RefRequirementExternalId";
         private const string RequirementNameAttributeName = "RefRequirementName";
         private const string AttributesPropertySetName = "DPoW Attributes";
 
-        static public string GetRequirementExternalSystem(this AssetType retType)
+        static public string GetRequirementExternalSystem(this CobieObject retType)
         {
             return GetStringValue(retType, RequirementExternalSystemAttributeName);
         }
 
-        static public string GetRequirementExternalId(this AssetType retType)
+        static public string GetRequirementExternalId(this CobieObject retType)
         {
             return GetStringValue(retType, RequirementExternalIdAttributeName);
         }
 
-        static public string GetRequirementName(this AssetType retType)
+        static public string GetRequirementName(this CobieObject retType)
         {
             return GetStringValue(retType, RequirementNameAttributeName);
         }
 
 
-        static public void SetRequirementExternalSystem(this AssetType retType, string value)
+        static public void SetRequirementExternalSystem(this CobieObject retType, string value)
         {
             if (retType == null)
                 return;
-            SetStringValue(retType, value, RequirementExternalSystemAttributeName, "ExternalSystem of the asset type containing the related requirement.");
+            SetStringValue(retType, value, RequirementExternalSystemAttributeName, "ExternalSystem of the requirement group.");
         }
 
-        static public void SetRequirementExternalId(this AssetType retType, string value)
+        static public void SetRequirementExternalId(this CobieObject retType, string value)
         {
             if (retType == null)
                 return;
-            SetStringValue(retType, value, RequirementExternalIdAttributeName, "ExternalId of the asset type containing the related requirement.");
+            SetStringValue(retType, value, RequirementExternalIdAttributeName, "ExternalId of the requirement group.");
         }
 
-        static public void SetRequirementName(this AssetType retType, string value)
+        static public void SetRequirementName(this CobieObject retType, string value)
         {
             if (retType == null)
                 return;
-            SetStringValue(retType, value, RequirementNameAttributeName, "Name of the asset type containing the related requirement.");
+            SetStringValue(retType, value, RequirementNameAttributeName, "Name of the requirement group.");
         }
 
-        static public void SetSubmittedAssetsCount(this AssetType retType, int value)
+        static public void SetSubmittedChildrenCount(this CobieObject retType, int value)
         {
             if (retType == null)
                 return;
-            SetIntegerValue(retType, value, SubmittedAssetsAttributeName, "Count of submitted assets under this AssetType.");
+            SetIntegerValue(retType, value, SubmittedChildrenAttributeName, "Count of submitted items.");
         }
 
-        static public int GetSubmittedAssetsCount(this AssetType retType)
+        static public int GetSubmittedChildrenCount(this CobieObject retType)
         {
-            return GetIntegerValue(retType, SubmittedAssetsAttributeName);
+            return GetIntegerValue(retType, SubmittedChildrenAttributeName);
         }
 
 
-        static public void SetValidAssetsCount(this AssetType retType, int value)
+        static public void SetValidChildrenCount(this CobieObject retType, int value)
         {
             if (retType == null)
                 return;
-            SetIntegerValue(retType, value, ValidAssetsAttributeName, "Count of submitted assets under this AssetType that satisfy requirements.");
+            SetIntegerValue(retType, value, ValidChildrenAttributeName, "Count of submitted items that satisfy requirements.");
         }
 
-        static public int GetValidAssetsCount(this AssetType retType)
+        static public int GetValidChildrenCount(this CobieObject retType)
         {
-            return GetIntegerValue(retType, ValidAssetsAttributeName);
+            return GetIntegerValue(retType, ValidChildrenAttributeName);
         }
 
-        private static string GetStringValue(AssetType retType, string AttributeName)
+        private static string GetStringValue(CobieObject retType, string attributeName)
         {
             if (retType.Attributes == null)
                 return "";
 
             var existingAttribute =
                 retType.Attributes.FirstOrDefault(
-                    a => a.Name == AttributeName && a.PropertySetName == AttributesPropertySetName);
+                    a => a.Name == attributeName && a.PropertySetName == AttributesPropertySetName);
 
             if (existingAttribute == null)
                 return "";
@@ -141,14 +164,14 @@ namespace Xbim.CobieLiteUK.Validation.Extensions
                 : stringValue.Value;
         }
 
-        private static int GetIntegerValue(AssetType retType, string AttributeName)
+        private static int GetIntegerValue(CobieObject retType, string attributeName)
         {
             if (retType.Attributes == null)
                 return 0;
 
             var existingAttribute =
                 retType.Attributes.FirstOrDefault(
-                    a => a.Name == AttributeName && a.PropertySetName == AttributesPropertySetName);
+                    a => a.Name == attributeName && a.PropertySetName == AttributesPropertySetName);
 
             if (existingAttribute == null)
                 return 0;
@@ -159,7 +182,7 @@ namespace Xbim.CobieLiteUK.Validation.Extensions
                 : integerValue.Value.Value;
         }
 
-        private static void SetStringValue(AssetType retType, string value, string propertyName, string propertyDescription)
+        private static void SetStringValue(CobieObject retType, string value, string propertyName, string propertyDescription)
         {
             if (retType.Attributes == null)
                 retType.Attributes = new List<Attribute>();
@@ -170,7 +193,7 @@ namespace Xbim.CobieLiteUK.Validation.Extensions
 
             if (existingAttribute != null)
             {
-                existingAttribute.Value = new StringAttributeValue() { Value = value };
+                existingAttribute.Value = new StringAttributeValue { Value = value };
             }
             else
             {
@@ -179,13 +202,19 @@ namespace Xbim.CobieLiteUK.Validation.Extensions
                     Name = propertyName,
                     PropertySetName = AttributesPropertySetName,
                     Description = propertyDescription,
-                    Value = new StringAttributeValue() { Value = value }
+                    Value = new StringAttributeValue { Value = value },
+                    Categories = new List<Category> { DpowValidatedAttributeClass }
                 };
                 retType.Attributes.Add(matchingClassAttribute);
             }
         }
 
-        private static void SetIntegerValue(AssetType retType, int value, string propertyName, string propertyDescription)
+        private static Category DpowValidatedAttributeClass
+        {
+            get { return new Category {Classification = @"DPoW", Code = "reference"}; }
+        }
+
+        private static void SetIntegerValue(CobieObject retType, int value, string propertyName, string propertyDescription)
         {
             if (retType.Attributes == null)
                 retType.Attributes = new List<Attribute>();
@@ -196,7 +225,7 @@ namespace Xbim.CobieLiteUK.Validation.Extensions
 
             if (existingAttribute != null)
             {
-                existingAttribute.Value = new IntegerAttributeValue() {Value = value};
+                existingAttribute.Value = new IntegerAttributeValue {Value = value};
             }
             else
             {
@@ -205,20 +234,21 @@ namespace Xbim.CobieLiteUK.Validation.Extensions
                     Name = propertyName,
                     PropertySetName = AttributesPropertySetName,
                     Description = propertyDescription,
-                    Value = new IntegerAttributeValue() {Value = value}
+                    Value = new IntegerAttributeValue {Value = value},
+                    Categories = new List<Category> { DpowValidatedAttributeClass }
                 };
                 retType.Attributes.Add(matchingClassAttribute);
             }
         }
 
-        public static IEnumerable<Category> GetMatchingCategories(this AssetType retType)
+        public static IEnumerable<Category> GetMatchingCategories(this CobieObject retType)
         {
             var cls = retType.GetMatchingClassifications().GetEnumerator();
             var codes = retType.GetMatchingCodes().GetEnumerator();
 
             while (cls.MoveNext() && codes.MoveNext())
             {
-                yield return new Category()
+                yield return new Category
                 {
                     Classification = cls.Current,
                     Code = codes.Current
@@ -226,7 +256,7 @@ namespace Xbim.CobieLiteUK.Validation.Extensions
             }
         }
 
-        public static IEnumerable<Category> GetRequirementCategories(this AssetType retType)
+        public static IEnumerable<Category> GetRequirementCategories(this CobieObject retType)
         {
             var cls = retType.GetRequirementClassifications().GetEnumerator();
             var codes = retType.GetRequirementCodes().GetEnumerator();
@@ -234,7 +264,7 @@ namespace Xbim.CobieLiteUK.Validation.Extensions
 
             while (cls.MoveNext() && codes.MoveNext() && descs.MoveNext())
             {
-                yield return new Category()
+                yield return new Category
                 {
                     Classification = cls.Current,
                     Code = codes.Current,
@@ -243,33 +273,33 @@ namespace Xbim.CobieLiteUK.Validation.Extensions
             }
         }
 
-        internal static IEnumerable<string> GetRequirementDescs(this AssetType retType)
+        internal static IEnumerable<string> GetRequirementDescs(this CobieObject retType)
         {
             return GetStringListFromCompound(retType, RequirementDescsAttributeName);
         }
 
-        internal static IEnumerable<string> GetRequirementClassifications(this AssetType retType)
+        internal static IEnumerable<string> GetRequirementClassifications(this CobieObject retType)
         {
             return GetStringListFromCompound(retType, RequirementCategoriesAttributeName);
         }
 
-        internal static IEnumerable<string> GetRequirementCodes(this AssetType retType)
+        internal static IEnumerable<string> GetRequirementCodes(this CobieObject retType)
         {
             return GetStringListFromCompound(retType, RequirementCodesAttributeName);
         }
         
-        internal static IEnumerable<string> GetMatchingClassifications(this AssetType retType)
+        internal static IEnumerable<string> GetMatchingClassifications(this CobieObject retType)
         {
             return GetStringListFromCompound(retType, MatchingCategoriesAttributeName);
         }
 
-        internal static IEnumerable<string> GetMatchingCodes(this AssetType retType)
+        internal static IEnumerable<string> GetMatchingCodes(this CobieObject retType)
         {
             return GetStringListFromCompound(retType, MatchingCodesAttributeName);
         }
-        
 
-        private static IEnumerable<string> GetStringListFromCompound(AssetType retType, string p)
+
+        private static IEnumerable<string> GetStringListFromCompound(CobieObject retType, string p)
         {
             if (retType.Attributes == null)
                 return Enumerable.Empty<string>();
@@ -287,14 +317,14 @@ namespace Xbim.CobieLiteUK.Validation.Extensions
                 : compoundStringValue.Value.CompoundStringToList();
         }
 
-        public static void SetMatchingCategories(this AssetType retType, IEnumerable<Category> matchingCategories)
+        public static void SetMatchingCategories(this CobieObject retType, IEnumerable<Category> matchingCategories)
         {
             var categories = matchingCategories as Category[] ?? matchingCategories.ToArray();
             retType.SetMatchingClassifications(categories.Select(x=>x.Classification));
             retType.SetMatchingCodes(categories.Select(x => x.Code));
         }
 
-        public static void SetRequirementCategories(this AssetType retType, IEnumerable<Category> matchingCategories)
+        public static void SetRequirementCategories(this CobieObject retType, IEnumerable<Category> matchingCategories)
         {
             var categories = matchingCategories as Category[] ?? matchingCategories.ToArray();
             retType.SetRequirementClassifications(categories.Select(x => x.Classification));
@@ -302,37 +332,37 @@ namespace Xbim.CobieLiteUK.Validation.Extensions
             retType.SetRequirementDescs(categories.Select(x => x.Description));
         }
 
-        private static void SetMatchingCodes(this AssetType retType, IEnumerable<string> matchingCategories)
+        private static void SetMatchingCodes(this CobieObject retType, IEnumerable<string> matchingCategories)
         {
             const string description = "Comma separated classification names of the validation candidate that match a requirement.";
             SetListToCompoundAttribute(retType, matchingCategories, MatchingCodesAttributeName, description);
         }
 
-        private static void SetRequirementDescs(this AssetType retType, IEnumerable<string> matchingCategories)
+        private static void SetRequirementDescs(this CobieObject retType, IEnumerable<string> matchingCategories)
         {
             const string description = "Comma separated classification description applicable to the validation requirement.";
             SetListToCompoundAttribute(retType, matchingCategories, RequirementDescsAttributeName, description);
         }
 
-        private static void SetRequirementCodes(this AssetType retType, IEnumerable<string> matchingCategories)
+        private static void SetRequirementCodes(this CobieObject retType, IEnumerable<string> matchingCategories)
         {
             const string description = "Comma separated classification codes applicable to the validation requirement.";
             SetListToCompoundAttribute(retType, matchingCategories, RequirementCodesAttributeName, description);
         }
 
-        private static void SetMatchingClassifications(this AssetType retType, IEnumerable<string> matchingCategories)
+        private static void SetMatchingClassifications(this CobieObject retType, IEnumerable<string> matchingCategories)
         {
             const string description = "Comma separated values of the validation candidate that match a classification requirement.";
             SetListToCompoundAttribute(retType, matchingCategories, MatchingCategoriesAttributeName, description);
         }
 
-        private static void SetRequirementClassifications(this AssetType retType, IEnumerable<string> matchingCategories)
+        private static void SetRequirementClassifications(this CobieObject retType, IEnumerable<string> matchingCategories)
         {
             const string description = "Comma separated classification names applicable to the validation requirement.";
             SetListToCompoundAttribute(retType, matchingCategories, RequirementCategoriesAttributeName, description);
         }
 
-        private static void SetListToCompoundAttribute(AssetType retType, IEnumerable<string> list, string propName,
+        private static void SetListToCompoundAttribute(CobieObject retType, IEnumerable<string> list, string propName,
             string description)
         {
             if (retType.Attributes == null)
@@ -346,7 +376,7 @@ namespace Xbim.CobieLiteUK.Validation.Extensions
 
             if (existingAttribute != null)
             {
-                existingAttribute.Value = new StringAttributeValue()
+                existingAttribute.Value = new StringAttributeValue
                 {
                     Value = newValue
                 };
@@ -358,10 +388,8 @@ namespace Xbim.CobieLiteUK.Validation.Extensions
                     Name = propName,
                     PropertySetName = AttributesPropertySetName,
                     Description = description,
-                    Value = new StringAttributeValue()
-                    {
-                        Value = newValue
-                    }
+                    Value = new StringAttributeValue { Value = newValue },
+                    Categories = new List<Category> { DpowValidatedAttributeClass }
                 };
                 retType.Attributes.Add(matchingClassAttribute);
             }

@@ -367,7 +367,7 @@ namespace Xbim.COBie.Data
 
             if (double.TryParse(num, out temp))
             {
-                return temp.ToString("F2"); // two decimal places
+                return temp.ToString(); // two decimal places
             }
             else
             {

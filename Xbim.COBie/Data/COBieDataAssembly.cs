@@ -75,7 +75,10 @@ namespace Xbim.COBie.Data
                 assembly.AssemblyType = "Fixed"; //as Responsibility matrix instruction
                 assembly.ExtSystem = GetExternalSystem(ra);
                 assembly.ExtObject = ra.GetType().Name;
-                assembly.ExtIdentifier = string.IsNullOrEmpty(ra.GlobalId) ? DEFAULT_STRING : ra.GlobalId.ToString();
+                if (!string.IsNullOrEmpty(ra.GlobalId)) 
+                {
+                    assembly.ExtIdentifier = ra.GlobalId.ToString();
+                }
                 
                 assembly.Description = GetAssemblyDescription(ra);
 
@@ -121,8 +124,7 @@ namespace Xbim.COBie.Data
                 assembly.Description = GetMaterialSetDescription(ifcMaterialLayerSet.MaterialLayers.ToList());
                 assembly.ParentName = (!string.IsNullOrEmpty(ifcMaterialLayerSet.Name)) ? ifcMaterialLayerSet.Name : DEFAULT_STRING;
                 assembly.AssemblyType = "Layer";
-                assembly.ExtObject = ifcMaterialLayerSet.GetType().Name;
-                assembly.ExtIdentifier = DEFAULT_STRING;  //no identifier for layers
+                assembly.ExtObject = ifcMaterialLayerSet.GetType().Name;              
 
                 //Loop Material names
                 ChildNamesList childNamesUnique = ExtractChildNames(ifcMaterialLayerSet.MaterialLayers.ToList());
@@ -215,7 +217,7 @@ namespace Xbim.COBie.Data
                     {
                         
                         strBuilder.Append(" (");
-                        strBuilder.Append(((double)thick).ToString("F1"));
+                        strBuilder.Append(((double)thick).ToString());
                         strBuilder.Append(")");
                     }
                     if (ifcMaterialLayers.Count > i)
@@ -249,7 +251,7 @@ namespace Xbim.COBie.Data
                     double? thick = ifcMaterialLayer.LayerThickness;
                     if (thick != null)
                     {
-                        name += " (" + ((double)thick).ToString("F1") + ")";
+                        name += " (" + ((double)thick).ToString() + ")";
                     }
                     childNamesFilter.Add(name);
                 }

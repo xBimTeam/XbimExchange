@@ -1,28 +1,26 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Xbim.COBieLiteUK;
+﻿using Xbim.COBieLiteUK;
 
 namespace Xbim.CobieLiteUK.Validation
 {
-    public class ProjectValidator
+    internal class ProjectValidator : IValidator
     {
-        private Project _requirementsProject;
+        private readonly Project _requirementsProject;
         public ProjectValidator(Project requirementsProject)
         {
+            HasFailures = false;
             _requirementsProject = requirementsProject;
         }
 
-        internal bool IsPass = true;
+        public TerminationMode TerminationMode { get; set; }
+
+        public bool HasFailures { get; private set; }
 
         public Project Validate(Project candidateProject)
         {
             var retP = new Project();
             if (candidateProject == null)
             {
-                candidateProject = new Project() {Name = "Undefined", ExternalId = "Undefined"};
+                candidateProject = new Project {Name = "Undefined", ExternalId = "Undefined"};
             }
             // check project name
             if (candidateProject.Name == _requirementsProject.Name)
@@ -32,7 +30,7 @@ namespace Xbim.CobieLiteUK.Validation
             else
             {
                 retP.Name = string.Format("'{0}' (should be '{1}')", candidateProject.Name, _requirementsProject.Name);
-                IsPass = false;
+                HasFailures = true;
             }
 
             // check project ExternalId
@@ -43,7 +41,7 @@ namespace Xbim.CobieLiteUK.Validation
             else
             {
                 retP.ExternalId = string.Format("{0} (should be '{1}')", candidateProject.ExternalId, _requirementsProject.ExternalId);
-                IsPass = false;
+                HasFailures = true;
             }
             return retP;
         }

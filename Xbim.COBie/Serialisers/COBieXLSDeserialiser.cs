@@ -179,7 +179,19 @@ namespace Xbim.COBie.Serialisers
                                                     if (sheetRow[i].COBieColumn.AllowedType == COBieAllowedType.ISODate)
                                                         cellValue = cell.DateCellValue.ToString(Constants.DATE_FORMAT);
                                                     else if (sheetRow[i].COBieColumn.AllowedType == COBieAllowedType.ISODateTime)
-                                                        cellValue = cell.DateCellValue.ToString(Constants.DATETIME_FORMAT);
+                                                    {
+                                                        DateTime date = DateTime.Now;
+                                                        try
+                                                        {
+                                                            date = cell.DateCellValue; 
+                                                        }
+                                                        catch
+                                                        {
+                                                            // If we can't read a valid date, just use the current date.
+                                                            date = DateTime.Now;    
+                                                        }
+                                                        cellValue = date.ToString(Constants.DATETIME_FORMAT);
+                                                    }
                                                     else
                                                         cellValue = cell.NumericCellValue.ToString();
                                                     break;

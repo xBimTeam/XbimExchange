@@ -17,5 +17,14 @@ namespace Xbim.COBieLiteUK
             if (RealizingElement != null)
                 yield return RealizingElement;
         }
+
+        internal override void RemoveKey(IEntityKey key)
+        {
+            base.RemoveKey(key);
+            if (ConnectedTo == key)
+                ConnectedTo = null;
+            if (RealizingElement == key)
+                RealizingElement = null;
+        }
     }
 }
