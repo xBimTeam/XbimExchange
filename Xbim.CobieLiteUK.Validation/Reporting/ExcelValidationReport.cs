@@ -159,7 +159,7 @@ namespace Xbim.CobieLiteUK.Validation.Reporting
             return true;
         }
 
-        private static bool CreateDetailSheet(ISheet detailSheet, AssetTypeRequirementPointer<AssetType, Asset> requirementPointer)
+        private static bool CreateDetailSheet(ISheet detailSheet, TwoLevelRequirementPointer<AssetType, Asset> requirementPointer)
         {
             try
             {
@@ -168,7 +168,7 @@ namespace Xbim.CobieLiteUK.Validation.Reporting
                 SetHeader(excelCell);
                 excelCell.SetCellValue("Requirement report");
 
-                var rep = new AssetTypeDetailedGridReport<AssetType, Asset>(requirementPointer);
+                var rep = new TwoLevelDetailedGridReport<AssetType, Asset>(requirementPointer);
                 rep.PrepareReport();
 
                 var iRunningRow = 2;
@@ -282,7 +282,7 @@ namespace Xbim.CobieLiteUK.Validation.Reporting
             }
         }
 
-        private static bool CreateDetailSheet(ISheet detailSheet, AssetTypeRequirementPointer<Zone, Space> requirementPointer)
+        private static bool CreateDetailSheet(ISheet detailSheet, TwoLevelRequirementPointer<Zone, Space> requirementPointer)
         {
             try
             {
@@ -291,7 +291,7 @@ namespace Xbim.CobieLiteUK.Validation.Reporting
                 SetHeader(excelCell);
                 excelCell.SetCellValue("Asset type requirement report");
 
-                var rep = new AssetTypeDetailedGridReport<Zone, Space>(requirementPointer);
+                var rep = new TwoLevelDetailedGridReport<Zone, Space>(requirementPointer);
                 rep.PrepareReport();
 
 
@@ -422,10 +422,10 @@ namespace Xbim.CobieLiteUK.Validation.Reporting
                 excelCell.SetCellValue("Validation Report Summary");
                 var iRunningRow = 2;
                 
-                var assetTypesReport = new SummaryReport<CobieObject>(facility.AssetTypes);
+                var assetTypesReport = new GroupingObjectSummaryReport<CobieObject>(facility.AssetTypes);
                 iRunningRow = WriteReportToPage(summaryPage, assetTypesReport.GetReport(PreferredClassification), iRunningRow);
 
-                var zonesReport = new SummaryReport<CobieObject>(facility.Zones);
+                var zonesReport = new GroupingObjectSummaryReport<CobieObject>(facility.Zones);
                 iRunningRow = WriteReportToPage(summaryPage, zonesReport.GetReport(PreferredClassification), iRunningRow);
 
                 var docReport = new DocumentsReport(facility.Documents);

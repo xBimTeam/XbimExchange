@@ -10,16 +10,16 @@ namespace Xbim.CobieLiteUK.Validation.Reporting
     /// <summary>
     /// Data preparation layer for the production or reports that group all AssetTypes/Assets associated with an assetType requirement
     /// </summary>
-    internal class AssetTypeDetailedGridReport<T, TSub>
+    internal class TwoLevelDetailedGridReport<T, TSub>
         where T : CobieObject
         where TSub : CobieObject
     {
-        private readonly AssetTypeRequirementPointer<T, TSub> _valideatedAssetType;
+        private readonly TwoLevelRequirementPointer<T, TSub> _valideatedAssetType;
 
         /// <summary>
         /// Initialise the reporting class with an AssetTypeRequirementPointer
         /// </summary>
-        internal AssetTypeDetailedGridReport(AssetTypeRequirementPointer<T, TSub> assetType)
+        internal TwoLevelDetailedGridReport(TwoLevelRequirementPointer<T, TSub> assetType)
         {
             _valideatedAssetType = assetType;
         }

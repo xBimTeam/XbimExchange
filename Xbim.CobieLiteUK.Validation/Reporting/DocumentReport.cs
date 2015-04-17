@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
-using System.Text;
 using Xbim.COBieLiteUK;
 using Xbim.CobieLiteUK.Validation.Extensions;
 
@@ -10,9 +9,9 @@ namespace Xbim.CobieLiteUK.Validation.Reporting
 {
     internal class DocumentsReport
     {
-        private List<COBieLiteUK.Document> _documentsToReport;
+        private readonly List<Document> _documentsToReport;
 
-        public DocumentsReport(List<COBieLiteUK.Document> documentsToReport)
+        public DocumentsReport(List<Document> documentsToReport)
         {
             _documentsToReport = documentsToReport;
         }
@@ -33,7 +32,7 @@ namespace Xbim.CobieLiteUK.Validation.Reporting
                 }
                 if (!dic.ContainsKey(attV))
                 {
-                    dic.Add(attV, new List<Document>() { document });
+                    dic.Add(attV, new List<Document> { document });
                 }
                 else
                 {

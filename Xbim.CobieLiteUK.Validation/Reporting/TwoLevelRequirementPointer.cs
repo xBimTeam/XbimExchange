@@ -6,14 +6,14 @@ using Xbim.CobieLiteUK.Validation.Extensions;
 
 namespace Xbim.CobieLiteUK.Validation.Reporting
 {
-    internal class AssetTypeRequirementPointer<T, TSub> 
+    internal class TwoLevelRequirementPointer<T, TSub> 
         where T : CobieObject
         where TSub : CobieObject
     {
         public readonly string ExternalId;
         public readonly string ExternalSystem;
 
-        public AssetTypeRequirementPointer(string externalSystem, string externalId, string name)
+        public TwoLevelRequirementPointer(string externalSystem, string externalId, string name)
         {
             ExternalId = externalId;
             ExternalSystem = externalSystem;
@@ -29,7 +29,7 @@ namespace Xbim.CobieLiteUK.Validation.Reporting
             }
 
             // If parameter cannot be cast to AssetTypeRequirementPointer return false.
-            var p = obj as AssetTypeRequirementPointer<T, TSub>;
+            var p = obj as TwoLevelRequirementPointer<T, TSub>;
             if (p == null)
             {
                 return false;

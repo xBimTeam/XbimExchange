@@ -28,16 +28,16 @@ namespace Xbim.CobieLiteUK.Validation.Reporting
             _validationResult = validationResultFacility;
         }
 
-        private List<AssetTypeRequirementPointer<AssetType, Asset>> _assetRequirementGroups;
+        private List<TwoLevelRequirementPointer<AssetType, Asset>> _assetRequirementGroups;
 
-        internal List<AssetTypeRequirementPointer<AssetType, Asset>> AssetRequirementGroups
+        internal List<TwoLevelRequirementPointer<AssetType, Asset>> AssetRequirementGroups
         {
             get
             {
                 if (_assetRequirementGroups != null) 
                     return _assetRequirementGroups;
-                var tmp = new Dictionary<Tuple<string, string>, AssetTypeRequirementPointer<AssetType, Asset>>();
-                _assetRequirementGroups = new List<AssetTypeRequirementPointer<AssetType, Asset>>();
+                var tmp = new Dictionary<Tuple<string, string>, TwoLevelRequirementPointer<AssetType, Asset>>();
+                _assetRequirementGroups = new List<TwoLevelRequirementPointer<AssetType, Asset>>();
                 if (_validationResult.AssetTypes == null) 
                     return _assetRequirementGroups;
                 foreach (var providedAsset in _validationResult.AssetTypes)
@@ -51,7 +51,7 @@ namespace Xbim.CobieLiteUK.Validation.Reporting
                         tmp[tryReq].AddSumission(providedAsset);
                     else
                     {
-                        var newP = new AssetTypeRequirementPointer<AssetType, Asset>(sys, id, nm);
+                        var newP = new TwoLevelRequirementPointer<AssetType, Asset>(sys, id, nm);
                         newP.AddSumission(providedAsset);
                         tmp.Add(tryReq, newP);
                     }
@@ -61,16 +61,16 @@ namespace Xbim.CobieLiteUK.Validation.Reporting
             }
         }
 
-        private List<AssetTypeRequirementPointer<Zone, Space>> _zoneRequirementGroups;
+        private List<TwoLevelRequirementPointer<Zone, Space>> _zoneRequirementGroups;
 
-        internal List<AssetTypeRequirementPointer<Zone, Space>> ZoneRequirementGroups
+        internal List<TwoLevelRequirementPointer<Zone, Space>> ZoneRequirementGroups
         {
             get
             {
                 if (_zoneRequirementGroups != null)
                     return _zoneRequirementGroups;
-                var tmp = new Dictionary<Tuple<string, string>, AssetTypeRequirementPointer<Zone, Space>>();
-                _zoneRequirementGroups = new List<AssetTypeRequirementPointer<Zone, Space>>();
+                var tmp = new Dictionary<Tuple<string, string>, TwoLevelRequirementPointer<Zone, Space>>();
+                _zoneRequirementGroups = new List<TwoLevelRequirementPointer<Zone, Space>>();
                 if (_validationResult.Zones == null)
                     return _zoneRequirementGroups;
                 foreach (var providedAsset in _validationResult.Zones)
@@ -84,7 +84,7 @@ namespace Xbim.CobieLiteUK.Validation.Reporting
                         tmp[tryReq].AddSumission(providedAsset);
                     else
                     {
-                        var newP = new AssetTypeRequirementPointer<Zone, Space>(sys, id, nm);
+                        var newP = new TwoLevelRequirementPointer<Zone, Space>(sys, id, nm);
                         newP.AddSumission(providedAsset);
                         tmp.Add(tryReq, newP);
                     }

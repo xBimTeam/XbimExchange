@@ -7,11 +7,11 @@ using Xbim.CobieLiteUK.Validation.Extensions;
 
 namespace Xbim.CobieLiteUK.Validation.Reporting
 {
-    internal class SummaryReport<T> where T : CobieObject
+    internal class GroupingObjectSummaryReport<T> where T : CobieObject
     {
         private readonly IEnumerable<T> _validatedAssetTypes;
 
-        public SummaryReport(IEnumerable<T> validatedAssetTypes)
+        public GroupingObjectSummaryReport(IEnumerable<T> validatedAssetTypes)
         {
             _validatedAssetTypes = validatedAssetTypes;
         }
