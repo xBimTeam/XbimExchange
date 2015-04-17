@@ -59,37 +59,43 @@ namespace Xbim.Exchange
                         var dpow = "DPoW";
                         if (facilities.Count > 1) 
                             dpow += ++facilityNumber;
-// ReSharper disable AssignNullToNotNullAttribute
-                        var dPoWFile = Path.Combine(fileDirectoryName, fileNameWithoutExtension+"_"+ dpow);
-// ReSharper restore AssignNullToNotNullAttribute
+                        // ReSharper disable AssignNullToNotNullAttribute
+                        var dPoWFile = Path.Combine(fileDirectoryName, fileNameWithoutExtension + "_" + dpow);
+                        // ReSharper restore AssignNullToNotNullAttribute
                         dPoWFile = Path.ChangeExtension(dPoWFile, "json");
                         Console.WriteLine("Creating " + dPoWFile);
-                        
-                            facility.WriteJson(dPoWFile);
 
+                        facility.WriteJson(dPoWFile);
+                        string cobieFile = Path.ChangeExtension(dPoWFile, "Xlsx");
+                        Console.WriteLine("Creating " + cobieFile);
+                        string error;
+                        facility.WriteCobie(cobieFile, out error);
+                        if (!string.IsNullOrWhiteSpace(error))
+                            Console.WriteLine("COBie Errors: " + error);
 
-                            dPoWFile = Path.ChangeExtension(dPoWFile, "xml");
-                            Console.WriteLine("Creating " + dPoWFile);
-                            facility.WriteXml(dPoWFile);
-
-                            dPoWFile = Path.ChangeExtension(dPoWFile, "xbim");
-                            Console.WriteLine("Creating " + dPoWFile);
-                            using (var ifcModel = XbimModel.CreateModel(dPoWFile))
+                        dPoWFile = Path.ChangeExtension(dPoWFile, "xml");
+                        Console.WriteLine("Creating " + dPoWFile);
+                       // facility.WriteXml(dPoWFile);
+                       
+                        //facility.ValidateUK2012();
+                        dPoWFile = Path.ChangeExtension(dPoWFile, "xbim");
+                        Console.WriteLine("Creating " + dPoWFile);
+                        using (var ifcModel = XbimModel.CreateModel(dPoWFile))
+                        {
+                            ifcModel.Initialise("Xbim Tester", "XbimTeam", "Xbim.Exchanger", "Xbim Development Team", "3.0");
+                            ifcModel.ReloadModelFactors();
+                            using (var txn = ifcModel.BeginTransaction("Convert from COBieLiteUK"))
                             {
-                                ifcModel.Initialise("Xbim Tester", "XbimTeam", "Xbim.Exchanger", "Xbim Development Team", "3.0");
-                                ifcModel.ReloadModelFactors();
-                                using (var txn = ifcModel.BeginTransaction("Convert from COBieLiteUK"))
-                                {
-                                    var coBieLiteUkToIfcExchanger = new CoBieLiteUkToIfcExchanger(facility, ifcModel);
-                                    coBieLiteUkToIfcExchanger.Convert();
-                                    txn.Commit();
-                                    //var err = model.Validate(model.Instances, Console.Out);
-                                }
-                                dPoWFile = Path.ChangeExtension(dPoWFile, "ifc");
-                                Console.WriteLine("Creating " + dPoWFile);
-                                ifcModel.SaveAs(dPoWFile, XbimStorageType.IFC);
-                                ifcModel.Close();
+                                var coBieLiteUkToIfcExchanger = new CoBieLiteUkToIfcExchanger(facility, ifcModel);
+                                coBieLiteUkToIfcExchanger.Convert();
+                                txn.Commit();
+                                //var err = model.Validate(model.Instances, Console.Out);
                             }
+                            dPoWFile = Path.ChangeExtension(dPoWFile, "ifc");
+                            Console.WriteLine("Creating " + dPoWFile);
+                            ifcModel.SaveAs(dPoWFile, XbimStorageType.IFC);
+                            ifcModel.Close();
+                        }
                     }
                     model.Close();
                 }

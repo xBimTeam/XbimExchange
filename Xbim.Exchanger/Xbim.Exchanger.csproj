@@ -55,19 +55,19 @@
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
     <Reference Include="Xbim.Common">
-      <HintPath>..\packages\Xbim.Essentials.3.0.18\lib\net45\Xbim.Common.dll</HintPath>
+      <HintPath>..\packages\Xbim.Essentials.3.0.19\lib\net45\Xbim.Common.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Xbim.Ifc.Extensions">
-      <HintPath>..\packages\Xbim.Essentials.3.0.18\lib\net45\Xbim.Ifc.Extensions.dll</HintPath>
+      <HintPath>..\packages\Xbim.Essentials.3.0.19\lib\net45\Xbim.Ifc.Extensions.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Xbim.Ifc2x3">
-      <HintPath>..\packages\Xbim.Essentials.3.0.18\lib\net45\Xbim.Ifc2x3.dll</HintPath>
+      <HintPath>..\packages\Xbim.Essentials.3.0.19\lib\net45\Xbim.Ifc2x3.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Xbim.IO">
-      <HintPath>..\packages\Xbim.Essentials.3.0.18\lib\net45\Xbim.IO.dll</HintPath>
+      <HintPath>..\packages\Xbim.Essentials.3.0.19\lib\net45\Xbim.IO.dll</HintPath>
       <Private>True</Private>
     </Reference>
   </ItemGroup>
@@ -143,9 +143,10 @@
     <Compile Include="IfcToCOBieLiteUK\MappingIfcSiteToSite.cs" />
     <Compile Include="IfcToCOBieLiteUK\MappingIfcSpaceToSpace.cs" />
     <Compile Include="IfcToCOBieLiteUK\MappingIfcSystemToSystem.cs" />
-    <Compile Include="IfcToCOBieLiteUK\MappingListOfIfcTypeObjectToAssetType.cs" />
+    <Compile Include="IfcToCOBieLiteUK\MappingXbimIfcProxyTypeObjectToAssetType.cs" />
     <Compile Include="IfcToCOBieLiteUK\MappingIfcZoneToZone.cs" />
     <Compile Include="IfcToCOBieLiteUK\XbimAttributedObject.cs" />
+    <Compile Include="IfcToCOBieLiteUK\XbimIfcProxyTypeObject.cs" />
     <Compile Include="IXbimMappings.cs" />
     <Compile Include="XbimMappings.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
