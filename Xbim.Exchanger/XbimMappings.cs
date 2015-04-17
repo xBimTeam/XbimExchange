@@ -60,10 +60,12 @@ namespace XbimExchanger
         /// <returns></returns>
         public TTargetObject GetOrCreateTargetObject(TSourceKey key)
         {
-            return Results.GetOrAdd(key, CreateTargetObject());
+            if (typeof(TSourceKey).IsValueType || !Object.Equals(null, key))
+                return Results.GetOrAdd(key, CreateTargetObject());
+            return CreateTargetObject();
         }
 
-       
+
         /// <summary>
         /// Adds a mapping between the two object all mapped properties are mapped over by the Mapping function
         /// </summary>

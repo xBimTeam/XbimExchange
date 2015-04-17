@@ -18,7 +18,7 @@ namespace XbimExchanger.IfcToCOBieLiteUK
             facility.ExternalEntity = helper.ExternalEntityName(ifcBuilding);
             facility.ExternalId = helper.ExternalEntityIdentity(ifcBuilding);
             facility.ExternalSystem = helper.ExternalSystemName(ifcBuilding);
-            facility.Name = ifcBuilding.Name;
+            facility.Name = helper.GetFacilityName(ifcBuilding);
             facility.Description = ifcBuilding.Description;
             facility.Categories = helper.GetCategories(ifcBuilding);
             var ifcProject = model.Instances.OfType<IfcProject>().FirstOrDefault();
@@ -83,41 +83,42 @@ namespace XbimExchanger.IfcToCOBieLiteUK
             }
 
             //Assets
-            var allIfcElementsinThisFacility = new HashSet<IfcElement>(helper.GetAllAssets(ifcBuilding));
+          //  var allIfcElementsinThisFacility = new HashSet<IfcElement>(helper.GetAllAssets(ifcBuilding));
 
             //AssetTypes
             //Get all assets that are in this facility/building
-            var allIfcTypesInThisFacility = AllAssetTypesInThisFacility(ifcBuilding, allIfcElementsinThisFacility, helper);
+            //Asset Types are groups of assets that share a common typology
+            //Some types are defined explicitly in the ifc file some have to be inferred
 
-            var typesByTypeName = helper.AssetTypes.Where(kv => allIfcTypesInThisFacility.Overlaps(kv.Value)).ToList();
-            if (allIfcTypesInThisFacility.Any())
+            var allIfcTypes = helper.DefiningTypeObjectMap.OrderBy(t=>t.Key.Name);
+            if (allIfcTypes.Any())
             {
-                facility.AssetTypes = new List<AssetType>(typesByTypeName.Count);
-                var assetTypeMappings = Exchanger.GetOrCreateMappings<MappingListOfIfcTypeObjectToAssetType>();
-                foreach (var typeKeyValue in typesByTypeName)
+                facility.AssetTypes = new List<AssetType>(); 
+                var assetTypeMappings = Exchanger.GetOrCreateMappings<MappingXbimIfcProxyTypeObjectToAssetType>();
+                foreach (var elementsByType in allIfcTypes)
                 {
-                    var listOfTypes = typeKeyValue.Value.Intersect(allIfcTypesInThisFacility);
-                    if (listOfTypes.Any())
+                    if (elementsByType.Value.Any())
                     {
                         var assetType = new AssetType();
-                        assetType = assetTypeMappings.AddMapping(listOfTypes, assetType);
+                        assetType = assetTypeMappings.AddMapping(elementsByType.Key, assetType);
                         facility.AssetTypes.Add(assetType);
                     }
                 }
             }
 
             //Systems
-            var allSystemsInThisFacility = helper.SystemAssignment
-                .Where(v => v.Value.Any(allIfcElementsinThisFacility.Contains))
-                .Select(k => k.Key).ToArray();
-            if (allSystemsInThisFacility.Any())
+            //var allSystemsInThisFacility = helper.SystemAssignment
+            //    .Where(v => v.Value.Any(allIfcTypes.Contains))
+            //    .Select(k => k.Key).ToArray();
+            var ifcSystems = helper.SystemAssignment;
+            if (helper.SystemAssignment.Any())
             {
-                facility.Systems = new List<Xbim.COBieLiteUK.System>(allSystemsInThisFacility.Length);
+                facility.Systems = new List<Xbim.COBieLiteUK.System>(ifcSystems.Count);
                 var systemMappings = Exchanger.GetOrCreateMappings<MappingIfcSystemToSystem>();
-                for (int i = 0; i < allSystemsInThisFacility.Length; i++)
+                foreach (var ifcSystem in ifcSystems.Keys)
                 {
                     var system = new Xbim.COBieLiteUK.System();
-                    system = systemMappings.AddMapping(allSystemsInThisFacility[i], system);
+                    system = systemMappings.AddMapping(ifcSystem, system);
                     facility.Systems.Add(system);
                 }
             }
@@ -141,20 +142,20 @@ namespace XbimExchanger.IfcToCOBieLiteUK
             return facility;
         }
 
-        private static HashSet<IfcTypeObject> AllAssetTypesInThisFacility(IfcBuilding ifcBuilding,
-        HashSet<IfcElement> allAssetsinThisFacility, CoBieLiteUkHelper helper)
-        {
+        //private static HashSet<IfcTypeObject> AllAssetTypesInThisFacility(IfcBuilding ifcBuilding,
+        //HashSet<IfcElement> allAssetsinThisFacility, CoBieLiteUkHelper helper)
+        //{
 
-            var allAssetTypes = helper.DefiningTypeObjectMap;
-            var allAssetTypesInThisFacility = new HashSet<IfcTypeObject>();
-            foreach (var assetTypeKeyValue in allAssetTypes)
-            {
-                //if any defining type has an object in this building/facility then we need to include it
-                if (assetTypeKeyValue.Value.Any(allAssetsinThisFacility.Contains))
-                    allAssetTypesInThisFacility.Add(assetTypeKeyValue.Key);
-            }
-            return allAssetTypesInThisFacility;
-        }
+        //    var allAssetTypes = helper.DefiningTypeObjectMap;
+        //    var allAssetTypesInThisFacility = new HashSet<IfcTypeObject>();
+        //    foreach (var assetTypeKeyValue in allAssetTypes)
+        //    {
+        //        //if any defining type has an object in this building/facility then we need to include it
+        //        if (assetTypeKeyValue.Value.Any(allAssetsinThisFacility.Contains))
+        //            allAssetTypesInThisFacility.Add(assetTypeKeyValue.Key);
+        //    }
+        //    return allAssetTypesInThisFacility;
+        //}
 
         private IEnumerable<IfcZone> GetAllZones(IEnumerable<IfcSpace> allSpaces, CoBieLiteUkHelper helper)
         {

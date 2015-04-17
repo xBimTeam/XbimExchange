@@ -14,8 +14,10 @@ using Xbim.Ifc2x3.Kernel;
 using Xbim.Ifc2x3.MeasureResource;
 using Xbim.Ifc2x3.ProductExtension;
 using Xbim.Ifc2x3.QuantityResource;
+using Xbim.Ifc2x3.SharedBldgElements;
 using Xbim.Ifc2x3.SharedFacilitiesElements;
 using Xbim.IO;
+using Xbim.IO.DynamicGrouping;
 using Xbim.XbimExtensions.SelectTypes;
 using Attribute = Xbim.COBieLiteUK.Attribute;
 using SystemAssembly = System.Reflection.Assembly;
@@ -111,8 +113,8 @@ namespace XbimExchanger.IfcToCOBieLiteUK
 
         private readonly HashSet<IfcType> _includedTypes = new HashSet<IfcType>();
 
-        private Dictionary<IfcObject,IfcTypeObject> _objectToTypeObjectMap;
-        private Dictionary<IfcTypeObject, List<IfcElement>> _definingTypeObjectMap;
+        private Dictionary<IfcObject, XbimIfcProxyTypeObject> _objectToTypeObjectMap;
+        private Dictionary<XbimIfcProxyTypeObject, List<IfcElement>> _definingTypeObjectMap = new Dictionary<XbimIfcProxyTypeObject, List<IfcElement>>();
 /*
         private Lookup<string, IfcElement> _elementTypeToElementObjectMap;
 */
@@ -123,12 +125,13 @@ namespace XbimExchanger.IfcToCOBieLiteUK
         private Dictionary<IfcElement, List<IfcSpatialStructureElement>> _spaceAssetLookup;
         private Dictionary<IfcSpace, IfcBuildingStorey> _spaceFloorLookup;
         private Dictionary<IfcSpatialStructureElement, List<IfcSpatialStructureElement>> _spatialDecomposition;
-
+        private readonly Dictionary<string,int> _typeNames = new Dictionary<string, int>(); 
         #endregion
 
         private readonly string _configFileName;
         private Dictionary<String, List<IfcTypeObject>> _assetTypes;
-
+        private ILookup<string, IfcElement> _elementTypeToElementObjectMap;
+        
         /// <summary>
         /// 
         /// </summary>
@@ -137,7 +140,7 @@ namespace XbimExchanger.IfcToCOBieLiteUK
         public CoBieLiteUkHelper(XbimModel model, string configurationFile = null)
         {
             _configFileName = configurationFile;
-
+           
             _model = model;
             _creatingApplication = model.Header.CreatingApplication;
             LoadCobieMaps();
@@ -169,18 +172,43 @@ namespace XbimExchanger.IfcToCOBieLiteUK
         /// <summary>
         /// 
         /// </summary>
-        public IDictionary<IfcTypeObject, List<IfcElement>> DefiningTypeObjectMap
+        public IDictionary<XbimIfcProxyTypeObject, List<IfcElement>> DefiningTypeObjectMap
         {
             get { return _definingTypeObjectMap; }
         }
         private void GetTypeMaps()
         {
-            _assetTypes = _model.Instances.OfType<IfcRelDefinesByType>().GroupBy(k => k.RelatingType.Name.HasValue ? k.RelatingType.Name.ToString() : "Undefined", v=>v.RelatingType).ToDictionary(group => group.Key, group => group.ToList());
 
-         
+            var relDefinesByType = _model.Instances.OfType<IfcRelDefinesByType>().ToList();
+            //creates a dictionary of uniqueness for type objects
+            var propertySetHashes = new Dictionary<string,string>();
+            var proxyTypesByKey = new Dictionary<string, XbimIfcProxyTypeObject>();
+            foreach (var typeObject in relDefinesByType.Select(r=>r.RelatingType))
+            {
+                var hash = GetTypeObjectHashString(typeObject);
+                if (!propertySetHashes.ContainsKey(hash))
+                {
+                    var typeName = BuildTypeName(typeObject);
+                    propertySetHashes.Add(hash, typeName);
+                    proxyTypesByKey.Add(hash, new XbimIfcProxyTypeObject(this, typeObject, typeName));
+                }
 
-            _definingTypeObjectMap = _model.Instances.OfType<IfcRelDefinesByType>().ToDictionary(k => k.RelatingType, kv => kv.RelatedObjects.OfType<IfcElement>().ToList());
-            _objectToTypeObjectMap = new Dictionary<IfcObject, IfcTypeObject>();
+            }
+
+           
+            var grouping = relDefinesByType.GroupBy(k => proxyTypesByKey[GetTypeObjectHashString(k.RelatingType)],
+                kv => kv.RelatedObjects).ToList();
+           
+            foreach (var group in grouping)
+            {
+                var allObjects = group.SelectMany(o => o).OfType<IfcElement>().ToList();  
+                _definingTypeObjectMap.Add(group.Key,allObjects);
+            }
+            
+            _objectToTypeObjectMap = new Dictionary<IfcObject, XbimIfcProxyTypeObject>();
+
+
+
             foreach (var typeObjectToObjects in _definingTypeObjectMap)
             {
                 foreach (var ifcObject in typeObjectToObjects.Value)
@@ -188,37 +216,173 @@ namespace XbimExchanger.IfcToCOBieLiteUK
                     _objectToTypeObjectMap.Add(ifcObject, typeObjectToObjects.Key);
                 }
             }
+            //get all Assets that don't belong to an Ifc Type or are not classified
+            //get all IfcElements that aren't classified or have a type
+            var existingAssets = _classifiedObjects.Keys.OfType<IfcElement>()
+                .Concat(_objectToTypeObjectMap.Keys.OfType<IfcElement>()).Distinct();
+            //retrieve all the IfcElements from the model and exclude them if they are already classified or are a member of an IfcType
+            var unCategorizedAssets = _model.Instances.OfType<IfcElement>().Except(existingAssets);
+            //convert to a Lookup with the key the type of the IfcElement and the value a list of IfcElements
+            //if the object has a classification we use this to distinguish types
+
+            var unCategorizedAssetsWithTypes = unCategorizedAssets.GroupBy
+                (t=>GetProxyTypeObject(t).Name, v => v).ToDictionary(k=>k.Key,v=>v.ToList());
+
+            foreach (var unCategorizedAssetsWithType in unCategorizedAssetsWithTypes)
+            {
+                XbimIfcProxyTypeObject proxyType;
+                if (proxyTypesByKey.ContainsKey(unCategorizedAssetsWithType.Key))
+                {
+                    proxyType = proxyTypesByKey[unCategorizedAssetsWithType.Key];
+                    _definingTypeObjectMap[proxyType].AddRange(
+                        unCategorizedAssetsWithType.Value);
+                }
+                else
+                {
+                    proxyType = new XbimIfcProxyTypeObject(unCategorizedAssetsWithType.Key);
+                    proxyTypesByKey.Add(unCategorizedAssetsWithType.Key, proxyType);
+                    _definingTypeObjectMap.Add(proxyType, unCategorizedAssetsWithType.Value);
+                }
+                foreach (var ifcObject in unCategorizedAssetsWithType.Value)
+                {
+                    _objectToTypeObjectMap.Add(ifcObject, proxyType);
+                }
+            }
+            
+           
 
             //Get asset assignments
 
             var assetRels = _model.Instances.OfType<IfcRelAssignsToGroup>()
-                .Where(r => r.RelatingGroup is IfcAsset &&
-                            r.RelatedObjects.Any(
-                                o => o is IfcTypeObject && _definingTypeObjectMap.ContainsKey((IfcTypeObject) o)));
+                .Where(r => r.RelatingGroup is IfcAsset);
 
             _assetAsignments = new Dictionary<IfcTypeObject, IfcAsset>();
             foreach (var assetRel in assetRels)
             {
                 foreach (var assetType in assetRel.RelatedObjects)
-                    AssetAsignments[(IfcTypeObject)assetType] = (IfcAsset) assetRel.RelatingGroup; 
+                    if (assetType is IfcTypeObject) 
+                        AssetAsignments[(IfcTypeObject)assetType] = (IfcAsset)assetRel.RelatingGroup; 
             }
-            //////get all Assets that don't belong to an Ifc Type or are not classified
-            //////get all IfcElements that aren't classified or have a type
-            ////var existingAssets =  _classifiedObjects.Keys.OfType<IfcElement>()
-            ////    .Concat(_objectToTypeObjectMap.Keys.OfType<IfcElement>()).Distinct();
-            //////retrieve all the IfcElements from the model and exclude them if they are already classified or are a member of an IfcType
-            ////var unCategorizedAssets = _model.Instances.OfType<IfcElement>().Except(existingAssets);
-            //////convert to a Lookup with the key the type of the IfcElement and the value a list of IfcElements
-            //////if the object has a classification we use this to distinguish types
-            ////_elementTypeToElementObjectMap = (Lookup<string,IfcElement>) unCategorizedAssets.ToLookup
-            ////    (k =>
-            ////    {
-            ////        var category = GetClassification(k); return category == null ? k.GetType().Name : k.GetType().Name + " [" + category + "]";
-            ////    }
-            ////    , v => v);
-
+           
         }
 
+        private static string GetTypeObjectHashString(IfcTypeObject typeObject)
+        {
+            var hashString = "";
+            if (typeObject.HasPropertySets != null && typeObject.HasPropertySets.Any())
+            {
+                var labels = typeObject.HasPropertySets.Select(t => t.EntityLabel).OrderBy(e => e);
+
+                foreach (var label in labels)
+                {
+                    hashString += label+":";
+                }
+            }
+            //might be good to add classification
+            hashString += typeObject.Name+":";
+            hashString += typeObject.GetType().Name;
+            return hashString;
+        }
+
+        /// <summary>
+        /// Looks at the name and the property sets of the type and tries to create a meaningful name for the type, removes duplicate types if they have no property sets
+        /// </summary>
+        /// <param name="ifcTypeObject"></param>
+        /// <param name="propertySetHashes"></param>
+        /// <returns></returns>
+        private string ResolveTypeIdentity(IfcTypeObject ifcTypeObject, Dictionary<string, string> propertySetHashes)
+        {
+            string typeName;
+            if (propertySetHashes.TryGetValue(GetTypeObjectHashString(ifcTypeObject), out typeName)) //if we have processed it just return
+                return typeName;
+            //if it has no properties from a cobie perspective only its categories, name and description distinguish it
+            
+            typeName = ifcTypeObject.Name;
+            if (string.IsNullOrWhiteSpace(typeName)) //try using the description
+                typeName = ifcTypeObject.Description;
+            if (string.IsNullOrWhiteSpace(typeName)) //try to use classification
+            {
+                var categories = GetCategories(ifcTypeObject);
+                if (categories != null && categories.Any()) //take the first one 
+                    return string.Format("{0} {1} {2}", ChangeNameFromStyleToType(ifcTypeObject), categories.First().Code, categories.First().Description);
+            }
+            if (string.IsNullOrWhiteSpace(typeName)) //this has no uniqueness, but it has property sets
+                return AllocateTypeName(ChangeNameFromStyleToType(ifcTypeObject)); //just use the type
+
+            return string.Format("{0} {1}", ChangeNameFromStyleToType(ifcTypeObject), typeName);
+            //bim tools create composite names that make them always unique though so try and undo this
+            //Look for the : separators added by revit in particular
+            //var splitName = typeName.Split(new[] {':'}, StringSplitOptions.RemoveEmptyEntries);
+            //if(splitName.Length)
+        }
+
+        private string ChangeNameFromStyleToType(IfcTypeObject ifcTypeObject)
+        {
+            if (ifcTypeObject is IfcDoorStyle )
+                return "DoorType";
+            if (ifcTypeObject is IfcWindowStyle)
+                return "WindowType";
+            return ifcTypeObject.GetType().Name.Substring(3);
+            
+        }
+
+        private string BuildTypeName(IfcTypeObject ifcTypeObject)
+        {
+            var typeName = AllocateTypeName(ChangeNameFromStyleToType(ifcTypeObject));
+            //remove names
+            return string.Format("{0} {1}", typeName, ifcTypeObject.Name);
+        }
+
+        private string AllocateTypeName(string typeName)
+        {
+            
+            if (_typeNames.ContainsKey(typeName))
+                _typeNames[typeName]++;
+            else
+                _typeNames.Add(typeName, 1);
+            return string.Format("{0}.{1}", typeName, _typeNames[typeName]);
+        }
+
+        /// <summary>
+        /// For an element gets a XbimIfcProxyTypeObject for the asset
+       /// </summary>
+       /// <param name="element"></param>
+       /// <returns></returns>
+        public XbimIfcProxyTypeObject GetProxyTypeObject(IfcElement element)
+       {
+           XbimIfcProxyTypeObject ifcTypeObject;
+            //If there is a formal IfcTypeObject then use that name
+           if (_objectToTypeObjectMap.TryGetValue(element, out ifcTypeObject))
+           {
+                return ifcTypeObject;
+           }
+
+           //get element name
+           string name = element.Name;
+           //look to see if it has been classified
+           var categories = GetCategories(element);
+           if (categories != null && categories.Any())
+           {
+               //prefer the Uniclass2015 code
+               foreach (var category in categories)
+               {
+                   if (category.Classification != null &&
+                       category.Classification.ToUpperInvariant().Contains("UNICLASS2015"))
+                       return new XbimIfcProxyTypeObject(string.Format("{0}Type {1}", element.GetType().Name.Substring(3), category.Code));
+               }
+               //otherwise take the first
+               return new XbimIfcProxyTypeObject(string.Format("{0}Type {1}", element.GetType().Name.Substring(3), categories.First().Code));
+           }
+           //its unclassified
+           if (!string.IsNullOrWhiteSpace(name))
+           {
+               
+               return new XbimIfcProxyTypeObject(string.Format("{0}Type {1}",element.GetType().Name.Substring(3), name));
+           }
+           return new XbimIfcProxyTypeObject(AllocateTypeName(element.GetType().Name.Substring(3)+"Type"));
+       }
+
+        
 
         private void LoadCobieMaps()
         {
@@ -316,17 +480,18 @@ namespace XbimExchanger.IfcToCOBieLiteUK
                     attributedObject.AddPropertySetDefinition(relProp.RelatingPropertyDefinition);  
                 }
             }
-            foreach (var typeObject in _definingTypeObjectMap.Keys)
+            //process type objects ignoring pure proxies
+            foreach (var typeObject in _definingTypeObjectMap.Keys.Where(t=>t.IfcTypeObject!=null))
             {
                 XbimAttributedObject attributedObject;
-                if (!_attributedObjects.TryGetValue(typeObject, out attributedObject))
+                if (!_attributedObjects.TryGetValue(typeObject.IfcTypeObject, out attributedObject))
                     {
-                        attributedObject = new XbimAttributedObject(typeObject);
-                        _attributedObjects.Add(typeObject, attributedObject);
+                        attributedObject = new XbimAttributedObject(typeObject.IfcTypeObject);
+                        _attributedObjects.Add(typeObject.IfcTypeObject, attributedObject);
                     }
-                if (typeObject.HasPropertySets != null)
+                if (typeObject.IfcTypeObject.HasPropertySets != null)
                 {
-                    foreach (var pset in typeObject.HasPropertySets)
+                    foreach (var pset in typeObject.IfcTypeObject.HasPropertySets)
                     {
                         attributedObject.AddPropertySetDefinition(pset);
                     }
@@ -744,7 +909,7 @@ namespace XbimExchanger.IfcToCOBieLiteUK
         /// <typeparam name="TValue"></typeparam>
         /// <returns></returns>
         /// <exception cref="ArgumentException"></exception>
-        public TValue GetCoBieProperty<TValue>(string valueName, IfcObject ifcObject) where TValue:struct
+        public TValue? GetCoBieProperty<TValue>(string valueName, IfcObject ifcObject) where TValue:struct
         {
             XbimAttributedObject attributedObject;
             if (_attributedObjects.TryGetValue(ifcObject, out attributedObject))
@@ -764,16 +929,16 @@ namespace XbimExchanger.IfcToCOBieLiteUK
                     throw new ArgumentException("Illegal COBie Attribute name:", valueName);
                 }
             }
-            return default(TValue);
+            return null;
         }
 
         
 
         private IfcTypeObject GetDefiningTypeObject(IfcObject ifcObject)
         {
-            IfcTypeObject definingType;
+            XbimIfcProxyTypeObject definingType;
             _objectToTypeObjectMap.TryGetValue(ifcObject, out definingType);
-            return definingType;
+            return definingType != null ? definingType.IfcTypeObject : null;
         }
 
         /// <summary>
@@ -1004,6 +1169,13 @@ namespace XbimExchanger.IfcToCOBieLiteUK
             if (_spaceAssetLookup.TryGetValue(ifcElement, out spaceList))
                 return spaceList;
             return Enumerable.Empty<IfcSpatialStructureElement>();
+        }
+
+        internal string GetFacilityName(IfcBuilding building)
+        {
+            if (string.IsNullOrWhiteSpace(building.Name))
+                return "Undefined";
+            return building.Name;
         }
     }
 }

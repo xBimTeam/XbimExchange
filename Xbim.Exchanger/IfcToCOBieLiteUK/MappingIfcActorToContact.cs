@@ -95,7 +95,11 @@ namespace XbimExchanger.IfcToCOBieLiteUK
             }
 
             target.Company = ifcOrganization.Name;
-
+            //if (string.IsNullOrWhiteSpace(target.Email))
+            //{
+            //    if (!string.IsNullOrWhiteSpace(target.FamilyName))
+            //        target.Email = string.Format("{0}{1}@undefined.email", ifcOrganization..FamilyName, ifcOrganization.EntityLabel);
+            //}
 
         }
 
