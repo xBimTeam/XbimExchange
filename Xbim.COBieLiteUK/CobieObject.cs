@@ -281,6 +281,7 @@ namespace Xbim.COBieLiteUK
             {
                 var cellIndex = CellReference.ConvertColStringToIndex(mapping.Column);
                 var cell = row.GetCell(cellIndex) ?? row.CreateCell(cellIndex);
+                var isPicklist = !String.IsNullOrWhiteSpace(mapping.PickList);
 
                 //set default column style
                 cell.CellStyle = sheet.GetColumnStyle(cellIndex);
@@ -338,8 +339,9 @@ namespace Xbim.COBieLiteUK
                 }
 
                 var value = GetCobieProperty(mapping, log);
-                if (value == null)
-                    cell.SetCellValue("n/a");
+                if (value == null ||
+                    (value.ValueType == CobieValueType.String && String.IsNullOrWhiteSpace(value.StringValue)))
+                    cell.SetCellValue(isPicklist ? "unknown" : "n/a");
                 else
                 {
                     switch (value.ValueType)
@@ -348,27 +350,34 @@ namespace Xbim.COBieLiteUK
                             if (value.BooleanValue.HasValue)
                                 cell.SetCellValue(value.BooleanValue ?? false);
                             else
-                                cell.SetCellValue("n/a");
+                                cell.SetCellValue(isPicklist ? "unknown" : "n/a");
                             break;
                         case CobieValueType.DateTime:
+                            //1900-12-31T23:59:59 is the default COBie date
                             var dtVal = value.DateTimeValue ?? //default date value
                                         DateTime.Parse("1900-12-31T23:59:59", null, DateTimeStyles.RoundtripKind);
+                            if (dtVal == default(DateTime))
+                                dtVal = DateTime.Parse("1900-12-31T23:59:59", null, DateTimeStyles.RoundtripKind);
+                            //according to BS1192-4 datetime should only be 19 characters long (no hours, minutes or seconds)
                             cell.SetCellValue(dtVal.ToString("O").Substring(0, 19));
                             break;
                         case CobieValueType.Double:
                             if (value.DoubleValue.HasValue)
                                 cell.SetCellValue(value.DoubleValue ?? 0);
                             else
-                                cell.SetCellValue("n/a");
+                                cell.SetCellValue(isPicklist ? "unknown" : "n/a");
                             break;
                         case CobieValueType.Integer:
                             if (value.IntegerValue.HasValue)
                                 cell.SetCellValue(value.IntegerValue ?? 0);
                             else
-                                cell.SetCellValue("n/a");
+                                cell.SetCellValue(isPicklist ? "unknown" : "n/a");
                             break;
                         case CobieValueType.String:
-                            cell.SetCellValue(value.StringValue ?? "n/a");
+                            if (String.IsNullOrWhiteSpace(value.StringValue))
+                                cell.SetCellValue(isPicklist ? "unknown" : "n/a");
+                            else
+                                cell.SetCellValue(value.StringValue);
                             break;
                         default:
                             throw new Exception("Unexpected data type");
