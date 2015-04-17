@@ -107,6 +107,7 @@
     <Compile Include="ProjectValidator.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="FacilityValidator.cs" />
+    <Compile Include="Reporting\DocumentsDetailedReport.cs" />
     <Compile Include="Reporting\TwoLevelDetailedGridReport.cs" />
     <Compile Include="Reporting\TwoLevelRequirementPointer.cs" />
     <Compile Include="Reporting\GroupingObjectSummaryReport.cs" />
