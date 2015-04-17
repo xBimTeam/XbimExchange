@@ -1386,6 +1386,7 @@ namespace Xbim.COBieLiteUK {
     [global::System.ComponentModel.DesignerCategoryAttribute("code")]
     [global::System.Xml.Serialization.XmlTypeAttribute(Namespace="http://openbim.org/schemas/cobieliteuk")]
     [global::System.Xml.Serialization.XmlRootAttribute(Namespace="http://openbim.org/schemas/cobieliteuk", IsNullable=true)]
+    [Xbim.COBieLiteUK.Parent(DataType = typeof(Facility))]
     [Xbim.COBieLiteUK.SheetMapping(Type="UK2012", Sheet="Document", IsExtension=false)]
     [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="A", Header="Name", Required=true, List=false, PickList=null, Path="Name", IsExtension=false)]
     [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="B", Header="CreatedBy", Required=true, List=false, PickList=null, Path="CreatedBy.Email", IsExtension=false)]
