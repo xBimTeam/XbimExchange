@@ -2,7 +2,7 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2011/10/nuspec.xsd">
     <metadata>
         <id>Xbim.Exchange</id>
-        <version>3.0.64-Prerelease</version>
+        <version>3.0.65-Prerelease</version>
         <title>xBIM Exchange</title>
         <authors>xBIM team</authors>
         <owners>Steve Lockley</owners>
@@ -22,7 +22,7 @@ IOS and Android versions are under development.</description>
       <tags>BIM, IFC, IfcXml, IfcZip, COBie, COBieLite, .Net, C#, BuildingSmart</tags>
       <dependencies>
         <dependency id="NPOI" version="2.1.3.1" />
-        <dependency id="Xbim.Geometry" version="3.0.17-Alpha" />
+        <dependency id="Xbim.Geometry" version="3.0.18-Alpha" />
         <dependency id="Xbim.Essentials" version="3.0.19" />
       </dependencies>
     </metadata>
