@@ -236,6 +236,20 @@ namespace Xbim.COBieLiteUK
             return result;
         }
 
+        private void SetDefaultCellValue(MappingAttribute mapping, ICell cell)
+        {
+            if (!String.IsNullOrWhiteSpace(mapping.PickList))
+            {
+                cell.SetCellValue("unknown");
+                return;
+            }
+            if (mapping.IsExtension)
+            {
+                return ;
+            }
+            cell.SetCellValue("n/a");
+        }
+
         internal virtual void WriteToCobie(IWorkbook workbook, TextWriter log, CobieObject parent,
             Dictionary<Type, int> rowNumCache, List<string> pickValuesCache, Dictionary<string, int> headerCache,
             string version = "UK2012")
@@ -341,7 +355,7 @@ namespace Xbim.COBieLiteUK
                 var value = GetCobieProperty(mapping, log);
                 if (value == null ||
                     (value.ValueType == CobieValueType.String && String.IsNullOrWhiteSpace(value.StringValue)))
-                    cell.SetCellValue(isPicklist ? "unknown" : "n/a");
+                    SetDefaultCellValue(mapping, cell);
                 else
                 {
                     switch (value.ValueType)
@@ -350,7 +364,7 @@ namespace Xbim.COBieLiteUK
                             if (value.BooleanValue.HasValue)
                                 cell.SetCellValue(value.BooleanValue ?? false);
                             else
-                                cell.SetCellValue(isPicklist ? "unknown" : "n/a");
+                                SetDefaultCellValue(mapping, cell);
                             break;
                         case CobieValueType.DateTime:
                             //1900-12-31T23:59:59 is the default COBie date
@@ -365,17 +379,17 @@ namespace Xbim.COBieLiteUK
                             if (value.DoubleValue.HasValue)
                                 cell.SetCellValue(value.DoubleValue ?? 0);
                             else
-                                cell.SetCellValue(isPicklist ? "unknown" : "n/a");
+                                SetDefaultCellValue(mapping, cell);
                             break;
                         case CobieValueType.Integer:
                             if (value.IntegerValue.HasValue)
                                 cell.SetCellValue(value.IntegerValue ?? 0);
                             else
-                                cell.SetCellValue(isPicklist ? "unknown" : "n/a");
+                                SetDefaultCellValue(mapping, cell);
                             break;
                         case CobieValueType.String:
                             if (String.IsNullOrWhiteSpace(value.StringValue))
-                                cell.SetCellValue(isPicklist ? "unknown" : "n/a");
+                                SetDefaultCellValue(mapping, cell);
                             else
                                 cell.SetCellValue(value.StringValue);
                             break;

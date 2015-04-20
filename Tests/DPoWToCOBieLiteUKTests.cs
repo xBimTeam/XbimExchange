@@ -58,7 +58,7 @@ namespace Tests
         [TestMethod]
         public void ConvertDPoWToAll()
         {
-            var pow = PlanOfWork.OpenJson("013-Lakeside_Restaurant.dpow");
+            var pow = PlanOfWork.OpenJson("001-Lakeside_Restaurant.dpow");
             const string dir = "..\\..\\COBieLiteUK";
             if (!Directory.Exists(dir)) Directory.CreateDirectory(dir);
             string msg;

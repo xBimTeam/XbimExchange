@@ -70,6 +70,10 @@
       <HintPath>..\packages\Xbim.Essentials.3.0.19\lib\net45\Xbim.IO.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="Xbim.Properties, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Xbim.PropertySets.1.0.2\lib\net45\Xbim.Properties.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="COBieLiteHelpers\AssetTypeInfoTypeComparer.cs" />

@@ -5,8 +5,10 @@ using System.Text;
 using System.Threading.Tasks;
 using Xbim.COBieLiteUK;
 using Xbim.DPoW;
+using Xbim.Properties;
 using Attribute = Xbim.COBieLiteUK.Attribute;
 using ProjectStage = Xbim.DPoW.ProjectStage;
+using Version = Xbim.Properties.Version;
 
 namespace XbimExchanger.DPoWToCOBieLiteUK
 {
@@ -14,12 +16,15 @@ namespace XbimExchanger.DPoWToCOBieLiteUK
         where TFrom : DPoWObject
         where TTo : CobieObject, new() 
     {
+        
+
         protected override TTo Mapping(TFrom sObject, TTo tObject)
         {
             //perform base mapping where free attributes are converted
             base.Mapping(sObject, tObject);
 
             tObject.ExternalId = sObject.Id.ToString();
+            tObject.ExternalEntity = sObject.GetType().Name;
             tObject.ExternalSystem = "DPoW";
             tObject.Name = sObject.Name;
             tObject.Description = sObject.Description;
@@ -42,6 +47,7 @@ namespace XbimExchanger.DPoWToCOBieLiteUK
             //LOI
             if (sObject.RequiredLOI != null)
             {
+                
                 if (tObject.Attributes == null) tObject.Attributes = new List<Attribute>();
                 var loi = sObject.RequiredLOI;
                 tObject.Attributes.Add("RequiredLOICode", "Required LOI Code", loi.Code, "RequiredLOI");
@@ -50,11 +56,10 @@ namespace XbimExchanger.DPoWToCOBieLiteUK
                 foreach (var sAttr in loi.RequiredAttributes)
                     tObject.Attributes.Add(new Attribute
                     {
-                        ExternalEntity = sAttr.PropertySetName,
                         Categories = new List<Category> { new Category{ Code = "required" , Classification = "DPoW"} },
                         Name = sAttr.Name, 
                         Description = sAttr.Description,
-                        PropertySetName = "DPoW Specified"
+                        PropertySetName = GetPsetName(GetUniclass2015(tObject.Categories), sAttr.Name)
                     });
             }
             
@@ -80,6 +85,58 @@ namespace XbimExchanger.DPoWToCOBieLiteUK
             }
 
             return tObject;
+        }
+
+        private static readonly Definitions<PropertySetDef> PsetDefinitions;
+        public static Dictionary<string, string> _psetDefinitionsCache = new Dictionary<string, string>();
+
+        static MappingDPoWObjectToCOBieObject()
+        {
+            PsetDefinitions = new Definitions<PropertySetDef>(Version.IFC4);
+            PsetDefinitions.LoadIFC4AndCOBie();
+        }
+
+
+        private string GetPsetName(Category category, string propertyName)
+        {
+            //get rid of any spaces in the name for a search
+            propertyName = propertyName.Replace(" ", "");
+
+            //try to get from cache
+            string name;
+            if (_psetDefinitionsCache.TryGetValue(propertyName, out name))
+                return name;
+
+            var psets = PsetDefinitions.DefinitionSets.Where(pset => pset.Definitions.Any(p => p.Name == propertyName)).ToArray();
+            if (psets.Length == 1)
+            {
+                _psetDefinitionsCache.Add(propertyName, psets[0].Name);
+                return psets[0].Name;
+            }
+
+            return category == null ? 
+                "DPoW_Specified" : 
+                String.Join("_", "DPoW", category.Code, category.Description);
+        }
+
+        private Category GetUniclass2015(IEnumerable<Category> cats)
+        {
+            var categories = cats as Category[] ?? cats.ToArray();
+            if (cats == null || !categories.Any())
+                return null;
+
+            foreach (var category in categories)
+            {
+                if(String.IsNullOrWhiteSpace(category.Classification)) continue;
+                
+                var clsName = (category.Classification ?? "").ToLower();
+                if (clsName == "uniclass2015")
+                    return category;
+                if (clsName.Contains("uniclass") && clsName.Contains("2015"))
+                    return category;
+            }
+
+            return null;
         }
     }
 }
