@@ -11,6 +11,7 @@ using Attribute = Xbim.COBieLiteUK.Attribute;
 using Contact = Xbim.COBieLiteUK.Contact;
 using SpaceType = Xbim.DPoW.SpaceType;
 using FacilityType = Xbim.COBieLiteUK.Facility;
+using ProjectStage = Xbim.COBieLiteUK.ProjectStage;
 using System = Xbim.COBieLiteUK.System;
 
 namespace XbimExchanger.DPoWToCOBieLiteUK
@@ -19,8 +20,15 @@ namespace XbimExchanger.DPoWToCOBieLiteUK
     {
         protected override FacilityType Mapping(PlanOfWork source, FacilityType target)
         {
+            //convert attributes
+            base.Mapping(source, target);
+
             target.ExternalId = source.Id.ToString();
             target.ExternalSystem = "DPoW";
+            
+            //convert contacts and roles (roles are contacts with ContactCategory == 'Role')
+            ConvertContacts(source, target);
+            ConvertRoles(source, target);
             
             //convert fafility related information
             ConvertFacility(source, target);
@@ -28,9 +36,7 @@ namespace XbimExchanger.DPoWToCOBieLiteUK
             //convert project with units
             ConvertProject(source, target);
 
-            //convert contacts and roles (roles are contacts with ContactCategory == 'Role')
-            ConvertContacts(source, target);
-            ConvertRoles(source, target);
+            
 
             //convert DPoW objects and related jobs from the specified stage
             var stage = Exchanger.Context as Xbim.DPoW.ProjectStage ?? source.Project.GetCurrentProjectStage(source);
@@ -50,7 +56,7 @@ namespace XbimExchanger.DPoWToCOBieLiteUK
 
                 //convert free stage attributes
                 //add project free attributes to facility
-                var stageAttrs = stage.GetCOBieAttributes();
+                var stageAttrs = stage.GetCOBieAttributes(target.CreatedOn, target.CreatedBy.Email);
                 var attrs = stageAttrs as Attribute[] ?? stageAttrs.ToArray();
                 if (attrs.Any())
                 {
@@ -59,10 +65,16 @@ namespace XbimExchanger.DPoWToCOBieLiteUK
                     if (target.Attributes == null) target.Attributes = new List<Attribute>();
                     target.Attributes.AddRange(attrs);
                 }
+
+                //convert stage
+                var stMapping = Exchanger.GetOrCreateMappings<MappingProjectStageToProjectStage>();
+                var tStage = stMapping.GetOrCreateTargetObject(stage.Id.ToString());
+                stMapping.AddMapping(stage, tStage);
+                if(target.Stages == null) target.Stages = new List<ProjectStage>();
+                target.Stages.Add(tStage);
             }
 
-            //convert attributes
-            base.Mapping(source, target);
+            
 
             //make sure all components live in at least one default system
             foreach (var assetType in target.AssetTypes ?? new List<AssetType>())
@@ -123,7 +135,7 @@ namespace XbimExchanger.DPoWToCOBieLiteUK
             target.VolumeUnitsCustom = sProject.VolumeUnits.ToString();
 
             //add project free attributes to facility
-            var attrs = sProject.GetCOBieAttributes().ToArray();
+            var attrs = sProject.GetCOBieAttributes(target.CreatedOn, target.CreatedBy.Email).ToArray();
             foreach (var attr in attrs)
                 attr.PropertySetName = "ProjectAttributes";
             if (attrs.Any())
@@ -136,7 +148,7 @@ namespace XbimExchanger.DPoWToCOBieLiteUK
             var stage = Exchanger.Context as Xbim.DPoW.ProjectStage;
             if (stage != null)
             {
-                var stageAttrs = stage.GetCOBieAttributes().ToArray();
+                var stageAttrs = stage.GetCOBieAttributes(target.CreatedOn, target.CreatedBy.Email).ToArray();
                 foreach (var attr in stageAttrs)
                     attr.PropertySetName = "ProjecStagetAttributes";
                 if (stageAttrs.Any())
@@ -171,19 +183,30 @@ namespace XbimExchanger.DPoWToCOBieLiteUK
 
             var clientId = source.Client != null ? source.Client.Id : new Guid();
 
+            //Set the Client to be the first
+            if (clientId != default(Guid))
+            {
+                var client = source.Contacts.FirstOrDefault(c => c.Id == clientId);
+                if (client != null)
+                {
+                    source.Contacts.Remove(client);
+                    source.Contacts.Insert(0, client);
+                }
+            }
+
             foreach (var sContact in source.Contacts)
             {
                 var key = sContact.Id.ToString();
                 var tContact = mappings.GetOrCreateTargetObject(key);
+                mappings.AddMapping(sContact, tContact);
 
                 //set client role as a contact category
                 if (sContact.Id == clientId)
                 {
-                    if (tContact.Categories == null) tContact.Categories = new List<Category>();
-                    tContact.Categories.Add(new Category() { Classification = "DPoW", Code = "Client" });
+                    tContact.Categories = new List<Category> {new Category() {Classification = "DPoW", Code = "Client"}};
+                    tContact.CreatedBy = new ContactKey{Email = tContact.Email};
                 }
 
-                mappings.AddMapping(sContact, tContact);
                 target.Contacts.Add(tContact);
             }
         }

@@ -10,10 +10,12 @@ namespace XbimExchanger.DPoWToCOBieLiteUK
     {
         protected override TTo Mapping(TFrom source, TTo target)
         {
+            base.Mapping(source, target);
+
             if (source.Attributes == null || !source.Attributes.Any())
                 return target;
 
-            var tAttrs = source.GetCOBieAttributes();
+            var tAttrs = source.GetCOBieAttributes(target.CreatedOn, target.CreatedBy.Email);
             if (target.Attributes == null) target.Attributes = new List<Attribute>();
             target.Attributes.AddRange(tAttrs);
 

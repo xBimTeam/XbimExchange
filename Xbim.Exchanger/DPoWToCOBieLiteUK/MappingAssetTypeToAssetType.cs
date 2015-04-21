@@ -33,7 +33,9 @@ namespace XbimExchanger.DPoWToCOBieLiteUK
                 ExternalId = Guid.NewGuid().ToString(),
                 ExternalSystem = "DPoW",
                 Description = sObject.Description,
-                Name = sObject.Name
+                Name = sObject.Name,
+                CreatedOn = DateTime.Now,
+                CreatedBy = new ContactKey{Email = tObject.CreatedBy.Email}
             });
 
 

@@ -84,18 +84,6 @@ namespace XbimExchanger.DPoWToCOBieLiteUK
                 tObject.ProjectStages.Add(new ProjectStageKey {Name = stage.Name});
             }
 
-            //set CreatedBy to Client
-            if (Exchanger.SourceRepository.Client != null)
-            {
-                var cKey = Exchanger.SourceRepository.Client.Id.ToString();
-                var cMapping = Exchanger.GetOrCreateMappings<MappingContactToContact>();
-                var tContact = cMapping.GetOrCreateTargetObject(cKey);
-                tObject.CreatedBy = new ContactKey {Email = tContact.Email};
-            }
-
-            //set CreatedOn
-            tObject.CreatedOn = Exchanger.SourceRepository.CreatedOn;
-
             return tObject;
         }
 

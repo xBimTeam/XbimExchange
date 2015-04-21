@@ -43,7 +43,7 @@ namespace XbimExchanger.COBieLiteUkToIfc
                 {
                     var ifcSpace = spaceMapping.AddMapping(space, spaceMapping.GetOrCreateTargetObject(space.ExternalId));
                     buildingStorey.AddToSpatialDecomposition(ifcSpace);
-                    //Exchanger.AddToSpaceMap(ifcSpace);
+                    Exchanger.AddToSpaceMap(ifcSpace);
                 }
             }
 

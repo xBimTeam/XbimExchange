@@ -47,7 +47,7 @@ namespace XbimExchanger.DPoWToCOBieLiteUK
                         CreatedOn = DateTime.Now,
                         Name = name,
                         Description = description,
-                        ExternalEntity = pset,
+                        PropertySetName = pset,
                         Value = new StringAttributeValue { Value = value}
                     });
         }
@@ -59,7 +59,7 @@ namespace XbimExchanger.DPoWToCOBieLiteUK
                 CreatedOn = DateTime.Now,
                 Name = name,
                 Description = description,
-                ExternalEntity = pset,
+                PropertySetName = pset,
                 Value = new IntegerAttributeValue { Value = value }
             });
         }
@@ -71,7 +71,7 @@ namespace XbimExchanger.DPoWToCOBieLiteUK
                 CreatedOn = DateTime.Now,
                 Name = name,
                 Description = description,
-                ExternalEntity = pset,
+                PropertySetName = pset,
                 Value = new DecimalAttributeValue { Value = value }
             });
         }
@@ -83,7 +83,7 @@ namespace XbimExchanger.DPoWToCOBieLiteUK
                 CreatedOn = DateTime.Now,
                 Name = name,
                 Description = description,
-                ExternalEntity = pset,
+                PropertySetName = pset,
                 Value = new BooleanAttributeValue { Value = value }
             });
         }
@@ -98,7 +98,7 @@ namespace XbimExchanger.DPoWToCOBieLiteUK
             });
         }
 
-        public static IEnumerable<CAttribute> GetCOBieAttributes(this DPoWAttributableObject obj)
+        public static IEnumerable<CAttribute> GetCOBieAttributes(this DPoWAttributableObject obj, DateTime? createdOn, string createdBy)
         {
             IEnumerable<Xbim.DPoW.Attribute> sAttributes = obj.Attributes;
             var sAttrs = sAttributes as DAttribute[] ?? sAttributes.ToArray();
@@ -108,7 +108,14 @@ namespace XbimExchanger.DPoWToCOBieLiteUK
             foreach (var sAttr in sAttrs)
             {
                 //create attribute in target
-                var tAttr = new CAttribute { Name = sAttr.Name, Description = sAttr.Definition, PropertySetName = "DPoW Attributes"};
+                var tAttr = new CAttribute
+                {
+                    Name = sAttr.Name, 
+                    Description = sAttr.Definition, 
+                    PropertySetName = "DPoW Attributes",
+                    CreatedOn = createdOn,
+                    CreatedBy = new ContactKey{Email = createdBy}
+                };
                 switch (sAttr.ValueType)
                 {
                     case ValueTypeEnum.NotDefined:
