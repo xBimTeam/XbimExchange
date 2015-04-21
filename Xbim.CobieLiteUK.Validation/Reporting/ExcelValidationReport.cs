@@ -200,7 +200,7 @@ namespace Xbim.CobieLiteUK.Validation.Reporting
                 var excelRow = detailSheet.GetRow(0) ?? detailSheet.CreateRow(0);
                 var excelCell = excelRow.GetCell(0) ?? excelRow.CreateCell(0);
                 SetHeader(excelCell);
-                excelCell.SetCellValue("Requirement report");
+                excelCell.SetCellValue("Asset Type and assets report");
 
                 var rep = new TwoLevelDetailedGridReport<AssetType, Asset>(requirementPointer);
                 rep.PrepareReport();
@@ -322,7 +322,7 @@ namespace Xbim.CobieLiteUK.Validation.Reporting
                 var excelRow = detailSheet.GetRow(0) ?? detailSheet.CreateRow(0);
                 var excelCell = excelRow.GetCell(0) ?? excelRow.CreateCell(0);
                 SetHeader(excelCell);
-                excelCell.SetCellValue("Asset type requirement report");
+                excelCell.SetCellValue("Zone and spaces report");
 
                 var rep = new TwoLevelDetailedGridReport<Zone, Space>(requirementPointer);
                 rep.PrepareReport();
@@ -452,13 +452,13 @@ namespace Xbim.CobieLiteUK.Validation.Reporting
                 var excelRow = summaryPage.GetRow(0) ?? summaryPage.CreateRow(0);  
                 var excelCell = excelRow.GetCell(0) ?? excelRow.CreateCell(0);
                 SetHeader(excelCell);
-                excelCell.SetCellValue("Validation Report Summary");
+                excelCell.SetCellValue("Facility summary");
                 var iRunningRow = 2;
                 
-                var assetTypesReport = new GroupingObjectSummaryReport<CobieObject>(facility.AssetTypes);
+                var assetTypesReport = new GroupingObjectSummaryReport<CobieObject>(facility.AssetTypes, "Asset types report");
                 iRunningRow = WriteReportToPage(summaryPage, assetTypesReport.GetReport(PreferredClassification), iRunningRow);
 
-                var zonesReport = new GroupingObjectSummaryReport<CobieObject>(facility.Zones);
+                var zonesReport = new GroupingObjectSummaryReport<CobieObject>(facility.Zones, "Zones report");
                 iRunningRow = WriteReportToPage(summaryPage, zonesReport.GetReport(PreferredClassification), iRunningRow);
 
                 var docReport = new DocumentsReport(facility.Documents);
@@ -482,6 +482,8 @@ namespace Xbim.CobieLiteUK.Validation.Reporting
             
             var iRunningColumn = 0;
 
+
+
             var cellStyle = summaryPage.Workbook.CreateCellStyle();
             cellStyle.BorderBottom = BorderStyle.Thick;
             cellStyle.BorderLeft = BorderStyle.Thin;
@@ -496,7 +498,12 @@ namespace Xbim.CobieLiteUK.Validation.Reporting
             failCellStyle.FillForegroundColor = IndexedColors.Red.Index;
 
             IRow excelRow = summaryPage.GetRow(startingRow) ?? summaryPage.CreateRow(startingRow);
-            ICell excelCell;
+            ICell excelCell = excelRow.GetCell(iRunningColumn) ?? excelRow.CreateCell(iRunningColumn);
+
+            excelCell.SetCellValue(table.TableName);
+            startingRow++;
+
+            excelRow = summaryPage.GetRow(startingRow) ?? summaryPage.CreateRow(startingRow);
             foreach (DataColumn tCol in table.Columns)
             {
                 if (tCol.AutoIncrement)

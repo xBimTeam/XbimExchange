@@ -107,6 +107,7 @@ namespace Xbim.CobieLiteUK.Validation.Reporting
         private void SetBasicGrid()
         {
             _attributesGrid = new DataTable();
+            _attributesGrid.TableName = "Detailed Documents report";
             // Id
             var workCol = AttributesGrid.Columns.Add("DPoW_ID", typeof(Int32));
             workCol.AllowDBNull = false;
