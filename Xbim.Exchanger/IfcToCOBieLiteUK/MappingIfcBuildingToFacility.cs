@@ -5,6 +5,7 @@ using Xbim.Ifc2x3.Extensions;
 using Xbim.Ifc2x3.Kernel;
 using Xbim.Ifc2x3.ProductExtension;
 using Xbim.IO;
+using System = Xbim.COBieLiteUK.System;
 
 namespace XbimExchanger.IfcToCOBieLiteUK
 {
@@ -111,21 +112,19 @@ namespace XbimExchanger.IfcToCOBieLiteUK
             }
 
             //Systems
-            //var allSystemsInThisFacility = helper.SystemAssignment
-            //    .Where(v => v.Value.Any(allIfcTypes.Contains))
-            //    .Select(k => k.Key).ToArray();
-            //var ifcSystems = helper.SystemAssignment;
-            //if (helper.SystemAssignment.Any())
-            //{
-            //    facility.Systems = new List<Xbim.COBieLiteUK.System>(ifcSystems.Count);
-            //    var systemMappings = Exchanger.GetOrCreateMappings<MappingIfcSystemToSystem>();
-            //    foreach (var ifcSystem in ifcSystems.Keys)
-            //    {
-            //        var system = new Xbim.COBieLiteUK.System();
-            //        system = systemMappings.AddMapping(ifcSystem, system);
-            //        facility.Systems.Add(system);
-            //    }
-            //}
+           
+            var ifcSystems = helper.SystemAssignment;
+            if (ifcSystems.Any())
+            {
+                facility.Systems = new List<Xbim.COBieLiteUK.System>(ifcSystems.Count);
+                var systemMappings = Exchanger.GetOrCreateMappings<MappingIfcSystemToSystem>();
+                foreach (var ifcSystem in ifcSystems.Keys)
+                {
+                    var system = new Xbim.COBieLiteUK.System();
+                    system = systemMappings.AddMapping(ifcSystem, system);
+                    facility.Systems.Add(system);
+                }
+            }
 
             //Contacts
             var ifcActorSelects = helper.Contacts;
@@ -160,20 +159,29 @@ namespace XbimExchanger.IfcToCOBieLiteUK
             }
             if (facility.Zones != null) facility.Zones.Add(defaultZone);
             //assign all assets that are not in a system to the default
-            var assets = facility.Get<Asset>().ToList();
+            var assetTypes = facility.Get<AssetType>().ToList();
+            var systemsWritten = facility.Get<Xbim.COBieLiteUK.System>();
+            var assetsAssignedToSystem = new HashSet<string>(systemsWritten.SelectMany(s => s.Components).Select(a => a.Name));
             var systems = facility.Systems ?? new List<Xbim.COBieLiteUK.System>();
             var defaultSystem = helper.CreateDefaultSystem();
-            foreach (
-                var asset in
-                    assets.Where(
-                        asset => !systems.Any(s => s.Components!= null && s.Components.Select(a => a.Name).Contains(asset.Name)))
-                )
+            //go over all unasigned assets
+            foreach (var assetType in assetTypes)
             {
+                Xbim.COBieLiteUK.System assetTypeSystem = null;
+                foreach (var asset in assetType.Assets.Where(a=>!assetsAssignedToSystem.Contains(a.Name)))
+                {
+                    if (assetTypeSystem == null)
+                    {
+                        assetTypeSystem = helper.CreateDefaultSystem();
+                        assetTypeSystem.Name = string.Format("System {0} ", assetType.Name);
+                        
+                    }
+                    assetTypeSystem.Components.Add(new AssetKey { Name = asset.Name });
+                }
                 if (facility.Systems == null) facility.Systems = new List<Xbim.COBieLiteUK.System>();
-                
-                defaultSystem.Components.Add(new AssetKey { Name = asset.Name });
+                facility.Systems.Add(assetTypeSystem);
             }
-            if (facility.Systems != null) facility.Systems.Add(defaultSystem);
+           
 
             //write out contacts created in the process
             if (helper.SundryContacts.Any())
