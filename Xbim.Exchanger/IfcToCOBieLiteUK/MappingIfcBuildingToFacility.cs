@@ -114,18 +114,18 @@ namespace XbimExchanger.IfcToCOBieLiteUK
             //var allSystemsInThisFacility = helper.SystemAssignment
             //    .Where(v => v.Value.Any(allIfcTypes.Contains))
             //    .Select(k => k.Key).ToArray();
-            var ifcSystems = helper.SystemAssignment;
-            if (helper.SystemAssignment.Any())
-            {
-                facility.Systems = new List<Xbim.COBieLiteUK.System>(ifcSystems.Count);
-                var systemMappings = Exchanger.GetOrCreateMappings<MappingIfcSystemToSystem>();
-                foreach (var ifcSystem in ifcSystems.Keys)
-                {
-                    var system = new Xbim.COBieLiteUK.System();
-                    system = systemMappings.AddMapping(ifcSystem, system);
-                    facility.Systems.Add(system);
-                }
-            }
+            //var ifcSystems = helper.SystemAssignment;
+            //if (helper.SystemAssignment.Any())
+            //{
+            //    facility.Systems = new List<Xbim.COBieLiteUK.System>(ifcSystems.Count);
+            //    var systemMappings = Exchanger.GetOrCreateMappings<MappingIfcSystemToSystem>();
+            //    foreach (var ifcSystem in ifcSystems.Keys)
+            //    {
+            //        var system = new Xbim.COBieLiteUK.System();
+            //        system = systemMappings.AddMapping(ifcSystem, system);
+            //        facility.Systems.Add(system);
+            //    }
+            //}
 
             //Contacts
             var ifcActorSelects = helper.Contacts;
