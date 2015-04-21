@@ -36,9 +36,7 @@ namespace Xbim.CobieLiteUK.Validation
         {
             if (_requirementType.Attributes == null) 
                 return Enumerable.Empty<Attribute>();
-            return _requirementType.Attributes.Where(x =>
-                x.Categories != null &&
-                x.Categories.Any(c => c.Classification == "DPoW" && c.Code == "required"));
+            return _requirementType.Attributes.Where(x => x.IsClassifiedAsRequirement());
         }
 
         private void RefreshRequirementDetails()
@@ -118,7 +116,7 @@ namespace Xbim.CobieLiteUK.Validation
                 return retType;
             }
 
-            // ==================== begin testing
+            // ==================== begin testing at parent level
 
             CachedPropertiesAndAttributesValidator<T> parentCachedValidator;
             try
@@ -165,8 +163,9 @@ namespace Xbim.CobieLiteUK.Validation
 
             retType.Description = string.Format("{0} of {1} requirement addressed.", RequirementDetails.Count - outstandingRequirementsCount, RequirementDetails.Count);
             var anyChildFails = false;
-            
-            // perform tests at child level
+
+            // ==================== begin testing at child level
+            // 
             if (candidateChildren != null)
             {
                 foreach (var modelChild in candidateChildren)

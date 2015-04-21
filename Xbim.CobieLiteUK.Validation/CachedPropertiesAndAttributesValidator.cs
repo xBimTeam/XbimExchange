@@ -51,7 +51,7 @@ namespace Xbim.CobieLiteUK.Validation
             var propValue = _assetToTest.GetCobieProperty(req.Name);
             if (propValue != null)
             {
-                retValue = propValue.ToObject();
+                retValue = AttributeValue.CreateFromObject(propValue);
                 ret = req.IsSatisfiedBy(propValue);
                 if (ret)
                     return RememberResult(req, true);
