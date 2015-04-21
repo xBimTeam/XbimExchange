@@ -17,7 +17,6 @@ using Xbim.Ifc2x3.QuantityResource;
 using Xbim.Ifc2x3.SharedBldgElements;
 using Xbim.Ifc2x3.SharedFacilitiesElements;
 using Xbim.IO;
-using Xbim.IO.DynamicGrouping;
 using Xbim.XbimExtensions.SelectTypes;
 using Attribute = Xbim.COBieLiteUK.Attribute;
 using SystemAssembly = System.Reflection.Assembly;
@@ -129,9 +128,18 @@ namespace XbimExchanger.IfcToCOBieLiteUK
         #endregion
 
         private readonly string _configFileName;
-        private Dictionary<String, List<IfcTypeObject>> _assetTypes;
-        private ILookup<string, IfcElement> _elementTypeToElementObjectMap;
-        
+        private List<IfcActorSelect> _contacts;
+        private Dictionary<IfcPersonAndOrganization, ContactKey> _createdByKeys;
+        private Dictionary<IfcActorSelect, IfcActor> _actors;
+        public static  ContactKey XbimCreatedByKey;
+        private Dictionary<string, Contact> _sundryContacts;
+
+        static CoBieLiteUkHelper()
+        {
+            XbimCreatedByKey = new ContactKey {Email = "XbimTeam@OpenBIM.org"};
+
+        }
+
         /// <summary>
         /// 
         /// </summary>
@@ -144,6 +152,7 @@ namespace XbimExchanger.IfcToCOBieLiteUK
             _model = model;
             _creatingApplication = model.Header.CreatingApplication;
             LoadCobieMaps();
+            GetContacts();
             GetClassificationDictionary();
             GetSpacesAndZones();
             GetUnits();
@@ -211,7 +220,7 @@ namespace XbimExchanger.IfcToCOBieLiteUK
 
             foreach (var typeObjectToObjects in _definingTypeObjectMap)
             {
-                foreach (var ifcObject in typeObjectToObjects.Value)
+                foreach (var ifcObject in typeObjectToObjects.Value.Where(t=>!(t is IfcFeatureElement)))
                 {
                     _objectToTypeObjectMap.Add(ifcObject, typeObjectToObjects.Key);
                 }
@@ -221,7 +230,9 @@ namespace XbimExchanger.IfcToCOBieLiteUK
             var existingAssets = _classifiedObjects.Keys.OfType<IfcElement>()
                 .Concat(_objectToTypeObjectMap.Keys.OfType<IfcElement>()).Distinct();
             //retrieve all the IfcElements from the model and exclude them if they are already classified or are a member of an IfcType
-            var unCategorizedAssets = _model.Instances.OfType<IfcElement>().Except(existingAssets);
+            var unCategorizedAssets = _model.Instances.OfType<IfcElement>()
+                .Where(t => !(t is IfcFeatureElement))
+                .Except(existingAssets);
             //convert to a Lookup with the key the type of the IfcElement and the value a list of IfcElements
             //if the object has a classification we use this to distinguish types
 
@@ -282,38 +293,6 @@ namespace XbimExchanger.IfcToCOBieLiteUK
             hashString += typeObject.Name+":";
             hashString += typeObject.GetType().Name;
             return hashString;
-        }
-
-        /// <summary>
-        /// Looks at the name and the property sets of the type and tries to create a meaningful name for the type, removes duplicate types if they have no property sets
-        /// </summary>
-        /// <param name="ifcTypeObject"></param>
-        /// <param name="propertySetHashes"></param>
-        /// <returns></returns>
-        private string ResolveTypeIdentity(IfcTypeObject ifcTypeObject, Dictionary<string, string> propertySetHashes)
-        {
-            string typeName;
-            if (propertySetHashes.TryGetValue(GetTypeObjectHashString(ifcTypeObject), out typeName)) //if we have processed it just return
-                return typeName;
-            //if it has no properties from a cobie perspective only its categories, name and description distinguish it
-            
-            typeName = ifcTypeObject.Name;
-            if (string.IsNullOrWhiteSpace(typeName)) //try using the description
-                typeName = ifcTypeObject.Description;
-            if (string.IsNullOrWhiteSpace(typeName)) //try to use classification
-            {
-                var categories = GetCategories(ifcTypeObject);
-                if (categories != null && categories.Any()) //take the first one 
-                    return string.Format("{0} {1} {2}", ChangeNameFromStyleToType(ifcTypeObject), categories.First().Code, categories.First().Description);
-            }
-            if (string.IsNullOrWhiteSpace(typeName)) //this has no uniqueness, but it has property sets
-                return AllocateTypeName(ChangeNameFromStyleToType(ifcTypeObject)); //just use the type
-
-            return string.Format("{0} {1}", ChangeNameFromStyleToType(ifcTypeObject), typeName);
-            //bim tools create composite names that make them always unique though so try and undo this
-            //Look for the : separators added by revit in particular
-            //var splitName = typeName.Split(new[] {':'}, StringSplitOptions.RemoveEmptyEntries);
-            //if(splitName.Length)
         }
 
         private string ChangeNameFromStyleToType(IfcTypeObject ifcTypeObject)
@@ -680,12 +659,16 @@ namespace XbimExchanger.IfcToCOBieLiteUK
             get { return _zoneSpaces; }
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        public Dictionary<string, List<IfcTypeObject>> AssetTypes
+
+
+        public List<IfcActorSelect> Contacts
         {
-            get { return _assetTypes; }
+            get { return _contacts; }
+        }
+
+        public Dictionary<string, Contact> SundryContacts
+        {
+            get { return _sundryContacts; }
         }
 
         private void GetUnits()
@@ -768,9 +751,7 @@ namespace XbimExchanger.IfcToCOBieLiteUK
             {
                 var category = new Category();
                 if (classification.ReferencedSource != null)
-                    category.Classification = classification.ReferencedSource.Name;
-                else
-                    category.Classification = "Unspecified";
+                    category.Classification = classification.ReferencedSource.Name;               
                 if (classification.ItemReference.HasValue && classification.Name.HasValue &&
                     string.CompareOrdinal(classification.ItemReference, classification.Name) == 0)
                 {
@@ -785,7 +766,8 @@ namespace XbimExchanger.IfcToCOBieLiteUK
                     category.Code = classification.ItemReference;
                     category.Description = classification.Name;
                 }
-                categories.Add(category);
+                if (category.Code != null && string.CompareOrdinal(category.Code.ToLower(),"n/a")!=0 )
+                    categories.Add(category);
             }
             return categories;
         }
@@ -1116,20 +1098,54 @@ namespace XbimExchanger.IfcToCOBieLiteUK
         /// 
         /// </summary>
         /// <returns></returns>
-        public IEnumerable<IfcActorSelect> GetContacts()
+        public void GetContacts()
         {
+            
             //get any actors and select their
-            var actors = new HashSet<IfcActorSelect>(_model.Instances.OfType<IfcActor>().Select(a=>a.TheActor)); //unique actors
+            var ifcActors = _model.Instances.OfType<IfcActor>().ToList();
+            var actors = new HashSet<IfcActorSelect>(ifcActors.Select(a => a.TheActor)); //unique actors
             var personOrgs =  new HashSet<IfcActorSelect>(_model.Instances.OfType<IfcPersonAndOrganization>().Where(p => !actors.Contains(p)));
             actors = new HashSet<IfcActorSelect>(actors.Concat(personOrgs));
             var personsAlreadyIn = new HashSet<IfcActorSelect>(actors.Where(a => a is IfcPerson));
 
             var persons = new HashSet<IfcActorSelect>(_model.Instances.OfType<IfcPerson>().Where(p => !personsAlreadyIn.Contains(p)));
-            actors = new HashSet<IfcActorSelect>(actors.Concat(persons));
-            return actors;
+            _contacts = actors.Concat(persons).ToList();
+            _actors = new Dictionary<IfcActorSelect, IfcActor>();
+            foreach (var actor in ifcActors)
+            {
+                if(!_actors.ContainsKey(actor.TheActor))
+                    _actors.Add(actor.TheActor,actor);
+            }
+            _createdByKeys = new Dictionary<IfcPersonAndOrganization, ContactKey>();
+            //sort out createdByKeys, these will always be IfcPersonAndOrganization
+            foreach (var actor in actors.OfType<IfcPersonAndOrganization>())
+            {
+                _createdByKeys.Add(actor, new ContactKey { Email = EmailAddressOf(actor) });
+            }
+            _sundryContacts = new Dictionary<string, Contact>();
         }
 
-
+        public string EmailAddressOf(IfcPersonAndOrganization personOrg)
+        {
+            var person = personOrg.ThePerson;
+            var organisation = personOrg.TheOrganization;
+            //get a default that will be unique
+            var email = string.Format("unknown{0}@undefined.email", personOrg.EntityLabel);
+            if (organisation.Addresses != null)
+            {
+                var telecom = organisation.Addresses.OfType<IfcTelecomAddress>().FirstOrDefault(a=>a.ElectronicMailAddresses.Any(e=>!string.IsNullOrWhiteSpace(e)));
+                if (telecom != null)
+                    email = telecom.ElectronicMailAddresses.FirstOrDefault(e => !string.IsNullOrWhiteSpace(e));
+            }
+            //overwrite if we have it at person level
+            if (person.Addresses != null)
+            {
+                var telecom = person.Addresses.OfType<IfcTelecomAddress>().FirstOrDefault(a => a.ElectronicMailAddresses.Any(e => !string.IsNullOrWhiteSpace(e)));
+                if (telecom != null)
+                    email = telecom.ElectronicMailAddresses.FirstOrDefault(e => !string.IsNullOrWhiteSpace(e));
+            }
+            return email;
+        }
 
         /// <summary>
         /// 
@@ -1173,9 +1189,92 @@ namespace XbimExchanger.IfcToCOBieLiteUK
 
         internal string GetFacilityName(IfcBuilding building)
         {
-            if (string.IsNullOrWhiteSpace(building.Name))
-                return "Undefined";
-            return building.Name;
+            if (!string.IsNullOrWhiteSpace(building.Name))
+                return building.Name;
+            if (!string.IsNullOrWhiteSpace(_model.IfcProject.Name))
+                return _model.IfcProject.Name;
+            return "Unknown";
+            
+        }
+
+        internal ContactKey GetCreatedBy(IfcRoot ifcRoot)
+        {
+            ContactKey key;
+            if (ifcRoot.OwnerHistory.LastModifyingUser != null)
+            {
+                if(_createdByKeys.TryGetValue(ifcRoot.OwnerHistory.LastModifyingUser, out key))
+                    return key;
+            }
+            else if (ifcRoot.OwnerHistory.OwningUser != null)
+            {
+                if (_createdByKeys.TryGetValue(ifcRoot.OwnerHistory.OwningUser, out key))
+                    return key;
+            }
+            key = new ContactKey {Email = string.Format("unknown{0}@undefined.email", ifcRoot.OwnerHistory.EntityLabel)};
+            return key;
+        }
+
+        internal DateTime? GetCreatedOn(IfcRoot ifcRoot)
+        {
+            //use last modified date if we have one
+            return IfcTimeStamp.ToDateTime(ifcRoot.OwnerHistory.LastModifiedDate.HasValue ? ifcRoot.OwnerHistory.LastModifiedDate.Value : ifcRoot.OwnerHistory.CreationDate);
+        }
+
+        internal ContactKey GetCreatedBy(IfcActorSelect actorSelect)
+        {
+            IfcActor actor;
+            if (_actors.TryGetValue(actorSelect, out actor))
+                return GetCreatedBy(actor);
+            return XbimCreatedByKey;
+
+        }
+
+        internal DateTime? GetCreatedOn(IfcActorSelect actorSelect)
+        {
+            IfcActor actor;
+            if (_actors.TryGetValue(actorSelect, out actor))
+                return GetCreatedOn(actor);
+            return DateTime.Now;
+        }
+
+        internal Zone CreateXbimDefaultZone()
+        {
+            return new Zone
+            {
+                Name = "Default Zone",
+                CreatedBy = XbimCreatedByKey,
+                CreatedOn = DateTime.Now,
+                Spaces = new List<SpaceKey>()
+            };
+        }
+
+        internal Xbim.COBieLiteUK.System CreateDefaultSystem()
+        {
+            return new Xbim.COBieLiteUK.System
+            {
+                Name = "Default System",
+                CreatedBy = XbimCreatedByKey,
+                CreatedOn = DateTime.Now,
+                Components = new List<AssetKey>()
+            };
+        }
+
+        internal ContactKey GetOrCreateContactKey(string email)
+        {
+            if (string.IsNullOrWhiteSpace(email) || 
+                string.Compare(email, "n/a", System.StringComparison.OrdinalIgnoreCase) == 0
+                || string.Compare(email, "User To Populate", System.StringComparison.OrdinalIgnoreCase)==0) return null;
+            Contact contact;
+            var actorContactKey =
+                _createdByKeys.Values.FirstOrDefault(c => System.String.Compare(c.Email, email, System.StringComparison.OrdinalIgnoreCase) == 0);
+            if (actorContactKey != null)
+                return actorContactKey;
+            if (!SundryContacts.TryGetValue(email, out contact))
+            {
+                contact = new Contact { Email = email };
+                SundryContacts.Add(email, contact);
+            }
+            return new ContactKey { Email = email };
         }
     }
 }

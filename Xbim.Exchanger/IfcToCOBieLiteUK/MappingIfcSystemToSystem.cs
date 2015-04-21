@@ -19,6 +19,8 @@ namespace XbimExchanger.IfcToCOBieLiteUK
             target.ExternalSystem = helper.ExternalSystemName(ifcSystem);
             target.Name = ifcSystem.Name;
             target.Description = ifcSystem.Description;
+            target.CreatedBy = helper.GetCreatedBy(ifcSystem);
+            target.CreatedOn = helper.GetCreatedOn(ifcSystem);
             target.Categories = helper.GetCategories(ifcSystem);
             //Add Assets
             var systemAssignments = helper.GetSystemAssignments(ifcSystem);

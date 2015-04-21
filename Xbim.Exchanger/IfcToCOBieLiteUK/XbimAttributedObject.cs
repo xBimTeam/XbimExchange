@@ -509,7 +509,7 @@ namespace XbimExchanger.IfcToCOBieLiteUK
              {
                  Description = ifcProperty.Description,
                  Name = ifcProperty.Name,
-                 Categories = new List<Category> { new Category { Classification = "DPoW Status", Code = "Submitted", Description = "Submitted for Approval" } }  
+                 Categories = new List<Category> { new Category { Classification = "DPoW Status", Code = "Submitted" } }  
 
                  //srl we need to define categories, the schema proposes "As Built|Submitted|Approved|Exact Requirement|Maximum Requirement|Minimum Requirement|Requirement", should DPoW set requirements?
              };

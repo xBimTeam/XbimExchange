@@ -111,7 +111,7 @@ namespace XbimExchanger.IfcToCOBieLiteUK
                     if (Enum.TryParse(accCategoryString, true, out accCategoryEnum))
                         return accCategoryEnum;
                     CoBieLiteUkHelper.Logger.WarnFormat(
-                        "AssetTypeAccountingCategory: An illegal value of [{0}] has been passed for the category of #{1}={2}. It has been replaced with a value of 'Item'",
+                        "AssetTypeAccountingCategory: An illegal value of [{0}] has been passed for the category of #{1}={2}.",
                         accCategoryString, _ifcTypeObject.EntityLabel, _ifcTypeObject.GetType().Name);
                     IfcAsset ifcAsset;
                     if (_helper.AssetAsignments.TryGetValue(_ifcTypeObject, out ifcAsset))
@@ -166,6 +166,20 @@ namespace XbimExchanger.IfcToCOBieLiteUK
                     return _ifcTypeObject.GetType().Name;
                 return null;
             }
+        }
+
+        internal ContactKey GetCreatedBy()
+        {
+            if (_ifcTypeObject != null)
+                return _helper.GetCreatedBy(_ifcTypeObject);
+            return CoBieLiteUkHelper.XbimCreatedByKey;
+        }
+
+        internal DateTime? GetCreatedOn()
+        {
+            if (_ifcTypeObject != null)
+                return _helper.GetCreatedOn(_ifcTypeObject);
+            return DateTime.Now;
         }
     }
 }

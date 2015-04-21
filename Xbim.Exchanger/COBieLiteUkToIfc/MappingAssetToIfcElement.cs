@@ -42,7 +42,8 @@ namespace XbimExchanger.COBieLiteUkToIfc
                 foreach (var spaceAssignment in asset.Spaces)
                 {
                     var ifcSpace = Exchanger.GetIfcSpace(spaceAssignment);
-                    if (ifcSpace == null) throw new Exception("Space " + spaceAssignment.Name + " - " + spaceAssignment.Name+" cannot be found");
+                    if (ifcSpace != null) 
+                        //throw new Exception("Space " + spaceAssignment.Name + " - " + spaceAssignment.Name+" cannot be found");
 
                     ifcSpace.AddElement(ifcElement);
                 }

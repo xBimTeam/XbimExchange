@@ -5,7 +5,6 @@ using Xbim.Ifc2x3.Extensions;
 using Xbim.Ifc2x3.Kernel;
 using Xbim.Ifc2x3.ProductExtension;
 using Xbim.IO;
-using Xbim.XbimExtensions.SelectTypes;
 
 namespace XbimExchanger.IfcToCOBieLiteUK
 {
@@ -20,10 +19,14 @@ namespace XbimExchanger.IfcToCOBieLiteUK
             facility.ExternalSystem = helper.ExternalSystemName(ifcBuilding);
             facility.Name = helper.GetFacilityName(ifcBuilding);
             facility.Description = ifcBuilding.Description;
+            facility.CreatedBy = helper.GetCreatedBy(ifcBuilding);
+            facility.CreatedOn = helper.GetCreatedOn(ifcBuilding);
             facility.Categories = helper.GetCategories(ifcBuilding);
             var ifcProject = model.Instances.OfType<IfcProject>().FirstOrDefault();
             if (ifcProject != null)
             {
+                if (facility.Categories == null) //use the project Categories instead
+                    facility.Categories = helper.GetCategories(ifcProject);
                 facility.Project = new Project();
                 var projectMapping = Exchanger.GetOrCreateMappings<MappingIfcProjectToProject>();
                 projectMapping.AddMapping(ifcProject, facility.Project);
@@ -49,18 +52,19 @@ namespace XbimExchanger.IfcToCOBieLiteUK
                 facility.CurrencyUnit = helper.ModelCurrencyUnit ?? CurrencyUnit.notdefined;
 
                 var storeys = ifcBuilding.GetBuildingStoreys(true);
-                var ifcBuildingStories = storeys as IList<IfcBuildingStorey> ?? storeys.ToList();
-                if (ifcBuildingStories.Any())
+                var cobieFloors = storeys.Cast<IfcSpatialStructureElement>().ToList();
+                cobieFloors.Add(ifcSite);
+                cobieFloors.Add(ifcBuilding);
+
+                facility.Floors = new List<Floor>(cobieFloors.Count);
+                var floorMappings = Exchanger.GetOrCreateMappings<MappingIfcSpatialStructureElementToFloor>();
+                for (int i = 0; i < cobieFloors.Count; i++)
                 {
-                    facility.Floors = new List<Floor>(ifcBuildingStories.Count);
-                    var floorMappings = Exchanger.GetOrCreateMappings<MappingIfcBuildingStoreyToFloor>();
-                    for (int i = 0; i < ifcBuildingStories.Count; i++)
-                    {
-                        var floor = new Floor();
-                        floor = floorMappings.AddMapping(ifcBuildingStories[i], floor);
-                        facility.Floors.Add(floor);
-                    }
+                    var floor = new Floor();
+                    floor = floorMappings.AddMapping(cobieFloors[i], floor);
+                    facility.Floors.Add(floor);
                 }
+
             }
             //Attributes
             facility.Attributes = helper.GetAttributes(ifcBuilding);
@@ -124,21 +128,61 @@ namespace XbimExchanger.IfcToCOBieLiteUK
             }
 
             //Contacts
-            var contacts = helper.GetContacts();
-            var ifcActors = contacts as IfcActorSelect[] ?? contacts.ToArray();
-            if (ifcActors.Any())
+            var ifcActorSelects = helper.Contacts;
+
+            if (ifcActorSelects!=null && ifcActorSelects.Any())
             {
 
-                facility.Contacts = new List<Contact>(ifcActors.Length);
+                var cobieContacts = new List<Contact>(ifcActorSelects.Count());
                 var contactMappings = Exchanger.GetOrCreateMappings<MappingIfcActorToContact>();
-                for (int i = 0; i < ifcActors.Length; i++)
+                foreach (var actor in ifcActorSelects)
                 {
                     var contact = new Contact();
-                    contact = contactMappings.AddMapping(ifcActors[i], contact);
-                    facility.Contacts.Add(contact);
+                    contact = contactMappings.AddMapping(actor, contact);
+                    cobieContacts.Add(contact);
                 }
+                facility.Contacts = cobieContacts.Distinct(new ContactComparer()).ToList();
             }
 
+            //assign all unallocated spaces to a zone
+            var spaces = facility.Get<Space>().ToList();
+            var zones = facility.Zones ?? new List<Zone>(); 
+            var defaultZone = helper.CreateXbimDefaultZone();
+            foreach (
+                var space in
+                    spaces.Where(
+                        space => !zones.Any(z => z.Spaces != null && z.Spaces.Select(s => s.Name).Contains(space.Name)))
+                )
+            {           
+                if (facility.Zones == null) facility.Zones = new List<Zone>();
+               
+                defaultZone.Spaces.Add(new SpaceKey { Name = space.Name });
+            }
+            if (facility.Zones != null) facility.Zones.Add(defaultZone);
+            //assign all assets that are not in a system to the default
+            var assets = facility.Get<Asset>().ToList();
+            var systems = facility.Systems ?? new List<Xbim.COBieLiteUK.System>();
+            var defaultSystem = helper.CreateDefaultSystem();
+            foreach (
+                var asset in
+                    assets.Where(
+                        asset => !systems.Any(s => s.Components!= null && s.Components.Select(a => a.Name).Contains(asset.Name)))
+                )
+            {
+                if (facility.Systems == null) facility.Systems = new List<Xbim.COBieLiteUK.System>();
+                
+                defaultSystem.Components.Add(new AssetKey { Name = asset.Name });
+            }
+            if (facility.Systems != null) facility.Systems.Add(defaultSystem);
+
+            //write out contacts created in the process
+            if (helper.SundryContacts.Any())
+            {
+                 if(facility.Contacts==null) facility.Contacts = new List<Contact>();
+                facility.Contacts.AddRange(helper.SundryContacts.Values);
+            }
+            
+            helper.SundryContacts.Clear(); //clear ready for processing next facility
             return facility;
         }
 

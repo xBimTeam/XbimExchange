@@ -20,7 +20,7 @@ namespace XbimExchanger.COBieLiteUkToIfc
             ifcBuilding.Description = facility.Description;
             ifcBuilding.CompositionType=IfcElementCompositionEnum.ELEMENT;
             #endregion
-            Exchanger.AddToSpaceMap(ifcBuilding);
+           
             #region Default units
 
             Exchanger.DefaultLinearUnit = new IfcUnitConverter(facility.LinearUnits.ToString());       
@@ -58,7 +58,6 @@ namespace XbimExchanger.COBieLiteUkToIfc
                 //add the relationship between the site and the project and the building
                 ifcProject.AddSite(ifcSite);
                 ifcSite.AddBuilding(ifcBuilding);
-                Exchanger.AddToSpaceMap(ifcSite);
             }
             else //relate the building to the project
                 ifcProject.AddBuilding(ifcBuilding); 
@@ -73,7 +72,6 @@ namespace XbimExchanger.COBieLiteUkToIfc
                 {
                     var ifcFloor = floorMapping.AddMapping(floor, floorMapping.GetOrCreateTargetObject(floor.ExternalId));
                     ifcBuilding.AddToSpatialDecomposition(ifcFloor);
-                    Exchanger.AddToSpaceMap(ifcFloor);
                 }
             } 
             #endregion
