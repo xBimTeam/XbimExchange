@@ -70,7 +70,7 @@ namespace Tests
 
                 var facility = new Xbim.COBieLiteUK.Facility();
                 var cobieExchanger = new DPoWToCOBieLiteUKExchanger(pow, facility, stage);
-                cobieExchanger.Convert();
+                cobieExchanger.Convert(DateTime.Now);
 
                 facility.WriteJson(json, true);
                 facility.WriteCobie(xlsx, out msg);

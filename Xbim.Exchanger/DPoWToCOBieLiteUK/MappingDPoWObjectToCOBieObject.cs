@@ -12,12 +12,10 @@ using Version = Xbim.Properties.Version;
 
 namespace XbimExchanger.DPoWToCOBieLiteUK
 {
-    class MappingDPoWObjectToCOBieObject<TFrom, TTo> : MappingAttributableObjectToCOBieObject<TFrom, TTo>
+    internal class MappingDPoWObjectToCOBieObject<TFrom, TTo> : MappingAttributableObjectToCOBieObject<TFrom, TTo>
         where TFrom : DPoWObject
-        where TTo : CobieObject, new() 
+        where TTo : CobieObject, new()
     {
-        
-
         protected override TTo Mapping(TFrom sObject, TTo tObject)
         {
             //perform base mapping where free attributes are converted
@@ -30,43 +28,45 @@ namespace XbimExchanger.DPoWToCOBieLiteUK
             tObject.Description = sObject.Description;
 
             var suffix = sObject is Xbim.DPoW.AssetType ? ((sObject as Xbim.DPoW.AssetType).Variant ?? "") : "";
-            if(tObject.Categories == null) tObject.Categories = new List<Category>();
-            tObject.Categories.AddRange(Exchanger.SourceRepository.GetEncodedClassification(sObject.ClassificationReferenceIds, suffix));
+            if (tObject.Categories == null) tObject.Categories = new List<Category>();
+            tObject.Categories.AddRange(
+                Exchanger.SourceRepository.GetEncodedClassification(sObject.ClassificationReferenceIds, suffix));
 
-            
+
             //LOD
             if (sObject.RequiredLOD != null)
             {
                 if (tObject.Attributes == null) tObject.Attributes = new List<Attribute>();
                 var lod = sObject.RequiredLOD;
                 tObject.Attributes.Add("RequiredLODCode", "Required LOD Code", lod.Code, "RequiredLOD");
-                tObject.Attributes.Add("RequiredLODDescription", "Required LOD Description", lod.Description, "RequiredLOD");
+                tObject.Attributes.Add("RequiredLODDescription", "Required LOD Description", lod.Description,
+                    "RequiredLOD");
                 tObject.Attributes.Add("RequiredLODURI", "Required LOD URI", lod.URI, "RequiredLOD");
             }
 
             //LOI
             if (sObject.RequiredLOI != null)
             {
-                
                 if (tObject.Attributes == null) tObject.Attributes = new List<Attribute>();
                 var loi = sObject.RequiredLOI;
                 tObject.Attributes.Add("RequiredLOICode", "Required LOI Code", loi.Code, "RequiredLOI");
-                tObject.Attributes.Add("RequiredLOIDescription", "Required LOI Description", loi.Description, "RequiredLOI");
+                tObject.Attributes.Add("RequiredLOIDescription", "Required LOI Description", loi.Description,
+                    "RequiredLOI");
                 //required attributes with encoded property set name
                 foreach (var sAttr in loi.RequiredAttributes)
                     tObject.Attributes.Add(new Attribute
                     {
-                        Categories = new List<Category> { new Category{ Code = "required" , Classification = "DPoW"} },
-                        Name = sAttr.Name, 
+                        Categories = new List<Category> {new Category {Code = "required", Classification = "DPoW"}},
+                        Name = sAttr.Name,
                         Description = sAttr.Description,
                         PropertySetName = GetPsetName(GetUniclass2015(tObject.Categories), sAttr.Name)
                     });
             }
-            
+
             //Issues from Jobs + Responsibilities
             if (sObject.Jobs != null && sObject.Jobs.Any())
             {
-                if(tObject.Issues == null) tObject.Issues = new List<Issue>();
+                if (tObject.Issues == null) tObject.Issues = new List<Issue>();
                 var jMap = Exchanger.GetOrCreateMappings<MappingJobToIssueType>();
                 foreach (var job in sObject.Jobs)
                 {
@@ -81,8 +81,20 @@ namespace XbimExchanger.DPoWToCOBieLiteUK
             if (stage != null)
             {
                 if (tObject.ProjectStages == null) tObject.ProjectStages = new List<ProjectStageKey>();
-                tObject.ProjectStages.Add(new ProjectStageKey{ Name = stage.Name });
+                tObject.ProjectStages.Add(new ProjectStageKey {Name = stage.Name});
             }
+
+            //set CreatedBy to Client
+            if (Exchanger.SourceRepository.Client != null)
+            {
+                var cKey = Exchanger.SourceRepository.Client.Id.ToString();
+                var cMapping = Exchanger.GetOrCreateMappings<MappingContactToContact>();
+                var tContact = cMapping.GetOrCreateTargetObject(cKey);
+                tObject.CreatedBy = new ContactKey {Email = tContact.Email};
+            }
+
+            //set CreatedOn
+            tObject.CreatedOn = Exchanger.SourceRepository.CreatedOn;
 
             return tObject;
         }
@@ -107,16 +119,18 @@ namespace XbimExchanger.DPoWToCOBieLiteUK
             if (_psetDefinitionsCache.TryGetValue(propertyName, out name))
                 return name;
 
-            var psets = PsetDefinitions.DefinitionSets.Where(pset => pset.Definitions.Any(p => p.Name == propertyName)).ToArray();
+            var psets =
+                PsetDefinitions.DefinitionSets.Where(pset => pset.Definitions.Any(p => p.Name == propertyName))
+                    .ToArray();
             if (psets.Length == 1)
             {
                 _psetDefinitionsCache.Add(propertyName, psets[0].Name);
                 return psets[0].Name;
             }
 
-            return category == null ? 
-                "DPoW_Specified" : 
-                String.Join("_", "DPoW", category.Code, category.Description);
+            return category == null
+                ? "DPoW_Specified"
+                : String.Join("_", "DPoW", category.Code, category.Description);
         }
 
         private Category GetUniclass2015(IEnumerable<Category> cats)
@@ -127,8 +141,8 @@ namespace XbimExchanger.DPoWToCOBieLiteUK
 
             foreach (var category in categories)
             {
-                if(String.IsNullOrWhiteSpace(category.Classification)) continue;
-                
+                if (String.IsNullOrWhiteSpace(category.Classification)) continue;
+
                 var clsName = (category.Classification ?? "").ToLower();
                 if (clsName == "uniclass2015")
                     return category;

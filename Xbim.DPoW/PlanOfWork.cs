@@ -57,6 +57,11 @@ namespace Xbim.DPoW
         public List<Role> Roles { get; set; }
 
         /// <summary>
+        /// The date when this plan of work fas created
+        /// </summary>
+        public DateTime CreatedOn { get; set; }
+
+        /// <summary>
         /// Initializes ID to new unique value
         /// </summary>
         public PlanOfWork()

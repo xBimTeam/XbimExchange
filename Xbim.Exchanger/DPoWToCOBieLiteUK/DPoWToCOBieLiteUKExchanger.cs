@@ -53,5 +53,16 @@ namespace XbimExchanger.DPoWToCOBieLiteUK
 
             return result;
         }
+
+        /// <summary>
+        /// Converts DPoW model to COBieLite where FacilityType is the root element of the data model
+        /// </summary>
+        /// <param name="createdOn">Date when Plan of Work has been created</param>
+        /// <returns>COBieLite root element</returns>
+        public FacilityType Convert(DateTime createdOn)
+        {
+            SourceRepository.CreatedOn = createdOn;
+            return Convert();
+        }
     }
 }
