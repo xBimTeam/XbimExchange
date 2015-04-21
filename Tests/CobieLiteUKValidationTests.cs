@@ -22,7 +22,7 @@ namespace Tests
         [TestMethod]
         public void CanSaveValidatedVacility()
         {
-            var validated = GetValidated(@"Lakeside_Restaurant-stage1-COBie.json");
+            var validated = GetValidated(@"Lakeside_Restaurant-stage6-COBie.json");
             validated.WriteJson(@"..\..\ValidationReport.json", true);
             validated.WriteXml(@"..\..\ValidationReport.xml", true);
             validated.WriteJson(@"ValidationReport.json", true);
@@ -31,6 +31,9 @@ namespace Tests
         [TestMethod]
         public void CanSaveValidationReport()
         {
+            // stage 0 is for documents
+            // stage 1 is for zones
+            // stage 6 is for assettypes
             var validated = GetValidated(@"Lakeside_Restaurant-stage1-COBie.json");
             const string repName = @"..\..\ValidationReport.xlsx";
             var xRep = new ExcelValidationReport();

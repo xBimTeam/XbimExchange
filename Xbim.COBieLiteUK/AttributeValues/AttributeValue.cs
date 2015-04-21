@@ -25,7 +25,12 @@ namespace Xbim.COBieLiteUK
             if (underlyingValue == null)
                 return null;
             if (underlyingValue is AttributeValue)
-                return underlyingValue as AttributeValue;
+                return (AttributeValue) underlyingValue;
+            var asCobieValue = underlyingValue as CobieValue;
+            if (asCobieValue != null)
+            {
+                return CreateFromObject(asCobieValue.ToObject());
+            }
 
             var sw = underlyingValue.GetType().Name.ToLowerInvariant(); 
 

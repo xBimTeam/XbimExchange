@@ -1,21 +1,41 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.IO;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-
-using Xbim.COBieLiteUK;
-using Xbim.CobieLiteUK.Validation;
 using Xbim.CobieLiteUK.Validation.Extensions;
+using Xbim.COBieLiteUK;
 
 namespace Tests
 {
     [TestClass]
     public class CobieLiteUKValidationExtraTests
     {
+        // [TestMethod]
+        //public void fixReqs()
+        //{
+        //    var d = new DirectoryInfo(@"E:\Dev\xbimTeam\XbimExchange\Tests\ValidationFiles");
+        //    foreach (var file in d.GetFiles("Lakeside_Restaurant-stage*.json"))
+        //    {
+        //        var cat = new Category()
+        //        {
+        //            Classification = "DPoW",
+        //            Code = "required"
+        //        };
+        //        var fac = Facility.ReadJson(file.FullName);
+        //        if (fac.Categories == null)
+        //            fac.Categories = new List<Category>(1);
+        //        fac.Categories.Add(cat);
+        //        foreach (var doc in fac.Get<Document>())
+        //        {
+        //            if (doc.Categories == null)
+        //                doc.Categories = new List<Category>(1);
+        //            doc.Categories.Add(cat);
+        //        }
+        //        fac.WriteJson(file.FullName, false);   
+        //    }
+        //}
+
         [TestMethod]
         public void EnumerableStringToSringSuccedes()
         {

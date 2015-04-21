@@ -276,7 +276,6 @@ namespace Xbim.CobieLiteUK.Validation.Reporting
                         if (row[tCol] == DBNull.Value)
                             continue;
                         excelCell = excelRow.GetCell(iRunningColumn) ?? excelRow.CreateCell(iRunningColumn);
-
                         // ReSharper disable once CanBeReplacedWithTryCastAndCheckForNull
                         if (row[tCol] is IVisualValue)
                         {

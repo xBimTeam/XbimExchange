@@ -60,6 +60,14 @@ namespace Xbim.CobieLiteUK.Validation
             // d) Zones/Spaces 
             // e) Documents
 
+            if (!requirement.IsClassifiedAsRequirement())
+            {
+                retFacility.Categories.Add(FailedCat);
+                retFacility.Name = "Invalid.";
+                retFacility.Description = "Cannot validate submitted facility: requirement file is invalid.";
+                return retFacility;
+            }
+
             // a)
             // area units
             if (requirement.AreaUnitsCustom != submitted.AreaUnitsCustom)

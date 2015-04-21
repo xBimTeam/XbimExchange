@@ -100,7 +100,6 @@
     <Compile Include="DocumentsValidator.cs" />
     <Compile Include="Extensions\CobieObjectExtensions.cs" />
     <Compile Include="Extensions\CategoryExtensions.cs" />
-    <Compile Include="Extensions\CobieValueExtensions.cs" />
     <Compile Include="Extensions\FacilityExtensions.cs" />
     <Compile Include="Extensions\StringExtensions.cs" />
     <Compile Include="IValidator.cs" />
