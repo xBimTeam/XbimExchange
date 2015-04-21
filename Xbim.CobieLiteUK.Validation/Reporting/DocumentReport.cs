@@ -83,7 +83,7 @@ namespace Xbim.CobieLiteUK.Validation.Reporting
             workCol.AutoIncrement = true;
 
             retTable.Columns.Add(new DataColumn(GroupColName, typeof(String)) { Caption = mainClassification });
-            retTable.Columns.Add(new DataColumn(SubmittedColName, typeof(int)) { Caption = "No. Submitted" });
+            retTable.Columns.Add(new DataColumn(SubmittedColName, typeof(int)) { Caption = "No. required" });
             retTable.Columns.Add(new DataColumn(ValidColName, typeof(VisualValue)) { Caption = "No. Valid" });
             return retTable;
         }

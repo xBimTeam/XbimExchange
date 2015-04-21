@@ -1,4 +1,5 @@
-﻿using NPOI.SS.UserModel;
+﻿using System.Threading;
+using NPOI.SS.UserModel;
 using Xbim.COBieLiteUK;
 
 namespace Xbim.CobieLiteUK.Validation.Reporting
@@ -24,7 +25,7 @@ namespace Xbim.CobieLiteUK.Validation.Reporting
         internal void SetCell(ICell excelCell, IVisualValue visualValue )
         {
             var attribute = visualValue.VisualValue;
-
+            var cellStyle = excelCell.Sheet.Workbook.CreateCellStyle();
             if (attribute is StringAttributeValue)
             {
                 excelCell.SetCellType(CellType.String);
@@ -61,18 +62,20 @@ namespace Xbim.CobieLiteUK.Validation.Reporting
             }
             else if (attribute is DateTimeAttributeValue)
             {
-                excelCell.SetCellType(CellType.Numeric);
-                var v = ((DateTimeAttributeValue) (attribute)).Value;
+                
+                // var dataFormatStyle = excelCell.Sheet.Workbook.CreateDataFormat();
+                cellStyle.DataFormat = (short)0x16; //  dataFormatStyle.GetFormat("yyyy/MM/dd HH:mm:ss");
+                excelCell.CellStyle = cellStyle;
+                var v = ((DateTimeAttributeValue)(attribute)).Value;
                 if (v.HasValue)
                 {
+                    // dataformats from: https://poi.apache.org/apidocs/org/apache/poi/ss/usermodel/BuiltinFormats.html
+                    excelCell.CellStyle.DataFormat = 0x16;
                     excelCell.SetCellValue(v.Value);
                 }
             }
-
             if (visualValue.AttentionStyle == VisualAttentionStyle.None)
                 return;
-
-            var cellStyle = excelCell.Sheet.Workbook.CreateCellStyle();
             if (BorderLeft.HasValue)
                 cellStyle.BorderLeft = BorderLeft.Value;
             if (BorderRight.HasValue)

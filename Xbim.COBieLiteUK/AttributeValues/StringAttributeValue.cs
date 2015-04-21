@@ -18,7 +18,12 @@ namespace Xbim.COBieLiteUK
         [JsonIgnore]
         internal override string AllowedValuesString
         {
-            get { return String.Join(",", AllowedValues ?? new List<string>()); }
+            get
+            {
+                if (AllowedValues == null || !AllowedValues.Any())
+                    return null;
+                return String.Join(",", AllowedValues);
+            }
             set {
                 AllowedValues = value == null ? new List<string>() : value.Split(new[] {','}, StringSplitOptions.RemoveEmptyEntries).ToList();
                 for (var i = 0; i < AllowedValues.Count; i++)

@@ -9,6 +9,7 @@ using NPOI.SS.Util;
 using NPOI.XSSF.UserModel;
 using Xbim.COBieLiteUK;
 using Xbim.Common.Logging;
+using System.Collections.Generic;
 
 namespace Xbim.CobieLiteUK.Validation.Reporting
 {
@@ -102,13 +103,21 @@ namespace Xbim.CobieLiteUK.Validation.Reporting
 
             var facReport = new FacilityReport(facility);
 
+            
             var summaryPage = workBook.CreateSheet("Summary");
             if (!CreateSummarySheet(summaryPage, facility)) 
                 return false;
+            
+            // reports on Documents
+            //
+            var documentsPage = workBook.CreateSheet("Documents");
+            if (!CreateDocumentDetailsSheet(documentsPage, facility.Documents))
+                return false;
+
+
             var iRunningWorkBook = 1;
-
             // reports on AssetTypes details
-
+            //
             // ReSharper disable once LoopCanBeConvertedToQuery // might restore once code is stable
             foreach (var assetType in facReport.AssetRequirementGroups)
             {
@@ -157,6 +166,31 @@ namespace Xbim.CobieLiteUK.Validation.Reporting
                 return false;
             }
             return true;
+        }
+
+        private bool CreateDocumentDetailsSheet(ISheet documentPage, List<Document> list)
+        {
+
+            try
+            {
+                var excelRow = documentPage.GetRow(0) ?? documentPage.CreateRow(0);
+                var excelCell = excelRow.GetCell(0) ?? excelRow.CreateCell(0);
+                SetHeader(excelCell);
+                excelCell.SetCellValue("Documents Report");
+                var iRunningRow = 2;
+
+                var drep = new DocumentsDetailedReport(list);
+                iRunningRow = WriteReportToPage(documentPage, drep.AttributesGrid , iRunningRow, false);
+                
+                Debug.WriteLine(iRunningRow);
+                return true;
+            }
+            catch (Exception e)
+            {
+                //log the error
+                Logger.Error("Failed to create Summary Sheet", e);
+                return false;
+            }
         }
 
         private static bool CreateDetailSheet(ISheet detailSheet, TwoLevelRequirementPointer<AssetType, Asset> requirementPointer)
@@ -442,7 +476,7 @@ namespace Xbim.CobieLiteUK.Validation.Reporting
             }
         }
 
-        private int WriteReportToPage(ISheet summaryPage, DataTable table, int startingRow)
+        private int WriteReportToPage(ISheet summaryPage, DataTable table, int startingRow, Boolean autoSize = true)
         {
             if (table == null)
                 return startingRow;
@@ -512,10 +546,13 @@ namespace Xbim.CobieLiteUK.Validation.Reporting
                 }
             }
 
-            // sets all used columns to autosize
-            for (int irun = 0; irun < iRunningColumn; irun++)
+            if (autoSize)
             {
-                summaryPage.AutoSizeColumn(irun);
+                // sets all used columns to autosize
+                for (int irun = 0; irun < iRunningColumn; irun++)
+                {
+                    summaryPage.AutoSizeColumn(irun);
+                }
             }
             return startingRow + 1;
         }

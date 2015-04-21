@@ -58,7 +58,7 @@ namespace Tests
         [TestMethod]
         public void ConvertDPoWToAll()
         {
-            var pow = PlanOfWork.OpenJson("013-Lakeside_Restaurant.dpow");
+            var pow = PlanOfWork.OpenJson("001-Lakeside_Restaurant.dpow");
             const string dir = "..\\..\\COBieLiteUK";
             if (!Directory.Exists(dir)) Directory.CreateDirectory(dir);
             string msg;
@@ -70,7 +70,7 @@ namespace Tests
 
                 var facility = new Xbim.COBieLiteUK.Facility();
                 var cobieExchanger = new DPoWToCOBieLiteUKExchanger(pow, facility, stage);
-                cobieExchanger.Convert();
+                cobieExchanger.Convert(DateTime.Now);
 
                 facility.WriteJson(json, true);
                 facility.WriteCobie(xlsx, out msg);
