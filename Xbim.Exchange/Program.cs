@@ -18,7 +18,10 @@ namespace Xbim.Exchange
        
         static void Main(string[] args)
         {
-            
+            string msg;
+            var f = Facility.ReadCobie(@"C:\Users\Steve\Source\Repos\XbimExchange\Tests\ValidationFiles\Lakeside_Restaurant_DPoW.Xlsx", out msg);
+            f.WriteCobie("Lakeside_Restaurant_enhanced.xlsx", out msg);
+            return;
             if (args.Length < 1)
             {
                 Console.WriteLine("No Ifc or xBim file specified");
