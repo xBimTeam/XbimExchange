@@ -719,7 +719,16 @@ namespace Xbim.COBieLiteUK
             return new List<CobieObject>();
         }
 
-
+        private static Dictionary< Type, ParentAttribute> _typeToParentAttributeCache;
+        static  CobieObject()
+        {
+            _typeToParentAttributeCache = new Dictionary<Type, ParentAttribute>();
+            var types = typeof(CobieObject).Assembly.GetTypes().Where(t => t.IsAbstract == false && typeof(CobieObject).IsAssignableFrom(t));
+            foreach (var type in types)
+            {
+                _typeToParentAttributeCache.Add(type, type.GetCustomAttribute<ParentAttribute>(false));
+            }
+        }
         private static Dictionary<string, Type> _typeSheetMappingsCache = new Dictionary<string, Type>();
 
         internal virtual void AddToParent(Dictionary<Type, CobieObject[]> parents, Facility facility,
@@ -728,8 +737,8 @@ namespace Xbim.COBieLiteUK
         {
             var log = new StringWriter();
             Type parentType = null;
-            //try to set parent type from custom attributes
-            var parentAttribute = GetType().GetCustomAttribute<ParentAttribute>();
+            //try to set parent type from custom attributes           
+            var parentAttribute = _typeToParentAttributeCache[GetType()];
             if (parentAttribute != null)
             {
                 parentType = parentAttribute.DataType;
