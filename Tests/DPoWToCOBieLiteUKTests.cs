@@ -76,20 +76,20 @@ namespace Tests
                 facility.WriteCobie(xlsx, out msg);
 
 
-                using (var ifcModel = XbimModel.CreateTemporaryModel())
-                {
-                    ifcModel.Initialise("Xbim Tester", "XbimTeam", "Xbim.Exchanger", "Xbim Development Team", "3.0");
-                    ifcModel.Header.FileName.Name = stage.Name;
-                    ifcModel.ReloadModelFactors();
-                    using (var txn = ifcModel.BeginTransaction("Conversion from COBie"))
-                    {
-                        var ifcExchanger = new XbimExchanger.COBieLiteUkToIfc.CoBieLiteUkToIfcExchanger(facility, ifcModel);
-                        ifcExchanger.Convert();
-                        txn.Commit();
-                    }
-                    ifcModel.SaveAs(ifc, XbimStorageType.IFC);
-                    ifcModel.Close();
-                }
+                //using (var ifcModel = XbimModel.CreateTemporaryModel())
+                //{
+                //    ifcModel.Initialise("Xbim Tester", "XbimTeam", "Xbim.Exchanger", "Xbim Development Team", "3.0");
+                //    using (var txn = ifcModel.BeginTransaction("Conversion from COBie"))
+                //    {
+                //        ifcModel.Header.FileName.Name = stage.Name;
+                //        ifcModel.ReloadModelFactors();
+                //        var ifcExchanger = new XbimExchanger.COBieLiteUkToIfc.CoBieLiteUkToIfcExchanger(facility, ifcModel);
+                //        ifcExchanger.Convert();
+                //        txn.Commit();
+                //    }
+                //    ifcModel.SaveAs(ifc, XbimStorageType.IFC);
+                //    ifcModel.Close();
+                //}
             }
         }
 

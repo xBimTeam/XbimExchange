@@ -12,6 +12,8 @@ namespace XbimExchanger.DPoWToCOBieLiteUK
     {
         protected override Issue Mapping(Xbim.DPoW.Job source, Issue target)
         {
+            base.Mapping(source, target);
+
             target.ExternalId = source.Id.ToString();
             target.ExternalSystem = "DPoW";
             target.Name = source.Name;

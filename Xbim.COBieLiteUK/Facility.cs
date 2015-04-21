@@ -794,7 +794,7 @@ namespace Xbim.COBieLiteUK
                     logger.WriteLine("Floor {0} doesn't have any space assigned.", floor.Name);
                     if (!fixIfPossible) continue;
                     if (floor.Spaces == null) floor.Spaces = new List<Space>();
-                    floor.Spaces.Add(GetNewDefaultSpace(false));
+                    floor.Spaces.Add(GetNewDefaultSpace(false, true));
                 }
             }
             if (Zones != null)
@@ -804,7 +804,7 @@ namespace Xbim.COBieLiteUK
                     logger.WriteLine("Zone {0} doesn't have any space assigned.", zone.Name);
                     if (!fixIfPossible) continue;
                     if (zone.Spaces == null) zone.Spaces = new List<SpaceKey>();
-                    var defaultSpace = GetAnyDefaultSpace();
+                    var defaultSpace = GetAnyDefaultSpace(false);
                     zone.Spaces.Add(new SpaceKey {Name = defaultSpace.Name});
                 }
             }
@@ -906,12 +906,16 @@ namespace Xbim.COBieLiteUK
                             {
                                 //these two are the most frequent keys
                                 case "ContactKey":
-                                    //set contact key to the default value
-                                    ((ContactKey) key).Email = defaultContact.Email;
-                                    break;
-                                case "SpaceKey":
-                                    //set space key to default value
-                                    key.Name = GetAnyDefaultSpace().Name;
+                                    //set contact key to the default value if it is not set at all
+                                    if (String.IsNullOrWhiteSpace(key.Name))
+                                        ((ContactKey) key).Email = defaultContact.Email;
+                                    //create contact with this email address
+                                    else
+                                    {
+                                        if(Contacts == null) Contacts = new List<Contact>();
+                                        if(Contacts.Any(c => c.Email == key.Name)) break;
+                                        Contacts.Add(new Contact{Email = key.Name, CreatedOn = DateTime.Now, CreatedBy = GetDefaultContactKey()});
+                                    }
                                     break;
                                 default:
                                     //Delete the key otherwise. It doesn't make a sense if it doesn't point to any object in the model.
@@ -1007,7 +1011,7 @@ namespace Xbim.COBieLiteUK
         }
 
         private Space _anyDefaultSpace;
-        private Space GetAnyDefaultSpace()
+        private Space GetAnyDefaultSpace(bool addToDefaultZone = true)
         {
             if (_anyDefaultSpace != null) return _anyDefaultSpace;
 
@@ -1021,11 +1025,11 @@ namespace Xbim.COBieLiteUK
                 }
             }
 
-            _anyDefaultSpace = GetNewDefaultSpace(true);
+            _anyDefaultSpace = GetNewDefaultSpace(true, addToDefaultZone);
             return _anyDefaultSpace;
         }
 
-        private Space GetNewDefaultSpace(bool addToDefaultFloor)
+        private Space GetNewDefaultSpace(bool addToDefaultFloor, bool addToDefaultZone)
         {
             var space = new Space
             {
@@ -1035,7 +1039,8 @@ namespace Xbim.COBieLiteUK
                 Categories = GetDefaultCategories(),
                 Description = "Default description"
             };
-            GetDefaultZone().Spaces.Add(new SpaceKey {Name = space.Name});
+            if(addToDefaultZone)
+                GetDefaultZone().Spaces.Add(new SpaceKey {Name = space.Name});
 
             if (!addToDefaultFloor) return space;
 

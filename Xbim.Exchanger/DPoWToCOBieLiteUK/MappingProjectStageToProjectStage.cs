@@ -16,7 +16,7 @@ namespace XbimExchanger.DPoWToCOBieLiteUK
             target.Description = source.Description;
             target.ExternalId = source.Id.ToString();
             target.ExternalSystem = "DPoW";
-
+            
             return result;
         }
     }
