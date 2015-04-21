@@ -62,7 +62,7 @@ namespace Xbim.COBieLiteUK
                     case AssetPortability.userdefined:
                         break;
                     default:
-                        AssetTypeCustom = Enum.GetName(typeof(AreaUnit), value);
+                        AssetTypeCustom = Enum.GetName(typeof(AssetPortability), value);
                         break;
                 }
             }
