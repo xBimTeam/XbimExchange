@@ -87,9 +87,12 @@ namespace XbimExchanger.IfcToCOBieLiteUK
                 if (Enum.TryParse(helper.GetCoBieProperty("AssetTypeWarrantyDurationUnit", ifcTypeObject), true,
                     out unit))
                     target.Warranty.DurationUnit = unit;
-
-                target.Warranty.GuarantorLabor = helper.GetOrCreateContactKey(helper.GetCoBieProperty("AssetTypeWarrantyGuarantorLabor", ifcTypeObject));
-                target.Warranty.GuarantorParts = helper.GetOrCreateContactKey(helper.GetCoBieProperty("AssetTypeWarrantyGuarantorParts", ifcTypeObject));
+                var laborContact = helper.GetCoBieProperty("AssetTypeWarrantyGuarantorLabor", ifcTypeObject);
+                if(!string.IsNullOrWhiteSpace(laborContact))
+                    target.Warranty.GuarantorLabor = helper.GetOrCreateContactKey(laborContact);
+                var partsContact = helper.GetCoBieProperty("AssetTypeWarrantyGuarantorParts", ifcTypeObject);
+                if (!string.IsNullOrWhiteSpace(partsContact))
+                    target.Warranty.GuarantorParts = helper.GetOrCreateContactKey(partsContact);
                 //Attributes
                 target.Attributes = helper.GetAttributes(ifcTypeObject);
             }
