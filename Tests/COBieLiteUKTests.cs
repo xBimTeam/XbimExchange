@@ -605,35 +605,22 @@ namespace Tests
             Assert.IsNotNull(submitted.AssetTypes);
             var requirement = Facility.ReadJson("Lakeside_Restaurant-stage6-COBie.json");
             Assert.IsNotNull(requirement.AssetTypes);
-
-            var ret = false;
+            var submittedAssetTypes = new List<AssetType>();
             foreach (var assetTypeRequirement in requirement.AssetTypes)
             {
                 var v = new CobieObjectValidator<AssetType, Asset>(assetTypeRequirement)
                 {
                     TerminationMode = TerminationMode.StopOnFirstFail
                 };
-                if (!v.HasRequirements)
-                    continue;
                 var candidates = v.GetCandidates(submitted.AssetTypes).ToList();
-
-                if (candidates.Any())
-                {
-                    //foreach (var candidate in candidates)
-                    //{
-                    //    if (retFacility.AssetTypes == null)
-                    //        retFacility.AssetTypes = new List<AssetType>();
-                    //    retFacility.AssetTypes.Add(v.Validate(candidate, retFacility));
-                    //}
-                }
-                //else
-                //{
-                //    if (retFacility.AssetTypes == null)
-                //        retFacility.AssetTypes = new List<AssetType>();
-                //    retFacility.AssetTypes.Add(v.Validate((AssetType)null, retFacility));
-                //}
-                ret |= v.HasFailures;
+                submittedAssetTypes.AddRange(candidates.Select(c => c.MatchedObject).Cast<AssetType>());
+  
             }
+            Assert.IsTrue(submittedAssetTypes.Count>0);
+            submitted.AssetTypes = submittedAssetTypes;
+            string msg;
+            submitted.WriteCobie("Lakeside_restaurant_submission.xlsx",out msg);
+            Assert.IsFalse(string.IsNullOrWhiteSpace(msg));
         }
     }
 }
