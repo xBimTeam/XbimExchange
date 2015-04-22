@@ -201,7 +201,12 @@ namespace Xbim.CobieLiteUK.Validation
                         else if (!parentCachedValidator.AlreadySatisfies(req)) // fails locally, and is not passed at higher level, then add to explicit report fail
                         {
                             var a = targetFacility.Clone(req.Attribute);
-                            a.Value = AttributeValue.CreateFromObject(satValue);
+                            if (satValue != null)
+                                a.Value = AttributeValue.CreateFromObject(satValue);
+                            else
+                                a.Value = AttributeValue.CreateFromObject("");
+                                
+                            
                             a.Categories = new List<Category> { FacilityValidator.FailedCat };
                             reportChild.Attributes.Add(a);
                         }
