@@ -64,7 +64,7 @@ namespace Xbim.CobieLiteUK.Validation.RequirementDetails
 
         internal bool IsSatisfiedBy(Attribute attribute)
         {
-            if (attribute == null)
+            if (attribute == null || attribute.Value == null)
                 return false;
 
             var v = attribute.Value.GetStringValue().ToLowerInvariant();
