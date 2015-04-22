@@ -999,9 +999,10 @@ namespace XbimExchanger.IfcToCOBieLiteUK
                             if(!uniqueAttributes.ContainsKey(keyName))
                             {
                                 uniqueAttributes.Remove(existingAttribute.Name);
+                                existingAttribute.Name = keyName;
                                 uniqueAttributes.Add(keyName, existingAttribute); //update existing key
                             }
-                            newAttribute.Name += string.Format("{0}.{1}", newAttribute.Name, newAttribute.PropertySetName);
+                            newAttribute.Name = string.Format("{0}.{1}", newAttribute.Name, newAttribute.PropertySetName);
                             if (!uniqueAttributes.ContainsKey(newAttribute.Name))
                             {
                                 uniqueAttributes.Add(newAttribute.Name, newAttribute); //update existing key
