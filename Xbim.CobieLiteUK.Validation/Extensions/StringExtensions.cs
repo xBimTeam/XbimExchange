@@ -44,7 +44,7 @@ namespace Xbim.CobieLiteUK.Validation.Extensions
         }
 
 
-        internal static String ListToCompoundString(this IEnumerable<String> stringList)
+        internal static string ListToCompoundString(this IEnumerable<String> stringList)
         {
             if (stringList == null)
                 return null;
@@ -52,13 +52,18 @@ namespace Xbim.CobieLiteUK.Validation.Extensions
             var asArray = stringList.ToArray();
             
 
-            for (int i = 0; i < asArray.Length; i++)
+            for (var i = 0; i < asArray.Length; i++)
             {
+                if (asArray[i] == null)
+                {
+                    asArray[i] = "";
+                    continue;
+                }
                 asArray[i] = asArray[i].Replace(@"\", @"\\");
                 asArray[i] = asArray[i].Replace(@",", @"\,");
             }
 
-            return String.Join(",", asArray);
+            return string.Join(",", asArray);
         }
     }
 }
