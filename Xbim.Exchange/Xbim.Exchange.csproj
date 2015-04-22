@@ -109,6 +109,10 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Xbim.CobieLiteUK.Validation\Xbim.CobieLiteUK.Validation.csproj">
+      <Project>{D2D0B192-93B2-409F-AAA0-47BD3038C87E}</Project>
+      <Name>Xbim.CobieLiteUK.Validation</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Xbim.COBieLiteUK\Xbim.COBieLiteUK.csproj">
       <Project>{90DEF072-96C7-4972-835E-909C41169CB4}</Project>
       <Name>Xbim.COBieLiteUK</Name>
