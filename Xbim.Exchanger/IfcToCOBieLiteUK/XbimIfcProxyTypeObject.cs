@@ -19,10 +19,10 @@ namespace XbimExchanger.IfcToCOBieLiteUK
         /// 
         /// </summary>
         /// <param name="name"></param>
-        public XbimIfcProxyTypeObject(string name)
+        public XbimIfcProxyTypeObject(CoBieLiteUkHelper helper, string name)
         {
             _name = name;
-           
+            _helper = helper;
         }
 
         /// <summary>
@@ -94,7 +94,7 @@ namespace XbimExchanger.IfcToCOBieLiteUK
             {
                 if(_ifcTypeObject!=null) 
                     return  _helper.GetCategories(_ifcTypeObject);
-                return null;
+                return CoBieLiteUkHelper.UnknownCategory;
             }
         }
         /// <summary>
@@ -169,10 +169,8 @@ namespace XbimExchanger.IfcToCOBieLiteUK
         }
 
         internal ContactKey GetCreatedBy()
-        {
-            if (_ifcTypeObject != null)
-                return _helper.GetCreatedBy(_ifcTypeObject);
-            return CoBieLiteUkHelper.XbimCreatedByKey;
+        {       
+           return _helper.GetCreatedBy(_ifcTypeObject);
         }
 
         internal DateTime? GetCreatedOn()
