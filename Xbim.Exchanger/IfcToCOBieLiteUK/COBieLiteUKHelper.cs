@@ -998,7 +998,7 @@ namespace XbimExchanger.IfcToCOBieLiteUK
                             var keyName = string.Format("{0}.{1}", existingAttribute.Name, existingAttribute.PropertySetName);
                             if(!uniqueAttributes.ContainsKey(keyName))
                             {
-                                uniqueAttributes.Remove(newAttribute.Name);
+                                uniqueAttributes.Remove(existingAttribute.Name);
                                 uniqueAttributes.Add(keyName, existingAttribute); //update existing key
                             }
                             newAttribute.Name += string.Format("{0}.{1}", newAttribute.Name, newAttribute.PropertySetName);
@@ -1007,6 +1007,8 @@ namespace XbimExchanger.IfcToCOBieLiteUK
                                 uniqueAttributes.Add(newAttribute.Name, newAttribute); //update existing key
                             }
                         }
+                        else
+                            uniqueAttributes.Add(newAttribute.Name, newAttribute); 
                         
                     }
                    
