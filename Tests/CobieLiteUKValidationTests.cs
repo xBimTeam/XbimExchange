@@ -1,15 +1,10 @@
-﻿using System.Data;
-using System.Diagnostics;
+﻿using System.Collections.Generic;
 using System.IO;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Xbim.CobieLiteUK.Validation;
-using Xbim.COBieLiteUK;
 using Xbim.CobieLiteUK.Validation.Reporting;
+using Xbim.COBieLiteUK;
 using Xbim.IO;
 using XbimExchanger.IfcToCOBieLiteUK;
 
@@ -34,7 +29,7 @@ namespace Tests
             // stage 0 is for documents
             // stage 1 is for zones
             // stage 6 is for assettypes
-            var validated = GetValidated(@"Lakeside_Restaurant-stage1-COBie.json");
+            var validated = GetValidated(@"Lakeside_Restaurant-stage6-COBie.json");
             const string repName = @"..\..\ValidationReport.xlsx";
             var xRep = new ExcelValidationReport();
             var ret = xRep.Create(validated, repName);
@@ -73,6 +68,25 @@ namespace Tests
             var validator = new FacilityValidator();
             var result = validator.Validate(req, cobie);
             result.WriteJson(@"..\..\XlsLakesideWithDocumentsValidationStage6.json", true);
+        }
+
+        [TestMethod]
+        public void ValidateXlsLakeside2()
+        {
+            const string xlsx = @"c:\Users\mxfm2\Dropbox\Martin\Lakeside_Restaurant_fabric_only.xlsx";
+            string msg;
+            var cobie = Facility.ReadCobie(xlsx, out msg);
+            var req = Facility.ReadJson(@"Lakeside_Restaurant-stage6-COBie.json");
+            var validator = new FacilityValidator();
+            var result = validator.Validate(req, cobie);
+            
+            //create report
+            using (var stream = File.Create(@"c:\Users\mxfm2\Dropbox\Martin\Lakeside_Restaurant_fabric_only.report.xlsx"))
+            {
+                var report = new ExcelValidationReport();
+                report.Create(result, stream, ExcelValidationReport.SpreadSheetFormat.Xlsx);
+                stream.Close();
+            }
         }
 
         [TestMethod]

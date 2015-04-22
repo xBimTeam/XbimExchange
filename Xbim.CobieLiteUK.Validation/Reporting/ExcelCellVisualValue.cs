@@ -30,6 +30,7 @@ namespace Xbim.CobieLiteUK.Validation.Reporting
             {
                 excelCell.SetCellType(CellType.String);
                 excelCell.SetCellValue(((StringAttributeValue) (attribute)).Value);
+                // todo: can we set here ? cellStyle.Alignment = HorizontalAlignment.Fill;
             }
             else if (attribute is IntegerAttributeValue)
             {

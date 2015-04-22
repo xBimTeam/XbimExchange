@@ -48,7 +48,8 @@ namespace XbimExchanger.DPoWToCOBieLiteUK
                         Name = name,
                         Description = description,
                         PropertySetName = pset,
-                        Value = new StringAttributeValue { Value = value}
+                        Value = new StringAttributeValue { Value = value },
+                        Categories = new List<Category>(new[] { new Category { Code = "Submitted" } })
                     });
         }
 
@@ -60,7 +61,8 @@ namespace XbimExchanger.DPoWToCOBieLiteUK
                 Name = name,
                 Description = description,
                 PropertySetName = pset,
-                Value = new IntegerAttributeValue { Value = value }
+                Value = new IntegerAttributeValue { Value = value },
+                Categories = new List<Category>(new[] { new Category { Code = "Submitted" } })
             });
         }
 
@@ -72,7 +74,8 @@ namespace XbimExchanger.DPoWToCOBieLiteUK
                 Name = name,
                 Description = description,
                 PropertySetName = pset,
-                Value = new DecimalAttributeValue { Value = value }
+                Value = new DecimalAttributeValue { Value = value },
+                Categories = new List<Category>(new[] { new Category { Code = "Submitted" } })
             });
         }
 
@@ -84,7 +87,8 @@ namespace XbimExchanger.DPoWToCOBieLiteUK
                 Name = name,
                 Description = description,
                 PropertySetName = pset,
-                Value = new BooleanAttributeValue { Value = value }
+                Value = new BooleanAttributeValue { Value = value },
+                Categories = new List<Category>(new[] { new Category { Code = "Submitted" } })
             });
         }
 
@@ -95,6 +99,7 @@ namespace XbimExchanger.DPoWToCOBieLiteUK
                 CreatedOn = DateTime.Now,
                 Name = name,
                 Description = description,
+                Categories = new List<Category>(new[] { new Category { Code = "Submitted" } })
             });
         }
 
@@ -114,7 +119,8 @@ namespace XbimExchanger.DPoWToCOBieLiteUK
                     Description = sAttr.Definition, 
                     PropertySetName = "DPoW Attributes",
                     CreatedOn = createdOn,
-                    CreatedBy = new ContactKey{Email = createdBy}
+                    CreatedBy = new ContactKey{Email = createdBy},
+                    Categories = new List<Category>(new []{new Category{Code = "Submitted"}})
                 };
                 switch (sAttr.ValueType)
                 {
