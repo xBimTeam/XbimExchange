@@ -263,7 +263,7 @@ namespace Xbim.CobieLiteUK.Validation.Reporting
                 }
                 iRunningRow++;
 
-                var writer = new ExcelCellVisualValue(BorderStyle.Thin);
+                var writer = new ExcelCellVisualValue(detailSheet.Workbook);
                 foreach (DataRow row in table.Rows)
                 {
                     excelRow = detailSheet.GetRow(iRunningRow) ?? detailSheet.CreateRow(iRunningRow);
@@ -386,7 +386,7 @@ namespace Xbim.CobieLiteUK.Validation.Reporting
                 }
                 iRunningRow++;
 
-                var writer = new ExcelCellVisualValue(BorderStyle.Thin);
+                var writer = new ExcelCellVisualValue(detailSheet.Workbook);
                 foreach (DataRow row in table.Rows)
                 {
                     excelRow = detailSheet.GetRow(iRunningRow) ?? detailSheet.CreateRow(iRunningRow);
@@ -527,7 +527,7 @@ namespace Xbim.CobieLiteUK.Validation.Reporting
             }
 
             startingRow++;
-            var writer = new ExcelCellVisualValue(BorderStyle.Thin);
+            var writer = new ExcelCellVisualValue(summaryPage.Workbook);
             foreach (DataRow row in table.Rows)
             {
                 excelRow = summaryPage.GetRow(startingRow) ?? summaryPage.CreateRow(startingRow);

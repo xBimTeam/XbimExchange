@@ -9,23 +9,51 @@ namespace Xbim.CobieLiteUK.Validation.Reporting
         public ExcelCellVisualValue()
         { }
 
-        public ExcelCellVisualValue(BorderStyle borderStyle)
+        private readonly ICellStyle _orange;
+        private readonly ICellStyle _green;
+        private readonly ICellStyle _red;
+        private readonly ICellStyle _neutral;
+
+        public ExcelCellVisualValue(IWorkbook workbook)
         {
-            BorderLeft = borderStyle;
-            BorderRight = borderStyle;
-            BorderTop = borderStyle;
-            BorderBottom = borderStyle;
+            _orange = GetBaseStyle(workbook);
+            _orange.FillForegroundColor = IndexedColors.Orange.Index;
+
+            _green = GetBaseStyle(workbook);
+            _green.FillForegroundColor = IndexedColors.Green.Index;
+
+            _red = GetBaseStyle(workbook);
+            _red.FillForegroundColor = IndexedColors.Red.Index;
+
+            _neutral = GetBaseStyle(workbook);
         }
 
-        public BorderStyle? BorderLeft { get; set; }
-        public BorderStyle? BorderRight { get; set; }
-        public BorderStyle? BorderTop { get; set; }
-        public BorderStyle? BorderBottom { get; set; }
+        private ICellStyle GetBaseStyle(IWorkbook workbook)
+        {
+            var style = workbook.CreateCellStyle();
+            style.BorderBottom = style.BorderLeft = style.BorderRight = style.BorderTop = BorderStyle.Thin;
+            style.FillPattern = FillPattern.SolidForeground;
+            return style;
+        }
 
         internal void SetCell(ICell excelCell, IVisualValue visualValue )
         {
+            if (visualValue.AttentionStyle == VisualAttentionStyle.None)
+                excelCell.CellStyle = _neutral;
+            switch (visualValue.AttentionStyle)
+            {
+                case VisualAttentionStyle.Amber:
+                    excelCell.CellStyle = _orange;
+                    break;
+                case VisualAttentionStyle.Green:
+                    excelCell.CellStyle = _green;
+                    break;
+                case VisualAttentionStyle.Red:
+                    excelCell.CellStyle = _red;
+                    break;
+            }
+
             var attribute = visualValue.VisualValue;
-            var cellStyle = excelCell.Sheet.Workbook.CreateCellStyle();
             if (attribute is StringAttributeValue)
             {
                 excelCell.SetCellType(CellType.String);
@@ -65,8 +93,7 @@ namespace Xbim.CobieLiteUK.Validation.Reporting
             {
                 
                 // var dataFormatStyle = excelCell.Sheet.Workbook.CreateDataFormat();
-                cellStyle.DataFormat = (short)0x16; //  dataFormatStyle.GetFormat("yyyy/MM/dd HH:mm:ss");
-                excelCell.CellStyle = cellStyle;
+                excelCell.CellStyle.DataFormat = (short)0x16; //  dataFormatStyle.GetFormat("yyyy/MM/dd HH:mm:ss");
                 var v = ((DateTimeAttributeValue)(attribute)).Value;
                 if (v.HasValue)
                 {
@@ -75,31 +102,7 @@ namespace Xbim.CobieLiteUK.Validation.Reporting
                     excelCell.SetCellValue(v.Value);
                 }
             }
-            if (visualValue.AttentionStyle == VisualAttentionStyle.None)
-                return;
-            if (BorderLeft.HasValue)
-                cellStyle.BorderLeft = BorderLeft.Value;
-            if (BorderRight.HasValue)
-                cellStyle.BorderRight = BorderRight.Value;
-            if (BorderTop.HasValue)
-                cellStyle.BorderTop = BorderTop.Value;
-            if (BorderBottom.HasValue)
-                cellStyle.BorderBottom = BorderBottom.Value;
             
-            cellStyle.FillPattern = FillPattern.SolidForeground;
-            switch (visualValue.AttentionStyle)
-            {
-                case VisualAttentionStyle.Amber:
-                    cellStyle.FillForegroundColor = IndexedColors.Orange.Index;
-                    break;
-                case VisualAttentionStyle.Green:
-                    cellStyle.FillForegroundColor = IndexedColors.Green.Index;
-                    break;
-                case VisualAttentionStyle.Red:
-                    cellStyle.FillForegroundColor = IndexedColors.Red.Index;
-                    break;
-            }
-            excelCell.CellStyle = cellStyle;
         }
     }
 }
