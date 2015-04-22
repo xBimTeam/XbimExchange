@@ -76,7 +76,7 @@ namespace Tests
             const string xlsx = @"c:\Users\mxfm2\Dropbox\Martin\Lakeside_Restaurant_fabric_only.xlsx";
             string msg;
             var cobie = Facility.ReadCobie(xlsx, out msg);
-            var req = Facility.ReadJson(@"Lakeside_Restaurant-stage6-COBie.json");
+            var req = Facility.ReadJson(@"c:\Users\mxfm2\Dropbox\Martin\003-Lakeside_Restaurant-stage6-COBie.json");
             var validator = new FacilityValidator();
             var result = validator.Validate(req, cobie);
             
