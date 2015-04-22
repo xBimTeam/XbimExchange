@@ -54,7 +54,9 @@ namespace Xbim.CobieLiteUK.Validation.Reporting
             {
                 using (var spreadsheetStream = new FileStream(ssFileName, FileMode.Create, FileAccess.Write))
                 {
-                    return Create(facility, spreadsheetStream, format);
+                    var result = Create(facility, spreadsheetStream, format);
+                    spreadsheetStream.Close();
+                    return result;
                 }
             }
             catch (Exception e)
