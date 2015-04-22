@@ -21,6 +21,11 @@ namespace Xbim.CobieLiteUK.Validation.Extensions
             return null;
         }
 
+        public static bool IsClassifiedAsRequirement(this CobieObject obj)
+        {
+            return obj.Categories != null && obj.Categories.Any(c => c.Classification == "DPoW" && c.Code == "required");
+        }
+
         public static StatusOptions ValidationResult(this CobieObject obj)
         {
             if (obj.Categories == null)

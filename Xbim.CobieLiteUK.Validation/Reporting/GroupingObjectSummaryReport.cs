@@ -11,9 +11,12 @@ namespace Xbim.CobieLiteUK.Validation.Reporting
     {
         private readonly IEnumerable<T> _validatedAssetTypes;
 
-        public GroupingObjectSummaryReport(IEnumerable<T> validatedAssetTypes)
+        private string _title;
+
+        public GroupingObjectSummaryReport(IEnumerable<T> validatedAssetTypes, string title)
         {
             _validatedAssetTypes = validatedAssetTypes;
+            _title = title;
         }
 
         public DataTable GetReport(string mainClassification)
@@ -32,7 +35,7 @@ namespace Xbim.CobieLiteUK.Validation.Reporting
                 mainClassification = firstClassification.Classification;
             }
 
-            var retTable = PrepareTable(mainClassification);
+            var retTable = PrepareTable(mainClassification, _title);
 
             // the progressive variable allows grouping by Maincategory and MatchingCategory values
             //
@@ -120,10 +123,9 @@ namespace Xbim.CobieLiteUK.Validation.Reporting
         }
 
 
-        private static DataTable PrepareTable(string mainClassification)
+        private static DataTable PrepareTable(string mainClassification, string title)
         {
-            var repName = typeof (T).Name + "s validation report";
-            var retTable = new DataTable(repName, "DPoW");
+            var retTable = new DataTable(title, "DPoW");
             var workCol = retTable.Columns.Add("DPoW_ID", typeof(Int32));
             workCol.AllowDBNull = false;
             workCol.Unique = true;

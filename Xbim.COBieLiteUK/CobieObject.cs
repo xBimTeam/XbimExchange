@@ -1265,6 +1265,25 @@ namespace Xbim.COBieLiteUK
         public bool? BooleanValue;
 
         public CobieValueType ValueType;
+
+        public object ToObject()
+        {
+            switch (ValueType)
+            {
+                case CobieValueType.Boolean:
+                    return BooleanValue;
+                case CobieValueType.DateTime:
+                    return DateTimeValue;
+                case CobieValueType.Double:
+                    return DoubleValue;
+                case CobieValueType.Integer:
+                    return IntegerValue;
+                case CobieValueType.String:
+                    return BooleanValue;
+                default:
+                    return null;
+            }
+        }
     }
 
     public enum CobieValueType

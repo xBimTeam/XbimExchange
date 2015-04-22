@@ -15,7 +15,7 @@ namespace Xbim.CobieLiteUK.Validation
         public DocumentsValidator(List<Document> requiredDocuments, Facility destinationFacility)
         {
             HasFailures = false;
-            _requiredDocuments = requiredDocuments;
+            _requiredDocuments = requiredDocuments.Where(doc => doc.IsClassifiedAsRequirement()).ToList();
             _destinationFacility = destinationFacility;
         }
         public TerminationMode TerminationMode { get; set; }
