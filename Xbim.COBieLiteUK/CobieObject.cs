@@ -1279,7 +1279,7 @@ namespace Xbim.COBieLiteUK
                 case CobieValueType.Integer:
                     return IntegerValue;
                 case CobieValueType.String:
-                    return BooleanValue;
+                    return StringValue;
                 default:
                     return null;
             }
