@@ -163,7 +163,7 @@ namespace XbimExchanger.IfcToCOBieLiteUK
             var systemsWritten = facility.Get<Xbim.COBieLiteUK.System>();
             var assetsAssignedToSystem = new HashSet<string>(systemsWritten.SelectMany(s => s.Components).Select(a => a.Name));
             var systems = facility.Systems ?? new List<Xbim.COBieLiteUK.System>();
-            var defaultSystem = helper.CreateDefaultSystem();
+            var defaultSystem = helper.CreateUndefinedSystem();
             //go over all unasigned assets
             foreach (var assetType in assetTypes)
             {
@@ -172,7 +172,7 @@ namespace XbimExchanger.IfcToCOBieLiteUK
                 {
                     if (assetTypeSystem == null)
                     {
-                        assetTypeSystem = helper.CreateDefaultSystem();
+                        assetTypeSystem = helper.CreateUndefinedSystem();
                         assetTypeSystem.Name = string.Format("System {0} ", assetType.Name);
                         
                     }

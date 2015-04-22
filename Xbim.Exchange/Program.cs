@@ -77,7 +77,9 @@ namespace Xbim.Exchange
                         Console.WriteLine("Creating " + dPoWFile);
                        // facility.WriteXml(dPoWFile);
                        
-                        //facility.ValidateUK2012();
+                        facility.ValidateUK2012(Console.Out,true);
+                        string cobieValidatedFile = Path.ChangeExtension(dPoWFile, "Validated.Xlsx");
+                        facility.WriteCobie(cobieValidatedFile, out error);
                         dPoWFile = Path.ChangeExtension(dPoWFile, "xbim");
                         Console.WriteLine("Creating " + dPoWFile);
                         using (var ifcModel = XbimModel.CreateModel(dPoWFile))

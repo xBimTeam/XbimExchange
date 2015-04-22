@@ -44,6 +44,10 @@ namespace XbimExchanger.IfcToCOBieLiteUK
             }
             target.CreatedBy = helper.GetCreatedBy(actor);
             target.CreatedOn = helper.GetCreatedOn(actor);
+            if (target.Categories == null || !target.Categories.Any())
+            {
+                target.Categories = CoBieLiteUkHelper.UnknownCategory;
+            }
             ////Attributes
             //AttributeType[] ifcAttributes = helper.GetAttributes(actor);
             //if (ifcAttributes != null && ifcAttributes.Length > 0)

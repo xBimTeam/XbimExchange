@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.InteropServices;
 using Xbim.COBieLiteUK;
 using Xbim.Ifc2x3.Extensions;
 using Xbim.Ifc2x3.Kernel;
@@ -342,15 +343,15 @@ namespace XbimExchanger.IfcToCOBieLiteUK
                 }
                 catch (ArgumentNullException)
                 {
-                    CoBieLiteUkHelper.Logger.WarnFormat("Decimal Conversion: String is null.");
+                    //CoBieLiteUkHelper.Logger.WarnFormat("Decimal Conversion: String is null.");
                 }
                 catch (FormatException)
                 {
-                    CoBieLiteUkHelper.Logger.WarnFormat("Decimal Conversion: String does not consist of an " + "optional sign followed by a series of digits.");
+                    //CoBieLiteUkHelper.Logger.WarnFormat("Decimal Conversion: String does not consist of an " + "optional sign followed by a series of digits.");
                 }
                 catch (OverflowException)
                 {
-                    CoBieLiteUkHelper.Logger.WarnFormat("Decimal Conversion: Overflow in string to int conversion.");
+                    //CoBieLiteUkHelper.Logger.WarnFormat("Decimal Conversion: Overflow in string to int conversion.");
                 }
 
             }
@@ -362,18 +363,18 @@ namespace XbimExchanger.IfcToCOBieLiteUK
                 }
                 catch (ArgumentNullException)
                 {
-                    CoBieLiteUkHelper.Logger.WarnFormat("Boolean Conversion: String is null.");
+                    //CoBieLiteUkHelper.Logger.WarnFormat("Boolean Conversion: String is null.");
                 }
                 catch (FormatException)
                 {
-                    CoBieLiteUkHelper.Logger.WarnFormat("Boolean Conversion: String does not consist of an " + "optional sign followed by a series of digits.");
+                    //CoBieLiteUkHelper.Logger.WarnFormat("Boolean Conversion: String does not consist of an " + "optional sign followed by a series of digits.");
                 }
                 catch (OverflowException)
                 {
-                    CoBieLiteUkHelper.Logger.WarnFormat("Boolean Conversion: Overflow in string to int conversion.");
+                    //CoBieLiteUkHelper.Logger.WarnFormat("Boolean Conversion: Overflow in string to int conversion.");
                 }
             }
-            else if (integerValueType != null)
+            else if (integerValueType != null )
             {
                 try
                 {
@@ -382,16 +383,16 @@ namespace XbimExchanger.IfcToCOBieLiteUK
                 }
                 catch (ArgumentNullException)
                 {
-                    CoBieLiteUkHelper.Logger.WarnFormat("Integer Conversion: String is null.");
+                    //CoBieLiteUkHelper.Logger.WarnFormat("Integer Conversion: String is null.");
                 }
                 catch (FormatException)
                 {
-                    CoBieLiteUkHelper.Logger.WarnFormat("Integer Conversion: String does not consist of an " +
-                                                      "optional sign followed by a series of digits.");
+                    //CoBieLiteUkHelper.Logger.WarnFormat("Integer Conversion: String does not consist of an " +
+                    //                                  "optional sign followed by a series of digits.");
                 }
                 catch (OverflowException)
                 {
-                    CoBieLiteUkHelper.Logger.WarnFormat("Integer Conversion: Overflow in string to int conversion.");
+                    //CoBieLiteUkHelper.Logger.WarnFormat("Integer Conversion: Overflow in string to int conversion.");
                 }
             }
             else
@@ -509,8 +510,11 @@ namespace XbimExchanger.IfcToCOBieLiteUK
              {
                  Description = ifcProperty.Description,
                  Name = ifcProperty.Name,
-                 Categories = new List<Category> { new Category { Classification = "DPoW Status", Code = "Submitted" } }  
-
+                 Categories = new List<Category>
+                 {
+                     new Category { Classification = "DPoW Status", Code = "Submitted" },
+                 }
+                
                  //srl we need to define categories, the schema proposes "As Built|Submitted|Approved|Exact Requirement|Maximum Requirement|Minimum Requirement|Requirement", should DPoW set requirements?
              };
 

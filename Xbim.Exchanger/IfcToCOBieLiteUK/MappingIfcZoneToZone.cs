@@ -19,6 +19,9 @@ namespace XbimExchanger.IfcToCOBieLiteUK
             target.ExternalSystem = helper.ExternalSystemName(ifcZone);
             target.Description = ifcZone.Description;
             target.Categories = helper.GetCategories(ifcZone);
+            if (target.Categories==CoBieLiteUkHelper.UnknownCategory)
+             if(!string.IsNullOrWhiteSpace(ifcZone.ObjectType) )
+                 target.Categories = new List<Category>(new [] {new Category{Code=ifcZone.ObjectType}} );
             target.CreatedBy = helper.GetCreatedBy(ifcZone);
             target.CreatedOn = helper.GetCreatedOn(ifcZone);
             target.Name = ifcZone.Name;

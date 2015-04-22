@@ -596,41 +596,44 @@ namespace Tests
                 }
             }
         }
-        //[DeploymentItem("ValidationFiles\\Lakeside_Restaurant.xlsx")]
-        //[TestMethod]
-        //public void RemoveUnrequiredAssetsFromSubmission()
-        //{
-        //    var requirement =  Facility.ReadCobie("Lakeside_restaurant.xlsx", out msg);
-        //    Assert.IsNotNull(requirement.AssetTypes);
-        //        return true;
-        //    var ret = false;
-        //    foreach (var assetTypeRequirement in requirement.AssetTypes)
-        //    {
-        //        var v = new CobieObjectValidator<AssetType, Asset>(assetTypeRequirement)
-        //        {
-        //            TerminationMode = TerminationMode
-        //        };
-        //        if (!v.HasRequirements)
-        //            continue;
-        //        var candidates = v.GetCandidates(submitted.AssetTypes).ToList();
+        [DeploymentItem("ValidationFiles\\Lakeside_Restaurant.json")]
+        [DeploymentItem("ValidationFiles\\Lakeside_Restaurant-stage6-COBie.json")]
+        [TestMethod]
+        public void RemoveUnrequiredAssetsFromSubmission()
+        {
+            var submitted = Facility.ReadJson("Lakeside_restaurant.json");
+            Assert.IsNotNull(submitted.AssetTypes);
+            var requirement = Facility.ReadJson("Lakeside_Restaurant-stage6-COBie.json");
+            Assert.IsNotNull(requirement.AssetTypes);
 
-        //        if (candidates.Any())
-        //        {
-        //            foreach (var candidate in candidates)
-        //            {
-        //                if (retFacility.AssetTypes == null)
-        //                    retFacility.AssetTypes = new List<AssetType>();
-        //                retFacility.AssetTypes.Add(v.Validate(candidate, retFacility));
-        //            }
-        //        }
-        //        else
-        //        {
-        //            if (retFacility.AssetTypes == null)
-        //                retFacility.AssetTypes = new List<AssetType>();
-        //            retFacility.AssetTypes.Add(v.Validate((AssetType)null, retFacility));
-        //        }
-        //        ret |= v.HasFailures;
-        //    }
-        //}
+            var ret = false;
+            foreach (var assetTypeRequirement in requirement.AssetTypes)
+            {
+                var v = new CobieObjectValidator<AssetType, Asset>(assetTypeRequirement)
+                {
+                    TerminationMode = TerminationMode.StopOnFirstFail
+                };
+                if (!v.HasRequirements)
+                    continue;
+                var candidates = v.GetCandidates(submitted.AssetTypes).ToList();
+
+                if (candidates.Any())
+                {
+                    //foreach (var candidate in candidates)
+                    //{
+                    //    if (retFacility.AssetTypes == null)
+                    //        retFacility.AssetTypes = new List<AssetType>();
+                    //    retFacility.AssetTypes.Add(v.Validate(candidate, retFacility));
+                    //}
+                }
+                //else
+                //{
+                //    if (retFacility.AssetTypes == null)
+                //        retFacility.AssetTypes = new List<AssetType>();
+                //    retFacility.AssetTypes.Add(v.Validate((AssetType)null, retFacility));
+                //}
+                ret |= v.HasFailures;
+            }
+        }
     }
 }
