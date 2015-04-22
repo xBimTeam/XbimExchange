@@ -18,6 +18,8 @@ namespace Xbim.CobieLiteUK.Validation.Reporting
 
         internal DataTable GetReport(string groupingAttributeName)
         {
+            if (_documentsToReport == null || !_documentsToReport.Any())
+                return null;
             var d = PrepareTable(groupingAttributeName);
             var dic = new Dictionary<string, List<Document>>();
             foreach (var document in _documentsToReport)

@@ -16,10 +16,11 @@ namespace XbimExchanger.DPoWToCOBieLiteUK
             base.Mapping(source, target);
 
             target.ExternalId = source.Id.ToString();
-            target.ExternalSystem = "DPoW";            
+            target.ExternalSystem = "DPoW";
+            var code = String.Format("Role: {0}", source.Name ?? "");
             if (target.Categories == null)
                 target.Categories = new List<Category>();
-            target.Categories.Add(new Category { Code = "Role", Classification = "DPoW"});
+            target.Categories.Add(new Category { Code = code, Classification = "DPoW"});
             target.GivenName = source.Name;
 
             //email has to be defined because it is a key for ContactKey references

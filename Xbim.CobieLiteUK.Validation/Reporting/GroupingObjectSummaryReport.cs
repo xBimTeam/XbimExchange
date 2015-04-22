@@ -18,7 +18,7 @@ namespace Xbim.CobieLiteUK.Validation.Reporting
 
         public DataTable GetReport(string mainClassification)
         {
-            if (_validatedAssetTypes == null || _validatedAssetTypes.FirstOrDefault() == null)
+            if (_validatedAssetTypes == null || !_validatedAssetTypes.Any())
                 return null;
             if (mainClassification == @"")
             {

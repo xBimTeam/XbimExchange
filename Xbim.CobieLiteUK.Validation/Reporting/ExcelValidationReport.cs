@@ -455,16 +455,25 @@ namespace Xbim.CobieLiteUK.Validation.Reporting
                 SetHeader(excelCell);
                 excelCell.SetCellValue("Validation Report Summary");
                 var iRunningRow = 2;
+
+                if (facility.AssetTypes != null && facility.AssetTypes.Any())
+                {
+                    var assetTypesReport = new GroupingObjectSummaryReport<CobieObject>(facility.AssetTypes);
+                    iRunningRow = WriteReportToPage(summaryPage, assetTypesReport.GetReport(PreferredClassification), iRunningRow);    
+                }
+
+                if (facility.Zones != null && facility.Zones.Any())
+                {
+                    var zonesReport = new GroupingObjectSummaryReport<CobieObject>(facility.Zones);
+                    iRunningRow = WriteReportToPage(summaryPage, zonesReport.GetReport(PreferredClassification), iRunningRow);
+                }
+
+                if (facility.Documents != null && facility.Documents.Any())
+                {
+                    var docReport = new DocumentsReport(facility.Documents);
+                    iRunningRow = WriteReportToPage(summaryPage, docReport.GetReport("ResponsibleRole"), iRunningRow);
+                }
                 
-                var assetTypesReport = new GroupingObjectSummaryReport<CobieObject>(facility.AssetTypes);
-                iRunningRow = WriteReportToPage(summaryPage, assetTypesReport.GetReport(PreferredClassification), iRunningRow);
-
-                var zonesReport = new GroupingObjectSummaryReport<CobieObject>(facility.Zones);
-                iRunningRow = WriteReportToPage(summaryPage, zonesReport.GetReport(PreferredClassification), iRunningRow);
-
-                var docReport = new DocumentsReport(facility.Documents);
-                iRunningRow = WriteReportToPage(summaryPage, docReport.GetReport("ResponsibleRole"), iRunningRow);
-
                 Debug.WriteLine(iRunningRow);
                 return true;
             }
