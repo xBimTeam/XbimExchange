@@ -454,15 +454,25 @@ namespace Xbim.CobieLiteUK.Validation.Reporting
                 SetHeader(excelCell);
                 excelCell.SetCellValue("Facility summary");
                 var iRunningRow = 2;
-                
-                var assetTypesReport = new GroupingObjectSummaryReport<CobieObject>(facility.AssetTypes, "Asset types report");
-                iRunningRow = WriteReportToPage(summaryPage, assetTypesReport.GetReport(PreferredClassification), iRunningRow);
 
-                var zonesReport = new GroupingObjectSummaryReport<CobieObject>(facility.Zones, "Zones report");
-                iRunningRow = WriteReportToPage(summaryPage, zonesReport.GetReport(PreferredClassification), iRunningRow);
+                if (facility.AssetTypes != null && facility.AssetTypes.Any())
+                {
+                    var assetTypesReport = new GroupingObjectSummaryReport<CobieObject>(facility.AssetTypes, "Asset types report");
+                    iRunningRow = WriteReportToPage(summaryPage, assetTypesReport.GetReport(PreferredClassification), iRunningRow);
+                }
 
-                var docReport = new DocumentsReport(facility.Documents);
-                iRunningRow = WriteReportToPage(summaryPage, docReport.GetReport("ResponsibleRole"), iRunningRow);
+                if (facility.Zones != null && facility.Zones.Any())
+                {
+                    var zonesReport = new GroupingObjectSummaryReport<CobieObject>(facility.Zones, "Zones report");
+                    iRunningRow = WriteReportToPage(summaryPage, zonesReport.GetReport(PreferredClassification),
+                        iRunningRow);
+                }
+
+                if (facility.Documents != null && facility.Documents.Any())
+                {
+                    var docReport = new DocumentsReport(facility.Documents);
+                    iRunningRow = WriteReportToPage(summaryPage, docReport.GetReport("ResponsibleRole"), iRunningRow);
+                }
 
                 Debug.WriteLine(iRunningRow);
                 return true;
