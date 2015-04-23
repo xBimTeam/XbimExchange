@@ -2,8 +2,8 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
-using Xbim.COBieLiteUK;
 using Xbim.CobieLiteUK.Validation.Extensions;
+using Xbim.COBieLiteUK;
 
 namespace Xbim.CobieLiteUK.Validation.Reporting
 {

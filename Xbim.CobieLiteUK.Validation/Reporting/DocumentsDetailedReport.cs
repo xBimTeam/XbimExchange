@@ -1,12 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Xbim.COBieLiteUK;
 using Xbim.CobieLiteUK.Validation.Extensions;
-using Attribute = Xbim.COBieLiteUK.Attribute;
+using Xbim.COBieLiteUK;
 
 namespace Xbim.CobieLiteUK.Validation.Reporting
 {
@@ -86,7 +82,7 @@ namespace Xbim.CobieLiteUK.Validation.Reporting
             if (!isInserting)
                 return null;
 
-            r[Dpow_DocName] = runningAsset.Name;
+            r[DpowDocName] = runningAsset.Name;
             return r;
         }
 
@@ -102,19 +98,18 @@ namespace Xbim.CobieLiteUK.Validation.Reporting
             }
         }
 
-        private const string Dpow_DocName = "DPoW_DocName";
+        private const string DpowDocName = "DPoW_DocName";
 
         private void SetBasicGrid()
         {
-            _attributesGrid = new DataTable();
-            _attributesGrid.TableName = "Detailed Documents report";
+            _attributesGrid = new DataTable {TableName = "Detailed Documents report"};
             // Id
             var workCol = AttributesGrid.Columns.Add("DPoW_ID", typeof(Int32));
             workCol.AllowDBNull = false;
             workCol.Unique = true;
             workCol.AutoIncrement = true;
 
-            AttributesGrid.Columns.Add(new DataColumn(Dpow_DocName, typeof(String)) { Caption = "Document name" });
+            AttributesGrid.Columns.Add(new DataColumn(DpowDocName, typeof(String)) { Caption = "Document name" });
             
         }
     }

@@ -1,5 +1,4 @@
-﻿using System.Threading;
-using NPOI.SS.UserModel;
+﻿using NPOI.SS.UserModel;
 using Xbim.COBieLiteUK;
 
 namespace Xbim.CobieLiteUK.Validation.Reporting

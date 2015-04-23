@@ -1,8 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using Xbim.COBieLiteUK;
 using Xbim.CobieLiteUK.Validation.Extensions;
+using Xbim.COBieLiteUK;
 
 namespace Xbim.CobieLiteUK.Validation
 {

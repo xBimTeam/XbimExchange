@@ -2,8 +2,8 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
-using Xbim.COBieLiteUK;
 using Xbim.CobieLiteUK.Validation.Extensions;
+using Xbim.COBieLiteUK;
 
 namespace Xbim.CobieLiteUK.Validation.Reporting
 {
@@ -11,7 +11,7 @@ namespace Xbim.CobieLiteUK.Validation.Reporting
     {
         private readonly IEnumerable<T> _validatedAssetTypes;
 
-        private string _title;
+        private readonly string _title;
 
         public GroupingObjectSummaryReport(IEnumerable<T> validatedAssetTypes, string title)
         {

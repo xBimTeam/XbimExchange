@@ -38,7 +38,7 @@ namespace Tests
 
         private static Facility GetValidated(string requirementFile)
         {
-            const string ifcTestFile = @"Lakeside_Restaurant.ifc";
+            const string ifcTestFile = @"Lakeside_Restaurant_fabric_only.ifczip";
             Facility sub = null;
 
             //create validation file from IFC

@@ -4,7 +4,6 @@ using System.Text;
 using Xbim.CobieLiteUK.Validation.Extensions;
 using Xbim.CobieLiteUK.Validation.RequirementDetails;
 using Xbim.COBieLiteUK;
-using Attribute = Xbim.COBieLiteUK.Attribute;
 
 namespace Xbim.CobieLiteUK.Validation
 {
@@ -143,10 +142,18 @@ namespace Xbim.CobieLiteUK.Validation
                 object satValue;
                 var pass = parentCachedValidator.CanSatisfy(req, out satValue);
                 var a = targetFacility.Clone(req.Attribute);
-                if (satValue is AttributeValue)
-                    a.Value = satValue as AttributeValue;
+
+                if (satValue != null)
+                    a.Value = AttributeValue.CreateFromObject(satValue);
                 else
-                    a.Value = null;
+                    a.Value = AttributeValue.CreateFromObject(""); // todo: determine the correct theoretical behaviour; it should probably be null, but needs changes in the reporting mechanism.
+
+                //// it was previously:
+                //if (satValue is AttributeValue)
+                //    a.Value = satValue as AttributeValue;
+                //else
+                //    a.Value = null;
+
                 if (pass)
                 {
                     a.Categories = new List<Category> { FacilityValidator.PassedCat };
@@ -204,7 +211,7 @@ namespace Xbim.CobieLiteUK.Validation
                             if (satValue != null)
                                 a.Value = AttributeValue.CreateFromObject(satValue);
                             else
-                                a.Value = AttributeValue.CreateFromObject("");
+                                a.Value = AttributeValue.CreateFromObject(""); // todo: determine the correct theoretical behaviour; it should probably be null, but needs changes in the reporting mechanism.
                                 
                             
                             a.Categories = new List<Category> { FacilityValidator.FailedCat };
