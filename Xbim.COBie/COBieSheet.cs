@@ -83,6 +83,8 @@ namespace Xbim.COBie
 
         public int RowCount { get { return Rows.Count; } }
 
+        public object SheetMetaData { get; set; }
+
         #endregion
         
         /// <summary>
