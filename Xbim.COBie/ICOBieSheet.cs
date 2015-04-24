@@ -22,6 +22,7 @@ namespace Xbim.COBie
         IEnumerable<COBieColumn> ForeignKeyColumns { get; }
         Dictionary<string, HashSet<string>> Indices { get; }
         COBieErrorCollection Errors { get; }
+        object SheetMetaData { get; set; }
 
 
         List<string> ValidateComponentMerge(XbimModel model, COBieMergeRoles fileRoles);
