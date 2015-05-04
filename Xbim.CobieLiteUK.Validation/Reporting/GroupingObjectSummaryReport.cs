@@ -62,18 +62,18 @@ namespace Xbim.CobieLiteUK.Validation.Reporting
                 var matchingCat = reportingAsset.GetMatchingCategories().FirstOrDefault();
                 // var sClass = (matchingCat != null) ? matchingCat.Classification : "";
                 var matchCatValue = (matchingCat != null) ? matchingCat.Code : "";
-                bool PassState = false;
+                var passState = false;
                 if (reportingAsset.Categories != null)
                 {
                     var vPassValue = reportingAsset.Categories.FirstOrDefault(c => c.Classification == "DPoW");
                     if (vPassValue != null && vPassValue.Code == "Passed")
                     {
-                        PassState=true;
+                        passState=true;
                     }
                 }
 
 
-                var thiItem = new Tuple<string, string, bool>(mainCatCode, matchCatValue, PassState);
+                var thiItem = new Tuple<string, string, bool>(mainCatCode, matchCatValue, passState);
 
                 if (!progressive.ContainsKey(thiItem))
                 {
@@ -134,7 +134,6 @@ namespace Xbim.CobieLiteUK.Validation.Reporting
             public int Total;
             public int Passes;
             public string MainCatDescription;
-            public bool HasFailure;
 
             public void Add(ValidationSummary addendum)
             {
