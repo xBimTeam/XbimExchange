@@ -39,7 +39,7 @@ namespace Xbim.CobieLiteUK.Validation.Reporting
 
             // the progressive variable allows grouping by Maincategory and MatchingCategory values
             //
-            var progressive = new Dictionary<Tuple<string, string>, ValidationSummary>();
+            var progressive = new Dictionary<Tuple<string, string, bool>, ValidationSummary>();
             foreach (var reportingAsset in _validatedAssetTypes)
             {
                 var mainCatCode = "";
@@ -62,8 +62,18 @@ namespace Xbim.CobieLiteUK.Validation.Reporting
                 var matchingCat = reportingAsset.GetMatchingCategories().FirstOrDefault();
                 // var sClass = (matchingCat != null) ? matchingCat.Classification : "";
                 var matchCatValue = (matchingCat != null) ? matchingCat.Code : "";
+                bool PassState = false;
+                if (reportingAsset.Categories != null)
+                {
+                    var v = reportingAsset.Categories.FirstOrDefault(c => c.Classification == "DPoW");
+                    if (v.Code == "Passed")
+                    {
+                        PassState=true;
+                    }
+                }
 
-                var thiItem = new Tuple<string, string>(mainCatCode, matchCatValue);
+
+                var thiItem = new Tuple<string, string, bool>(mainCatCode, matchCatValue, PassState);
 
                 if (!progressive.ContainsKey(thiItem))
                 {
@@ -90,11 +100,18 @@ namespace Xbim.CobieLiteUK.Validation.Reporting
                 thisRow[i++] = sortedKey.Item2;
                 thisRow[i++] = value.Total;
 
+                bool pass = sortedKey.Item3;
+                
                 var aStyle = VisualAttentionStyle.Green;
                 if (value.Passes < value.Total)
                     aStyle = VisualAttentionStyle.Red;
                 if (value.Total == 0)
-                    aStyle = VisualAttentionStyle.Amber;
+                {
+                    // aStyle = VisualAttentionStyle.Amber;
+                    if (!pass) // it's green by default.
+                        aStyle = VisualAttentionStyle.Red;
+                }
+                    
                 // ReSharper disable once RedundantAssignment (reduces risk for future edits)
                 thisRow[i++] = new VisualValue(value.Passes) { AttentionStyle = aStyle};
                 retTable.Rows.Add(thisRow);
@@ -102,11 +119,14 @@ namespace Xbim.CobieLiteUK.Validation.Reporting
             return retTable;
         }
 
-        private static int Comparison(Tuple<string, string> tuple, Tuple<string, string> tuple1)
+        private static int Comparison(Tuple<string, string, bool> tuple, Tuple<string, string, bool> tuple1)
         {
-            return tuple.Item1 == tuple1.Item1 
-                ? String.Compare(tuple.Item2, tuple1.Item2, StringComparison.Ordinal) 
-                : String.Compare(tuple.Item1, tuple1.Item1, StringComparison.Ordinal);
+            if (tuple.Item1 != tuple1.Item1)
+                return String.Compare(tuple.Item1, tuple1.Item1, StringComparison.Ordinal);
+
+            return tuple.Item2 != tuple1.Item2
+                ? String.Compare(tuple.Item2, tuple1.Item2, StringComparison.Ordinal)
+                : String.Compare(tuple.Item3.ToString(), tuple1.Item3.ToString(), StringComparison.Ordinal);
         }
 
         private class ValidationSummary
@@ -114,6 +134,7 @@ namespace Xbim.CobieLiteUK.Validation.Reporting
             public int Total;
             public int Passes;
             public string MainCatDescription;
+            public bool HasFailure;
 
             public void Add(ValidationSummary addendum)
             {

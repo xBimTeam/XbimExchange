@@ -11,12 +11,12 @@ namespace Xbim.CobieLiteUK.Validation
         where T : CobieObject, new()
         where TSub : CobieObject, new()
     {
-        private readonly T _requirementType;
+        private readonly T _requirementObject;
 
-        public CobieObjectValidator(T requirementType)
+        public CobieObjectValidator(T requirementObject)
         {
             HasFailures = false;
-            _requirementType = requirementType;
+            _requirementObject = requirementObject;
         }
 
         private List<RequirementDetail> _requirementDetails;
@@ -33,9 +33,9 @@ namespace Xbim.CobieLiteUK.Validation
 
         private IEnumerable<Attribute> RequirementAttributes()
         {
-            if (_requirementType.Attributes == null) 
+            if (_requirementObject.Attributes == null) 
                 return Enumerable.Empty<Attribute>();
-            return _requirementType.Attributes.Where(x => x.IsClassifiedAsRequirement());
+            return _requirementObject.Attributes.Where(x => x.IsClassifiedAsRequirement());
         }
 
         private void RefreshRequirementDetails()
@@ -68,15 +68,15 @@ namespace Xbim.CobieLiteUK.Validation
             // initialisation
             var retType = targetFacility.Create<T>();
             retType.Categories = new List<Category>();
-            retType.SetRequirementExternalSystem(_requirementType.ExternalSystem);
-            retType.SetRequirementExternalId(_requirementType.ExternalId);
-            retType.SetRequirementName(_requirementType.Name);
-            retType.SetRequirementCategories(_requirementType.Categories);
+            retType.SetRequirementExternalSystem(_requirementObject.ExternalSystem);
+            retType.SetRequirementExternalId(_requirementObject.ExternalId);
+            retType.SetRequirementName(_requirementObject.Name);
+            retType.SetRequirementCategories(_requirementObject.Categories);
 
             // improve returning Parent
             if (candidateParent == null) // the following properties depend on the nullity of candidate
             {
-                retType.Name = _requirementType.Name;
+                retType.Name = _requirementObject.Name;
             }
             else
             {
@@ -103,7 +103,15 @@ namespace Xbim.CobieLiteUK.Validation
             // if candidate is null then consider there's no match
             if (candidateParent == null)
             {
-                retType.Categories.Add(FacilityValidator.FailedCat);
+                // it's only a failure if the requirement was itself required (not only it had atteributes required)
+                if (_requirementObject.Categories != null
+                    && _requirementObject.Categories.Any(c => c.Classification == "DPoW" && c.Code == "required")
+                    )
+                    retType.Categories.Add(FacilityValidator.FailedCat);
+                else
+                {
+                    retType.Categories.Add(FacilityValidator.PassedCat);
+                }
                 retType.Description = "No candidates in submission match the required classification.\r\n";
                 retType.Attributes.AddRange(RequirementAttributes());
                 returnWithoutFurtherTests = true;    
@@ -254,11 +262,11 @@ namespace Xbim.CobieLiteUK.Validation
         /// <returns></returns>
         internal IEnumerable<CobieObjectCategoryMatch> GetCandidates<TReq>(List<TReq> submitted) where TReq : CobieObject
         {
-            if (_requirementType.Categories == null)
+            if (_requirementObject.Categories == null)
                 yield break;
  
             var ret = new Dictionary<TReq, List<Category>>();
-            foreach (var reqClass in _requirementType.Categories)
+            foreach (var reqClass in _requirementObject.Categories)
             {
                 var thisClassMatch = reqClass.GetClassificationMatches(submitted);
                 foreach (var matchedItem in thisClassMatch)
