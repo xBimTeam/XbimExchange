@@ -90,11 +90,11 @@ namespace Xbim.CobieLiteUK.Validation.Reporting
         /// <summary>
         /// Creates the report.
         /// </summary>
-        /// <param name="facility">the result of a DPoW validation to be transformed into report form.</param>
+        /// <param name="reportFacility">the result of a DPoW validation to be transformed into report form.</param>
         /// <param name="destinationStream">target stream for the spreadsheet</param>
         /// <param name="format">determines the excel format to use</param>
         /// <returns>true if successful, errors are cought and passed to Logger</returns>
-        public bool Create(Facility facility, Stream destinationStream, SpreadSheetFormat format)
+        public bool Create(Facility reportFacility, Stream destinationStream, SpreadSheetFormat format)
         {
             var workBook = format == SpreadSheetFormat.Xlsx
                 // ReSharper disable once RedundantCast
@@ -103,19 +103,21 @@ namespace Xbim.CobieLiteUK.Validation.Reporting
                 : (IWorkbook)new HSSFWorkbook();
             
 
-            var facReport = new FacilityReport(facility);
+            var facReport = new FacilityReport(reportFacility);
 
             
             var summaryPage = workBook.CreateSheet("Summary");
-            if (!CreateSummarySheet(summaryPage, facility)) 
+            if (!CreateSummarySheet(summaryPage, reportFacility)) 
                 return false;
             
             // reports on Documents
             //
-            var documentsPage = workBook.CreateSheet("Documents");
-            if (!CreateDocumentDetailsSheet(documentsPage, facility.Documents))
-                return false;
-
+            if (reportFacility.Documents != null)
+            {
+                var documentsPage = workBook.CreateSheet("Documents");
+                if (!CreateDocumentDetailsSheet(documentsPage, reportFacility.Documents))
+                    return false;
+            }
 
             var iRunningWorkBook = 1;
             // reports on AssetTypes details

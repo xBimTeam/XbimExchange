@@ -24,6 +24,19 @@ namespace Tests
         }
 
         [TestMethod]
+        public void HandlesIncompleteRequirmentFile()
+        {
+            // stage 0 is for documents
+            // stage 1 is for zones
+            // stage 6 is for assettypes
+            var validated = GetValidated(@"Lakeside_Restaurant-FacilityNotRequired.json");
+            const string repName = @"..\..\ValidationReport.xlsx";
+            var xRep = new ExcelValidationReport();
+            var ret = xRep.Create(validated, repName);
+            Assert.IsTrue(ret, "File not created");
+        }
+
+        [TestMethod]
         public void CanSaveValidationReport()
         {
             // stage 0 is for documents
