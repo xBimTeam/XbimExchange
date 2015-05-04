@@ -65,8 +65,8 @@ namespace Xbim.CobieLiteUK.Validation.Reporting
                 bool PassState = false;
                 if (reportingAsset.Categories != null)
                 {
-                    var v = reportingAsset.Categories.FirstOrDefault(c => c.Classification == "DPoW");
-                    if (v.Code == "Passed")
+                    var vPassValue = reportingAsset.Categories.FirstOrDefault(c => c.Classification == "DPoW");
+                    if (vPassValue != null && vPassValue.Code == "Passed")
                     {
                         PassState=true;
                     }
