@@ -27,8 +27,9 @@ namespace Xbim.COBieLiteUK
         internal void SetFacility(Facility facility)
         {
             _facility = facility;
-            foreach (var child in GetChildren())
-                child.SetFacility(facility);
+            var children = GetChildren();
+            foreach (var child in children)
+                if(child != null) child.SetFacility(facility);
         }
 
         protected CobieObject()
@@ -36,6 +37,57 @@ namespace Xbim.COBieLiteUK
             //create default unique name for the case no name is set.
             Name = Guid.NewGuid().ToString();
         }
+
+        #region Custom Enumerations infrastructure
+        protected T GetEnumeration<T>(string customValue) where T : struct
+        {
+
+            //return default value if nothing is specified as a custom value
+            if (string.IsNullOrWhiteSpace(customValue))
+            {
+                T def;
+                Enum.TryParse("notdefined", true, out def);
+                return def;
+            }
+
+            //try to parse string value
+            T result;
+            if (Enum.TryParse(customValue, true, out result))
+                return result;
+
+            //try to use aliases
+            var enumMembers = typeof(T).GetFields();
+            foreach (var member in from member in enumMembers
+                                   let alias = member.GetCustomAttributes<AliasAttribute>()
+                                       .FirstOrDefault(
+                                           a => String.Equals(a.Value, customValue, StringComparison.CurrentCultureIgnoreCase))
+                                   where alias != null
+                                   select member)
+                return (T)member.GetValue(result);
+
+            //if nothing fits it is a user defined value
+            T usrDef;
+            Enum.TryParse("userdefined", true, out usrDef);
+            return usrDef;
+
+        }
+
+        protected void SetEnumeration<T>(T value, Action<string> setter) where T : struct
+        {
+            var name = Enum.GetName(typeof(T), value);
+            switch (name)
+            {
+                case "notdefined":
+                    setter(null);
+                    break;
+                case "userdefined":
+                    break;
+                default:
+                    setter(name);
+                    break;
+            }
+        }
+        #endregion
 
         [XmlIgnore]
         [JsonIgnore]
@@ -59,7 +111,7 @@ namespace Xbim.COBieLiteUK
                 else if (condition(child)) yield return child;
             }
             //traverse tree down
-            foreach (var subChild in children.SelectMany(child => child.GetDeep(condition)))
+            foreach (var subChild in children.Where(c => c != null).SelectMany(child => child.GetDeep(condition)))
             {
                 yield return subChild;
             }
@@ -68,19 +120,19 @@ namespace Xbim.COBieLiteUK
         internal virtual IEnumerable<CobieObject> GetChildren()
         {
             if (Documents != null)
-                foreach (var document in Documents)
+                foreach (var document in Documents.Where(d => d != null))
                     yield return document;
             if (Attributes != null)
-                foreach (var attribute in Attributes)
+                foreach (var attribute in Attributes.Where(a => a != null))
                     yield return attribute;
             if (Issues != null)
-                foreach (var issue in Issues)
+                foreach (var issue in Issues.Where(i => i != null))
                     yield return issue;
             if (Impacts != null)
-                foreach (var impact in Impacts)
+                foreach (var impact in Impacts.Where(i => i != null))
                     yield return impact;
             if (Representations != null)
-                foreach (var representation in Representations)
+                foreach (var representation in Representations.Where(i => i != null))
                     yield return representation;
         }
 

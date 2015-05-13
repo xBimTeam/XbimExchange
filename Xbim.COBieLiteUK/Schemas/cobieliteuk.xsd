@@ -303,6 +303,7 @@
             <xs:element name="DateTimeAttributeValue" type="cobielite:DateTimeAttributeValue" minOccurs="1" />
             <xs:element name="DecimalAttributeValue" type="cobielite:DecimalAttributeValue" minOccurs="1" />
           </xs:choice>
+          <xs:element name="StageType" type="cobielite:StageType"/>
         </xs:sequence>
       </xs:extension>
     </xs:complexContent>
@@ -1053,6 +1054,7 @@
       <xs:extension base="cobielite:CobieObject">
         <xs:sequence>
           <xs:element name="Spaces" type="cobielite:SpaceKeyCollection" minOccurs="0" maxOccurs="1" />
+          <xs:element name="ZoneType" type="cobielite:ZoneType" minOccurs="0" maxOccurs="1" />
         </xs:sequence>
       </xs:extension>
     </xs:complexContent>
@@ -1649,6 +1651,43 @@
       <xs:enumeration value="quarter" />
       <xs:enumeration value="year" />
       <xs:enumeration value="as required" />
+    </xs:restriction>
+  </xs:simpleType>
+
+  <xs:simpleType name="ZoneType">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="Circulation Zone">
+        <xs:annotation>
+          <xs:appinfo source="alias">UK2012|Circulation Zone</xs:appinfo>
+        </xs:annotation>
+      </xs:enumeration>
+      <xs:enumeration value="Lighting Zone">
+        <xs:annotation>
+          <xs:appinfo source="alias">UK2012|Lighting Zone</xs:appinfo>
+        </xs:annotation>
+      </xs:enumeration>
+      <xs:enumeration value="Fire Alarm Zone">
+        <xs:annotation>
+          <xs:appinfo source="alias">UK2012|Fire Alarm Zone</xs:appinfo>
+        </xs:annotation>
+      </xs:enumeration>
+      <xs:enumeration value="Historical Preservation Zone">
+        <xs:annotation>
+          <xs:appinfo source="alias">UK2012|Historical Preservation Zone</xs:appinfo>
+        </xs:annotation>
+      </xs:enumeration>
+      <xs:enumeration value="Occupancy Zone">
+        <xs:annotation>
+          <xs:appinfo source="alias">UK2012|Occupancy Zone</xs:appinfo>
+        </xs:annotation>
+      </xs:enumeration>
+      <xs:enumeration value="Ventilation Zone">
+        <xs:annotation>
+          <xs:appinfo source="alias">UK2012|Ventilation Zone</xs:appinfo>
+        </xs:annotation>
+      </xs:enumeration>
+      <xs:enumeration value="not defined" />
+      <xs:enumeration value="user defined" />
     </xs:restriction>
   </xs:simpleType>
 </xs:schema>
