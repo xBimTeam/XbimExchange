@@ -134,7 +134,6 @@ namespace XbimExchanger.DPoWToCOBieLiteUK
             };
 
             //get project attributes which are convertable to COBieLite facility
-            bool converted;
             target.AreaUnitsCustom = sProject.AreaUnits.ToString();
             target.CurrencyUnitCustom = sProject.CurrencyUnits.ToString();
             target.LinearUnitsCustom = sProject.LinearUnits.ToString();
