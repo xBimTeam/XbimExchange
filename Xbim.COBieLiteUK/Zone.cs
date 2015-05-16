@@ -11,6 +11,28 @@ namespace Xbim.COBieLiteUK
 {
     public partial class Zone
     {
+
+        public ZoneType ZoneType
+        {
+            get
+            {
+                if(Categories == null || !Categories.Any()) return ZoneType.notdefined;
+                var type = Categories.FirstOrDefault(c => c.Classification == "ZoneType" || c.Classification == null);
+                return type == null ? ZoneType.notdefined : GetEnumeration<ZoneType>(type.Code);
+            }
+            set { SetEnumeration(value, s =>
+            {
+                if(Categories == null) Categories = new List<Category>();
+                var type = Categories.FirstOrDefault(c => c.Classification == "ZoneType" || c.Classification == null);
+                if (type == null)
+                {
+                    type = new Category{Classification = "ZoneType"};
+                    Categories.Add(type);
+                }
+                type.Code = s;
+            });}
+        }
+
         internal override IEnumerable<IEntityKey> GetKeys()
         {
             foreach (var key in base.GetKeys())

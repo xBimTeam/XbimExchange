@@ -41,6 +41,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "COBieLiteUK.Profiling", "CO
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Xbim.COBieLiteUK.Validation.Profiling", "Xbim.COBieLiteUK.Validation.Profiling\Xbim.COBieLiteUK.Validation.Profiling.csproj", "{D78043F8-A253-41AD-86B0-02143DE75BBD}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Xbim.COBieLiteUK.WebOptimization", "Xbim.COBieLiteUK.WebOptimization\Xbim.COBieLiteUK.WebOptimization.csproj", "{29027C2C-7F0B-4238-AF7A-216400005E3A}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -103,6 +105,10 @@ Global
 		{D78043F8-A253-41AD-86B0-02143DE75BBD}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D78043F8-A253-41AD-86B0-02143DE75BBD}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D78043F8-A253-41AD-86B0-02143DE75BBD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{29027C2C-7F0B-4238-AF7A-216400005E3A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{29027C2C-7F0B-4238-AF7A-216400005E3A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{29027C2C-7F0B-4238-AF7A-216400005E3A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{29027C2C-7F0B-4238-AF7A-216400005E3A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -113,5 +119,6 @@ Global
 		{ECF29BC1-D9B6-4E9F-8915-892B8D6D1089} = {3D4383C4-C053-4EC1-BBB7-D768314F37BE}
 		{421F22EA-E228-4B2A-ACEB-5BECE1B6489E} = {3D4383C4-C053-4EC1-BBB7-D768314F37BE}
 		{D78043F8-A253-41AD-86B0-02143DE75BBD} = {3D4383C4-C053-4EC1-BBB7-D768314F37BE}
+		{29027C2C-7F0B-4238-AF7A-216400005E3A} = {3D4383C4-C053-4EC1-BBB7-D768314F37BE}
 	EndGlobalSection
 EndGlobal
