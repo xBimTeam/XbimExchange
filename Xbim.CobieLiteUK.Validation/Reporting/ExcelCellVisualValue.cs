@@ -92,14 +92,13 @@ namespace Xbim.CobieLiteUK.Validation.Reporting
             {
                 
                 // var dataFormatStyle = excelCell.Sheet.Workbook.CreateDataFormat();
-                excelCell.CellStyle.DataFormat = (short)0x16; //  dataFormatStyle.GetFormat("yyyy/MM/dd HH:mm:ss");
+                excelCell.CellStyle.DataFormat = 0x16; //  dataFormatStyle.GetFormat("yyyy/MM/dd HH:mm:ss");
                 var v = ((DateTimeAttributeValue)(attribute)).Value;
-                if (v.HasValue)
-                {
-                    // dataformats from: https://poi.apache.org/apidocs/org/apache/poi/ss/usermodel/BuiltinFormats.html
-                    excelCell.CellStyle.DataFormat = 0x16;
-                    excelCell.SetCellValue(v.Value);
-                }
+                if (!v.HasValue) 
+                    return;
+                // dataformats from: https://poi.apache.org/apidocs/org/apache/poi/ss/usermodel/BuiltinFormats.html
+                excelCell.CellStyle.DataFormat = 0x16;
+                excelCell.SetCellValue(v.Value);
             }
             
         }
