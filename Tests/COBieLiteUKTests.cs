@@ -5,10 +5,12 @@ using Xbim.COBieLiteUK;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Text.RegularExpressions;
 using Xbim.CobieLiteUK.Validation;
 using Xbim.IO;
 using XbimExchanger.IfcToCOBieLiteUK;
 using Attribute = Xbim.COBieLiteUK.Attribute;
+using System = Xbim.COBieLiteUK.System;
 
 
 namespace Tests
@@ -16,6 +18,117 @@ namespace Tests
     [TestClass]
     public class CoBieLiteUkTests
     {
+        [TestMethod]
+        public void CustomEnumerationTests()
+        {
+            var f = new Facility();
+            Assert.AreEqual(AreaUnit.notdefined, f.AreaUnits);
+
+            f.AreaUnits = AreaUnit.squarefeet;
+            Assert.AreEqual(AreaUnit.squarefeet, f.AreaUnits);
+
+            //this should be qualified as a user defined value
+            f.AreaUnitsCustom = "aaa";
+            Assert.AreEqual(AreaUnit.userdefined, f.AreaUnits);
+
+            //this should be picked from aliases
+            f.AreaUnitsCustom = "Square centimeters";
+            Assert.AreEqual(AreaUnit.squarecentimeters, f.AreaUnits);
+
+            //this shouldn't change the value
+            f.AreaUnits = AreaUnit.userdefined;
+            Assert.AreEqual(AreaUnit.squarecentimeters, f.AreaUnits);
+
+            //this should set custom area units to null
+            f.AreaUnits = AreaUnit.notdefined;
+            Assert.IsNull(f.AreaUnitsCustom);
+        }
+
+        [TestMethod]
+        public void IFSModelAnalyses()
+        {
+            const string file = @"c:\CODE\SampleData\IFS\DB4 full Model A_DPoW.json";
+            //**************** semantical analysis
+            var f = Facility.ReadJson(file);
+
+            var assemblies = f.Get<Assembly>().Where(i => i != null);
+            var assets = f.Get<Asset>().Where(i => i != null);
+            var assetsTypes = (f.AssetTypes ?? new List<AssetType>()).Where(i => i != null);
+            var attributes = f.Get<Attribute>().Where(i => i != null);
+            var connections = f.Get<Connection>().Where(i => i != null);
+            var contacts = (f.Contacts ?? new List<Contact>()).Where(i => i != null);
+            var documents = f.Get<Document>().Where(i => i != null);
+            var floors = (f.Floors ?? new List<Floor>()).Where(i => i != null);
+            var impacts = f.Get<Impact>().Where(i => i != null);
+            var issues = f.Get<Issue>().Where(i => i != null);
+            var jobs = f.Get<Job>().Where(i => i != null);
+            var resources = f.Get<Resource>().Where(i => i != null);
+            var spaces = f.Get<Space>().Where(i => i != null);
+            var spares = f.Get<Spare>().Where(i => i != null);
+            var systems = (f.Systems ?? new List<Xbim.COBieLiteUK.System>()).Where(i => i != null);
+            var zones = (f.Zones ?? new List<Zone>()).Where(i => i != null);
+
+            //report
+            Debug.WriteLine("Assemblies: {0}", assemblies.Count());
+            Debug.WriteLine("Assets: {0}", assets.Count());
+            Debug.WriteLine("AssetTypes: {0}", assetsTypes.Count());
+            Debug.WriteLine("Attributes: {0}", attributes.Count());
+            Debug.WriteLine("Connections: {0}", connections.Count());
+            Debug.WriteLine("Contacts: {0}", contacts.Count());
+            Debug.WriteLine("Documents: {0}", documents.Count());
+            Debug.WriteLine("Floors: {0}", floors.Count());
+            Debug.WriteLine("Impacts: {0}", impacts.Count());
+            Debug.WriteLine("Issues: {0}", issues.Count());
+            Debug.WriteLine("Jobs: {0}", jobs.Count());
+            Debug.WriteLine("Resources: {0}", resources.Count());
+            Debug.WriteLine("Spaces: {0}", spaces.Count());
+            Debug.WriteLine("Spares: {0}", spares.Count());
+            Debug.WriteLine("Systems: {0}", systems.Count());
+            Debug.WriteLine("Zones: {0}", zones.Count());
+        }
+
+        [TestMethod]
+        public void IFSFileAnalyses()
+        {
+            const string file = @"c:\CODE\SampleData\IFS\DB4 full Model A_DPoW.json";
+            //const string file = @"c:\Users\mxfm2\Desktop\SampleHouse.json";
+            const string result = @"c:\CODE\SampleData\IFS\Tokens.txt";
+
+
+            //**************** lexical analysis
+            var tokens = new Dictionary<string, int>();
+            var filesize = 0;
+            using (var reader = File.OpenText(file))
+            {
+                var data = reader.ReadToEnd();
+                filesize = data.Length;
+                //analyse repetition of property names
+                var propNameRegex = new Regex("(?<=\")([\\w0-9]+?)(?=\":)");
+                var matches = propNameRegex.Matches(data).OfType<Match>();
+                reader.Close();
+                foreach (var match in matches)
+                {
+                    if (!tokens.Keys.Contains(match.Value)) tokens.Add(match.Value, 0);
+                    tokens[match.Value]++;
+                }
+                data = null;
+                matches = null;
+            }
+
+            using (var w = File.CreateText(result))
+            {
+                var total = tokens.Values.Aggregate(0, (a, b) => a + b);
+                w.WriteLine("Total count of tokens: {0:## ### ###}", total);
+                w.WriteLine("Total file length: {0:## ### ###}", filesize);
+                w.WriteLine("------------------------------");
+                foreach (var t in tokens.OrderByDescending(t => t.Value))
+                {
+                    w.WriteLine("{0,30} {1,10} {2,10:P} {3,10:P}", t.Key, t.Value, (float) t.Value/(float) total,
+                        (float) (t.Key.Length*t.Value)/(float) filesize);
+                }
+            }
+        }
+
         [TestMethod]
         public void CoBieLiteUkCreation()
         {
@@ -265,7 +378,7 @@ namespace Tests
                         Name = "Null attribute"
                     }
                 },
-                Stages = new List<ProjectStage>(new []
+                Stages = new List<ProjectStage>(new[]
                 {
                     new ProjectStage
                     {
@@ -273,7 +386,7 @@ namespace Tests
                         CreatedOn = DateTime.Now,
                         Start = DateTime.Now.AddDays(5),
                         End = DateTime.Now.AddDays(10),
-                        CreatedBy = new ContactKey{Email = "martin.cerny@northumbria.ac.uk"}
+                        CreatedBy = new ContactKey {Email = "martin.cerny@northumbria.ac.uk"}
                     },
                     new ProjectStage
                     {
@@ -281,7 +394,7 @@ namespace Tests
                         CreatedOn = DateTime.Now,
                         Start = DateTime.Now.AddDays(10),
                         End = DateTime.Now.AddDays(20),
-                        CreatedBy = new ContactKey{Email = "martin.cerny@northumbria.ac.uk"}
+                        CreatedBy = new ContactKey {Email = "martin.cerny@northumbria.ac.uk"}
                     },
                     new ProjectStage
                     {
@@ -289,7 +402,7 @@ namespace Tests
                         CreatedOn = DateTime.Now,
                         Start = DateTime.Now.AddDays(20),
                         End = DateTime.Now.AddDays(110),
-                        CreatedBy = new ContactKey{Email = "martin.cerny@northumbria.ac.uk"}
+                        CreatedBy = new ContactKey {Email = "martin.cerny@northumbria.ac.uk"}
                     },
                     new ProjectStage
                     {
@@ -297,7 +410,7 @@ namespace Tests
                         CreatedOn = DateTime.Now,
                         Start = DateTime.Now.AddDays(110),
                         End = DateTime.Now.AddDays(300),
-                        CreatedBy = new ContactKey{Email = "martin.cerny@northumbria.ac.uk"}
+                        CreatedBy = new ContactKey {Email = "martin.cerny@northumbria.ac.uk"}
                     },
                 })
             };
@@ -312,7 +425,65 @@ namespace Tests
             facility.WriteCobie(xlsxFile, out msg);
 
             var facility2 = Facility.ReadXml(xmlFile);
-            var facility3 = Facility.ReadJson(jsonFile);    
+            var facility3 = Facility.ReadJson(jsonFile);
+        }
+
+        [TestMethod]
+        public void AttributeTest()
+        {
+            var facility = new Facility
+            {
+                Attributes = new List<Attribute>
+                {
+                    new Attribute
+                    {
+                        Name = "Boolean",
+                        Value = new BooleanAttributeValue {Value = true}
+                    },
+                    new Attribute
+                    {
+                        Name = "DateTime",
+                        Value = new DateTimeAttributeValue {Value = DateTime.Today}
+                    },
+                    new Attribute
+                    {
+                        Name = "Decimal",
+                        Value = new DecimalAttributeValue {Value = 10.0}
+                    },
+                    new Attribute
+                    {
+                        Name = "Integer",
+                        Value = new IntegerAttributeValue {Value = 5}
+                    },
+                    new Attribute
+                    {
+                        Name = "String",
+                        Value = new StringAttributeValue {Value = "A"}
+                    },
+                    new Attribute
+                    {
+                        Name = "Null"
+                    }
+                }
+            };
+
+            const string file = "attribute_test.json";
+
+            //write to file and minified file (attribute type names minified)
+            facility.WriteJson(file);
+
+            var f2 = Facility.ReadJson(file);
+
+            foreach (var f in new []{f2})
+            {
+                Assert.AreEqual((f.Attributes.FirstOrDefault(a => a.Name == "Boolean").Value as BooleanAttributeValue).Value, true);
+                Assert.AreEqual((f.Attributes.FirstOrDefault(a => a.Name == "DateTime").Value as DateTimeAttributeValue).Value, DateTime.Today);
+                Assert.AreEqual((f.Attributes.FirstOrDefault(a => a.Name == "Decimal").Value as DecimalAttributeValue).Value ?? 0, 10.0, 0.0000001);
+                Assert.AreEqual((f.Attributes.FirstOrDefault(a => a.Name == "Integer").Value as IntegerAttributeValue).Value, 5);
+                Assert.AreEqual((f.Attributes.FirstOrDefault(a => a.Name == "String").Value as StringAttributeValue).Value, "A");
+                Assert.IsNull(f.Attributes.FirstOrDefault(a => a.Name == "Null").Value);
+            }
+
         }
 
         [TestMethod]
@@ -330,7 +501,7 @@ namespace Tests
             facility.ValidateUK2012(log, true);
             Debug.Write(log.ToString());
             Debug.WriteLine("----------------------------------------------------------------------");
-            
+
             //second run after fixings
             log = new StringWriter();
             facility.ValidateUK2012(log, true);
@@ -385,7 +556,7 @@ namespace Tests
                     var facility = Facility.ReadCobie(file, out msg);
                     stopWatch.Stop();
 
-                    if(!String.IsNullOrEmpty(msg))
+                    if (!String.IsNullOrEmpty(msg))
                         log.WriteLine(msg);
                     Debug.WriteLine("Reading COBie: " + stopWatch.ElapsedMilliseconds);
 
@@ -401,7 +572,7 @@ namespace Tests
                     stopWatch.Start();
                     //Debug.Write(msg);
                     //Debug.Write(log.ToString());    
-                    facility.WriteCobie(newFile, out  msg);
+                    facility.WriteCobie(newFile, out msg);
                     stopWatch.Stop();
                     if (!String.IsNullOrEmpty(msg))
                         log.WriteLine(msg);
@@ -438,7 +609,7 @@ namespace Tests
             double dbl = 3.14;
             var attDbl = AttributeValue.CreateFromObject(dbl);
 
-            AttributeValue dAt = new DecimalAttributeValue() {Value = Math.E };
+            AttributeValue dAt = new DecimalAttributeValue() {Value = Math.E};
             var fromA = AttributeValue.CreateFromObject(dAt);
         }
 
@@ -464,13 +635,15 @@ namespace Tests
         public void DeepSearchTest()
         {
             #region Model
+
             var facility = new Facility
             {
-                Contacts = new List<Contact>(new []{
-                    new Contact
+                Contacts = new List<Contact>(new[]
                 {
-                Name    = "martin.cerny@northumbria.ac.uk"
-                } 
+                    new Contact
+                    {
+                        Name = "martin.cerny@northumbria.ac.uk"
+                    }
                 }),
                 Floors = new List<Floor>(new[]
                 {
@@ -551,6 +724,7 @@ namespace Tests
                     }
                 })
             };
+
             #endregion
 
             var allAttributes = facility.Get<Attribute>();
@@ -565,8 +739,11 @@ namespace Tests
             var self = facility.Get<Facility>().FirstOrDefault();
             Assert.IsNotNull(self);
 
-            var contact = facility.Get<CobieObject>(c => c.GetType() == typeof (Contact) && c.Name == "martin.cerny@northumbria.ac.uk");
+            var contact =
+                facility.Get<CobieObject>(
+                    c => c.GetType() == typeof (Contact) && c.Name == "martin.cerny@northumbria.ac.uk");
         }
+
         [DeploymentItem("TestFiles\\OBN1-COBie-UK-2014.xlsx")]
         [TestMethod]
         [DeploymentItem("ValidationFiles\\Lakeside_Restaurant.ifc")]
@@ -591,11 +768,12 @@ namespace Tests
                     facilityType.WriteJson(jsonFile, true);
                     facilityType.WriteCobie("..\\..\\Lakeside_Restaurant.xlsx", out msg, "UK2012", true);
 
-                    
+
                     break;
                 }
             }
         }
+
         [DeploymentItem("ValidationFiles\\Lakeside_Restaurant.json")]
         [DeploymentItem("ValidationFiles\\Lakeside_Restaurant-stage6-COBie.json")]
         [TestMethod]
@@ -614,12 +792,11 @@ namespace Tests
                 };
                 var candidates = v.GetCandidates(submitted.AssetTypes).ToList();
                 submittedAssetTypes.AddRange(candidates.Select(c => c.MatchedObject).Cast<AssetType>());
-  
             }
-            Assert.IsTrue(submittedAssetTypes.Count>0);
+            Assert.IsTrue(submittedAssetTypes.Count > 0);
             submitted.AssetTypes = submittedAssetTypes;
             string msg;
-            submitted.WriteCobie("Lakeside_restaurant_submission.xlsx",out msg);
+            submitted.WriteCobie("Lakeside_restaurant_submission.xlsx", out msg);
             Assert.IsFalse(string.IsNullOrWhiteSpace(msg));
         }
     }

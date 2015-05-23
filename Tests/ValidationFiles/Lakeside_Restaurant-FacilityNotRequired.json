@@ -1,0 +1,136 @@
+{
+	"AreaUnits" : "squaremeters",
+	"LinearUnits" : "meters",
+	"VolumeUnits" : "cubicmeters",
+	"CurrencyUnit" : "GBP",
+	"Metadata" : {
+		"Title" : "COBIE",
+		"Version" : "2",
+		"Release" : "4",
+		"Status" : "ifc2x3",
+		"Region" : "EN-UK"
+	},
+	"Project" : {
+		"Name" : "003 Lakeside Restaurant",
+		"ExternalId" : "884712c6-2c50-4fcd-a758-008bcda73cc0"
+	},
+	"LinearUnitsCustom" : "meters",
+	"AreaUnitsCustom" : "squaremeters",
+	"VolumeUnitsCustom" : "cubicmeters",
+	"CurrencyUnitCustom" : "GBP",
+	"Name" : "Lakeside Restaurant",
+	"CreatedBy" : {
+		"Email" : "69d60606-bee8-4327-9e44-3db8bf5a718c",
+		"KeyType" : "Contact"
+	},
+	"CreatedOn" : "0001-01-01T00:00:00",
+	"ExternalSystem" : "DPoW",
+	"ExternalId" : "2340c234-9537-4681-8357-dd069415eac3",
+	"Attributes" : [{
+			"Name" : "DPoWFileVersion",
+			"CreatedBy" : {
+				"Email" : "69d60606-bee8-4327-9e44-3db8bf5a718c",
+				"KeyType" : "Contact"
+			},
+			"CreatedOn" : "0001-01-01T00:00:00",
+			"Categories" : [{
+					"Code" : "unknown"
+				}
+			],
+			"ExternalEntity" : "DPoW Attributes",
+			"StringAttributeValue" : {
+				"Value" : "1.0.1"
+			}
+		}, {
+			"Name" : "CurrentStage",
+			"CreatedBy" : {
+				"Email" : "69d60606-bee8-4327-9e44-3db8bf5a718c",
+				"KeyType" : "Contact"
+			},
+			"CreatedOn" : "0001-01-01T00:00:00",
+			"Categories" : [{
+					"Code" : "unknown"
+				}
+			],
+			"ExternalEntity" : "DPoW Attributes",
+			"StringAttributeValue" : {
+				"Value" : "0"
+			}
+		}, {
+			"Name" : "LastModified (0) (1)",
+			"CreatedBy" : {
+				"Email" : "69d60606-bee8-4327-9e44-3db8bf5a718c",
+				"KeyType" : "Contact"
+			},
+			"CreatedOn" : "0001-01-01T00:00:00",
+			"Categories" : [{
+					"Code" : "unknown"
+				}
+			],
+			"ExternalEntity" : "ProjectAttributes",
+			"DateTimeAttributeValue" : {
+				"Value" : "2015-04-14T21:48:27.673+00:00"
+			}
+		}, {
+			"Name" : "LastModified (0) (1)",
+			"CreatedBy" : {
+				"Email" : "69d60606-bee8-4327-9e44-3db8bf5a718c",
+				"KeyType" : "Contact"
+			},
+			"CreatedOn" : "0001-01-01T00:00:00",
+			"Categories" : [{
+					"Code" : "unknown"
+				}
+			],
+			"ExternalEntity" : "ProjectAttributes",
+			"DateTimeAttributeValue" : {
+				"Value" : "2015-04-14T21:48:27.673+00:00"
+			}
+		}, {
+			"Name" : "Cost",
+			"CreatedBy" : {
+				"Email" : "69d60606-bee8-4327-9e44-3db8bf5a718c",
+				"KeyType" : "Contact"
+			},
+			"CreatedOn" : "0001-01-01T00:00:00",
+			"Categories" : [{
+					"Code" : "unknown"
+				}
+			],
+			"ExternalEntity" : "ProjectStageAttributes",
+			"DecimalAttributeValue" : {
+				"Value" : 0.0
+			}
+		}, {
+			"Name" : "Currency",
+			"CreatedBy" : {
+				"Email" : "69d60606-bee8-4327-9e44-3db8bf5a718c",
+				"KeyType" : "Contact"
+			},
+			"CreatedOn" : "0001-01-01T00:00:00",
+			"Categories" : [{
+					"Code" : "unknown"
+				}
+			],
+			"ExternalEntity" : "ProjectStageAttributes",
+			"StringAttributeValue" : {
+				"Value" : "GBP"
+			}
+		}, {
+			"Name" : "EnvironmentalRating",
+			"CreatedBy" : {
+				"Email" : "69d60606-bee8-4327-9e44-3db8bf5a718c",
+				"KeyType" : "Contact"
+			},
+			"CreatedOn" : "0001-01-01T00:00:00",
+			"Categories" : [{
+					"Code" : "unknown"
+				}
+			],
+			"ExternalEntity" : "ProjectStageAttributes",
+			"StringAttributeValue" : {
+				"Value" : "Undefined"
+			}
+		}
+	]
+}

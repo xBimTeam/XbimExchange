@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Xbim.COBieLiteUK;
 using Xbim.CobieLiteUK.Validation.Extensions;
+using Xbim.COBieLiteUK;
 using Attribute = Xbim.COBieLiteUK.Attribute;
 
 namespace Xbim.CobieLiteUK.Validation
@@ -24,20 +24,20 @@ namespace Xbim.CobieLiteUK.Validation
 
         internal IEnumerable<Document> ValidatedDocs(List<Document> list)
         {
-            var _dicDocs = new Dictionary<string, Document>();
+            var dicDocs = new Dictionary<string, Document>();
             if (list != null)
             {
                 try
                 {
-                    _dicDocs = list.ToDictionary(doc => doc.Name, doc => doc);
+                    dicDocs = list.ToDictionary(doc => doc.Name, doc => doc);
                 }
                 catch 
                 {
                     // creates a dictionary with first values, but also presents a document error.
                     HasFailures = true;
-                    foreach (var document in list.Where(document => !_dicDocs.ContainsKey(document.Name)))
+                    foreach (var document in list.Where(document => !dicDocs.ContainsKey(document.Name)))
                     {
-                        _dicDocs.Add(document.Name, document);
+                        dicDocs.Add(document.Name, document);
                     }
                 }
                 if (HasFailures) // it must be because of the try/catch earlier
@@ -64,11 +64,11 @@ namespace Xbim.CobieLiteUK.Validation
                 if (TerminationMode == TerminationMode.StopOnFirstFail)
                     yield break;
                 Document submitted = null;
-                if (_dicDocs.ContainsKey(requiredDocument.Name))
+                if (dicDocs.ContainsKey(requiredDocument.Name))
                 {
-                    submitted = _dicDocs[requiredDocument.Name];
+                    submitted = dicDocs[requiredDocument.Name];
                 }
-                Document tmp = null;
+                Document tmp;
                 if (IsValid(submitted))
                 {
                     tmp = _destinationFacility.Clone(submitted);

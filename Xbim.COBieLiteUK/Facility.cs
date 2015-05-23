@@ -40,8 +40,91 @@ namespace Xbim.COBieLiteUK
 
         public IEnumerable<T> Get<T>(Func<T, bool> condition = null) where T : CobieObject
         {
-            //make Facility part of the result
             var self = this as T;
+
+            //optimization first:
+            if (typeof (T) == typeof (Facility))
+            {
+                if(condition == null) yield return self;
+                else if (condition(self)) yield return self;
+                yield break;
+            }
+
+            if (typeof(T) == typeof(AssetType))
+            {
+                if(AssetTypes == null) yield break;
+                foreach (var o in AssetTypes.Select(assetType => assetType as T))
+                {
+                    if (condition == null) yield return o;
+                    else if (condition(o)) yield return o;
+                }
+                yield break;
+            }
+
+            if (typeof(T) == typeof(Asset))
+            {
+                if (AssetTypes == null) yield break;
+                foreach (var type in AssetTypes.Where(a => a != null && a.Assets != null))
+                {
+                    foreach (var o in type.Assets.Select(o => o as T))
+                    {
+                        if (condition == null) yield return o;
+                        else if (condition(o)) yield return o;
+                    }
+                }
+                yield break;
+            }
+
+            if (typeof(T) == typeof(Floor))
+            {
+                if (Floors == null) yield break;
+                foreach (var o in Floors.Select(o => o as T))
+                {
+                    if (condition == null) yield return o;
+                    else if (condition(o)) yield return o;
+                }
+                yield break;
+            }
+
+            if (typeof(T) == typeof(Space))
+            {
+                if (Floors == null) yield break;
+                foreach (var type in Floors.Where(a => a != null && a.Spaces != null))
+                {
+                    foreach (var o in type.Spaces.Select(o => o as T))
+                    {
+                        if (condition == null) yield return o;
+                        else if (condition(o)) yield return o;
+                    }
+                }
+                yield break;
+            }
+
+            if (typeof(T) == typeof(System))
+            {
+                if (Systems == null) yield break;
+                foreach (var o in Systems.Select(o => o as T))
+                {
+                    if (condition == null) yield return o;
+                    else if (condition(o)) yield return o;
+                }
+                yield break;
+            }
+
+            if (typeof(T) == typeof(Zone))
+            {
+                if (Zones == null) yield break;
+                foreach (var o in Zones.Select(o => o as T))
+                {
+                    if (condition == null) yield return o;
+                    else if (condition(o)) yield return o;
+                }
+                yield break;
+            }
+
+            //generic selection (mostly for attributes, issues, etc.)
+
+            //make Facility part of the result
             if (self != null)
             {
                 if (condition == null) yield return self;
@@ -52,165 +135,28 @@ namespace Xbim.COBieLiteUK
         }
 
         #region Enumerations
-
         public AreaUnit AreaUnits
         {
-            get
-            {
-                if (String.IsNullOrEmpty(AreaUnitsCustom)) return AreaUnit.notdefined;
-
-                //try to parse string value
-                AreaUnit result;
-                if (Enum.TryParse(AreaUnitsCustom, true, out result))
-                    return result;
-
-                //try to use aliases
-                var enumMembers = typeof (AreaUnit).GetFields();
-                foreach (var member in from member in enumMembers
-                    let alias = member.GetCustomAttributes<AliasAttribute>()
-                        .FirstOrDefault(
-                            a => String.Equals(a.Value, AreaUnitsCustom, StringComparison.CurrentCultureIgnoreCase))
-                    where alias != null
-                    select member)
-                    return (AreaUnit) member.GetValue(result);
-
-                //if nothing fits it is a user defined value
-                return AreaUnit.userdefined;
-            }
-            set
-            {
-                switch (value)
-                {
-                    case AreaUnit.notdefined:
-                        AreaUnitsCustom = null;
-                        break;
-                    case AreaUnit.userdefined:
-                        break;
-                    default:
-                        AreaUnitsCustom = Enum.GetName(typeof (AreaUnit), value);
-                        break;
-                }
-            }
+            get { return GetEnumeration<AreaUnit>(AreaUnitsCustom); }
+            set { SetEnumeration(value, s => AreaUnitsCustom = s);}
         }
 
         public LinearUnit LinearUnits
         {
-            get
-            {
-                if (String.IsNullOrEmpty(LinearUnitsCustom)) return LinearUnit.notdefined;
-
-                //try to parse string value
-                LinearUnit result;
-                if (Enum.TryParse(LinearUnitsCustom, true, out result))
-                    return result;
-
-                //try to use aliases
-                var enumMembers = typeof (LinearUnit).GetFields();
-                foreach (var member in from member in enumMembers
-                    let alias = member.GetCustomAttributes<AliasAttribute>()
-                        .FirstOrDefault(
-                            a => String.Equals(a.Value, LinearUnitsCustom, StringComparison.CurrentCultureIgnoreCase))
-                    where alias != null
-                    select member)
-                    return (LinearUnit) member.GetValue(result);
-
-                //if nothing fits it is a user defined value
-                return LinearUnit.userdefined;
-            }
-            set
-            {
-                switch (value)
-                {
-                    case LinearUnit.notdefined:
-                        LinearUnitsCustom = null;
-                        break;
-                    case LinearUnit.userdefined:
-                        break;
-                    default:
-                        LinearUnitsCustom = Enum.GetName(typeof (LinearUnit), value);
-                        break;
-                }
-            }
+            get { return GetEnumeration<LinearUnit>(LinearUnitsCustom); }
+            set { SetEnumeration(value, s => LinearUnitsCustom = s);}
         }
 
         public VolumeUnit VolumeUnits
         {
-            get
-            {
-                if (String.IsNullOrEmpty(VolumeUnitsCustom)) return VolumeUnit.notdefined;
-
-                //try to parse string value
-                VolumeUnit result;
-                if (Enum.TryParse(VolumeUnitsCustom, true, out result))
-                    return result;
-
-                //try to use aliases
-                var enumMembers = typeof (VolumeUnit).GetFields();
-                foreach (var member in from member in enumMembers
-                    let alias = member.GetCustomAttributes<AliasAttribute>()
-                        .FirstOrDefault(
-                            a => String.Equals(a.Value, VolumeUnitsCustom, StringComparison.CurrentCultureIgnoreCase))
-                    where alias != null
-                    select member)
-                    return (VolumeUnit) member.GetValue(result);
-
-                //if nothing fits it is a user defined value
-                return VolumeUnit.userdefined;
-            }
-            set
-            {
-                switch (value)
-                {
-                    case VolumeUnit.notdefined:
-                        VolumeUnitsCustom = null;
-                        break;
-                    case VolumeUnit.userdefined:
-                        break;
-                    default:
-                        VolumeUnitsCustom = Enum.GetName(typeof (VolumeUnit), value);
-                        break;
-                }
-            }
+            get { return GetEnumeration<VolumeUnit>(VolumeUnitsCustom); }
+            set { SetEnumeration(value, s => VolumeUnitsCustom = s); }
         }
 
         public CurrencyUnit CurrencyUnit
         {
-            get
-            {
-                if (String.IsNullOrEmpty(CurrencyUnitCustom)) return CurrencyUnit.notdefined;
-
-                //try to parse string value
-                CurrencyUnit result;
-                if (Enum.TryParse(CurrencyUnitCustom, true, out result))
-                    return result;
-
-                //try to use aliases
-                var enumMembers = typeof (CurrencyUnit).GetFields();
-                foreach (var member in from member in enumMembers
-                    let alias = member.GetCustomAttributes<AliasAttribute>()
-                        .FirstOrDefault(
-                            a => String.Equals(a.Value, CurrencyUnitCustom, StringComparison.CurrentCultureIgnoreCase))
-                    where alias != null
-                    select member)
-                    return (CurrencyUnit) member.GetValue(result);
-
-                //if nothing fits it is a user defined value
-                return CurrencyUnit.userdefined;
-            }
-            set
-            {
-                switch (value)
-                {
-                    case CurrencyUnit.notdefined:
-                        CurrencyUnitCustom = null;
-                        break;
-                    case CurrencyUnit.userdefined:
-                        break;
-                    default:
-                        CurrencyUnitCustom = Enum.GetName(typeof (CurrencyUnit), value);
-                        break;
-                }
-            }
+            get { return GetEnumeration<CurrencyUnit>(CurrencyUnitCustom); }
+            set { SetEnumeration(value, s => CurrencyUnitCustom = s); }
         }
 
         #endregion
@@ -609,25 +555,25 @@ namespace Xbim.COBieLiteUK
 
             //enumerate own
             if (Floors != null)
-                foreach (var floor in Floors)
+                foreach (var floor in Floors.Where(i => i != null))
                     yield return floor;
             if (AssetTypes != null)
-                foreach (var assetType in AssetTypes)
+                foreach (var assetType in AssetTypes.Where(i => i != null))
                     yield return assetType;
             if (Contacts != null)
-                foreach (var contact in Contacts)
+                foreach (var contact in Contacts.Where(i => i != null))
                     yield return contact;
             if (Systems != null)
-                foreach (var system in Systems)
+                foreach (var system in Systems.Where(i => i != null))
                     yield return system;
             if (Zones != null)
-                foreach (var zone in Zones)
+                foreach (var zone in Zones.Where(i => i != null))
                     yield return zone;
             if (Resources != null)
-                foreach (var resource in Resources)
+                foreach (var resource in Resources.Where(i => i != null))
                     yield return resource;
             if (Stages != null)
-                foreach (var stage in Stages)
+                foreach (var stage in Stages.Where(i => i != null))
                     yield return stage;
         }
 

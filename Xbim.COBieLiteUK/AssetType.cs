@@ -30,42 +30,8 @@ namespace Xbim.COBieLiteUK
 
         public AssetPortability AssetTypeEnum
         {
-            get
-            {
-                if (String.IsNullOrEmpty(AssetTypeCustom)) return AssetPortability.notdefined;
-
-                //try to parse string value
-                AssetPortability result;
-                if (Enum.TryParse(AssetTypeCustom, true, out result))
-                    return result;
-
-                //try to use aliases
-                var enumMembers = typeof(AssetPortability).GetFields();
-                foreach (var member in from member in enumMembers
-                                       let alias = member.GetCustomAttributes<AliasAttribute>()
-                                           .FirstOrDefault(
-                                               a => String.Equals(a.Value, AssetTypeCustom, StringComparison.CurrentCultureIgnoreCase))
-                                       where alias != null
-                                       select member)
-                    return (AssetPortability)member.GetValue(result);
-
-                //if nothing fits it is a user defined value
-                return AssetPortability.userdefined;
-            }
-            set
-            {
-                switch (value)
-                {
-                    case AssetPortability.notdefined:
-                        AssetTypeCustom = null;
-                        break;
-                    case AssetPortability.userdefined:
-                        break;
-                    default:
-                        AssetTypeCustom = Enum.GetName(typeof(AssetPortability), value);
-                        break;
-                }
-            }
+            get { return GetEnumeration<AssetPortability>(AssetTypeCustom); }
+            set { SetEnumeration(value, s => AssetTypeCustom = s); }
         }
 
         internal override IEnumerable<CobieObject> GetChildren()

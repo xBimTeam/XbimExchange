@@ -1,6 +1,5 @@
-﻿using System.Linq;
+﻿using Xbim.CobieLiteUK.Validation.Extensions;
 using Xbim.COBieLiteUK;
-using Xbim.CobieLiteUK.Validation.Extensions;
 
 namespace Xbim.CobieLiteUK.Validation.Reporting
 {

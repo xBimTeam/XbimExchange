@@ -178,6 +178,9 @@ namespace XbimExchanger.IfcToCOBieLiteUK
                     }
                     assetTypeSystem.Components.Add(new AssetKey { Name = asset.Name });
                 }
+
+                //add to tle list only if it is not null
+                if (assetTypeSystem == null) continue;
                 if (facility.Systems == null) facility.Systems = new List<Xbim.COBieLiteUK.System>();
                 facility.Systems.Add(assetTypeSystem);
             }

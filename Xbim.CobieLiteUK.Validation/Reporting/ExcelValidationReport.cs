@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Data;
 using System.Diagnostics;
 using System.IO;
@@ -7,9 +8,8 @@ using NPOI.HSSF.UserModel;
 using NPOI.SS.UserModel;
 using NPOI.SS.Util;
 using NPOI.XSSF.UserModel;
-using Xbim.COBieLiteUK;
 using Xbim.Common.Logging;
-using System.Collections.Generic;
+using Xbim.COBieLiteUK;
 
 namespace Xbim.CobieLiteUK.Validation.Reporting
 {
@@ -90,11 +90,11 @@ namespace Xbim.CobieLiteUK.Validation.Reporting
         /// <summary>
         /// Creates the report.
         /// </summary>
-        /// <param name="facility">the result of a DPoW validation to be transformed into report form.</param>
+        /// <param name="reportFacility">the result of a DPoW validation to be transformed into report form.</param>
         /// <param name="destinationStream">target stream for the spreadsheet</param>
         /// <param name="format">determines the excel format to use</param>
         /// <returns>true if successful, errors are cought and passed to Logger</returns>
-        public bool Create(Facility facility, Stream destinationStream, SpreadSheetFormat format)
+        public bool Create(Facility reportFacility, Stream destinationStream, SpreadSheetFormat format)
         {
             var workBook = format == SpreadSheetFormat.Xlsx
                 // ReSharper disable once RedundantCast
@@ -103,19 +103,21 @@ namespace Xbim.CobieLiteUK.Validation.Reporting
                 : (IWorkbook)new HSSFWorkbook();
             
 
-            var facReport = new FacilityReport(facility);
+            var facReport = new FacilityReport(reportFacility);
 
             
             var summaryPage = workBook.CreateSheet("Summary");
-            if (!CreateSummarySheet(summaryPage, facility)) 
+            if (!CreateSummarySheet(summaryPage, reportFacility)) 
                 return false;
             
             // reports on Documents
             //
-            var documentsPage = workBook.CreateSheet("Documents");
-            if (!CreateDocumentDetailsSheet(documentsPage, facility.Documents))
-                return false;
-
+            if (reportFacility.Documents != null)
+            {
+                var documentsPage = workBook.CreateSheet("Documents");
+                if (!CreateDocumentDetailsSheet(documentsPage, reportFacility.Documents))
+                    return false;
+            }
 
             var iRunningWorkBook = 1;
             // reports on AssetTypes details
@@ -128,15 +130,14 @@ namespace Xbim.CobieLiteUK.Validation.Reporting
                 if (assetType.GetSubmittedAssetsCount() < 1)
                     continue;
                 var firstOrDefault = assetType.RequirementCategories.FirstOrDefault(cat => cat.Classification == @"Uniclass2015");
-                if (firstOrDefault != null)
-                {
-                    var tName = firstOrDefault.Code;
-                    var validName = WorkbookUtil.CreateSafeSheetName(string.Format(@"{0} {1}", iRunningWorkBook++, tName));
+                if (firstOrDefault == null) 
+                    continue;
+                var tName = firstOrDefault.Code;
+                var validName = WorkbookUtil.CreateSafeSheetName(string.Format(@"{0} {1}", iRunningWorkBook++, tName));
 
-                    var detailPage = workBook.CreateSheet(validName);
-                    if (!CreateDetailSheet(detailPage, assetType))
-                        return false;
-                }
+                var detailPage = workBook.CreateSheet(validName);
+                if (!CreateDetailSheet(detailPage, assetType))
+                    return false;
             }
 
             // reports on Zones details
@@ -148,15 +149,14 @@ namespace Xbim.CobieLiteUK.Validation.Reporting
                 if (zoneGroup.GetSubmittedAssetsCount() < 1)
                     continue;
                 var firstOrDefault = zoneGroup.RequirementCategories.FirstOrDefault(cat => cat.Classification == @"Uniclass2015");
-                if (firstOrDefault != null)
-                {
-                    var tName = firstOrDefault.Code;
-                    var validName = WorkbookUtil.CreateSafeSheetName(string.Format(@"{0} {1}", iRunningWorkBook++, tName));
+                if (firstOrDefault == null) 
+                    continue;
+                var tName = firstOrDefault.Code;
+                var validName = WorkbookUtil.CreateSafeSheetName(string.Format(@"{0} {1}", iRunningWorkBook++, tName));
 
-                    var detailPage = workBook.CreateSheet(validName);
-                    if (!CreateDetailSheet(detailPage, zoneGroup))
-                        return false;
-                }
+                var detailPage = workBook.CreateSheet(validName);
+                if (!CreateDetailSheet(detailPage, zoneGroup))
+                    return false;
             }
             try
             {
@@ -542,6 +542,7 @@ namespace Xbim.CobieLiteUK.Validation.Reporting
                         continue;
                     excelCell = excelRow.GetCell(iRunningColumn) ?? excelRow.CreateCell(iRunningColumn);
 
+                    // ReSharper disable once CanBeReplacedWithTryCastAndCheckForNull
                     if (row[tCol] is IVisualValue)
                     {
                         writer.SetCell(excelCell, (IVisualValue) row[tCol]);
@@ -564,13 +565,12 @@ namespace Xbim.CobieLiteUK.Validation.Reporting
                 }
             }
 
-            if (autoSize)
+            if (!autoSize) 
+                return startingRow + 1;
+            // sets all used columns to autosize
+            for (int irun = 0; irun < iRunningColumn; irun++)
             {
-                // sets all used columns to autosize
-                for (int irun = 0; irun < iRunningColumn; irun++)
-                {
-                    summaryPage.AutoSizeColumn(irun);
-                }
+                summaryPage.AutoSizeColumn(irun);
             }
             return startingRow + 1;
         }

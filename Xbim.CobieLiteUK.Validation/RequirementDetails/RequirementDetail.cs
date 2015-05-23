@@ -1,6 +1,5 @@
 ﻿using System;
 using Xbim.COBieLiteUK;
-using Xbim.CobieLiteUK.Validation.Extensions;
 using Attribute = Xbim.COBieLiteUK.Attribute;
 
 namespace Xbim.CobieLiteUK.Validation.RequirementDetails
