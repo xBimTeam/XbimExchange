@@ -485,8 +485,10 @@ namespace Xbim.COBieLiteUK
 
         private void FixHeaderForWriting(IRow row, List<MappingAttribute> mappings)
         {
+            if (row == null) return;
             foreach (var mapping in mappings)
             {
+              
                 var cellIndex = CellReference.ConvertColStringToIndex(mapping.Column);
                 var cell = row.GetCell(cellIndex) ?? row.CreateCell(cellIndex);
                 if (cell.CellType == CellType.Blank)
@@ -494,9 +496,10 @@ namespace Xbim.COBieLiteUK
                     if (row.RowStyle != null) cell.CellStyle = row.RowStyle;
                     cell.SetCellValue(mapping.Header);
                 }
-
+               
                 if (cell.CellType == CellType.String && cell.StringCellValue.Trim() != mapping.Header)
                     throw new Exception("Wrong template header!");
+               
             }
         }
 

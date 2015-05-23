@@ -144,9 +144,11 @@ namespace Xbim.COBie.Data
                     {
                         coordinate.ExtIdentifier = ifcProduct.GlobalId.ToString();
                     }
-                coordinate.ClockwiseRotation = transBox.ClockwiseRotation.ToString("F4");
-                coordinate.ElevationalRotation = transBox.ElevationalRotation.ToString("F4");
-                coordinate.YawRotation = transBox.YawRotation.ToString("F4");
+
+                    coordinate.ClockwiseRotation = transBox.ClockwiseRotation.ToString("F4");
+                    coordinate.ElevationalRotation = transBox.ElevationalRotation.ToString("F4");
+                    coordinate.YawRotation = transBox.YawRotation.ToString("F4");
+
 
                     coordinates.AddRow(coordinate);
                     if (ifcCartesianPointUpper != null) //we need a second row for upper point
@@ -158,9 +160,9 @@ namespace Xbim.COBie.Data
                         coordinateUpper.RowName = coordinate.RowName;
                         coordinateUpper.SheetName = coordinate.SheetName;
                         coordinateUpper.Category = "box-upperright";
-                    coordinateUpper.CoordinateXAxis = string.Format("{0}", (double)ifcCartesianPointUpper[0]);
-                    coordinateUpper.CoordinateYAxis = string.Format("{0}", (double)ifcCartesianPointUpper[1]);
-                    coordinateUpper.CoordinateZAxis = string.Format("{0}", (double)ifcCartesianPointUpper[2]);
+                        coordinateUpper.CoordinateXAxis = string.Format("{0}", (double)ifcCartesianPointUpper[0]);
+                        coordinateUpper.CoordinateYAxis = string.Format("{0}", (double)ifcCartesianPointUpper[1]);
+                        coordinateUpper.CoordinateZAxis = string.Format("{0}", (double)ifcCartesianPointUpper[2]);
                         coordinateUpper.ExtSystem = coordinate.ExtSystem;
                         coordinateUpper.ExtObject = coordinate.ExtObject;
                         coordinateUpper.ExtIdentifier = coordinate.ExtIdentifier;
@@ -175,7 +177,7 @@ namespace Xbim.COBie.Data
 
             coordinates.OrderBy(s => s.Name);
             
-                ProgressIndicator.Finalise();
+            ProgressIndicator.Finalise();
                 
 
             return coordinates;

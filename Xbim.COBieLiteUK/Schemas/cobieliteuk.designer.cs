@@ -61,19 +61,15 @@ namespace Xbim.COBieLiteUK {
         
         private Site siteField;
         
-        private LinearUnit linearUnitsField;
         
         private string linearUnitsCustomField;
         
-        private AreaUnit areaUnitsField;
         
         private string areaUnitsCustomField;
         
-        private VolumeUnit volumeUnitsField;
         
         private string volumeUnitsCustomField;
         
-        private CurrencyUnit currencyUnitField;
         
         private string currencyUnitCustomField;
         
@@ -1945,7 +1941,6 @@ namespace Xbim.COBieLiteUK {
         
         private List<SpaceKey> spacesField;
         
-        private ZoneType zoneTypeField;
         
         [global::System.Xml.Serialization.XmlArrayAttribute(Form=global::System.Xml.Schema.XmlSchemaForm.Unqualified)]
         [global::System.Xml.Serialization.XmlArrayItemAttribute(Form=global::System.Xml.Schema.XmlSchemaForm.Unqualified, IsNullable=false)]
@@ -2717,7 +2712,6 @@ namespace Xbim.COBieLiteUK {
         
         private string assetTypeCustomField;
         
-        private AssetPortability assetTypeEnumField;
         
         private ContactKey manufacturerField;
         

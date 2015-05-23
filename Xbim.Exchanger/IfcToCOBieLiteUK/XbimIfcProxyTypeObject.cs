@@ -18,6 +18,7 @@ namespace XbimExchanger.IfcToCOBieLiteUK
         /// <summary>
         /// 
         /// </summary>
+        /// <param name="helper"></param>
         /// <param name="name"></param>
         public XbimIfcProxyTypeObject(CoBieLiteUkHelper helper, string name)
         {
