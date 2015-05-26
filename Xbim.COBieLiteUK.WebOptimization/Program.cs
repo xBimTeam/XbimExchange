@@ -1,8 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
+using System.IO.Compression;
 using System.Linq;
+using System.Runtime.Serialization;
+using System.Runtime.Serialization.Formatters.Binary;
 using System.Text.RegularExpressions;
+using CSystem = Xbim.COBieLiteUK.System;
 
 namespace Xbim.COBieLiteUK.WebOptimization
 {
@@ -30,7 +35,11 @@ namespace Xbim.COBieLiteUK.WebOptimization
             Console.WriteLine("File size {0}.", originalSize);
             Console.WriteLine("Loading file {0}.", file);
 
+            var watch = new Stopwatch();
+            watch.Start();
             var facility = Facility.ReadJson(file);
+            watch.Stop();
+            Console.WriteLine("File loaded in {0}ms", watch.ElapsedMilliseconds);
 
             Console.WriteLine("Analyzing original file.");
             FileAnalyses(file);
@@ -133,7 +142,7 @@ namespace Xbim.COBieLiteUK.WebOptimization
             var resources = f.Get<Resource>().Where(i => i != null).ToList();
             var spaces = f.Get<Space>().Where(i => i != null).ToList();
             var spares = f.Get<Spare>().Where(i => i != null).ToList();
-            var systems = (f.Systems ?? new List<Xbim.COBieLiteUK.System>()).Where(i => i != null).ToList();
+            var systems = (f.Systems ?? new List<CSystem>()).Where(i => i != null).ToList();
             var zones = (f.Zones ?? new List<Zone>()).Where(i => i != null).ToList();
 
             //report

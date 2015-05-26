@@ -64,7 +64,7 @@
       <xs:appinfo source="mapping">UK2012|I|ExtObject|optional|item|-|ExternalEntity</xs:appinfo>
       <xs:appinfo source="mapping">UK2012|J|ExtIdentifier|optional|item|-|ExternalId</xs:appinfo>
       <xs:appinfo source="mapping">UK2012|K|Description|optional|item|-|Description</xs:appinfo>
-      
+
       <!-- Experimental extensions -->
       <xs:appinfo source="mapping">UK2012|L|ProjectStages|optional|list|-|ProjectStages.Name|extension</xs:appinfo>
 
@@ -108,7 +108,7 @@
       <xs:appinfo source="mapping">UK2012|O|AssetIdentifier|optional|item|-|AssetIdentifier</xs:appinfo>
       <!-- Experimental extensions -->
       <xs:appinfo source="mapping">UK2012|P|ProjectStages|optional|list|-|ProjectStages.Name|extension</xs:appinfo>
-      
+
       <xs:documentation>
         Named and individually scheduled physical items and features that might require
         management, such as inspection, maintenance, servicing or replacement, during
@@ -303,7 +303,7 @@
             <xs:element name="DateTimeAttributeValue" type="cobielite:DateTimeAttributeValue" minOccurs="1" />
             <xs:element name="DecimalAttributeValue" type="cobielite:DecimalAttributeValue" minOccurs="1" />
           </xs:choice>
-          <xs:element name="StageType" type="cobielite:StageType"/>
+          <xs:element name="StageType" type="cobielite:StageType" />
         </xs:sequence>
       </xs:extension>
     </xs:complexContent>
@@ -840,7 +840,7 @@
       <xs:appinfo source="mapping">UK2012|M|ClockwiseRotation|optional|item|-|Roll</xs:appinfo>
       <xs:appinfo source="mapping">UK2012|N|ElevationalRotation|optional|item|-|Pitch</xs:appinfo>
       <xs:appinfo source="mapping">UK2012|O|YawRotation|optional|item|-|Yaw</xs:appinfo>
-      
+
       <!-- BS1192-4 additions -->
       <xs:appinfo source="mapping">UK2012|P|RelativeTo|optional|item|-|RelativeTo</xs:appinfo>
       <xs:appinfo source="mapping">UK2012|Q|LRM|optional|item|-|LRM</xs:appinfo>
@@ -868,7 +868,7 @@
           <xs:element name="Yaw" type="xs:double" minOccurs="1" />
           <xs:element name="Pitch" type="xs:double" minOccurs="1" />
           <xs:element name="Roll" type="xs:double" minOccurs="1" />
-          <xs:element name="RelativeTo" type="xs:string" minOccurs="0" >
+          <xs:element name="RelativeTo" type="xs:string" minOccurs="0">
             <xs:annotation>
               <xs:documentation>
                 (BS 1192-4) This refers to the name of earlier points.
@@ -878,7 +878,7 @@
               </xs:documentation>
             </xs:annotation>
           </xs:element>
-          <xs:element name="LRM" type="xs:string" minOccurs="0" >
+          <xs:element name="LRM" type="xs:string" minOccurs="0">
             <xs:annotation>
               <xs:documentation>
                 (BS 1192-4) Linear Referencing Method
@@ -1080,11 +1080,11 @@
       </xs:documentation>
     </xs:annotation>
     <xs:sequence>
-      <xs:element name="Title" type="xs:string" default="COBIE"/>
-      <xs:element name="Version" type="xs:string" default="2"/>
-      <xs:element name="Release" type="xs:string" default="4"/>
-      <xs:element name="Status" type="xs:string" default="ifc2x3"/>
-      <xs:element name="Region" type="xs:string" default="EN-UK"/>
+      <xs:element name="Title" type="xs:string" default="COBIE" />
+      <xs:element name="Version" type="xs:string" default="2" />
+      <xs:element name="Release" type="xs:string" default="4" />
+      <xs:element name="Status" type="xs:string" default="ifc2x3" />
+      <xs:element name="Region" type="xs:string" default="EN-UK" />
     </xs:sequence>
   </xs:complexType>
   <!-- End COBie metadata-->
@@ -1105,8 +1105,8 @@
     
   </xs:complexType>-->
   <!-- End CobieUniqueObject type -->
-  
-  
+
+
   <!-- Begin CobieObject type -->
   <xs:complexType name="CobieObject" abstract="true">
     <xs:sequence>
@@ -1135,7 +1135,7 @@
     <xs:sequence>
       <xs:element name="Name" type="xs:string" minOccurs="1" maxOccurs="1" />
     </xs:sequence>
-    <xs:attribute name="KeyType" type="cobielite:EntityType" default="Not defined"/>
+    <xs:attribute name="KeyType" type="cobielite:EntityType" default="Not defined" />
   </xs:complexType>
   <xs:complexType name="EntityKeyCollection">
     <xs:sequence>
@@ -1183,7 +1183,7 @@
     <xs:complexContent>
       <xs:extension base="cobielite:AttributeValue">
         <xs:sequence>
-          <xs:element name="Value" type="xs:boolean" minOccurs="1" nillable="true"/>
+          <xs:element name="Value" type="xs:boolean" minOccurs="1" nillable="true" />
           <xs:element name="AllowedValue" type="xs:boolean" minOccurs="0" nillable="true" />
         </xs:sequence>
       </xs:extension>
@@ -1218,7 +1218,7 @@
     <xs:complexContent>
       <xs:extension base="cobielite:AttributeValue">
         <xs:sequence>
-          <xs:element name="Value" type="xs:int" minOccurs="1" nillable="true"/>
+          <xs:element name="Value" type="xs:int" minOccurs="1" nillable="true" />
           <xs:element name="MinimalValue" type="xs:int" minOccurs="0" nillable="true" />
           <xs:element name="MaximalValue" type="xs:int" minOccurs="0" nillable="true" />
         </xs:sequence>
@@ -1486,7 +1486,7 @@
           <xs:appinfo source="alias">yd</xs:appinfo>
         </xs:annotation>
       </xs:enumeration>
-      <xs:enumeration value="not defined" >
+      <xs:enumeration value="not defined">
         <xs:annotation>
           <xs:appinfo source="alias">unknown</xs:appinfo>
           <xs:appinfo source="alias">n/a</xs:appinfo>
@@ -1575,7 +1575,7 @@
   <xs:simpleType name="EntityType">
     <xs:annotation>
       <xs:documentation>
-        Entity type for a keys which are not strong defined in COBie. 
+        Entity type for a keys which are not strong defined in COBie.
         Keys can only be defined for a types with unique name restriction.
       </xs:documentation>
     </xs:annotation>
@@ -1635,7 +1635,7 @@
           <xs:appinfo source="alias">UK2016|ProjectStage</xs:appinfo>
         </xs:annotation>
       </xs:enumeration>
-      <xs:enumeration value="Not defined"/>
+      <xs:enumeration value="Not defined" />
     </xs:restriction>
   </xs:simpleType>
 
@@ -1686,6 +1686,19 @@
           <xs:appinfo source="alias">UK2012|Ventilation Zone</xs:appinfo>
         </xs:annotation>
       </xs:enumeration>
+      <xs:enumeration value="not defined" />
+      <xs:enumeration value="user defined" />
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="StageType">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="As Built" />
+      <xs:enumeration value="Submitted" />
+      <xs:enumeration value="Approved" />
+      <xs:enumeration value="Exact Requirement" />
+      <xs:enumeration value="Maximum Requirement" />
+      <xs:enumeration value="Minimum Requirement" />
+      <xs:enumeration value="Requirement" />
       <xs:enumeration value="not defined" />
       <xs:enumeration value="user defined" />
     </xs:restriction>

@@ -153,7 +153,6 @@ namespace Xbim.Exchange
                     catch (Exception e)
                     {
                         Console.WriteLine("Unable to open model {0}, {1}", fileName, e.Message);
-                        Console.WriteLine("Unable to open model {0}, {1}", fileName, e.Message);
                     }
 
                 }
@@ -168,7 +167,6 @@ namespace Xbim.Exchange
                     }
                     catch (Exception e)
                     {
-                        Console.WriteLine("Unable to open model {0}, {1}", fileName, e.Message);
                         Console.WriteLine("Unable to open model {0}, {1}", fileName, e.Message);
                     }
 

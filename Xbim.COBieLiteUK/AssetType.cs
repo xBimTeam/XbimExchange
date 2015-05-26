@@ -28,6 +28,7 @@ namespace Xbim.COBieLiteUK
             }
         }
 
+        [global::System.Runtime.Serialization.DataMember]
         public AssetPortability AssetTypeEnum
         {
             get { return GetEnumeration<AssetPortability>(AssetTypeCustom); }

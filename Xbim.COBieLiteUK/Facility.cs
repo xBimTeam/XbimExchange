@@ -135,24 +135,28 @@ namespace Xbim.COBieLiteUK
         }
 
         #region Enumerations
+        [global::System.Runtime.Serialization.DataMember]
         public AreaUnit AreaUnits
         {
             get { return GetEnumeration<AreaUnit>(AreaUnitsCustom); }
             set { SetEnumeration(value, s => AreaUnitsCustom = s);}
         }
 
+        [global::System.Runtime.Serialization.DataMember]
         public LinearUnit LinearUnits
         {
             get { return GetEnumeration<LinearUnit>(LinearUnitsCustom); }
             set { SetEnumeration(value, s => LinearUnitsCustom = s);}
         }
 
+        [global::System.Runtime.Serialization.DataMember]
         public VolumeUnit VolumeUnits
         {
             get { return GetEnumeration<VolumeUnit>(VolumeUnitsCustom); }
             set { SetEnumeration(value, s => VolumeUnitsCustom = s); }
         }
 
+        [global::System.Runtime.Serialization.DataMember]
         public CurrencyUnit CurrencyUnit
         {
             get { return GetEnumeration<CurrencyUnit>(CurrencyUnitCustom); }
@@ -254,6 +258,7 @@ namespace Xbim.COBieLiteUK
             return originalCobieObjects.Select(Clone);
         }
 
+        [NonSerialized]
         private JsonSerializer _cachedCloningSerialiser;
 
         private JsonSerializer CachedCloningSerialiser
@@ -287,11 +292,13 @@ namespace Xbim.COBieLiteUK
 
         public void WriteJson(Stream stream, bool indented = false)
         {
-            using (var textWriter = new StreamWriter(stream))
-            {
+            //using (
+            var textWriter = new StreamWriter(stream);
+              //  )
+            //{
                 var serialiser = GetJsonSerializer(indented);
                 serialiser.Serialize(textWriter, this);
-            }
+            //}
         }
 
         public void WriteJson(string path, bool indented = false)
@@ -596,6 +603,7 @@ namespace Xbim.COBieLiteUK
 
         #region Validation UK2012 (BS1192-4)
 
+        [NonSerialized]
         private int _counter;
         // ReSharper disable once InconsistentNaming
         public void ValidateUK2012(TextWriter logger, bool fixIfPossible)
@@ -930,6 +938,7 @@ namespace Xbim.COBieLiteUK
             return result;
         }
 
+        [NonSerialized]
         private System _defaultSystem;
         private System GetDefaultSystem()
         {
@@ -956,6 +965,7 @@ namespace Xbim.COBieLiteUK
             return system;
         }
 
+        [NonSerialized]
         private Space _anyDefaultSpace;
         private Space GetAnyDefaultSpace(bool addToDefaultZone = true)
         {

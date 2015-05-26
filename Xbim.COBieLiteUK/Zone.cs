@@ -11,7 +11,8 @@ namespace Xbim.COBieLiteUK
 {
     public partial class Zone
     {
-
+        [JsonIgnore]
+        [global::System.Runtime.Serialization.DataMember]
         public ZoneType ZoneType
         {
             get
@@ -26,7 +27,7 @@ namespace Xbim.COBieLiteUK
                 var type = Categories.FirstOrDefault(c => c.Classification == "ZoneType" || c.Classification == null);
                 if (type == null)
                 {
-                    type = new Category{Classification = "ZoneType"};
+                    type = new Category();
                     Categories.Add(type);
                 }
                 type.Code = s;

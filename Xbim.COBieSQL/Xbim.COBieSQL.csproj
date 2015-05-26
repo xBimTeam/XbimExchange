@@ -4,16 +4,15 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{29027C2C-7F0B-4238-AF7A-216400005E3A}</ProjectGuid>
-    <OutputType>Exe</OutputType>
+    <ProjectGuid>{C126ACF8-4D7C-4EB3-A984-D36905A8507D}</ProjectGuid>
+    <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Xbim.COBieLiteUK.WebOptimization</RootNamespace>
-    <AssemblyName>Xbim.COBieLiteUK.WebOptimization</AssemblyName>
+    <RootNamespace>Xbim.COBieSQL</RootNamespace>
+    <AssemblyName>Xbim.COBieSQL</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
@@ -23,7 +22,6 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
     <OutputPath>bin\Release\</OutputPath>
@@ -32,10 +30,15 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="EntityFramework">
+      <HintPath>..\packages\EntityFramework.6.1.3\lib\net45\EntityFramework.dll</HintPath>
+    </Reference>
+    <Reference Include="EntityFramework.SqlServer">
+      <HintPath>..\packages\EntityFramework.6.1.3\lib\net45\EntityFramework.SqlServer.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Core" />
-    <Reference Include="System.IO.Compression" />
-    <Reference Include="System.IO.Compression.FileSystem" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -43,17 +46,30 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Program.cs" />
+    <Compile Include="CobieContext.cs" />
+    <Compile Include="Model\Attribute.cs" />
+    <Compile Include="Model\Classification\Classification.cs" />
+    <Compile Include="Model\Classification\ClassificationItem.cs" />
+    <Compile Include="Model\CobieObject.cs" />
+    <Compile Include="Model\Contact.cs" />
+    <Compile Include="Model\Document.cs" />
+    <Compile Include="Model\Enumerations\AreaUnit.cs" />
+    <Compile Include="Model\Enumerations\ContactRole.cs" />
+    <Compile Include="Model\Enumerations\CurrencyUnit.cs" />
+    <Compile Include="Model\Enumerations\ExternalSystem.cs" />
+    <Compile Include="Model\Enumerations\ICobieEnumeration.cs" />
+    <Compile Include="Model\Enumerations\LinearUnit.cs" />
+    <Compile Include="Model\Enumerations\VolumeUnit.cs" />
+    <Compile Include="Model\Facility.cs" />
+    <Compile Include="Model\Impact.cs" />
+    <Compile Include="Model\Issue.cs" />
+    <Compile Include="Model\ProjectStage.cs" />
+    <Compile Include="Model\Representation.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\Xbim.COBieLiteUK\Xbim.COBieLiteUK.csproj">
-      <Project>{90def072-96c7-4972-835e-909c41169cb4}</Project>
-      <Name>Xbim.COBieLiteUK</Name>
-    </ProjectReference>
+    <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

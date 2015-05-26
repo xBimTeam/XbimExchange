@@ -15,8 +15,8 @@
       <Path>
         <Point X="2" Y="7.625" />
         <Point X="2.317" Y="7.625" />
-        <Point X="2.317" Y="11" />
-        <Point X="2" Y="11" />
+        <Point X="2.317" Y="11.25" />
+        <Point X="2" Y="11.25" />
       </Path>
       <MemberNameLabel ManuallyPlaced="true">
         <Position X="0.071" Y="-0.238" />
@@ -43,7 +43,7 @@
       </Path>
     </AssociationLine>
     <TypeIdentifier>
-      <HashCode>BIA4ACAANQQIgggAAAKACCASgAAQxAFEIAgApEhFTFA=</HashCode>
+      <HashCode>hIA4EGEANQRIoihCCQKACKAzgAAQxEFEIAoArEhVXFA=</HashCode>
       <FileName>Facility.cs</FileName>
     </TypeIdentifier>
     <ShowAsAssociation>
@@ -105,7 +105,7 @@
       </Path>
     </AssociationLine>
     <TypeIdentifier>
-      <HashCode>AQMKAAABAAggAAkAAJYACgQQAAAS2gIGASYENAgAgAM=</HashCode>
+      <HashCode>AQMKAAABAAggQAkAWJYECgQQAAQT2gJugWYEFAsAggM=</HashCode>
       <FileName>CobieObject.cs</FileName>
     </TypeIdentifier>
     <ShowAsCollectionAssociation>
@@ -126,13 +126,13 @@
   <Class Name="Xbim.COBieLiteUK.Representation" Collapsed="true" HideInheritanceLine="true">
     <Position X="9.5" Y="0.5" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAAAAAFACAAIAAEAICAAgAQAAAAIAIAAEABAABgAYAE=</HashCode>
+      <HashCode>AAAAACFACAAIAAEAMCAAgAQAAgAYAIAAEABAABgAYAE=</HashCode>
     </TypeIdentifier>
   </Class>
   <Class Name="Xbim.COBieLiteUK.Issue" Collapsed="true" HideInheritanceLine="true">
     <Position X="6" Y="0.5" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAAAAACAgAEAIAAIAIAQGAAAAABAAAQIAAAAAAAAAAA=</HashCode>
+      <HashCode>AAAIAACAgAEAIAAIAIAUGAAAAABAAAQIAAAAAAAAAAA=</HashCode>
       <FileName>Issue.cs</FileName>
     </TypeIdentifier>
   </Class>
@@ -146,7 +146,7 @@
   <Class Name="Xbim.COBieLiteUK.Document" Collapsed="true" HideInheritanceLine="true">
     <Position X="2.5" Y="0.5" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAACABCAAEAAAAAAAgCAAAAAAAAEAAIAEAgAAAAAAAA=</HashCode>
+      <HashCode>AAAKABCAAEAAAAAAAgCEAAAAAAAEAAIAEAgAAAAAAAA=</HashCode>
       <FileName>Document.cs</FileName>
     </TypeIdentifier>
   </Class>
@@ -166,7 +166,7 @@
       </MemberNameLabel>
     </AssociationLine>
     <TypeIdentifier>
-      <HashCode>AEkUCEIAWAICjEgIAEBpEEAgBwLRQAqEBARgwAHEARg=</HashCode>
+      <HashCode>AEkcCEIAWCICjEgIAEBtEEAAAwLRQgqkFARgwAHEAVg=</HashCode>
       <FileName>AssetType.cs</FileName>
     </TypeIdentifier>
     <ShowAsAssociation>
@@ -180,7 +180,7 @@
   <Class Name="Xbim.COBieLiteUK.Zone" Collapsed="true" HideInheritanceLine="true">
     <Position X="3" Y="4.25" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAAAACAAAQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <HashCode>AAAKAGAAASAAAAAAQAAEAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
       <FileName>Zone.cs</FileName>
     </TypeIdentifier>
   </Class>
@@ -203,7 +203,8 @@
   <Class Name="Xbim.COBieLiteUK.System" Collapsed="true" HideInheritanceLine="true">
     <Position X="3" Y="6.5" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAAAAAAAAAAAAIAAAAAAAAAAAAAAAAAAAAQAAAAAAAA=</HashCode>
+      <HashCode>AAAIAAAAAAAAAIAAQAAEAAAAEAAAAAAAAAQAAAAAAAA=</HashCode>
+      <FileName>System.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="Xbim.COBieLiteUK.Floor" HideInheritanceLine="true">
@@ -228,7 +229,7 @@
     </TypeIdentifier>
   </Class>
   <Class Name="Xbim.COBieLiteUK.Project">
-    <Position X="0.5" Y="8" Width="1.5" />
+    <Position X="0.5" Y="8.25" Width="1.5" />
     <Compartments>
       <Compartment Name="Fields" Collapsed="true" />
     </Compartments>
@@ -237,7 +238,7 @@
     </TypeIdentifier>
   </Class>
   <Class Name="Xbim.COBieLiteUK.Site">
-    <Position X="0.5" Y="10.25" Width="1.5" />
+    <Position X="0.5" Y="10.5" Width="1.5" />
     <Compartments>
       <Compartment Name="Fields" Collapsed="true" />
     </Compartments>
@@ -263,7 +264,7 @@
       <Compartment Name="Methods" Collapsed="true" />
     </Compartments>
     <TypeIdentifier>
-      <HashCode>AIAAAAAEICASAEAAABADAQAgAoAQQAoAAAAAAAAFo0A=</HashCode>
+      <HashCode>AIAIAAAEICASAEAAABAHAQAgAoAQQAoAAAAAAAAFo0A=</HashCode>
       <FileName>Job.cs</FileName>
     </TypeIdentifier>
   </Class>
@@ -274,7 +275,7 @@
       <Compartment Name="Methods" Collapsed="true" />
     </Compartments>
     <TypeIdentifier>
-      <HashCode>ACgAgCAAAQAACMEBAAQAAAAAEAkAQAAAABAAACCAAhA=</HashCode>
+      <HashCode>ACgIgCAAAQAACMEBAAQEAAAAEAkAQAAgABAAACCAAhA=</HashCode>
       <FileName>Asset.cs</FileName>
     </TypeIdentifier>
   </Class>

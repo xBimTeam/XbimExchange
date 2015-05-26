@@ -140,7 +140,7 @@ namespace Xsd2Code.Library.Extensions
             }
 
             //remove properties which will be implemented in partial classes
-            var toRemove = new[] { "AreaUnits", "LinearUnits", "VolumeUnits", "CurrencyUnit", "AssetTypeEnum", "ZoneType" };
+            var toRemove = new[] { "AreaUnits", "LinearUnits", "VolumeUnits", "CurrencyUnit", "AssetTypeEnum", "ZoneType", "StageType" };
             foreach (CodeTypeDeclaration type in code.Types)
             {
                 foreach (var member in type.Members.OfType<CodeMemberProperty>().ToList())

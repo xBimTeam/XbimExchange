@@ -25,7 +25,12 @@ namespace Xbim.COBieLiteUK.CodeGeneration
                 NameSpace = "Xbim.COBieLiteUK",
                 OutputFilePath = outFile,
                 TargetFramework = TargetFramework.CobieLiteUk,
-                EnableInitializeFields = false,
+                EnableInitializeFields = false, 
+                GenerateDataContracts = true,
+                Miscellaneous = new MiscellaneousParams
+                {
+                    HidePrivateFieldInIde = true
+                },
                 Serialization = new SerializeParams
                 {
                     DefaultEncoder = DefaultEncoder.UTF8,
