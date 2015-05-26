@@ -292,13 +292,10 @@ namespace Xbim.COBieLiteUK
 
         public void WriteJson(Stream stream, bool indented = false)
         {
-            //using (
             var textWriter = new StreamWriter(stream);
-              //  )
-            //{
-                var serialiser = GetJsonSerializer(indented);
-                serialiser.Serialize(textWriter, this);
-            //}
+            var serialiser = GetJsonSerializer(indented);
+            serialiser.Serialize(textWriter, this);
+            textWriter.Flush();
         }
 
         public void WriteJson(string path, bool indented = false)

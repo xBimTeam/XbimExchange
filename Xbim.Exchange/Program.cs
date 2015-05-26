@@ -67,7 +67,6 @@ namespace Xbim.Exchange
                         dPoWFile = Path.ChangeExtension(dPoWFile, "json");
                         Console.WriteLine("Creating " + dPoWFile);
 
-                        facility.WriteJson(dPoWFile);
                         string cobieFile = Path.ChangeExtension(dPoWFile, "Xlsx");
                         Console.WriteLine("Creating " + cobieFile);
                         string error;
@@ -112,6 +111,19 @@ namespace Xbim.Exchange
                             ifcModel.SaveAs(dPoWFile, XbimStorageType.IFC);
                             ifcModel.Close();
                         }
+
+                        facility.WriteJson(dPoWFile);
+
+                        //strip off some of the information to make it smaller
+                        foreach (var co in facility.Get<CobieObject>())
+                        {
+                            co.CreatedBy = null;
+                            co.CreatedOn = null;
+                            co.Categories = null;
+                            co.ExternalSystem = null;
+                        }
+                        facility.WriteJson(Path.ChangeExtension(fileName, ".min.json"));
+
                     }
                     model.Close();
                 }
