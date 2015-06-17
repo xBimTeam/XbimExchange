@@ -10,7 +10,7 @@ using Xbim.CobieLiteUK.Validation;
 using Xbim.IO;
 using XbimExchanger.IfcToCOBieLiteUK;
 using Attribute = Xbim.COBieLiteUK.Attribute;
-using System = Xbim.COBieLiteUK.System;
+//using System = Xbim.COBieLiteUK.System;
 
 
 namespace Tests
@@ -42,6 +42,21 @@ namespace Tests
             //this should set custom area units to null
             f.AreaUnits = AreaUnit.notdefined;
             Assert.IsNull(f.AreaUnitsCustom);
+        }
+
+        [DeploymentItem("ValidationFiles\\Lakeside_Restaurant.ifc")]
+        [TestMethod]
+        public void ConfigSetUp()
+        {
+            using (var m = new XbimModel())
+            {
+                const string ifcTestFile = @"Lakeside_Restaurant.ifc";
+                var xbimTestFile = Path.ChangeExtension(ifcTestFile, "xbim");
+                m.CreateFrom(ifcTestFile, xbimTestFile, null, true, true);
+
+                CoBieLiteUkHelper Helper = new CoBieLiteUkHelper(m);
+
+            }
         }
 
         //[TestMethod]
