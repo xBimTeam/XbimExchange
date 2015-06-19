@@ -16,6 +16,7 @@ using NPOI.HSSF.UserModel;
 using NPOI.SS.UserModel;
 using NPOI.SS.Util;
 using NPOI.XSSF.UserModel;
+using XbimExchanger.COBieLiteHelpers;
 
 namespace Xbim.COBieLiteUK
 {
@@ -303,10 +304,10 @@ namespace Xbim.COBieLiteUK
         }
 
         internal virtual void WriteToCobie(IWorkbook workbook, TextWriter log, CobieObject parent,
-            Dictionary<Type, int> rowNumCache, List<string> pickValuesCache, Dictionary<string, int> headerCache,
+            Dictionary<Type, int> rowNumCache, List<string> pickValuesCache, Dictionary<string, int> headerCache, PropertyFiltersHelper assetfilters = null,
             string version = "UK2012")
         {
-            var mappings = GetMapping(GetType(), version, false).ToList();
+            var mappings = GetMapping(GetType(), version, false).OrderBy(m => m.Column).ToList();
             if (!mappings.Any())
             {
                 log.WriteLine("There are no mappings for a type '{0}'", GetType().Name);
@@ -479,7 +480,7 @@ namespace Xbim.COBieLiteUK
             //call for all child objects but with this as a parent
             foreach (var child in GetChildren())
             {
-                child.WriteToCobie(workbook, log, this, rowNumCache, pickValuesCache, headerCache, version);
+                child.WriteToCobie(workbook, log, this, rowNumCache, pickValuesCache, headerCache, assetfilters, version);
             }
         }
 

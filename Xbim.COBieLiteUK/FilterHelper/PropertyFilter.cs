@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace XbimExchanger.IfcToCOBieLiteUK
+namespace Xbim.COBieLiteUK.FilterHelper
 {
     /// <summary>
     /// Filter on property set names, and properties names held within the set, used to extract attribute sheets
@@ -110,6 +110,30 @@ namespace XbimExchanger.IfcToCOBieLiteUK
                     }
                 }
             }
+        }
+
+
+        /// <summary>
+        /// Test for string exists in EqTo, Contains, or StartWith string lists
+        /// </summary>
+        /// <param name="testStr">String to test</param>
+        /// <returns>bool</returns>
+        public bool NameFilter (string testStr)
+        {
+            return ((EqualTo.Where(a => testStr.Equals(a)).Count() > 0) ||
+                    (StartWith.Where(a => testStr.StartsWith(a)).Count() > 0) ||
+                    (Contain.Where(a => testStr.Contains(a)).Count() > 0)
+                   );
+        }
+
+        /// <summary>
+        /// Test for string exists in PropertySetsEqualTo string lists
+        /// </summary>
+        /// <param name="testStr">String to test</param>
+        /// <returns>bool</returns>
+        public bool PSetNameFilter(string testStr)
+        {
+            return (PropertySetsEqualTo.Where(a => testStr.Equals(a)).Count() > 0);
         }
 
     }

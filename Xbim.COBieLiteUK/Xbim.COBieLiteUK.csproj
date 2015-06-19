@@ -64,6 +64,7 @@
       <HintPath>..\packages\NPOI.2.1.3.1\lib\net40\NPOI.OpenXmlFormats.dll</HintPath>
     </Reference>
     <Reference Include="System" />
+    <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
@@ -112,6 +113,8 @@
     <Compile Include="EntityKeys\ProjectStageKey.cs" />
     <Compile Include="EntityKeys\ResourceKey.cs" />
     <Compile Include="EntityKeys\SpaceKey.cs" />
+    <Compile Include="FilterHelper\PropertyFilter.cs" />
+    <Compile Include="FilterHelper\PropertyFiltersHelper.cs" />
     <Compile Include="Floor.cs" />
     <Compile Include="Impact.cs" />
     <Compile Include="AttributeValues\IntegerAttributeValue.cs" />
@@ -131,6 +134,7 @@
     <Compile Include="Zone.cs" />
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="FilterHelper\COBieAttributesFilters.config" />
     <None Include="Schemas\cobieliteuk.cd" />
     <None Include="packages.config" />
     <None Include="Schemas\cobieliteuk.xsd">

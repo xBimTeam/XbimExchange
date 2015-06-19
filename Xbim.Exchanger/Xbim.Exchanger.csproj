@@ -150,7 +150,6 @@
     <Compile Include="IfcToCOBieLiteUK\MappingIfcSystemToSystem.cs" />
     <Compile Include="IfcToCOBieLiteUK\MappingXbimIfcProxyTypeObjectToAssetType.cs" />
     <Compile Include="IfcToCOBieLiteUK\MappingIfcZoneToZone.cs" />
-    <Compile Include="IfcToCOBieLiteUK\PropertyFilter.cs" />
     <Compile Include="IfcToCOBieLiteUK\XbimAttributedObject.cs" />
     <Compile Include="IfcToCOBieLiteUK\XbimIfcProxyTypeObject.cs" />
     <Compile Include="IXbimMappings.cs" />

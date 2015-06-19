@@ -162,38 +162,7 @@ namespace XbimExchanger.IfcToCOBieLiteUK
         /// </summary>
         public HashSet<IfcType> ExcludedAssembly { get; private set; }
 
-        /// <summary>
-        /// Zone attribute filters
-        /// </summary>
-        public PropertyFilter ZoneFilter { get; private set; }
-        /// <summary>
-        /// Type attribute filters
-        /// </summary>
-        public PropertyFilter TypeFilter { get; private set; }
-        /// <summary>
-        /// Space attribute filters
-        /// </summary>
-        public PropertyFilter SpaceFilter { get; private set; }
-        /// <summary>
-        /// Floor attribute filters
-        /// </summary>
-        public PropertyFilter FloorFilter { get; private set; }
-        /// <summary>
-        /// Facility attribute filters
-        /// </summary>
-        public PropertyFilter FacilityFilter { get; private set; }
-        /// <summary>
-        /// Spare attribute filters
-        /// </summary>
-        public PropertyFilter SpareFilter { get; private set; }
-        /// <summary>
-        /// Component attribute filters
-        /// </summary>
-        public PropertyFilter ComponentFilter { get; private set; }
-        /// <summary>
-        /// Common attribute filters
-        /// </summary>
-        public PropertyFilter CommonFilter { get; private set; }
+        
         #endregion
 
         private readonly string _configFileName;
@@ -530,15 +499,7 @@ namespace XbimExchanger.IfcToCOBieLiteUK
             //set Assembly include and exclude ifc objects
             SetInclusions(config.GetSection("IfcAssemblyInclusion"), IncludedAssembly, ExcludedAssembly);
 
-            //set filers, might need moving to some export configuration file/object
-            ZoneFilter =       new PropertyFilter(config.GetSection("ZoneFilter"));
-            TypeFilter =       new PropertyFilter(config.GetSection("TypeFilter"));
-            SpaceFilter =      new PropertyFilter(config.GetSection("SpaceFilter"));
-            FloorFilter =      new PropertyFilter(config.GetSection("FloorFilter"));
-            FacilityFilter =   new PropertyFilter(config.GetSection("FacilityFilter"));
-            SpareFilter =      new PropertyFilter(config.GetSection("SpareFilter"));
-            ComponentFilter =  new PropertyFilter(config.GetSection("ComponentFilter"));
-            CommonFilter =     new PropertyFilter(config.GetSection("CommonFilter"));
+            
             
             if (_configFileName == null)
             {
