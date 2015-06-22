@@ -13,6 +13,7 @@ namespace Xbim.COBieLiteUK.FilterHelper
     /// </summary>
     public class PropertyFilter
     {
+
         /// <summary>
         /// Property Name exclude filter strings where name equal one of the strings
         /// </summary>
@@ -45,6 +46,8 @@ namespace Xbim.COBieLiteUK.FilterHelper
         /// <summary>
         /// Set Property Filters constructor
         /// </summary>
+        /// <param name="elementsToExclude">';' delimited string for IfcProducts to exclude from components(Assets)</param>
+        /// <param name="typesToExclude">';' delimited string for IfcTypeObjects to exclude from Types</param>
         /// <param name="equalTo">';' delimited string for property names to equal</param>
         /// <param name="startWith">';' delimited string for property names to start with</param>
         /// <param name="contain">';' delimited string for property names containing</param>
@@ -54,6 +57,7 @@ namespace Xbim.COBieLiteUK.FilterHelper
             //initialize fields
             Init();
 
+            //Property names to exclude 
             if (!string.IsNullOrEmpty(equalTo))
             {
                 EqualTo.AddRange(equalTo.Split(new[] { ';' }, StringSplitOptions.RemoveEmptyEntries));
@@ -66,6 +70,8 @@ namespace Xbim.COBieLiteUK.FilterHelper
             {
                 Contain.AddRange(contain.Split(new[] { ';' }, StringSplitOptions.RemoveEmptyEntries));
             }
+
+            //PropertySet names to exclude
             if (!string.IsNullOrEmpty(pSetEqualTo))
             {
                 PropertySetsEqualTo.AddRange(pSetEqualTo.Split(new[] { ';' }, StringSplitOptions.RemoveEmptyEntries));
@@ -87,18 +93,18 @@ namespace Xbim.COBieLiteUK.FilterHelper
                 {
                     if (!string.IsNullOrEmpty(keyVal.Value))
                     {
-                        switch (keyVal.Key)
+                        switch (keyVal.Key.ToUpper())
                         {
-                            case "EqualTo":
+                            case "EQUALTO":
                                 EqualTo.AddRange(keyVal.Value.Split(new[] { ';' }, StringSplitOptions.RemoveEmptyEntries));
                                 break;
-                            case "StartWith":
+                            case "STARTWITH":
                                 StartWith.AddRange(keyVal.Value.Split(new[] { ';' }, StringSplitOptions.RemoveEmptyEntries));
                                 break;
-                            case "Contain":
+                            case "CONTAIN":
                                 Contain.AddRange(keyVal.Value.Split(new[] { ';' }, StringSplitOptions.RemoveEmptyEntries));
                                 break;
-                            case "PropertySetsEqualTo":
+                            case "PROPERTYSETSEQUALTO":
                                 PropertySetsEqualTo.AddRange(keyVal.Value.Split(new[] { ';' }, StringSplitOptions.RemoveEmptyEntries));
                                 break;
                             default:

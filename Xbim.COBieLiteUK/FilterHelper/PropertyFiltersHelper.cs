@@ -12,9 +12,17 @@ using Xbim.COBieLiteUK;
 
 namespace XbimExchanger.COBieLiteHelpers
 {
-    public class PropertyFiltersHelper
+    public class FiltersHelper
     {
         #region Filters
+        /// <summary>
+        /// IfcProduct Exclude filters
+        /// </summary>
+        public ObjectFilter IfcProductFilter { get; private set; }
+        /// <summary>
+        /// IfcTypeObject Exclude filters
+        /// </summary>
+        public ObjectFilter IfcTypeObjectFilter { get; private set; }
         /// <summary>
         /// Zone attribute filters
         /// </summary>
@@ -53,7 +61,7 @@ namespace XbimExchanger.COBieLiteHelpers
         /// Constructor, will read Configuration file if passed, or default COBieAttributesFilters.config
         /// </summary>
         /// <param name="configFileName">Full path/name for config file</param>
-        public PropertyFiltersHelper(string configFileName = null)
+        public FiltersHelper(string configFileName = null)
         {
             var tmpFile = configFileName;
             if (configFileName == null)
@@ -92,7 +100,12 @@ namespace XbimExchanger.COBieLiteHelpers
             {
                 throw new ConfigurationErrorsException(string.Format(@"Error loading configuration file ""{0}"". Error: {1}", tmpFile, ex.Message ));
             }
+
+            //IfcProduct and IfcTypeObject filters
+            IfcProductFilter = new ObjectFilter(config.GetSection("IfcElementInclusion"));
+            IfcTypeObjectFilter = new ObjectFilter(config.GetSection("IfcTypeInclusion"));
             
+            //Property name filters
             ZoneFilter = new PropertyFilter(config.GetSection("ZoneFilter"));
             TypeFilter = new PropertyFilter(config.GetSection("TypeFilter"));
             SpaceFilter = new PropertyFilter(config.GetSection("SpaceFilter"));
@@ -111,25 +124,29 @@ namespace XbimExchanger.COBieLiteHelpers
         /// <returns>bool</returns>
         public bool NameFilterOnParent(string testStr, CobieObject parent = null)
         {
-            bool result = CommonFilter.NameFilter(testStr);
-            if (!result)
+            bool result = false;
+            if (!string.IsNullOrEmpty(testStr))
             {
-                if (parent is Zone)
-                    result = ZoneFilter.NameFilter(testStr);
-                else if (parent is AssetType)
-                    result = TypeFilter.NameFilter(testStr);
-                else if (parent is Space)
-                    result = SpaceFilter.NameFilter(testStr);
-                else if (parent is Floor)
-                    result = FloorFilter.NameFilter(testStr);
-                else if (parent is Facility)
-                    result = FacilityFilter.NameFilter(testStr);
-                else if (parent is Spare)
-                    result = SpareFilter.NameFilter(testStr);
-                else if (parent is Asset)
-                    result = ComponentFilter.NameFilter(testStr);
-                else
-                    result = false;
+                result = CommonFilter.NameFilter(testStr);
+                if (!result)
+                {
+                    if (parent is Zone)
+                        result = ZoneFilter.NameFilter(testStr);
+                    else if (parent is AssetType)
+                        result = TypeFilter.NameFilter(testStr);
+                    else if (parent is Space)
+                        result = SpaceFilter.NameFilter(testStr);
+                    else if (parent is Floor)
+                        result = FloorFilter.NameFilter(testStr);
+                    else if (parent is Facility)
+                        result = FacilityFilter.NameFilter(testStr);
+                    else if (parent is Spare)
+                        result = SpareFilter.NameFilter(testStr);
+                    else if (parent is Asset)
+                        result = ComponentFilter.NameFilter(testStr);
+                    else
+                        result = false;
+                }
             }
             return result;
         }
@@ -142,28 +159,50 @@ namespace XbimExchanger.COBieLiteHelpers
         /// <returns>bool</returns>
         public bool PSetNameFilterOnSheetName(string testStr, CobieObject parent = null)
         {
-            bool result = CommonFilter.PSetNameFilter(testStr);
-            if (!result)
+            bool result = false;
+            if (!string.IsNullOrEmpty(testStr))
             {
-                if (parent is Zone)
-                    result = ZoneFilter.PSetNameFilter(testStr);
-                else if (parent is AssetType)
-                    result = TypeFilter.PSetNameFilter(testStr);
-                else if (parent is Space)
-                    result = SpaceFilter.PSetNameFilter(testStr);
-                else if (parent is Floor)
-                    result = FloorFilter.PSetNameFilter(testStr);
-                else if (parent is Facility)
-                    result = FacilityFilter.PSetNameFilter(testStr);
-                else if (parent is Spare)
-                    result = SpareFilter.PSetNameFilter(testStr);
-                else if (parent is Asset)
-                    result = ComponentFilter.PSetNameFilter(testStr);
-                else
-                    result = false;
+                result = CommonFilter.PSetNameFilter(testStr);
+                if (!result)
+                {
+                    if (parent is Zone)
+                        result = ZoneFilter.PSetNameFilter(testStr);
+                    else if (parent is AssetType)
+                        result = TypeFilter.PSetNameFilter(testStr);
+                    else if (parent is Space)
+                        result = SpaceFilter.PSetNameFilter(testStr);
+                    else if (parent is Floor)
+                        result = FloorFilter.PSetNameFilter(testStr);
+                    else if (parent is Facility)
+                        result = FacilityFilter.PSetNameFilter(testStr);
+                    else if (parent is Spare)
+                        result = SpareFilter.PSetNameFilter(testStr);
+                    else if (parent is Asset)
+                        result = ComponentFilter.PSetNameFilter(testStr);
+                    else
+                        result = false;
+                }
             }
             return result;
         }
+
+        /// <summary>
+        /// Filter IfcProduct and IfcTypeObject types
+        /// </summary>
+        /// <param name="obj">CobieObject</param>
+        /// <returns>bool</returns>
+        public bool ObjFilter(CobieObject obj)
+        {
+            if (!string.IsNullOrEmpty(obj.ExternalEntity))
+            {
+                if (obj is Asset)
+                    return IfcProductFilter.ElementsFilter(obj.ExternalEntity);
+                else if (obj is AssetType)
+                    return IfcTypeObjectFilter.TypeObjFilter(obj.ExternalEntity);
+            }
+            return false;
+        }
+            
     }
 
    

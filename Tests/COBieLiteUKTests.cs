@@ -831,7 +831,7 @@ namespace Tests
                     string msg;
                     facilityType.WriteJson(jsonFile, true);
                     //set attribute name filters
-                    PropertyFiltersHelper assetfilters = new PropertyFiltersHelper();
+                    FiltersHelper assetfilters = new FiltersHelper();
                     facilityType.WriteCobie("..\\..\\Lakeside_Restaurant.xlsx", out msg, assetfilters, "UK2012", true);
 
 

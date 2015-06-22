@@ -466,7 +466,7 @@ namespace Xbim.COBieLiteUK
         #region Writing COBie Spreadsheet
 
         public void WriteCobie(Stream stream, ExcelTypeEnum type, out string message,
-            PropertyFiltersHelper assetfilters = null, string version = "UK2012", bool useTemplate = true)
+            FiltersHelper assetfilters = null, string version = "UK2012", bool useTemplate = true)
         {
             Stream templateStream = null;
             if (useTemplate)
@@ -519,7 +519,7 @@ namespace Xbim.COBieLiteUK
             workbook.Write(stream);
         }
        
-        public void WriteCobie(string path, out string message, PropertyFiltersHelper assetfilters = null, string version = "UK2012", bool useTemplate = true)
+        public void WriteCobie(string path, out string message, FiltersHelper assetfilters = null, string version = "UK2012", bool useTemplate = true)
         {
             if (path == null) throw new ArgumentNullException("path");
             var ext = Path.GetExtension(path).ToLower().Trim('.');
@@ -541,7 +541,7 @@ namespace Xbim.COBieLiteUK
         #endregion
 
         internal override void WriteToCobie(IWorkbook workbook, TextWriter loger, CobieObject parent,
-            Dictionary<Type, int> rowNumCache, List<string> pickValuesCache, Dictionary<string, int> headerCache, PropertyFiltersHelper assetfilters = null, string version = "UK2012")
+            Dictionary<Type, int> rowNumCache, List<string> pickValuesCache, Dictionary<string, int> headerCache, FiltersHelper assetfilters = null, string version = "UK2012")
         {
             base.WriteToCobie(workbook, loger, parent, rowNumCache, pickValuesCache, headerCache, assetfilters, version);
 
