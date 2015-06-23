@@ -138,29 +138,29 @@ namespace XbimExchanger.IfcToCOBieLiteUK
         /// <summary>
         /// Included ifcElement types for components assets
         /// </summary>
-        public HashSet<IfcType> IncludedComponents { get; private set; }
+        //public HashSet<IfcType> IncludedComponents { get; private set; }
         /// <summary>
         /// Excluded ifcElement types for components assets
         /// </summary>
-        public HashSet<IfcType> ExcludedComponents { get; private set; }
+        //public HashSet<IfcType> ExcludedComponents { get; private set; }
 
         /// <summary>
         /// Included ifcElement types for Type assets
         /// </summary>
-        public HashSet<IfcType> IncludedType { get; private set; }
+        //public HashSet<IfcType> IncludedType { get; private set; }
         /// <summary>
         /// Excluded ifcElement types for Type assets
         /// </summary>
-        public HashSet<IfcType> ExcludedType { get; private set; }
+        //public HashSet<IfcType> ExcludedType { get; private set; }
 
         /// <summary>
         /// Included ifcElement types for Assembly assets
         /// </summary>
-        public HashSet<IfcType> IncludedAssembly { get; private set; }
+        //public HashSet<IfcType> IncludedAssembly { get; private set; }
         /// <summary>
         /// Excluded ifcElement types for Assembly assets
         /// </summary>
-        public HashSet<IfcType> ExcludedAssembly { get; private set; }
+        //public HashSet<IfcType> ExcludedAssembly { get; private set; }
 
         
         #endregion
@@ -208,7 +208,7 @@ namespace XbimExchanger.IfcToCOBieLiteUK
            
             _model = model;
             _creatingApplication = model.Header.CreatingApplication;
-            InitFilters(); //initialize filters
+            //InitFilters(); //initialize filters
             LoadCobieMaps();
             GetContacts();
             GetClassificationDictionary();
@@ -223,15 +223,15 @@ namespace XbimExchanger.IfcToCOBieLiteUK
         /// <summary>
         /// Initialize filters
         /// </summary>
-        private void InitFilters()
-        {
-            IncludedComponents = new HashSet<IfcType>();
-            ExcludedComponents = new HashSet<IfcType>();
-            IncludedType = new HashSet<IfcType>();
-            ExcludedType = new HashSet<IfcType>();
-            IncludedAssembly = new HashSet<IfcType>();
-            ExcludedAssembly = new HashSet<IfcType>();
-        }
+        //private void InitFilters()
+        //{
+        //    IncludedComponents = new HashSet<IfcType>();
+        //    ExcludedComponents = new HashSet<IfcType>();
+        //    IncludedType = new HashSet<IfcType>();
+        //    ExcludedType = new HashSet<IfcType>();
+        //    IncludedAssembly = new HashSet<IfcType>();
+        //    ExcludedAssembly = new HashSet<IfcType>();
+        //}
         
         private void GetSystems()
         {
@@ -493,11 +493,11 @@ namespace XbimExchanger.IfcToCOBieLiteUK
             //Set Include And Exclude, probably should just use exclude, better to include then miss altogether
 
             //set component include and exclude ifc objects
-            SetInclusions(config.GetSection("IfcElementInclusion"), IncludedComponents, ExcludedComponents);
+            //SetInclusions(config.GetSection("IfcElementInclusion"), IncludedComponents, ExcludedComponents);
             //set Type include and exclude ifc objects
-            SetInclusions(config.GetSection("IfcTypeInclusion"), IncludedType, ExcludedType);
+            //SetInclusions(config.GetSection("IfcTypeInclusion"), IncludedType, ExcludedType);
             //set Assembly include and exclude ifc objects
-            SetInclusions(config.GetSection("IfcAssemblyInclusion"), IncludedAssembly, ExcludedAssembly);
+            //SetInclusions(config.GetSection("IfcAssemblyInclusion"), IncludedAssembly, ExcludedAssembly);
 
             
             
@@ -515,34 +515,34 @@ namespace XbimExchanger.IfcToCOBieLiteUK
         /// <param name="section">AppSettingsSection from configuration file</param>
         /// <param name="include">HashSet of IfcType for includes</param>
         /// <param name="exclude">HashSet of IfcType for excludes</param>
-        private static void SetInclusions(ConfigurationSection section, HashSet<IfcType> include, HashSet<IfcType> exclude)
-        {
-            if (section != null)
-            {
-                foreach (KeyValueConfigurationElement keyVal in ((AppSettingsSection)section).Settings)
-                {
-                    var elementType = IfcMetaData.IfcType(keyVal.Key.ToUpper());
-                    if (elementType != null)
-                    {
-                        if (String.Compare(keyVal.Value, "YES", StringComparison.OrdinalIgnoreCase) == 0)
-                        {
+//        private static void SetInclusions(ConfigurationSection section, HashSet<IfcType> include, HashSet<IfcType> exclude)
+//        {
+//            if (section != null)
+//            {
+//                foreach (KeyValueConfigurationElement keyVal in ((AppSettingsSection)section).Settings)
+//                {
+//                    var elementType = IfcMetaData.IfcType(keyVal.Key.ToUpper());
+//                    if (elementType != null)
+//                    {
+//                        if (String.Compare(keyVal.Value, "YES", StringComparison.OrdinalIgnoreCase) == 0)
+//                        {
 
-                            include.Add(elementType);
-                        }
-                        else
-                        {
-                            exclude.Add(elementType);
-                        }
-                    }
-                    else
-                    {
-#if DEBUG
-                        Debug.WriteLine(string.Format("Failed to create IfcType - {0}", keyVal.Key.ToUpper()));
-#endif
-                    }
-                }
-            }
-        }
+//                            include.Add(elementType);
+//                        }
+//                        else
+//                        {
+//                            exclude.Add(elementType);
+//                        }
+//                    }
+//                    else
+//                    {
+//#if DEBUG
+//                        Debug.WriteLine(string.Format("Failed to create IfcType - {0}", keyVal.Key.ToUpper()));
+//#endif
+//                    }
+//                }
+//            }
+//        }
 
         private void GetPropertySets()
         {

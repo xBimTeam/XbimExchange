@@ -46,8 +46,6 @@ namespace Xbim.COBieLiteUK.FilterHelper
         /// <summary>
         /// Set Property Filters constructor
         /// </summary>
-        /// <param name="elementsToExclude">';' delimited string for IfcProducts to exclude from components(Assets)</param>
-        /// <param name="typesToExclude">';' delimited string for IfcTypeObjects to exclude from Types</param>
         /// <param name="equalTo">';' delimited string for property names to equal</param>
         /// <param name="startWith">';' delimited string for property names to start with</param>
         /// <param name="contain">';' delimited string for property names containing</param>

@@ -45,68 +45,7 @@ namespace Tests
             Assert.IsNull(f.AreaUnitsCustom);
         }
 
-        /// <summary>
-        /// Test COBieAttributes.config file filter numbers numbers correct at 18-6-2015
-        /// </summary>
-        [DeploymentItem("ValidationFiles\\Lakeside_Restaurant.ifc")]
-        [TestMethod]
-        public void ConfigSetUp()
-        {
-            using (var m = new XbimModel())
-            {
-                const string ifcTestFile = @"Lakeside_Restaurant.ifc";
-                var xbimTestFile = Path.ChangeExtension(ifcTestFile, "xbim");
-                m.CreateFrom(ifcTestFile, xbimTestFile, null, true, true);
 
-                CoBieLiteUkHelper Helper = new CoBieLiteUkHelper(m);
-                //ifc filters for IFC2x3 
-                Assert.AreEqual(59, Helper.ExcludedComponents.Count());
-                Assert.AreEqual(26,Helper.ExcludedType.Count());
-                Assert.AreEqual(4, Helper.ExcludedAssembly.Count());
-
-                //property set, property name filters
-                //Assert.AreEqual(10, Helper.CommonFilter.Contain.Count);
-                //Assert.AreEqual(30, Helper.CommonFilter.EqualTo.Count);
-                //Assert.AreEqual(0, Helper.CommonFilter.PropertySetsEqualTo.Count);
-                //Assert.AreEqual(7, Helper.CommonFilter.StartWith.Count);
-
-                //Assert.AreEqual(7, Helper.ComponentFilter.Contain.Count);
-                //Assert.AreEqual(8, Helper.ComponentFilter.EqualTo.Count);
-                //Assert.AreEqual(0, Helper.ComponentFilter.PropertySetsEqualTo.Count);
-                //Assert.AreEqual(0, Helper.ComponentFilter.StartWith.Count);
-
-                //Assert.AreEqual(7, Helper.FacilityFilter.Contain.Count);
-                //Assert.AreEqual(1, Helper.FacilityFilter.EqualTo.Count);
-                //Assert.AreEqual(0, Helper.FacilityFilter.PropertySetsEqualTo.Count);
-                //Assert.AreEqual(0, Helper.FacilityFilter.StartWith.Count);
-
-                //Assert.AreEqual(6, Helper.FloorFilter.Contain.Count);
-                //Assert.AreEqual(9, Helper.FloorFilter.EqualTo.Count);
-                //Assert.AreEqual(0, Helper.FloorFilter.PropertySetsEqualTo.Count);
-                //Assert.AreEqual(0, Helper.FloorFilter.StartWith.Count);
-
-                //Assert.AreEqual(7, Helper.SpaceFilter.Contain.Count);
-                //Assert.AreEqual(8, Helper.SpaceFilter.EqualTo.Count);
-                //Assert.AreEqual(1, Helper.SpaceFilter.PropertySetsEqualTo.Count);
-                //Assert.AreEqual(0, Helper.SpaceFilter.StartWith.Count);
-
-                //Assert.AreEqual(1, Helper.SpareFilter.Contain.Count);
-                //Assert.AreEqual(1, Helper.SpareFilter.EqualTo.Count);
-                //Assert.AreEqual(0, Helper.SpareFilter.PropertySetsEqualTo.Count);
-                //Assert.AreEqual(0, Helper.SpareFilter.StartWith.Count);
-
-                //Assert.AreEqual(3, Helper.TypeFilter.Contain.Count);
-                //Assert.AreEqual(39, Helper.TypeFilter.EqualTo.Count);
-                //Assert.AreEqual(1, Helper.TypeFilter.PropertySetsEqualTo.Count);
-                //Assert.AreEqual(0, Helper.TypeFilter.StartWith.Count);
-
-                //Assert.AreEqual(7, Helper.ZoneFilter.Contain.Count);
-                //Assert.AreEqual(0, Helper.ZoneFilter.EqualTo.Count);
-                //Assert.AreEqual(0, Helper.ZoneFilter.PropertySetsEqualTo.Count);
-                //Assert.AreEqual(0, Helper.ZoneFilter.StartWith.Count);
-
-            }
-        }
 
         //[TestMethod]
         //public void IFSModelAnalyses()
