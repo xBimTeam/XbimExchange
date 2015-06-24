@@ -47,6 +47,7 @@ namespace Tests
 
 
 
+
         //[TestMethod]
         //public void IFSModelAnalyses()
         //{
@@ -770,13 +771,28 @@ namespace Tests
                     string msg;
                     facilityType.WriteJson(jsonFile, true);
                     //set attribute name filters
-                    FiltersHelper assetfilters = new FiltersHelper();
+                    OutPutFilters assetfilters = new OutPutFilters();
                     facilityType.WriteCobie("..\\..\\Lakeside_Restaurant.xlsx", out msg, assetfilters, "UK2012", true);
 
 
                     break;
                 }
             }
+        }
+
+        [TestMethod]
+        public void FilterToXML ()
+        {
+            FileInfo filename = new FileInfo( @"d:\SerializationFiltersHelper2.xml");
+            OutPutFilters outfilters = new OutPutFilters(null);
+            outfilters.IfcProductFilter.AddPreDefinedType("TEST", new string[] { "One", "Two" });
+            OutPutFilters mergefilters = new OutPutFilters(null);
+            mergefilters.IfcProductFilter.AddPreDefinedType("TEST", new string[] {"THree", "Four"});
+            outfilters.Merge(mergefilters);
+            outfilters.SerializeXML(filename);
+            
+            OutPutFilters infilters = OutPutFilters.DeserializeXML(filename);
+            
         }
 
         [DeploymentItem("ValidationFiles\\Lakeside_Restaurant.json")]

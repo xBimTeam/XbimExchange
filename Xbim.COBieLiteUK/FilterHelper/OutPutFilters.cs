@@ -12,56 +12,73 @@ using Xbim.COBieLiteUK;
 
 namespace XbimExchanger.COBieLiteHelpers
 {
-    public class FiltersHelper
+    public class OutPutFilters
     {
         #region Filters
         /// <summary>
         /// IfcProduct Exclude filters
         /// </summary>
-        public ObjectFilter IfcProductFilter { get; private set; }
+        public ObjectFilter IfcProductFilter { get;  set; }
         /// <summary>
         /// IfcTypeObject Exclude filters
         /// </summary>
-        public ObjectFilter IfcTypeObjectFilter { get; private set; }
+        public ObjectFilter IfcTypeObjectFilter { get;  set; }
         /// <summary>
         /// Zone attribute filters
         /// </summary>
-        public PropertyFilter ZoneFilter { get; private set; }
+        public PropertyFilter ZoneFilter { get;  set; }
         /// <summary>
         /// Type attribute filters
         /// </summary>
-        public PropertyFilter TypeFilter { get; private set; }
+        public PropertyFilter TypeFilter { get;  set; }
         /// <summary>
         /// Space attribute filters
         /// </summary>
-        public PropertyFilter SpaceFilter { get; private set; }
+        public PropertyFilter SpaceFilter { get;  set; }
         /// <summary>
         /// Floor attribute filters
         /// </summary>
-        public PropertyFilter FloorFilter { get; private set; }
+        public PropertyFilter FloorFilter { get;  set; }
         /// <summary>
         /// Facility attribute filters
         /// </summary>
-        public PropertyFilter FacilityFilter { get; private set; }
+        public PropertyFilter FacilityFilter { get;  set; }
         /// <summary>
         /// Spare attribute filters
         /// </summary>
-        public PropertyFilter SpareFilter { get; private set; }
+        public PropertyFilter SpareFilter { get;  set; }
         /// <summary>
         /// Component attribute filters
         /// </summary>
-        public PropertyFilter ComponentFilter { get; private set; }
+        public PropertyFilter ComponentFilter { get;  set; }
         /// <summary>
         /// Common attribute filters
         /// </summary>
-        public PropertyFilter CommonFilter { get; private set; }
+        public PropertyFilter CommonFilter { get;  set; }
         #endregion
+
+        /// <summary>
+        /// Empty constructor for Serialize
+        /// </summary>
+        public OutPutFilters()
+        {
+
+        }
+        
+        /// <summary>
+        /// Constructor for default configFileName = null, or passed in configuration file path
+        /// </summary>
+        /// <param name="configFileName"></param>
+        public OutPutFilters(string configFileName)
+        {
+            FiltersHelperInit(configFileName);
+        }
 
         /// <summary>
         /// Constructor, will read Configuration file if passed, or default COBieAttributesFilters.config
         /// </summary>
         /// <param name="configFileName">Full path/name for config file</param>
-        public FiltersHelper(string configFileName = null)
+        public void FiltersHelperInit(string configFileName = null)
         {
             var tmpFile = configFileName;
             if (configFileName == null)
@@ -130,19 +147,21 @@ namespace XbimExchanger.COBieLiteHelpers
                 result = CommonFilter.NameFilter(testStr);
                 if (!result)
                 {
-                    if (parent is Zone)
+                    if (parent == null)
+                        result = false;
+                    else if ((parent is Zone) && (ZoneFilter != null))
                         result = ZoneFilter.NameFilter(testStr);
-                    else if (parent is AssetType)
+                    else if ((parent is AssetType) && (TypeFilter != null))
                         result = TypeFilter.NameFilter(testStr);
-                    else if (parent is Space)
+                    else if ((parent is Space) && (SpaceFilter != null))
                         result = SpaceFilter.NameFilter(testStr);
-                    else if (parent is Floor)
+                    else if ((parent is Floor) && (FloorFilter != null))
                         result = FloorFilter.NameFilter(testStr);
-                    else if (parent is Facility)
+                    else if ((parent is Facility) && (FacilityFilter != null))
                         result = FacilityFilter.NameFilter(testStr);
-                    else if (parent is Spare)
+                    else if ((parent is Spare) && (SpareFilter != null))
                         result = SpareFilter.NameFilter(testStr);
-                    else if (parent is Asset)
+                    else if ((parent is Asset) && (ComponentFilter != null))
                         result = ComponentFilter.NameFilter(testStr);
                     else
                         result = false;
@@ -165,19 +184,21 @@ namespace XbimExchanger.COBieLiteHelpers
                 result = CommonFilter.PSetNameFilter(testStr);
                 if (!result)
                 {
-                    if (parent is Zone)
+                    if (parent == null)
+                        result = false;
+                    else if ((parent is Zone) && (ZoneFilter != null))
                         result = ZoneFilter.PSetNameFilter(testStr);
-                    else if (parent is AssetType)
+                    else if ((parent is AssetType) && (TypeFilter != null))
                         result = TypeFilter.PSetNameFilter(testStr);
-                    else if (parent is Space)
+                    else if ((parent is Space) && (SpaceFilter != null))
                         result = SpaceFilter.PSetNameFilter(testStr);
-                    else if (parent is Floor)
+                    else if ((parent is Floor) && (FloorFilter != null))
                         result = FloorFilter.PSetNameFilter(testStr);
-                    else if (parent is Facility)
+                    else if ((parent is Facility) && (FacilityFilter != null))
                         result = FacilityFilter.PSetNameFilter(testStr);
-                    else if (parent is Spare)
+                    else if ((parent is Spare) && (SpareFilter != null))
                         result = SpareFilter.PSetNameFilter(testStr);
-                    else if (parent is Asset)
+                    else if ((parent is Asset) && (ComponentFilter != null))
                         result = ComponentFilter.PSetNameFilter(testStr);
                     else
                         result = false;
@@ -191,17 +212,55 @@ namespace XbimExchanger.COBieLiteHelpers
         /// </summary>
         /// <param name="obj">CobieObject</param>
         /// <returns>bool</returns>
-        public bool ObjFilter(CobieObject obj)
+        public bool ObjFilter(CobieObject obj, string preDefinedType = null)
         {
             if (!string.IsNullOrEmpty(obj.ExternalEntity))
             {
-                if (obj is Asset)
-                    return IfcProductFilter.ElementsFilter(obj.ExternalEntity);
-                else if (obj is AssetType)
+                if ((obj is Asset) && (IfcProductFilter != null))
+                    return IfcProductFilter.ElementsFilter(obj.ExternalEntity, preDefinedType);
+                else if ((obj is AssetType) && (IfcTypeObjectFilter != null))
                     return IfcTypeObjectFilter.TypeObjFilter(obj.ExternalEntity);
             }
             return false;
         }
+
+        /// <summary>
+        /// Save object as xml file
+        /// </summary>
+        /// <param name="filename">FileInfo</param>
+        public void SerializeXML(FileInfo filename)
+        {
+            System.Xml.Serialization.XmlSerializer writer = new System.Xml.Serialization.XmlSerializer(typeof(OutPutFilters));
+            using (System.IO.StreamWriter file = new System.IO.StreamWriter(filename.FullName))
+            {
+                writer.Serialize(file, this);
+            }
+        }
+
+        /// <summary>
+        /// Create a FiltersHelper object from a XML file
+        /// </summary>
+        /// <param name="filename">FileInfo</param>
+        /// <returns>FiltersHelper</returns>
+        public static OutPutFilters DeserializeXML(FileInfo filename)
+        {
+            OutPutFilters result = null;
+            System.Xml.Serialization.XmlSerializer writer = new System.Xml.Serialization.XmlSerializer(typeof(OutPutFilters));
+            using (System.IO.StreamReader file = new System.IO.StreamReader(filename.FullName))
+            {
+                result =  (OutPutFilters)writer.Deserialize(file);
+            }
+            return result;
+        }
+
+
+        public void Merge(OutPutFilters mergeFilter)
+        {
+            IfcProductFilter.Merge(mergeFilter.IfcProductFilter);
+        }
+
+
+        
             
     }
 

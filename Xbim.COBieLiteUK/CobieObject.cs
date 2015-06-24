@@ -310,7 +310,7 @@ namespace Xbim.COBieLiteUK
         }
 
         internal virtual void WriteToCobie(IWorkbook workbook, TextWriter log, CobieObject parent,
-            Dictionary<Type, int> rowNumCache, List<string> pickValuesCache, Dictionary<string, int> headerCache, FiltersHelper assetfilters = null,
+            Dictionary<Type, int> rowNumCache, List<string> pickValuesCache, Dictionary<string, int> headerCache, OutPutFilters assetfilters = null,
             string version = "UK2012")
         {
             if (!Filter(assetfilters, parent)) //filter out IfcElement and IfcTypeObject Excludes, property set names, and property set property names
@@ -504,7 +504,7 @@ namespace Xbim.COBieLiteUK
         /// <param name="assetfilters">FiltersHelper, filters for names and objects </param>
         /// <param name="parent">COBieLite object</param>
         /// <returns>bool</returns>
-        private bool Filter(FiltersHelper assetfilters, CobieObject parent)
+        private bool Filter(OutPutFilters assetfilters, CobieObject parent)
         {
             if (assetfilters != null)
             {

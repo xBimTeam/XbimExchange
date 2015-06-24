@@ -17,32 +17,30 @@ namespace Xbim.COBieLiteUK.FilterHelper
         /// <summary>
         /// Property Name exclude filter strings where name equal one of the strings
         /// </summary>
-        public List<string> EqualTo { get; private set; }
+        public List<string> EqualTo { get; set; }
 
         /// <summary>
         /// Property Name exclude filter strings where name starts with one of the strings
         /// </summary>
-        public List<string> StartWith { get; private set; }
+        public List<string> StartWith { get; set; }
 
         /// <summary>
         /// Property Name exclude filter strings where name contains with one of the strings
         /// </summary>
-        public List<string> Contain { get; private set; }
+        public List<string> Contain { get; set; }
         /// <summary>
         /// Property Set Name exclude filter strings where name equals with one of the strings
         /// </summary>
-        public List<string> PropertySetsEqualTo { get; private set; }
+        public List<string> PropertySetsEqualTo { get; set; }
 
-        /// <summary>
-        /// Initialize fields
-        /// </summary>
-        private void Init()
+        public PropertyFilter()
         {
             EqualTo = new List<string>();
             StartWith = new List<string>();
             Contain = new List<string>();
             PropertySetsEqualTo = new List<string>();
         }
+        
         /// <summary>
         /// Set Property Filters constructor
         /// </summary>
@@ -50,29 +48,26 @@ namespace Xbim.COBieLiteUK.FilterHelper
         /// <param name="startWith">';' delimited string for property names to start with</param>
         /// <param name="contain">';' delimited string for property names containing</param>
         /// <param name="pSetEqualTo">';' delimited string for Property Set names to equal</param>
-        public PropertyFilter(string equalTo, string startWith, string contain, string pSetEqualTo)
+        public PropertyFilter(string equalTo, string startWith, string contain, string pSetEqualTo) : this()
         {
-            //initialize fields
-            Init();
-
-            //Property names to exclude 
+             //Property names to exclude 
             if (!string.IsNullOrEmpty(equalTo))
             {
-                EqualTo.AddRange(equalTo.Split(new[] { ';' }, StringSplitOptions.RemoveEmptyEntries));
+                EqualTo.AddRange(equalTo.Split(new[] { ';' }, StringSplitOptions.RemoveEmptyEntries).ToList().ConvertAll(s => s.ToUpper()));
             }
             if (!string.IsNullOrEmpty(startWith))
             {
-                StartWith.AddRange(startWith.Split(new[] { ';' }, StringSplitOptions.RemoveEmptyEntries));
+                StartWith.AddRange(startWith.Split(new[] { ';' }, StringSplitOptions.RemoveEmptyEntries).ToList().ConvertAll(s => s.ToUpper()));
             }
             if (!string.IsNullOrEmpty(contain))
             {
-                Contain.AddRange(contain.Split(new[] { ';' }, StringSplitOptions.RemoveEmptyEntries));
+                Contain.AddRange(contain.Split(new[] { ';' }, StringSplitOptions.RemoveEmptyEntries).ToList().ConvertAll(s => s.ToUpper()));
             }
 
             //PropertySet names to exclude
             if (!string.IsNullOrEmpty(pSetEqualTo))
             {
-                PropertySetsEqualTo.AddRange(pSetEqualTo.Split(new[] { ';' }, StringSplitOptions.RemoveEmptyEntries));
+                PropertySetsEqualTo.AddRange(pSetEqualTo.Split(new[] { ';' }, StringSplitOptions.RemoveEmptyEntries).ToList().ConvertAll(s => s.ToUpper()));
             }
 
         }
@@ -81,10 +76,9 @@ namespace Xbim.COBieLiteUK.FilterHelper
         /// Set Property Filters constructor via ConfigurationSection from configuration file
         /// </summary>
         /// <param name="section">ConfigurationSection from configuration file</param>
-        public PropertyFilter(ConfigurationSection section)
+        public PropertyFilter(ConfigurationSection section) : this()
         {
             //initialize fields
-            Init();
             if (section != null)
             {
                 foreach (KeyValueConfigurationElement keyVal in ((AppSettingsSection)section).Settings)
@@ -94,16 +88,16 @@ namespace Xbim.COBieLiteUK.FilterHelper
                         switch (keyVal.Key.ToUpper())
                         {
                             case "EQUALTO":
-                                EqualTo.AddRange(keyVal.Value.Split(new[] { ';' }, StringSplitOptions.RemoveEmptyEntries));
+                                EqualTo.AddRange(keyVal.Value.Split(new[] { ';' }, StringSplitOptions.RemoveEmptyEntries).ToList().ConvertAll(s => s.ToUpper()));
                                 break;
                             case "STARTWITH":
-                                StartWith.AddRange(keyVal.Value.Split(new[] { ';' }, StringSplitOptions.RemoveEmptyEntries));
+                                StartWith.AddRange(keyVal.Value.Split(new[] { ';' }, StringSplitOptions.RemoveEmptyEntries).ToList().ConvertAll(s => s.ToUpper()));
                                 break;
                             case "CONTAIN":
-                                Contain.AddRange(keyVal.Value.Split(new[] { ';' }, StringSplitOptions.RemoveEmptyEntries));
+                                Contain.AddRange(keyVal.Value.Split(new[] { ';' }, StringSplitOptions.RemoveEmptyEntries).ToList().ConvertAll(s => s.ToUpper()));
                                 break;
                             case "PROPERTYSETSEQUALTO":
-                                PropertySetsEqualTo.AddRange(keyVal.Value.Split(new[] { ';' }, StringSplitOptions.RemoveEmptyEntries));
+                                PropertySetsEqualTo.AddRange(keyVal.Value.Split(new[] { ';' }, StringSplitOptions.RemoveEmptyEntries).ToList().ConvertAll(s => s.ToUpper()));
                                 break;
                             default:
 #if DEBUG
@@ -124,6 +118,7 @@ namespace Xbim.COBieLiteUK.FilterHelper
         /// <returns>bool</returns>
         public bool NameFilter (string testStr)
         {
+            testStr = testStr.ToUpper();
             return ((EqualTo.Where(a => testStr.Equals(a)).Count() > 0) ||
                     (StartWith.Where(a => testStr.StartsWith(a)).Count() > 0) ||
                     (Contain.Where(a => testStr.Contains(a)).Count() > 0)
@@ -137,6 +132,7 @@ namespace Xbim.COBieLiteUK.FilterHelper
         /// <returns>bool</returns>
         public bool PSetNameFilter(string testStr)
         {
+            testStr = testStr.ToUpper();
             return (PropertySetsEqualTo.Where(a => testStr.Equals(a)).Count() > 0);
         }
 

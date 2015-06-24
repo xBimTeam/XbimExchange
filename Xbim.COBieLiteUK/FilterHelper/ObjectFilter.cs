@@ -16,33 +16,42 @@ namespace Xbim.COBieLiteUK.FilterHelper
         /// <summary>
         /// IfcProducts to filter out
         /// </summary>
-        public List<string> ElementsToExclude { get; private set; }
+        public List<string> ElementsToExclude { get;  set; }
 
         /// <summary>
         /// IfcTypeObjects to filter out
         /// </summary>
-        public List<string> TypesToExclude { get; private set; }
+        public List<string> TypesToExclude { get; set; }
 
-        private void Init()
+        /// <summary>
+        /// keyed by IfcElement to element property PredefinedType
+        /// </summary>
+        public SerializableDictionary<string, string[]> PreDefinedType { get; set; }
+
+        
+
+        public ObjectFilter()
         {
             ElementsToExclude = new List<string>();
             TypesToExclude = new List<string>();
+            PreDefinedType = new SerializableDictionary<string, string[]>();
+            //PreDefinedType.Add("TEST", new string[] { "ONE", "TWO" });
         }
         /// <summary>
         /// Set Object Filters constructor
         /// </summary>
         /// <param name="elementsToExclude">';' delimited string for IfcProducts to exclude from components(Assets)</param>
         /// <param name="typesToExclude">';' delimited string for IfcTypeObjects to exclude from Types</param>
-        public ObjectFilter(string elementsToExclude, string typesToExclude)
+        public ObjectFilter(string elementsToExclude, string typesToExclude) : this()
         {
             //IfcProducts and IfcTypeObjects to exclude
             if (!string.IsNullOrEmpty(elementsToExclude))
             {
-                ElementsToExclude.AddRange(elementsToExclude.Split(new[] { ';' }, StringSplitOptions.RemoveEmptyEntries));
+                ElementsToExclude.AddRange(elementsToExclude.Split(new[] { ';' }, StringSplitOptions.RemoveEmptyEntries).ToList().ConvertAll(s => s.ToUpper()));
             }
             if (!string.IsNullOrEmpty(typesToExclude))
             {
-                TypesToExclude.AddRange(typesToExclude.Split(new[] { ';' }, StringSplitOptions.RemoveEmptyEntries));
+                TypesToExclude.AddRange(typesToExclude.Split(new[] { ';' }, StringSplitOptions.RemoveEmptyEntries).ToList().ConvertAll(s => s.ToUpper()));
             }
         }
 
@@ -50,10 +59,9 @@ namespace Xbim.COBieLiteUK.FilterHelper
         /// Set Property Filters constructor via ConfigurationSection from configuration file
         /// </summary>
         /// <param name="section">ConfigurationSection from configuration file</param>
-        public ObjectFilter(ConfigurationSection section)
+        public ObjectFilter(ConfigurationSection section) : this()
         {
             //initialize fields
-            Init();
             switch (section.SectionInformation.Name.ToUpper())
             {
                 case "IFCELEMENTINCLUSION":
@@ -84,7 +92,7 @@ namespace Xbim.COBieLiteUK.FilterHelper
                     {
                         if (String.Compare(keyVal.Value, "NO", StringComparison.OrdinalIgnoreCase) == 0)
                         {
-                            ElementsToExclude.Add(keyVal.Key);
+                            ElementsToExclude.Add(keyVal.Key.ToUpper());
                         }
                     }
                 }
@@ -105,11 +113,30 @@ namespace Xbim.COBieLiteUK.FilterHelper
                     {
                         if (String.Compare(keyVal.Value, "NO", StringComparison.OrdinalIgnoreCase) == 0)
                         {
-                            TypesToExclude.Add(keyVal.Key);
+                            TypesToExclude.Add(keyVal.Key.ToUpper());
                         }
                     }
                 }
             }
+        }
+
+        /// <summary>
+        /// add PreDefined types associated with ifcelements
+        /// </summary>
+        /// <param name="ifcElement">string name of ifcElement</param>
+        /// <param name="definedTypes">array of strings for the ifcElement predefinedtype enum property </param>
+        /// <returns></returns>
+        public bool AddPreDefinedType(string ifcElement, string[] definedTypes)
+        {
+            if (PreDefinedType.ContainsKey(ifcElement))
+            { 
+                return false;
+            }
+            else
+            {
+                PreDefinedType.Add(ifcElement, definedTypes);
+            }
+            return true;
         }
         
         /// <summary>
@@ -117,9 +144,20 @@ namespace Xbim.COBieLiteUK.FilterHelper
         /// </summary>
         /// <param name="testStr">String to test</param>
         /// <returns>bool</returns>
-        public bool ElementsFilter(string testStr)
+        public bool ElementsFilter(string testStr, string preDefinedType = null)
         {
-            return (ElementsToExclude.Where(a => testStr.Equals(a)).Count() > 0);
+            testStr = testStr.ToUpper();
+            //check for predefinedtype enum value passed as string
+            bool hasDefinedType = true; //if preDefinedType is null or testStr does not exist in PredefinedType dictionary we need to just test on testStr in return so set to true as default
+            if ((preDefinedType != null) &&
+                PreDefinedType.ContainsKey(testStr)
+                )
+            {
+                preDefinedType = preDefinedType.ToUpper();
+                hasDefinedType = PreDefinedType[testStr].Contains(preDefinedType);
+            }
+
+            return (hasDefinedType && (ElementsToExclude.Where(a => testStr.Equals(a)).Count() > 0));
         }
 
         /// <summary>
@@ -129,7 +167,32 @@ namespace Xbim.COBieLiteUK.FilterHelper
         /// <returns>bool</returns>
         public bool TypeObjFilter(string testStr)
         {
+            testStr = testStr.ToUpper();
             return (TypesToExclude.Where(a => testStr.Equals(a)).Count() > 0);
+        }
+
+        /// <summary>
+        /// Merge together properties
+        /// </summary>
+        /// <param name="mergeFilter">ObjectFilter to merge</param>
+        public void Merge(ObjectFilter mergeFilter)
+        {
+            var mergeElements = mergeFilter.ElementsToExclude.Where(p => !this.ElementsToExclude.Contains(p));
+            this.ElementsToExclude.AddRange(mergeElements);
+
+            var mergeTypes = mergeFilter.TypesToExclude.Where(p => !this.TypesToExclude.Contains(p));
+            this.ElementsToExclude.AddRange(mergeTypes);
+
+           // var mergePreDefined = mergeFilter.PreDefinedType.Where(p => !this.PreDefinedType.ContainsKey(p.Key));
+
+            var mergeData = this.PreDefinedType.Concat(mergeFilter.PreDefinedType).GroupBy(v => v.Key).ToDictionary(k => k.Key, v => v.SelectMany(x => x.Value).Distinct().ToArray());
+            this.PreDefinedType.Clear();
+            foreach (var item in mergeData)
+            {
+                this.PreDefinedType.Add(item.Key, item.Value);
+            }
+            
+
         }
 
         
