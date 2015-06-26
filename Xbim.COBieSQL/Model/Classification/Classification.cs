@@ -9,7 +9,7 @@ namespace Xbim.COBieSQL.Model.Classification
 {
     public class Classification
     {
-        public uint ClassificationId { get; set; }
+        public int ClassificationId { get; set; }
         public string Name { get; set; }
         public virtual ICollection<ClassificationItem> Items { get; set; }
     }

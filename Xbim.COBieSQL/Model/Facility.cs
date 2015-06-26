@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text;
@@ -12,6 +13,8 @@ namespace Xbim.COBieSQL.Model
     [Table("Facilities")]
     public class Facility: CobieObject
     {
+        public int FacilityId { get; set; }
+
         public virtual ICollection<ClassificationItem> Categories { get; set; }
 
         public virtual AreaUnit AreaUnit { get; set; }
@@ -23,11 +26,11 @@ namespace Xbim.COBieSQL.Model
         public string Phase { get; set; }
 
         //site
-        public uint SiteId { get; set; }
+        public int SiteId { get; set; }
         public virtual Site Site { get; set; }
 
         //project
-        public uint ProjectId { get; set; }
+        public int ProjectId { get; set; }
         public virtual Project Project { get; set; }
 
         //first level objects
@@ -36,7 +39,7 @@ namespace Xbim.COBieSQL.Model
 
     public class Project
     {
-        public uint ProjectId { get; set; }
+        public int ProjectId { get; set; }
         public string Name { get; set; }
         public string Description { get; set; }
         public string ExternalObject { get; set; }
@@ -45,7 +48,7 @@ namespace Xbim.COBieSQL.Model
 
     public class Site
     {
-        public uint SiteId { get; set; }
+        public int SiteId { get; set; }
         public string Name { get; set; }
         public string Description { get; set; }
         public string ExternalObject { get; set; }

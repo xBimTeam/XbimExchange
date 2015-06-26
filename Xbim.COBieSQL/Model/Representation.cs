@@ -10,5 +10,6 @@ namespace Xbim.COBieSQL.Model
     [Table("Representations")]
     public class Representation: CobieObject
     {
+        public int RepresentationId { get; set; }
     }
 }

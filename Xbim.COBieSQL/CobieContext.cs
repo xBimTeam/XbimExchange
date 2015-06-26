@@ -29,7 +29,7 @@ namespace Xbim.COBieSQL
 
         #region DbSets
 
-        public DbSet<CobieObject> CobieObjects { get; set; }
+        public DbSet<Facility> Facilities { get; set; }
 
         #endregion
     }

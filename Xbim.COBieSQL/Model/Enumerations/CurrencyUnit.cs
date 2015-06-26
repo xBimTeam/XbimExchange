@@ -8,10 +8,10 @@ namespace Xbim.COBieSQL.Model.Enumerations
 {
     public class CurrencyUnit: ICobieEnumeration
     {
-        public uint CurrencyUnitId { get; set; }
+        public int CurrencyUnitId { get; set; }
         public string Name { get; set; }
 
-        public uint FacilityId { get; set; }
+        public int FacilityId { get; set; }
         public Facility Facility { get; set; }
     }
 }

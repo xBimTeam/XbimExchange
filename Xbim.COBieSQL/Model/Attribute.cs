@@ -10,5 +10,6 @@ namespace Xbim.COBieSQL.Model
     [Table("Attributes")]
     public class Attribute: CobieObject
     {
+        public int AttributeId { get; set; }
     }
 }

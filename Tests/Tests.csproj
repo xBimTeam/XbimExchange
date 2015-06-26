@@ -55,6 +55,7 @@
     <Compile Include="DPoWToCOBieLiteTests.cs" />
     <Compile Include="IfcToCOBieLiteUKTests.cs" />
     <Compile Include="ConvertCobieLiteUKToValidationReportTests.cs" />
+    <Compile Include="COBieSQLTests.cs" />
     <Compile Include="ValidationMockUp.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -69,6 +70,10 @@
     <ProjectReference Include="..\Xbim.COBieLite\Xbim.COBieLite.csproj">
       <Project>{e550c721-50af-4ad0-998e-0c61f305eec8}</Project>
       <Name>Xbim.COBieLite</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Xbim.COBieSQL\Xbim.COBieSQL.csproj">
+      <Project>{c126acf8-4d7c-4eb3-a984-d36905a8507d}</Project>
+      <Name>Xbim.COBieSQL</Name>
     </ProjectReference>
     <ProjectReference Include="..\Xbim.DPoW\Xbim.DPoW.csproj">
       <Project>{79e7f597-f509-49ec-a606-fdc8326e72f5}</Project>
@@ -159,6 +164,13 @@
     </None>
   </ItemGroup>
   <ItemGroup>
+    <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\EntityFramework.6.1.3\lib\net45\EntityFramework.dll</HintPath>
+    </Reference>
+    <Reference Include="EntityFramework.SqlServer">
+      <HintPath>..\packages\EntityFramework.6.1.3\lib\net45\EntityFramework.SqlServer.dll</HintPath>
+    </Reference>
     <Reference Include="Esent.Interop, Version=1.9.2.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\ManagedEsent.1.9.2.0\lib\net40\Esent.Interop.dll</HintPath>
@@ -193,6 +205,7 @@
       <HintPath>..\packages\NPOI.2.1.3.1\lib\net40\NPOI.OpenXmlFormats.dll</HintPath>
     </Reference>
     <Reference Include="System" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Data" />
     <Reference Include="System.Data.Linq" />
     <Reference Include="System.XML" />

@@ -10,5 +10,6 @@ namespace Xbim.COBieSQL.Model
     [Table("Impacts")]
     public class Impact: CobieObject
     {
+        public int ImpactId { get; set; }
     }
 }

@@ -12,6 +12,8 @@ namespace Xbim.COBieSQL.Model
     [Table("Contacts")]
     public class Contact:CobieObject
     {
+        public int ContactId { get; set; }
+
         [Required]
         public string Email { get; set; }
 
@@ -21,7 +23,7 @@ namespace Xbim.COBieSQL.Model
             set { Email = value; }
         }
 
-        public uint ContactRoleId { get; set; }
+        public int ContactRoleId { get; set; }
         public virtual ContactRole ContactRole { get; set; }
 
         public string Company { get; set; }

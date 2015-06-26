@@ -10,5 +10,6 @@ namespace Xbim.COBieSQL.Model
     [Table("ProjectStages")]
     public class ProjectStage: CobieObject
     {
+        public int ProjectStageId { get; set; }
     }
 }

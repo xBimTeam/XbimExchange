@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -9,21 +10,18 @@ namespace Xbim.COBieSQL.Model
 {
     public abstract class CobieObject
     {
-        public uint CobieObjectId { get; set; }
-
-        public uint FacilityId { get; set; }
-        public virtual Facility Facility { get; set; }
+        public int CobieObjectId { get; set; }
 
         public virtual string Name { get; set; }
 
         public virtual string Description { get; set; }
 
-        public uint CreatedById { get; set; }
+        public int CreatedById { get; set; }
         public virtual Contact CreatedBy { get; set; }
 
         public DateTime CreatedOn { get; set; }
 
-        public uint ExternalSystemId { get; set; }
+        public int ExternalSystemId { get; set; }
         public virtual ExternalSystem ExternalSystem { get; set; }
 
         public string ExternalObject { get; set; }

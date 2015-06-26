@@ -8,10 +8,10 @@ namespace Xbim.COBieSQL.Model.Enumerations
 {
     public class ContactRole : ICobieEnumeration
     {
-        public uint ContactRoleId { get; set; }
+        public int ContactRoleId { get; set; }
         public string Name { get; set; }
 
-        public uint FacilityId { get; set; }
+        public int FacilityId { get; set; }
         public Facility Facility { get; set; }
 
     }
