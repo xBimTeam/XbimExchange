@@ -1,31 +1,29 @@
 ﻿using System;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Newtonsoft.Json;
 using System.IO;
-using System.Linq;
-using Newtonsoft.Json.Converters;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Xbim.COBieLite;
-using Xbim.COBieLite.Converters;
 using Xbim.Ifc2x3.MeasureResource;
 using Xbim.IO;
 using Xbim.ModelGeometry.Scene;
 using Xbim.XbimExtensions.Interfaces;
 using XbimExchanger.COBieLiteToIfc;
-using XbimExchanger.DPoWToCOBieLite;
 using XbimExchanger.IfcHelpers;
 using XbimGeometry.Interfaces;
 
 namespace Tests
 {
+    [DeploymentItem(@"ValidationFiles\")]
     [DeploymentItem(@"TestFiles\")]
-    [DeploymentItem(@"COBieAttributes.config\")]
+    [DeploymentItem(@"COBieAttributes.config")]
+    [DeploymentItem(@"x64\","x64")]
+    [DeploymentItem(@"x86\","x86")]
     [TestClass]
     public class ConversionTests
     {
         [TestMethod]
         public void ConverIfcToWexBim()
         {
-            const string ifcFileFullName = @"D:\Users\steve\My Documents\DPoW\001 NBS Lakeside Restaurant 2014.ifc";
+            const string ifcFileFullName = @"Lakeside_Restaurant.ifc";
 
             var fileName = Path.GetFileName(ifcFileFullName);
             var fileNameWithoutExtension = Path.GetFileNameWithoutExtension(fileName);

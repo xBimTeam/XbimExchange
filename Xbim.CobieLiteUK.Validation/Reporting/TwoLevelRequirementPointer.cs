@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using Xbim.CobieLiteUK.Validation.Extensions;
 using Xbim.COBieLiteUK;
@@ -20,23 +19,24 @@ namespace Xbim.CobieLiteUK.Validation.Reporting
             Name = name;
         }
 
-        public override bool Equals(Object obj)
+        public override bool Equals(object obj)
         {
             // If parameter is null return false.
+            // ReSharper disable once UseNullPropagation // for code clarity
             if (obj == null)
-            {
                 return false;
-            }
 
             // If parameter cannot be cast to AssetTypeRequirementPointer return false.
             var p = obj as TwoLevelRequirementPointer<T, TSub>;
             if (p == null)
-            {
                 return false;
-            }
+
 
             // Return true if the fields match:
-            return (ExternalId == p.ExternalId) && (ExternalSystem == p.ExternalSystem);
+            return 
+                (ExternalId == p.ExternalId) 
+                && 
+                (ExternalSystem == p.ExternalSystem);
         }
 
         public override int GetHashCode()

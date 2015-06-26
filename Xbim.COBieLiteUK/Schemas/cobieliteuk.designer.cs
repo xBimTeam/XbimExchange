@@ -67,25 +67,21 @@ namespace Xbim.COBieLiteUK {
         private Site siteField;
         
         [EditorBrowsable(EditorBrowsableState.Never)]
-        private LinearUnit linearUnitsField;
         
         [EditorBrowsable(EditorBrowsableState.Never)]
         private string linearUnitsCustomField;
         
         [EditorBrowsable(EditorBrowsableState.Never)]
-        private AreaUnit areaUnitsField;
         
         [EditorBrowsable(EditorBrowsableState.Never)]
         private string areaUnitsCustomField;
         
         [EditorBrowsable(EditorBrowsableState.Never)]
-        private VolumeUnit volumeUnitsField;
         
         [EditorBrowsable(EditorBrowsableState.Never)]
         private string volumeUnitsCustomField;
         
         [EditorBrowsable(EditorBrowsableState.Never)]
-        private CurrencyUnit currencyUnitField;
         
         [EditorBrowsable(EditorBrowsableState.Never)]
         private string currencyUnitCustomField;
@@ -2230,7 +2226,6 @@ namespace Xbim.COBieLiteUK {
         private List<SpaceKey> spacesField;
         
         [EditorBrowsable(EditorBrowsableState.Never)]
-        private ZoneType zoneTypeField;
         
         [global::System.Xml.Serialization.XmlArrayAttribute(Form=global::System.Xml.Schema.XmlSchemaForm.Unqualified)]
         [global::System.Xml.Serialization.XmlArrayItemAttribute(Form=global::System.Xml.Schema.XmlSchemaForm.Unqualified, IsNullable=false)]
@@ -3080,7 +3075,6 @@ namespace Xbim.COBieLiteUK {
         private string assetTypeCustomField;
         
         [EditorBrowsable(EditorBrowsableState.Never)]
-        private AssetPortability assetTypeEnumField;
         
         [EditorBrowsable(EditorBrowsableState.Never)]
         private ContactKey manufacturerField;

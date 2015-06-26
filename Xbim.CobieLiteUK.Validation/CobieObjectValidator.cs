@@ -151,10 +151,12 @@ namespace Xbim.CobieLiteUK.Validation
                 var pass = parentCachedValidator.CanSatisfy(req, out satValue);
                 var a = targetFacility.Clone(req.Attribute);
 
+                // todo: determine the correct theoretical behaviour; it should probably be null, but needs changes in the reporting mechanism.
+                // ReSharper disable once ConvertIfStatementToNullCoalescingExpression
                 if (satValue != null)
                     a.Value = AttributeValue.CreateFromObject(satValue);
                 else
-                    a.Value = AttributeValue.CreateFromObject(""); // todo: determine the correct theoretical behaviour; it should probably be null, but needs changes in the reporting mechanism.
+                    a.Value = AttributeValue.CreateFromObject(""); 
 
                 //// it was previously:
                 //if (satValue is AttributeValue)
@@ -216,10 +218,14 @@ namespace Xbim.CobieLiteUK.Validation
                         else if (!parentCachedValidator.AlreadySatisfies(req)) // fails locally, and is not passed at higher level, then add to explicit report fail
                         {
                             var a = targetFacility.Clone(req.Attribute);
+
+                            // todo: determine the correct theoretical behaviour; it should probably be null, but needs changes in the reporting mechanism.
+
+                            // ReSharper disable once ConvertIfStatementToNullCoalescingExpression
                             if (satValue != null)
                                 a.Value = AttributeValue.CreateFromObject(satValue);
                             else
-                                a.Value = AttributeValue.CreateFromObject(""); // todo: determine the correct theoretical behaviour; it should probably be null, but needs changes in the reporting mechanism.
+                                a.Value = AttributeValue.CreateFromObject(""); 
                                 
                             
                             a.Categories = new List<Category> { FacilityValidator.FailedCat };

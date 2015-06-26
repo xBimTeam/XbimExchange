@@ -10,18 +10,18 @@ namespace Xbim.COBieLite
     class XbimCoBieLiteToIfcConverter : IDisposable
     {
         private XbimModel _model;
-        private bool _merging;
+       
         public bool Convert(FacilityType facility, XbimModel model=null)
         {
             if (model == null)
             {
                 _model = XbimModel.CreateTemporaryModel();
-                _merging = false;
+                
             }
             else
             {
                 _model = model;
-                _merging = true;
+                
             }
             return  WriteFacility(facility);
            

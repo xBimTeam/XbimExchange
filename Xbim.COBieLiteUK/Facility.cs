@@ -16,6 +16,7 @@ using NPOI.SS.UserModel;
 using NPOI.XSSF.UserModel;
 using Xbim.COBieLiteUK.Converters;
 using Formatting = System.Xml.Formatting;
+using XbimExchanger.COBieLiteHelpers;
 
 namespace Xbim.COBieLiteUK
 {
@@ -469,7 +470,7 @@ namespace Xbim.COBieLiteUK
         #region Writing COBie Spreadsheet
 
         public void WriteCobie(Stream stream, ExcelTypeEnum type, out string message,
-            string version = "UK2012", bool useTemplate = true)
+            FiltersHelper assetfilters = null, string version = "UK2012", bool useTemplate = true)
         {
             Stream templateStream = null;
             if (useTemplate)
@@ -498,7 +499,9 @@ namespace Xbim.COBieLiteUK
             var watch = new Stopwatch();
             watch.Start();
 
-            WriteToCobie(workbook, log, null, new Dictionary<Type, int>(), new List<string>(), new Dictionary<string, int>(), version);
+            
+
+            WriteToCobie(workbook, log, null, new Dictionary<Type, int>(), new List<string>(), new Dictionary<string, int>(), assetfilters, version);
 
             watch.Stop();
             Debug.WriteLine("Creating NPOI model: {0}ms", watch.ElapsedMilliseconds);
@@ -519,8 +522,8 @@ namespace Xbim.COBieLiteUK
             message = log.ToString();
             workbook.Write(stream);
         }
-
-        public void WriteCobie(string path, out string message, string version = "UK2012", bool useTemplate = true)
+       
+        public void WriteCobie(string path, out string message, FiltersHelper assetfilters = null, string version = "UK2012", bool useTemplate = true)
         {
             if (path == null) throw new ArgumentNullException("path");
             var ext = Path.GetExtension(path).ToLower().Trim('.');
@@ -534,7 +537,7 @@ namespace Xbim.COBieLiteUK
             using (var file = File.Create(path))
             {
                 var type = ext == "xlsx" ? ExcelTypeEnum.XLSX : ExcelTypeEnum.XLS;
-                WriteCobie(file, type, out message, version, useTemplate);
+                WriteCobie(file, type, out message, assetfilters, version, useTemplate);
                 file.Close();
             }
         }
@@ -542,9 +545,9 @@ namespace Xbim.COBieLiteUK
         #endregion
 
         internal override void WriteToCobie(IWorkbook workbook, TextWriter loger, CobieObject parent,
-            Dictionary<Type, int> rowNumCache, List<string> pickValuesCache, Dictionary<string, int> headerCache, string version = "UK2012")
+            Dictionary<Type, int> rowNumCache, List<string> pickValuesCache, Dictionary<string, int> headerCache, FiltersHelper assetfilters = null, string version = "UK2012")
         {
-            base.WriteToCobie(workbook, loger, parent, rowNumCache, pickValuesCache, headerCache, version);
+            base.WriteToCobie(workbook, loger, parent, rowNumCache, pickValuesCache, headerCache, assetfilters, version);
 
             //write metadata out
             if (Metadata != null)

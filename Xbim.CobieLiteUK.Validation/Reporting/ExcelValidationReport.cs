@@ -130,15 +130,14 @@ namespace Xbim.CobieLiteUK.Validation.Reporting
                 if (assetType.GetSubmittedAssetsCount() < 1)
                     continue;
                 var firstOrDefault = assetType.RequirementCategories.FirstOrDefault(cat => cat.Classification == @"Uniclass2015");
-                if (firstOrDefault != null)
-                {
-                    var tName = firstOrDefault.Code;
-                    var validName = WorkbookUtil.CreateSafeSheetName(string.Format(@"{0} {1}", iRunningWorkBook++, tName));
+                if (firstOrDefault == null) 
+                    continue;
+                var tName = firstOrDefault.Code;
+                var validName = WorkbookUtil.CreateSafeSheetName(string.Format(@"{0} {1}", iRunningWorkBook++, tName));
 
-                    var detailPage = workBook.CreateSheet(validName);
-                    if (!CreateDetailSheet(detailPage, assetType))
-                        return false;
-                }
+                var detailPage = workBook.CreateSheet(validName);
+                if (!CreateDetailSheet(detailPage, assetType))
+                    return false;
             }
 
             // reports on Zones details
@@ -150,15 +149,14 @@ namespace Xbim.CobieLiteUK.Validation.Reporting
                 if (zoneGroup.GetSubmittedAssetsCount() < 1)
                     continue;
                 var firstOrDefault = zoneGroup.RequirementCategories.FirstOrDefault(cat => cat.Classification == @"Uniclass2015");
-                if (firstOrDefault != null)
-                {
-                    var tName = firstOrDefault.Code;
-                    var validName = WorkbookUtil.CreateSafeSheetName(string.Format(@"{0} {1}", iRunningWorkBook++, tName));
+                if (firstOrDefault == null) 
+                    continue;
+                var tName = firstOrDefault.Code;
+                var validName = WorkbookUtil.CreateSafeSheetName(string.Format(@"{0} {1}", iRunningWorkBook++, tName));
 
-                    var detailPage = workBook.CreateSheet(validName);
-                    if (!CreateDetailSheet(detailPage, zoneGroup))
-                        return false;
-                }
+                var detailPage = workBook.CreateSheet(validName);
+                if (!CreateDetailSheet(detailPage, zoneGroup))
+                    return false;
             }
             try
             {
@@ -544,6 +542,7 @@ namespace Xbim.CobieLiteUK.Validation.Reporting
                         continue;
                     excelCell = excelRow.GetCell(iRunningColumn) ?? excelRow.CreateCell(iRunningColumn);
 
+                    // ReSharper disable once CanBeReplacedWithTryCastAndCheckForNull
                     if (row[tCol] is IVisualValue)
                     {
                         writer.SetCell(excelCell, (IVisualValue) row[tCol]);
@@ -566,13 +565,12 @@ namespace Xbim.CobieLiteUK.Validation.Reporting
                 }
             }
 
-            if (autoSize)
+            if (!autoSize) 
+                return startingRow + 1;
+            // sets all used columns to autosize
+            for (int irun = 0; irun < iRunningColumn; irun++)
             {
-                // sets all used columns to autosize
-                for (int irun = 0; irun < iRunningColumn; irun++)
-                {
-                    summaryPage.AutoSizeColumn(irun);
-                }
+                summaryPage.AutoSizeColumn(irun);
             }
             return startingRow + 1;
         }

@@ -10,7 +10,8 @@ using Xbim.CobieLiteUK.Validation;
 using Xbim.IO;
 using XbimExchanger.IfcToCOBieLiteUK;
 using Attribute = Xbim.COBieLiteUK.Attribute;
-using System = Xbim.COBieLiteUK.System;
+using XbimExchanger.COBieLiteHelpers;
+//using System = Xbim.COBieLiteUK.System;
 
 
 namespace Tests
@@ -44,90 +45,92 @@ namespace Tests
             Assert.IsNull(f.AreaUnitsCustom);
         }
 
-        [TestMethod]
-        public void IFSModelAnalyses()
-        {
-            const string file = @"c:\CODE\SampleData\IFS\DB4 full Model A_DPoW.json";
-            //**************** semantical analysis
-            var f = Facility.ReadJson(file);
-
-            var assemblies = f.Get<Assembly>().Where(i => i != null);
-            var assets = f.Get<Asset>().Where(i => i != null);
-            var assetsTypes = (f.AssetTypes ?? new List<AssetType>()).Where(i => i != null);
-            var attributes = f.Get<Attribute>().Where(i => i != null);
-            var connections = f.Get<Connection>().Where(i => i != null);
-            var contacts = (f.Contacts ?? new List<Contact>()).Where(i => i != null);
-            var documents = f.Get<Document>().Where(i => i != null);
-            var floors = (f.Floors ?? new List<Floor>()).Where(i => i != null);
-            var impacts = f.Get<Impact>().Where(i => i != null);
-            var issues = f.Get<Issue>().Where(i => i != null);
-            var jobs = f.Get<Job>().Where(i => i != null);
-            var resources = f.Get<Resource>().Where(i => i != null);
-            var spaces = f.Get<Space>().Where(i => i != null);
-            var spares = f.Get<Spare>().Where(i => i != null);
-            var systems = (f.Systems ?? new List<Xbim.COBieLiteUK.System>()).Where(i => i != null);
-            var zones = (f.Zones ?? new List<Zone>()).Where(i => i != null);
-
-            //report
-            Debug.WriteLine("Assemblies: {0}", assemblies.Count());
-            Debug.WriteLine("Assets: {0}", assets.Count());
-            Debug.WriteLine("AssetTypes: {0}", assetsTypes.Count());
-            Debug.WriteLine("Attributes: {0}", attributes.Count());
-            Debug.WriteLine("Connections: {0}", connections.Count());
-            Debug.WriteLine("Contacts: {0}", contacts.Count());
-            Debug.WriteLine("Documents: {0}", documents.Count());
-            Debug.WriteLine("Floors: {0}", floors.Count());
-            Debug.WriteLine("Impacts: {0}", impacts.Count());
-            Debug.WriteLine("Issues: {0}", issues.Count());
-            Debug.WriteLine("Jobs: {0}", jobs.Count());
-            Debug.WriteLine("Resources: {0}", resources.Count());
-            Debug.WriteLine("Spaces: {0}", spaces.Count());
-            Debug.WriteLine("Spares: {0}", spares.Count());
-            Debug.WriteLine("Systems: {0}", systems.Count());
-            Debug.WriteLine("Zones: {0}", zones.Count());
-        }
-
-        [TestMethod]
-        public void IFSFileAnalyses()
-        {
-            const string file = @"c:\CODE\SampleData\IFS\DB4 full Model A_DPoW.json";
-            //const string file = @"c:\Users\mxfm2\Desktop\SampleHouse.json";
-            const string result = @"c:\CODE\SampleData\IFS\Tokens.txt";
 
 
-            //**************** lexical analysis
-            var tokens = new Dictionary<string, int>();
-            var filesize = 0;
-            using (var reader = File.OpenText(file))
-            {
-                var data = reader.ReadToEnd();
-                filesize = data.Length;
-                //analyse repetition of property names
-                var propNameRegex = new Regex("(?<=\")([\\w0-9]+?)(?=\":)");
-                var matches = propNameRegex.Matches(data).OfType<Match>();
-                reader.Close();
-                foreach (var match in matches)
-                {
-                    if (!tokens.Keys.Contains(match.Value)) tokens.Add(match.Value, 0);
-                    tokens[match.Value]++;
-                }
-                data = null;
-                matches = null;
-            }
+        //[TestMethod]
+        //public void IFSModelAnalyses()
+        //{
+        //    const string file = @"c:\CODE\SampleData\IFS\DB4 full Model A_DPoW.json";
+        //    //**************** semantical analysis
+        //    var f = Facility.ReadJson(file);
 
-            using (var w = File.CreateText(result))
-            {
-                var total = tokens.Values.Aggregate(0, (a, b) => a + b);
-                w.WriteLine("Total count of tokens: {0:## ### ###}", total);
-                w.WriteLine("Total file length: {0:## ### ###}", filesize);
-                w.WriteLine("------------------------------");
-                foreach (var t in tokens.OrderByDescending(t => t.Value))
-                {
-                    w.WriteLine("{0,30} {1,10} {2,10:P} {3,10:P}", t.Key, t.Value, (float) t.Value/(float) total,
-                        (float) (t.Key.Length*t.Value)/(float) filesize);
-                }
-            }
-        }
+        //    var assemblies = f.Get<Assembly>().Where(i => i != null);
+        //    var assets = f.Get<Asset>().Where(i => i != null);
+        //    var assetsTypes = (f.AssetTypes ?? new List<AssetType>()).Where(i => i != null);
+        //    var attributes = f.Get<Attribute>().Where(i => i != null);
+        //    var connections = f.Get<Connection>().Where(i => i != null);
+        //    var contacts = (f.Contacts ?? new List<Contact>()).Where(i => i != null);
+        //    var documents = f.Get<Document>().Where(i => i != null);
+        //    var floors = (f.Floors ?? new List<Floor>()).Where(i => i != null);
+        //    var impacts = f.Get<Impact>().Where(i => i != null);
+        //    var issues = f.Get<Issue>().Where(i => i != null);
+        //    var jobs = f.Get<Job>().Where(i => i != null);
+        //    var resources = f.Get<Resource>().Where(i => i != null);
+        //    var spaces = f.Get<Space>().Where(i => i != null);
+        //    var spares = f.Get<Spare>().Where(i => i != null);
+        //    var systems = (f.Systems ?? new List<Xbim.COBieLiteUK.System>()).Where(i => i != null);
+        //    var zones = (f.Zones ?? new List<Zone>()).Where(i => i != null);
+
+        //    //report
+        //    Debug.WriteLine("Assemblies: {0}", assemblies.Count());
+        //    Debug.WriteLine("Assets: {0}", assets.Count());
+        //    Debug.WriteLine("AssetTypes: {0}", assetsTypes.Count());
+        //    Debug.WriteLine("Attributes: {0}", attributes.Count());
+        //    Debug.WriteLine("Connections: {0}", connections.Count());
+        //    Debug.WriteLine("Contacts: {0}", contacts.Count());
+        //    Debug.WriteLine("Documents: {0}", documents.Count());
+        //    Debug.WriteLine("Floors: {0}", floors.Count());
+        //    Debug.WriteLine("Impacts: {0}", impacts.Count());
+        //    Debug.WriteLine("Issues: {0}", issues.Count());
+        //    Debug.WriteLine("Jobs: {0}", jobs.Count());
+        //    Debug.WriteLine("Resources: {0}", resources.Count());
+        //    Debug.WriteLine("Spaces: {0}", spaces.Count());
+        //    Debug.WriteLine("Spares: {0}", spares.Count());
+        //    Debug.WriteLine("Systems: {0}", systems.Count());
+        //    Debug.WriteLine("Zones: {0}", zones.Count());
+        //}
+
+        //[TestMethod]
+        //public void IFSFileAnalyses()
+        //{
+        //    const string file = @"c:\CODE\SampleData\IFS\DB4 full Model A_DPoW.json";
+        //    //const string file = @"c:\Users\mxfm2\Desktop\SampleHouse.json";
+        //    const string result = @"c:\CODE\SampleData\IFS\Tokens.txt";
+
+
+        //    //**************** lexical analysis
+        //    var tokens = new Dictionary<string, int>();
+        //    var filesize = 0;
+        //    using (var reader = File.OpenText(file))
+        //    {
+        //        var data = reader.ReadToEnd();
+        //        filesize = data.Length;
+        //        //analyse repetition of property names
+        //        var propNameRegex = new Regex("(?<=\")([\\w0-9]+?)(?=\":)");
+        //        var matches = propNameRegex.Matches(data).OfType<Match>();
+        //        reader.Close();
+        //        foreach (var match in matches)
+        //        {
+        //            if (!tokens.Keys.Contains(match.Value)) tokens.Add(match.Value, 0);
+        //            tokens[match.Value]++;
+        //        }
+        //        data = null;
+        //        matches = null;
+        //    }
+
+        //    using (var w = File.CreateText(result))
+        //    {
+        //        var total = tokens.Values.Aggregate(0, (a, b) => a + b);
+        //        w.WriteLine("Total count of tokens: {0:## ### ###}", total);
+        //        w.WriteLine("Total file length: {0:## ### ###}", filesize);
+        //        w.WriteLine("------------------------------");
+        //        foreach (var t in tokens.OrderByDescending(t => t.Value))
+        //        {
+        //            w.WriteLine("{0,30} {1,10} {2,10:P} {3,10:P}", t.Key, t.Value, (float) t.Value/(float) total,
+        //                (float) (t.Key.Length*t.Value)/(float) filesize);
+        //        }
+        //    }
+        //}
 
         [TestMethod]
         public void CoBieLiteUkCreation()
@@ -495,7 +498,7 @@ namespace Tests
             facility.WriteJson("..\\..\\2012-03-23-Duplex-Design.cobielite.json", true);
 
             Assert.AreEqual(AreaUnit.squaremeters, facility.AreaUnits);
-            Assert.IsTrue(String.IsNullOrEmpty(msg));
+            Assert.IsFalse(String.IsNullOrEmpty(msg));
 
             var log = new StringWriter();
             facility.ValidateUK2012(log, true);
@@ -628,7 +631,7 @@ namespace Tests
         {
             string msg;
             var facility = Facility.ReadCobie("OBN1-COBie-UK-2014.xlsx", out msg);
-            facility.WriteCobie("..\\..\\OBN1-COBie-UK-2014_plain.xlsx", out msg, "UK2012", false);
+            facility.WriteCobie("..\\..\\OBN1-COBie-UK-2014_plain.xlsx", out msg, null, "UK2012", false);
         }
 
         [TestMethod]
@@ -766,7 +769,9 @@ namespace Tests
 
                     string msg;
                     facilityType.WriteJson(jsonFile, true);
-                    facilityType.WriteCobie("..\\..\\Lakeside_Restaurant.xlsx", out msg, "UK2012", true);
+                    //set attribute name filters
+                    FiltersHelper assetfilters = new FiltersHelper();
+                    facilityType.WriteCobie("..\\..\\Lakeside_Restaurant.xlsx", out msg, assetfilters, "UK2012", true);
 
 
                     break;
@@ -797,7 +802,7 @@ namespace Tests
             submitted.AssetTypes = submittedAssetTypes;
             string msg;
             submitted.WriteCobie("Lakeside_restaurant_submission.xlsx", out msg);
-            Assert.IsFalse(string.IsNullOrWhiteSpace(msg));
+            Assert.IsTrue(string.IsNullOrWhiteSpace(msg));
         }
     }
 }

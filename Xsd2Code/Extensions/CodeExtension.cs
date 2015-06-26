@@ -203,7 +203,7 @@ namespace Xsd2Code.Library.Extensions
                     {
                         if (argument.Name == "Namespace")
                         {
-                            if (((CodePrimitiveExpression)argument.Value).Value == schema.TargetNamespace)
+                            if ((string) ((CodePrimitiveExpression)argument.Value).Value == schema.TargetNamespace)
                             {
                                 return true;
                             }

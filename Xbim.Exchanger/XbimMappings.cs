@@ -10,7 +10,8 @@ namespace XbimExchanger
     /// <typeparam name="TSourceKey">Type of the key in the From object to link mappings</typeparam>
     /// <typeparam name="TSourceObject">Type of the object to map from</typeparam>
     /// <typeparam name="TTargetObject">Type of the object to map to</typeparam>
-    /// <typeparam name="TRepository">The repository that holds new objects</typeparam>
+    /// <typeparam name="TSourceRepository"></typeparam>
+    /// <typeparam name="TTargetRepository"></typeparam>
     public abstract class XbimMappings<TSourceRepository, TTargetRepository, TSourceKey, TSourceObject, TTargetObject> : IXbimMappings<TSourceRepository, TTargetRepository> where TTargetObject : new()
     {
         protected ConcurrentDictionary<TSourceKey, TTargetObject> Results = new ConcurrentDictionary<TSourceKey, TTargetObject>();
