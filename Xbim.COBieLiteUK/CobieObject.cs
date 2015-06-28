@@ -23,6 +23,7 @@ using NPOI.SS.Util;
 using NPOI.XSSF.UserModel;
 using XbimExchanger.COBieLiteHelpers;
 using System.Diagnostics;
+using Xbim.COBieLiteUK.Net40PortHelpers;
 
 namespace Xbim.COBieLiteUK
 {
@@ -659,8 +660,7 @@ namespace Xbim.COBieLiteUK
 
         public CobieValue GetCobieProperty(string name)
         {
-            var mapping = GetType().GetCustomAttributes(typeof (MappingAttribute))
-                .FirstOrDefault(a => ((MappingAttribute) a).Header == name) as MappingAttribute;
+            var mapping = GetType().GetCustomAttributes<MappingAttribute>().FirstOrDefault(a => a.Header == name);
             return mapping == null ? null : GetCobieProperty(mapping, new StringWriter());
         }
 
@@ -841,7 +841,7 @@ namespace Xbim.COBieLiteUK
             var types = typeof(CobieObject).Assembly.GetTypes().Where(t => t.IsAbstract == false && typeof(CobieObject).IsAssignableFrom(t));
             foreach (var type in types)
             {
-                _typeToParentAttributeCache.Add(type, type.GetCustomAttribute<ParentAttribute>(false));
+                _typeToParentAttributeCache.Add(type, type.GetCustomAttributes<ParentAttribute>(false).FirstOrDefault());
             }
         }
         private static Dictionary<string, Type> _typeSheetMappingsCache = new Dictionary<string, Type>();
@@ -1326,9 +1326,7 @@ namespace Xbim.COBieLiteUK
                     ? result.Select(a => a.Clone())
                     : result;
 
-            result = type.GetCustomAttributes(typeof (MappingAttribute))
-                .Where(a => ((MappingAttribute) a).Type == mapping)
-                .Cast<MappingAttribute>().ToList();
+            result = type.GetCustomAttributes<MappingAttribute>().Where(a => a.Type == mapping).ToList();
 
             //there is a special tweak for attributes where Value fiels needs to be processed as the first one 
             //in order to get the right data type
