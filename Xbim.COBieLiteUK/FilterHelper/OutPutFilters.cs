@@ -9,12 +9,13 @@ using Xbim.IO;
 using System.Reflection;
 using Xbim.COBieLiteUK.FilterHelper;
 using Xbim.COBieLiteUK;
+using Newtonsoft.Json;
 
 namespace XbimExchanger.COBieLiteHelpers
 {
     public class OutPutFilters
     {
-        #region Filters
+        #region Properties
         /// <summary>
         /// IfcProduct Exclude filters
         /// </summary>
@@ -23,6 +24,11 @@ namespace XbimExchanger.COBieLiteHelpers
         /// IfcTypeObject Exclude filters
         /// </summary>
         public ObjectFilter IfcTypeObjectFilter { get;  set; }
+        /// <summary>
+        /// IfcAssembly Exclude filters
+        /// </summary>
+        public ObjectFilter IfcAssemblyFilter { get; set; }
+
         /// <summary>
         /// Zone attribute filters
         /// </summary>
@@ -57,6 +63,8 @@ namespace XbimExchanger.COBieLiteHelpers
         public PropertyFilter CommonFilter { get;  set; }
         #endregion
 
+        #region Constructor methods
+
         /// <summary>
         /// Empty constructor for Serialize
         /// </summary>
@@ -66,61 +74,34 @@ namespace XbimExchanger.COBieLiteHelpers
         }
         
         /// <summary>
-        /// Constructor for default configFileName = null, or passed in configuration file path
+        /// Constructor for default set configFileName = null, or passed in configuration file path
         /// </summary>
         /// <param name="configFileName"></param>
         public OutPutFilters(string configFileName)
         {
             FiltersHelperInit(configFileName);
         }
+       
 
         /// <summary>
         /// Constructor, will read Configuration file if passed, or default COBieAttributesFilters.config
         /// </summary>
         /// <param name="configFileName">Full path/name for config file</param>
-        public void FiltersHelperInit(string configFileName = null)
+        private void FiltersHelperInit(string configFileName = null)
         {
-            var tmpFile = configFileName;
-            if (configFileName == null)
+            string resFile = configFileName;
+            //set default
+            if (resFile == null)
             {
-                tmpFile = Path.GetTempPath() + Guid.NewGuid().ToString() + ".tmp";
-
-                var asss = System.Reflection.Assembly.GetExecutingAssembly();
-
-                using (var input = asss.GetManifestResourceStream("Xbim.COBieLiteUK.FilterHelper.COBieAttributesFilters.config"))
-                {
-                    if (input != null)
-                    {
-                        using (var output = File.Create(tmpFile))
-                        {
-                            if (input != null) input.CopyTo(output);
-                        }
-                    }
-                }
+                 resFile = "Xbim.COBieLiteUK.FilterHelper.COBieAttributesFilters.config";               
             }
             
-            if (!File.Exists(tmpFile))
-            {
-                var directory = new DirectoryInfo(".");
-                throw new FileNotFoundException(string.Format(@"Error loading configuration file ""{0}"". App folder is ""{1}"".", tmpFile,directory.FullName) );
-            }
-            
-            Configuration config;
-
-            try
-            {
-                var configMap = new ExeConfigurationFileMap { ExeConfigFilename = tmpFile };
-                config = ConfigurationManager.OpenMappedExeConfiguration(configMap, ConfigurationUserLevel.None);
-               
-            }
-            catch (Exception ex)
-            {
-                throw new ConfigurationErrorsException(string.Format(@"Error loading configuration file ""{0}"". Error: {1}", tmpFile, ex.Message ));
-            }
+            Configuration config = GetResourceConfig(resFile);
 
             //IfcProduct and IfcTypeObject filters
             IfcProductFilter = new ObjectFilter(config.GetSection("IfcElementInclusion"));
             IfcTypeObjectFilter = new ObjectFilter(config.GetSection("IfcTypeInclusion"));
+            IfcAssemblyFilter = new ObjectFilter(config.GetSection("IfcAssemblyInclusion"));
             
             //Property name filters
             ZoneFilter = new PropertyFilter(config.GetSection("ZoneFilter"));
@@ -131,7 +112,59 @@ namespace XbimExchanger.COBieLiteHelpers
             SpareFilter = new PropertyFilter(config.GetSection("SpareFilter"));
             ComponentFilter = new PropertyFilter(config.GetSection("ComponentFilter"));
             CommonFilter = new PropertyFilter(config.GetSection("CommonFilter"));
+
+            if (configFileName == null)
+            {
+                File.Delete(config.FilePath);
+            }
+            
         }
+
+        private Configuration GetResourceConfig(string resFileName)
+        {
+            string tmpFile = resFileName;
+            bool isResourcFile = !File.Exists(resFileName);
+            if (isResourcFile)
+            {
+                tmpFile = Path.GetTempPath() + Guid.NewGuid().ToString() + ".tmp";
+
+                var asss = System.Reflection.Assembly.GetExecutingAssembly();
+
+                using (var input = asss.GetManifestResourceStream(resFileName))
+                {
+                    if (input != null)
+                    {
+                        using (var output = File.Create(tmpFile))
+                        {
+                            if (input != null) input.CopyTo(output);
+                        }
+                    }
+                }
+
+                if (!File.Exists(tmpFile))
+                {
+                    var directory = new DirectoryInfo(".");
+                    throw new FileNotFoundException(string.Format(@"Error loading configuration file ""{0}"". App folder is ""{1}"".", tmpFile, directory.FullName));
+                }
+            }
+
+            Configuration config;
+            try
+            {
+                var configMap = new ExeConfigurationFileMap { ExeConfigFilename = tmpFile };
+                config = ConfigurationManager.OpenMappedExeConfiguration(configMap, ConfigurationUserLevel.None);
+
+            }
+            catch (Exception ex)
+            {
+                throw new ConfigurationErrorsException(string.Format(@"Error loading configuration file ""{0}"". Error: {1}", tmpFile, ex.Message));
+            }
+
+            return config;
+        }
+        #endregion
+
+        #region Filter Methods
 
         /// <summary>
         /// Test property Names against sheets
@@ -217,13 +250,29 @@ namespace XbimExchanger.COBieLiteHelpers
             if (!string.IsNullOrEmpty(obj.ExternalEntity))
             {
                 if ((obj is Asset) && (IfcProductFilter != null))
-                    return IfcProductFilter.ElementsFilter(obj.ExternalEntity, preDefinedType);
+                    return IfcProductFilter.ItemsFilter(obj.ExternalEntity, preDefinedType);
                 else if ((obj is AssetType) && (IfcTypeObjectFilter != null))
-                    return IfcTypeObjectFilter.TypeObjFilter(obj.ExternalEntity);
+                    return IfcTypeObjectFilter.ItemsFilter(obj.ExternalEntity);
             }
             return false;
         }
+        #endregion
 
+        /// <summary>
+        /// Merge OutPutFilters
+        /// </summary>
+        /// <param name="mergeFilter">OutPutFilters</param>
+        public void Merge(OutPutFilters mergeFilter)
+        {
+            IfcProductFilter.Merge(mergeFilter.IfcProductFilter);
+            IfcTypeObjectFilter.Merge(mergeFilter.IfcTypeObjectFilter);
+            IfcAssemblyFilter.Merge(mergeFilter.IfcAssemblyFilter);
+
+
+        }
+
+        #region Serialize
+        
         /// <summary>
         /// Save object as xml file
         /// </summary>
@@ -238,10 +287,10 @@ namespace XbimExchanger.COBieLiteHelpers
         }
 
         /// <summary>
-        /// Create a FiltersHelper object from a XML file
+        /// Create a OutPutFilters object from a XML file
         /// </summary>
         /// <param name="filename">FileInfo</param>
-        /// <returns>FiltersHelper</returns>
+        /// <returns>OutPutFilters</returns>
         public static OutPutFilters DeserializeXML(FileInfo filename)
         {
             OutPutFilters result = null;
@@ -253,16 +302,35 @@ namespace XbimExchanger.COBieLiteHelpers
             return result;
         }
 
-
-        public void Merge(OutPutFilters mergeFilter)
+        /// <summary>
+        /// Save object as JSON 
+        /// </summary>
+        /// <param name="filename">FileInfo</param>
+        public void SerializeJSON (FileInfo filename)
         {
-            IfcProductFilter.Merge(mergeFilter.IfcProductFilter);
+            JsonSerializer writer = new JsonSerializer();
+            using (System.IO.StreamWriter file = new System.IO.StreamWriter(filename.FullName))
+            {
+                writer.Serialize(file, this);
+            }
         }
 
+        /// <summary>
+        /// Create a OutPutFilters object from a JSON file
+        /// </summary>
+        /// <param name="filename">FileInfo</param>
+        /// <returns>OutPutFilters</returns>
+        public static OutPutFilters DeserializeJSON(FileInfo filename)
+        {
+            OutPutFilters result = null;
+            JsonSerializer writer = new JsonSerializer();
+            using (System.IO.StreamReader file = new System.IO.StreamReader(filename.FullName))
+            {
+                result = (OutPutFilters)writer.Deserialize(file, typeof(OutPutFilters));
+            }
+            return result;
+        }
 
-        
-            
+        #endregion
     }
-
-   
 }

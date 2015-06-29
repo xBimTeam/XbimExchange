@@ -136,5 +136,18 @@ namespace Xbim.COBieLiteUK.FilterHelper
             return (PropertySetsEqualTo.Where(a => testStr.Equals(a)).Count() > 0);
         }
 
+
+        /// <summary>
+        /// Merge PropertyFilter
+        /// </summary>
+        /// <param name="mergeFilter">PropertyFilter to merge</param>
+        public void Merge (PropertyFilter mergeFilter)
+        {
+            EqualTo = EqualTo.Concat(mergeFilter.EqualTo.Where(s => !EqualTo.Contains(s))).ToList();
+            StartWith = StartWith.Concat(mergeFilter.StartWith.Where(s => !StartWith.Contains(s))).ToList();
+            Contain = Contain.Concat(mergeFilter.Contain.Where(s => !Contain.Contains(s))).ToList();
+            PropertySetsEqualTo = PropertySetsEqualTo.Concat(mergeFilter.PropertySetsEqualTo.Where(s => !PropertySetsEqualTo.Contains(s))).ToList();
+        }
+
     }
 }

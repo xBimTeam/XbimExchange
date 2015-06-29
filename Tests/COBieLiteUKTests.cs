@@ -11,6 +11,7 @@ using Xbim.IO;
 using XbimExchanger.IfcToCOBieLiteUK;
 using Attribute = Xbim.COBieLiteUK.Attribute;
 using XbimExchanger.COBieLiteHelpers;
+using Xbim.COBieLiteUK.FilterHelper;
 //using System = Xbim.COBieLiteUK.System;
 
 
@@ -783,16 +784,29 @@ namespace Tests
         [TestMethod]
         public void FilterToXML ()
         {
-            FileInfo filename = new FileInfo( @"d:\SerializationFiltersHelper2.xml");
+            FileInfo filename = new FileInfo( @"d:\FiltersOut.xml");
+            FileInfo mergefilename = new FileInfo(@"d:\MergeFiltersOut.xml");
             OutPutFilters outfilters = new OutPutFilters(null);
             outfilters.IfcProductFilter.AddPreDefinedType("TEST", new string[] { "One", "Two" });
-            OutPutFilters mergefilters = new OutPutFilters(null);
-            mergefilters.IfcProductFilter.AddPreDefinedType("TEST", new string[] {"THree", "Four"});
-            outfilters.Merge(mergefilters);
             outfilters.SerializeXML(filename);
-            
-            OutPutFilters infilters = OutPutFilters.DeserializeXML(filename);
-            
+            OutPutFilters mergefilters = new OutPutFilters(null);
+            mergefilters.IfcProductFilter.Items["IFCBEAM"] = true;
+            mergefilters.IfcProductFilter.Items["IFCBEAMSTANDARDCASE"] = true;
+            mergefilters.IfcProductFilter.AddPreDefinedType("TEST", new string[] { "THree", "Four" });
+            outfilters.Merge(mergefilters);
+            outfilters.SerializeXML(mergefilename);
+
+            OutPutFilters infilters = OutPutFilters.DeserializeXML(mergefilename);
+
+            //Test JSON
+            FileInfo filenameJSon = new FileInfo(@"d:\FiltersOut.json");
+            infilters.SerializeJSON(filenameJSon);
+            OutPutFilters jsonfilters = OutPutFilters.DeserializeJSON(filenameJSon);
+
+
+            OutPutFilters rolefilters = new OutPutFilters(null);
+            MergeRoles reqRoles = MergeRoles.Architectural | MergeRoles.Plumbing;
+            rolefilters.AddRoleFilters(reqRoles);
         }
 
         [DeploymentItem("ValidationFiles\\Lakeside_Restaurant.json")]

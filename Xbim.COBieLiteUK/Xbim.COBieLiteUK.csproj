@@ -116,6 +116,7 @@
     <Compile Include="FilterHelper\ObjectFilter.cs" />
     <Compile Include="FilterHelper\PropertyFilter.cs" />
     <Compile Include="FilterHelper\OutPutFilters.cs" />
+    <Compile Include="FilterHelper\RoleIfcFilter.cs" />
     <Compile Include="FilterHelper\SerializableDictionary.cs" />
     <Compile Include="Floor.cs" />
     <Compile Include="Impact.cs" />
@@ -136,7 +137,14 @@
     <Compile Include="Zone.cs" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="FilterHelper\COBieAttributesFilters.config" />
+    <EmbeddedResource Include="FilterHelper\COBieAttributesFilters.config">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FilterHelper\COBieArchitecturalFilters.config" />
+    <EmbeddedResource Include="FilterHelper\COBieElectricalFilters.config" />
+    <EmbeddedResource Include="FilterHelper\COBieFireProtectionFilters.config" />
+    <EmbeddedResource Include="FilterHelper\COBieMechanicallFilters.config" />
+    <EmbeddedResource Include="FilterHelper\COBiePlumbingFilters.config" />
     <None Include="Schemas\cobieliteuk.cd" />
     <None Include="packages.config" />
     <None Include="Schemas\cobieliteuk.xsd">
