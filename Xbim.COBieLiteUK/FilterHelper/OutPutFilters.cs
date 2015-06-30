@@ -1,17 +1,20 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Configuration;
-using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Xbim.IO;
 using System.Reflection;
-using Xbim.COBieLiteUK.FilterHelper;
-using Xbim.COBieLiteUK;
 using Newtonsoft.Json;
+using System.Xml.Serialization;
+using System.IO;
+using Xbim.COBieLiteUK;
 
-namespace XbimExchanger.COBieLiteHelpers
+
+
+
+namespace Xbim.FilterHelper
 {
     public class OutPutFilters
     {
@@ -61,6 +64,12 @@ namespace XbimExchanger.COBieLiteHelpers
         /// Common attribute filters
         /// </summary>
         public PropertyFilter CommonFilter { get;  set; }
+
+        /// <summary>
+        /// Temp storage for role OutPutFilters
+        /// </summary>
+        private Dictionary<RoleFilter, OutPutFilters> RolesFilter { get;  set; }
+
         #endregion
 
         #region Constructor methods
@@ -70,14 +79,14 @@ namespace XbimExchanger.COBieLiteHelpers
         /// </summary>
         public OutPutFilters()
         {
-
+            RolesFilter = new Dictionary<RoleFilter, OutPutFilters>();
         }
         
         /// <summary>
         /// Constructor for default set configFileName = null, or passed in configuration file path
         /// </summary>
         /// <param name="configFileName"></param>
-        public OutPutFilters(string configFileName)
+        public OutPutFilters(string configFileName) : this()
         {
             FiltersHelperInit(configFileName);
         }
@@ -101,6 +110,7 @@ namespace XbimExchanger.COBieLiteHelpers
             //IfcProduct and IfcTypeObject filters
             IfcProductFilter = new ObjectFilter(config.GetSection("IfcElementInclusion"));
             IfcTypeObjectFilter = new ObjectFilter(config.GetSection("IfcTypeInclusion"));
+            IfcTypeObjectFilter.FillPreDefinedTypes(config.GetSection("IfcPreDefinedTypeFilter"));
             IfcAssemblyFilter = new ObjectFilter(config.GetSection("IfcAssemblyInclusion"));
             
             //Property name filters
@@ -143,8 +153,7 @@ namespace XbimExchanger.COBieLiteHelpers
 
                 if (!File.Exists(tmpFile))
                 {
-                    var directory = new DirectoryInfo(".");
-                    throw new FileNotFoundException(string.Format(@"Error loading configuration file ""{0}"". App folder is ""{1}"".", tmpFile, directory.FullName));
+                    throw new FileNotFoundException(string.Format(@"File not found ""{0}"".", tmpFile));
                 }
             }
 
@@ -244,20 +253,22 @@ namespace XbimExchanger.COBieLiteHelpers
         /// Filter IfcProduct and IfcTypeObject types
         /// </summary>
         /// <param name="obj">CobieObject</param>
-        /// <returns>bool</returns>
+        /// <param name="preDefinedType">strings for the ifcTypeObject predefinedtype enum property</param>
+        /// <returns>bool, true = exclude</returns>
         public bool ObjFilter(CobieObject obj, string preDefinedType = null)
         {
             if (!string.IsNullOrEmpty(obj.ExternalEntity))
             {
                 if ((obj is Asset) && (IfcProductFilter != null))
-                    return IfcProductFilter.ItemsFilter(obj.ExternalEntity, preDefinedType);
+                    return IfcProductFilter.ItemsFilter(obj.ExternalEntity);
                 else if ((obj is AssetType) && (IfcTypeObjectFilter != null))
-                    return IfcTypeObjectFilter.ItemsFilter(obj.ExternalEntity);
+                    return IfcTypeObjectFilter.ItemsFilter(obj.ExternalEntity, preDefinedType);
             }
             return false;
         }
         #endregion
 
+        #region Merge Roles
         /// <summary>
         /// Merge OutPutFilters
         /// </summary>
@@ -271,15 +282,64 @@ namespace XbimExchanger.COBieLiteHelpers
 
         }
 
+        /// <summary>
+        /// Extension method to use default role configuration resource files
+        /// </summary>
+        /// <param name="roles">MergeRoles, Flag enum with one or more roles</param>
+        public void AddRoleFilters(RoleFilter roles)
+        {
+            OutPutFilters mergeFilter = new OutPutFilters();
+            foreach (RoleFilter role in Enum.GetValues(typeof(RoleFilter)))
+            {
+                if (roles.HasFlag(role))
+                {
+                    if (RolesFilter.ContainsKey(role))
+                    {
+                        mergeFilter = RolesFilter[role];
+                    }
+                    else
+                    {   //load defaults
+                        switch (role)
+                        {
+                            case RoleFilter.Unknown:
+                                break;
+                            case RoleFilter.Architectural:
+                                mergeFilter = new OutPutFilters("Xbim.COBieLiteUK.FilterHelper.COBieArchitecturalFilters.config");
+                                break;
+                            case RoleFilter.Mechanical:
+                                mergeFilter = new OutPutFilters("Xbim.COBieLiteUK.FilterHelper.COBieMechanicalFilters.config");
+                                break;
+                            case RoleFilter.Electrical:
+                                mergeFilter = new OutPutFilters("Xbim.COBieLiteUK.FilterHelper.COBieElectricalFilters.config");
+                                break;
+                            case RoleFilter.Plumbing:
+                                mergeFilter = new OutPutFilters("Xbim.COBieLiteUK.FilterHelper.COBiePlumbingFilters.config");
+                                break;
+                            case RoleFilter.FireProtection:
+                                mergeFilter = new OutPutFilters("Xbim.COBieLiteUK.FilterHelper.COBieFireProtectionFilters.config");
+                                break;
+                            default:
+                                break;
+                        }
+                        RolesFilter[role] = mergeFilter;
+                    }
+                    this.Merge(mergeFilter);
+                }
+
+            }
+        }
+
+        #endregion
+
         #region Serialize
-        
+
         /// <summary>
         /// Save object as xml file
         /// </summary>
         /// <param name="filename">FileInfo</param>
         public void SerializeXML(FileInfo filename)
         {
-            System.Xml.Serialization.XmlSerializer writer = new System.Xml.Serialization.XmlSerializer(typeof(OutPutFilters));
+            XmlSerializer writer = new XmlSerializer(typeof(OutPutFilters));
             using (System.IO.StreamWriter file = new System.IO.StreamWriter(filename.FullName))
             {
                 writer.Serialize(file, this);
@@ -294,7 +354,7 @@ namespace XbimExchanger.COBieLiteHelpers
         public static OutPutFilters DeserializeXML(FileInfo filename)
         {
             OutPutFilters result = null;
-            System.Xml.Serialization.XmlSerializer writer = new System.Xml.Serialization.XmlSerializer(typeof(OutPutFilters));
+            XmlSerializer writer = new XmlSerializer(typeof(OutPutFilters));
             using (System.IO.StreamReader file = new System.IO.StreamReader(filename.FullName))
             {
                 result =  (OutPutFilters)writer.Deserialize(file);
@@ -332,5 +392,19 @@ namespace XbimExchanger.COBieLiteHelpers
         }
 
         #endregion
+    }
+    /// <summary>
+    /// Merge Flags for roles in deciding if an object is allowed or discarded depending on the role of the model
+    /// </summary>
+    [Flags] //allows use to | and & values for multiple boolean tests
+    public enum RoleFilter
+    {
+        Unknown = 0x1,
+        Architectural = 0x2,
+        Mechanical = 0x4,
+        Electrical = 0x8,
+        Plumbing = 0x10,
+        FireProtection = 0x20
+
     }
 }

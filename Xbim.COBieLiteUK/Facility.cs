@@ -16,7 +16,7 @@ using NPOI.SS.UserModel;
 using NPOI.XSSF.UserModel;
 using Xbim.COBieLiteUK.Converters;
 using Formatting = System.Xml.Formatting;
-using XbimExchanger.COBieLiteHelpers;
+using Xbim.FilterHelper;
 
 namespace Xbim.COBieLiteUK
 {

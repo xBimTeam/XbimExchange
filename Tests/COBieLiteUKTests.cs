@@ -11,8 +11,7 @@ using Xbim.IO;
 using XbimExchanger.IfcToCOBieLiteUK;
 using Attribute = Xbim.COBieLiteUK.Attribute;
 using XbimExchanger.COBieLiteHelpers;
-using Xbim.COBieLiteUK.FilterHelper;
-//using System = Xbim.COBieLiteUK.System;
+using Xbim.FilterHelper;
 
 
 namespace Tests
@@ -772,7 +771,7 @@ namespace Tests
                     string msg;
                     facilityType.WriteJson(jsonFile, true);
                     //set attribute name filters
-                    OutPutFilters assetfilters = new OutPutFilters();
+                    OutPutFilters assetfilters = new OutPutFilters(null);
                     facilityType.WriteCobie("..\\..\\Lakeside_Restaurant.xlsx", out msg, assetfilters, "UK2012", true);
 
 
@@ -805,7 +804,8 @@ namespace Tests
 
 
             OutPutFilters rolefilters = new OutPutFilters(null);
-            MergeRoles reqRoles = MergeRoles.Architectural | MergeRoles.Plumbing;
+            RoleFilter reqRoles = RoleFilter.Architectural;
+            rolefilters.AddRoleFilters(reqRoles);
             rolefilters.AddRoleFilters(reqRoles);
         }
 

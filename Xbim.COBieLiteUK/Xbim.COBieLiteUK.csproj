@@ -116,7 +116,6 @@
     <Compile Include="FilterHelper\ObjectFilter.cs" />
     <Compile Include="FilterHelper\PropertyFilter.cs" />
     <Compile Include="FilterHelper\OutPutFilters.cs" />
-    <Compile Include="FilterHelper\RoleIfcFilter.cs" />
     <Compile Include="FilterHelper\SerializableDictionary.cs" />
     <Compile Include="Floor.cs" />
     <Compile Include="Impact.cs" />

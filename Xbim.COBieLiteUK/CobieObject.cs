@@ -21,8 +21,10 @@ using NPOI.HSSF.UserModel;
 using NPOI.SS.UserModel;
 using NPOI.SS.Util;
 using NPOI.XSSF.UserModel;
-using XbimExchanger.COBieLiteHelpers;
+//using XbimExchanger.COBieLiteHelpers;
 using System.Diagnostics;
+using Xbim.FilterHelper;
+//using XbimExchanger.FilterHelper;
 
 namespace Xbim.COBieLiteUK
 {

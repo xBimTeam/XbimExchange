@@ -9,7 +9,7 @@ using System.Xml;
 using System.Xml.Schema;
 using System.Xml.Serialization;
 
-namespace Xbim.COBieLiteUK.FilterHelper
+namespace Xbim.FilterHelper
 {
     [XmlRoot("dictionary")]
     public class SerializableDictionary<TKey, TValue>

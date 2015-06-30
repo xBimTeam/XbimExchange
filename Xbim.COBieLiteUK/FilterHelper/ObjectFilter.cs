@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Xbim.COBieLiteUK.FilterHelper
+namespace Xbim.FilterHelper
 {
     /// <summary>
     /// Filter on object type names, used to filter Type and Component COBie Sheets
@@ -87,27 +87,42 @@ namespace Xbim.COBieLiteUK.FilterHelper
             }
             return true;
         }
+
+        public void FillPreDefinedTypes(ConfigurationSection section)
+        {
+            if (section != null)
+            {
+                foreach (KeyValueConfigurationElement keyVal in ((AppSettingsSection)section).Settings)
+                {
+                    if (!string.IsNullOrEmpty(keyVal.Value))
+                    {
+                        var values = keyVal.Value.Split(new[] { ';' }, StringSplitOptions.RemoveEmptyEntries).ToList().ConvertAll(s => s.ToUpper()).ToArray();
+                        PreDefinedType.Add(keyVal.Key.ToUpper(), values);
+                    }
+                }
+            }
+        }
         
         /// <summary>
         /// Test for string exists in ItemsToExclude string lists
         /// </summary>
         /// <param name="testStr">String to test</param>
-        /// <param name="preDefinedType">strings for the ifcElement predefinedtype enum property</param>
-        /// <returns>bool</returns>
+        /// <param name="preDefinedType">strings for the ifcTypeObject predefinedtype enum property</param>
+        /// <returns>bool, true = exclude</returns>
         public bool ItemsFilter(string testStr, string preDefinedType = null)
         {
             testStr = testStr.ToUpper();
             //check for predefinedtype enum value passed as string
-            bool hasDefinedType = true; //if preDefinedType is null or preDefinedType does not exist in PredefinedType dictionary we need to just test on testStr in return so set to true as default
+            bool ExcludeDefinedType = false; //if preDefinedType is null or preDefinedType does not exist in PredefinedType dictionary 
             if ((preDefinedType != null) &&
                 PreDefinedType.ContainsKey(testStr)
                 )
             {
                 preDefinedType = preDefinedType.ToUpper();
-                hasDefinedType = PreDefinedType[testStr].Contains(preDefinedType);
+                ExcludeDefinedType = PreDefinedType[testStr].Contains(preDefinedType);
             }
 
-            return (hasDefinedType && (ItemsToExclude.Where(a => testStr.Equals(a)).Count() > 0));
+            return (ItemsToExclude.Contains(testStr) || ExcludeDefinedType);
         }
 
         /// <summary>

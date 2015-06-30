@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Xbim.COBieLiteUK.FilterHelper
+namespace Xbim.FilterHelper
 {
     /// <summary>
     /// Filter on property set names, and properties names held within the set, used to extract attribute sheets
