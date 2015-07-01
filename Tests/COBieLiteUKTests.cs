@@ -803,10 +803,10 @@ namespace Tests
             OutPutFilters jsonfilters = OutPutFilters.DeserializeJSON(filenameJSon);
 
 
-            OutPutFilters rolefilters = new OutPutFilters(null);
-            RoleFilter reqRoles = RoleFilter.Architectural;
-            rolefilters.AddRoleFilters(reqRoles);
-            rolefilters.AddRoleFilters(reqRoles);
+            OutPutFilters rolefilters = new OutPutFilters();
+            RoleFilter reqRoles = RoleFilter.Architectural |  RoleFilter.Mechanical | RoleFilter.Electrical | RoleFilter.FireProtection | RoleFilter.Plumbing;
+            rolefilters.ApplyRoleFilters(reqRoles);
+            
         }
 
         [DeploymentItem("ValidationFiles\\Lakeside_Restaurant.json")]

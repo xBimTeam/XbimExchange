@@ -532,7 +532,7 @@ namespace Xbim.COBieLiteUK
                 }
                 else
                 {
-                    if(assetfilters.ObjFilter(this))
+                    if (assetfilters.ObjFilter(this, parent))
                     {
 #if SHOWEXCLUDES
                         Debug.WriteLine(string.Format(@"Object, Filtering out: Object ""{0}""", this.ExternalEntity));

@@ -68,7 +68,8 @@ namespace Xbim.FilterHelper
         /// <summary>
         /// Temp storage for role OutPutFilters
         /// </summary>
-        private Dictionary<RoleFilter, OutPutFilters> RolesFilter { get;  set; }
+        //[XmlIgnore][JsonIgnore]
+        private Dictionary<RoleFilter, OutPutFilters> RolesFilterHolder { get; set; }
 
         #endregion
 
@@ -79,49 +80,98 @@ namespace Xbim.FilterHelper
         /// </summary>
         public OutPutFilters()
         {
-            RolesFilter = new Dictionary<RoleFilter, OutPutFilters>();
+            //object filters
+            IfcProductFilter = new ObjectFilter();
+            IfcTypeObjectFilter = new ObjectFilter();
+            IfcAssemblyFilter = new ObjectFilter();
+
+            //Property name filters
+            ZoneFilter = new PropertyFilter();
+            TypeFilter = new PropertyFilter();
+            SpaceFilter = new PropertyFilter();
+            FloorFilter = new PropertyFilter();
+            FacilityFilter = new PropertyFilter();
+            SpareFilter = new PropertyFilter();
+            ComponentFilter = new PropertyFilter();
+            CommonFilter = new PropertyFilter();
+
+            //role storage
+            RolesFilterHolder = new Dictionary<RoleFilter, OutPutFilters>();
         }
         
         /// <summary>
         /// Constructor for default set configFileName = null, or passed in configuration file path
         /// </summary>
         /// <param name="configFileName"></param>
-        public OutPutFilters(string configFileName) : this()
+        public OutPutFilters(string configFileName, ImportSet import = ImportSet.All) : this()
         {
-            FiltersHelperInit(configFileName);
+            FiltersHelperInit(import, configFileName);
         }
-       
+
 
         /// <summary>
-        /// Constructor, will read Configuration file if passed, or default COBieAttributesFilters.config
+        /// Constructor to apply roles, and pass custom role OutPutFilters
+        /// </summary>
+        /// <param name="roles">RoleFilter flags on roles to filter on</param>
+        /// <param name="rolesFilter">Dictionary of role to OutPutFilters</param>
+        public OutPutFilters(RoleFilter roles, Dictionary<RoleFilter, OutPutFilters> rolesFilter = null)
+            : this()
+        {
+            ApplyRoleFilters(roles, rolesFilter);
+        }
+
+        #endregion
+
+        #region Methods
+
+        /// <summary>
+        /// Test for empty object
+        /// </summary>
+        /// <returns>bool</returns>
+        public bool IsEmpty()
+        {
+            return IfcProductFilter.IsEmpty() && IfcTypeObjectFilter.IsEmpty() && IfcAssemblyFilter.IsEmpty() && 
+            ZoneFilter.IsEmpty() && TypeFilter.IsEmpty() && SpaceFilter.IsEmpty() && 
+            FloorFilter.IsEmpty() && FacilityFilter.IsEmpty() && SpareFilter.IsEmpty() && 
+            ComponentFilter.IsEmpty() && CommonFilter.IsEmpty();
+        }
+        /// <summary>
+        /// Will read Configuration file if passed, or default COBieAttributesFilters.config
         /// </summary>
         /// <param name="configFileName">Full path/name for config file</param>
-        private void FiltersHelperInit(string configFileName = null)
+        private void FiltersHelperInit(ImportSet import, string configFileName = null)
         {
             string resFile = configFileName;
             //set default
             if (resFile == null)
             {
-                 resFile = "Xbim.COBieLiteUK.FilterHelper.COBieAttributesFilters.config";               
+                resFile = "Xbim.COBieLiteUK.FilterHelper.COBieDefaultFilters.config";               
             }
             
             Configuration config = GetResourceConfig(resFile);
 
             //IfcProduct and IfcTypeObject filters
-            IfcProductFilter = new ObjectFilter(config.GetSection("IfcElementInclusion"));
-            IfcTypeObjectFilter = new ObjectFilter(config.GetSection("IfcTypeInclusion"));
-            IfcTypeObjectFilter.FillPreDefinedTypes(config.GetSection("IfcPreDefinedTypeFilter"));
-            IfcAssemblyFilter = new ObjectFilter(config.GetSection("IfcAssemblyInclusion"));
+            if ((import == ImportSet.All) || (import == ImportSet.IfcFilters))
+            {
+                IfcProductFilter = new ObjectFilter(config.GetSection("IfcElementInclusion"));
+                IfcTypeObjectFilter = new ObjectFilter(config.GetSection("IfcTypeInclusion"));
+                IfcTypeObjectFilter.FillPreDefinedTypes(config.GetSection("IfcPreDefinedTypeFilter"));
+                IfcAssemblyFilter = new ObjectFilter(config.GetSection("IfcAssemblyInclusion"));
+            }
             
             //Property name filters
-            ZoneFilter = new PropertyFilter(config.GetSection("ZoneFilter"));
-            TypeFilter = new PropertyFilter(config.GetSection("TypeFilter"));
-            SpaceFilter = new PropertyFilter(config.GetSection("SpaceFilter"));
-            FloorFilter = new PropertyFilter(config.GetSection("FloorFilter"));
-            FacilityFilter = new PropertyFilter(config.GetSection("FacilityFilter"));
-            SpareFilter = new PropertyFilter(config.GetSection("SpareFilter"));
-            ComponentFilter = new PropertyFilter(config.GetSection("ComponentFilter"));
-            CommonFilter = new PropertyFilter(config.GetSection("CommonFilter"));
+            if ((import == ImportSet.All) || (import == ImportSet.PropertyFilters))
+            {
+                ZoneFilter = new PropertyFilter(config.GetSection("ZoneFilter"));
+                TypeFilter = new PropertyFilter(config.GetSection("TypeFilter"));
+                SpaceFilter = new PropertyFilter(config.GetSection("SpaceFilter"));
+                FloorFilter = new PropertyFilter(config.GetSection("FloorFilter"));
+                FacilityFilter = new PropertyFilter(config.GetSection("FacilityFilter"));
+                SpareFilter = new PropertyFilter(config.GetSection("SpareFilter"));
+                ComponentFilter = new PropertyFilter(config.GetSection("ComponentFilter"));
+                CommonFilter = new PropertyFilter(config.GetSection("CommonFilter"));
+            }
+            
 
             if (configFileName == null)
             {
@@ -130,6 +180,11 @@ namespace Xbim.FilterHelper
             
         }
 
+        /// <summary>
+        /// Get Configuration object from the passed file path or embedded resource file
+        /// </summary>
+        /// <param name="resFileName">file path or resource name</param>
+        /// <returns></returns>
         private Configuration GetResourceConfig(string resFileName)
         {
             string tmpFile = resFileName;
@@ -171,7 +226,29 @@ namespace Xbim.FilterHelper
 
             return config;
         }
+
+        /// <summary>
+        /// Copy the OutPutFilters
+        /// </summary>
+        /// <param name="copyFilter">OutPutFilters to copy </param>
+        public void Copy(OutPutFilters copyFilter)
+        {
+            IfcProductFilter.Copy(copyFilter.IfcProductFilter);
+            IfcTypeObjectFilter.Copy(copyFilter.IfcTypeObjectFilter);
+            IfcAssemblyFilter.Copy(copyFilter.IfcAssemblyFilter);
+
+            ZoneFilter.Copy(copyFilter.ZoneFilter);
+            TypeFilter.Copy(copyFilter.TypeFilter);
+            SpaceFilter.Copy(copyFilter.SpaceFilter);
+            FloorFilter.Copy(copyFilter.FloorFilter);
+            FacilityFilter.Copy(copyFilter.FacilityFilter);
+            SpareFilter.Copy(copyFilter.SpareFilter);
+            ComponentFilter.Copy(copyFilter.ComponentFilter);
+            CommonFilter.Copy(copyFilter.CommonFilter);
+        }
+
         #endregion
+
 
         #region Filter Methods
 
@@ -253,16 +330,27 @@ namespace Xbim.FilterHelper
         /// Filter IfcProduct and IfcTypeObject types
         /// </summary>
         /// <param name="obj">CobieObject</param>
+        /// <param name="parent">Parent object</param>
         /// <param name="preDefinedType">strings for the ifcTypeObject predefinedtype enum property</param>
         /// <returns>bool, true = exclude</returns>
-        public bool ObjFilter(CobieObject obj, string preDefinedType = null)
+        public bool ObjFilter(CobieObject obj, CobieObject parent = null, string preDefinedType = null)
         {
             if (!string.IsNullOrEmpty(obj.ExternalEntity))
             {
-                if ((obj is Asset) && (IfcProductFilter != null))
-                    return IfcProductFilter.ItemsFilter(obj.ExternalEntity);
-                else if ((obj is AssetType) && (IfcTypeObjectFilter != null))
+                if (obj is Asset)
+                {
+                    bool exclude =  IfcProductFilter.ItemsFilter(obj.ExternalEntity);
+                    //check the element is not defined by a type which is excluded, by default if no type, then no element included
+                    if (!exclude && (parent != null) && (parent is AssetType))
+                    {
+                        exclude = IfcTypeObjectFilter.ItemsFilter(parent.ExternalEntity, preDefinedType);
+                    }
+                    return exclude;
+                }
+                else if (obj is AssetType) 
+                {
                     return IfcTypeObjectFilter.ItemsFilter(obj.ExternalEntity, preDefinedType);
+                }
             }
             return false;
         }
@@ -275,10 +363,18 @@ namespace Xbim.FilterHelper
         /// <param name="mergeFilter">OutPutFilters</param>
         public void Merge(OutPutFilters mergeFilter)
         {
-            IfcProductFilter.Merge(mergeFilter.IfcProductFilter);
-            IfcTypeObjectFilter.Merge(mergeFilter.IfcTypeObjectFilter);
-            IfcAssemblyFilter.Merge(mergeFilter.IfcAssemblyFilter);
+            IfcProductFilter.MergeInc(mergeFilter.IfcProductFilter);
+            IfcTypeObjectFilter.MergeInc(mergeFilter.IfcTypeObjectFilter);
+            IfcAssemblyFilter.MergeInc(mergeFilter.IfcAssemblyFilter);
 
+            ZoneFilter.Merge(mergeFilter.ZoneFilter);
+            TypeFilter.Merge(mergeFilter.TypeFilter);
+            SpaceFilter.Merge(mergeFilter.SpaceFilter);
+            FloorFilter.Merge(mergeFilter.FloorFilter);
+            FacilityFilter.Merge(mergeFilter.FacilityFilter);
+            SpareFilter.Merge(mergeFilter.SpareFilter);
+            ComponentFilter.Merge(mergeFilter.ComponentFilter);
+            CommonFilter.Merge(mergeFilter.CommonFilter);
 
         }
 
@@ -286,46 +382,98 @@ namespace Xbim.FilterHelper
         /// Extension method to use default role configuration resource files
         /// </summary>
         /// <param name="roles">MergeRoles, Flag enum with one or more roles</param>
-        public void AddRoleFilters(RoleFilter roles)
+        /// <param name="rolesFilter">Dictionary of roles to OutPutFilters to use for merge, overwrites current assigned dictionary</param>
+        public void ApplyRoleFilters(RoleFilter roles, Dictionary<RoleFilter, OutPutFilters> rolesFilter = null)
         {
-            OutPutFilters mergeFilter = new OutPutFilters();
+            if (rolesFilter != null)
+            {
+                RolesFilterHolder = rolesFilter;
+            }
+
+            bool init = !this.IsEmpty();
+            
+            OutPutFilters mergeFilter = null;
             foreach (RoleFilter role in Enum.GetValues(typeof(RoleFilter)))
             {
                 if (roles.HasFlag(role))
                 {
-                    if (RolesFilter.ContainsKey(role))
+                    if (RolesFilterHolder.ContainsKey(role))
                     {
-                        mergeFilter = RolesFilter[role];
+                        mergeFilter = RolesFilterHolder[role];
                     }
                     else
                     {   //load defaults
-                        switch (role)
+                        string mergeFile = GetDefaultRoleFile(role);
+                        if (!string.IsNullOrEmpty(mergeFile))
                         {
-                            case RoleFilter.Unknown:
-                                break;
-                            case RoleFilter.Architectural:
-                                mergeFilter = new OutPutFilters("Xbim.COBieLiteUK.FilterHelper.COBieArchitecturalFilters.config");
-                                break;
-                            case RoleFilter.Mechanical:
-                                mergeFilter = new OutPutFilters("Xbim.COBieLiteUK.FilterHelper.COBieMechanicalFilters.config");
-                                break;
-                            case RoleFilter.Electrical:
-                                mergeFilter = new OutPutFilters("Xbim.COBieLiteUK.FilterHelper.COBieElectricalFilters.config");
-                                break;
-                            case RoleFilter.Plumbing:
-                                mergeFilter = new OutPutFilters("Xbim.COBieLiteUK.FilterHelper.COBiePlumbingFilters.config");
-                                break;
-                            case RoleFilter.FireProtection:
-                                mergeFilter = new OutPutFilters("Xbim.COBieLiteUK.FilterHelper.COBieFireProtectionFilters.config");
-                                break;
-                            default:
-                                break;
+                            mergeFilter = new OutPutFilters(mergeFile);
+                            RolesFilterHolder[role] = mergeFilter;
                         }
-                        RolesFilter[role] = mergeFilter;
                     }
-                    this.Merge(mergeFilter);
+                    if (mergeFilter != null)
+                    {
+                        if (!init)
+                        {
+                            this.Copy(mergeFilter);
+                            init = true;
+                        }
+                        {
+
+                            this.Merge(mergeFilter);
+                        }
+                    }
+                    mergeFilter = null;
                 }
 
+            }
+            //add the default property filters
+            OutPutFilters defaultPropFilters = new OutPutFilters(null, ImportSet.PropertyFilters);
+            this.Merge(defaultPropFilters);
+        }
+
+        /// <summary>
+        /// Add filter for a role, used by ApplyRoleFilters for none default filters
+        /// </summary>
+        /// <param name="role">RoleFilter, single flag RoleFilter</param>
+        /// <param name="filter">OutPutFilters to assign to role</param>
+        /// <remarks>Does not apply filter to this object, used ApplyRoleFilters after setting the RolesFilterHolder items </remarks>
+        public void AddRoleFilterHolderItem(RoleFilter role, OutPutFilters filter)
+        {
+            if ((role & (role - 1)) != 0)
+            {
+                throw new ArgumentException("More than one flag set on role");
+            }
+
+            RolesFilterHolder[role] = filter;
+        }
+
+        /// <summary>
+        /// Get default embedded resource file for a specified role
+        /// </summary>
+        /// <param name="role">RoleFilter</param>
+        /// <returns></returns>
+        private static string GetDefaultRoleFile(RoleFilter role)
+        {
+            if ((role & (role - 1)) != 0)
+            {
+                throw new ArgumentException("More than one flag set on role");
+            }
+            switch (role)
+            {
+                case RoleFilter.Unknown:
+                    return "Xbim.COBieLiteUK.FilterHelper.COBieDefaultFilters.config";
+                case RoleFilter.Architectural:
+                    return "Xbim.COBieLiteUK.FilterHelper.COBieArchitecturalFilters.config";
+                case RoleFilter.Mechanical:
+                    return "Xbim.COBieLiteUK.FilterHelper.COBieMechanicalFilters.config";
+                case RoleFilter.Electrical:
+                    return "Xbim.COBieLiteUK.FilterHelper.COBieElectricalFilters.config";
+                case RoleFilter.Plumbing:
+                    return "Xbim.COBieLiteUK.FilterHelper.COBiePlumbingFilters.config";
+                case RoleFilter.FireProtection:
+                    return "Xbim.COBieLiteUK.FilterHelper.COBieFireProtectionFilters.config";
+                default:
+                    return string.Empty;
             }
         }
 
@@ -393,6 +541,8 @@ namespace Xbim.FilterHelper
 
         #endregion
     }
+
+
     /// <summary>
     /// Merge Flags for roles in deciding if an object is allowed or discarded depending on the role of the model
     /// </summary>
@@ -406,5 +556,15 @@ namespace Xbim.FilterHelper
         Plumbing = 0x10,
         FireProtection = 0x20
 
+    }
+
+    /// <summary>
+    /// used to control import
+    /// </summary>
+    public enum ImportSet
+    {
+        All,
+        IfcFilters,
+        PropertyFilters
     }
 }

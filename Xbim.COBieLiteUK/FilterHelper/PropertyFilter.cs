@@ -110,6 +110,14 @@ namespace Xbim.FilterHelper
             }
         }
 
+        /// <summary>
+        /// see if object is empty of any values
+        /// </summary>
+        /// <returns></returns>
+        public bool IsEmpty()
+        {
+            return ((EqualTo.Count == 0) && (StartWith.Count == 0) && (Contain.Count == 0) && (PropertySetsEqualTo.Count == 0));
+        }
 
         /// <summary>
         /// Test for string exists in EqTo, Contains, or StartWith string lists
@@ -147,6 +155,24 @@ namespace Xbim.FilterHelper
             StartWith = StartWith.Concat(mergeFilter.StartWith.Where(s => !StartWith.Contains(s))).ToList();
             Contain = Contain.Concat(mergeFilter.Contain.Where(s => !Contain.Contains(s))).ToList();
             PropertySetsEqualTo = PropertySetsEqualTo.Concat(mergeFilter.PropertySetsEqualTo.Where(s => !PropertySetsEqualTo.Contains(s))).ToList();
+        }
+
+
+        /// <summary>
+        /// Copy values from passed PropertyFilter
+        /// </summary>
+        /// <param name="copyFilter">PropertyFilter to copy</param>
+        public void Copy(PropertyFilter copyFilter)
+        {
+            EqualTo.Clear();
+            EqualTo = EqualTo.Concat(copyFilter.EqualTo).ToList();
+            StartWith.Clear();
+            StartWith = StartWith.Concat(copyFilter.StartWith).ToList();
+            Contain.Clear();
+            Contain = Contain.Concat(copyFilter.Contain).ToList();
+            PropertySetsEqualTo.Clear();
+            PropertySetsEqualTo = PropertySetsEqualTo.Concat(copyFilter.PropertySetsEqualTo).ToList();
+            
         }
 
     }

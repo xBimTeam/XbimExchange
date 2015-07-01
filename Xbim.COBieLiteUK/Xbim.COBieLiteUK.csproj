@@ -136,14 +136,24 @@
     <Compile Include="Zone.cs" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="FilterHelper\COBieAttributesFilters.config">
+    <EmbeddedResource Include="FilterHelper\COBieDefaultFilters.config">
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="FilterHelper\COBieArchitecturalFilters.config" />
-    <EmbeddedResource Include="FilterHelper\COBieElectricalFilters.config" />
-    <EmbeddedResource Include="FilterHelper\COBieFireProtectionFilters.config" />
-    <EmbeddedResource Include="FilterHelper\COBieMechanicallFilters.config" />
-    <EmbeddedResource Include="FilterHelper\COBiePlumbingFilters.config" />
+    <EmbeddedResource Include="FilterHelper\COBieArchitecturalFilters.config">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FilterHelper\COBieElectricalFilters.config">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FilterHelper\COBieFireProtectionFilters.config">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FilterHelper\COBieMechanicalFilters.config">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FilterHelper\COBiePlumbingFilters.config">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
     <None Include="Schemas\cobieliteuk.cd" />
     <None Include="packages.config" />
     <None Include="Schemas\cobieliteuk.xsd">

@@ -5,6 +5,8 @@ using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Xbim.Ifc2x3.Kernel;
+using Xbim.IO;
 
 namespace Xbim.FilterHelper
 {
@@ -38,7 +40,35 @@ namespace Xbim.FilterHelper
                 return _itemsToExclude != null ? _itemsToExclude : Items.Where(e => e.Value == false).Select(e => e.Key).ToList();
             }
         }
+
+        /// <summary>
+        /// IfcType Items to filter
+        /// </summary>
+        private List<Type> _ifcToExclude = null;
+        private List<Type> IfcToExclude
+        {
+            get 
+            {
+                if (_ifcToExclude == null)
+                {
+                    _ifcToExclude = new List<Type>();
+                    foreach (string item in ItemsToExclude)
+                    {
+                        var elementType = IfcMetaData.IfcType(item);
+                        if (elementType != null)
+                        {
+                            _ifcToExclude.Add(elementType.Type);
+                        }
+                    } 
+                }
+                return _ifcToExclude; 
+            }
+            
+        }
+        
         #endregion
+         
+        #region Constructors
 
         public ObjectFilter()
         {
@@ -68,6 +98,17 @@ namespace Xbim.FilterHelper
                 }
             }
         }
+        #endregion
+
+        #region Methods
+        /// <summary>
+        /// see if object is empty of any values
+        /// </summary>
+        /// <returns></returns>
+        public bool IsEmpty()
+        {
+            return ((Items.Count == 0) && (PreDefinedType.Count == 0));
+        }
 
         /// <summary>
         /// add PreDefined types associated with ifcElements
@@ -77,6 +118,7 @@ namespace Xbim.FilterHelper
         /// <returns></returns>
         public bool AddPreDefinedType(string ifcElement, string[] definedTypes)
         {
+            ifcElement = ifcElement.ToUpper();
             if (PreDefinedType.ContainsKey(ifcElement))
             { 
                 return false;
@@ -126,10 +168,39 @@ namespace Xbim.FilterHelper
         }
 
         /// <summary>
+        /// Test for IfcRoot exists in IfcToExclude type lists
+        /// </summary>
+        /// <param name="obj">IfcRoot object</param>
+        /// <param name="preDefinedType">strings for the ifcTypeObject predefinedtype enum property</param>
+        /// <returns>bool, true = exclude</returns>
+        public bool ItemFilter(IfcRoot obj, string preDefinedType = null)
+        {
+            var objType = obj.GetType();
+            bool ExcludeDefinedType = false;
+
+            if (preDefinedType != null)
+            {
+                var objPreDefined = objType.GetProperty("PredefinedType");
+                if (objPreDefined != null)
+                {
+                    var objString = obj.IfcType().ToString();
+                    if (PreDefinedType.ContainsKey(objString))
+                    {
+                        var objPreDefValue = objPreDefined.GetValue(obj).ToString();
+                        preDefinedType = preDefinedType.ToUpper();
+                        ExcludeDefinedType = PreDefinedType[objString].Contains(preDefinedType);
+                    }
+                }
+            }
+            return (IfcToExclude.Contains(obj.GetType()) || ExcludeDefinedType);            
+           
+        }
+
+        /// <summary>
         /// Merge together ObjectFilter
         /// </summary>
         /// <param name="mergeFilter">ObjectFilter to merge</param>
-        public void Merge(ObjectFilter mergeFilter)
+        public void MergeInc(ObjectFilter mergeFilter)
         {
             _itemsToExclude = null; //reset exclude
 
@@ -151,6 +222,30 @@ namespace Xbim.FilterHelper
 
         }
 
-        
+        /// <summary>
+        /// Copy values from passed ObjectFilter
+        /// </summary>
+        /// <param name="copyFilter">ObjectFilter to copy</param>
+        public void Copy(ObjectFilter copyFilter)
+        {
+            _itemsToExclude = null; //reset exclude
+
+            this.Items.Clear();
+            //fill dictionary from passed argument  Items
+            foreach (var pair in copyFilter.Items)
+            {
+                this.Items[pair.Key] = pair.Value;
+            }
+
+            this.PreDefinedType.Clear();
+            foreach (var pair in copyFilter.PreDefinedType)
+            {
+                this.PreDefinedType[pair.Key] = pair.Value;
+            }
+        }
+
+        #endregion
+
+
     }
 }
