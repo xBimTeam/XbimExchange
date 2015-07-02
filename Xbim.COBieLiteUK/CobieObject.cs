@@ -1,4 +1,9 @@
-﻿using System;
+﻿//turn on filter messages to the DEBUG output window, comment out #define SHOWEXCLUDES to stop.
+#if DEBUG
+#define SHOWEXCLUDES
+#endif
+
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -16,6 +21,8 @@ using NPOI.HSSF.UserModel;
 using NPOI.SS.UserModel;
 using NPOI.SS.Util;
 using NPOI.XSSF.UserModel;
+using XbimExchanger.COBieLiteHelpers;
+using System.Diagnostics;
 
 namespace Xbim.COBieLiteUK
 {
@@ -303,184 +310,236 @@ namespace Xbim.COBieLiteUK
         }
 
         internal virtual void WriteToCobie(IWorkbook workbook, TextWriter log, CobieObject parent,
-            Dictionary<Type, int> rowNumCache, List<string> pickValuesCache, Dictionary<string, int> headerCache,
+            Dictionary<Type, int> rowNumCache, List<string> pickValuesCache, Dictionary<string, int> headerCache, FiltersHelper assetfilters = null,
             string version = "UK2012")
         {
-            var mappings = GetMapping(GetType(), version, false).ToList();
-            if (!mappings.Any())
+            if (!Filter(assetfilters, parent)) //filter out IfcElement and IfcTypeObject Excludes, property set names, and property set property names
             {
-                log.WriteLine("There are no mappings for a type '{0}'", GetType().Name);
-                return;
-            }
-
-            //get or create a sheet
-            var sheetName = GetSheetName(GetType(), version);
-            var sheet = workbook.GetSheet(sheetName) ?? workbook.CreateSheet(sheetName);
-
-            //get the next row in rowNumber is less than 1 or use the argument to get or create new row
-            int lastIndex;
-            if (!rowNumCache.TryGetValue(GetType(), out lastIndex))
-            {
-                lastIndex = -1;
-                rowNumCache.Add(GetType(), -1);
-            }
-            var row = lastIndex < 0
-                ? GetNextEmptyRow(sheet)
-                : (sheet.GetRow(lastIndex + 1) ?? sheet.CreateRow(lastIndex + 1));
-            if (row.RowNum == 0)
-            {
-                //set up header if this is the very first row in the sheet
-                SetUpHeader(sheet.CreateRow(0), mappings);
-                row = sheet.CreateRow(1);
-            }
-            if (row.RowNum == 1)
-            {
-                //make sure all headers are in there
-                FixHeaderForWriting(sheet.GetRow(0), mappings);
-            }
-
-            //cache the latest row index
-            rowNumCache[GetType()] = row.RowNum;
-
-            //write columns
-            foreach (var mapping in mappings)
-            {
-                var cellIndex = CellReference.ConvertColStringToIndex(mapping.Column);
-                var cell = row.GetCell(cellIndex) ?? row.CreateCell(cellIndex);
-                var isPicklist = !String.IsNullOrWhiteSpace(mapping.PickList);
-
-                //set default column style
-                cell.CellStyle = sheet.GetColumnStyle(cellIndex);
-
-                //if it is a parent or parent name, set it differently
-                if (mapping.Path.ToLower() == "parent")
+                var mappings = GetMapping(GetType(), version, false).OrderBy(m => m.Column).ToList();
+                if (!mappings.Any())
                 {
-                    if (parent == null)
-                        throw new Exception(
-                            String.Format(
-                                "Object (type: {0}, name: {1}) can't exist on its own but no parent object was supplied.",
-                                GetType().Name, Name));
-                    var parentSheet = GetSheetName(parent.GetType(), version);
-                    if (String.IsNullOrEmpty(parentSheet))
-                        throw new Exception(
-                            String.Format("Parent object (type: {0}, name: {1}) doesn't have a mapping defined in {2}",
-                                parent.GetType().Name, parent.Name, version));
-                    cell.SetCellType(CellType.String);
-                    cell.SetCellValue(parentSheet);
-
-                    if (!String.IsNullOrEmpty(mapping.PickList))
-                    {
-                        WritePickListValue(workbook, mapping, parentSheet, pickValuesCache, headerCache);
-                    }
-                    continue;
+                    log.WriteLine("There are no mappings for a type '{0}'", GetType().Name);
+                    return;
                 }
-                if (mapping.Path.ToLower().StartsWith("parent."))
-                {
-                    if (parent == null)
-                        throw new Exception(
-                            String.Format("{0} (name: {1}) can't exist on its own but no parent object was supplied.",
-                                sheet.SheetName, Name));
-                    var parentPath = mapping.Path.Replace("parent.", "");
-                    var parentPropInfo = parent.GetType().GetProperty(parentPath);
-                    //keys are always string properties
-                    var parentKeyValue = parentPropInfo.GetValue(parent) as String;
 
-                    if (String.IsNullOrEmpty(parentKeyValue))
+                //get or create a sheet
+                var sheetName = GetSheetName(GetType(), version);
+                var sheet = workbook.GetSheet(sheetName) ?? workbook.CreateSheet(sheetName);
+
+                //get the next row in rowNumber is less than 1 or use the argument to get or create new row
+                int lastIndex;
+                if (!rowNumCache.TryGetValue(GetType(), out lastIndex))
+                {
+                    lastIndex = -1;
+                    rowNumCache.Add(GetType(), -1);
+                }
+                var row = lastIndex < 0
+                    ? GetNextEmptyRow(sheet)
+                    : (sheet.GetRow(lastIndex + 1) ?? sheet.CreateRow(lastIndex + 1));
+                if (row.RowNum == 0)
+                {
+                    //set up header if this is the very first row in the sheet
+                    SetUpHeader(sheet.CreateRow(0), mappings);
+                    row = sheet.CreateRow(1);
+                }
+                if (row.RowNum == 1)
+                {
+                    //make sure all headers are in there
+                    FixHeaderForWriting(sheet.GetRow(0), mappings);
+                }
+
+                //cache the latest row index
+                rowNumCache[GetType()] = row.RowNum;
+
+
+
+                //write columns
+                foreach (var mapping in mappings)
+                {
+                    var cellIndex = CellReference.ConvertColStringToIndex(mapping.Column);
+                    var cell = row.GetCell(cellIndex) ?? row.CreateCell(cellIndex);
+                    var isPicklist = !String.IsNullOrWhiteSpace(mapping.PickList);
+
+                    //set default column style
+                    cell.CellStyle = sheet.GetColumnStyle(cellIndex);
+
+                    //if it is a parent or parent name, set it differently
+                    if (mapping.Path.ToLower() == "parent")
                     {
-                        log.WriteLine(
-                            "Parent object (type: {0}) doesn't have a key property '{1}' defined. This will result into invalid and inconsistent COBie file.",
-                            parent.GetType().Name, parentPath);
-                    }
-                    else
-                    {
+                        if (parent == null)
+                            throw new Exception(
+                                String.Format(
+                                    "Object (type: {0}, name: {1}) can't exist on its own but no parent object was supplied.",
+                                    GetType().Name, Name));
+                        var parentSheet = GetSheetName(parent.GetType(), version);
+                        if (String.IsNullOrEmpty(parentSheet))
+                            throw new Exception(
+                                String.Format("Parent object (type: {0}, name: {1}) doesn't have a mapping defined in {2}",
+                                    parent.GetType().Name, parent.Name, version));
                         cell.SetCellType(CellType.String);
-                        cell.SetCellValue(parentKeyValue);
-                    }
+                        cell.SetCellValue(parentSheet);
 
-                    if (!String.IsNullOrEmpty(mapping.PickList))
-                    {
-                        WritePickListValue(workbook, mapping, parentKeyValue, pickValuesCache, headerCache);
-                    }
-                    continue;
-                }
-
-                var value = GetCobieProperty(mapping, log);
-                if (value == null ||
-                    (value.ValueType == CobieValueType.String && String.IsNullOrWhiteSpace(value.StringValue)))
-                    SetDefaultCellValue(mapping, cell);
-                else
-                {
-                    switch (value.ValueType)
-                    {
-                        case CobieValueType.Boolean:
-                            if (value.BooleanValue.HasValue)
-                                cell.SetCellValue(value.BooleanValue ?? false);
-                            else
-                                SetDefaultCellValue(mapping, cell);
-                            break;
-                        case CobieValueType.DateTime:
-                            //1900-12-31T23:59:59 is the default COBie date
-                            var dtVal = value.DateTimeValue ?? //default date value
-                                        DateTime.Parse("1900-12-31T23:59:59", null, DateTimeStyles.RoundtripKind);
-                            if (dtVal == default(DateTime))
-                                dtVal = DateTime.Parse("1900-12-31T23:59:59", null, DateTimeStyles.RoundtripKind);
-                            //according to BS1192-4 datetime should only be 19 characters long (no hours, minutes or seconds)
-                            cell.SetCellValue(dtVal.ToString("O").Substring(0, 19));
-                            break;
-                        case CobieValueType.Double:
-                            if (value.DoubleValue.HasValue)
-                                cell.SetCellValue(value.DoubleValue ?? 0);
-                            else
-                                SetDefaultCellValue(mapping, cell);
-                            break;
-                        case CobieValueType.Integer:
-                            if (value.IntegerValue.HasValue)
-                                cell.SetCellValue(value.IntegerValue ?? 0);
-                            else
-                                SetDefaultCellValue(mapping, cell);
-                            break;
-                        case CobieValueType.String:
-                            if (String.IsNullOrWhiteSpace(value.StringValue))
-                                SetDefaultCellValue(mapping, cell);
-                            else
-                                cell.SetCellValue(value.StringValue);
-                            break;
-                        default:
-                            throw new Exception("Unexpected data type");
-                    }
-                    if (!String.IsNullOrEmpty(mapping.PickList) && value.ValueType == CobieValueType.String)
-                    {
-                        if (mapping.Path.StartsWith("Categories")) //categories need to be handled differently
+                        if (!String.IsNullOrEmpty(mapping.PickList))
                         {
-                            if (Categories != null)
-                                foreach (var category in Categories)
-                                {
-                                    if (string.IsNullOrEmpty(category.Classification))
-                                        WritePickListValue(workbook, mapping, category.CategoryString, pickValuesCache, headerCache);
-                                    else
-                                    {
-                                        var alterMapping = new MappingAttribute
-                                        {
-                                            PickList =
-                                                mapping.PickList.Substring(0, mapping.PickList.IndexOf('.') + 1) +
-                                                category.Classification
-                                        };
-                                        WritePickListValue(workbook, alterMapping, category.CategoryString,
-                                            pickValuesCache, headerCache);
-                                    }
-                                }
+                            WritePickListValue(workbook, mapping, parentSheet, pickValuesCache, headerCache);
+                        }
+                        continue;
+                    }
+                    if (mapping.Path.ToLower().StartsWith("parent."))
+                    {
+                        if (parent == null)
+                            throw new Exception(
+                                String.Format("{0} (name: {1}) can't exist on its own but no parent object was supplied.",
+                                    sheet.SheetName, Name));
+                        var parentPath = mapping.Path.Replace("parent.", "");
+                        var parentPropInfo = parent.GetType().GetProperty(parentPath);
+                        //keys are always string properties
+                        var parentKeyValue = parentPropInfo.GetValue(parent) as String;
+
+                        if (String.IsNullOrEmpty(parentKeyValue))
+                        {
+                            log.WriteLine(
+                                "Parent object (type: {0}) doesn't have a key property '{1}' defined. This will result into invalid and inconsistent COBie file.",
+                                parent.GetType().Name, parentPath);
                         }
                         else
-                            WritePickListValue(workbook, mapping, value.StringValue, pickValuesCache, headerCache);
+                        {
+                            cell.SetCellType(CellType.String);
+                            cell.SetCellValue(parentKeyValue);
+                        }
+
+                        if (!String.IsNullOrEmpty(mapping.PickList))
+                        {
+                            WritePickListValue(workbook, mapping, parentKeyValue, pickValuesCache, headerCache);
+                        }
+                        continue;
+                    }
+
+                    var value = GetCobieProperty(mapping, log);
+                    if (value == null ||
+                        (value.ValueType == CobieValueType.String && String.IsNullOrWhiteSpace(value.StringValue)))
+                        SetDefaultCellValue(mapping, cell);
+                    else
+                    {
+                        switch (value.ValueType)
+                        {
+                            case CobieValueType.Boolean:
+                                if (value.BooleanValue.HasValue)
+                                    cell.SetCellValue(value.BooleanValue ?? false);
+                                else
+                                    SetDefaultCellValue(mapping, cell);
+                                break;
+                            case CobieValueType.DateTime:
+                                //1900-12-31T23:59:59 is the default COBie date
+                                var dtVal = value.DateTimeValue ?? //default date value
+                                            DateTime.Parse("1900-12-31T23:59:59", null, DateTimeStyles.RoundtripKind);
+                                if (dtVal == default(DateTime))
+                                    dtVal = DateTime.Parse("1900-12-31T23:59:59", null, DateTimeStyles.RoundtripKind);
+                                //according to BS1192-4 datetime should only be 19 characters long (no hours, minutes or seconds)
+                                cell.SetCellValue(dtVal.ToString("O").Substring(0, 19));
+                                break;
+                            case CobieValueType.Double:
+                                if (value.DoubleValue.HasValue)
+                                    cell.SetCellValue(value.DoubleValue ?? 0);
+                                else
+                                    SetDefaultCellValue(mapping, cell);
+                                break;
+                            case CobieValueType.Integer:
+                                if (value.IntegerValue.HasValue)
+                                    cell.SetCellValue(value.IntegerValue ?? 0);
+                                else
+                                    SetDefaultCellValue(mapping, cell);
+                                break;
+                            case CobieValueType.String:
+                                if (String.IsNullOrWhiteSpace(value.StringValue))
+                                    SetDefaultCellValue(mapping, cell);
+                                else
+                                    cell.SetCellValue(value.StringValue);
+                                break;
+                            default:
+                                throw new Exception("Unexpected data type");
+                        }
+                        if (!String.IsNullOrEmpty(mapping.PickList) && value.ValueType == CobieValueType.String)
+                        {
+                            if (mapping.Path.StartsWith("Categories")) //categories need to be handled differently
+                            {
+                                if (Categories != null)
+                                    foreach (var category in Categories)
+                                    {
+                                        if (string.IsNullOrEmpty(category.Classification))
+                                            WritePickListValue(workbook, mapping, category.CategoryString, pickValuesCache, headerCache);
+                                        else
+                                        {
+                                            var alterMapping = new MappingAttribute
+                                            {
+                                                PickList =
+                                                    mapping.PickList.Substring(0, mapping.PickList.IndexOf('.') + 1) +
+                                                    category.Classification
+                                            };
+                                            WritePickListValue(workbook, alterMapping, category.CategoryString,
+                                                pickValuesCache, headerCache);
+                                        }
+                                    }
+                            }
+                            else
+                                WritePickListValue(workbook, mapping, value.StringValue, pickValuesCache, headerCache);
+                        }
                     }
                 }
+
             }
 
             //call for all child objects but with this as a parent
             foreach (var child in GetChildren())
             {
-                child.WriteToCobie(workbook, log, this, rowNumCache, pickValuesCache, headerCache, version);
+                child.WriteToCobie(workbook, log, this, rowNumCache, pickValuesCache, headerCache, assetfilters, version);
             }
+        }
+
+
+        /// <summary>
+        /// Filter Attribute objects based on PropertySet Name, and Property Values
+        /// Filter objects based on type
+        /// </summary>
+        /// <param name="assetfilters">FiltersHelper, filters for names and objects </param>
+        /// <param name="parent">COBieLite object</param>
+        /// <returns>bool</returns>
+        private bool Filter(FiltersHelper assetfilters, CobieObject parent)
+        {
+            if (assetfilters != null)
+            {
+                if (this is Attribute)
+                {
+                    var objAtt = (Attribute)this;
+                    if (assetfilters.PSetNameFilterOnSheetName(objAtt.PropertySetName, parent))
+                    {
+#if SHOWEXCLUDES
+                        Debug.WriteLine(string.Format(@"Filtering out: PropertySet ""{1}"" with name ""{0}""", this.Name, objAtt.PropertySetName));
+#endif
+                        return true;
+                    }
+                    if (assetfilters.NameFilterOnParent(this.Name, parent))
+                    {
+#if SHOWEXCLUDES
+                        Debug.WriteLine(string.Format(@"Filtering out: PropertySet ""{1}"", containing property name ""{0}""", this.Name, objAtt.PropertySetName));
+#endif
+
+                        return true;
+                    }
+                    return false;
+                }
+                else
+                {
+                    if(assetfilters.ObjFilter(this))
+                    {
+#if SHOWEXCLUDES
+                        Debug.WriteLine(string.Format(@"Object, Filtering out: Object ""{0}""", this.ExternalEntity));
+#endif
+                        return true;
+                    }
+                }
+            }
+            return false;
         }
 
         private void FixHeaderForWriting(IRow row, List<MappingAttribute> mappings)
@@ -698,6 +757,7 @@ namespace Xbim.COBieLiteUK
             //this should never happen.
             return null;
         }
+
 
         private string GetEnumAlias(object enu, MappingAttribute mapping)
         {

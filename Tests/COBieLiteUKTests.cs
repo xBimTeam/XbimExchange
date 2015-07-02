@@ -10,7 +10,8 @@ using Xbim.CobieLiteUK.Validation;
 using Xbim.IO;
 using XbimExchanger.IfcToCOBieLiteUK;
 using Attribute = Xbim.COBieLiteUK.Attribute;
-using System = Xbim.COBieLiteUK.System;
+using XbimExchanger.COBieLiteHelpers;
+//using System = Xbim.COBieLiteUK.System;
 
 
 namespace Tests
@@ -43,6 +44,8 @@ namespace Tests
             f.AreaUnits = AreaUnit.notdefined;
             Assert.IsNull(f.AreaUnitsCustom);
         }
+
+
 
         //[TestMethod]
         //public void IFSModelAnalyses()
@@ -628,7 +631,7 @@ namespace Tests
         {
             string msg;
             var facility = Facility.ReadCobie("OBN1-COBie-UK-2014.xlsx", out msg);
-            facility.WriteCobie("..\\..\\OBN1-COBie-UK-2014_plain.xlsx", out msg, "UK2012", false);
+            facility.WriteCobie("..\\..\\OBN1-COBie-UK-2014_plain.xlsx", out msg, null, "UK2012", false);
         }
 
         [TestMethod]
@@ -766,7 +769,9 @@ namespace Tests
 
                     string msg;
                     facilityType.WriteJson(jsonFile, true);
-                    facilityType.WriteCobie("..\\..\\Lakeside_Restaurant.xlsx", out msg, "UK2012", true);
+                    //set attribute name filters
+                    FiltersHelper assetfilters = new FiltersHelper();
+                    facilityType.WriteCobie("..\\..\\Lakeside_Restaurant.xlsx", out msg, assetfilters, "UK2012", true);
 
 
                     break;

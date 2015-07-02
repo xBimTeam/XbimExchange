@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Configuration;
+using System.Diagnostics;
 using System.Globalization;
 using System.IO;
 using System.Linq;
@@ -113,9 +114,6 @@ namespace XbimExchanger.IfcToCOBieLiteUK
 
         private Dictionary<string, string[]> _cobieFieldMap;
 
-
-        private readonly HashSet<IfcType> _includedTypes = new HashSet<IfcType>();
-
         private Dictionary<IfcObject, XbimIfcProxyTypeObject> _objectToTypeObjectMap;
 
         private Dictionary<XbimIfcProxyTypeObject, List<IfcElement>> _definingTypeObjectMap =
@@ -133,6 +131,38 @@ namespace XbimExchanger.IfcToCOBieLiteUK
         private Dictionary<IfcSpatialStructureElement, List<IfcSpatialStructureElement>> _spatialDecomposition;
         private readonly Dictionary<string, int> _typeNames = new Dictionary<string, int>();
 
+        #endregion
+
+        #region Filters
+
+        /// <summary>
+        /// Included ifcElement types for components assets
+        /// </summary>
+        //public HashSet<IfcType> IncludedComponents { get; private set; }
+        /// <summary>
+        /// Excluded ifcElement types for components assets
+        /// </summary>
+        //public HashSet<IfcType> ExcludedComponents { get; private set; }
+
+        /// <summary>
+        /// Included ifcElement types for Type assets
+        /// </summary>
+        //public HashSet<IfcType> IncludedType { get; private set; }
+        /// <summary>
+        /// Excluded ifcElement types for Type assets
+        /// </summary>
+        //public HashSet<IfcType> ExcludedType { get; private set; }
+
+        /// <summary>
+        /// Included ifcElement types for Assembly assets
+        /// </summary>
+        //public HashSet<IfcType> IncludedAssembly { get; private set; }
+        /// <summary>
+        /// Excluded ifcElement types for Assembly assets
+        /// </summary>
+        //public HashSet<IfcType> ExcludedAssembly { get; private set; }
+
+        
         #endregion
 
         private readonly string _configFileName;
@@ -178,6 +208,7 @@ namespace XbimExchanger.IfcToCOBieLiteUK
            
             _model = model;
             _creatingApplication = model.Header.CreatingApplication;
+            //InitFilters(); //initialize filters
             LoadCobieMaps();
             GetContacts();
             GetClassificationDictionary();
@@ -188,6 +219,19 @@ namespace XbimExchanger.IfcToCOBieLiteUK
             GetSystems();
             GetSpaceAssetLookup();
         }
+
+        /// <summary>
+        /// Initialize filters
+        /// </summary>
+        //private void InitFilters()
+        //{
+        //    IncludedComponents = new HashSet<IfcType>();
+        //    ExcludedComponents = new HashSet<IfcType>();
+        //    IncludedType = new HashSet<IfcType>();
+        //    ExcludedType = new HashSet<IfcType>();
+        //    IncludedAssembly = new HashSet<IfcType>();
+        //    ExcludedAssembly = new HashSet<IfcType>();
+        //}
         
         private void GetSystems()
         {
@@ -446,28 +490,59 @@ namespace XbimExchanger.IfcToCOBieLiteUK
                         _cobieProperties.Add(cobieProperty);
                 }
             }
+            //Set Include And Exclude, probably should just use exclude, better to include then miss altogether
 
+            //set component include and exclude ifc objects
+            //SetInclusions(config.GetSection("IfcElementInclusion"), IncludedComponents, ExcludedComponents);
+            //set Type include and exclude ifc objects
+            //SetInclusions(config.GetSection("IfcTypeInclusion"), IncludedType, ExcludedType);
+            //set Assembly include and exclude ifc objects
+            //SetInclusions(config.GetSection("IfcAssemblyInclusion"), IncludedAssembly, ExcludedAssembly);
 
-            var ifcElementInclusion = (AppSettingsSection) config.GetSection("IfcElementInclusion");
-
-            if (ifcElementInclusion != null)
-            {
-                foreach (KeyValueConfigurationElement keyVal in ifcElementInclusion.Settings)
-                {
-                    if (String.Compare(keyVal.Value, "YES", StringComparison.OrdinalIgnoreCase) == 0)
-                    {
-                        var includedType = IfcMetaData.IfcType(keyVal.Key.ToUpper());
-                        if (includedType != null) _includedTypes.Add(includedType);
-                    }
-                }
-            }
-
+            
+            
             if (_configFileName == null)
             {
                 File.Delete(tmpFile);
             }
         }
 
+        
+
+        /// <summary>
+        /// Set up include and exclude ifcType member fields
+        /// </summary>
+        /// <param name="section">AppSettingsSection from configuration file</param>
+        /// <param name="include">HashSet of IfcType for includes</param>
+        /// <param name="exclude">HashSet of IfcType for excludes</param>
+//        private static void SetInclusions(ConfigurationSection section, HashSet<IfcType> include, HashSet<IfcType> exclude)
+//        {
+//            if (section != null)
+//            {
+//                foreach (KeyValueConfigurationElement keyVal in ((AppSettingsSection)section).Settings)
+//                {
+//                    var elementType = IfcMetaData.IfcType(keyVal.Key.ToUpper());
+//                    if (elementType != null)
+//                    {
+//                        if (String.Compare(keyVal.Value, "YES", StringComparison.OrdinalIgnoreCase) == 0)
+//                        {
+
+//                            include.Add(elementType);
+//                        }
+//                        else
+//                        {
+//                            exclude.Add(elementType);
+//                        }
+//                    }
+//                    else
+//                    {
+//#if DEBUG
+//                        Debug.WriteLine(string.Format("Failed to create IfcType - {0}", keyVal.Key.ToUpper()));
+//#endif
+//                    }
+//                }
+//            }
+//        }
 
         private void GetPropertySets()
         {
@@ -1346,4 +1421,7 @@ namespace XbimExchanger.IfcToCOBieLiteUK
             return new ContactKey { Email = email };
         }
     }
+
+
+    
 }
