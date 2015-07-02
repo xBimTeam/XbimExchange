@@ -167,33 +167,33 @@ namespace Xbim.FilterHelper
             return (ItemsToExclude.Contains(testStr) || ExcludeDefinedType);
         }
 
+
+        //TODO: Check function below, see if it works!
         /// <summary>
-        /// Test for IfcRoot exists in IfcToExclude type lists
+        /// Test for IfcObjectDefinition exists in IfcToExclude type lists
         /// </summary>
-        /// <param name="obj">IfcRoot object</param>
-        /// <param name="preDefinedType">strings for the ifcTypeObject predefinedtype enum property</param>
+        /// <param name="obj">IfcObjectDefinition object</param>
         /// <returns>bool, true = exclude</returns>
-        public bool ItemFilter(IfcRoot obj, string preDefinedType = null)
+        public bool ItemsFilter(IfcObjectDefinition obj)
         {
             var objType = obj.GetType();
-            bool ExcludeDefinedType = false;
-
-            if (preDefinedType != null)
+            bool result = IfcToExclude.Contains(objType);
+            
+            var objString = obj.ToString().ToUpper(); //or this might work, obj.IfcType().IfcTypeEnum.ToString();
+            
+            if (!result && (PreDefinedType.ContainsKey(objString)))
             {
-                var objPreDefined = objType.GetProperty("PredefinedType");
-                if (objPreDefined != null)
+                var objPreDefinedProp = objType.GetType().GetProperty("PredefinedType");
+            
+                if (objPreDefinedProp != null)
                 {
-                    var objString = obj.IfcType().ToString();
-                    if (PreDefinedType.ContainsKey(objString))
-                    {
-                        var objPreDefValue = objPreDefined.GetValue(obj).ToString();
-                        preDefinedType = preDefinedType.ToUpper();
-                        ExcludeDefinedType = PreDefinedType[objString].Contains(preDefinedType);
-                    }
+
+                    var objPreDefValue = objPreDefinedProp.GetValue(obj).ToString();
+
+                    result = PreDefinedType[objString].Contains(objPreDefValue);
                 }
             }
-            return (IfcToExclude.Contains(obj.GetType()) || ExcludeDefinedType);            
-           
+            return result;
         }
 
         /// <summary>

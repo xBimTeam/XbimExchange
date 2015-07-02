@@ -10,6 +10,7 @@ using Newtonsoft.Json;
 using System.Xml.Serialization;
 using System.IO;
 using Xbim.COBieLiteUK;
+using Xbim.Ifc2x3.Kernel;
 
 
 
@@ -251,6 +252,7 @@ namespace Xbim.FilterHelper
 
 
         #region Filter Methods
+        //TODO: IfcProperty filterining on IfcObjects
 
         /// <summary>
         /// Test property Names against sheets
@@ -351,6 +353,31 @@ namespace Xbim.FilterHelper
                 {
                     return IfcTypeObjectFilter.ItemsFilter(obj.ExternalEntity, preDefinedType);
                 }
+            }
+            return false;
+        }
+        //TODO: Check function below, see if it works!
+        /// <summary>
+        /// filter on IfcObjectDefinition objects
+        /// </summary>
+        /// <param name="obj"></param>
+        /// <returns></returns>
+        public bool ObjFilter(IfcObjectDefinition obj)
+        {
+            if (obj is IfcProduct)
+            {
+                bool exclude = IfcProductFilter.ItemsFilter(obj);
+                //check the element is not defined by a type which is excluded, by default if no type, then no element included
+                if (!exclude)
+                {
+                    IfcTypeObject objType = ((IfcProduct)obj).IsDefinedBy.OfType<IfcRelDefinesByType>().Select(rdbt => rdbt.RelatingType).First(); //assuming only one IfcRelDefinesByType
+                    exclude = IfcTypeObjectFilter.ItemsFilter(objType);
+                }
+                return exclude;
+            }
+            else if (obj is IfcTypeProduct)
+            {
+                return IfcTypeObjectFilter.ItemsFilter(obj);
             }
             return false;
         }
