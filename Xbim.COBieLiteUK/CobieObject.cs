@@ -45,6 +45,9 @@ namespace Xbim.COBieLiteUK
             Name = Guid.NewGuid().ToString();
         }
 
+        [XmlIgnore, JsonIgnore]
+        public abstract string ObjectType { get; set; }
+
         #region Custom Enumerations infrastructure
         protected T GetEnumeration<T>(string customValue) where T : struct
         {
@@ -461,10 +464,11 @@ namespace Xbim.COBieLiteUK
                         }
                         if (!String.IsNullOrEmpty(mapping.PickList) && value.ValueType == CobieValueType.String)
                         {
-                            if (mapping.Path.StartsWith("Categories")) //categories need to be handled differently
+                            var clsObject = this as CobieClassifiedObject;
+                            if (clsObject!= null && mapping.Path.StartsWith("Categories")) //categories need to be handled differently
                             {
-                                if (Categories != null)
-                                    foreach (var category in Categories)
+                                if (clsObject.Categories != null)
+                                    foreach (var category in clsObject.Categories)
                                     {
                                         if (string.IsNullOrEmpty(category.Classification))
                                             WritePickListValue(workbook, mapping, category.CategoryString, pickValuesCache, headerCache);

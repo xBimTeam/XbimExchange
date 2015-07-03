@@ -3,6 +3,7 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 using Xbim.COBieLiteUK.Converters;
 using System.IO;
+using System.Security.AccessControl;
 
 namespace Xbim.COBieLiteUK
 {
@@ -15,6 +16,12 @@ namespace Xbim.COBieLiteUK
         [XmlIgnore][JsonIgnore]
         public string PropertySetName { get { return ExternalEntity; } set { ExternalEntity = value; } }
 
+        [XmlIgnore, JsonIgnore]
+        public override string ObjectType
+        {
+            get { return AttributeType; }
+            set { AttributeType = value; }
+        }
      
     }
 }

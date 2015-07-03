@@ -640,9 +640,10 @@ namespace Xbim.COBieLiteUK
                     if (fixIfPossible) key.Name = regex.Replace(key.Name ?? "", "");
                 }
 
-                if (o.Categories != null && o.Categories.Any())
+                var clsObject = o as CobieClassifiedObject;
+                if (clsObject != null && clsObject.Categories != null && clsObject.Categories.Any())
                 {
-                    foreach (var category in o.Categories)
+                    foreach (var category in clsObject.Categories)
                     {
                         if (category.Code != null && catRegex.IsMatch(category.Code))
                         {
@@ -656,15 +657,14 @@ namespace Xbim.COBieLiteUK
                     }
                 }
 
-                //Category entries should be provided.
-                //Only Asset doesn't have a category in COBie XLS
-                if ((o.Categories == null || !o.Categories.Any()) && !(o is Asset))
+                //Category entries should be provided for CobieClassifiedObjects
+                if (clsObject != null && (clsObject.Categories == null || !clsObject.Categories.Any()))
                 {
                     logger.WriteLine("{0} '{1}' doesn't have a category defined.", o.GetType().Name, o.Name);
                     if (fixIfPossible)
                     {
-                        if (o.Categories == null) o.Categories = new List<Category>();
-                        o.Categories.Add(new Category {Code = "unknown"});
+                        if (clsObject.Categories == null) clsObject.Categories = new List<Category>();
+                        clsObject.Categories.Add(new Category { Code = "unknown" });
                     }
                 }
 
@@ -1035,7 +1035,7 @@ namespace Xbim.COBieLiteUK
                     Spaces = new List<Space>(),
                     CreatedOn = DateTime.Now,
                     CreatedBy = GetDefaultContactKey(),
-                    Categories = GetDefaultCategories()
+                    FloorType = "Floor"
                 };
                 Floors.Add(defaultFloor);
             }

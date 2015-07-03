@@ -4,6 +4,8 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Xml.Serialization;
+using Newtonsoft.Json;
 
 namespace Xbim.COBieLiteUK
 {
@@ -46,6 +48,13 @@ namespace Xbim.COBieLiteUK
             var entity = key as EntityKey;
             if(ChildAssetsOrTypes == null || entity == null) return;
             ChildAssetsOrTypes.Remove(entity);
+        }
+
+        [XmlIgnore, JsonIgnore]
+        public override string ObjectType
+        {
+            get { return AssemblyType; }
+            set { AssemblyType = value; }
         }
     }
 }

@@ -16,6 +16,12 @@ namespace Xbim.COBieLiteUK
             Warranty = new Warranty{GuarantorLabor = new ContactKey(), GuarantorParts = new ContactKey()};
         }
 
+        public override string ObjectType
+        {
+            get { return AssetTypeCustom; }
+            set { AssetTypeCustom = value; }
+        }
+
         internal override void AfterCobieRead()
         {
             base.AfterCobieRead();

@@ -97,6 +97,7 @@
     <Compile Include="AttributeValues\AttributeValue.cs" />
     <Compile Include="AttributeValues\BooleanAttributeValue.cs" />
     <Compile Include="Category.cs" />
+    <Compile Include="CobieClassifiedObject.cs" />
     <Compile Include="CobieObject.cs" />
     <Compile Include="Connection.cs" />
     <Compile Include="Contact.cs" />
@@ -122,6 +123,7 @@
     <Compile Include="Issue.cs" />
     <Compile Include="Job.cs" />
     <Compile Include="Metadata.cs" />
+    <Compile Include="Representation.cs" />
     <Compile Include="Resource.cs" />
     <Compile Include="Schemas\Attributes.cs" />
     <Compile Include="Facility.cs" />

@@ -22,7 +22,7 @@
       <xs:appinfo source="mapping">UK2012|J|End           |optional|item|-                              |End</xs:appinfo>
     </xs:annotation>
     <xs:complexContent>
-      <xs:extension base="cobielite:CobieObject">
+      <xs:extension base="cobielite:CobieClassifiedObject">
         <xs:sequence>
           <xs:element name="Start" type="xs:date" minOccurs="0" nillable="true" />
           <xs:element name="End" type="xs:date" minOccurs="0" nillable="true" />
@@ -59,7 +59,7 @@
       <xs:appinfo source="mapping">UK2012|E|ParentName|required|item|-|parent.Name</xs:appinfo>
       <xs:appinfo source="mapping">UK2012|F|ChildNames|required|list|-|ChildAssetsOrTypes.Name</xs:appinfo>
       <!-- AssemblyType is defined as a D column in BS 1192-4 but as a G column in referenced docs -->
-      <xs:appinfo source="mapping">UK2012|G|AssemblyType|optional|list|PickLists.AssemblyType|Categories.CategoryString</xs:appinfo>
+      <xs:appinfo source="mapping">UK2012|G|AssemblyType|optional|item|PickLists.AssemblyType|AssemblyType</xs:appinfo>
       <xs:appinfo source="mapping">UK2012|H|ExtSystem|optional|item|-|ExternalSystem</xs:appinfo>
       <xs:appinfo source="mapping">UK2012|I|ExtObject|optional|item|-|ExternalEntity</xs:appinfo>
       <xs:appinfo source="mapping">UK2012|J|ExtIdentifier|optional|item|-|ExternalId</xs:appinfo>
@@ -77,6 +77,7 @@
     <xs:complexContent>
       <xs:extension base="cobielite:CobieObject">
         <xs:sequence>
+          <xs:element name="AssemblyType" type="xs:string" minOccurs="1"/>
           <!-- Lists -->
           <xs:element name="ChildAssetsOrTypes" type="cobielite:EntityKeyCollection" minOccurs="0" maxOccurs="1" />
         </xs:sequence>
@@ -116,7 +117,7 @@
       </xs:documentation>
     </xs:annotation>
     <xs:complexContent>
-      <xs:extension base="cobielite:CobieObject">
+      <xs:extension base="cobielite:CobieClassifiedObject">
         <xs:sequence>
           <xs:element name="Spaces" type="cobielite:SpaceKeyCollection" minOccurs="1" />
           <xs:element name="SerialNumber" type="xs:string" minOccurs="1" />
@@ -199,7 +200,7 @@
       </xs:documentation>
     </xs:annotation>
     <xs:complexContent>
-      <xs:extension base="cobielite:CobieObject">
+      <xs:extension base="cobielite:CobieClassifiedObject">
         <xs:sequence>
           <xs:element name="AssetTypeCustom" type="xs:string" minOccurs="1" />
           <xs:element name="AssetTypeEnum" type="cobielite:AssetPortability" minOccurs="0" />
@@ -277,7 +278,7 @@
       <xs:appinfo source="mapping">UK2012|A|Name|required|item|-|Name</xs:appinfo>
       <xs:appinfo source="mapping">UK2012|B|CreatedBy|required|item|-|CreatedBy.Email</xs:appinfo>
       <xs:appinfo source="mapping">UK2012|C|CreatedOn|required|item|-|CreatedOn</xs:appinfo>
-      <xs:appinfo source="mapping">UK2012|D|Category|required|list|PickLists.StageType|Categories.CategoryString</xs:appinfo>
+      <xs:appinfo source="mapping">UK2012|D|Category|required|item|PickLists.StageType|AttributeType</xs:appinfo>
       <xs:appinfo source="mapping">UK2012|E|SheetName|required|item|PickLists.SheetType|parent</xs:appinfo>
       <xs:appinfo source="mapping">UK2012|F|RowName|required|item|-|parent.Name</xs:appinfo>
       <xs:appinfo source="mapping">UK2012|G|Value|required|item|-|Value.Value</xs:appinfo>
@@ -303,7 +304,7 @@
             <xs:element name="DateTimeAttributeValue" type="cobielite:DateTimeAttributeValue" minOccurs="1" />
             <xs:element name="DecimalAttributeValue" type="cobielite:DecimalAttributeValue" minOccurs="1" />
           </xs:choice>
-          <xs:element name="StageType" type="cobielite:StageType"/>
+          <xs:element name="AttributeType" type="xs:string" minOccurs="1"/>
         </xs:sequence>
       </xs:extension>
     </xs:complexContent>
@@ -323,7 +324,7 @@
       <xs:appinfo source="mapping">UK2012|A|Name|required|item|-|Name</xs:appinfo>
       <xs:appinfo source="mapping">UK2012|B|CreatedBy|required|item|-|CreatedBy.Email</xs:appinfo>
       <xs:appinfo source="mapping">UK2012|C|CreatedOn|required|item|-|CreatedOn</xs:appinfo>
-      <xs:appinfo source="mapping">UK2012|D|ConnectionType|required|list|PickLists.ConnectionType|Categories.CategoryString</xs:appinfo>
+      <xs:appinfo source="mapping">UK2012|D|ConnectionType|required|item|PickLists.ConnectionType|ConnectionType</xs:appinfo>
       <xs:appinfo source="mapping">UK2012|E|SheetName|optional|item|PickLists.SheetType|parent</xs:appinfo>
       <xs:appinfo source="mapping">UK2012|F|RowName1|required|item|-|parent.Name</xs:appinfo>
       <xs:appinfo source="mapping">UK2012|G|RowName2|required|item|-|ConnectedTo.Name</xs:appinfo>
@@ -343,6 +344,7 @@
     <xs:complexContent>
       <xs:extension base="cobielite:CobieObject">
         <xs:sequence>
+          <xs:element name="ConnectionType" type="xs:string" minOccurs="1"/>
           <xs:element name="ConnectedTo" type="cobielite:AssetKey" minOccurs="1" />
           <xs:element name="RealizingElement" type="cobielite:AssetKey" minOccurs="0" />
           <xs:element name="PortName1" type="xs:string" minOccurs="0" />
@@ -390,7 +392,7 @@
       </xs:documentation>
     </xs:annotation>
     <xs:complexContent>
-      <xs:extension base="cobielite:CobieObject">
+      <xs:extension base="cobielite:CobieClassifiedObject">
         <xs:sequence>
           <xs:element name="Email" type="xs:string" minOccurs="1" />
           <xs:element name="Company" type="xs:string" minOccurs="1" />
@@ -434,7 +436,7 @@
       <xs:appinfo source="mapping">UK2012|A|Name|required|item|-|Name</xs:appinfo>
       <xs:appinfo source="mapping">UK2012|B|CreatedBy|required|item|-|CreatedBy.Email</xs:appinfo>
       <xs:appinfo source="mapping">UK2012|C|CreatedOn|required|item|-|CreatedOn</xs:appinfo>
-      <xs:appinfo source="mapping">UK2012|D|Category|required|list|PickLists.DocumentType|Categories.CategoryString</xs:appinfo>
+      <xs:appinfo source="mapping">UK2012|D|Category|required|item|PickLists.DocumentType|DocumentType</xs:appinfo>
       <xs:appinfo source="mapping">UK2012|E|ApprovalBy|required|item|PickLists.ApprovalBy|ApprovalBy.Email</xs:appinfo>
       <xs:appinfo source="mapping">UK2012|F|Stage|required|item|PickLists.StageType|Stage</xs:appinfo>
       <xs:appinfo source="mapping">UK2012|G|SheetName|required|item|PickLists.SheetType|parent</xs:appinfo>
@@ -455,6 +457,7 @@
     <xs:complexContent>
       <xs:extension base="cobielite:CobieObject">
         <xs:sequence>
+          <xs:element name="DocumentType" type="xs:string" minOccurs="1"/>
           <xs:element name="ApprovalBy" type="cobielite:ContactKey" minOccurs="1" />
           <xs:element name="Stage" type="xs:string" minOccurs="1" />
           <xs:element name="Directory" type="xs:string" minOccurs="1" />
@@ -512,7 +515,7 @@
       </xs:documentation>
     </xs:annotation>
     <xs:complexContent>
-      <xs:extension base="cobielite:CobieObject">
+      <xs:extension base="cobielite:CobieClassifiedObject">
         <xs:sequence>
           <xs:element name="Metadata" type="cobielite:Metadata" minOccurs="1" />
           <xs:element name="Project" type="cobielite:Project" minOccurs="1" maxOccurs="1" />
@@ -577,7 +580,7 @@
       <xs:appinfo source="mapping">UK2012|A|Name|required|item|-|Name</xs:appinfo>
       <xs:appinfo source="mapping">UK2012|B|CreatedBy|required|item|-|CreatedBy.Email</xs:appinfo>
       <xs:appinfo source="mapping">UK2012|C|CreatedOn|required|item|-|CreatedOn</xs:appinfo>
-      <xs:appinfo source="mapping">UK2012|D|Category|required|list|PickLists.FloorType|Categories.CategoryString</xs:appinfo>
+      <xs:appinfo source="mapping">UK2012|D|Category|required|item|PickLists.FloorType|FloorType</xs:appinfo>
       <xs:appinfo source="mapping">UK2012|E|ExtSystem|optional|item|-|ExternalSystem</xs:appinfo>
       <xs:appinfo source="mapping">UK2012|F|ExtObject|optional|item|-|ExternalEntity</xs:appinfo>
       <xs:appinfo source="mapping">UK2012|G|ExtIdentifier|optional|item|-|ExternalId</xs:appinfo>
@@ -595,6 +598,7 @@
     <xs:complexContent>
       <xs:extension base="cobielite:CobieObject">
         <xs:sequence>
+          <xs:element name="FloorType" type="xs:string" minOccurs="1"/>
           <xs:element name="Elevation" type="xs:double" minOccurs="0" nillable="true" />
           <xs:element name="Height" type="xs:double" minOccurs="0" nillable="true" />
 
@@ -620,7 +624,7 @@
       <xs:appinfo source="mapping">UK2012|A|Name|required|item|-|Name</xs:appinfo>
       <xs:appinfo source="mapping">UK2012|B|CreatedBy|required|item|-|CreatedBy.Email</xs:appinfo>
       <xs:appinfo source="mapping">UK2012|C|CreatedOn|required|item|-|CreatedOn</xs:appinfo>
-      <xs:appinfo source="mapping">UK2012|D|Type|required|list|PickLists.IssueCategory|Categories.CategoryString</xs:appinfo>
+      <xs:appinfo source="mapping">UK2012|D|Type|required|item|PickLists.IssueCategory|IssueType</xs:appinfo>
       <xs:appinfo source="mapping">UK2012|E|Risk|required|item|PickLists.IssueRisk|Risk</xs:appinfo>
       <xs:appinfo source="mapping">UK2012|F|Chance|required|item|PickLists.IssueChance|Chance</xs:appinfo>
       <xs:appinfo source="mapping">UK2012|G|Impact|required|item|PickLists.IssueImpact|Impact</xs:appinfo>
@@ -643,6 +647,7 @@
     <xs:complexContent>
       <xs:extension base="cobielite:CobieObject">
         <xs:sequence>
+          <xs:element name="IssueType" type="xs:string" minOccurs="1"/>
           <xs:element name="Risk" type="xs:string" minOccurs="1" />
           <xs:element name="Chance" type="xs:string" minOccurs="1" />
           <xs:element name="Impact" type="xs:string" minOccurs="1" />
@@ -668,7 +673,7 @@
       <xs:appinfo source="mapping">UK2012|A|Name|required|item|-|Name</xs:appinfo>
       <xs:appinfo source="mapping">UK2012|B|CreatedBy|required|item|-|CreatedBy.Email</xs:appinfo>
       <xs:appinfo source="mapping">UK2012|C|CreatedOn|required|item|-|CreatedOn</xs:appinfo>
-      <xs:appinfo source="mapping">UK2012|D|ImpactType|required|list|PickLists.ImpactType|Categories.CategoryString</xs:appinfo>
+      <xs:appinfo source="mapping">UK2012|D|ImpactType|required|item|PickLists.ImpactType|ImpactType</xs:appinfo>
       <xs:appinfo source="mapping">UK2012|E|ImpactStage|required|item|PickLists.ImpactStage|ImpactStage</xs:appinfo>
       <xs:appinfo source="mapping">UK2012|F|SheetName|required|item|PickLists.SheetType|parent</xs:appinfo>
       <xs:appinfo source="mapping">UK2012|G|RowName|required|item|-|parent.Name</xs:appinfo>
@@ -690,6 +695,7 @@
     <xs:complexContent>
       <xs:extension base="cobielite:CobieObject">
         <xs:sequence>
+          <xs:element name="ImpactType" type="xs:string" minOccurs="1"/>
           <xs:element name="ImpactStage" type="xs:string" minOccurs="1" />
           <xs:element name="Value" type="xs:string" minOccurs="1" />
           <xs:element name="ImpactUnit" type="xs:string" minOccurs="1" />
@@ -716,7 +722,7 @@
       <xs:appinfo source="mapping">UK2012|A|Name|required|item|-|Name</xs:appinfo>
       <xs:appinfo source="mapping">UK2012|B|CreatedBy|required|item|-|CreatedBy.Email</xs:appinfo>
       <xs:appinfo source="mapping">UK2012|C|CreatedOn|required|item|-|CreatedOn</xs:appinfo>
-      <xs:appinfo source="mapping">UK2012|D|Category|required|list|PickLists.JobType|Categories.CategoryString</xs:appinfo>
+      <xs:appinfo source="mapping">UK2012|D|Category|required|item|PickLists.JobType|JobType</xs:appinfo>
       <xs:appinfo source="mapping">UK2012|E|Status|required|item|PickLists.JobStatusType|Status</xs:appinfo>
       <xs:appinfo source="mapping">UK2012|F|TypeName|required|item|-|parent.Name</xs:appinfo>
       <xs:appinfo source="mapping">UK2012|G|Description|required|item|-|Description</xs:appinfo>
@@ -743,6 +749,7 @@
     <xs:complexContent>
       <xs:extension base="cobielite:CobieObject">
         <xs:sequence>
+          <xs:element name="JobType" type="xs:string" minOccurs="1"/>
           <xs:element name="Status" type="xs:string" minOccurs="1" />
           <xs:element name="Duration" type="xs:double" minOccurs="1" nillable="true" />
           <xs:element name="DurationUnit" type="cobielite:DurationUnit" minOccurs="1" nillable="true" />
@@ -786,7 +793,7 @@
       <xs:appinfo source="mapping">UK2012|A|Name|required|item|-|Name</xs:appinfo>
       <xs:appinfo source="mapping">UK2012|B|CreatedBy|required|item|-|CreatedBy.Email</xs:appinfo>
       <xs:appinfo source="mapping">UK2012|C|CreatedOn|required|item|-|CreatedOn</xs:appinfo>
-      <xs:appinfo source="mapping">UK2012|D|Category|required|list|PickLists.ResourceType|Categories.CategoryString</xs:appinfo>
+      <xs:appinfo source="mapping">UK2012|D|Category|required|item|PickLists.ResourceType|ResourceType</xs:appinfo>
       <xs:appinfo source="mapping">UK2012|E|ExtSystem|optional|item|-|ExternalSystem</xs:appinfo>
       <xs:appinfo source="mapping">UK2012|F|ExtObject|optional|item|-|ExternalEntity</xs:appinfo>
       <xs:appinfo source="mapping">UK2012|G|ExtIdentifier|optional|item|-|ExternalId</xs:appinfo>
@@ -800,6 +807,7 @@
     <xs:complexContent>
       <xs:extension base="cobielite:CobieObject">
         <xs:sequence>
+          <xs:element name="ResourceType" type="xs:string" minOccurs="1"/>
         </xs:sequence>
       </xs:extension>
     </xs:complexContent>
@@ -828,7 +836,7 @@
       <xs:appinfo source="mapping">UK2012|A|Name|required|item|-|Name</xs:appinfo>
       <xs:appinfo source="mapping">UK2012|B|CreatedBy|required|item|-|CreatedBy.Email</xs:appinfo>
       <xs:appinfo source="mapping">UK2012|C|CreatedOn|required|item|-|CreatedOn</xs:appinfo>
-      <xs:appinfo source="mapping">UK2012|D|Category|required|list|PickLists.CoordinateType|Categories.CategoryString</xs:appinfo>
+      <xs:appinfo source="mapping">UK2012|D|Category|required|item|PickLists.CoordinateType|CoordinateType</xs:appinfo>
       <xs:appinfo source="mapping">UK2012|E|SheetName|required|item|PickLists.CoordinateSheet|parent</xs:appinfo>
       <xs:appinfo source="mapping">UK2012|F|RowName|required|item|-|parent.Name</xs:appinfo>
       <xs:appinfo source="mapping">UK2012|G|CoordinateXAxis|required|item|-|X</xs:appinfo>
@@ -859,6 +867,7 @@
     <xs:complexContent>
       <xs:extension base="cobielite:CobieObject">
         <xs:sequence>
+          <xs:element name="CoordinateType" type="xs:string" minOccurs="1"/>
           <xs:element name="X" type="xs:double" minOccurs="1" />
           <xs:element name="Y" type="xs:double" minOccurs="1" />
           <xs:element name="Z" type="xs:double" minOccurs="1" />
@@ -924,7 +933,7 @@
       </xs:documentation>
     </xs:annotation>
     <xs:complexContent>
-      <xs:extension base="cobielite:CobieObject">
+      <xs:extension base="cobielite:CobieClassifiedObject">
         <xs:sequence>
           <xs:element name="RoomTag" type="xs:string" minOccurs="0" />
           <xs:element name="UsableHeight" type="xs:double" minOccurs="0" nillable="true" />
@@ -960,7 +969,7 @@
       <xs:appinfo source="mapping">UK2012|A|Name|required|item|-|Name</xs:appinfo>
       <xs:appinfo source="mapping">UK2012|B|CreatedBy|required|item|-|CreatedBy.Email</xs:appinfo>
       <xs:appinfo source="mapping">UK2012|C|CreatedOn|required|item|-|CreatedOn</xs:appinfo>
-      <xs:appinfo source="mapping">UK2012|D|Category|required|list|PickLists.SpareType|Categories.CategoryString</xs:appinfo>
+      <xs:appinfo source="mapping">UK2012|D|Category|required|item|PickLists.SpareType|SpareType</xs:appinfo>
       <xs:appinfo source="mapping">UK2012|E|TypeName|required|item|-|parent.Name</xs:appinfo>
       <xs:appinfo source="mapping">UK2012|F|Suppliers|required|list|-|Suppliers.Email</xs:appinfo>
       <xs:appinfo source="mapping">UK2012|G|ExtSystem|optional|item|-|ExternalSystem</xs:appinfo>
@@ -978,6 +987,7 @@
     <xs:complexContent>
       <xs:extension base="cobielite:CobieObject">
         <xs:sequence>
+          <xs:element name="SpareType" type="xs:string" minOccurs="1"/>
           <xs:element name="Suppliers" type="cobielite:ContactKeyCollection" minOccurs="0" maxOccurs="1" />
           <xs:element name="SetNumber" type="xs:string" minOccurs="0" />
           <xs:element name="PartNumber" type="xs:string" minOccurs="0" />
@@ -1014,7 +1024,7 @@
       </xs:documentation>
     </xs:annotation>
     <xs:complexContent>
-      <xs:extension base="cobielite:CobieObject">
+      <xs:extension base="cobielite:CobieClassifiedObject">
         <xs:sequence>
           <xs:element name="Components" type="cobielite:AssetKeyCollection" minOccurs="0" maxOccurs="1" />
         </xs:sequence>
@@ -1051,7 +1061,7 @@
       </xs:documentation>
     </xs:annotation>
     <xs:complexContent>
-      <xs:extension base="cobielite:CobieObject">
+      <xs:extension base="cobielite:CobieClassifiedObject">
         <xs:sequence>
           <xs:element name="Spaces" type="cobielite:SpaceKeyCollection" minOccurs="0" maxOccurs="1" />
           <xs:element name="ZoneType" type="cobielite:ZoneType" minOccurs="0" maxOccurs="1" />
@@ -1089,23 +1099,29 @@
   </xs:complexType>
   <!-- End COBie metadata-->
 
-  <!-- Begin CobieUniqueObject type -->
-  <!--<xs:complexType name="CobieUniqueObject">
+  <!-- Begin CobieClassifiedObject type -->
+  <xs:complexType name="CobieClassifiedObject" abstract="true">
     <xs:complexContent>
       <xs:extension base="cobielite:CobieObject">
         <xs:sequence>
-      <xs:element name="Documents" type="cobielite:DocumentCollection" maxOccurs="1" minOccurs="0" />
-      <xs:element name="Attributes" type="cobielite:AttributeCollection" maxOccurs="1" minOccurs="0" />
-      <xs:element name="Issues" type="cobielite:IssueCollection" maxOccurs="1" minOccurs="0" />
-      <xs:element name="Impacts" type="cobielite:ImpactCollection" maxOccurs="1" minOccurs="0" />
-      <xs:element name="Representations" type="cobielite:RepresentationCollection" maxOccurs="1" minOccurs="0" />
-        </xs:sequence>
+          <xs:element name="Categories" type="cobielite:CategoryCollection" minOccurs="0" />
+        </xs:sequence>    
       </xs:extension>
     </xs:complexContent>
-    
-  </xs:complexType>-->
-  <!-- End CobieUniqueObject type -->
-  
+  </xs:complexType>
+  <xs:complexType name="Category">
+    <xs:sequence>
+      <xs:element name="Classification" type="xs:string" minOccurs="0" />
+      <xs:element name="Code" type="xs:string" minOccurs="1" />
+      <xs:element name="Description" type="xs:string" minOccurs="0" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="CategoryCollection">
+    <xs:sequence>
+      <xs:element name="Category" type="cobielite:Category" minOccurs="0" maxOccurs="unbounded" />
+    </xs:sequence>
+  </xs:complexType>
+  <!-- End CobieClassifiedObject type -->
   
   <!-- Begin CobieObject type -->
   <xs:complexType name="CobieObject" abstract="true">
@@ -1115,7 +1131,6 @@
       <xs:element name="Description" type="xs:string" minOccurs="0" />
       <xs:element name="CreatedBy" type="cobielite:ContactKey" minOccurs="1" />
       <xs:element name="CreatedOn" type="xs:dateTime" minOccurs="1" nillable="true" />
-      <xs:element name="Categories" type="cobielite:CategoryCollection" minOccurs="0" />
 
       <!-- External system identifiers -->
       <xs:element name="ExternalSystem" type="xs:string" minOccurs="0" />
@@ -1140,18 +1155,6 @@
   <xs:complexType name="EntityKeyCollection">
     <xs:sequence>
       <xs:element name="EntityKey" type="cobielite:EntityKey" minOccurs="0" maxOccurs="unbounded" />
-    </xs:sequence>
-  </xs:complexType>
-  <xs:complexType name="Category">
-    <xs:sequence>
-      <xs:element name="Classification" type="xs:string" minOccurs="0" />
-      <xs:element name="Code" type="xs:string" minOccurs="1" />
-      <xs:element name="Description" type="xs:string" minOccurs="0" />
-    </xs:sequence>
-  </xs:complexType>
-  <xs:complexType name="CategoryCollection">
-    <xs:sequence>
-      <xs:element name="Category" type="cobielite:Category" minOccurs="0" maxOccurs="unbounded" />
     </xs:sequence>
   </xs:complexType>
   <!-- End CobieObject type -->
