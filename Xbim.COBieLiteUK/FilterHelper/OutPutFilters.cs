@@ -20,6 +20,8 @@ namespace Xbim.FilterHelper
     public class OutPutFilters
     {
         #region Properties
+
+        public bool FlipResult { get; set; }
         /// <summary>
         /// IfcProduct Exclude filters
         /// </summary>
@@ -81,6 +83,9 @@ namespace Xbim.FilterHelper
         /// </summary>
         public OutPutFilters()
         {
+            //will flip filter result from true to false
+            FlipResult = false;
+
             //object filters
             IfcProductFilter = new ObjectFilter();
             IfcTypeObjectFilter = new ObjectFilter();
@@ -288,7 +293,7 @@ namespace Xbim.FilterHelper
                         result = false;
                 }
             }
-            return result;
+            return FlipResult ? !result : result;
         }
 
         /// <summary>
@@ -325,7 +330,7 @@ namespace Xbim.FilterHelper
                         result = false;
                 }
             }
-            return result;
+            return FlipResult ? !result : result; ;
         }
 
         /// <summary>
@@ -337,24 +342,25 @@ namespace Xbim.FilterHelper
         /// <returns>bool, true = exclude</returns>
         public bool ObjFilter(CobieObject obj, CobieObject parent = null, string preDefinedType = null)
         {
+            bool exclude = false;
             if (!string.IsNullOrEmpty(obj.ExternalEntity))
             {
                 if (obj is Asset)
                 {
-                    bool exclude =  IfcProductFilter.ItemsFilter(obj.ExternalEntity);
+                    exclude =  IfcProductFilter.ItemsFilter(obj.ExternalEntity);
                     //check the element is not defined by a type which is excluded, by default if no type, then no element included
                     if (!exclude && (parent != null) && (parent is AssetType))
                     {
                         exclude = IfcTypeObjectFilter.ItemsFilter(parent.ExternalEntity, preDefinedType);
                     }
-                    return exclude;
+                    
                 }
                 else if (obj is AssetType) 
                 {
-                    return IfcTypeObjectFilter.ItemsFilter(obj.ExternalEntity, preDefinedType);
+                    exclude =  IfcTypeObjectFilter.ItemsFilter(obj.ExternalEntity, preDefinedType);
                 }
             }
-            return false;
+            return FlipResult ? !exclude : exclude;
         }
         //TODO: Check function below, see if it works!
         /// <summary>
@@ -364,22 +370,23 @@ namespace Xbim.FilterHelper
         /// <returns></returns>
         public bool ObjFilter(IfcObjectDefinition obj)
         {
+            bool exclude = false;
             if (obj is IfcProduct)
             {
-                bool exclude = IfcProductFilter.ItemsFilter(obj);
+                exclude = IfcProductFilter.ItemsFilter(obj);
                 //check the element is not defined by a type which is excluded, by default if no type, then no element included
                 if (!exclude)
                 {
                     IfcTypeObject objType = ((IfcProduct)obj).IsDefinedBy.OfType<IfcRelDefinesByType>().Select(rdbt => rdbt.RelatingType).First(); //assuming only one IfcRelDefinesByType
                     exclude = IfcTypeObjectFilter.ItemsFilter(objType);
                 }
-                return exclude;
+                
             }
             else if (obj is IfcTypeProduct)
             {
-                return IfcTypeObjectFilter.ItemsFilter(obj);
+                exclude = IfcTypeObjectFilter.ItemsFilter(obj);
             }
-            return false;
+            return FlipResult ? !exclude : exclude;
         }
         #endregion
 
