@@ -780,34 +780,34 @@ namespace Tests
             }
         }
 
-        [TestMethod]
-        public void FilterToXML ()
-        {
-            FileInfo filename = new FileInfo( @"d:\FiltersOut.xml");
-            FileInfo mergefilename = new FileInfo(@"d:\MergeFiltersOut.xml");
-            OutPutFilters outfilters = new OutPutFilters(null);
-            outfilters.IfcProductFilter.AddPreDefinedType("TEST", new string[] { "One", "Two" });
-            outfilters.SerializeXML(filename);
-            OutPutFilters mergefilters = new OutPutFilters(null);
-            mergefilters.IfcProductFilter.Items["IFCBEAM"] = true;
-            mergefilters.IfcProductFilter.Items["IFCBEAMSTANDARDCASE"] = true;
-            mergefilters.IfcProductFilter.AddPreDefinedType("TEST", new string[] { "THree", "Four" });
-            outfilters.Merge(mergefilters);
-            outfilters.SerializeXML(mergefilename);
+        //[TestMethod]
+        //public void FilterToXML ()
+        //{
+        //    FileInfo filename = new FileInfo( @"d:\FiltersOut.xml");
+        //    FileInfo mergefilename = new FileInfo(@"d:\MergeFiltersOut.xml");
+        //    OutPutFilters outfilters = new OutPutFilters(null);
+        //    outfilters.IfcProductFilter.AddPreDefinedType("TEST", new string[] { "One", "Two" });
+        //    outfilters.SerializeXML(filename);
+        //    OutPutFilters mergefilters = new OutPutFilters(null);
+        //    mergefilters.IfcProductFilter.Items["IFCBEAM"] = true;
+        //    mergefilters.IfcProductFilter.Items["IFCBEAMSTANDARDCASE"] = true;
+        //    mergefilters.IfcProductFilter.AddPreDefinedType("TEST", new string[] { "THree", "Four" });
+        //    outfilters.Merge(mergefilters);
+        //    outfilters.SerializeXML(mergefilename);
 
-            OutPutFilters infilters = OutPutFilters.DeserializeXML(mergefilename);
+        //    OutPutFilters infilters = OutPutFilters.DeserializeXML(mergefilename);
 
-            //Test JSON
-            FileInfo filenameJSon = new FileInfo(@"d:\FiltersOut.json");
-            infilters.SerializeJSON(filenameJSon);
-            OutPutFilters jsonfilters = OutPutFilters.DeserializeJSON(filenameJSon);
+        //    //Test JSON
+        //    FileInfo filenameJSon = new FileInfo(@"d:\FiltersOut.json");
+        //    infilters.SerializeJSON(filenameJSon);
+        //    OutPutFilters jsonfilters = OutPutFilters.DeserializeJSON(filenameJSon);
 
 
-            OutPutFilters rolefilters = new OutPutFilters();
-            RoleFilter reqRoles = RoleFilter.Architectural |  RoleFilter.Mechanical | RoleFilter.Electrical | RoleFilter.FireProtection | RoleFilter.Plumbing;
-            rolefilters.ApplyRoleFilters(reqRoles);
+        //    OutPutFilters rolefilters = new OutPutFilters();
+        //    RoleFilter reqRoles = RoleFilter.Architectural |  RoleFilter.Mechanical | RoleFilter.Electrical | RoleFilter.FireProtection | RoleFilter.Plumbing;
+        //    rolefilters.ApplyRoleFilters(reqRoles);
             
-        }
+        //}
 
         [DeploymentItem("ValidationFiles\\Lakeside_Restaurant.json")]
         [DeploymentItem("ValidationFiles\\Lakeside_Restaurant-stage6-COBie.json")]
