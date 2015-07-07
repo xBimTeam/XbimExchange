@@ -330,7 +330,9 @@ namespace Xbim.FilterHelper
                         result = false;
                 }
             }
-            return FlipResult ? !result : result; ;
+            //don't flip property sets as this excludes all the attributes, so we do not see attribute name exclusions as all property sets get excluded
+            //return FlipResult ? !result : result; 
+            return result;
         }
 
         /// <summary>
