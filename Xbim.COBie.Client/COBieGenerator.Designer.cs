@@ -238,7 +238,7 @@
             // StatusMsg
             // 
             this.StatusMsg.Name = "StatusMsg";
-            this.StatusMsg.Size = new System.Drawing.Size(207, 17);
+            this.StatusMsg.Size = new System.Drawing.Size(356, 17);
             this.StatusMsg.Spring = true;
             this.StatusMsg.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 

@@ -215,11 +215,10 @@ namespace Xbim.Client
                 string path = Path.GetDirectoryName(parameters.ModelFile);
                 string outputFile = Path.Combine(path, Path.ChangeExtension(fileName, parameters.ExcelType == ExcelTypeEnum.XLS ? ".xls" : ".xlsx"));
                 string logFile = Path.ChangeExtension(outputFile, ".log");
-                _worker.ReportProgress(0, string.Format("Creating file: {0}", logFile));
-                using (var log = new LogOutput(txtOutput, ref _worker))//File.CreateText(logFile)
+                _worker.ReportProgress(0, string.Format("Creating validation log file: {0}", logFile));
+                using (var log = File.CreateText(logFile))
                 { 
                     facilityType.ValidateUK2012(log, true);
-                    //_worker.ReportProgress(0, string.Format("Validate file log: {0}", log.ToString())); 
                 }
                 _worker.ReportProgress(0, string.Format("Creating file: {0}", outputFile));
                 string msg;
@@ -246,12 +245,23 @@ namespace Xbim.Client
 
         private List<Facility> GenerateFacility(Params parameters)
         {
+            string fileExt = Path.GetExtension(parameters.ModelFile);
             var facilities = new List<Facility>();
             using (var model = new XbimModel())
             {
+                if ((fileExt.Equals(".xbim", StringComparison.OrdinalIgnoreCase)) ||
+                    (fileExt.Equals(".xbimf", StringComparison.OrdinalIgnoreCase))
+                   )
+                {
+                    model.Open(parameters.ModelFile, XbimExtensions.XbimDBAccess.Read, _worker.ReportProgress);
+                }
+                else
+                {
+                    var xbimFile = Path.ChangeExtension(parameters.ModelFile, "xbim");
+                    model.CreateFrom(parameters.ModelFile, xbimFile, _worker.ReportProgress, true, true);
 
-                var xbimFile = Path.ChangeExtension(parameters.ModelFile, "xbim");
-                model.CreateFrom(parameters.ModelFile, xbimFile, null, true, true);
+                }
+                
                 
                 var ifcToCoBieLiteUkExchanger = new IfcToCOBieLiteUkExchanger(model, facilities);
                 facilities = ifcToCoBieLiteUkExchanger.Convert();
@@ -282,7 +292,7 @@ namespace Xbim.Client
         private void btnBrowse_Click(object sender, EventArgs e)
         {
             OpenFileDialog dlg = new OpenFileDialog();
-            dlg.Filter = "All XBim Files|*.ifc;*.ifcxml;*.ifczip;*.xbim;*.xbimf|IFC Files|*.ifc;*.ifcxml;*.ifczip|Xbim Files|*.xbim|Xbim Federated Files|*.xbimf|XLS Files|*.xls";
+            dlg.Filter = "All XBim Files|*.ifc;*.ifcxml;*.ifczip;*.xbim;*.xbimf|IFC Files|*.ifc;*.ifcxml;*.ifczip|Xbim Files|*.xbim|Xbim Federated Files|*.xbimf"; //|XLS Files|*.xls
             dlg.Title = "Choose a source model file";
 
             dlg.CheckFileExists = true;
@@ -345,36 +355,32 @@ namespace Xbim.Client
             txtOutput.Clear();
         }
 
-    private class Params
-    {
-        public string ModelFile { get; set; }
-        public string TemplateFile { get; set; }
-        public ExcelTypeEnum ExcelType { get; set; }
-        public bool FlipFilter { get; set; }
-        public bool OpenExcel { get; set; }
-        public RoleFilter Roles { get; set; }
-    }
+        private class Params
+        {
+            public string ModelFile { get; set; }
+            public string TemplateFile { get; set; }
+            public ExcelTypeEnum ExcelType { get; set; }
+            public bool FlipFilter { get; set; }
+            public bool OpenExcel { get; set; }
+            public RoleFilter Roles { get; set; }
+        }
 
-    private class LogOutput : TextWriter
-    {
-        RichTextBox _txtBox = null;
-        BackgroundWorker _worker = null;
-        public LogOutput(RichTextBox txtBox, ref BackgroundWorker worker)
+        /// <summary>
+        /// Display notes on filter flip option
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void chkBoxFlipFilter_CheckedChanged(object sender, EventArgs e)
         {
-            _txtBox = txtBox;
-            _worker = worker;
+            if (chkBoxFlipFilter.Checked)
+            {
+                txtOutput.AppendText("Test purposes Only: Will export filtered items to excel workbook, ignoring property set filters to ensure property names are shown" + Environment.NewLine);
+            }
+            else
+            {
+                txtOutput.AppendText("Filter set to on" + Environment.NewLine);
+            }
         }
-        public override void Write(char value)
-        {
-            base.Write(value);
-            _worker.ReportProgress(0, value.ToString()); // When character data is written, append it to the text box.
-        }
-        public override Encoding Encoding
-        {
-            get { return System.Text.Encoding.UTF8; }
-        }
-    }
-
     
 
     }

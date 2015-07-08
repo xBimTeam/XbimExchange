@@ -223,7 +223,7 @@ namespace Xbim.Client
             this.btnClassFilter.Name = "btnClassFilter";
             this.btnClassFilter.Size = new System.Drawing.Size(75, 26);
             this.btnClassFilter.TabIndex = 21;
-            this.btnClassFilter.Text = "Class filter";
+            this.btnClassFilter.Text = "Filters";
             this.btnClassFilter.UseVisualStyleBackColor = true;
             // 
             // chkBoxFlipFilter
@@ -235,6 +235,7 @@ namespace Xbim.Client
             this.chkBoxFlipFilter.TabIndex = 22;
             this.chkBoxFlipFilter.Text = "Flip Filter";
             this.chkBoxFlipFilter.UseVisualStyleBackColor = true;
+            this.chkBoxFlipFilter.CheckedChanged += new System.EventHandler(this.chkBoxFlipFilter_CheckedChanged);
             // 
             // chkBoxOpenFile
             // 
