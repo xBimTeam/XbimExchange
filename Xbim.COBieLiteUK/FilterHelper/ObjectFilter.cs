@@ -116,16 +116,24 @@ namespace Xbim.FilterHelper
         /// <param name="ifcElement">string name of ifcElement</param>
         /// <param name="definedTypes">array of strings for the ifcElement predefinedtype enum property </param>
         /// <returns></returns>
-        public bool AddPreDefinedType(string ifcElement, string[] definedTypes)
+        public bool SetPreDefinedType(string ifcElement, string[] definedTypes)
         {
             ifcElement = ifcElement.ToUpper();
-            if (PreDefinedType.ContainsKey(ifcElement))
-            { 
-                return false;
-            }
-            else
+            try
             {
-                PreDefinedType.Add(ifcElement, definedTypes);
+                if (PreDefinedType.ContainsKey(ifcElement))
+                {
+                    PreDefinedType[ifcElement] = definedTypes;
+                    return true;
+                }
+                else
+                {
+                    PreDefinedType.Add(ifcElement, definedTypes);
+                }
+            }
+            catch (Exception)
+            {
+                return false;
             }
             return true;
         }

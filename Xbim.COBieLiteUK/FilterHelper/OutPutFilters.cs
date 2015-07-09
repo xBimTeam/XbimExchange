@@ -74,6 +74,16 @@ namespace Xbim.FilterHelper
         //[XmlIgnore][JsonIgnore]
         private Dictionary<RoleFilter, OutPutFilters> RolesFilterHolder { get; set; }
 
+        /// <summary>
+        /// Nothing set in RolesFilterHolder
+        /// </summary>
+        public bool DefaultsNotSet 
+        {
+            get
+            {
+                return RolesFilterHolder.Count == 0;
+            }
+        }
         #endregion
 
         #region Constructor methods
@@ -466,6 +476,50 @@ namespace Xbim.FilterHelper
             OutPutFilters defaultPropFilters = new OutPutFilters(null, ImportSet.PropertyFilters);
             this.Merge(defaultPropFilters);
         }
+
+
+        /// <summary>
+        /// Fill RolesFilterHolder with default values
+        /// </summary>
+        public void FillDefaultRolesFilterHolder()
+        {
+            foreach (RoleFilter role in Enum.GetValues(typeof(RoleFilter)))
+            {
+                string mergeFile = GetDefaultRoleFile(role);
+                if (!string.IsNullOrEmpty(mergeFile))
+                {
+                    RolesFilterHolder[role] = new OutPutFilters(mergeFile);
+                }
+            }
+        }
+
+        /// <summary>
+        /// Get stored role filter
+        /// </summary>
+        /// <param name="role">RoleFilter with single flag(role) set</param>
+        /// <returns>OutPutFilters</returns>
+        public OutPutFilters GetRoleFilter(RoleFilter role)
+        {
+            if ((role & (role - 1)) != 0)
+            {
+                throw new ArgumentException("More than one flag set on role");
+            }
+            if (RolesFilterHolder.ContainsKey(role))
+            {
+                return RolesFilterHolder[role];
+            }
+            else
+            {   //load defaults
+                string mergeFile = GetDefaultRoleFile(role);
+                if (!string.IsNullOrEmpty(mergeFile))
+                {
+                    RolesFilterHolder[role] = new OutPutFilters(mergeFile);
+                }
+            }
+            return RolesFilterHolder[role];
+        }
+
+        
 
         /// <summary>
         /// Add filter for a role, used by ApplyRoleFilters for none default filters

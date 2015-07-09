@@ -20,6 +20,7 @@ namespace Xbim.Client
     public partial class COBieLiteGenerator : Form
     {
         BackgroundWorker _worker;
+        OutPutFilters _assetfilters = new OutPutFilters(); //empty role filter
         
 
         public COBieLiteGenerator()
@@ -223,12 +224,12 @@ namespace Xbim.Client
                 _worker.ReportProgress(0, string.Format("Creating file: {0}", outputFile));
                 string msg;
                 //set attribute name filters
-                OutPutFilters assetfilters = new OutPutFilters();
-                assetfilters.ApplyRoleFilters(parameters.Roles);
-                assetfilters.FlipResult = parameters.FlipFilter;
+                
+                _assetfilters.ApplyRoleFilters(parameters.Roles);
+                _assetfilters.FlipResult = parameters.FlipFilter;
                 using (var file = File.Create(outputFile))
                 {
-                    facilityType.WriteCobie(file, parameters.ExcelType, out msg, assetfilters, parameters.TemplateFile, true);
+                    facilityType.WriteCobie(file, parameters.ExcelType, out msg, _assetfilters, parameters.TemplateFile, true);
                 }
                 _worker.ReportProgress(0, msg);
                 if (parameters.OpenExcel)
@@ -379,6 +380,23 @@ namespace Xbim.Client
             else
             {
                 txtOutput.AppendText("Filter set to on" + Environment.NewLine);
+            }
+        }
+
+        private void btnClassFilter_Click(object sender, EventArgs e)
+        {
+            
+            //set the defaults if not already set
+            if (_assetfilters.DefaultsNotSet)
+            {
+                _assetfilters.FillDefaultRolesFilterHolder();
+            }
+
+            FilterDlg filterDlg = new FilterDlg(_assetfilters);
+
+            if (filterDlg.ShowDialog() == DialogResult.OK)
+            {
+                _assetfilters = filterDlg.RolesFilters;
             }
         }
     

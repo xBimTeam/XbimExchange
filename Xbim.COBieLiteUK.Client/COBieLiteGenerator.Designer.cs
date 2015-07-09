@@ -225,6 +225,7 @@ namespace Xbim.Client
             this.btnClassFilter.TabIndex = 21;
             this.btnClassFilter.Text = "Filters";
             this.btnClassFilter.UseVisualStyleBackColor = true;
+            this.btnClassFilter.Click += new System.EventHandler(this.btnClassFilter_Click);
             // 
             // chkBoxFlipFilter
             // 
