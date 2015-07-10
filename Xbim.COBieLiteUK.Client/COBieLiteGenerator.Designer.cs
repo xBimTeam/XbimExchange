@@ -48,6 +48,7 @@ namespace Xbim.Client
             this.btnClassFilter = new System.Windows.Forms.Button();
             this.chkBoxFlipFilter = new System.Windows.Forms.CheckBox();
             this.chkBoxOpenFile = new System.Windows.Forms.CheckBox();
+            this.btnMergeFilter = new System.Windows.Forms.Button();
             this.groupBox1.SuspendLayout();
             this.statusStrip1.SuspendLayout();
             this.SuspendLayout();
@@ -223,14 +224,14 @@ namespace Xbim.Client
             this.btnClassFilter.Name = "btnClassFilter";
             this.btnClassFilter.Size = new System.Drawing.Size(75, 26);
             this.btnClassFilter.TabIndex = 21;
-            this.btnClassFilter.Text = "Filters";
+            this.btnClassFilter.Text = "Set Filters";
             this.btnClassFilter.UseVisualStyleBackColor = true;
             this.btnClassFilter.Click += new System.EventHandler(this.btnClassFilter_Click);
             // 
             // chkBoxFlipFilter
             // 
             this.chkBoxFlipFilter.AutoSize = true;
-            this.chkBoxFlipFilter.Location = new System.Drawing.Point(438, 130);
+            this.chkBoxFlipFilter.Location = new System.Drawing.Point(438, 170);
             this.chkBoxFlipFilter.Name = "chkBoxFlipFilter";
             this.chkBoxFlipFilter.Size = new System.Drawing.Size(67, 17);
             this.chkBoxFlipFilter.TabIndex = 22;
@@ -241,18 +242,29 @@ namespace Xbim.Client
             // chkBoxOpenFile
             // 
             this.chkBoxOpenFile.AutoSize = true;
-            this.chkBoxOpenFile.Location = new System.Drawing.Point(438, 154);
+            this.chkBoxOpenFile.Location = new System.Drawing.Point(438, 194);
             this.chkBoxOpenFile.Name = "chkBoxOpenFile";
             this.chkBoxOpenFile.Size = new System.Drawing.Size(81, 17);
             this.chkBoxOpenFile.TabIndex = 23;
             this.chkBoxOpenFile.Text = "Open Excel";
             this.chkBoxOpenFile.UseVisualStyleBackColor = true;
             // 
+            // btnMergeFilter
+            // 
+            this.btnMergeFilter.Location = new System.Drawing.Point(438, 129);
+            this.btnMergeFilter.Name = "btnMergeFilter";
+            this.btnMergeFilter.Size = new System.Drawing.Size(75, 23);
+            this.btnMergeFilter.TabIndex = 24;
+            this.btnMergeFilter.Text = "Applied Filter";
+            this.btnMergeFilter.UseVisualStyleBackColor = true;
+            this.btnMergeFilter.Click += new System.EventHandler(this.btnMergeFilter_Click);
+            // 
             // COBieLiteGenerator
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(527, 376);
+            this.Controls.Add(this.btnMergeFilter);
             this.Controls.Add(this.chkBoxOpenFile);
             this.Controls.Add(this.chkBoxFlipFilter);
             this.Controls.Add(this.btnClassFilter);
@@ -263,6 +275,9 @@ namespace Xbim.Client
             this.Controls.Add(this.btnGenerate);
             this.Controls.Add(this.checkedListRoles);
             this.Controls.Add(this.groupBox1);
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
+            this.MaximizeBox = false;
+            this.MinimizeBox = false;
             this.Name = "COBieLiteGenerator";
             this.Text = "XBim COBieLiteUK Test Harness";
             this.Load += new System.EventHandler(this.COBieLiteGenerator_Load);
@@ -296,6 +311,7 @@ namespace Xbim.Client
         private System.Windows.Forms.Button btnClassFilter;
         private System.Windows.Forms.CheckBox chkBoxFlipFilter;
         private System.Windows.Forms.CheckBox chkBoxOpenFile;
+        private System.Windows.Forms.Button btnMergeFilter;
     }
 }
 

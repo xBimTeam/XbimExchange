@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FilterTab));
             this.label3 = new System.Windows.Forms.Label();
             this.chkListBoxAss = new System.Windows.Forms.CheckedListBox();
             this.label2 = new System.Windows.Forms.Label();
@@ -37,27 +38,32 @@
             this.label4 = new System.Windows.Forms.Label();
             this.tabPropertyCtr = new System.Windows.Forms.TabControl();
             this.tabCommon = new System.Windows.Forms.TabPage();
-            this.listViewEqTo = new Xbim.Client.EditableList();
             this.tabZone = new System.Windows.Forms.TabPage();
-            this.listViewStartWith = new Xbim.Client.EditableList();
             this.tabType = new System.Windows.Forms.TabPage();
-            this.listViewContains = new Xbim.Client.EditableList();
             this.tabSpace = new System.Windows.Forms.TabPage();
-            this.listViewPSet = new Xbim.Client.EditableList();
-            this.listViewDefinedTypes = new Xbim.Client.EditableList();
-            this.label5 = new System.Windows.Forms.Label();
-            this.editableList1 = new Xbim.Client.EditableList();
-            this.editableList2 = new Xbim.Client.EditableList();
-            this.editableList3 = new Xbim.Client.EditableList();
             this.tabFloor = new System.Windows.Forms.TabPage();
             this.tabFacility = new System.Windows.Forms.TabPage();
             this.tabSpare = new System.Windows.Forms.TabPage();
             this.tabComponent = new System.Windows.Forms.TabPage();
+            this.label5 = new System.Windows.Forms.Label();
+            this.pSetFiltersCommon = new Xbim.Client.PropertySetFilters();
+            this.pSetFiltersZone = new Xbim.Client.PropertySetFilters();
+            this.pSetFiltersType = new Xbim.Client.PropertySetFilters();
+            this.pSetFiltersSpace = new Xbim.Client.PropertySetFilters();
+            this.pSetFiltersFloor = new Xbim.Client.PropertySetFilters();
+            this.pSetFiltersFacility = new Xbim.Client.PropertySetFilters();
+            this.pSetFiltersSpare = new Xbim.Client.PropertySetFilters();
+            this.pSetFiltersComponent = new Xbim.Client.PropertySetFilters();
+            this.listViewDefinedTypes = new Xbim.Client.EditableList();
             this.tabPropertyCtr.SuspendLayout();
             this.tabCommon.SuspendLayout();
             this.tabZone.SuspendLayout();
             this.tabType.SuspendLayout();
             this.tabSpace.SuspendLayout();
+            this.tabFloor.SuspendLayout();
+            this.tabFacility.SuspendLayout();
+            this.tabSpare.SuspendLayout();
+            this.tabComponent.SuspendLayout();
             this.SuspendLayout();
             // 
             // label3
@@ -66,9 +72,9 @@
             this.label3.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label3.Location = new System.Drawing.Point(617, 6);
             this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(151, 13);
+            this.label3.Size = new System.Drawing.Size(96, 13);
             this.label3.TabIndex = 13;
-            this.label3.Text = "Assembly Sheet Excludes";
+            this.label3.Text = "Assembly Sheet";
             // 
             // chkListBoxAss
             // 
@@ -86,9 +92,9 @@
             this.label2.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label2.Location = new System.Drawing.Point(273, 6);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(127, 13);
+            this.label2.Size = new System.Drawing.Size(72, 13);
             this.label2.TabIndex = 11;
-            this.label2.Text = "Type Sheet Excludes";
+            this.label2.Text = "Type Sheet";
             // 
             // chkListBoxType
             // 
@@ -106,9 +112,9 @@
             this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label1.Location = new System.Drawing.Point(8, 6);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(162, 13);
+            this.label1.Size = new System.Drawing.Size(107, 13);
             this.label1.TabIndex = 9;
-            this.label1.Text = "Component Sheet Excludes";
+            this.label1.Text = "Component Sheet";
             // 
             // chkListBoxComp
             // 
@@ -143,88 +149,90 @@
             this.tabPropertyCtr.Location = new System.Drawing.Point(8, 287);
             this.tabPropertyCtr.Name = "tabPropertyCtr";
             this.tabPropertyCtr.SelectedIndex = 0;
-            this.tabPropertyCtr.Size = new System.Drawing.Size(801, 229);
+            this.tabPropertyCtr.Size = new System.Drawing.Size(801, 241);
             this.tabPropertyCtr.TabIndex = 17;
             // 
             // tabCommon
             // 
-            this.tabCommon.Controls.Add(this.editableList3);
-            this.tabCommon.Controls.Add(this.editableList2);
-            this.tabCommon.Controls.Add(this.editableList1);
-            this.tabCommon.Controls.Add(this.listViewEqTo);
+            this.tabCommon.Controls.Add(this.pSetFiltersCommon);
             this.tabCommon.Location = new System.Drawing.Point(4, 22);
             this.tabCommon.Name = "tabCommon";
             this.tabCommon.Padding = new System.Windows.Forms.Padding(3);
-            this.tabCommon.Size = new System.Drawing.Size(793, 203);
+            this.tabCommon.Size = new System.Drawing.Size(793, 215);
             this.tabCommon.TabIndex = 0;
             this.tabCommon.Text = "Common";
             this.tabCommon.UseVisualStyleBackColor = true;
             // 
-            // listViewEqTo
-            // 
-            this.listViewEqTo.Location = new System.Drawing.Point(3, 22);
-            this.listViewEqTo.Name = "listViewEqTo";
-            this.listViewEqTo.Size = new System.Drawing.Size(190, 175);
-            this.listViewEqTo.TabIndex = 0;
-            // 
             // tabZone
             // 
-            this.tabZone.Controls.Add(this.listViewStartWith);
+            this.tabZone.Controls.Add(this.pSetFiltersZone);
             this.tabZone.Location = new System.Drawing.Point(4, 22);
             this.tabZone.Name = "tabZone";
             this.tabZone.Padding = new System.Windows.Forms.Padding(3);
-            this.tabZone.Size = new System.Drawing.Size(793, 203);
+            this.tabZone.Size = new System.Drawing.Size(793, 215);
             this.tabZone.TabIndex = 1;
             this.tabZone.Text = "Zone";
             this.tabZone.UseVisualStyleBackColor = true;
             // 
-            // listViewStartWith
-            // 
-            this.listViewStartWith.Location = new System.Drawing.Point(3, 6);
-            this.listViewStartWith.Name = "listViewStartWith";
-            this.listViewStartWith.Size = new System.Drawing.Size(289, 191);
-            this.listViewStartWith.TabIndex = 0;
-            // 
             // tabType
             // 
-            this.tabType.Controls.Add(this.listViewContains);
+            this.tabType.Controls.Add(this.pSetFiltersType);
             this.tabType.Location = new System.Drawing.Point(4, 22);
             this.tabType.Name = "tabType";
-            this.tabType.Size = new System.Drawing.Size(793, 203);
+            this.tabType.Size = new System.Drawing.Size(793, 215);
             this.tabType.TabIndex = 2;
             this.tabType.Text = "Type";
             this.tabType.UseVisualStyleBackColor = true;
             // 
-            // listViewContains
-            // 
-            this.listViewContains.Location = new System.Drawing.Point(3, 6);
-            this.listViewContains.Name = "listViewContains";
-            this.listViewContains.Size = new System.Drawing.Size(289, 191);
-            this.listViewContains.TabIndex = 0;
-            // 
             // tabSpace
             // 
-            this.tabSpace.Controls.Add(this.listViewPSet);
+            this.tabSpace.Controls.Add(this.pSetFiltersSpace);
             this.tabSpace.Location = new System.Drawing.Point(4, 22);
             this.tabSpace.Name = "tabSpace";
-            this.tabSpace.Size = new System.Drawing.Size(793, 203);
+            this.tabSpace.Size = new System.Drawing.Size(793, 215);
             this.tabSpace.TabIndex = 3;
             this.tabSpace.Text = "Space";
             this.tabSpace.UseVisualStyleBackColor = true;
             // 
-            // listViewPSet
+            // tabFloor
             // 
-            this.listViewPSet.Location = new System.Drawing.Point(3, 6);
-            this.listViewPSet.Name = "listViewPSet";
-            this.listViewPSet.Size = new System.Drawing.Size(289, 191);
-            this.listViewPSet.TabIndex = 0;
+            this.tabFloor.Controls.Add(this.pSetFiltersFloor);
+            this.tabFloor.Location = new System.Drawing.Point(4, 22);
+            this.tabFloor.Name = "tabFloor";
+            this.tabFloor.Size = new System.Drawing.Size(793, 215);
+            this.tabFloor.TabIndex = 4;
+            this.tabFloor.Text = "Floor";
+            this.tabFloor.UseVisualStyleBackColor = true;
             // 
-            // listViewDefinedTypes
+            // tabFacility
             // 
-            this.listViewDefinedTypes.Location = new System.Drawing.Point(276, 185);
-            this.listViewDefinedTypes.Name = "listViewDefinedTypes";
-            this.listViewDefinedTypes.Size = new System.Drawing.Size(259, 66);
-            this.listViewDefinedTypes.TabIndex = 16;
+            this.tabFacility.Controls.Add(this.pSetFiltersFacility);
+            this.tabFacility.Location = new System.Drawing.Point(4, 22);
+            this.tabFacility.Name = "tabFacility";
+            this.tabFacility.Size = new System.Drawing.Size(793, 215);
+            this.tabFacility.TabIndex = 5;
+            this.tabFacility.Text = "Facility";
+            this.tabFacility.UseVisualStyleBackColor = true;
+            // 
+            // tabSpare
+            // 
+            this.tabSpare.Controls.Add(this.pSetFiltersSpare);
+            this.tabSpare.Location = new System.Drawing.Point(4, 22);
+            this.tabSpare.Name = "tabSpare";
+            this.tabSpare.Size = new System.Drawing.Size(793, 215);
+            this.tabSpare.TabIndex = 6;
+            this.tabSpare.Text = "Spare";
+            this.tabSpare.UseVisualStyleBackColor = true;
+            // 
+            // tabComponent
+            // 
+            this.tabComponent.Controls.Add(this.pSetFiltersComponent);
+            this.tabComponent.Location = new System.Drawing.Point(4, 22);
+            this.tabComponent.Name = "tabComponent";
+            this.tabComponent.Size = new System.Drawing.Size(793, 215);
+            this.tabComponent.TabIndex = 7;
+            this.tabComponent.Text = "Component";
+            this.tabComponent.UseVisualStyleBackColor = true;
             // 
             // label5
             // 
@@ -236,62 +244,70 @@
             this.label5.TabIndex = 18;
             this.label5.Text = "Property Excludes";
             // 
-            // editableList1
+            // pSetFiltersCommon
             // 
-            this.editableList1.Location = new System.Drawing.Point(198, 22);
-            this.editableList1.Name = "editableList1";
-            this.editableList1.Size = new System.Drawing.Size(190, 175);
-            this.editableList1.TabIndex = 1;
+            this.pSetFiltersCommon.Location = new System.Drawing.Point(4, 4);
+            this.pSetFiltersCommon.Name = "pSetFiltersCommon";
+            this.pSetFiltersCommon.Size = new System.Drawing.Size(786, 209);
+            this.pSetFiltersCommon.TabIndex = 0;
             // 
-            // editableList2
+            // pSetFiltersZone
             // 
-            this.editableList2.Location = new System.Drawing.Point(395, 22);
-            this.editableList2.Name = "editableList2";
-            this.editableList2.Size = new System.Drawing.Size(190, 175);
-            this.editableList2.TabIndex = 2;
+            this.pSetFiltersZone.Location = new System.Drawing.Point(4, 4);
+            this.pSetFiltersZone.Name = "pSetFiltersZone";
+            this.pSetFiltersZone.Size = new System.Drawing.Size(786, 208);
+            this.pSetFiltersZone.TabIndex = 0;
             // 
-            // editableList3
+            // pSetFiltersType
             // 
-            this.editableList3.Location = new System.Drawing.Point(592, 22);
-            this.editableList3.Name = "editableList3";
-            this.editableList3.Size = new System.Drawing.Size(190, 175);
-            this.editableList3.TabIndex = 3;
+            this.pSetFiltersType.Location = new System.Drawing.Point(4, 4);
+            this.pSetFiltersType.Name = "pSetFiltersType";
+            this.pSetFiltersType.Size = new System.Drawing.Size(786, 208);
+            this.pSetFiltersType.TabIndex = 0;
             // 
-            // tabFloor
+            // pSetFiltersSpace
             // 
-            this.tabFloor.Location = new System.Drawing.Point(4, 22);
-            this.tabFloor.Name = "tabFloor";
-            this.tabFloor.Size = new System.Drawing.Size(793, 203);
-            this.tabFloor.TabIndex = 4;
-            this.tabFloor.Text = "Floor";
-            this.tabFloor.UseVisualStyleBackColor = true;
+            this.pSetFiltersSpace.Location = new System.Drawing.Point(4, 4);
+            this.pSetFiltersSpace.Name = "pSetFiltersSpace";
+            this.pSetFiltersSpace.Size = new System.Drawing.Size(786, 208);
+            this.pSetFiltersSpace.TabIndex = 0;
             // 
-            // tabFacility
+            // pSetFiltersFloor
             // 
-            this.tabFacility.Location = new System.Drawing.Point(4, 22);
-            this.tabFacility.Name = "tabFacility";
-            this.tabFacility.Size = new System.Drawing.Size(793, 203);
-            this.tabFacility.TabIndex = 5;
-            this.tabFacility.Text = "Facility";
-            this.tabFacility.UseVisualStyleBackColor = true;
+            this.pSetFiltersFloor.Location = new System.Drawing.Point(4, 4);
+            this.pSetFiltersFloor.Name = "pSetFiltersFloor";
+            this.pSetFiltersFloor.Size = new System.Drawing.Size(786, 208);
+            this.pSetFiltersFloor.TabIndex = 0;
             // 
-            // tabSpare
+            // pSetFiltersFacility
             // 
-            this.tabSpare.Location = new System.Drawing.Point(4, 22);
-            this.tabSpare.Name = "tabSpare";
-            this.tabSpare.Size = new System.Drawing.Size(793, 203);
-            this.tabSpare.TabIndex = 6;
-            this.tabSpare.Text = "Spare";
-            this.tabSpare.UseVisualStyleBackColor = true;
+            this.pSetFiltersFacility.Location = new System.Drawing.Point(4, 4);
+            this.pSetFiltersFacility.Name = "pSetFiltersFacility";
+            this.pSetFiltersFacility.Size = new System.Drawing.Size(786, 208);
+            this.pSetFiltersFacility.TabIndex = 0;
             // 
-            // tabComponent
+            // pSetFiltersSpare
             // 
-            this.tabComponent.Location = new System.Drawing.Point(4, 22);
-            this.tabComponent.Name = "tabComponent";
-            this.tabComponent.Size = new System.Drawing.Size(793, 203);
-            this.tabComponent.TabIndex = 7;
-            this.tabComponent.Text = "Component";
-            this.tabComponent.UseVisualStyleBackColor = true;
+            this.pSetFiltersSpare.Location = new System.Drawing.Point(4, 4);
+            this.pSetFiltersSpare.Name = "pSetFiltersSpare";
+            this.pSetFiltersSpare.Size = new System.Drawing.Size(786, 208);
+            this.pSetFiltersSpare.TabIndex = 0;
+            // 
+            // pSetFiltersComponent
+            // 
+            this.pSetFiltersComponent.Location = new System.Drawing.Point(4, 4);
+            this.pSetFiltersComponent.Name = "pSetFiltersComponent";
+            this.pSetFiltersComponent.Size = new System.Drawing.Size(786, 208);
+            this.pSetFiltersComponent.TabIndex = 0;
+            // 
+            // listViewDefinedTypes
+            // 
+            this.listViewDefinedTypes.Items = ((System.Collections.Generic.List<string>)(resources.GetObject("listViewDefinedTypes.Items")));
+            this.listViewDefinedTypes.Key = null;
+            this.listViewDefinedTypes.Location = new System.Drawing.Point(276, 185);
+            this.listViewDefinedTypes.Name = "listViewDefinedTypes";
+            this.listViewDefinedTypes.Size = new System.Drawing.Size(259, 66);
+            this.listViewDefinedTypes.TabIndex = 16;
             // 
             // FilterTab
             // 
@@ -314,6 +330,10 @@
             this.tabZone.ResumeLayout(false);
             this.tabType.ResumeLayout(false);
             this.tabSpace.ResumeLayout(false);
+            this.tabFloor.ResumeLayout(false);
+            this.tabFacility.ResumeLayout(false);
+            this.tabSpare.ResumeLayout(false);
+            this.tabComponent.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -334,17 +354,18 @@
         private System.Windows.Forms.TabPage tabZone;
         private System.Windows.Forms.TabPage tabType;
         private System.Windows.Forms.TabPage tabSpace;
-        private EditableList listViewEqTo;
-        private EditableList listViewStartWith;
-        private EditableList listViewContains;
-        private EditableList listViewPSet;
         private System.Windows.Forms.Label label5;
-        private EditableList editableList3;
-        private EditableList editableList2;
-        private EditableList editableList1;
         private System.Windows.Forms.TabPage tabFloor;
         private System.Windows.Forms.TabPage tabFacility;
         private System.Windows.Forms.TabPage tabSpare;
         private System.Windows.Forms.TabPage tabComponent;
+        private PropertySetFilters pSetFiltersCommon;
+        private PropertySetFilters pSetFiltersZone;
+        private PropertySetFilters pSetFiltersType;
+        private PropertySetFilters pSetFiltersSpace;
+        private PropertySetFilters pSetFiltersFloor;
+        private PropertySetFilters pSetFiltersFacility;
+        private PropertySetFilters pSetFiltersSpare;
+        private PropertySetFilters pSetFiltersComponent;
     }
 }

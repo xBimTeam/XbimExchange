@@ -161,11 +161,19 @@ namespace Xbim.Client
             tooltip.SetToolTip(btnBrowse, "Select file to extract COBie from");
             tooltip.SetToolTip(btnBrowseTemplate, "Select template excel file");
             tooltip.SetToolTip(cmboxFiletype, "Select excel file extension to generate");
+            tooltip.SetToolTip(btnMergeFilter, "Filter To Apply, based on selected roles");
         }
 
         private void btnGenerate_Click(object sender, EventArgs e)
         {
-
+            if (chkBoxFlipFilter.Checked)
+            {
+                var result = MessageBox.Show("Flip Filter is ticked, this will show only excluded items, Do you want to continue", "Warning", MessageBoxButtons.YesNo);
+                if (result == System.Windows.Forms.DialogResult.No)
+                {
+                    return;
+                }
+            }
             btnGenerate.Enabled = false;
             CreateWorker();
             _worker.DoWork += CobieLiteUKWorker;
@@ -385,11 +393,13 @@ namespace Xbim.Client
 
         private void btnClassFilter_Click(object sender, EventArgs e)
         {
-            
+            DirectoryInfo dir = new DirectoryInfo(AppDomain.CurrentDomain.BaseDirectory);
             //set the defaults if not already set
             if (_assetfilters.DefaultsNotSet)
             {
-                _assetfilters.FillDefaultRolesFilterHolder();
+                
+                _assetfilters.FillRolesFilterHolderFromDir(dir);
+                //_assetfilters.FillDefaultRolesFilterHolder();
             }
 
             FilterDlg filterDlg = new FilterDlg(_assetfilters);
@@ -397,7 +407,17 @@ namespace Xbim.Client
             if (filterDlg.ShowDialog() == DialogResult.OK)
             {
                 _assetfilters = filterDlg.RolesFilters;
+                _assetfilters.WriteXMLRolesFilterHolderToDir(dir);
             }
+        }
+
+        private void btnMergeFilter_Click(object sender, EventArgs e)
+        {
+            RoleFilter roles = SetRoles();
+            _assetfilters.ApplyRoleFilters(roles);
+            FilterDlg filterDlg = new FilterDlg(_assetfilters, true, roles);
+            //read only
+            filterDlg.ShowDialog();
         }
     
 

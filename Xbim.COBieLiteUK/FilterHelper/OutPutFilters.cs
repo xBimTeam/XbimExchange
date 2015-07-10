@@ -485,10 +485,59 @@ namespace Xbim.FilterHelper
         {
             foreach (RoleFilter role in Enum.GetValues(typeof(RoleFilter)))
             {
-                string mergeFile = GetDefaultRoleFile(role);
-                if (!string.IsNullOrEmpty(mergeFile))
+                string roleFile = GetDefaultRoleFile(role);
+                if (!string.IsNullOrEmpty(roleFile))
                 {
-                    RolesFilterHolder[role] = new OutPutFilters(mergeFile);
+                    RolesFilterHolder[role] = new OutPutFilters(roleFile);
+                }
+            }
+        }
+
+
+        /// <summary>
+        /// Fill FilterHolder From Directory, if no file use defaults config files in assembly
+        /// </summary>
+        /// <param name="dir">DirectoryInfo</param>
+        public void FillRolesFilterHolderFromDir(DirectoryInfo dir)
+        {
+            if (dir.Exists)
+            {
+                foreach (RoleFilter role in Enum.GetValues(typeof(RoleFilter)))
+                {
+
+
+                    string fileName = Path.Combine(dir.FullName, role.ToString() + "Filters.xml");
+                    FileInfo fileInfo = new FileInfo(fileName);
+                    if (fileInfo.Exists)
+                    {
+                        RolesFilterHolder[role] = DeserializeXML(fileInfo);
+                    }
+                    else
+                    {
+                        string roleFile = GetDefaultRoleFile(role);
+                        if (!string.IsNullOrEmpty(roleFile))
+                        {
+                            RolesFilterHolder[role] = new OutPutFilters(roleFile);
+                        }
+                    }
+                }
+            }
+
+        }
+
+        /// <summary>
+        /// Read in xml roleFilter files on passed directory
+        /// </summary>
+        /// <param name="dir">DirectoryInfo</param>
+        public void WriteXMLRolesFilterHolderToDir(DirectoryInfo dir)
+        {
+            if (dir.Exists)
+            {
+                foreach (var item in RolesFilterHolder)
+                {
+                    string fileName = Path.Combine(dir.FullName, item.Key.ToString() + "Filters.xml");
+                    FileInfo fileInfo = new FileInfo(fileName);
+                    item.Value.SerializeXML(fileInfo);
                 }
             }
         }

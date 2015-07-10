@@ -30,7 +30,7 @@
         {
             this.add = new System.Windows.Forms.Button();
             this.remove = new System.Windows.Forms.Button();
-            this.editlistView = new Xbim.Client.EditListView();
+            this.editlistView = new System.Windows.Forms.ListView();
             this.columnHeader1 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.SuspendLayout();
             // 
@@ -59,7 +59,6 @@
             this.editlistView.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
             this.columnHeader1});
             this.editlistView.HeaderStyle = System.Windows.Forms.ColumnHeaderStyle.None;
-            this.editlistView.Key = null;
             this.editlistView.LabelEdit = true;
             this.editlistView.Location = new System.Drawing.Point(0, 0);
             this.editlistView.MultiSelect = false;
@@ -69,7 +68,6 @@
             this.editlistView.TabIndex = 17;
             this.editlistView.UseCompatibleStateImageBehavior = false;
             this.editlistView.View = System.Windows.Forms.View.Details;
-            this.editlistView.Leave += new System.EventHandler(this.editlistView_Leave);
             // 
             // columnHeader1
             // 
@@ -95,6 +93,6 @@
         private System.Windows.Forms.ColumnHeader columnHeader1;
         private System.Windows.Forms.Button add;
         private System.Windows.Forms.Button remove;
-        private EditListView editlistView;
+        private System.Windows.Forms.ListView editlistView;
     }
 }

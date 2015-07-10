@@ -25,7 +25,7 @@ namespace Xbim.FilterHelper
         public SerializableDictionary<string, bool> Items { get; set; }
 
         /// <summary>
-        /// keyed by IfcElement to element property PredefinedType
+        /// keyed by IfcElement to element property PredefinedType to include list
         /// </summary>
         public SerializableDictionary<string, string[]> PreDefinedType { get; set; }
 
@@ -169,7 +169,7 @@ namespace Xbim.FilterHelper
                 )
             {
                 preDefinedType = preDefinedType.ToUpper();
-                ExcludeDefinedType = PreDefinedType[testStr].Contains(preDefinedType);
+                ExcludeDefinedType = !PreDefinedType[testStr].Contains(preDefinedType);
             }
 
             return (ItemsToExclude.Contains(testStr) || ExcludeDefinedType);
@@ -198,7 +198,7 @@ namespace Xbim.FilterHelper
 
                     var objPreDefValue = objPreDefinedProp.GetValue(obj).ToString();
 
-                    result = PreDefinedType[objString].Contains(objPreDefValue);
+                    result = !PreDefinedType[objString].Contains(objPreDefValue);
                 }
             }
             return result;

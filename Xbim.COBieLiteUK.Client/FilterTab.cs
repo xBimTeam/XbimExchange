@@ -14,30 +14,59 @@ namespace Xbim.Client
 {
     public partial class FilterTab : UserControl
     {
-        OutPutFilters Filter = null;
-        EditListView _listview, _eqTo, _startWidth, _containsText, _pSetEqTo;
-        
-        public FilterTab(OutPutFilters filter)
+        private OutPutFilters Filter = null;
+        private PropertySetFilters _common, _zone, _type, _space, _floor, _facility, _spare, _component;
+        public bool ReadOnly { get; private set; }
+
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        /// <param name="filter">OutPutFilters</param>
+        public FilterTab(OutPutFilters filter, bool readOnly = false)
         {
             Filter = filter;
+            ReadOnly = readOnly;
             InitializeComponent();
-            _listview = (EditListView)listViewDefinedTypes.Controls.Find("editlistView", false).FirstOrDefault();
-            _listview.UpdatedListView += SetPreDefinedTypes;
-            _eqTo = (EditListView)listViewEqTo.Controls.Find("editlistView", false).FirstOrDefault();
+            listViewDefinedTypes.UpdatedListView += SetPreDefinedTypes;
+            if (readOnly)
+            {
+                listViewDefinedTypes.SetReadOnly(); 
+            }
+            _common = (PropertySetFilters)tabPropertyCtr.TabPages["tabCommon"].Controls["pSetFiltersCommon"];
+            _zone = (PropertySetFilters)tabPropertyCtr.TabPages["tabZone"].Controls["pSetFiltersZone"];
+            _type = (PropertySetFilters)tabPropertyCtr.TabPages["tabType"].Controls["pSetFiltersType"];
+            _space = (PropertySetFilters)tabPropertyCtr.TabPages["tabSpace"].Controls["pSetFiltersSpace"];
+            _floor = (PropertySetFilters)tabPropertyCtr.TabPages["tabFloor"].Controls["pSetFiltersFloor"];
+            _facility = (PropertySetFilters)tabPropertyCtr.TabPages["tabFacility"].Controls["pSetFiltersFacility"];
+            _spare = (PropertySetFilters)tabPropertyCtr.TabPages["tabSpare"].Controls["pSetFiltersSpare"];
+            _component = (PropertySetFilters)tabPropertyCtr.TabPages["tabComponent"].Controls["pSetFiltersComponent"];
 
-            _startWidth = (EditListView)listViewStartWith.Controls.Find("editlistView", false).FirstOrDefault();
-
-            _containsText = (EditListView)listViewContains.Controls.Find("editlistView", false).FirstOrDefault();
-
-            _pSetEqTo = (EditListView)listViewPSet.Controls.Find("editlistView", false).FirstOrDefault();
+            SetUpPropertNameLists(_common, filter.CommonFilter);
+            SetUpPropertNameLists(_zone, filter.ZoneFilter);
+            SetUpPropertNameLists(_type, filter.TypeFilter);
+            SetUpPropertNameLists(_space, filter.SpaceFilter);
+            SetUpPropertNameLists(_floor, filter.FloorFilter);
+            SetUpPropertNameLists(_facility, filter.FacilityFilter);
+            SetUpPropertNameLists(_spare, filter.SpareFilter);
+            SetUpPropertNameLists(_component, filter.ComponentFilter);
 
             SetUpObjectsList(chkListBoxComp, filter.IfcProductFilter.Items);
             SetUpObjectsList(chkListBoxType, filter.IfcTypeObjectFilter.Items);
             SetUpObjectsList(chkListBoxAss, filter.IfcAssemblyFilter.Items);
-            SetUpPropertyNameLists();
-            
+
+            if (readOnly)
+            {
+                chkListBoxComp.ItemCheck += new ItemCheckEventHandler(this.chkList_OnItemCheck);
+                chkListBoxType.ItemCheck += new ItemCheckEventHandler(this.chkList_OnItemCheck);
+                chkListBoxAss.ItemCheck += new ItemCheckEventHandler(this.chkList_OnItemCheck); 
+            }
         }
 
+        /// <summary>
+        /// Set Up Object Lists
+        /// </summary>
+        /// <param name="listbox">CheckedListBox</param>
+        /// <param name="objs">Dictionary of string, bool></param>
         private void SetUpObjectsList(CheckedListBox listbox, Dictionary<string, bool> objs)
         {
             ((ListBox)listbox).DataSource = objs.Keys.ToList();
@@ -49,34 +78,47 @@ namespace Xbim.Client
                 if (objs[value]) listbox.SetItemChecked(i, true);
 
             }
+            //listbox.SelectionMode = ReadOnly ? SelectionMode.None : SelectionMode.One;
         }
 
-        private void SetUpPropertyNameLists()
+        /// <summary>
+        /// Set Up Property Name Exclusions
+        /// </summary>
+        /// <param name="pSetFilter">PropertySetFilters</param>
+        /// <param name="filter">PropertyFilter</param>
+        private void SetUpPropertNameLists(PropertySetFilters pSetFilter, PropertyFilter filter)
         {
-            foreach (var item in Filter.ZoneFilter.EqualTo)
-            {
-                _eqTo.Items.Add(item);
-            }
-            
+            pSetFilter.FillLists(filter, ReadOnly);
         }
 
+        /// <summary>
+        /// Change Index action
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void chkListBoxType_SelectedIndexChanged(object sender, EventArgs e)
         {
-            var selitem = chkListBoxType.Text; 
-            _listview.Key = selitem;
-            _listview.Items.Clear();
+            var selitem = chkListBoxType.Text;
+            listViewDefinedTypes.Key = selitem;
+            
             if (!string.IsNullOrEmpty(selitem) && (Filter.IfcTypeObjectFilter.PreDefinedType.Keys.Contains(selitem)))
             {
-                var value = Filter.IfcTypeObjectFilter.PreDefinedType[selitem];
-                foreach (var item in value)
-                {
-                    _listview.Items.Add(item);
-                }
+                listViewDefinedTypes.Items = Filter.IfcTypeObjectFilter.PreDefinedType[selitem].ToList();
                 
             }
             
         }
 
+        private void chkList_OnItemCheck(object sender, ItemCheckEventArgs e)
+        {
+            if (ReadOnly) e.NewValue = e.CurrentValue;
+        }
+
+        /// <summary>
+        /// PreDefinedType Action
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void SetPreDefinedTypes(object sender, ListUpdateEventArgs e)
         {
            
@@ -91,15 +133,93 @@ namespace Xbim.Client
 
         }
 
-        private void listBoxDefinedTypes_SelectedIndexChanged(object sender, EventArgs e)
+        /// <summary>
+        /// Save lists back to Filter Object
+        /// </summary>
+        /// <returns></returns>
+        public OutPutFilters Save()
         {
-            //foreach (ListViewItem item in listViewDefinedTypes.SelectedItems)
-            //{
-            //    item.BeginEdit();
-            //}
-            
-            //((ListViewItem)listBoxDefinedTypes.Items[listBoxDefinedTypes.SelectedIndex]).BeginEdit();
-            //((ListViewItem)listViewDefinedTypes.sel).BeginEdit();
+            SaveObjectsLists();
+            SavePropertyLists();
+            return Filter;
+
+        }
+
+        /// <summary>
+        /// Save Object Lists
+        /// </summary>
+        private void SaveObjectsLists()
+        {
+            //Note SetPreDefinedType save exit from list box as changes on type selection
+            foreach (CheckedListBox chkBoxList in new List<CheckedListBox>(){chkListBoxComp, chkListBoxType, chkListBoxAss })
+            {
+                for (int i = 0; i < chkBoxList.Items.Count; i++)
+                {
+                    switch (chkBoxList.Name)
+                    {
+                        case "chkListBoxComp":
+                            Filter.IfcProductFilter.Items[(string)chkBoxList.Items[i]] = chkBoxList.GetItemChecked(i);
+                            break;
+                        case "chkListBoxType":
+                            Filter.IfcTypeObjectFilter.Items[(string)chkBoxList.Items[i]] = chkBoxList.GetItemChecked(i);
+                            break;
+                        case "chkListBoxAss":
+                            Filter.IfcAssemblyFilter.Items[(string)chkBoxList.Items[i]] = chkBoxList.GetItemChecked(i);
+                            break;
+                        default:
+                            break;
+                    }
+                   
+                }
+            }
+        }
+
+
+        /// <summary>
+        /// Save property name exclusions back to filter object
+        /// </summary>
+        private void SavePropertyLists()
+        {
+            //Common
+            Filter.CommonFilter.EqualTo = _common.EqTo;
+            Filter.CommonFilter.StartWith = _common.StartWith;
+            Filter.CommonFilter.Contain = _common.ContainsTxt;
+            Filter.CommonFilter.PropertySetsEqualTo = _common.PSetEqTo;
+            //Zone
+            Filter.ZoneFilter.EqualTo = _zone.EqTo;
+            Filter.ZoneFilter.StartWith = _zone.StartWith;
+            Filter.ZoneFilter.Contain = _zone.ContainsTxt;
+            Filter.ZoneFilter.PropertySetsEqualTo = _zone.PSetEqTo;
+            //Type
+            Filter.TypeFilter.EqualTo = _type.EqTo;
+            Filter.TypeFilter.StartWith = _type.StartWith;
+            Filter.TypeFilter.Contain = _type.ContainsTxt;
+            Filter.TypeFilter.PropertySetsEqualTo = _type.PSetEqTo;
+            //Space
+            Filter.SpaceFilter.EqualTo = _space.EqTo;
+            Filter.SpaceFilter.StartWith = _space.StartWith;
+            Filter.SpaceFilter.Contain = _space.ContainsTxt;
+            Filter.SpaceFilter.PropertySetsEqualTo = _space.PSetEqTo;
+            //Floor
+            Filter.FloorFilter.EqualTo = _floor.EqTo;
+            Filter.FloorFilter.StartWith = _floor.StartWith;
+            Filter.FloorFilter.Contain = _floor.ContainsTxt;
+            Filter.FloorFilter.PropertySetsEqualTo = _floor.PSetEqTo;
+            //Facility
+            Filter.FacilityFilter.EqualTo = _facility.EqTo;
+            Filter.FacilityFilter.StartWith = _facility.StartWith;
+            Filter.FacilityFilter.Contain = _facility.ContainsTxt;
+            Filter.FacilityFilter.PropertySetsEqualTo = _facility.PSetEqTo;
+            //Spare
+            Filter.SpareFilter.EqualTo = _spare.EqTo;
+            Filter.SpareFilter.StartWith = _spare.StartWith;
+            Filter.SpareFilter.Contain = _spare.ContainsTxt;
+            Filter.SpareFilter.PropertySetsEqualTo = _spare.PSetEqTo;
+            //Component
+            Filter.ComponentFilter.EqualTo = _component.EqTo;
+            Filter.ComponentFilter.StartWith = _component.StartWith;
+            Filter.ComponentFilter.Contain = _component.ContainsTxt;
+            Filter.ComponentFilter.PropertySetsEqualTo = _component.PSetEqTo;
         }
 
         
