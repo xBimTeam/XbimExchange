@@ -133,7 +133,7 @@ namespace Xbim.FilterHelper
         public OutPutFilters(RoleFilter roles, Dictionary<RoleFilter, OutPutFilters> rolesFilter = null)
             : this()
         {
-            ApplyRoleFilters(roles, rolesFilter);
+            ApplyRoleFilters(roles, false, rolesFilter);
         }
 
         #endregion
@@ -379,15 +379,15 @@ namespace Xbim.FilterHelper
         /// filter on IfcObjectDefinition objects
         /// </summary>
         /// <param name="obj"></param>
-        /// <returns></returns>
-        public bool ObjFilter(IfcObjectDefinition obj)
+        /// <returns>bool true = exclude</returns>
+        public bool ObjFilter(IfcObjectDefinition obj, bool checkType = true)
         {
             bool exclude = false;
             if (obj is IfcProduct)
             {
                 exclude = IfcProductFilter.ItemsFilter(obj);
                 //check the element is not defined by a type which is excluded, by default if no type, then no element included
-                if (!exclude)
+                if (!exclude && checkType)
                 {
                     IfcTypeObject objType = ((IfcProduct)obj).IsDefinedBy.OfType<IfcRelDefinesByType>().Select(rdbt => rdbt.RelatingType).First(); //assuming only one IfcRelDefinesByType
                     exclude = IfcTypeObjectFilter.ItemsFilter(objType);
@@ -429,14 +429,14 @@ namespace Xbim.FilterHelper
         /// </summary>
         /// <param name="roles">MergeRoles, Flag enum with one or more roles</param>
         /// <param name="rolesFilter">Dictionary of roles to OutPutFilters to use for merge, overwrites current assigned dictionary</param>
-        public void ApplyRoleFilters(RoleFilter roles, Dictionary<RoleFilter, OutPutFilters> rolesFilter = null)
+        public void ApplyRoleFilters(RoleFilter roles, bool append = false, Dictionary<RoleFilter, OutPutFilters> rolesFilter = null)
         {
             if (rolesFilter != null)
             {
                 RolesFilterHolder = rolesFilter;
             }
 
-            bool init = !this.IsEmpty();
+            bool init = append ? !this.IsEmpty(): false;
             
             OutPutFilters mergeFilter = null;
             foreach (RoleFilter role in Enum.GetValues(typeof(RoleFilter)))
@@ -460,11 +460,11 @@ namespace Xbim.FilterHelper
                     {
                         if (!init)
                         {
-                            this.Copy(mergeFilter);
-                            init = true;
+                            this.Copy(mergeFilter); //start a fresh
+                            init = true;//want to merge on next loop iteration
                         }
+                        else
                         {
-
                             this.Merge(mergeFilter);
                         }
                     }
@@ -549,23 +549,43 @@ namespace Xbim.FilterHelper
         /// <returns>OutPutFilters</returns>
         public OutPutFilters GetRoleFilter(RoleFilter role)
         {
-            if ((role & (role - 1)) != 0)
+             if ((role & (role - 1)) != 0)
             {
                 throw new ArgumentException("More than one flag set on role");
             }
+           
             if (RolesFilterHolder.ContainsKey(role))
             {
                 return RolesFilterHolder[role];
             }
             else
             {   //load defaults
-                string mergeFile = GetDefaultRoleFile(role);
-                if (!string.IsNullOrEmpty(mergeFile))
+                var objFilter = GetDefaults(role);
+                if (objFilter != null)
                 {
-                    RolesFilterHolder[role] = new OutPutFilters(mergeFile);
+                    RolesFilterHolder[role] = objFilter;
                 }
             }
             return RolesFilterHolder[role];
+        }
+
+        /// <summary>
+        /// Get the default filters for a single role
+        /// </summary>
+        /// <param name="role">RoleFilter with single flag(role) set</param>
+        /// <returns>OutPutFilters</returns>
+        public static OutPutFilters GetDefaults(RoleFilter role)
+        {
+             if ((role & (role - 1)) != 0)
+            {
+                throw new ArgumentException("More than one flag set on role");
+            }
+             string filterFile = GetDefaultRoleFile(role);
+             if (!string.IsNullOrEmpty(filterFile))
+             {
+                 return new OutPutFilters(filterFile);
+             }
+             return null;
         }
 
         

@@ -8,6 +8,7 @@ using System.IO;
 using System.Linq;
 using Xbim.COBieLiteUK;
 using Xbim.Common.Logging;
+using Xbim.FilterHelper;
 using Xbim.Ifc2x3.ActorResource;
 using Xbim.Ifc2x3.Extensions;
 using Xbim.Ifc2x3.ExternalReferenceResource;
@@ -135,6 +136,8 @@ namespace XbimExchanger.IfcToCOBieLiteUK
 
         #region Filters
 
+        private OutPutFilters Filter  { get; set; }
+
         /// <summary>
         /// Included ifcElement types for components assets
         /// </summary>
@@ -202,10 +205,11 @@ namespace XbimExchanger.IfcToCOBieLiteUK
         /// </summary>
         /// <param name="model"></param>
         /// <param name="configurationFile"></param>
-        public CoBieLiteUkHelper(XbimModel model, string configurationFile = null)
+        public CoBieLiteUkHelper(XbimModel model, OutPutFilters filter = null, string configurationFile = null)
         {
             _configFileName = configurationFile;
-           
+            Filter = filter!= null ? filter : new OutPutFilters();
+
             _model = model;
             _creatingApplication = model.Header.CreatingApplication;
             //InitFilters(); //initialize filters
@@ -259,7 +263,7 @@ namespace XbimExchanger.IfcToCOBieLiteUK
         private void GetTypeMaps()
         {
 
-            var relDefinesByType = _model.Instances.OfType<IfcRelDefinesByType>().ToList();
+            var relDefinesByType = _model.Instances.OfType<IfcRelDefinesByType>().Where(r => !Filter.IfcTypeObjectFilter.ItemsFilter(r.RelatingType)).ToList();
             //creates a dictionary of uniqueness for type objects
             var propertySetHashes = new Dictionary<string,string>();
             var proxyTypesByKey = new Dictionary<string, XbimIfcProxyTypeObject>();
@@ -275,13 +279,13 @@ namespace XbimExchanger.IfcToCOBieLiteUK
 
             }
 
-            var assemblyParts = new HashSet<IfcObjectDefinition>(_model.Instances.OfType<IfcRelAggregates>().SelectMany(a => a.RelatedObjects));
+            var assemblyParts = new HashSet<IfcObjectDefinition>(_model.Instances.OfType<IfcRelAggregates>().Where(r => !Filter.ObjFilter(r.RelatingObject, false)).SelectMany(a => a.RelatedObjects.Where(obj => !Filter.ObjFilter(obj, false))));
             var grouping = relDefinesByType.GroupBy(k => proxyTypesByKey[GetTypeObjectHashString(k.RelatingType)],
                 kv => kv.RelatedObjects).ToList();
            
             foreach (var group in grouping)
             {
-                var allObjects = group.SelectMany(o => o).OfType<IfcElement>().Where(e=>!assemblyParts.Contains(e)).ToList();  
+                var allObjects = group.SelectMany(o => o).OfType<IfcElement>().Where(e => !assemblyParts.Contains(e) && !Filter.IfcProductFilter.ItemsFilter(e)).ToList();  
                 _definingTypeObjectMap.Add(group.Key,allObjects);
             }
             
@@ -302,7 +306,7 @@ namespace XbimExchanger.IfcToCOBieLiteUK
                 .Concat(_objectToTypeObjectMap.Keys.OfType<IfcElement>()).Distinct();
             //retrieve all the IfcElements from the model and exclude them if they are already classified or are a member of an IfcType
             var unCategorizedAssets = _model.Instances.OfType<IfcElement>()
-                .Where(t => !(t is IfcFeatureElement) && !assemblyParts.Contains(t))
+                .Where(t => !(t is IfcFeatureElement) && !assemblyParts.Contains(t) && !Filter.IfcProductFilter.ItemsFilter(t))
                 .Except(existingAssets);
             //convert to a Lookup with the key the type of the IfcElement and the value a list of IfcElements
             //if the object has a classification we use this to distinguish types
@@ -342,7 +346,7 @@ namespace XbimExchanger.IfcToCOBieLiteUK
             foreach (var assetRel in assetRels)
             {
                 foreach (var assetType in assetRel.RelatedObjects)
-                    if (assetType is IfcTypeObject) 
+                    if ((assetType is IfcTypeObject) && !Filter.IfcTypeObjectFilter.ItemsFilter(assetType))
                         AssetAsignments[(IfcTypeObject)assetType] = (IfcAsset)assetRel.RelatingGroup; 
             }
            

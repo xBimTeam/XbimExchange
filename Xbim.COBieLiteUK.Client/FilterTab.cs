@@ -41,6 +41,23 @@ namespace Xbim.Client
             _spare = (PropertySetFilters)tabPropertyCtr.TabPages["tabSpare"].Controls["pSetFiltersSpare"];
             _component = (PropertySetFilters)tabPropertyCtr.TabPages["tabComponent"].Controls["pSetFiltersComponent"];
 
+            Init(Filter);
+
+            if (readOnly)
+            {
+                chkListBoxComp.ItemCheck += new ItemCheckEventHandler(this.chkList_OnItemCheck);
+                chkListBoxType.ItemCheck += new ItemCheckEventHandler(this.chkList_OnItemCheck);
+                chkListBoxAss.ItemCheck += new ItemCheckEventHandler(this.chkList_OnItemCheck); 
+            }
+        }
+
+
+        /// <summary>
+        /// Set up control items
+        /// </summary>
+        /// <param name="filter">OutPutFilters</param>
+        private void Init (OutPutFilters filter)
+        {
             SetUpPropertNameLists(_common, filter.CommonFilter);
             SetUpPropertNameLists(_zone, filter.ZoneFilter);
             SetUpPropertNameLists(_type, filter.TypeFilter);
@@ -53,13 +70,6 @@ namespace Xbim.Client
             SetUpObjectsList(chkListBoxComp, filter.IfcProductFilter.Items);
             SetUpObjectsList(chkListBoxType, filter.IfcTypeObjectFilter.Items);
             SetUpObjectsList(chkListBoxAss, filter.IfcAssemblyFilter.Items);
-
-            if (readOnly)
-            {
-                chkListBoxComp.ItemCheck += new ItemCheckEventHandler(this.chkList_OnItemCheck);
-                chkListBoxType.ItemCheck += new ItemCheckEventHandler(this.chkList_OnItemCheck);
-                chkListBoxAss.ItemCheck += new ItemCheckEventHandler(this.chkList_OnItemCheck); 
-            }
         }
 
         /// <summary>
@@ -69,16 +79,38 @@ namespace Xbim.Client
         /// <param name="objs">Dictionary of string, bool></param>
         private void SetUpObjectsList(CheckedListBox listbox, Dictionary<string, bool> objs)
         {
+            
             ((ListBox)listbox).DataSource = objs.Keys.ToList();
             
             for (int i = 0; i < listbox.Items.Count; i++)
             {
                 string value = (string)listbox.Items[i];
 
-                if (objs[value]) listbox.SetItemChecked(i, true);
+                listbox.SetItemChecked(i, objs[value]);
 
             }
-            //listbox.SelectionMode = ReadOnly ? SelectionMode.None : SelectionMode.One;
+           
+        }
+
+        /// <summary>
+        /// Reset to the default resource config file
+        /// </summary>
+        private void SetDefault()
+        {
+            var name = this.Parent.Name;
+            RoleFilter role;
+
+            if (Enum.TryParse(name, out role))
+            {
+                var defaultFilter  = OutPutFilters.GetDefaults(role);
+                if (defaultFilter != null)
+                {
+                    Filter.Copy(defaultFilter);
+                    Init(Filter);
+                }
+            }
+
+
         }
 
         /// <summary>
@@ -109,6 +141,11 @@ namespace Xbim.Client
             
         }
 
+        /// <summary>
+        /// Catch item check event, if read only stop check by reassigning back to original state
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void chkList_OnItemCheck(object sender, ItemCheckEventArgs e)
         {
             if (ReadOnly) e.NewValue = e.CurrentValue;
@@ -220,6 +257,16 @@ namespace Xbim.Client
             Filter.ComponentFilter.StartWith = _component.StartWith;
             Filter.ComponentFilter.Contain = _component.ContainsTxt;
             Filter.ComponentFilter.PropertySetsEqualTo = _component.PSetEqTo;
+        }
+
+        /// <summary>
+        /// Set tab back to defaults held in resource config file for the tabs assigned role
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void btnSetDefaults_Click(object sender, EventArgs e)
+        {
+            SetDefault();
         }
 
         

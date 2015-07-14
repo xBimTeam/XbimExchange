@@ -37,11 +37,18 @@ namespace Xbim.Client
 
         public void FillLists(PropertyFilter psetFilter, bool readOnly = false)
         {
+            //clear lists
+            listViewEqTo.Items.Clear();
+            listViewStartWith.Items.Clear();
+            listViewContains.Items.Clear();
+            listViewPSetEqTo.Items.Clear();
 
+            //fill lists
             listViewEqTo.Items = psetFilter.EqualTo;
             listViewStartWith.Items = psetFilter.StartWith;
             listViewContains.Items = psetFilter.Contain;
             listViewPSetEqTo.Items = psetFilter.PropertySetsEqualTo;
+            //set read only
             if (readOnly)
             {
                 listViewEqTo.SetReadOnly();

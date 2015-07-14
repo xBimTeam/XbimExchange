@@ -38,23 +38,24 @@
             this.label4 = new System.Windows.Forms.Label();
             this.tabPropertyCtr = new System.Windows.Forms.TabControl();
             this.tabCommon = new System.Windows.Forms.TabPage();
-            this.tabZone = new System.Windows.Forms.TabPage();
-            this.tabType = new System.Windows.Forms.TabPage();
-            this.tabSpace = new System.Windows.Forms.TabPage();
-            this.tabFloor = new System.Windows.Forms.TabPage();
-            this.tabFacility = new System.Windows.Forms.TabPage();
-            this.tabSpare = new System.Windows.Forms.TabPage();
-            this.tabComponent = new System.Windows.Forms.TabPage();
-            this.label5 = new System.Windows.Forms.Label();
             this.pSetFiltersCommon = new Xbim.Client.PropertySetFilters();
+            this.tabZone = new System.Windows.Forms.TabPage();
             this.pSetFiltersZone = new Xbim.Client.PropertySetFilters();
+            this.tabType = new System.Windows.Forms.TabPage();
             this.pSetFiltersType = new Xbim.Client.PropertySetFilters();
+            this.tabSpace = new System.Windows.Forms.TabPage();
             this.pSetFiltersSpace = new Xbim.Client.PropertySetFilters();
+            this.tabFloor = new System.Windows.Forms.TabPage();
             this.pSetFiltersFloor = new Xbim.Client.PropertySetFilters();
+            this.tabFacility = new System.Windows.Forms.TabPage();
             this.pSetFiltersFacility = new Xbim.Client.PropertySetFilters();
+            this.tabSpare = new System.Windows.Forms.TabPage();
             this.pSetFiltersSpare = new Xbim.Client.PropertySetFilters();
+            this.tabComponent = new System.Windows.Forms.TabPage();
             this.pSetFiltersComponent = new Xbim.Client.PropertySetFilters();
+            this.label5 = new System.Windows.Forms.Label();
             this.listViewDefinedTypes = new Xbim.Client.EditableList();
+            this.btnSetDefaults = new System.Windows.Forms.Button();
             this.tabPropertyCtr.SuspendLayout();
             this.tabCommon.SuspendLayout();
             this.tabZone.SuspendLayout();
@@ -70,7 +71,7 @@
             // 
             this.label3.AutoSize = true;
             this.label3.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label3.Location = new System.Drawing.Point(617, 6);
+            this.label3.Location = new System.Drawing.Point(543, 6);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(96, 13);
             this.label3.TabIndex = 13;
@@ -163,6 +164,13 @@
             this.tabCommon.Text = "Common";
             this.tabCommon.UseVisualStyleBackColor = true;
             // 
+            // pSetFiltersCommon
+            // 
+            this.pSetFiltersCommon.Location = new System.Drawing.Point(4, 4);
+            this.pSetFiltersCommon.Name = "pSetFiltersCommon";
+            this.pSetFiltersCommon.Size = new System.Drawing.Size(786, 209);
+            this.pSetFiltersCommon.TabIndex = 0;
+            // 
             // tabZone
             // 
             this.tabZone.Controls.Add(this.pSetFiltersZone);
@@ -174,6 +182,13 @@
             this.tabZone.Text = "Zone";
             this.tabZone.UseVisualStyleBackColor = true;
             // 
+            // pSetFiltersZone
+            // 
+            this.pSetFiltersZone.Location = new System.Drawing.Point(4, 4);
+            this.pSetFiltersZone.Name = "pSetFiltersZone";
+            this.pSetFiltersZone.Size = new System.Drawing.Size(786, 208);
+            this.pSetFiltersZone.TabIndex = 0;
+            // 
             // tabType
             // 
             this.tabType.Controls.Add(this.pSetFiltersType);
@@ -183,6 +198,13 @@
             this.tabType.TabIndex = 2;
             this.tabType.Text = "Type";
             this.tabType.UseVisualStyleBackColor = true;
+            // 
+            // pSetFiltersType
+            // 
+            this.pSetFiltersType.Location = new System.Drawing.Point(4, 4);
+            this.pSetFiltersType.Name = "pSetFiltersType";
+            this.pSetFiltersType.Size = new System.Drawing.Size(786, 208);
+            this.pSetFiltersType.TabIndex = 0;
             // 
             // tabSpace
             // 
@@ -194,6 +216,13 @@
             this.tabSpace.Text = "Space";
             this.tabSpace.UseVisualStyleBackColor = true;
             // 
+            // pSetFiltersSpace
+            // 
+            this.pSetFiltersSpace.Location = new System.Drawing.Point(4, 4);
+            this.pSetFiltersSpace.Name = "pSetFiltersSpace";
+            this.pSetFiltersSpace.Size = new System.Drawing.Size(786, 208);
+            this.pSetFiltersSpace.TabIndex = 0;
+            // 
             // tabFloor
             // 
             this.tabFloor.Controls.Add(this.pSetFiltersFloor);
@@ -203,6 +232,13 @@
             this.tabFloor.TabIndex = 4;
             this.tabFloor.Text = "Floor";
             this.tabFloor.UseVisualStyleBackColor = true;
+            // 
+            // pSetFiltersFloor
+            // 
+            this.pSetFiltersFloor.Location = new System.Drawing.Point(4, 4);
+            this.pSetFiltersFloor.Name = "pSetFiltersFloor";
+            this.pSetFiltersFloor.Size = new System.Drawing.Size(786, 208);
+            this.pSetFiltersFloor.TabIndex = 0;
             // 
             // tabFacility
             // 
@@ -214,6 +250,13 @@
             this.tabFacility.Text = "Facility";
             this.tabFacility.UseVisualStyleBackColor = true;
             // 
+            // pSetFiltersFacility
+            // 
+            this.pSetFiltersFacility.Location = new System.Drawing.Point(4, 4);
+            this.pSetFiltersFacility.Name = "pSetFiltersFacility";
+            this.pSetFiltersFacility.Size = new System.Drawing.Size(786, 208);
+            this.pSetFiltersFacility.TabIndex = 0;
+            // 
             // tabSpare
             // 
             this.tabSpare.Controls.Add(this.pSetFiltersSpare);
@@ -223,6 +266,13 @@
             this.tabSpare.TabIndex = 6;
             this.tabSpare.Text = "Spare";
             this.tabSpare.UseVisualStyleBackColor = true;
+            // 
+            // pSetFiltersSpare
+            // 
+            this.pSetFiltersSpare.Location = new System.Drawing.Point(4, 4);
+            this.pSetFiltersSpare.Name = "pSetFiltersSpare";
+            this.pSetFiltersSpare.Size = new System.Drawing.Size(786, 208);
+            this.pSetFiltersSpare.TabIndex = 0;
             // 
             // tabComponent
             // 
@@ -234,6 +284,13 @@
             this.tabComponent.Text = "Component";
             this.tabComponent.UseVisualStyleBackColor = true;
             // 
+            // pSetFiltersComponent
+            // 
+            this.pSetFiltersComponent.Location = new System.Drawing.Point(4, 4);
+            this.pSetFiltersComponent.Name = "pSetFiltersComponent";
+            this.pSetFiltersComponent.Size = new System.Drawing.Size(786, 208);
+            this.pSetFiltersComponent.TabIndex = 0;
+            // 
             // label5
             // 
             this.label5.AutoSize = true;
@@ -244,62 +301,6 @@
             this.label5.TabIndex = 18;
             this.label5.Text = "Property Excludes";
             // 
-            // pSetFiltersCommon
-            // 
-            this.pSetFiltersCommon.Location = new System.Drawing.Point(4, 4);
-            this.pSetFiltersCommon.Name = "pSetFiltersCommon";
-            this.pSetFiltersCommon.Size = new System.Drawing.Size(786, 209);
-            this.pSetFiltersCommon.TabIndex = 0;
-            // 
-            // pSetFiltersZone
-            // 
-            this.pSetFiltersZone.Location = new System.Drawing.Point(4, 4);
-            this.pSetFiltersZone.Name = "pSetFiltersZone";
-            this.pSetFiltersZone.Size = new System.Drawing.Size(786, 208);
-            this.pSetFiltersZone.TabIndex = 0;
-            // 
-            // pSetFiltersType
-            // 
-            this.pSetFiltersType.Location = new System.Drawing.Point(4, 4);
-            this.pSetFiltersType.Name = "pSetFiltersType";
-            this.pSetFiltersType.Size = new System.Drawing.Size(786, 208);
-            this.pSetFiltersType.TabIndex = 0;
-            // 
-            // pSetFiltersSpace
-            // 
-            this.pSetFiltersSpace.Location = new System.Drawing.Point(4, 4);
-            this.pSetFiltersSpace.Name = "pSetFiltersSpace";
-            this.pSetFiltersSpace.Size = new System.Drawing.Size(786, 208);
-            this.pSetFiltersSpace.TabIndex = 0;
-            // 
-            // pSetFiltersFloor
-            // 
-            this.pSetFiltersFloor.Location = new System.Drawing.Point(4, 4);
-            this.pSetFiltersFloor.Name = "pSetFiltersFloor";
-            this.pSetFiltersFloor.Size = new System.Drawing.Size(786, 208);
-            this.pSetFiltersFloor.TabIndex = 0;
-            // 
-            // pSetFiltersFacility
-            // 
-            this.pSetFiltersFacility.Location = new System.Drawing.Point(4, 4);
-            this.pSetFiltersFacility.Name = "pSetFiltersFacility";
-            this.pSetFiltersFacility.Size = new System.Drawing.Size(786, 208);
-            this.pSetFiltersFacility.TabIndex = 0;
-            // 
-            // pSetFiltersSpare
-            // 
-            this.pSetFiltersSpare.Location = new System.Drawing.Point(4, 4);
-            this.pSetFiltersSpare.Name = "pSetFiltersSpare";
-            this.pSetFiltersSpare.Size = new System.Drawing.Size(786, 208);
-            this.pSetFiltersSpare.TabIndex = 0;
-            // 
-            // pSetFiltersComponent
-            // 
-            this.pSetFiltersComponent.Location = new System.Drawing.Point(4, 4);
-            this.pSetFiltersComponent.Name = "pSetFiltersComponent";
-            this.pSetFiltersComponent.Size = new System.Drawing.Size(786, 208);
-            this.pSetFiltersComponent.TabIndex = 0;
-            // 
             // listViewDefinedTypes
             // 
             this.listViewDefinedTypes.Items = ((System.Collections.Generic.List<string>)(resources.GetObject("listViewDefinedTypes.Items")));
@@ -309,10 +310,21 @@
             this.listViewDefinedTypes.Size = new System.Drawing.Size(259, 66);
             this.listViewDefinedTypes.TabIndex = 16;
             // 
+            // btnSetDefaults
+            // 
+            this.btnSetDefaults.Location = new System.Drawing.Point(727, 266);
+            this.btnSetDefaults.Name = "btnSetDefaults";
+            this.btnSetDefaults.Size = new System.Drawing.Size(75, 23);
+            this.btnSetDefaults.TabIndex = 1;
+            this.btnSetDefaults.Text = "Set Defaults";
+            this.btnSetDefaults.UseVisualStyleBackColor = true;
+            this.btnSetDefaults.Click += new System.EventHandler(this.btnSetDefaults_Click);
+            // 
             // FilterTab
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.Controls.Add(this.btnSetDefaults);
             this.Controls.Add(this.label5);
             this.Controls.Add(this.tabPropertyCtr);
             this.Controls.Add(this.listViewDefinedTypes);
@@ -367,5 +379,6 @@
         private PropertySetFilters pSetFiltersFacility;
         private PropertySetFilters pSetFiltersSpare;
         private PropertySetFilters pSetFiltersComponent;
+        private System.Windows.Forms.Button btnSetDefaults;
     }
 }

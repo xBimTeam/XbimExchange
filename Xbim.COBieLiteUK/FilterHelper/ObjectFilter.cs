@@ -44,27 +44,27 @@ namespace Xbim.FilterHelper
         /// <summary>
         /// IfcType Items to filter
         /// </summary>
-        private List<Type> _ifcToExclude = null;
-        private List<Type> IfcToExclude
-        {
-            get 
-            {
-                if (_ifcToExclude == null)
-                {
-                    _ifcToExclude = new List<Type>();
-                    foreach (string item in ItemsToExclude)
-                    {
-                        var elementType = IfcMetaData.IfcType(item);
-                        if (elementType != null)
-                        {
-                            _ifcToExclude.Add(elementType.Type);
-                        }
-                    } 
-                }
-                return _ifcToExclude; 
-            }
+        //private List<Type> _ifcToExclude = null;
+        //private List<Type> IfcToExclude
+        //{
+        //    get 
+        //    {
+        //        if (_ifcToExclude == null)
+        //        {
+        //            _ifcToExclude = new List<Type>();
+        //            foreach (string item in ItemsToExclude)
+        //            {
+        //                var elementType = IfcMetaData.IfcType(item);
+        //                if (elementType != null)
+        //                {
+        //                    _ifcToExclude.Add(elementType.Type);
+        //                }
+        //            } 
+        //        }
+        //        return _ifcToExclude; 
+        //    }
             
-        }
+        //}
         
         #endregion
          
@@ -161,6 +161,8 @@ namespace Xbim.FilterHelper
         /// <returns>bool, true = exclude</returns>
         public bool ItemsFilter(string testStr, string preDefinedType = null)
         {
+            if (ItemsToExclude.Count == 0) return false; //nothing to test against
+            
             testStr = testStr.ToUpper();
             //check for predefinedtype enum value passed as string
             bool ExcludeDefinedType = false; //if preDefinedType is null or preDefinedType does not exist in PredefinedType dictionary 
@@ -184,14 +186,15 @@ namespace Xbim.FilterHelper
         /// <returns>bool, true = exclude</returns>
         public bool ItemsFilter(IfcObjectDefinition obj)
         {
+            if (ItemsToExclude.Count == 0) return false; //nothing to test against
+
             var objType = obj.GetType();
-            bool result = IfcToExclude.Contains(objType);
-            
-            var objString = obj.ToString().ToUpper(); //or this might work, obj.IfcType().IfcTypeEnum.ToString();
+            var objString = objType.Name.ToUpper(); //obj.ToString().ToUpper(); //or this might work, obj.IfcType().IfcTypeEnum.ToString();
+            bool result = ItemsToExclude.Contains(objString);
             
             if (!result && (PreDefinedType.ContainsKey(objString)))
             {
-                var objPreDefinedProp = objType.GetType().GetProperty("PredefinedType");
+                var objPreDefinedProp = objType.GetProperty("PredefinedType");
             
                 if (objPreDefinedProp != null)
                 {

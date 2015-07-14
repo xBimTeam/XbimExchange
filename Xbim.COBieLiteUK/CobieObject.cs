@@ -505,7 +505,7 @@ namespace Xbim.COBieLiteUK
         /// </summary>
         /// <param name="assetfilters">FiltersHelper, filters for names and objects </param>
         /// <param name="parent">COBieLite object</param>
-        /// <returns>bool</returns>
+        /// <returns>bool true = exclude</returns>
         private bool Filter(OutPutFilters assetfilters, CobieObject parent)
         {
             if (assetfilters != null)
@@ -530,6 +530,7 @@ namespace Xbim.COBieLiteUK
                     }
                     return false;
                 }
+                //moved to front end for ifctypeobjects and ifcproducts, but will filter back end for things like spaces, floors, zones
                 else
                 {
                     if (assetfilters.ObjFilter(this, parent))

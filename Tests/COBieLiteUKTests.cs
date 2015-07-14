@@ -760,7 +760,12 @@ namespace Tests
                 var jsonFile = Path.ChangeExtension(ifcTestFile, "json");
                 m.CreateFrom(ifcTestFile, xbimTestFile, null, true, true);
                 var facilities = new List<Facility>();
-                var ifcToCoBieLiteUkExchanger = new IfcToCOBieLiteUkExchanger(m, facilities);
+
+                OutPutFilters rolefilters = new OutPutFilters();
+                RoleFilter reqRoles = RoleFilter.Unknown; //RoleFilter.Architectural |  RoleFilter.Mechanical | RoleFilter.Electrical | RoleFilter.FireProtection | RoleFilter.Plumbing;
+                rolefilters.ApplyRoleFilters(reqRoles);
+
+                var ifcToCoBieLiteUkExchanger = new IfcToCOBieLiteUkExchanger(m, facilities, rolefilters);
                 facilities = ifcToCoBieLiteUkExchanger.Convert();
 
                 foreach (var facilityType in facilities)
@@ -770,9 +775,7 @@ namespace Tests
 
                     string msg;
                     facilityType.WriteJson(jsonFile, true);
-                    //set attribute name filters
-                    OutPutFilters assetfilters = new OutPutFilters(null);
-                    facilityType.WriteCobie("..\\..\\Lakeside_Restaurant.xlsx", out msg, assetfilters, "UK2012", true);
+                    facilityType.WriteCobie("..\\..\\Lakeside_Restaurant.xlsx", out msg, null /*rolefilters*/, "UK2012", true);
 
 
                     break;
