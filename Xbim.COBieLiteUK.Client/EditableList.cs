@@ -26,7 +26,7 @@ namespace Xbim.Client
                 {
                     if (!string.IsNullOrEmpty(item.Text))
                     {
-                        strItems.Add(item.Text);
+                        strItems.Add(item.Text.ToUpper());
                     }
 
                 }

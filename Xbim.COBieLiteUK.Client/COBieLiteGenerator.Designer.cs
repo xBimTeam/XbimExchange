@@ -49,8 +49,11 @@ namespace Xbim.Client
             this.chkBoxFlipFilter = new System.Windows.Forms.CheckBox();
             this.chkBoxOpenFile = new System.Windows.Forms.CheckBox();
             this.btnMergeFilter = new System.Windows.Forms.Button();
+            this.chkBoxNoFilter = new System.Windows.Forms.CheckBox();
+            this.groupBox2 = new System.Windows.Forms.GroupBox();
             this.groupBox1.SuspendLayout();
             this.statusStrip1.SuspendLayout();
+            this.groupBox2.SuspendLayout();
             this.SuspendLayout();
             // 
             // groupBox1
@@ -148,7 +151,7 @@ namespace Xbim.Client
             this.cmboxFiletype.Items.AddRange(new object[] {
             "XLS",
             "XLSX"});
-            this.cmboxFiletype.Location = new System.Drawing.Point(438, 323);
+            this.cmboxFiletype.Location = new System.Drawing.Point(438, 307);
             this.cmboxFiletype.Name = "cmboxFiletype";
             this.cmboxFiletype.Size = new System.Drawing.Size(75, 21);
             this.cmboxFiletype.TabIndex = 18;
@@ -157,7 +160,7 @@ namespace Xbim.Client
             // btnClear
             // 
             this.btnClear.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnClear.Location = new System.Drawing.Point(438, 265);
+            this.btnClear.Location = new System.Drawing.Point(438, 249);
             this.btnClear.Name = "btnClear";
             this.btnClear.Size = new System.Drawing.Size(75, 23);
             this.btnClear.TabIndex = 17;
@@ -168,7 +171,7 @@ namespace Xbim.Client
             // btnGenerate
             // 
             this.btnGenerate.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnGenerate.Location = new System.Drawing.Point(438, 294);
+            this.btnGenerate.Location = new System.Drawing.Point(438, 278);
             this.btnGenerate.Name = "btnGenerate";
             this.btnGenerate.Size = new System.Drawing.Size(75, 23);
             this.btnGenerate.TabIndex = 16;
@@ -220,7 +223,7 @@ namespace Xbim.Client
             // 
             // btnClassFilter
             // 
-            this.btnClassFilter.Location = new System.Drawing.Point(438, 97);
+            this.btnClassFilter.Location = new System.Drawing.Point(6, 63);
             this.btnClassFilter.Name = "btnClassFilter";
             this.btnClassFilter.Size = new System.Drawing.Size(75, 26);
             this.btnClassFilter.TabIndex = 21;
@@ -231,7 +234,7 @@ namespace Xbim.Client
             // chkBoxFlipFilter
             // 
             this.chkBoxFlipFilter.AutoSize = true;
-            this.chkBoxFlipFilter.Location = new System.Drawing.Point(438, 170);
+            this.chkBoxFlipFilter.Location = new System.Drawing.Point(6, 40);
             this.chkBoxFlipFilter.Name = "chkBoxFlipFilter";
             this.chkBoxFlipFilter.Size = new System.Drawing.Size(67, 17);
             this.chkBoxFlipFilter.TabIndex = 22;
@@ -242,7 +245,7 @@ namespace Xbim.Client
             // chkBoxOpenFile
             // 
             this.chkBoxOpenFile.AutoSize = true;
-            this.chkBoxOpenFile.Location = new System.Drawing.Point(438, 194);
+            this.chkBoxOpenFile.Location = new System.Drawing.Point(438, 334);
             this.chkBoxOpenFile.Name = "chkBoxOpenFile";
             this.chkBoxOpenFile.Size = new System.Drawing.Size(81, 17);
             this.chkBoxOpenFile.TabIndex = 23;
@@ -251,7 +254,7 @@ namespace Xbim.Client
             // 
             // btnMergeFilter
             // 
-            this.btnMergeFilter.Location = new System.Drawing.Point(438, 129);
+            this.btnMergeFilter.Location = new System.Drawing.Point(6, 95);
             this.btnMergeFilter.Name = "btnMergeFilter";
             this.btnMergeFilter.Size = new System.Drawing.Size(75, 23);
             this.btnMergeFilter.TabIndex = 24;
@@ -259,15 +262,37 @@ namespace Xbim.Client
             this.btnMergeFilter.UseVisualStyleBackColor = true;
             this.btnMergeFilter.Click += new System.EventHandler(this.btnMergeFilter_Click);
             // 
+            // chkBoxNoFilter
+            // 
+            this.chkBoxNoFilter.AutoSize = true;
+            this.chkBoxNoFilter.Location = new System.Drawing.Point(6, 19);
+            this.chkBoxNoFilter.Name = "chkBoxNoFilter";
+            this.chkBoxNoFilter.Size = new System.Drawing.Size(70, 17);
+            this.chkBoxNoFilter.TabIndex = 25;
+            this.chkBoxNoFilter.Text = "No Filters";
+            this.chkBoxNoFilter.UseVisualStyleBackColor = true;
+            this.chkBoxNoFilter.CheckedChanged += new System.EventHandler(this.chkBoxNoFilter_CheckedChanged);
+            // 
+            // groupBox2
+            // 
+            this.groupBox2.Controls.Add(this.chkBoxNoFilter);
+            this.groupBox2.Controls.Add(this.btnClassFilter);
+            this.groupBox2.Controls.Add(this.btnMergeFilter);
+            this.groupBox2.Controls.Add(this.chkBoxFlipFilter);
+            this.groupBox2.Location = new System.Drawing.Point(431, 97);
+            this.groupBox2.Name = "groupBox2";
+            this.groupBox2.Size = new System.Drawing.Size(88, 123);
+            this.groupBox2.TabIndex = 26;
+            this.groupBox2.TabStop = false;
+            this.groupBox2.Text = "Filters";
+            // 
             // COBieLiteGenerator
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(527, 376);
-            this.Controls.Add(this.btnMergeFilter);
+            this.Controls.Add(this.groupBox2);
             this.Controls.Add(this.chkBoxOpenFile);
-            this.Controls.Add(this.chkBoxFlipFilter);
-            this.Controls.Add(this.btnClassFilter);
             this.Controls.Add(this.txtOutput);
             this.Controls.Add(this.statusStrip1);
             this.Controls.Add(this.cmboxFiletype);
@@ -285,6 +310,8 @@ namespace Xbim.Client
             this.groupBox1.PerformLayout();
             this.statusStrip1.ResumeLayout(false);
             this.statusStrip1.PerformLayout();
+            this.groupBox2.ResumeLayout(false);
+            this.groupBox2.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -312,6 +339,8 @@ namespace Xbim.Client
         private System.Windows.Forms.CheckBox chkBoxFlipFilter;
         private System.Windows.Forms.CheckBox chkBoxOpenFile;
         private System.Windows.Forms.Button btnMergeFilter;
+        private System.Windows.Forms.CheckBox chkBoxNoFilter;
+        private System.Windows.Forms.GroupBox groupBox2;
     }
 }
 

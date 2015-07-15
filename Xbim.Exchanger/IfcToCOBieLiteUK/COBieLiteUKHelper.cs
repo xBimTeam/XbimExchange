@@ -279,7 +279,7 @@ namespace XbimExchanger.IfcToCOBieLiteUK
 
             }
 
-            var assemblyParts = new HashSet<IfcObjectDefinition>(_model.Instances.OfType<IfcRelAggregates>().Where(r => !Filter.ObjFilter(r.RelatingObject, false)).SelectMany(a => a.RelatedObjects.Where(obj => !Filter.ObjFilter(obj, false))));
+            var assemblyParts = new HashSet<IfcObjectDefinition>(_model.Instances.OfType<IfcRelAggregates>().SelectMany(a => a.RelatedObjects));
             var grouping = relDefinesByType.GroupBy(k => proxyTypesByKey[GetTypeObjectHashString(k.RelatingType)],
                 kv => kv.RelatedObjects).ToList();
            

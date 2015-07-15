@@ -54,7 +54,15 @@ namespace Xbim.Client
             {
                 roles &= ~RoleFilter.Unknown;//remove unknown
             }
-            AppendLog("Selected Roles: " + roles.ToString("F"));
+            if (!chkBoxNoFilter.Checked)
+            {
+                AppendLog("Selected Roles: " + roles.ToString("F"));
+            }
+            else
+            {
+                AppendLog("Selected Roles: Disabled by no filter flag ");
+            }
+            
             return roles;
         }
 
@@ -180,7 +188,7 @@ namespace Xbim.Client
             //get Excel File Type
             ExcelTypeEnum excelType = GetExcelType();
             //set parameters
-            var args = new Params { ModelFile = txtPath.Text, TemplateFile = txtTemplate.Text, Roles = SetRoles(), ExcelType = excelType, FlipFilter = chkBoxFlipFilter.Checked, OpenExcel = chkBoxOpenFile.Checked };
+            var args = new Params { ModelFile = txtPath.Text, TemplateFile = txtTemplate.Text, Roles = SetRoles(), ExcelType = excelType, FlipFilter = chkBoxFlipFilter.Checked, OpenExcel = chkBoxOpenFile.Checked, FilterOff = chkBoxNoFilter.Checked };
             //run worker
             _worker.RunWorkerAsync(args);
 
@@ -211,6 +219,18 @@ namespace Xbim.Client
         {
             Stopwatch timer = new Stopwatch();
             timer.Start();
+            //set attribute name filters
+            if (parameters.FilterOff)
+            {
+                _assetfilters = new OutPutFilters();
+            }
+            else
+            {
+                _assetfilters.ApplyRoleFilters(parameters.Roles);
+                _assetfilters.FlipResult = parameters.FlipFilter;
+            }
+            
+
             var facilities = GenerateFacility(parameters);
             //COBieBuilder builder = GenerateCOBieWorkBook(parameters);
             timer.Stop();
@@ -231,10 +251,7 @@ namespace Xbim.Client
                 }
                 _worker.ReportProgress(0, string.Format("Creating file: {0}", outputFile));
                 string msg;
-                //set attribute name filters
                 
-                _assetfilters.ApplyRoleFilters(parameters.Roles);
-                _assetfilters.FlipResult = parameters.FlipFilter;
                 using (var file = File.Create(outputFile))
                 {
                     facilityType.WriteCobie(file, parameters.ExcelType, out msg, _assetfilters, parameters.TemplateFile, true);
@@ -270,9 +287,9 @@ namespace Xbim.Client
                     model.CreateFrom(parameters.ModelFile, xbimFile, _worker.ReportProgress, true, true);
 
                 }
-                
-                
-                var ifcToCoBieLiteUkExchanger = new IfcToCOBieLiteUkExchanger(model, facilities);
+
+
+                var ifcToCoBieLiteUkExchanger = new IfcToCOBieLiteUkExchanger(model, facilities, _assetfilters);
                 facilities = ifcToCoBieLiteUkExchanger.Convert();
             }
             return facilities;
@@ -372,6 +389,7 @@ namespace Xbim.Client
             public bool FlipFilter { get; set; }
             public bool OpenExcel { get; set; }
             public RoleFilter Roles { get; set; }
+            public bool FilterOff { get; set; }
         }
 
         /// <summary>
@@ -387,7 +405,7 @@ namespace Xbim.Client
             }
             else
             {
-                txtOutput.AppendText("Filter set to on" + Environment.NewLine);
+                txtOutput.AppendText("Filter Flip off" + Environment.NewLine);
             }
         }
 
@@ -418,6 +436,22 @@ namespace Xbim.Client
             FilterDlg filterDlg = new FilterDlg(_assetfilters, true, roles);
             //read only
             filterDlg.ShowDialog();
+        }
+
+        private void chkBoxNoFilter_CheckedChanged(object sender, EventArgs e)
+        {
+            chkBoxFlipFilter.Enabled = !chkBoxNoFilter.Checked;
+            btnClassFilter.Enabled = !chkBoxNoFilter.Checked;
+            btnMergeFilter.Enabled = !chkBoxNoFilter.Checked;
+            checkedListRoles.Enabled = !chkBoxNoFilter.Checked;
+            if (chkBoxNoFilter.Checked)
+            {
+                txtOutput.AppendText("Filter Off" + Environment.NewLine);
+            }
+            else
+            {
+                txtOutput.AppendText("Filter On" + Environment.NewLine);
+            }
         }
     
 

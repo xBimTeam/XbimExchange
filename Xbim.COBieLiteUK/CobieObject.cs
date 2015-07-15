@@ -530,17 +530,17 @@ namespace Xbim.COBieLiteUK
                     }
                     return false;
                 }
-                //moved to front end for ifctypeobjects and ifcproducts, but will filter back end for things like spaces, floors, zones
-                else
-                {
-                    if (assetfilters.ObjFilter(this, parent))
-                    {
-#if SHOWEXCLUDES
-                        Debug.WriteLine(string.Format(@"Object, Filtering out: Object ""{0}""", this.ExternalEntity));
-#endif
-                        return true;
-                    }
-                }
+                //moved to front end for ifcTypeObjects and ifcElements
+//                else
+//                {
+//                    if (assetfilters.ObjFilter(this, parent))
+//                    {
+//#if SHOWEXCLUDES
+//                        Debug.WriteLine(string.Format(@"Object, Filtering out: Object ""{0}""", this.ExternalEntity));
+//#endif
+//                        return true;
+//                    }
+//                }
             }
             return false;
         }

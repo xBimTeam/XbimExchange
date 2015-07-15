@@ -775,7 +775,7 @@ namespace Tests
 
                     string msg;
                     facilityType.WriteJson(jsonFile, true);
-                    facilityType.WriteCobie("..\\..\\Lakeside_Restaurant.xlsx", out msg, null /*rolefilters*/, "UK2012", true);
+                    facilityType.WriteCobie("..\\..\\Lakeside_Restaurant.xlsx", out msg, rolefilters, "UK2012", true);
 
 
                     break;
