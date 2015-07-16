@@ -122,6 +122,10 @@ namespace XbimExchanger.IfcToCOBieLiteUK
                         if (Enum.TryParse(portability, true, out accCategoryEnum))
                             return accCategoryEnum;
                     }
+                    if (_ifcTypeObject is IfcFurnitureType) //Responsibility matrix, 'SpreadSheet Schema' tab, cell S81
+                    {
+                        return AssetPortability.Moveable;
+                    }
                 }
                 return AssetPortability.notdefined;
             }

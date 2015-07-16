@@ -389,8 +389,11 @@ namespace Xbim.FilterHelper
                 //check the element is not defined by a type which is excluded, by default if no type, then no element included
                 if (!exclude && checkType)
                 {
-                    IfcTypeObject objType = ((IfcProduct)obj).IsDefinedBy.OfType<IfcRelDefinesByType>().Select(rdbt => rdbt.RelatingType).First(); //assuming only one IfcRelDefinesByType
-                    exclude = IfcTypeObjectFilter.ItemsFilter(objType);
+                    IfcTypeObject objType = ((IfcProduct)obj).IsDefinedBy.OfType<IfcRelDefinesByType>().Select(rdbt => rdbt.RelatingType).FirstOrDefault(); //assuming only one IfcRelDefinesByType
+                    if (objType != null) //if no type defined lets include it for now
+                    {
+                        exclude = IfcTypeObjectFilter.ItemsFilter(objType); 
+                    }
                 }
                 
             }

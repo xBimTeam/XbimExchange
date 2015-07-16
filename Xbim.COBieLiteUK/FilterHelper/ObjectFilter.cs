@@ -41,31 +41,6 @@ namespace Xbim.FilterHelper
             }
         }
 
-        /// <summary>
-        /// IfcType Items to filter
-        /// </summary>
-        //private List<Type> _ifcToExclude = null;
-        //private List<Type> IfcToExclude
-        //{
-        //    get 
-        //    {
-        //        if (_ifcToExclude == null)
-        //        {
-        //            _ifcToExclude = new List<Type>();
-        //            foreach (string item in ItemsToExclude)
-        //            {
-        //                var elementType = IfcMetaData.IfcType(item);
-        //                if (elementType != null)
-        //                {
-        //                    _ifcToExclude.Add(elementType.Type);
-        //                }
-        //            } 
-        //        }
-        //        return _ifcToExclude; 
-        //    }
-            
-        //}
-        
         #endregion
          
         #region Constructors

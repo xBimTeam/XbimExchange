@@ -113,6 +113,7 @@
     <Compile Include="EntityKeys\ProjectStageKey.cs" />
     <Compile Include="EntityKeys\ResourceKey.cs" />
     <Compile Include="EntityKeys\SpaceKey.cs" />
+    <Compile Include="FilterHelper\AttributePaths.cs" />
     <Compile Include="FilterHelper\ObjectFilter.cs" />
     <Compile Include="FilterHelper\PropertyFilter.cs" />
     <Compile Include="FilterHelper\OutPutFilters.cs" />

@@ -19,15 +19,43 @@ namespace Xbim.Client
 {
     public partial class COBieLiteGenerator : Form
     {
-        BackgroundWorker _worker;
-        OutPutFilters _assetfilters = new OutPutFilters(); //empty role filter
+        private BackgroundWorker _worker;
+        private OutPutFilters _assetfilters = new OutPutFilters(); //empty role filter
+        private string FileName { get;  set; }
+        private FileInfo ConfigFile { get;  set; }
         
 
         public COBieLiteGenerator()
         {
             InitializeComponent();
+            //set default role filters held in FillRolesFilterHolder property list
+            DirectoryInfo dir = new DirectoryInfo(AppDomain.CurrentDomain.BaseDirectory);
+            ConfigFile = new FileInfo(Path.Combine(dir.FullName, "COBieAttributes.config"));
+            if (!ConfigFile.Exists)
+            {
+                AppendLog("Creating Config File");
+                CreateDefaultAppConfig(ConfigFile.FullName);
+            }
+            if (_assetfilters.DefaultsNotSet)
+            {
+                _assetfilters.FillRolesFilterHolderFromDir(dir);
+            }
         }
 
+        /// <summary>
+        /// Copy resource help config file to working directory
+        /// </summary>
+        /// <param name="fileName"></param>
+        private void CreateDefaultAppConfig(string fileName)
+        {
+            var asss = System.Reflection.Assembly.GetAssembly(typeof(IfcToCOBieLiteUkExchanger));
+
+            using (var input = asss.GetManifestResourceStream("XbimExchanger.IfcToCOBieLiteUK.COBieAttributes.config"))
+            using (var output = File.Create(fileName))
+            {
+                if (input != null) input.CopyTo(output);
+            }
+        }
         
         /// <summary>
         /// Set roles for this run
@@ -129,8 +157,11 @@ namespace Xbim.Client
                 {
                    btnGenerate.Enabled = true;
                 }
-                
-
+                //open file if ticked to open excel
+                if (chkBoxOpenFile.Checked && !string.IsNullOrEmpty(FileName))
+                {
+                    Process.Start(FileName);
+                }
             };
         }
 
@@ -242,25 +273,23 @@ namespace Xbim.Client
             {
                 string fileName = Path.GetFileNameWithoutExtension(parameters.ModelFile) + ((facilities.Count == 1) ? "" : index.ToString());
                 string path = Path.GetDirectoryName(parameters.ModelFile);
-                string outputFile = Path.Combine(path, Path.ChangeExtension(fileName, parameters.ExcelType == ExcelTypeEnum.XLS ? ".xls" : ".xlsx"));
-                string logFile = Path.ChangeExtension(outputFile, ".log");
+                FileName = Path.Combine(path, Path.ChangeExtension(fileName, parameters.ExcelType == ExcelTypeEnum.XLS ? ".xls" : ".xlsx"));
+                string logFile = Path.ChangeExtension(FileName, ".log");
                 _worker.ReportProgress(0, string.Format("Creating validation log file: {0}", logFile));
                 using (var log = File.CreateText(logFile))
                 { 
                     facilityType.ValidateUK2012(log, true);
                 }
-                _worker.ReportProgress(0, string.Format("Creating file: {0}", outputFile));
+                _worker.ReportProgress(0, string.Format("Creating file: {0}", FileName));
+                
                 string msg;
                 
-                using (var file = File.Create(outputFile))
+                using (var file = File.Create(FileName))
                 {
                     facilityType.WriteCobie(file, parameters.ExcelType, out msg, _assetfilters, parameters.TemplateFile, true);
                 }
                 _worker.ReportProgress(0, msg);
-                if (parameters.OpenExcel)
-                {
-                    Process.Start(outputFile); 
-                }
+                
                 index++;
             }
             timer.Stop();

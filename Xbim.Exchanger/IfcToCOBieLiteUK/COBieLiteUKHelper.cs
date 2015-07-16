@@ -138,34 +138,6 @@ namespace XbimExchanger.IfcToCOBieLiteUK
 
         private OutPutFilters Filter  { get; set; }
 
-        /// <summary>
-        /// Included ifcElement types for components assets
-        /// </summary>
-        //public HashSet<IfcType> IncludedComponents { get; private set; }
-        /// <summary>
-        /// Excluded ifcElement types for components assets
-        /// </summary>
-        //public HashSet<IfcType> ExcludedComponents { get; private set; }
-
-        /// <summary>
-        /// Included ifcElement types for Type assets
-        /// </summary>
-        //public HashSet<IfcType> IncludedType { get; private set; }
-        /// <summary>
-        /// Excluded ifcElement types for Type assets
-        /// </summary>
-        //public HashSet<IfcType> ExcludedType { get; private set; }
-
-        /// <summary>
-        /// Included ifcElement types for Assembly assets
-        /// </summary>
-        //public HashSet<IfcType> IncludedAssembly { get; private set; }
-        /// <summary>
-        /// Excluded ifcElement types for Assembly assets
-        /// </summary>
-        //public HashSet<IfcType> ExcludedAssembly { get; private set; }
-
-        
         #endregion
 
         private readonly string _configFileName;
@@ -285,6 +257,7 @@ namespace XbimExchanger.IfcToCOBieLiteUK
            
             foreach (var group in grouping)
             {
+                //filter on in assembly, and ifcElement if filtered in ProductFilter even if the ifcTypeObject is not filtered (passed filter in relDefinesByType assignment above)
                 var allObjects = group.SelectMany(o => o).OfType<IfcElement>().Where(e => !assemblyParts.Contains(e) && !Filter.IfcProductFilter.ItemsFilter(e)).ToList();  
                 _definingTypeObjectMap.Add(group.Key,allObjects);
             }
@@ -306,7 +279,7 @@ namespace XbimExchanger.IfcToCOBieLiteUK
                 .Concat(_objectToTypeObjectMap.Keys.OfType<IfcElement>()).Distinct();
             //retrieve all the IfcElements from the model and exclude them if they are already classified or are a member of an IfcType
             var unCategorizedAssets = _model.Instances.OfType<IfcElement>()
-                .Where(t => !(t is IfcFeatureElement) && !assemblyParts.Contains(t) && !Filter.IfcProductFilter.ItemsFilter(t))
+                .Where(t => !(t is IfcFeatureElement) && !assemblyParts.Contains(t) && !Filter.ObjFilter(t)) //filter ifcElement it ifcTypeObject it is defined by is in excluded list of ifcTypeobjects
                 .Except(existingAssets);
             //convert to a Lookup with the key the type of the IfcElement and the value a list of IfcElements
             //if the object has a classification we use this to distinguish types
@@ -494,15 +467,6 @@ namespace XbimExchanger.IfcToCOBieLiteUK
                         _cobieProperties.Add(cobieProperty);
                 }
             }
-            //Set Include And Exclude, probably should just use exclude, better to include then miss altogether
-
-            //set component include and exclude ifc objects
-            //SetInclusions(config.GetSection("IfcElementInclusion"), IncludedComponents, ExcludedComponents);
-            //set Type include and exclude ifc objects
-            //SetInclusions(config.GetSection("IfcTypeInclusion"), IncludedType, ExcludedType);
-            //set Assembly include and exclude ifc objects
-            //SetInclusions(config.GetSection("IfcAssemblyInclusion"), IncludedAssembly, ExcludedAssembly);
-
             
             
             if (_configFileName == null)
@@ -510,43 +474,6 @@ namespace XbimExchanger.IfcToCOBieLiteUK
                 File.Delete(tmpFile);
             }
         }
-
-        
-
-        /// <summary>
-        /// Set up include and exclude ifcType member fields
-        /// </summary>
-        /// <param name="section">AppSettingsSection from configuration file</param>
-        /// <param name="include">HashSet of IfcType for includes</param>
-        /// <param name="exclude">HashSet of IfcType for excludes</param>
-//        private static void SetInclusions(ConfigurationSection section, HashSet<IfcType> include, HashSet<IfcType> exclude)
-//        {
-//            if (section != null)
-//            {
-//                foreach (KeyValueConfigurationElement keyVal in ((AppSettingsSection)section).Settings)
-//                {
-//                    var elementType = IfcMetaData.IfcType(keyVal.Key.ToUpper());
-//                    if (elementType != null)
-//                    {
-//                        if (String.Compare(keyVal.Value, "YES", StringComparison.OrdinalIgnoreCase) == 0)
-//                        {
-
-//                            include.Add(elementType);
-//                        }
-//                        else
-//                        {
-//                            exclude.Add(elementType);
-//                        }
-//                    }
-//                    else
-//                    {
-//#if DEBUG
-//                        Debug.WriteLine(string.Format("Failed to create IfcType - {0}", keyVal.Key.ToUpper()));
-//#endif
-//                    }
-//                }
-//            }
-//        }
 
         private void GetPropertySets()
         {
