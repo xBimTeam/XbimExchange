@@ -21,9 +21,9 @@ namespace XbimExchanger.IfcToCOBieLiteUK
         /// </summary>
         /// <param name="source"></param>
         /// <param name="target"></param>
-        public IfcToCOBieLiteUkExchanger(XbimModel source, List<Facility> target, OutPutFilters filter = null) : base(source, target)
+        public IfcToCOBieLiteUkExchanger(XbimModel source, List<Facility> target, OutPutFilters filter = null, string configFile = null) : base(source, target)
         {
-            Helper = new CoBieLiteUkHelper(source, filter);
+            Helper = new CoBieLiteUkHelper(source, filter, configFile);
         }
 
         /// <summary>

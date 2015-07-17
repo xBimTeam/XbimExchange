@@ -22,8 +22,8 @@ namespace Xbim.Client
         private BackgroundWorker _worker;
         private OutPutFilters _assetfilters = new OutPutFilters(); //empty role filter
         private string FileName { get;  set; }
-        private FileInfo ConfigFile { get;  set; }
-        
+        public FileInfo ConfigFile { get; private set; }
+        private COBiePropertyMapping PropertyMaps { get;  set; }
 
         public COBieLiteGenerator()
         {
@@ -34,27 +34,31 @@ namespace Xbim.Client
             if (!ConfigFile.Exists)
             {
                 AppendLog("Creating Config File");
-                CreateDefaultAppConfig(ConfigFile.FullName);
+                CreateDefaultAppConfig(ConfigFile);
+                ConfigFile.Refresh();
             }
             if (_assetfilters.DefaultsNotSet)
             {
                 _assetfilters.FillRolesFilterHolderFromDir(dir);
             }
-        }
 
+            PropertyMaps = new COBiePropertyMapping(ConfigFile);
+        }
+        
         /// <summary>
         /// Copy resource help config file to working directory
         /// </summary>
         /// <param name="fileName"></param>
-        private void CreateDefaultAppConfig(string fileName)
+        public void CreateDefaultAppConfig(FileInfo configFile)
         {
             var asss = System.Reflection.Assembly.GetAssembly(typeof(IfcToCOBieLiteUkExchanger));
 
             using (var input = asss.GetManifestResourceStream("XbimExchanger.IfcToCOBieLiteUK.COBieAttributes.config"))
-            using (var output = File.Create(fileName))
+            using (var output = configFile.Create())
             {
                 if (input != null) input.CopyTo(output);
             }
+            configFile.Refresh();
         }
         
         /// <summary>
@@ -318,7 +322,7 @@ namespace Xbim.Client
                 }
 
 
-                var ifcToCoBieLiteUkExchanger = new IfcToCOBieLiteUkExchanger(model, facilities, _assetfilters);
+                var ifcToCoBieLiteUkExchanger = new IfcToCOBieLiteUkExchanger(model, facilities, _assetfilters, ConfigFile.FullName);
                 facilities = ifcToCoBieLiteUkExchanger.Convert();
             }
             return facilities;
@@ -480,6 +484,18 @@ namespace Xbim.Client
             else
             {
                 txtOutput.AppendText("Filter On" + Environment.NewLine);
+            }
+        }
+
+        private void btmPropMaps_Click(object sender, EventArgs e)
+        {
+            PropertyMapDlg PropMapDlg = new PropertyMapDlg(PropertyMaps);
+            var result = PropMapDlg.ShowDialog(this);
+            if (result == DialogResult.OK)
+            {
+               
+                PropertyMaps = PropMapDlg.PropertyMaps;
+                PropertyMaps.Save();
             }
         }
     

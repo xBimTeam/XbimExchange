@@ -51,6 +51,7 @@ namespace Xbim.Client
             this.btnMergeFilter = new System.Windows.Forms.Button();
             this.chkBoxNoFilter = new System.Windows.Forms.CheckBox();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
+            this.btmPropMaps = new System.Windows.Forms.Button();
             this.groupBox1.SuspendLayout();
             this.statusStrip1.SuspendLayout();
             this.groupBox2.SuspendLayout();
@@ -286,11 +287,22 @@ namespace Xbim.Client
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "Filters";
             // 
+            // btmPropMaps
+            // 
+            this.btmPropMaps.Location = new System.Drawing.Point(437, 220);
+            this.btmPropMaps.Name = "btmPropMaps";
+            this.btmPropMaps.Size = new System.Drawing.Size(75, 23);
+            this.btmPropMaps.TabIndex = 27;
+            this.btmPropMaps.Text = "Mappings";
+            this.btmPropMaps.UseVisualStyleBackColor = true;
+            this.btmPropMaps.Click += new System.EventHandler(this.btmPropMaps_Click);
+            // 
             // COBieLiteGenerator
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(527, 376);
+            this.Controls.Add(this.btmPropMaps);
             this.Controls.Add(this.groupBox2);
             this.Controls.Add(this.chkBoxOpenFile);
             this.Controls.Add(this.txtOutput);
@@ -341,6 +353,7 @@ namespace Xbim.Client
         private System.Windows.Forms.Button btnMergeFilter;
         private System.Windows.Forms.CheckBox chkBoxNoFilter;
         private System.Windows.Forms.GroupBox groupBox2;
+        private System.Windows.Forms.Button btmPropMaps;
     }
 }
 

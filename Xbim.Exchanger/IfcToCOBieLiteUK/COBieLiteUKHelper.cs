@@ -126,7 +126,7 @@ namespace XbimExchanger.IfcToCOBieLiteUK
         private Dictionary<IfcTypeObject, IfcAsset> _assetAsignments;
         private Dictionary<IfcSystem, ObjectDefinitionSet> _systemAssignment;
         private Dictionary<IfcObjectDefinition, List<IfcSystem>> _systemLookup;
-        private readonly HashSet<string> _cobieProperties = new HashSet<string>();
+        private HashSet<string> _cobieProperties = new HashSet<string>();
         private Dictionary<IfcElement, List<IfcSpatialStructureElement>> _spaceAssetLookup;
         private Dictionary<IfcSpace, IfcBuildingStorey> _spaceFloorLookup;
         private Dictionary<IfcSpatialStructureElement, List<IfcSpatialStructureElement>> _spatialDecomposition;
@@ -428,9 +428,9 @@ namespace XbimExchanger.IfcToCOBieLiteUK
             }
 
 
-            Configuration config;
-            AppSettingsSection cobiePropertyMaps;
-            _cobieFieldMap = new Dictionary<string, string[]>();
+            //Configuration config;
+            //AppSettingsSection cobiePropertyMaps;
+            //_cobieFieldMap = new Dictionary<string, string[]>();
 
             if (!File.Exists(tmpFile))
             {
@@ -442,31 +442,35 @@ namespace XbimExchanger.IfcToCOBieLiteUK
                     );
             }
 
-            try
-            {
-                var configMap = new ExeConfigurationFileMap { ExeConfigFilename = tmpFile };
-                config = ConfigurationManager.OpenMappedExeConfiguration(configMap, ConfigurationUserLevel.None);
-                cobiePropertyMaps = (AppSettingsSection) config.GetSection("COBiePropertyMaps");
-            }
-            catch (Exception ex)
-            {
-                var directory = new DirectoryInfo(".");
-                throw new Exception(
-                    @"Error loading configuration file ""COBieAttributes.config"". App folder is " + directory.FullName,
-                    ex);
-            }
+            //try
+            //{
+            //    var configMap = new ExeConfigurationFileMap { ExeConfigFilename = tmpFile };
+            //    config = ConfigurationManager.OpenMappedExeConfiguration(configMap, ConfigurationUserLevel.None);
+            //    cobiePropertyMaps = (AppSettingsSection) config.GetSection("COBiePropertyMaps");
+            //}
+            //catch (Exception ex)
+            //{
+            //    var directory = new DirectoryInfo(".");
+            //    throw new Exception(
+            //        @"Error loading configuration file ""COBieAttributes.config"". App folder is " + directory.FullName,
+            //        ex);
+            //}
 
-            if (cobiePropertyMaps != null)
-            {
-                foreach (KeyValueConfigurationElement keyVal in cobiePropertyMaps.Settings)
-                {
-                    var values = keyVal.Value.Split(new[] {';'}, StringSplitOptions.RemoveEmptyEntries);
-                    _cobieFieldMap.Add(keyVal.Key, values);
-                    foreach (var cobieProperty in values)
-                        //used to keep a list of properties that are reserved for COBie and not written out as attributes
-                        _cobieProperties.Add(cobieProperty);
-                }
-            }
+            //if (cobiePropertyMaps != null)
+            //{
+            //    foreach (KeyValueConfigurationElement keyVal in cobiePropertyMaps.Settings)
+            //    {
+            //        var values = keyVal.Value.Split(new[] {';'}, StringSplitOptions.RemoveEmptyEntries);
+            //        _cobieFieldMap.Add(keyVal.Key, values);
+            //        foreach (var cobieProperty in values)
+            //            //used to keep a list of properties that are reserved for COBie and not written out as attributes
+            //            _cobieProperties.Add(cobieProperty);
+            //    }
+            //}
+
+            COBiePropertyMapping propertyMaps = new COBiePropertyMapping(new FileInfo(tmpFile));
+            _cobieFieldMap = propertyMaps.GetDictOfProperties();
+            _cobieProperties = new HashSet<string>(_cobieFieldMap.SelectMany(pair => pair.Value).ToList());
             
             
             if (_configFileName == null)

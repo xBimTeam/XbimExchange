@@ -13,6 +13,7 @@ namespace Xbim.Client
 {
     public partial class EditableList : UserControl
     {
+        public bool AllUpper { get; set; }
 
         /// <summary>
         /// Get And Set displayed strings in list
@@ -26,7 +27,14 @@ namespace Xbim.Client
                 {
                     if (!string.IsNullOrEmpty(item.Text))
                     {
-                        strItems.Add(item.Text.ToUpper());
+                        if (AllUpper)
+                        {
+                            strItems.Add(item.Text.ToUpper());
+                        }
+                        else
+                        {
+                            strItems.Add(item.Text);
+                        }
                     }
 
                 }
@@ -61,6 +69,7 @@ namespace Xbim.Client
             InitializeComponent();
             editlistView.Columns[0].Width = editlistView.Width - 4;
             editlistView.Height = this.Height - 4;
+            AllUpper = true;
             
         }
 
@@ -130,6 +139,7 @@ namespace Xbim.Client
         {
             editlistView.Width = this.Width - 30;
             editlistView.Height = this.Height ;
+            editlistView.Columns[0].Width = editlistView.Width;
             add.Location = new Point(this.Width - 24, 3);
             remove.Location = new Point(this.Width - 24, 27);
         }
