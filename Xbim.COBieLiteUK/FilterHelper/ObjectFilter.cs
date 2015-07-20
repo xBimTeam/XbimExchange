@@ -174,7 +174,7 @@ namespace Xbim.FilterHelper
                 if (objPreDefinedProp != null)
                 {
 
-                    var objPreDefValue = objPreDefinedProp.GetValue(obj).ToString();
+                    var objPreDefValue = objPreDefinedProp.GetValue(obj,null).ToString();
 
                     result = !PreDefinedType[objString].Contains(objPreDefValue);
                 }

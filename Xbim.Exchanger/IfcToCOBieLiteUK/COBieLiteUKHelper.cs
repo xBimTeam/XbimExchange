@@ -180,7 +180,7 @@ namespace XbimExchanger.IfcToCOBieLiteUK
         public CoBieLiteUkHelper(XbimModel model, OutPutFilters filter = null, string configurationFile = null)
         {
             _configFileName = configurationFile;
-            Filter = filter!= null ? filter : new OutPutFilters();
+            Filter = filter != null ? filter : new OutPutFilters();
 
             _model = model;
             _creatingApplication = model.Header.CreatingApplication;
@@ -235,7 +235,7 @@ namespace XbimExchanger.IfcToCOBieLiteUK
         private void GetTypeMaps()
         {
 
-            var relDefinesByType = _model.Instances.OfType<IfcRelDefinesByType>().Where(r => !Filter.IfcTypeObjectFilter.ItemsFilter(r.RelatingType)).ToList();
+            var relDefinesByType = _model.Instances.OfType<IfcRelDefinesByType>().Where(r => !Filter.ObjFilter(r.RelatingType)).ToList();
             //creates a dictionary of uniqueness for type objects
             var propertySetHashes = new Dictionary<string,string>();
             var proxyTypesByKey = new Dictionary<string, XbimIfcProxyTypeObject>();
@@ -258,7 +258,7 @@ namespace XbimExchanger.IfcToCOBieLiteUK
             foreach (var group in grouping)
             {
                 //filter on in assembly, and ifcElement if filtered in ProductFilter even if the ifcTypeObject is not filtered (passed filter in relDefinesByType assignment above)
-                var allObjects = group.SelectMany(o => o).OfType<IfcElement>().Where(e => !assemblyParts.Contains(e) && !Filter.IfcProductFilter.ItemsFilter(e)).ToList();  
+                var allObjects = group.SelectMany(o => o).OfType<IfcElement>().Where(e => !assemblyParts.Contains(e) && !Filter.ObjFilter(e, false)).ToList();  
                 _definingTypeObjectMap.Add(group.Key,allObjects);
             }
             
@@ -319,7 +319,7 @@ namespace XbimExchanger.IfcToCOBieLiteUK
             foreach (var assetRel in assetRels)
             {
                 foreach (var assetType in assetRel.RelatedObjects)
-                    if ((assetType is IfcTypeObject) && !Filter.IfcTypeObjectFilter.ItemsFilter(assetType))
+                    if ((assetType is IfcTypeObject) && !Filter.ObjFilter(assetType))
                         AssetAsignments[(IfcTypeObject)assetType] = (IfcAsset)assetRel.RelatingGroup; 
             }
            
