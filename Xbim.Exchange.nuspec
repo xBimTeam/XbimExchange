@@ -2,7 +2,7 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2011/10/nuspec.xsd">
     <metadata>
         <id>Xbim.Exchange</id>
-        <version>3.0.82</version>
+        <version>3.1.0</version>
         <title>xBIM Exchange</title>
         <authors>xBIM team</authors>
         <owners>Steve Lockley</owners>
@@ -17,36 +17,40 @@ xBIM reads and writes Ifc, IfcXMl and IfcZip formats.
 The xBIM project provides packages to convert IFC models to COBie spreadsheets in both UK and US cultures as well as a range of 3D viewing controls for use with Windows forms, WPF, WEBGL and OpenGL platforms.
 IOS and Android versions are under development.</description>
         <summary>The .Net toolkit for developing BIM applications based on the IFC standard. Essential support for the Ifc data model</summary>
-        <releaseNotes>3.0 contains an implementation of the COBieLite protocol as well as the COBieLite Spreadsheet format.</releaseNotes>
+        <releaseNotes>
+          3.1 contains signed libaries targeting net40 framework.
+          3.0 contains an implementation of the COBieLite protocol as well as the COBieLite Spreadsheet format.
+        </releaseNotes>
         <language>en-GB</language>
       <tags>BIM, IFC, IfcXml, IfcZip, COBie, COBieLite, .Net, C#, BuildingSmart</tags>
       <dependencies>
         <dependency id="NPOI" version="2.1.3.1" />
-        <dependency id="Xbim.Geometry" version="3.0.22" />
-        <dependency id="Xbim.Essentials" version="3.0.23" />
+        <dependency id="Xbim.Geometry" version="3.1.0" />
+        <dependency id="Xbim.Essentials" version="3.1.0" />
+        <dependency id="Xbim.PropertySets" version="1.0.3" />
       </dependencies>
     </metadata>
     <files>
-      <file src="Output\Release\Xbim.COBie.dll" target="lib\net45\Xbim.COBie.dll" />
-      <file src="Output\Release\Xbim.COBieLite.dll" target="lib\net45\Xbim.COBieLite.dll" />
-      <file src="Output\Release\Xbim.COBieLiteUK.dll" target="lib\net45\Xbim.COBieLiteUK.dll" />
-      <file src="Output\Release\Xbim.COBieLiteUK.Validation.dll" target="lib\net45\Xbim.COBieLiteUK.Validation.dll" />
-      <file src="Output\Release\Xbim.DPoW.dll" target="lib\net45\Xbim.DPoW.dll" />
-      <file src="Output\Release\Xbim.Exchanger.dll" target="lib\net45\Xbim.Exchanger.dll" />
+      <file src="Output\Release\Xbim.COBie.dll" target="lib\net40\Xbim.COBie.dll" />
+      <file src="Output\Release\Xbim.COBieLite.dll" target="lib\net40\Xbim.COBieLite.dll" />
+      <file src="Output\Release\Xbim.COBieLiteUK.dll" target="lib\net40\Xbim.COBieLiteUK.dll" />
+      <file src="Output\Release\Xbim.COBieLiteUK.Validation.dll" target="lib\net40\Xbim.COBieLiteUK.Validation.dll" />
+      <file src="Output\Release\Xbim.DPoW.dll" target="lib\net40\Xbim.DPoW.dll" />
+      <file src="Output\Release\Xbim.Exchanger.dll" target="lib\net40\Xbim.Exchanger.dll" />
       
-      <file src="Output\Release\Xbim.COBie.xml" target="lib\net45\Xbim.COBie.xml" />
-      <file src="Output\Release\Xbim.COBieLite.xml" target="lib\net45\Xbim.COBieLite.xml" />
-      <file src="Output\Release\Xbim.COBieLiteUK.xml" target="lib\net45\Xbim.COBieLiteUK.xml" />
-      <file src="Output\Release\Xbim.COBieLiteUK.Validation.xml" target="lib\net45\Xbim.COBieLiteUK.Validation.xml" />
-      <file src="Output\Release\Xbim.DPoW.xml" target="lib\net45\Xbim.DPoW.xml" />
-      <file src="Output\Release\Xbim.Exchanger.xml" target="lib\net45\Xbim.Exchanger.xml" />
+      <file src="Output\Release\Xbim.COBie.xml" target="lib\net40\Xbim.COBie.xml" />
+      <file src="Output\Release\Xbim.COBieLite.xml" target="lib\net40\Xbim.COBieLite.xml" />
+      <file src="Output\Release\Xbim.COBieLiteUK.xml" target="lib\net40\Xbim.COBieLiteUK.xml" />
+      <file src="Output\Release\Xbim.COBieLiteUK.Validation.xml" target="lib\net40\Xbim.COBieLiteUK.Validation.xml" />
+      <file src="Output\Release\Xbim.DPoW.xml" target="lib\net40\Xbim.DPoW.xml" />
+      <file src="Output\Release\Xbim.Exchanger.xml" target="lib\net40\Xbim.Exchanger.xml" />
       
-      <file src="Output\Release\Xbim.COBie.pdb" target="lib\net45\Xbim.COBie.pdb" />
-      <file src="Output\Release\Xbim.COBieLite.pdb" target="lib\net45\Xbim.COBieLite.pdb" />
-      <file src="Output\Release\Xbim.COBieLiteUK.pdb" target="lib\net45\Xbim.COBieLiteUK.pdb" />
-      <file src="Output\Release\Xbim.COBieLiteUK.Validation.pdb" target="lib\net45\Xbim.COBieLiteUK.Validation.pdb" />
-      <file src="Output\Release\Xbim.DPoW.pdb" target="lib\net45\Xbim.DPoW.pdb" />
-      <file src="Output\Release\Xbim.Exchanger.pdb" target="lib\net45\Xbim.Exchanger.pdb" />
+      <file src="Output\Release\Xbim.COBie.pdb" target="lib\net40\Xbim.COBie.pdb" />
+      <file src="Output\Release\Xbim.COBieLite.pdb" target="lib\net40\Xbim.COBieLite.pdb" />
+      <file src="Output\Release\Xbim.COBieLiteUK.pdb" target="lib\net40\Xbim.COBieLiteUK.pdb" />
+      <file src="Output\Release\Xbim.COBieLiteUK.Validation.pdb" target="lib\net40\Xbim.COBieLiteUK.Validation.pdb" />
+      <file src="Output\Release\Xbim.DPoW.pdb" target="lib\net40\Xbim.DPoW.pdb" />
+      <file src="Output\Release\Xbim.Exchanger.pdb" target="lib\net40\Xbim.Exchanger.pdb" />
       
     </files>
 

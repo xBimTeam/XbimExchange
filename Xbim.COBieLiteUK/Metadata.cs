@@ -7,6 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using NPOI.SS.UserModel;
 using NPOI.SS.Util;
+using Xbim.COBieLiteUK.Net40PortHelpers;
 
 namespace Xbim.COBieLiteUK
 {

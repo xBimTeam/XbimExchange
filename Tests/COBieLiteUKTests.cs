@@ -516,6 +516,8 @@ namespace Tests
             var f2 = Facility.ReadJson("..\\..\\2012-03-23-Duplex-Design.cobielite.json");
         }
 
+
+
         [TestMethod]
         [DeploymentItem("TestFiles\\OBN1-COBie-UK-2014.xlsx")]
         public void ReadingUkSpreadsheet()
@@ -616,6 +618,24 @@ namespace Tests
             AttributeValue dAt = new DecimalAttributeValue() {Value = Math.E};
             var fromA = AttributeValue.CreateFromObject(dAt);
         }
+
+
+        [TestMethod]
+        [DeploymentItem("TestFiles\\2012-03-23-Duplex-Design.xlsx")]
+        public void ExtractOneAssetType()
+        {
+            string msg;
+            var facility = Facility.ReadCobie("2012-03-23-Duplex-Design.xlsx", out msg);
+            var assetType = facility.AssetTypes.FirstOrDefault(t => t.Assets != null && t.Assets.Count() > 5);
+            var serializer = Facility.GetJsonSerializer(true);
+
+            using (var writer = File.CreateText("..\\..\\OneAsset.json"))
+            {
+                serializer.Serialize(writer, assetType);
+                writer.Close();
+            }
+        }
+
 
         [TestMethod]
         [DeploymentItem("TestFiles\\2012-03-23-Duplex-Design.xlsx")]

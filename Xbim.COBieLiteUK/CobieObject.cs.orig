@@ -23,9 +23,12 @@ using NPOI.SS.Util;
 using NPOI.XSSF.UserModel;
 //using XbimExchanger.COBieLiteHelpers;
 using System.Diagnostics;
+<<<<<<< HEAD
 using Xbim.FilterHelper;
 //using XbimExchanger.FilterHelper;
+=======
 using Xbim.COBieLiteUK.Net40PortHelpers;
+>>>>>>> 2734e8f198a6737b19f7714f80d6b4e7e40da85a
 
 namespace Xbim.COBieLiteUK
 {
