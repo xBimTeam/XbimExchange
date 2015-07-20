@@ -23,9 +23,12 @@ using NPOI.SS.Util;
 using NPOI.XSSF.UserModel;
 //using XbimExchanger.COBieLiteHelpers;
 using System.Diagnostics;
+<<<<<<< HEAD
 using Xbim.FilterHelper;
 //using XbimExchanger.FilterHelper;
+=======
 using Xbim.COBieLiteUK.Net40PortHelpers;
+>>>>>>> 2734e8f198a6737b19f7714f80d6b4e7e40da85a
 
 namespace Xbim.COBieLiteUK
 {
@@ -506,7 +509,7 @@ namespace Xbim.COBieLiteUK
         /// </summary>
         /// <param name="assetfilters">FiltersHelper, filters for names and objects </param>
         /// <param name="parent">COBieLite object</param>
-        /// <returns>bool true = exclude</returns>
+        /// <returns>bool</returns>
         private bool Filter(OutPutFilters assetfilters, CobieObject parent)
         {
             if (assetfilters != null)
@@ -531,17 +534,16 @@ namespace Xbim.COBieLiteUK
                     }
                     return false;
                 }
-                //moved to front end for ifcTypeObjects and ifcElements
-//                else
-//                {
-//                    if (assetfilters.ObjFilter(this, parent))
-//                    {
-//#if SHOWEXCLUDES
-//                        Debug.WriteLine(string.Format(@"Object, Filtering out: Object ""{0}""", this.ExternalEntity));
-//#endif
-//                        return true;
-//                    }
-//                }
+                else
+                {
+                    if (assetfilters.ObjFilter(this, parent))
+                    {
+#if SHOWEXCLUDES
+                        Debug.WriteLine(string.Format(@"Object, Filtering out: Object ""{0}""", this.ExternalEntity));
+#endif
+                        return true;
+                    }
+                }
             }
             return false;
         }

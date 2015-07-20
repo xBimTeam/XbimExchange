@@ -39,6 +39,14 @@ namespace Xbim.COBieLiteUK
             return  retObject;
         }
 
+        /// <summary>
+        /// This function is used to search for any object in the model which is a CobieObject. 
+        /// You can optionally pass a condition to select specific elements. Search is optimized 
+        /// for specific types so it is advisable to specify the type as specific as possible.
+        /// </summary>
+        /// <typeparam name="T">Type os the object to search for</typeparam>
+        /// <param name="condition">Optional search condition</param>
+        /// <returns>Collection of cobie objects of specified type</returns>
         public IEnumerable<T> Get<T>(Func<T, bool> condition = null) where T : CobieObject
         {
             var self = this as T;
@@ -136,24 +144,52 @@ namespace Xbim.COBieLiteUK
         }
 
         #region Enumerations
+        /// <summary>
+        /// Enumeration of area units. If custom area units are from this enumeration it will
+        /// be returned also here. Values from this enumeration are set into that respective field.
+        /// If you set this property to 'None' custom field will be set to Null. If you set custom field
+        /// to a value which doesn't exist in this enumeration, 'Custom' value will be returned as a value
+        /// of this property.
+        /// </summary>
         public AreaUnit AreaUnits
         {
             get { return GetEnumeration<AreaUnit>(AreaUnitsCustom); }
             set { SetEnumeration(value, s => AreaUnitsCustom = s);}
         }
 
+        /// <summary>
+        /// Enumeration of linear units. If custom linear units are from this enumeration it will
+        /// be returned also here. Values from this enumeration are set into that respective field.
+        /// If you set this property to 'None' custom field will be set to Null. If you set custom field
+        /// to a value which doesn't exist in this enumeration, 'Custom' value will be returned as a value
+        /// of this property.
+        /// </summary>
         public LinearUnit LinearUnits
         {
             get { return GetEnumeration<LinearUnit>(LinearUnitsCustom); }
             set { SetEnumeration(value, s => LinearUnitsCustom = s);}
         }
 
+        /// <summary>
+        /// Enumeration of volume units. If custom volume units are from this enumeration it will
+        /// be returned also here. Values from this enumeration are set into that respective field.
+        /// If you set this property to 'None' custom field will be set to Null. If you set custom field
+        /// to a value which doesn't exist in this enumeration, 'Custom' value will be returned as a value
+        /// of this property.
+        /// </summary>
         public VolumeUnit VolumeUnits
         {
             get { return GetEnumeration<VolumeUnit>(VolumeUnitsCustom); }
             set { SetEnumeration(value, s => VolumeUnitsCustom = s); }
         }
 
+        /// <summary>
+        /// Enumeration of currency units. If custom currency units are from this enumeration it will
+        /// be returned also here. Values from this enumeration are set into that respective field.
+        /// If you set this property to 'None' custom field will be set to Null. If you set custom field
+        /// to a value which doesn't exist in this enumeration, 'Custom' value will be returned as a value
+        /// of this property.
+        /// </summary>
         public CurrencyUnit CurrencyUnit
         {
             get { return GetEnumeration<CurrencyUnit>(CurrencyUnitCustom); }
@@ -169,6 +205,11 @@ namespace Xbim.COBieLiteUK
             return new XmlSerializer(typeof (Facility));
         }
 
+        /// <summary>
+        /// This function will serialize the model as an XML
+        /// </summary>
+        /// <param name="path">Path where this model should be serialized</param>
+        /// <param name="indented">Optional flag. XML will be indented if this is true. This will increase the size of the file.</param>
         public void WriteXml(string path, bool indented = false)
         {
             using (var stream = File.Create(path))
@@ -178,6 +219,11 @@ namespace Xbim.COBieLiteUK
             }
         }
 
+        /// <summary>
+        /// This function will serialize the model as an XML. Stream will be closed at the end
+        /// </summary>
+        /// <param name="stream">Target stream</param>
+        /// <param name="indented">Optional flag. XML will be indented if this is true. This will increase the size of the file.</param>
         public void WriteXml(Stream stream, bool indented = false)
         {
             var serializer = GetXmlSerializer();
@@ -219,7 +265,7 @@ namespace Xbim.COBieLiteUK
 
         #region JSON serialization
 
-        private static JsonSerializer GetJsonSerializer(bool indented = false)
+        public static JsonSerializer GetJsonSerializer(bool indented = false)
         {
             var serializerSettings = new JsonSerializerSettings
             {
