@@ -269,6 +269,55 @@ namespace Xbim.Client
             SetDefault();
         }
 
+        /// <summary>
+        /// Right click menu event to clear all ticks
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void clearToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            SetAllTicks(sender, false);
+        }
+        
+        /// <summary>
+        /// Right click menu event to tick all items
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void fuillToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            SetAllTicks(sender, true);
+        }
+
+        /// <summary>
+        /// Set or remove all ticks from checked list box's
+        /// </summary>
+        /// <param name="sender">ToolStripItem</param>
+        /// <param name="isChecked">true = all ticked, false = all not ticked</param>
+        private static void SetAllTicks(object sender, bool isChecked)
+        {
+            var menuItem = sender as ToolStripItem;
+            if (menuItem != null)
+            {
+                var owner = menuItem.Owner as ContextMenuStrip;
+                if (owner != null)
+                {
+                    var listbox = owner.SourceControl as CheckedListBox;
+                    if (listbox != null)
+                    {
+                        for (int i = 0; i < listbox.Items.Count; i++)
+                        {
+                            string value = (string)listbox.Items[i];
+
+                            listbox.SetItemChecked(i, isChecked);
+                        }
+                    }
+                }
+            }
+        }
+
+        
+
         
     }
 }

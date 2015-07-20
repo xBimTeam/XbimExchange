@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Xbim.COBieLiteUK;
 using Xbim.Ifc2x3.Kernel;
 using Xbim.Ifc2x3.SharedFacilitiesElements;
@@ -122,13 +123,50 @@ namespace XbimExchanger.IfcToCOBieLiteUK
                         if (Enum.TryParse(portability, true, out accCategoryEnum))
                             return accCategoryEnum;
                     }
-                    if (_ifcTypeObject is IfcFurnitureType) //Responsibility matrix, 'SpreadSheet Schema' tab, cell S81
+                    //Not technically correct, but if all ifcElements all have the same AssetTypeAccountingCategory value , we can safely assume that the type is going to be the same
+                    accCategoryString = GetObjPropByAssoc("AssetTypeAccountingCategory", _ifcTypeObject);
+                    if (accCategoryString != null)
+                    {
+                        if (Enum.TryParse(accCategoryString, true, out accCategoryEnum))
+                        return accCategoryEnum;
+                    }
+                    //Responsibility matrix, 'SpreadSheet Schema' tab, cell S81
+                    if (_ifcTypeObject is IfcFurnitureType) 
                     {
                         return AssetPortability.Moveable;
                     }
                 }
                 return AssetPortability.notdefined;
             }
+        }
+
+        /// <summary>
+        /// Check all ifcElements associated with the pass ifcTypeObject for the passed property map key. 
+        /// If all found elements of the property are the same then we assume that the property applies to the type as well as all the elements 
+        /// </summary>
+        /// <param name="valueName">property map key</param>
+        /// <param name="ifcTypeObject">ifcTypeObject</param>
+        /// <returns>property value</returns>
+        private string GetObjPropByAssoc(string valueName, IfcTypeObject ifcTypeObject)
+        {
+            string accCategoryString = string.Empty;
+            var ObjDefByType = _helper.DefiningTypeObjectMap.Where(pair => (pair.Key.IfcTypeObject != null) && (pair.Key.IfcTypeObject == ifcTypeObject)).SelectMany(p => p.Value);
+            var assetTypes = new List<string>();
+            foreach (var item in ObjDefByType)
+            {
+                accCategoryString = _helper.GetCoBieProperty(valueName, item);
+                assetTypes.Add(accCategoryString != null ? accCategoryString : string.Empty);
+            }
+            //assume every ifcElement hast to have the value and be set to the same value
+            if (assetTypes.Count > 0)
+            {
+                var fat = assetTypes.First();
+                if (assetTypes.All(at => at == fat))
+                {
+                    return accCategoryString;
+                }
+            }
+            return null;
         }
 
         /// <summary>

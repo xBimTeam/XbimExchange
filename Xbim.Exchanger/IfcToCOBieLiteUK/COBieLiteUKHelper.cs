@@ -426,12 +426,7 @@ namespace XbimExchanger.IfcToCOBieLiteUK
                     if (input != null) input.CopyTo(output);
                 }
             }
-
-
-            //Configuration config;
-            //AppSettingsSection cobiePropertyMaps;
-            //_cobieFieldMap = new Dictionary<string, string[]>();
-
+                        
             if (!File.Exists(tmpFile))
             {
                 var directory = new DirectoryInfo(".");
@@ -442,32 +437,7 @@ namespace XbimExchanger.IfcToCOBieLiteUK
                     );
             }
 
-            //try
-            //{
-            //    var configMap = new ExeConfigurationFileMap { ExeConfigFilename = tmpFile };
-            //    config = ConfigurationManager.OpenMappedExeConfiguration(configMap, ConfigurationUserLevel.None);
-            //    cobiePropertyMaps = (AppSettingsSection) config.GetSection("COBiePropertyMaps");
-            //}
-            //catch (Exception ex)
-            //{
-            //    var directory = new DirectoryInfo(".");
-            //    throw new Exception(
-            //        @"Error loading configuration file ""COBieAttributes.config"". App folder is " + directory.FullName,
-            //        ex);
-            //}
-
-            //if (cobiePropertyMaps != null)
-            //{
-            //    foreach (KeyValueConfigurationElement keyVal in cobiePropertyMaps.Settings)
-            //    {
-            //        var values = keyVal.Value.Split(new[] {';'}, StringSplitOptions.RemoveEmptyEntries);
-            //        _cobieFieldMap.Add(keyVal.Key, values);
-            //        foreach (var cobieProperty in values)
-            //            //used to keep a list of properties that are reserved for COBie and not written out as attributes
-            //            _cobieProperties.Add(cobieProperty);
-            //    }
-            //}
-
+            //using COBiePropertyMapping to set properties, might pass this into function, but for now read file passed file name, or default
             COBiePropertyMapping propertyMaps = new COBiePropertyMapping(new FileInfo(tmpFile));
             _cobieFieldMap = propertyMaps.GetDictOfProperties();
             _cobieProperties = new HashSet<string>(_cobieFieldMap.SelectMany(pair => pair.Value).ToList());
@@ -485,7 +455,9 @@ namespace XbimExchanger.IfcToCOBieLiteUK
             var relProps = _model.Instances.OfType<IfcRelDefinesByProperties>().ToList();
             foreach (var relProp in relProps)
             {
-                foreach (var ifcObject in relProp.RelatedObjects)
+                //get objects left after the IfcElement filters, plus none IfcElement (floors, spaces...)
+                var filteredObjects = relProp.RelatedObjects.Where(obj => _objectToTypeObjectMap.Keys.Contains(obj) || !(obj is IfcElement));
+                foreach (var ifcObject in filteredObjects)
                 {
                     XbimAttributedObject attributedObject;
                     if (!_attributedObjects.TryGetValue(ifcObject, out attributedObject))
