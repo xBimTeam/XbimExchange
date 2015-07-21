@@ -113,6 +113,10 @@ namespace Xbim.FilterHelper
             return true;
         }
 
+        /// <summary>
+        /// fill pre defined types
+        /// </summary>
+        /// <param name="section"></param>
         public void FillPreDefinedTypes(ConfigurationSection section)
         {
             if (section != null)
@@ -174,9 +178,16 @@ namespace Xbim.FilterHelper
                 if (objPreDefinedProp != null)
                 {
 
-                    var objPreDefValue = objPreDefinedProp.GetValue(obj,null).ToString();
+                    var objPreDefValue = objPreDefinedProp.GetValue(obj,null);
 
-                    result = !PreDefinedType[objString].Contains(objPreDefValue);
+                    if (objPreDefValue != null)
+                    {
+                        var preDefType = objPreDefValue.ToString();
+                        if (!string.IsNullOrEmpty(preDefType))
+                        {
+                            result = !PreDefinedType[objString].Contains(preDefType.ToUpper());
+                        } 
+                    }
                 }
             }
             return result;

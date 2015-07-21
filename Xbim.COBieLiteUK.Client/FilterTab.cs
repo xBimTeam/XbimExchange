@@ -138,6 +138,10 @@ namespace Xbim.Client
                 listViewDefinedTypes.Items = Filter.IfcTypeObjectFilter.PreDefinedType[selitem].ToList();
                 
             }
+            else
+            {
+                listViewDefinedTypes.Clear();
+            }
             
         }
 

@@ -10,7 +10,6 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using Xbim.FilterHelper;
 using Xbim.COBieLiteUK;
-using Xbim.COBieLiteUK.Client;
 using System.Diagnostics;
 using Xbim.IO;
 using XbimExchanger.IfcToCOBieLiteUK;

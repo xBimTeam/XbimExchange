@@ -184,7 +184,6 @@ namespace XbimExchanger.IfcToCOBieLiteUK
 
             _model = model;
             _creatingApplication = model.Header.CreatingApplication;
-            //InitFilters(); //initialize filters
             LoadCobieMaps();
             GetContacts();
             GetClassificationDictionary();
@@ -196,18 +195,7 @@ namespace XbimExchanger.IfcToCOBieLiteUK
             GetSpaceAssetLookup();
         }
 
-        /// <summary>
-        /// Initialize filters
-        /// </summary>
-        //private void InitFilters()
-        //{
-        //    IncludedComponents = new HashSet<IfcType>();
-        //    ExcludedComponents = new HashSet<IfcType>();
-        //    IncludedType = new HashSet<IfcType>();
-        //    ExcludedType = new HashSet<IfcType>();
-        //    IncludedAssembly = new HashSet<IfcType>();
-        //    ExcludedAssembly = new HashSet<IfcType>();
-        //}
+        
         
         private void GetSystems()
         {
