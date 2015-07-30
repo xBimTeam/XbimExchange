@@ -348,7 +348,7 @@ namespace Xbim.Client
                 {
                     facilityType.WriteCobie(file, parameters.ExcelType, out msg, _assetfilters, parameters.TemplateFile, true);
                 }
-                _worker.ReportProgress(0, msg);
+                //_worker.ReportProgress(0, msg); //removed for now, kill app for some reason
                 
                 index++;
             }
