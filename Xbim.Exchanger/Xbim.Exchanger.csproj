@@ -171,6 +171,7 @@
     <Compile Include="IfcToCOBieLiteUK\MappingIfcSiteToSite.cs" />
     <Compile Include="IfcToCOBieLiteUK\MappingIfcSpatialStructureElementToSpace.cs" />
     <Compile Include="IfcToCOBieLiteUK\MappingIfcSystemToSystem.cs" />
+    <Compile Include="IfcToCOBieLiteUK\MappingSystemViaIfcPropertyToSystem.cs" />
     <Compile Include="IfcToCOBieLiteUK\MappingXbimIfcProxyTypeObjectToAssetType.cs" />
     <Compile Include="IfcToCOBieLiteUK\MappingIfcZoneToZone.cs" />
     <Compile Include="IfcToCOBieLiteUK\XbimAttributedObject.cs" />

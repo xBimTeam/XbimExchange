@@ -55,6 +55,8 @@ namespace Xbim.Client
                     return PropertyMaps.AssetPaths;
                 case "AssetTypePropertyMaps":
                     return PropertyMaps.AssetTypePaths;
+                case "SystemPropertyMaps":
+                    return PropertyMaps.PSetsAsSystem;
                 default:
                     return null;
             }

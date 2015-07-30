@@ -97,6 +97,31 @@ namespace Xbim.Client
             return roles;
         }
 
+        /// <summary>
+        /// Set the System extraction Methods
+        /// </summary>
+        /// <returns></returns>
+        private SystemExtractionMode SetSystemMode()
+        {
+            SystemExtractionMode sysMode = SystemExtractionMode.System;
+            var checkedSysMode = checkedListSys.CheckedItems;
+            //add the checked system modes
+            foreach (var item in checkedSysMode)
+            {
+                try
+                {
+                    SystemExtractionMode mode = (SystemExtractionMode)Enum.Parse(typeof(SystemExtractionMode), (string)item);
+                    sysMode |= mode;
+                }
+                catch (Exception)
+                {
+                    AppendLog("Error: Failed to get requested system extraction mode");
+                }
+            }
+
+            return sysMode;
+        }
+
 
         private void CreateWorker()
         {
@@ -126,7 +151,7 @@ namespace Xbim.Client
 
                         StringBuilder sb = new StringBuilder();
                         Exception ex = args.Result as Exception;
-                        String indent = "";
+                        string indent = "";
                         while (ex != null)
                         {
                             sb.AppendFormat("{0}{1}\n", indent, ex.Message);
@@ -137,7 +162,7 @@ namespace Xbim.Client
                     }
                     else
                     {
-                        string errMsg = args.Result as String;
+                        string errMsg = args.Result as string;
                         if (!string.IsNullOrEmpty(errMsg))
                             AppendLog(errMsg);
 
@@ -146,7 +171,7 @@ namespace Xbim.Client
                 catch (Exception ex)
                 {
                     StringBuilder sb = new StringBuilder();
-                     String indent = "";
+                    string indent = "";
                         
                     while (ex != null)
                     {
@@ -168,6 +193,10 @@ namespace Xbim.Client
             };
         }
 
+        /// <summary>
+        /// Add string to Text Output List Box 
+        /// </summary>
+        /// <param name="text"></param>
         private void AppendLog(string text)
         {
             txtOutput.AppendText(text + Environment.NewLine);
@@ -175,12 +204,22 @@ namespace Xbim.Client
         }
 
         
-
+        /// <summary>
+        /// On Load
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void COBieLiteGenerator_Load(object sender, EventArgs e)
         {
             //set roles
             var roleList = Enum.GetNames(typeof(RoleFilter));
             checkedListRoles.Items.AddRange(roleList.Where(r => r != RoleFilter.Unknown.ToString()).ToArray());
+            var sysList = Enum.GetNames(typeof(SystemExtractionMode));
+            checkedListSys.Items.AddRange(sysList.Where(r => r != SystemExtractionMode.System.ToString()).ToArray());
+            for (int i = 0; i < checkedListSys.Items.Count; i++) //set all to ticked
+            {
+                checkedListSys.SetItemChecked(i, true);
+            }
             //set template from resources
             var templates = typeof(Xbim.COBieLiteUK.Facility).Assembly.GetManifestResourceNames();
             templates = templates.Where(x => x.Contains(".Templates.")).ToArray();
@@ -195,7 +234,7 @@ namespace Xbim.Client
             tooltip.InitialDelay = 1000;
             tooltip.ReshowDelay = 500;
             tooltip.ShowAlways = true;
-
+            tooltip.IsBalloon = true;
             tooltip.SetToolTip(chkBoxFlipFilter, "Export all excludes to excel file, Note PropertySet Excludes are not flipped");
             tooltip.SetToolTip(chkBoxOpenFile, "Open in excel once file is created");
             tooltip.SetToolTip(checkedListRoles, "Select roles for export filtering");
@@ -203,9 +242,19 @@ namespace Xbim.Client
             tooltip.SetToolTip(btnBrowse, "Select file to extract COBie from");
             tooltip.SetToolTip(btnBrowseTemplate, "Select template excel file");
             tooltip.SetToolTip(cmboxFiletype, "Select excel file extension to generate");
+            tooltip.SetToolTip(btnClassFilter, "Setup Filter");
             tooltip.SetToolTip(btnMergeFilter, "Filter To Apply, based on selected roles");
+            tooltip.SetToolTip(btnPropMaps, "Set PropertySet.PropertyName mappings to COBie Fileds");
+            tooltip.SetToolTip(chkBoxIds, "Tick to change GUID IDs to Entity IDs");
+            tooltip.SetToolTip(checkedListSys, "Tick to include additional Systems (ifcSystems always included)\nPropertyMaps = PropertySet Mappings, System Tab in \"Property Maps\" dialog\nTypes = Object Types listing associated components (not assigned to system)");
+            
         }
 
+        /// <summary>
+        /// On Click Generate Button
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void btnGenerate_Click(object sender, EventArgs e)
         {
             if (chkBoxFlipFilter.Checked)
@@ -222,7 +271,16 @@ namespace Xbim.Client
             //get Excel File Type
             ExcelTypeEnum excelType = GetExcelType();
             //set parameters
-            var args = new Params { ModelFile = txtPath.Text, TemplateFile = txtTemplate.Text, Roles = SetRoles(), ExcelType = excelType, FlipFilter = chkBoxFlipFilter.Checked, OpenExcel = chkBoxOpenFile.Checked, FilterOff = chkBoxNoFilter.Checked };
+            var args = new Params { ModelFile = txtPath.Text,
+                                    TemplateFile = txtTemplate.Text,
+                                    Roles = SetRoles(),
+                                    ExcelType = excelType,
+                                    FlipFilter = chkBoxFlipFilter.Checked,
+                                    OpenExcel = chkBoxOpenFile.Checked,
+                                    FilterOff = chkBoxNoFilter.Checked,
+                                    ExtId = chkBoxIds.Checked ? EntityIdentifierMode.IfcEntityLabels : EntityIdentifierMode.GloballyUniqueIds,
+                                    SysMode = SetSystemMode()
+            };
             //run worker
             _worker.RunWorkerAsync(args);
 
@@ -238,7 +296,7 @@ namespace Xbim.Client
              Params parameters = e.Argument as Params;
             if ((string.IsNullOrEmpty(parameters.ModelFile)) || (!File.Exists(parameters.ModelFile)))
             {
-                _worker.ReportProgress(0, String.Format("That file doesn't exist: {0}.", parameters.ModelFile));
+                _worker.ReportProgress(0, string.Format("That file doesn't exist: {0}.", parameters.ModelFile));
                 return;
             }
             GenerateCOBieFile(parameters);
@@ -266,9 +324,8 @@ namespace Xbim.Client
             
 
             var facilities = GenerateFacility(parameters);
-            //COBieBuilder builder = GenerateCOBieWorkBook(parameters);
             timer.Stop();
-            _worker.ReportProgress(0, String.Format("Time to generate COBieLite data = {0} seconds", timer.Elapsed.TotalSeconds.ToString("F3")));
+            _worker.ReportProgress(0, string.Format("Time to generate COBieLite data = {0} seconds", timer.Elapsed.TotalSeconds.ToString("F3")));
             timer.Reset();
             timer.Start();
             int index = 1;
@@ -281,7 +338,7 @@ namespace Xbim.Client
                 _worker.ReportProgress(0, string.Format("Creating validation log file: {0}", logFile));
                 using (var log = File.CreateText(logFile))
                 { 
-                    facilityType.ValidateUK2012(log, true);
+                    facilityType.ValidateUK2012(log, false);
                 }
                 _worker.ReportProgress(0, string.Format("Creating file: {0}", FileName));
                 
@@ -296,11 +353,16 @@ namespace Xbim.Client
                 index++;
             }
             timer.Stop();
-            _worker.ReportProgress(0, String.Format("Time to generate COBieLite Excel = {0} seconds", timer.Elapsed.TotalSeconds.ToString("F3")));
+            _worker.ReportProgress(0, string.Format("Time to generate COBieLite Excel = {0} seconds", timer.Elapsed.TotalSeconds.ToString("F3")));
 
             _worker.ReportProgress(0, "Finished COBie Generation");
         }
 
+        /// <summary>
+        /// Genertate the Facilities held within the Model
+        /// </summary>
+        /// <param name="parameters">Params</param>
+        /// <returns>List of Facilities</returns>
         private List<Facility> GenerateFacility(Params parameters)
         {
             string fileExt = Path.GetExtension(parameters.ModelFile);
@@ -321,7 +383,7 @@ namespace Xbim.Client
                 }
 
 
-                var ifcToCoBieLiteUkExchanger = new IfcToCOBieLiteUkExchanger(model, facilities, _assetfilters, ConfigFile.FullName);
+                var ifcToCoBieLiteUkExchanger = new IfcToCOBieLiteUkExchanger(model, facilities, _assetfilters, ConfigFile.FullName, parameters.ExtId, parameters.SysMode);
                 facilities = ifcToCoBieLiteUkExchanger.Convert();
             }
             return facilities;
@@ -345,8 +407,12 @@ namespace Xbim.Client
             return excelType;
         }
 
-        
 
+        /// <summary>
+        /// On Click Browse Model File Button
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void btnBrowse_Click(object sender, EventArgs e)
         {
             OpenFileDialog dlg = new OpenFileDialog();
@@ -413,6 +479,9 @@ namespace Xbim.Client
             txtOutput.Clear();
         }
 
+        /// <summary>
+        /// Internal Params Class, holds parameters for to worker to access
+        /// </summary>
         private class Params
         {
             public string ModelFile { get; set; }
@@ -422,6 +491,8 @@ namespace Xbim.Client
             public bool OpenExcel { get; set; }
             public RoleFilter Roles { get; set; }
             public bool FilterOff { get; set; }
+            public EntityIdentifierMode ExtId { get; set; }
+            public SystemExtractionMode SysMode { get; set; }
         }
 
         /// <summary>
@@ -441,6 +512,11 @@ namespace Xbim.Client
             }
         }
 
+        /// <summary>
+        /// On Click Class filter Button
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void btnClassFilter_Click(object sender, EventArgs e)
         {
             DirectoryInfo dir = new DirectoryInfo(AppDomain.CurrentDomain.BaseDirectory);
@@ -449,18 +525,29 @@ namespace Xbim.Client
             {
                 
                 _assetfilters.FillRolesFilterHolderFromDir(dir);
-                //_assetfilters.FillDefaultRolesFilterHolder();
             }
-
-            FilterDlg filterDlg = new FilterDlg(_assetfilters);
-
-            if (filterDlg.ShowDialog() == DialogResult.OK)
+            try
             {
-                _assetfilters = filterDlg.RolesFilters;
-                _assetfilters.WriteXMLRolesFilterHolderToDir(dir);
+                Cursor.Current = Cursors.WaitCursor;
+                FilterDlg filterDlg = new FilterDlg(_assetfilters);
+                if (filterDlg.ShowDialog() == DialogResult.OK)
+                {
+                    _assetfilters = filterDlg.RolesFilters;
+                    _assetfilters.WriteXMLRolesFilterHolderToDir(dir);
+                }
             }
+            finally
+            {
+                Cursor.Current = Cursors.Default;
+            }
+            
         }
 
+        /// <summary>
+        /// On Click Merge Filter Button
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void btnMergeFilter_Click(object sender, EventArgs e)
         {
             RoleFilter roles = SetRoles();
@@ -470,6 +557,11 @@ namespace Xbim.Client
             filterDlg.ShowDialog();
         }
 
+        /// <summary>
+        /// Check Box Change on No Filter Tick Box
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void chkBoxNoFilter_CheckedChanged(object sender, EventArgs e)
         {
             chkBoxFlipFilter.Enabled = !chkBoxNoFilter.Checked;
@@ -486,7 +578,12 @@ namespace Xbim.Client
             }
         }
 
-        private void btmPropMaps_Click(object sender, EventArgs e)
+        /// <summary>
+        /// Show the Property Fields Map Dialog
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void btnPropMaps_Click(object sender, EventArgs e)
         {
             PropertyMapDlg PropMapDlg = new PropertyMapDlg(PropertyMaps);
             var result = PropMapDlg.ShowDialog(this);

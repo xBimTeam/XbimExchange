@@ -14,7 +14,7 @@ namespace Xbim.FilterHelper
         /// <summary>
         /// current section names in config file
         /// </summary>
-        private string[] _sectionKeys = new string[] { "SpacePropertyMaps", "FloorPropertyMaps", "AssetPropertyMaps", "AssetTypePropertyMaps" };
+        private string[] _sectionKeys = new string[] { "SpacePropertyMaps", "FloorPropertyMaps", "AssetPropertyMaps", "AssetTypePropertyMaps", "SystemPropertyMaps" };
         /// <summary>
         /// Space List of attribute paths
         /// </summary>
@@ -31,6 +31,10 @@ namespace Xbim.FilterHelper
         /// Asset Types List of attribute paths
         /// </summary>
         public List<AttributePaths> AssetTypePaths { get; set; }
+        /// <summary>
+        /// Property Set mappings to be considered as systems,
+        /// </summary>
+        public List<AttributePaths> PSetsAsSystem { get; set; }
 
         /// <summary>
         /// File info for config file
@@ -46,6 +50,7 @@ namespace Xbim.FilterHelper
             FloorPaths = new List<AttributePaths>();
             AssetPaths = new List<AttributePaths>();
             AssetTypePaths = new List<AttributePaths>();
+            PSetsAsSystem = new List<AttributePaths>();
 
         }
 
@@ -137,6 +142,8 @@ namespace Xbim.FilterHelper
                     return AssetPaths;
                 case "AssetTypePropertyMaps":
                     return AssetTypePaths;
+                case "SystemPropertyMaps":
+                    return PSetsAsSystem;
                 default:
                     return null;
             }

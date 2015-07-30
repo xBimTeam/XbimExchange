@@ -674,7 +674,7 @@ namespace Xbim.COBieLiteUK
                         o.GetType().Name, o.Description);
                     if (fixIfPossible) o.Name = String.Format("{0} {1}", o.GetType().Name, _counter++);
                 }
-                if (regex.IsMatch(o.Name))
+                else if (regex.IsMatch(o.Name))
                 {
                     logger.WriteLine("Name {0} of {1} contains forbidden characters.", o.Name, o.GetType().Name);
                     if (fixIfPossible) o.Name = regex.Replace(o.Name, "");

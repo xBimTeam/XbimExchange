@@ -15,6 +15,7 @@ using Xbim.Ifc2x3.ExternalReferenceResource;
 using Xbim.Ifc2x3.Kernel;
 using Xbim.Ifc2x3.MeasureResource;
 using Xbim.Ifc2x3.ProductExtension;
+using Xbim.Ifc2x3.PropertyResource;
 using Xbim.Ifc2x3.QuantityResource;
 using Xbim.Ifc2x3.SharedBldgElements;
 using Xbim.Ifc2x3.SharedFacilitiesElements;
@@ -44,6 +45,18 @@ namespace XbimExchanger.IfcToCOBieLiteUK
         None = 2
     }
 
+    /// <summary>
+    /// Control what we extract from IFC as systems
+    /// </summary>
+    [Flags]
+    public enum SystemExtractionMode
+    {
+        System = 0x1, //default and should always be set
+        PropertyMaps = 0x2, //include properties as set by GetPropMap("SystemMaps")
+        Types = 0x4, //include types as system listing all defined objects in componentnsnames
+    }
+
+    
     /// <summary>
     /// 
     /// </summary>
@@ -114,7 +127,7 @@ namespace XbimExchanger.IfcToCOBieLiteUK
         private Dictionary<IfcObjectDefinition, XbimAttributedObject> _attributedObjects;
 
         private Dictionary<string, string[]> _cobieFieldMap;
-
+        
         private Dictionary<IfcObject, XbimIfcProxyTypeObject> _objectToTypeObjectMap;
 
         private Dictionary<XbimIfcProxyTypeObject, List<IfcElement>> _definingTypeObjectMap =
@@ -132,6 +145,10 @@ namespace XbimExchanger.IfcToCOBieLiteUK
         private Dictionary<IfcSpatialStructureElement, List<IfcSpatialStructureElement>> _spatialDecomposition;
         private readonly Dictionary<string, int> _typeNames = new Dictionary<string, int>();
 
+        /// <summary>
+        /// Property Sets used to establish systems as per responsibility matrix 
+        /// </summary>
+        public Dictionary<IfcPropertySet, IEnumerable<IfcObject>> SystemViaPropAssignment { get; private set; }
         #endregion
 
         #region Filters
@@ -177,13 +194,17 @@ namespace XbimExchanger.IfcToCOBieLiteUK
         /// </summary>
         /// <param name="model"></param>
         /// <param name="configurationFile"></param>
-        public CoBieLiteUkHelper(XbimModel model, OutPutFilters filter = null, string configurationFile = null)
+        public CoBieLiteUkHelper(XbimModel model, OutPutFilters filter = null, string configurationFile = null, EntityIdentifierMode extId = EntityIdentifierMode.IfcEntityLabels, SystemExtractionMode sysMode = SystemExtractionMode.System | SystemExtractionMode.Types)
         {
+            //set props
             _configFileName = configurationFile;
             Filter = filter != null ? filter : new OutPutFilters();
-
             _model = model;
+            EntityIdentifierMode = extId;
+            SystemMode = sysMode;
             _creatingApplication = model.Header.CreatingApplication;
+
+            //init
             LoadCobieMaps();
             GetContacts();
             GetClassificationDictionary();
@@ -195,23 +216,67 @@ namespace XbimExchanger.IfcToCOBieLiteUK
             GetSpaceAssetLookup();
         }
 
-        
-        
+
+
         private void GetSystems()
         {
-            _systemAssignment = 
-                _model.Instances.OfType<IfcRelAssignsToGroup>().Where(r => r.RelatingGroup is IfcSystem)
-                .ToDictionary(k => (IfcSystem)k.RelatingGroup, v => v.RelatedObjects);
-            _systemLookup = new Dictionary<IfcObjectDefinition, List<IfcSystem>>();
-            foreach (var systemAssignment in SystemAssignment)
-                foreach (var objectDefinition in systemAssignment.Value)
+            _systemAssignment = new Dictionary<IfcSystem, ObjectDefinitionSet>();
+            if (SystemMode.HasFlag(SystemExtractionMode.System))
+            {
+                _systemAssignment =
+                        _model.Instances.OfType<IfcRelAssignsToGroup>().Where(r => r.RelatingGroup is IfcSystem)
+                        .ToDictionary(k => (IfcSystem)k.RelatingGroup, v => v.RelatedObjects);
+                _systemLookup = new Dictionary<IfcObjectDefinition, List<IfcSystem>>();
+                foreach (var systemAssignment in SystemAssignment)
+                    foreach (var objectDefinition in systemAssignment.Value)
+                    {
+                        if (_systemLookup.ContainsKey(objectDefinition))
+                            _systemLookup[objectDefinition].Add(systemAssignment.Key);
+                        else
+                            _systemLookup.Add(objectDefinition, new List<IfcSystem>(new[] { systemAssignment.Key }));
+                    } 
+            }
+
+            //Use PropertySet Property with names matching config values on section name = SystemPropertyMaps with key=SystemMaps
+            SystemViaPropAssignment = new Dictionary<IfcPropertySet, IEnumerable<IfcObject>>();
+            if (SystemMode.HasFlag(SystemExtractionMode.PropertyMaps))
+            {
+                foreach (var propertyName in GetPropMap("SystemMaps"))
                 {
-                    if (_systemLookup.ContainsKey(objectDefinition))
-                        _systemLookup[objectDefinition].Add(systemAssignment.Key);
-                    else
-                        _systemLookup.Add(objectDefinition, new List<IfcSystem>(new[] {systemAssignment.Key} ));
-                }
+                    var propmap = propertyName.Split(new Char[] { '.' }, StringSplitOptions.RemoveEmptyEntries);
+                    if (propmap.Count() == 2)
+                    {
+                        var sets = Model.Instances.OfType<IfcPropertySet>()
+                            .Where(ps => ps.Name != null && propmap[0].Equals(ps.Name, StringComparison.OrdinalIgnoreCase)
+                                    && ps.PropertyDefinitionOf.Any()
+                                    && ps.HasProperties.OfType<IfcPropertySingleValue>().Where(psv => psv.Name == propmap[1]).Any()
+                                    && !SystemViaPropAssignment.ContainsKey(ps)
+                                    )
+                            .SelectMany(ps => ps.PropertyDefinitionOf)
+                            .Where(dbp => dbp.RelatedObjects.Where(e => _objectToTypeObjectMap.Keys.Contains(e)).Any()) //only none filtered objects
+                            .ToDictionary(dbp => dbp.RelatingPropertyDefinition as IfcPropertySet, dbp => dbp.RelatedObjects.AsEnumerable());
+
+                        SystemViaPropAssignment = SystemViaPropAssignment.Concat(sets).ToDictionary(p => p.Key, p => p.Value);
+                    }
+                } 
+            }
         }
+
+        /// <summary>
+        /// Get the property mappings for a given field name
+        /// </summary>
+        /// <param name="FiledKey">Field name</param>
+        /// <returns>string[]</returns>
+        public string[] GetPropMap(string FiledKey)
+        {
+            string[] propertyNames;
+            if (_cobieFieldMap.TryGetValue("SystemMaps", out propertyNames))
+            {
+                return propertyNames;
+            }
+            return new string[] { };
+        }
+        
 
         /// <summary>
         /// 
@@ -261,11 +326,16 @@ namespace XbimExchanger.IfcToCOBieLiteUK
                     _objectToTypeObjectMap.Add(ifcObject, typeObjectToObjects.Key);
                 }
             }
+
+            //**NOTE**: removed _classifiedObjects from existingAssets as some elements do not have a type but have a classification, this excludes them from the _objectToTypeObjectMap, not what we want I think
+            
             //get all Assets that don't belong to an Ifc Type or are not classified
             //get all IfcElements that aren't classified or have a type
-            var existingAssets = _classifiedObjects.Keys.OfType<IfcElement>()
-                .Concat(_objectToTypeObjectMap.Keys.OfType<IfcElement>()).Distinct();
-            //retrieve all the IfcElements from the model and exclude them if they are already classified or are a member of an IfcType
+            //var existingAssets = _classifiedObjects.Keys.OfType<IfcElement>()
+            //    .Concat(_objectToTypeObjectMap.Keys.OfType<IfcElement>()).Distinct();
+            var existingAssets = _objectToTypeObjectMap.Keys.OfType<IfcElement>();
+
+            //retrieve all the IfcElements from the model and exclude them if they are a member of an IfcType, 
             var unCategorizedAssets = _model.Instances.OfType<IfcElement>()
                 .Where(t => !(t is IfcFeatureElement) && !assemblyParts.Contains(t) && !Filter.ObjFilter(t)) //filter ifcElement it ifcTypeObject it is defined by is in excluded list of ifcTypeobjects
                 .Except(existingAssets);
@@ -668,6 +738,12 @@ namespace XbimExchanger.IfcToCOBieLiteUK
             get { return _sundryContacts; }
         }
 
+        public SystemExtractionMode SystemMode
+        {
+            get;
+            internal set;
+        }
+
         private void GetUnits()
         {
             var ifcProject = Model.IfcProject;
@@ -918,6 +994,25 @@ namespace XbimExchanger.IfcToCOBieLiteUK
             XbimIfcProxyTypeObject definingType;
             _objectToTypeObjectMap.TryGetValue(ifcObject, out definingType);
             return definingType != null ? definingType.IfcTypeObject : null;
+        }
+
+        /// <summary>
+        /// Get the XbimAttributedObject object associated with the passed ifcObjectDefinition
+        /// </summary>
+        /// <param name="ifcObjectDefinition">ifcObjectDefinition, IfcTypeObject, IfcObject</param>
+        /// <returns>XbimAttributedObject</returns>
+        public XbimAttributedObject GetAttributesObj(IfcObjectDefinition ifcObjectDefinition)
+        {
+            XbimAttributedObject attributedObject;
+            if (_attributedObjects.TryGetValue(ifcObjectDefinition, out attributedObject))
+            {
+                return attributedObject;
+            }
+            else
+            {
+                return null;
+            }
+            
         }
 
         /// <summary>
@@ -1207,6 +1302,20 @@ namespace XbimExchanger.IfcToCOBieLiteUK
             
         }
 
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="ifcPropertySet"></param>
+        /// <returns></returns>
+        public IEnumerable<IfcObjectDefinition> GetSystemAssignments(IfcPropertySet ifcPropertySet)
+        {
+            IEnumerable<IfcObject> assignments;
+            if (SystemViaPropAssignment.TryGetValue(ifcPropertySet, out assignments))
+                return assignments;
+            return Enumerable.Empty<IfcObjectDefinition>();
+
+        }
         /// <summary>
         /// Returns a list of spaces the element is in
         /// </summary>

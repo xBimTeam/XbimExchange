@@ -130,13 +130,14 @@ namespace Xbim.Client
         /// <param name="e"></param>
         private void chkListBoxType_SelectedIndexChanged(object sender, EventArgs e)
         {
+            listViewDefinedTypes.SetEnabled();
             var selitem = chkListBoxType.Text;
             listViewDefinedTypes.Key = selitem;
-            
             if (!string.IsNullOrEmpty(selitem) && (Filter.IfcTypeObjectFilter.PreDefinedType.Keys.Contains(selitem)))
             {
                 listViewDefinedTypes.Items = Filter.IfcTypeObjectFilter.PreDefinedType[selitem].ToList();
                 
+
             }
             else
             {

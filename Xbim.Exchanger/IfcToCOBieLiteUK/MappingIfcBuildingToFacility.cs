@@ -6,6 +6,7 @@ using Xbim.Ifc2x3.Kernel;
 using Xbim.Ifc2x3.ProductExtension;
 using Xbim.IO;
 using System = Xbim.COBieLiteUK.System;
+using netSystem = System;
 
 namespace XbimExchanger.IfcToCOBieLiteUK
 {
@@ -112,19 +113,42 @@ namespace XbimExchanger.IfcToCOBieLiteUK
             }
 
             //Systems
-           
-            var ifcSystems = helper.SystemAssignment;
-            if (ifcSystems.Any())
+            
+            facility.Systems = new List<Xbim.COBieLiteUK.System>();
+
+            if (helper.SystemMode.HasFlag(SystemExtractionMode.System) && helper.SystemAssignment.Any())
             {
-                facility.Systems = new List<Xbim.COBieLiteUK.System>(ifcSystems.Count);
                 var systemMappings = Exchanger.GetOrCreateMappings<MappingIfcSystemToSystem>();
-                foreach (var ifcSystem in ifcSystems.Keys)
+                foreach (var ifcSystem in helper.SystemAssignment.Keys)
                 {
                     var system = new Xbim.COBieLiteUK.System();
                     system = systemMappings.AddMapping(ifcSystem, system);
                     facility.Systems.Add(system);
                 }
             }
+
+            //Get systems via propertySets
+            if (helper.SystemMode.HasFlag(SystemExtractionMode.PropertyMaps) && helper.SystemViaPropAssignment.Any())
+            {
+                var systemMappings = Exchanger.GetOrCreateMappings<MappingSystemViaIfcPropertyToSystem>();
+                foreach (var ifcPropSet in helper.SystemViaPropAssignment.Keys)
+                {
+                    var system = new Xbim.COBieLiteUK.System();
+                    system = systemMappings.AddMapping(ifcPropSet, system);
+                    var init = facility.Systems.Where(sys => sys.Name.Equals(system.Name, netSystem.StringComparison.CurrentCultureIgnoreCase)).FirstOrDefault();
+                    if (init != null)
+                    {
+                        var idx = facility.Systems.IndexOf(init);
+                        facility.Systems[idx].Components = facility.Systems[idx].Components.Concat(system.Components).Distinct(new AssetKeyCompare()).ToList();
+                    }
+                    else
+                    {
+                        facility.Systems.Add(system);
+                    }
+
+                }
+            }
+            
 
             //Contacts
             var ifcActorSelects = helper.Contacts;
@@ -158,31 +182,37 @@ namespace XbimExchanger.IfcToCOBieLiteUK
                 defaultZone.Spaces.Add(new SpaceKey { Name = space.Name });
             }
             if (facility.Zones != null) facility.Zones.Add(defaultZone);
-            //assign all assets that are not in a system to the default
-            var assetTypes = facility.Get<AssetType>().ToList();
-            var systemsWritten = facility.Get<Xbim.COBieLiteUK.System>();
-            var assetsAssignedToSystem = new HashSet<string>(systemsWritten.SelectMany(s => s.Components).Select(a => a.Name));
-            var systems = facility.Systems ?? new List<Xbim.COBieLiteUK.System>();
-            var defaultSystem = helper.CreateUndefinedSystem();
-            //go over all unasigned assets
-            foreach (var assetType in assetTypes)
-            {
-                Xbim.COBieLiteUK.System assetTypeSystem = null;
-                foreach (var asset in assetType.Assets.Where(a=>!assetsAssignedToSystem.Contains(a.Name)))
-                {
-                    if (assetTypeSystem == null)
-                    {
-                        assetTypeSystem = helper.CreateUndefinedSystem();
-                        assetTypeSystem.Name = string.Format("System {0} ", assetType.Name);
-                        
-                    }
-                    assetTypeSystem.Components.Add(new AssetKey { Name = asset.Name });
-                }
 
-                //add to tle list only if it is not null
-                if (assetTypeSystem == null) continue;
-                if (facility.Systems == null) facility.Systems = new List<Xbim.COBieLiteUK.System>();
-                facility.Systems.Add(assetTypeSystem);
+            //assign all assets that are not in a system to the default
+            if (helper.SystemMode.HasFlag(SystemExtractionMode.Types))
+            {
+                var assetTypes = facility.Get<AssetType>().ToList();
+                var systemsWritten = facility.Get<Xbim.COBieLiteUK.System>();
+                var assetsAssignedToSystem = new HashSet<string>(systemsWritten.SelectMany(s => s.Components).Select(a => a.Name));
+                var systems = facility.Systems ?? new List<Xbim.COBieLiteUK.System>();
+                var defaultSystem = helper.CreateUndefinedSystem();
+                //go over all unasigned assets
+                foreach (var assetType in assetTypes)
+                {
+                    Xbim.COBieLiteUK.System assetTypeSystem = null;
+                    foreach (var asset in assetType.Assets.Where(a => !assetsAssignedToSystem.Contains(a.Name)))
+                    {
+                        if (assetTypeSystem == null)
+                        {
+                            assetTypeSystem = helper.CreateUndefinedSystem();
+                            assetTypeSystem.Name = string.Format("Type System {0} ", assetType.Name);
+
+                        }
+                        assetTypeSystem.Components.Add(new AssetKey { Name = asset.Name });
+                    }
+
+                    //add to tle list only if it is not null
+                    if (assetTypeSystem == null)
+                        continue;
+                    if (facility.Systems == null)
+                        facility.Systems = new List<Xbim.COBieLiteUK.System>();
+                    facility.Systems.Add(assetTypeSystem);
+                } 
             }
            
 

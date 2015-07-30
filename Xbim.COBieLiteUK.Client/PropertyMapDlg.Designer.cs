@@ -83,7 +83,7 @@
             this.Controls.Add(this.btnSave);
             this.Controls.Add(this.tabControl);
             this.Name = "PropertyMapDlg";
-            this.Text = "PropertyMapDlg";
+            this.Text = "Property Maps";
             this.ResumeLayout(false);
 
         }

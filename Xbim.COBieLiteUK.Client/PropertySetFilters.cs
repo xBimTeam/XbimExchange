@@ -56,6 +56,13 @@ namespace Xbim.Client
                 listViewContains.SetReadOnly();
                 listViewPSetEqTo.SetReadOnly();
             }
+            else
+            {
+                listViewEqTo.SetEnabled();
+                listViewStartWith.SetEnabled();
+                listViewContains.SetEnabled();
+                listViewPSetEqTo.SetEnabled();
+            }
         }
 
     }

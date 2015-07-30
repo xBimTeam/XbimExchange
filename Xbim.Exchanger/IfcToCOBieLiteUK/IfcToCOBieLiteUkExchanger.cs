@@ -21,9 +21,10 @@ namespace XbimExchanger.IfcToCOBieLiteUK
         /// </summary>
         /// <param name="source"></param>
         /// <param name="target"></param>
-        public IfcToCOBieLiteUkExchanger(XbimModel source, List<Facility> target, OutPutFilters filter = null, string configFile = null) : base(source, target)
+        public IfcToCOBieLiteUkExchanger(XbimModel source, List<Facility> target, OutPutFilters filter = null, string configFile = null, EntityIdentifierMode extId = EntityIdentifierMode.IfcEntityLabels, SystemExtractionMode sysMode = SystemExtractionMode.System | SystemExtractionMode.Types ) : base(source, target)
         {
-            Helper = new CoBieLiteUkHelper(source, filter, configFile);
+            Helper = new CoBieLiteUkHelper(source, filter, configFile, extId, sysMode);
+            
         }
 
         /// <summary>

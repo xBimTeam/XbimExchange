@@ -24,6 +24,11 @@ namespace Xbim.Client
             listViewMaps.AllUpper = false; //force return lists to be as typed, not forced to uppercase
             PropPaths = paths;
             SetUp();
+            if (listBoxFieldNames.Items.Count > 0)
+            {
+                listBoxFieldNames.SelectedIndex = 0;
+            }
+            
         }
 
         /// <summary>
@@ -36,7 +41,10 @@ namespace Xbim.Client
             listBoxFieldNames.Items.Clear();
             listViewMaps.Clear();
             SetUp();
-
+            if (listBoxFieldNames.Items.Count > 0)
+            {
+                listBoxFieldNames.SelectedIndex = 0;
+            }
         }
 
         /// <summary>
@@ -62,7 +70,8 @@ namespace Xbim.Client
              listViewMaps.Key = selitem;
              if (!string.IsNullOrEmpty(selitem))
              {
-                 listViewMaps.Items = PropPaths.Where(p => p.Key == selitem).First().PSetPaths.ToList();
+                listViewMaps.Items = PropPaths.Where(p => p.Key == selitem).First().PSetPaths.ToList();
+                listViewMaps.SetEnabled();
              }
                 
          }
@@ -82,8 +91,11 @@ namespace Xbim.Client
                  Debug.Write(string.Format(" : {0} ", item));
              }
 #endif
-             PropPaths.RemoveAt(listBoxFieldNames.SelectedIndex);
-             PropPaths.Insert(listBoxFieldNames.SelectedIndex, new AttributePaths(e.Key, string.Join(";", e.Items)));
+            if (listBoxFieldNames.SelectedIndex >= 0)
+            {
+                PropPaths.RemoveAt(listBoxFieldNames.SelectedIndex);
+                PropPaths.Insert(listBoxFieldNames.SelectedIndex, new AttributePaths(e.Key, string.Join(";", e.Items))); 
+            }
          }
     }
 }

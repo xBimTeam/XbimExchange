@@ -70,7 +70,8 @@ namespace Xbim.Client
             editlistView.Columns[0].Width = editlistView.Width - 4;
             editlistView.Height = this.Height - 4;
             AllUpper = true;
-            
+            //SetReadOnly();
+
         }
 
         /// <summary>
@@ -128,6 +129,13 @@ namespace Xbim.Client
             add.Enabled = false;
             remove.Enabled = false;
             editlistView.LabelEdit = false;
+        }
+
+        public void SetEnabled()
+        {
+            add.Enabled = true;
+            remove.Enabled = true;
+            editlistView.LabelEdit = true;
         }
 
         /// <summary>
