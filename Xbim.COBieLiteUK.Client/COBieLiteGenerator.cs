@@ -29,7 +29,7 @@ namespace Xbim.Client
             InitializeComponent();
             //set default role filters held in FillRolesFilterHolder property list
             DirectoryInfo dir = new DirectoryInfo(AppDomain.CurrentDomain.BaseDirectory);
-            ConfigFile = new FileInfo(Path.Combine(dir.FullName, "COBieAttributes.config"));
+            ConfigFile = new FileInfo(Path.Combine(dir.FullName, "COBieAttributesCustom.config"));
             if (!ConfigFile.Exists)
             {
                 AppendLog("Creating Config File");
