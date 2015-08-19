@@ -206,7 +206,7 @@ namespace Xbim.Client
                             MessageBox.Show("File path does not exist: {0}", doc.Name);
                         }
                     }
-                    catch (System.ArgumentException Ex)
+                    catch (System.ArgumentException )
                     {
                         MessageBox.Show("File path is incorrect: {0}", doc.Name);
                     }
