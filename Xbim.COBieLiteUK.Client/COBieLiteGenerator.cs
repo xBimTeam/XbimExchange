@@ -65,26 +65,7 @@ namespace Xbim.Client
         /// </summary>
         private RoleFilter SetRoles()
         {
-            RoleFilter roles = RoleFilter.Unknown; //reset to unknown
-            var checkedRoles = checkedListRoles.CheckedItems;
-            //set selected roles
-            foreach (var item in checkedRoles)
-            {
-                try
-                {
-                    RoleFilter role = (RoleFilter)Enum.Parse(typeof(RoleFilter), (string)item);
-                    roles |= role;
-                }
-                catch (Exception)
-                {
-                    AppendLog("Error: Failed to get requested role");
-                }
-            }
-            //we have selected roles so remove unknown
-            if (checkedRoles.Count > 0)
-            {
-                roles &= ~RoleFilter.Unknown;//remove unknown
-            }
+            var roles = rolesList.Roles;
             if (!chkBoxNoFilter.Checked)
             {
                 AppendLog("Selected Roles: " + roles.ToString("F"));
@@ -93,7 +74,6 @@ namespace Xbim.Client
             {
                 AppendLog("Selected Roles: Disabled by no filter flag ");
             }
-            
             return roles;
         }
 
@@ -130,6 +110,10 @@ namespace Xbim.Client
             _worker.WorkerSupportsCancellation = false;
             _worker.ProgressChanged += (object s, ProgressChangedEventArgs args) =>
             {
+                if (ProgressBar.Visible == false)
+                {
+                    ProgressBar.Visible = true;
+                }
                 StatusMsg.Text = (string)args.UserState;
                 if (args.ProgressPercentage == 0)
                 {
@@ -190,6 +174,7 @@ namespace Xbim.Client
                 {
                     Process.Start(FileName);
                 }
+                ProgressBar.Visible = false;
             };
         }
 
@@ -212,8 +197,8 @@ namespace Xbim.Client
         private void COBieLiteGenerator_Load(object sender, EventArgs e)
         {
             //set roles
-            var roleList = Enum.GetNames(typeof(RoleFilter));
-            checkedListRoles.Items.AddRange(roleList.Where(r => r != RoleFilter.Unknown.ToString()).ToArray());
+            //var roleList = Enum.GetNames(typeof(RoleFilter));
+            //checkedListRoles.Items.AddRange(roleList.Where(r => r != RoleFilter.Unknown.ToString()).ToArray());
             var sysList = Enum.GetNames(typeof(SystemExtractionMode));
             checkedListSys.Items.AddRange(sysList.Where(r => r != SystemExtractionMode.System.ToString()).ToArray());
             for (int i = 0; i < checkedListSys.Items.Count; i++) //set all to ticked
@@ -237,9 +222,10 @@ namespace Xbim.Client
             tooltip.IsBalloon = true;
             tooltip.SetToolTip(chkBoxFlipFilter, "Export all excludes to excel file, Note PropertySet Excludes are not flipped");
             tooltip.SetToolTip(chkBoxOpenFile, "Open in excel once file is created");
-            tooltip.SetToolTip(checkedListRoles, "Select roles for export filtering");
+            tooltip.SetToolTip(rolesList, "Select roles for export filtering");
             tooltip.SetToolTip(btnGenerate, "Generate COBie excel workbook");
             tooltip.SetToolTip(btnBrowse, "Select file to extract COBie from");
+            tooltip.SetToolTip(btnFederate, "Create federated file to extract COBie from");
             tooltip.SetToolTip(btnBrowseTemplate, "Select template excel file");
             tooltip.SetToolTip(cmboxFiletype, "Select excel file extension to generate");
             tooltip.SetToolTip(btnClassFilter, "Setup Filter");
@@ -425,6 +411,7 @@ namespace Xbim.Client
             {
                 txtPath.Text = dlg.FileName;
             }
+            rolesList.Enabled = (Path.GetExtension(txtPath.Text).ToUpper() != ".XBIMF");
         }
 
         /// <summary>
@@ -567,7 +554,7 @@ namespace Xbim.Client
             chkBoxFlipFilter.Enabled = !chkBoxNoFilter.Checked;
             btnClassFilter.Enabled = !chkBoxNoFilter.Checked;
             btnMergeFilter.Enabled = !chkBoxNoFilter.Checked;
-            checkedListRoles.Enabled = !chkBoxNoFilter.Checked;
+            rolesList.Enabled = !chkBoxNoFilter.Checked;
             if (chkBoxNoFilter.Checked)
             {
                 txtOutput.AppendText("Filter Off" + Environment.NewLine);
@@ -594,8 +581,17 @@ namespace Xbim.Client
                 PropertyMaps.Save();
             }
         }
-    
 
+        private void btnFederate_Click(object sender, EventArgs e)
+        {
+            Federate FedDlg = new Federate(txtPath.Text);
+            var result = FedDlg.ShowDialog(this);
+            if (result == DialogResult.OK)
+            {
+                txtPath.Text = FedDlg.FileName;
+            }
+            rolesList.Enabled = (Path.GetExtension(txtPath.Text).ToUpper() != ".XBIMF");
+        }
     }
 
     

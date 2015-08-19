@@ -30,13 +30,13 @@ namespace Xbim.Client
         private void InitializeComponent()
         {
             this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.btnFederate = new System.Windows.Forms.Button();
             this.btnBrowseTemplate = new System.Windows.Forms.Button();
             this.txtTemplate = new System.Windows.Forms.ComboBox();
             this.label2 = new System.Windows.Forms.Label();
             this.txtPath = new System.Windows.Forms.ComboBox();
             this.btnBrowse = new System.Windows.Forms.Button();
             this.label1 = new System.Windows.Forms.Label();
-            this.checkedListRoles = new System.Windows.Forms.CheckedListBox();
             this.cmboxFiletype = new System.Windows.Forms.ComboBox();
             this.btnClear = new System.Windows.Forms.Button();
             this.btnGenerate = new System.Windows.Forms.Button();
@@ -55,6 +55,7 @@ namespace Xbim.Client
             this.chkBoxIds = new System.Windows.Forms.CheckBox();
             this.checkedListSys = new System.Windows.Forms.CheckedListBox();
             this.label3 = new System.Windows.Forms.Label();
+            this.rolesList = new Xbim.Client.RolesList();
             this.groupBox1.SuspendLayout();
             this.statusStrip1.SuspendLayout();
             this.groupBox2.SuspendLayout();
@@ -64,6 +65,7 @@ namespace Xbim.Client
             // 
             this.groupBox1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
+            this.groupBox1.Controls.Add(this.btnFederate);
             this.groupBox1.Controls.Add(this.btnBrowseTemplate);
             this.groupBox1.Controls.Add(this.txtTemplate);
             this.groupBox1.Controls.Add(this.label2);
@@ -77,13 +79,23 @@ namespace Xbim.Client
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "File Location";
             // 
+            // btnFederate
+            // 
+            this.btnFederate.Location = new System.Drawing.Point(361, 20);
+            this.btnFederate.Name = "btnFederate";
+            this.btnFederate.Size = new System.Drawing.Size(62, 23);
+            this.btnFederate.TabIndex = 5;
+            this.btnFederate.Text = "Federate";
+            this.btnFederate.UseVisualStyleBackColor = true;
+            this.btnFederate.Click += new System.EventHandler(this.btnFederate_Click);
+            // 
             // btnBrowseTemplate
             // 
             this.btnBrowseTemplate.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.btnBrowseTemplate.Enabled = false;
-            this.btnBrowseTemplate.Location = new System.Drawing.Point(353, 44);
+            this.btnBrowseTemplate.Location = new System.Drawing.Point(299, 44);
             this.btnBrowseTemplate.Name = "btnBrowseTemplate";
-            this.btnBrowseTemplate.Size = new System.Drawing.Size(75, 23);
+            this.btnBrowseTemplate.Size = new System.Drawing.Size(124, 23);
             this.btnBrowseTemplate.TabIndex = 4;
             this.btnBrowseTemplate.Text = "&Browse...";
             this.btnBrowseTemplate.UseVisualStyleBackColor = true;
@@ -97,7 +109,7 @@ namespace Xbim.Client
             this.txtTemplate.FormattingEnabled = true;
             this.txtTemplate.Location = new System.Drawing.Point(74, 46);
             this.txtTemplate.Name = "txtTemplate";
-            this.txtTemplate.Size = new System.Drawing.Size(262, 21);
+            this.txtTemplate.Size = new System.Drawing.Size(219, 21);
             this.txtTemplate.TabIndex = 3;
             this.txtTemplate.SelectedIndexChanged += new System.EventHandler(this.txtTemplate_SelectedIndexChanged);
             // 
@@ -117,15 +129,15 @@ namespace Xbim.Client
             this.txtPath.FormattingEnabled = true;
             this.txtPath.Location = new System.Drawing.Point(74, 20);
             this.txtPath.Name = "txtPath";
-            this.txtPath.Size = new System.Drawing.Size(262, 21);
+            this.txtPath.Size = new System.Drawing.Size(219, 21);
             this.txtPath.TabIndex = 0;
             // 
             // btnBrowse
             // 
             this.btnBrowse.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnBrowse.Location = new System.Drawing.Point(353, 18);
+            this.btnBrowse.Location = new System.Drawing.Point(299, 20);
             this.btnBrowse.Name = "btnBrowse";
-            this.btnBrowse.Size = new System.Drawing.Size(75, 23);
+            this.btnBrowse.Size = new System.Drawing.Size(63, 23);
             this.btnBrowse.TabIndex = 1;
             this.btnBrowse.Text = "&Browse...";
             this.btnBrowse.UseVisualStyleBackColor = true;
@@ -139,15 +151,6 @@ namespace Xbim.Client
             this.label1.Size = new System.Drawing.Size(56, 13);
             this.label1.TabIndex = 0;
             this.label1.Text = "Select file:";
-            // 
-            // checkedListRoles
-            // 
-            this.checkedListRoles.CheckOnClick = true;
-            this.checkedListRoles.FormattingEnabled = true;
-            this.checkedListRoles.Location = new System.Drawing.Point(12, 12);
-            this.checkedListRoles.Name = "checkedListRoles";
-            this.checkedListRoles.Size = new System.Drawing.Size(140, 79);
-            this.checkedListRoles.TabIndex = 13;
             // 
             // cmboxFiletype
             // 
@@ -201,11 +204,12 @@ namespace Xbim.Client
             this.ProgressBar.AutoSize = false;
             this.ProgressBar.Name = "ProgressBar";
             this.ProgressBar.Size = new System.Drawing.Size(150, 16);
+            this.ProgressBar.Visible = false;
             // 
             // StatusMsg
             // 
             this.StatusMsg.Name = "StatusMsg";
-            this.StatusMsg.Size = new System.Drawing.Size(433, 17);
+            this.StatusMsg.Size = new System.Drawing.Size(402, 17);
             this.StatusMsg.Spring = true;
             this.StatusMsg.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
@@ -341,11 +345,20 @@ namespace Xbim.Client
             this.label3.TabIndex = 30;
             this.label3.Text = "System Mode";
             // 
+            // rolesList
+            // 
+            this.rolesList.Location = new System.Drawing.Point(15, 8);
+            this.rolesList.Name = "rolesList";
+            this.rolesList.Roles = Xbim.FilterHelper.RoleFilter.Unknown;
+            this.rolesList.Size = new System.Drawing.Size(137, 83);
+            this.rolesList.TabIndex = 31;
+            // 
             // COBieLiteGenerator
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(600, 468);
+            this.Controls.Add(this.rolesList);
             this.Controls.Add(this.label3);
             this.Controls.Add(this.checkedListSys);
             this.Controls.Add(this.chkBoxIds);
@@ -357,7 +370,6 @@ namespace Xbim.Client
             this.Controls.Add(this.cmboxFiletype);
             this.Controls.Add(this.btnClear);
             this.Controls.Add(this.btnGenerate);
-            this.Controls.Add(this.checkedListRoles);
             this.Controls.Add(this.groupBox1);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
             this.MaximizeBox = false;
@@ -385,7 +397,6 @@ namespace Xbim.Client
         private System.Windows.Forms.ComboBox txtPath;
         private System.Windows.Forms.Button btnBrowse;
         private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.CheckedListBox checkedListRoles;
         private System.Windows.Forms.ComboBox cmboxFiletype;
         private System.Windows.Forms.Button btnClear;
         private System.Windows.Forms.Button btnGenerate;
@@ -404,6 +415,8 @@ namespace Xbim.Client
         private System.Windows.Forms.CheckBox chkBoxIds;
         private System.Windows.Forms.CheckedListBox checkedListSys;
         private System.Windows.Forms.Label label3;
+        private RolesList rolesList;
+        private System.Windows.Forms.Button btnFederate;
     }
 }
 
