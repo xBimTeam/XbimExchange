@@ -25,6 +25,11 @@ namespace Xbim.Client
         { get { return _fedModel; } }
 
         /// <summary>
+        /// XBimF File name
+        /// </summary>
+        public FileInfo FileNameXbimf
+        { get; set; }
+        /// <summary>
         /// Mapping of RoleFilter to ActorRole
         /// </summary>
         public Dictionary<RoleFilter, IfcActorRole> RoleMap
@@ -94,6 +99,7 @@ namespace Xbim.Client
         /// <param name="prjName">Project Name</param>
         public FederatedModel(FileInfo file, string author, string organisation, string prjName = null)
         {
+            FileNameXbimf = file;
             Create(file, author, organisation, prjName);            
         }
 
@@ -106,7 +112,9 @@ namespace Xbim.Client
         /// <param name="prjName">Project Name</param>
         public void Create(FileInfo file, string author, string organisation, string prjName = null)
         {
-            _fedModel = XbimModel.CreateModel(file.FullName, XbimDBAccess.ReadWrite);
+            FileNameXbimf = file;
+            _fedModel = XbimModel.CreateTemporaryModel();
+            //_fedModel = XbimModel.CreateModel(file.FullName, XbimDBAccess.ReadWrite);
 
             _fedModel.Initialise(author, organisation, "xBIM", "xBIM Team", ""); //"" is version, but none to grab as yet
 
@@ -222,6 +230,21 @@ namespace Xbim.Client
         {
             if (_fedModel != null)
             {
+                //Hate this!!!
+                string tempFile = Path.GetTempFileName();
+                tempFile = Path.ChangeExtension(tempFile, ".ifc");
+
+                _fedModel.SaveAs(tempFile, XbimExtensions.Interfaces.XbimStorageType.IFC);
+                using (var model = new XbimModel())
+                {
+                    model.CreateFrom(tempFile, FileNameXbimf.FullName,null,true,true);
+                }
+                if (File.Exists(tempFile))
+                {
+                    File.Delete(tempFile);
+                }
+                //End hate
+                
                 _fedModel.Close();
                 _fedModel.Dispose(); //might not need this, as close can call dispose above
                 _fedModel = null;
