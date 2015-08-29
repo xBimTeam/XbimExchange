@@ -94,8 +94,8 @@
       <HintPath>..\packages\Xbim.Essentials.3.1.10-V0003\lib\net40\Xbim.IO.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Xbim.Properties, Version=0.0.0.0, Culture=neutral, PublicKeyToken=11e3655e576ec5a9, processorArchitecture=MSIL">
-      <HintPath>..\packages\Xbim.PropertySets.3.1.10-V0001\lib\net40\Xbim.Properties.dll</HintPath>
+    <Reference Include="Xbim.Properties, Version=3.1.0.0, Culture=neutral, PublicKeyToken=11e3655e576ec5a9, processorArchitecture=MSIL">
+      <HintPath>..\packages\Xbim.PropertySets.3.1.10-V0003\lib\net40\Xbim.Properties.dll</HintPath>
       <Private>True</Private>
     </Reference>
   </ItemGroup>
@@ -178,10 +178,10 @@
     <Compile Include="IfcToCOBieLiteUK\XbimIfcProxyTypeObject.cs" />
     <Compile Include="IXbimMappings.cs" />
     <Compile Include="XbimMappings.cs" />
-	<Compile Include="..\SharedAssemblyInfo.cs">
+    <Compile Include="..\SharedAssemblyInfo.cs">
       <Link>Properties\SharedAssemblyInfo.cs</Link>
     </Compile>
-	<Compile Include="..\SharedFileVersionInfo.cs">
+    <Compile Include="..\SharedFileVersionInfo.cs">
       <Link>Properties\SharedFileVersionInfo.cs</Link>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />

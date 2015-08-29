@@ -11,7 +11,7 @@
     <AssemblyName>Xbim.Exchange</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
-    <NuGetPackageImportStamp>49b9e096</NuGetPackageImportStamp>
+    <NuGetPackageImportStamp>ac9b7e72</NuGetPackageImportStamp>
     <IsWebBootstrapper>false</IsWebBootstrapper>
     <PublishUrl>publish\</PublishUrl>
     <Install>true</Install>
