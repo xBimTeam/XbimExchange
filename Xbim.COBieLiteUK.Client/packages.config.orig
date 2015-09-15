@@ -4,8 +4,8 @@
   <package id="ManagedEsent" version="1.9.2.0" targetFramework="net45" />
   <package id="SharpZipLib" version="0.86.0" targetFramework="net45" />
 <<<<<<< HEAD
-  <package id="Xbim.Essentials" version="3.1.8" targetFramework="net45" />
+  <package id="Xbim.Essentials" version="3.1.7" targetFramework="net4" />
 =======
-  <package id="Xbim.Essentials" version="3.1.7" targetFramework="net40" />
->>>>>>> 72dda5bcb09ad348d267cd3e997ab3223e64d1f8
+  <package id="Xbim.Essentials" version="3.1.10-V0003" targetFramework="net40" />
+>>>>>>> 747191ed5e7b69b53cffd056886df0ee40e77f88
 </packages>

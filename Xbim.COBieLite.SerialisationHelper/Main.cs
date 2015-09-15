@@ -43,6 +43,8 @@ namespace SerialisationHelper
 
         private static void Main()
         {
+            return;
+
             var f = new FileInfo("XmlSerializationCode.tcs");
             FixSerialisation(f, @"..\..\..\Xbim.COBieLite\COBieLite Schema\");
 

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -20,27 +21,46 @@ namespace Xbim.Client
         public bool SeeMergeFilter { get; set; }
         public RoleFilter Roles { get; set; }
 
-        public FilterDlg(OutPutFilters assetfilters, bool seeMergeFilterOnRole = false, RoleFilter roles = RoleFilter.Unknown)
+        public FilterDlg(OutPutFilters assetfilters, bool seeMergeFilterOnRole = false, Dictionary<FileInfo, OutPutFilters> FedFilters = null)
         {
             InitializeComponent();
             SeeMergeFilter = seeMergeFilterOnRole;
-            Roles = roles;
+            Roles = assetfilters.AppliedRoles;
             RolesFilters = assetfilters;
-            SetFilter();
+            SetFilter(FedFilters);
         }
 
 
-        public void SetFilter()
+        public void SetFilter(Dictionary<FileInfo, OutPutFilters> FedFilters)
         {
             if (SeeMergeFilter)
             {
-                TabPage page = new System.Windows.Forms.TabPage(Roles.ToString("F"));
-                page.Controls.Add(new FilterTab(RolesFilters, true));
-                tabControl.TabPages.Add(page);
+                if (FedFilters != null) //federated filters passed,
+                {
+                    Text = "Federated Referenced Model Filters";
+                    foreach (var item in FedFilters)
+                    {
+                        var modelName = Path.GetFileName(item.Key.Name) + " : " + item.Value.AppliedRoles.ToString("F");
+                        TabPage page = new System.Windows.Forms.TabPage(modelName);
+                        page.Controls.Add(new FilterTab(item.Value, true));
+                        tabControl.TabPages.Add(page);
+                    }
+                }
+                else
+                {
+                    Text = "Model Filters";
+                    TabPage page = new System.Windows.Forms.TabPage(Roles.ToString("F"));
+                    page.Controls.Add(new FilterTab(RolesFilters, true));
+                    tabControl.TabPages.Add(page);
+                    
+                }
                 btnOK.Enabled = false;
+                btnOK.Visible = false;
+                btnCancel.Text = "Close";
             }
             else
             {
+                Text = "Role Filters";
                 foreach (RoleFilter role in Enum.GetValues(typeof(RoleFilter)))
                 {
                     TabPage page = new System.Windows.Forms.TabPage(role.ToString());
@@ -50,6 +70,8 @@ namespace Xbim.Client
 
                 }
                 btnOK.Enabled = true;
+                btnOK.Visible = true;
+                btnCancel.Text = "Cancel";
             }
             
 

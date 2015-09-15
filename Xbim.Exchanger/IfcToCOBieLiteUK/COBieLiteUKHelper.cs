@@ -21,6 +21,7 @@ using Xbim.Ifc2x3.SharedBldgElements;
 using Xbim.Ifc2x3.SharedFacilitiesElements;
 using Xbim.IO;
 using Xbim.XbimExtensions.SelectTypes;
+using XbimExchanger.IfcToCOBieLiteUK.EqCompare;
 using Attribute = Xbim.COBieLiteUK.Attribute;
 using SystemAssembly = System.Reflection.Assembly;
 
@@ -225,6 +226,7 @@ namespace XbimExchanger.IfcToCOBieLiteUK
             {
                 _systemAssignment =
                         _model.Instances.OfType<IfcRelAssignsToGroup>().Where(r => r.RelatingGroup is IfcSystem)
+                        .Distinct(new IfcRelAssignsToGroupRelatedGroupObjCompare()) //make sure we do not have duplicate keys, or ToDictionary will throw ex. could lose RelatedObjects though. 
                         .ToDictionary(k => (IfcSystem)k.RelatingGroup, v => v.RelatedObjects);
                 _systemLookup = new Dictionary<IfcObjectDefinition, List<IfcSystem>>();
                 foreach (var systemAssignment in SystemAssignment)
@@ -832,7 +834,8 @@ namespace XbimExchanger.IfcToCOBieLiteUK
                     var parts = strRef.Split(new[] {':', ';', '/', '\\'}, StringSplitOptions.RemoveEmptyEntries);
                     if (parts.Length > 1)
                         category.Description = parts[1];
-                    category.Code = parts[0];
+                    if (parts.Length > 0)
+                        category.Code = parts[0];
                 }
                 else
                 {

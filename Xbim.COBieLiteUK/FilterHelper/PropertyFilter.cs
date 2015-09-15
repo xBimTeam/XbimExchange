@@ -175,5 +175,16 @@ namespace Xbim.FilterHelper
             
         }
 
+        /// <summary>
+        /// Clear PropertyFilter
+        /// </summary>
+        public void Clear()
+        {
+            EqualTo.Clear();
+            StartWith.Clear();
+            Contain.Clear();
+            PropertySetsEqualTo.Clear();
+        }
+
     }
 }

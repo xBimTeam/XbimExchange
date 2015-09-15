@@ -5,8 +5,8 @@
 <<<<<<< HEAD
         <version>3.1.8</version>
 =======
-        <version>3.1.9-Prerelease</version>
->>>>>>> 72dda5bcb09ad348d267cd3e997ab3223e64d1f8
+        <version>3.1.10-V0003</version>
+>>>>>>> 747191ed5e7b69b53cffd056886df0ee40e77f88
         <title>xBIM Exchange</title>
         <authors>xBIM team</authors>
         <owners>Steve Lockley</owners>
@@ -31,9 +31,9 @@ IOS and Android versions are under development.</description>
         <dependency id="Xbim.Essentials" version="3.1.8" />
         <dependency id="Xbim.PropertySets" version="3.1.8" />
 =======
-        <dependency id="Xbim.Geometry" version="3.1.9-Prerelease" />
-        <dependency id="Xbim.PropertySets" version="3.1.9-Prerelease" />
->>>>>>> 72dda5bcb09ad348d267cd3e997ab3223e64d1f8
+        <dependency id="Xbim.Geometry" version="3.1.10-V0003" />
+        <dependency id="Xbim.PropertySets" version="3.1.10-V0001" />
+>>>>>>> 747191ed5e7b69b53cffd056886df0ee40e77f88
       </dependencies>
     </metadata>
     <files>

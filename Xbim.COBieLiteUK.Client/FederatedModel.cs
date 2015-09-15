@@ -21,7 +21,7 @@ namespace Xbim.Client
         // <summary>
         /// Return the federated XBim Model
         /// </summary>
-        public XbimModel FedModel
+        public XbimModel Model
         { get { return _fedModel; } }
 
         /// <summary>
@@ -72,11 +72,11 @@ namespace Xbim.Client
         /// <summary>
         /// Refrenced files and roles
         /// </summary>
-        public Dictionary<FileInfo, RoleFilter> FileRoles
+        public Dictionary<XbimModel, RoleFilter> RefModelRoles
         {
             get
             {
-                return _fedModel != null ? GetFileRoles() : new Dictionary<FileInfo, RoleFilter>();
+                return _fedModel != null ? GetFileRoles() : new Dictionary<XbimModel, RoleFilter>();
             }
         } 
         #endregion
@@ -87,6 +87,7 @@ namespace Xbim.Client
         /// <param name="file"></param>
         public FederatedModel(FileInfo file)
         {
+            FileNameXbimf = file;
             Open(file);
         }
 
@@ -113,18 +114,16 @@ namespace Xbim.Client
         public void Create(FileInfo file, string author, string organisation, string prjName = null)
         {
             FileNameXbimf = file;
-            _fedModel = XbimModel.CreateTemporaryModel();
-            //_fedModel = XbimModel.CreateModel(file.FullName, XbimDBAccess.ReadWrite);
+            //_fedModel = XbimModel.CreateTemporaryModel();
+            _fedModel = XbimModel.CreateModel(file.FullName, XbimDBAccess.ReadWrite);
 
             _fedModel.Initialise(author, organisation, "xBIM", "xBIM Team", ""); //"" is version, but none to grab as yet
 
-            if (prjName != null)
+            using (var txn = _fedModel.BeginTransaction())
             {
-                using (var txn = _fedModel.BeginTransaction())
-                {
-                    _fedModel.IfcProject.Name = prjName;
-                    txn.Commit();
-                }
+                _fedModel.IfcProject.Name = (prjName != null) ? prjName : string.Empty;
+                _fedModel.Header = new IfcFileHeader(IfcFileHeader.HeaderCreationMode.InitWithXbimDefaults);
+                txn.Commit();
             }
         }
 
@@ -192,9 +191,9 @@ namespace Xbim.Client
         /// Get the file to roles information
         /// </summary>
         /// <returns>Dictionary or FileInfo to RoleFilter</returns>
-        private Dictionary<FileInfo, RoleFilter> GetFileRoles()
+        private Dictionary<XbimModel, RoleFilter> GetFileRoles()
         {
-            Dictionary<FileInfo, RoleFilter> fileRoles = new Dictionary<FileInfo, RoleFilter>();
+            Dictionary<XbimModel, RoleFilter> modelRoles = new Dictionary<XbimModel, RoleFilter>();
             foreach (var refModel in _fedModel.ReferencedModels)
             {
                 IfcDocumentInformation doc = refModel.DocumentInformation;
@@ -204,10 +203,10 @@ namespace Xbim.Client
                     RoleFilter docRoles = GetRoleFilters(owner.Roles.ToList());
                     try
                     {
-                        FileInfo file = new FileInfo(doc.Name);
+                        FileInfo file = new FileInfo(refModel.Model.DatabaseName);
                         if (file.Exists)
                         {
-                            fileRoles[file] = docRoles;
+                            modelRoles[refModel.Model] = docRoles;
                         }
                         else
                         {
@@ -220,7 +219,7 @@ namespace Xbim.Client
                     }
                 }
             }
-            return fileRoles;
+            return modelRoles;
         }
 
         /// <summary>
@@ -230,24 +229,29 @@ namespace Xbim.Client
         {
             if (_fedModel != null)
             {
-                //Hate this!!!
-                string tempFile = Path.GetTempFileName();
-                tempFile = Path.ChangeExtension(tempFile, ".ifc");
+                //TODO:  hate this work around to avoid header Object set to null in XBimModel Close method, but small file so time hit limited
+                //Check with steve as to why header set to null 
 
-                _fedModel.SaveAs(tempFile, XbimExtensions.Interfaces.XbimStorageType.IFC);
-                using (var model = new XbimModel())
-                {
-                    model.CreateFrom(tempFile, FileNameXbimf.FullName,null,true,true);
-                }
-                if (File.Exists(tempFile))
-                {
-                    File.Delete(tempFile);
-                }
-                //End hate
-                
-                _fedModel.Close();
-                _fedModel.Dispose(); //might not need this, as close can call dispose above
+                //save the xbim model back to a temp ifc
+                //string tempFile = Path.GetTempFileName();
+                //tempFile = Path.ChangeExtension(tempFile, ".ifc");
+                //_fedModel.SaveAs(tempFile, XbimExtensions.Interfaces.XbimStorageType.IFC);
+
+                //dispose of fed xbim databse
+                _fedModel.Close(); //will close referenced models as well
+                _fedModel.Dispose(); //might not need this, as close method can call dispose 
                 _fedModel = null;
+
+                //create new xbimf database from temp file ifc
+                //using (var model = new XbimModel())
+                //{
+                //    model.CreateFrom(tempFile, FileNameXbimf.FullName, null, true, true);
+                //}
+                //if (File.Exists(tempFile))
+                //{
+                //    File.Delete(tempFile);
+                //}
+
             }
         }
 
@@ -334,7 +338,7 @@ namespace Xbim.Client
         /// </summary>
         /// <param name="actorRoles">list of IfcActorRole</param>
         /// <returns>RoleFilter</returns>
-        private RoleFilter GetRoleFilters(List<IfcActorRole> actorRoles)
+        public static RoleFilter GetRoleFilters(List<IfcActorRole> actorRoles)
         {
             RoleFilter roles = RoleFilter.Unknown; //reset to unknown
 
@@ -362,16 +366,16 @@ namespace Xbim.Client
         /// </summary>
         /// <param name="actorRole">IfcActorRole</param>
         /// <returns>RoleFilter</returns>
-        private RoleFilter MapActorRole(IfcActorRole actorRole)
+        private static RoleFilter MapActorRole(IfcActorRole actorRole)
         {
             var role = actorRole.Role;
             var userDefined = actorRole.UserDefinedRole;
             if (role == IfcRole.UserDefined)
             {
-                RoleFilter role2;
-                if (Enum.TryParse(userDefined, out role2))
+                RoleFilter filterRole;
+                if (Enum.TryParse(userDefined, out filterRole))
                 {
-                    return role2;
+                    return filterRole;
                 }
             }
             else

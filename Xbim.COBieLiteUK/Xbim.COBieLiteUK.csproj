@@ -83,20 +83,20 @@
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
-    <Reference Include="Xbim.Common, Version=3.0.5701.20771, Culture=neutral, PublicKeyToken=11e3655e576ec5a9, processorArchitecture=MSIL">
-      <HintPath>..\packages\Xbim.Essentials.3.1.7\lib\net40\Xbim.Common.dll</HintPath>
+    <Reference Include="Xbim.Common, Version=3.1.0.0, Culture=neutral, PublicKeyToken=11e3655e576ec5a9, processorArchitecture=MSIL">
+      <HintPath>..\packages\Xbim.Essentials.3.1.10-V0003\lib\net40\Xbim.Common.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Xbim.Ifc.Extensions, Version=3.0.5701.20774, Culture=neutral, PublicKeyToken=11e3655e576ec5a9, processorArchitecture=MSIL">
-      <HintPath>..\packages\Xbim.Essentials.3.1.7\lib\net40\Xbim.Ifc.Extensions.dll</HintPath>
+    <Reference Include="Xbim.Ifc.Extensions, Version=3.1.0.0, Culture=neutral, PublicKeyToken=11e3655e576ec5a9, processorArchitecture=MSIL">
+      <HintPath>..\packages\Xbim.Essentials.3.1.10-V0003\lib\net40\Xbim.Ifc.Extensions.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Xbim.Ifc2x3, Version=3.0.5701.20772, Culture=neutral, PublicKeyToken=11e3655e576ec5a9, processorArchitecture=MSIL">
-      <HintPath>..\packages\Xbim.Essentials.3.1.7\lib\net40\Xbim.Ifc2x3.dll</HintPath>
+    <Reference Include="Xbim.Ifc2x3, Version=3.1.0.0, Culture=neutral, PublicKeyToken=11e3655e576ec5a9, processorArchitecture=MSIL">
+      <HintPath>..\packages\Xbim.Essentials.3.1.10-V0003\lib\net40\Xbim.Ifc2x3.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Xbim.IO, Version=3.0.5701.20775, Culture=neutral, PublicKeyToken=11e3655e576ec5a9, processorArchitecture=MSIL">
-      <HintPath>..\packages\Xbim.Essentials.3.1.7\lib\net40\Xbim.IO.dll</HintPath>
+    <Reference Include="Xbim.IO, Version=3.1.0.0, Culture=neutral, PublicKeyToken=11e3655e576ec5a9, processorArchitecture=MSIL">
+      <HintPath>..\packages\Xbim.Essentials.3.1.10-V0003\lib\net40\Xbim.IO.dll</HintPath>
       <Private>True</Private>
     </Reference>
   </ItemGroup>
@@ -125,6 +125,31 @@
     <Compile Include="EntityKeys\ProjectStageKey.cs" />
     <Compile Include="EntityKeys\ResourceKey.cs" />
     <Compile Include="EntityKeys\SpaceKey.cs" />
+    <Compile Include="EqCompare\AssetCompareKey.cs" />
+    <Compile Include="EqCompare\AssetTypeCompareKey.cs" />
+    <Compile Include="EqCompare\AttributeCompareKey.cs" />
+    <Compile Include="EqCompare\CategoryCompareKey.cs" />
+    <Compile Include="EqCompare\CompareEqRule.cs" />
+    <Compile Include="EqCompare\CompareLogger.cs" />
+    <Compile Include="EqCompare\ConnectionCompareKey.cs" />
+    <Compile Include="EqCompare\ContactCompareKey.cs" />
+    <Compile Include="EqCompare\FloorCompareKey.cs" />
+    <Compile Include="EqCompare\EntityKeyCompareKey.cs" />
+    <Compile Include="EqCompare\ICompareEqRule.cs" />
+    <Compile Include="EqCompare\ImpactCompareKey.cs" />
+    <Compile Include="EqCompare\IssueCompareKey.cs" />
+    <Compile Include="EqCompare\JobCompareKey.cs" />
+    <Compile Include="EqCompare\JobKeyCompareKey.cs" />
+    <Compile Include="EqCompare\NameCompareKey.cs" />
+    <Compile Include="EqCompare\DocumentCompareKey.cs" />
+    <Compile Include="EqCompare\MetadataCompareKey.cs" />
+    <Compile Include="EqCompare\ProjectCompareKey.cs" />
+    <Compile Include="EqCompare\RepresentationCompareKey.cs" />
+    <Compile Include="EqCompare\SiteCompareKey.cs" />
+    <Compile Include="EqCompare\SpaceCompareKey.cs" />
+    <Compile Include="EqCompare\SpareCompareKey.cs" />
+    <Compile Include="EqCompare\StringBuilderExtender.cs" />
+    <Compile Include="EqCompare\StringCompareKey.cs" />
     <Compile Include="FilterHelper\COBiePropertyMapping.cs" />
     <Compile Include="FilterHelper\ObjectFilter.cs" />
     <Compile Include="FilterHelper\PropertyFilter.cs" />
@@ -140,6 +165,12 @@
     <Compile Include="Resource.cs" />
     <Compile Include="Schemas\Attributes.cs" />
     <Compile Include="Facility.cs" />
+    <Compile Include="..\SharedAssemblyInfo.cs">
+      <Link>Properties\SharedAssemblyInfo.cs</Link>
+    </Compile>
+    <Compile Include="..\SharedFileVersionInfo.cs">
+      <Link>Properties\SharedFileVersionInfo.cs</Link>
+    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Schemas\cobieliteuk.designer.cs" />
     <Compile Include="EntityKeys\ContactKey.cs" />

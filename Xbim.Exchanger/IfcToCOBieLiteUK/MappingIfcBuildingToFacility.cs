@@ -55,8 +55,10 @@ namespace XbimExchanger.IfcToCOBieLiteUK
 
                 var storeys = ifcBuilding.GetBuildingStoreys(true);
                 var cobieFloors = storeys.Cast<IfcSpatialStructureElement>().ToList();
-                cobieFloors.Add(ifcSite);
-                cobieFloors.Add(ifcBuilding);
+                if (ifcSite != null)
+                    cobieFloors.Add(ifcSite);
+                if (ifcBuilding != null)
+                    cobieFloors.Add(ifcBuilding);
 
                 facility.Floors = new List<Floor>(cobieFloors.Count);
                 var floorMappings = Exchanger.GetOrCreateMappings<MappingIfcSpatialStructureElementToFloor>();

@@ -106,7 +106,7 @@ namespace Xbim.Client
         {
             var filename = PropertyMaps.ConfigFile; //save config file name before we set temp file name
             FileInfo tempConfig = new FileInfo(Path.GetTempPath() + Guid.NewGuid().ToString() + ".tmp");
-            ((COBieLiteGenerator)this.Owner).CreateDefaultAppConfig(tempConfig);
+            ((COBieLiteGeneratorDlg)this.Owner).CreateDefaultAppConfig(tempConfig);
 
             if (tempConfig.Exists)
             {

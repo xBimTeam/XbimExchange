@@ -13,18 +13,43 @@ using Xbim.COBieLiteUK;
 using System.Diagnostics;
 using Xbim.IO;
 using XbimExchanger.IfcToCOBieLiteUK;
+using Xbim.Common.Exceptions;
 
 namespace Xbim.Client
 {
-    public partial class COBieLiteGenerator : Form
+    public partial class COBieLiteGeneratorDlg : Form
     {
-        private BackgroundWorker _worker;
+        /// <summary>
+        /// Worker
+        /// </summary>
+        private COBieLiteWorker _cobieWorker;
+
+        /// <summary>
+        /// Filters for Extracting COBie, Role Filtering
+        /// </summary>
         private OutPutFilters _assetfilters = new OutPutFilters(); //empty role filter
-        private string FileName { get;  set; }
+
+        /// <summary>
+        /// Refrence models to OutPutFilters mappings
+        /// </summary>
+        public Dictionary<FileInfo, RoleFilter> MapRefModelsRoles {get; private set; }
+
+        
+
+        /// <summary>
+        /// Config File holding mappings for ifc property extractions
+        /// </summary>
         public FileInfo ConfigFile { get; private set; }
+
+        /// <summary>
+        /// Mappings for COBie proerties from IFC
+        /// </summary>
         private COBiePropertyMapping PropertyMaps { get;  set; }
 
-        public COBieLiteGenerator()
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        public COBieLiteGeneratorDlg()
         {
             InitializeComponent();
             //set default role filters held in FillRolesFilterHolder property list
@@ -42,6 +67,7 @@ namespace Xbim.Client
             }
 
             PropertyMaps = new COBiePropertyMapping(ConfigFile);
+            MapRefModelsRoles = new Dictionary<FileInfo, RoleFilter>();
         }
         
         /// <summary>
@@ -59,136 +85,7 @@ namespace Xbim.Client
             }
             configFile.Refresh();
         }
-        
-        /// <summary>
-        /// Set roles for this run
-        /// </summary>
-        private RoleFilter SetRoles()
-        {
-            var roles = rolesList.Roles;
-            if (!chkBoxNoFilter.Checked)
-            {
-                AppendLog("Selected Roles: " + roles.ToString("F"));
-            }
-            else
-            {
-                AppendLog("Selected Roles: Disabled by no filter flag ");
-            }
-            return roles;
-        }
 
-        /// <summary>
-        /// Set the System extraction Methods
-        /// </summary>
-        /// <returns></returns>
-        private SystemExtractionMode SetSystemMode()
-        {
-            SystemExtractionMode sysMode = SystemExtractionMode.System;
-            var checkedSysMode = checkedListSys.CheckedItems;
-            //add the checked system modes
-            foreach (var item in checkedSysMode)
-            {
-                try
-                {
-                    SystemExtractionMode mode = (SystemExtractionMode)Enum.Parse(typeof(SystemExtractionMode), (string)item);
-                    sysMode |= mode;
-                }
-                catch (Exception)
-                {
-                    AppendLog("Error: Failed to get requested system extraction mode");
-                }
-            }
-
-            return sysMode;
-        }
-
-
-        private void CreateWorker()
-        {
-            _worker = new BackgroundWorker();
-            _worker.WorkerReportsProgress = true;
-            _worker.WorkerSupportsCancellation = false;
-            _worker.ProgressChanged += (object s, ProgressChangedEventArgs args) =>
-            {
-                if (ProgressBar.Visible == false)
-                {
-                    ProgressBar.Visible = true;
-                }
-                StatusMsg.Text = (string)args.UserState;
-                if (args.ProgressPercentage == 0)
-                {
-                    AppendLog(args.UserState.ToString());
-                }
-                else
-                {
-                    ProgressBar.Value = args.ProgressPercentage;
-                }
-            };
-
-            _worker.RunWorkerCompleted += (object s, RunWorkerCompletedEventArgs args) =>
-            {
-                
-                try
-                {
-                    if (args.Result is Exception)
-                    {
-
-                        StringBuilder sb = new StringBuilder();
-                        Exception ex = args.Result as Exception;
-                        string indent = "";
-                        while (ex != null)
-                        {
-                            sb.AppendFormat("{0}{1}\n", indent, ex.Message);
-                            ex = ex.InnerException;
-                            indent += "\t";
-                        }
-                        AppendLog(sb.ToString());
-                    }
-                    else
-                    {
-                        string errMsg = args.Result as string;
-                        if (!string.IsNullOrEmpty(errMsg))
-                            AppendLog(errMsg);
-
-                    }
-                }
-                catch (Exception ex)
-                {
-                    StringBuilder sb = new StringBuilder();
-                    string indent = "";
-                        
-                    while (ex != null)
-                    {
-                        sb.AppendFormat("{0}{1}\n", indent, ex.Message);
-                        ex = ex.InnerException;
-                        indent += "\t";
-                    }
-                    AppendLog(sb.ToString());
-                }
-                finally
-                {
-                   btnGenerate.Enabled = true;
-                }
-                //open file if ticked to open excel
-                if (chkBoxOpenFile.Checked && !string.IsNullOrEmpty(FileName))
-                {
-                    Process.Start(FileName);
-                }
-                ProgressBar.Visible = false;
-            };
-        }
-
-        /// <summary>
-        /// Add string to Text Output List Box 
-        /// </summary>
-        /// <param name="text"></param>
-        private void AppendLog(string text)
-        {
-            txtOutput.AppendText(text + Environment.NewLine);
-            txtOutput.ScrollToCaret();
-        }
-
-        
         /// <summary>
         /// On Load
         /// </summary>
@@ -233,8 +130,62 @@ namespace Xbim.Client
             tooltip.SetToolTip(btnPropMaps, "Set PropertySet.PropertyName mappings to COBie Fileds");
             tooltip.SetToolTip(chkBoxIds, "Tick to change GUID IDs to Entity IDs");
             tooltip.SetToolTip(checkedListSys, "Tick to include additional Systems (ifcSystems always included)\nPropertyMaps = PropertySet Mappings, System Tab in \"Property Maps\" dialog\nTypes = Object Types listing associated components (not assigned to system)");
-            
+
         }
+
+        /// <summary>
+        /// Set roles for this run
+        /// </summary>
+        private RoleFilter SetRoles()
+        {
+            var roles = rolesList.Roles;
+            if (!chkBoxNoFilter.Checked)
+            {
+                if (MapRefModelsRoles.Count > 0)
+                {
+                    foreach (var item in MapRefModelsRoles)
+                    {
+                        AppendLog(string.Format("{0} has Roles: {1}",item.Key.Name, item.Value.ToString("F")));
+                    }
+                }
+                else
+                {
+                    AppendLog("Selected Roles: " + roles.ToString("F"));
+                }
+            }
+            else
+            {
+                AppendLog("Selected Roles: Disabled by no filter flag ");
+            }
+            return roles;
+        }
+
+        /// <summary>
+        /// Set the System extraction Methods
+        /// </summary>
+        /// <returns></returns>
+        private SystemExtractionMode SetSystemMode()
+        {
+            SystemExtractionMode sysMode = SystemExtractionMode.System;
+            var checkedSysMode = checkedListSys.CheckedItems;
+            //add the checked system modes
+            foreach (var item in checkedSysMode)
+            {
+                try
+                {
+                    SystemExtractionMode mode = (SystemExtractionMode)Enum.Parse(typeof(SystemExtractionMode), (string)item);
+                    sysMode |= mode;
+                }
+                catch (Exception)
+                {
+                    AppendLog("Error: Failed to get requested system extraction mode");
+                }
+            }
+
+            return sysMode;
+        }
+        
+        
 
         /// <summary>
         /// On Click Generate Button
@@ -252,128 +203,130 @@ namespace Xbim.Client
                 }
             }
             btnGenerate.Enabled = false;
-            CreateWorker();
-            _worker.DoWork += CobieLiteUKWorker;
+            if (_cobieWorker == null)
+            {
+                _cobieWorker = new COBieLiteWorker();
+                _cobieWorker.Worker.ProgressChanged += WorkerProgressChanged;
+                _cobieWorker.Worker.RunWorkerCompleted += WorkerCompleted;
+            }
             //get Excel File Type
             ExcelTypeEnum excelType = GetExcelType();
+            //set filters
+            RoleFilter filterRoles = SetRoles();
+            if (!chkBoxNoFilter.Checked)
+            {
+                _assetfilters.ApplyRoleFilters(filterRoles);
+                _assetfilters.FlipResult = chkBoxFlipFilter.Checked;
+            }
+
             //set parameters
             var args = new Params { ModelFile = txtPath.Text,
-                                    TemplateFile = txtTemplate.Text,
-                                    Roles = SetRoles(),
-                                    ExcelType = excelType,
-                                    FlipFilter = chkBoxFlipFilter.Checked,
-                                    OpenExcel = chkBoxOpenFile.Checked,
-                                    FilterOff = chkBoxNoFilter.Checked,
-                                    ExtId = chkBoxIds.Checked ? EntityIdentifierMode.IfcEntityLabels : EntityIdentifierMode.GloballyUniqueIds,
-                                    SysMode = SetSystemMode()
+                TemplateFile = txtTemplate.Text,
+                Roles = filterRoles,
+                ExcelType = excelType,
+                FlipFilter = chkBoxFlipFilter.Checked,
+                OpenExcel = chkBoxOpenFile.Checked,
+                FilterOff = chkBoxNoFilter.Checked,
+                ExtId = chkBoxIds.Checked ? EntityIdentifierMode.IfcEntityLabels : EntityIdentifierMode.GloballyUniqueIds,
+                SysMode = SetSystemMode(),
+                Filter = chkBoxNoFilter.Checked ? new OutPutFilters() : _assetfilters,
+                ConfigFile = ConfigFile.FullName,
+                Log = chkBoxLog.Checked,
             };
             //run worker
-            _worker.RunWorkerAsync(args);
-
-        }
-        
-        /// <summary>
-        /// DOWork function for worker, generate excel COBie
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        void CobieLiteUKWorker(object sender, DoWorkEventArgs e)
-        {
-             Params parameters = e.Argument as Params;
-            if ((string.IsNullOrEmpty(parameters.ModelFile)) || (!File.Exists(parameters.ModelFile)))
-            {
-                _worker.ReportProgress(0, string.Format("That file doesn't exist: {0}.", parameters.ModelFile));
-                return;
-            }
-            GenerateCOBieFile(parameters);
+           _cobieWorker.Run(args);
 
         }
 
+        #region Worker Methods
         /// <summary>
-        /// Create XLS file from ifc/xbim files
+        /// Worker Complete method
         /// </summary>
-        /// <param name="parameters">Params</param>
-        private void GenerateCOBieFile(Params parameters)
+        /// <param name="s"></param>
+        /// <param name="args"></param>
+        public void WorkerCompleted(object s, RunWorkerCompletedEventArgs args)
         {
-            Stopwatch timer = new Stopwatch();
-            timer.Start();
-            //set attribute name filters
-            if (parameters.FilterOff)
+            try
             {
-                _assetfilters = new OutPutFilters();
-            }
-            else
-            {
-                _assetfilters.ApplyRoleFilters(parameters.Roles);
-                _assetfilters.FlipResult = parameters.FlipFilter;
-            }
-            
-
-            var facilities = GenerateFacility(parameters);
-            timer.Stop();
-            _worker.ReportProgress(0, string.Format("Time to generate COBieLite data = {0} seconds", timer.Elapsed.TotalSeconds.ToString("F3")));
-            timer.Reset();
-            timer.Start();
-            int index = 1;
-            foreach (var facilityType in facilities)
-            {
-                string fileName = Path.GetFileNameWithoutExtension(parameters.ModelFile) + ((facilities.Count == 1) ? "" : index.ToString());
-                string path = Path.GetDirectoryName(parameters.ModelFile);
-                FileName = Path.Combine(path, Path.ChangeExtension(fileName, parameters.ExcelType == ExcelTypeEnum.XLS ? ".xls" : ".xlsx"));
-                string logFile = Path.ChangeExtension(FileName, ".log");
-                _worker.ReportProgress(0, string.Format("Creating validation log file: {0}", logFile));
-                using (var log = File.CreateText(logFile))
-                { 
-                    facilityType.ValidateUK2012(log, false);
-                }
-                _worker.ReportProgress(0, string.Format("Creating file: {0}", FileName));
-                
-                string msg;
-                
-                using (var file = File.Create(FileName))
+                if (args.Result is Exception)
                 {
-                    facilityType.WriteCobie(file, parameters.ExcelType, out msg, _assetfilters, parameters.TemplateFile, true);
-                }
-                //_worker.ReportProgress(0, msg); //removed for now, kill app for some reason
-                
-                index++;
-            }
-            timer.Stop();
-            _worker.ReportProgress(0, string.Format("Time to generate COBieLite Excel = {0} seconds", timer.Elapsed.TotalSeconds.ToString("F3")));
-
-            _worker.ReportProgress(0, "Finished COBie Generation");
-        }
-
-        /// <summary>
-        /// Genertate the Facilities held within the Model
-        /// </summary>
-        /// <param name="parameters">Params</param>
-        /// <returns>List of Facilities</returns>
-        private List<Facility> GenerateFacility(Params parameters)
-        {
-            string fileExt = Path.GetExtension(parameters.ModelFile);
-            var facilities = new List<Facility>();
-            using (var model = new XbimModel())
-            {
-                if ((fileExt.Equals(".xbim", StringComparison.OrdinalIgnoreCase)) ||
-                    (fileExt.Equals(".xbimf", StringComparison.OrdinalIgnoreCase))
-                   )
-                {
-                    model.Open(parameters.ModelFile, XbimExtensions.XbimDBAccess.Read, _worker.ReportProgress);
+                    StringBuilder sb = new StringBuilder();
+                    Exception ex = args.Result as Exception;
+                    string indent = "";
+                    while (ex != null)
+                    {
+                        sb.AppendFormat("{0}{1}\n", indent, ex.Message);
+                        ex = ex.InnerException;
+                        indent += "\t";
+                    }
+                    AppendLog(sb.ToString());
                 }
                 else
                 {
-                    var xbimFile = Path.ChangeExtension(parameters.ModelFile, "xbim");
-                    model.CreateFrom(parameters.ModelFile, xbimFile, _worker.ReportProgress, true, true);
+                    string errMsg = args.Result as string;
+                    if (!string.IsNullOrEmpty(errMsg))
+                        AppendLog(errMsg);
 
                 }
-
-
-                var ifcToCoBieLiteUkExchanger = new IfcToCOBieLiteUkExchanger(model, facilities, _assetfilters, ConfigFile.FullName, parameters.ExtId, parameters.SysMode);
-                facilities = ifcToCoBieLiteUkExchanger.Convert();
             }
-            return facilities;
+            catch (Exception ex)
+            {
+                StringBuilder sb = new StringBuilder();
+                string indent = "";
+
+                while (ex != null)
+                {
+                    sb.AppendFormat("{0}{1}\n", indent, ex.Message);
+                    ex = ex.InnerException;
+                    indent += "\t";
+                }
+                AppendLog(sb.ToString());
+            }
+            finally
+            {
+                btnGenerate.Enabled = true;
+            }
+            //open file if ticked to open excel
+            if (chkBoxOpenFile.Checked && args.Result != null && !string.IsNullOrEmpty(args.Result.ToString()))
+            {
+                Process.Start(args.Result.ToString());
+            }
+            ProgressBar.Visible = false;
         }
+
+        /// <summary>
+        /// Worker Progress Changed
+        /// </summary>
+        /// <param name="s"></param>
+        /// <param name="args"></param>
+        public void WorkerProgressChanged(object s, ProgressChangedEventArgs args)
+        {
+            if (ProgressBar.Visible == false)
+            {
+                ProgressBar.Visible = true;
+            }
+            StatusMsg.Text = (string)args.UserState;
+            if (args.ProgressPercentage == 0)
+            {
+                AppendLog(args.UserState.ToString());
+            }
+            else
+            {
+                ProgressBar.Value = args.ProgressPercentage;
+            }
+        }
+
+        /// <summary>
+        /// Add string to Text Output List Box 
+        /// </summary>
+        /// <param name="text"></param>
+        private void AppendLog(string text)
+        {
+            txtOutput.AppendText(text + Environment.NewLine);
+            txtOutput.ScrollToCaret();
+        } 
+        #endregion
+
 
         /// <summary>
         /// Get Excel Type From Combo
@@ -410,6 +363,41 @@ namespace Xbim.Client
             if (dlg.ShowDialog() == System.Windows.Forms.DialogResult.OK)
             {
                 txtPath.Text = dlg.FileName;
+                string fileExt = Path.GetExtension(txtPath.Text);
+                MapRefModelsRoles.Clear();
+                if (fileExt.Equals(".xbimf", StringComparison.OrdinalIgnoreCase))
+                {
+                    using (var fedModel = new FederatedModel(new FileInfo(txtPath.Text)))
+                    {
+                        if (fedModel.Model.IsFederation)
+                        {
+                            MapRefModelsRoles = fedModel.RefModelRoles.ToDictionary(m => new FileInfo(m.Key.DatabaseName), m => m.Value);
+                        }
+                        else
+                        {
+                            throw new XbimException(string.Format("Model is not Federated: {0}", fedModel.FileNameXbimf));
+                        }
+                    }
+                   
+                }
+                rolesList.Enabled = !fileExt.Equals(".xbimf", StringComparison.OrdinalIgnoreCase);
+            }
+            
+        }
+
+        /// <summary>
+        /// On Click federated button
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void btnFederate_Click(object sender, EventArgs e)
+        {
+            Federate FedDlg = new Federate(txtPath.Text);
+            var result = FedDlg.ShowDialog(this);
+            if (result == DialogResult.OK)
+            {
+                txtPath.Text = FedDlg.FileName;
+                MapRefModelsRoles = FedDlg.FileRoles;
             }
             rolesList.Enabled = (Path.GetExtension(txtPath.Text).ToUpper() != ".XBIMF");
         }
@@ -466,21 +454,7 @@ namespace Xbim.Client
             txtOutput.Clear();
         }
 
-        /// <summary>
-        /// Internal Params Class, holds parameters for to worker to access
-        /// </summary>
-        private class Params
-        {
-            public string ModelFile { get; set; }
-            public string TemplateFile { get; set; }
-            public ExcelTypeEnum ExcelType { get; set; }
-            public bool FlipFilter { get; set; }
-            public bool OpenExcel { get; set; }
-            public RoleFilter Roles { get; set; }
-            public bool FilterOff { get; set; }
-            public EntityIdentifierMode ExtId { get; set; }
-            public SystemExtractionMode SysMode { get; set; }
-        }
+        
 
         /// <summary>
         /// Display notes on filter flip option
@@ -537,11 +511,41 @@ namespace Xbim.Client
         /// <param name="e"></param>
         private void btnMergeFilter_Click(object sender, EventArgs e)
         {
-            RoleFilter roles = SetRoles();
-            _assetfilters.ApplyRoleFilters(roles);
-            FilterDlg filterDlg = new FilterDlg(_assetfilters, true, roles);
-            //read only
-            filterDlg.ShowDialog();
+            //set the defaults if not already set
+            if (_assetfilters.DefaultsNotSet)
+            {
+                DirectoryInfo dir = new DirectoryInfo(AppDomain.CurrentDomain.BaseDirectory);
+                _assetfilters.FillRolesFilterHolderFromDir(dir);
+            }
+            try
+            {
+                Cursor.Current = Cursors.WaitCursor;
+                FilterDlg filterDlg = null;
+                string fileExt = Path.GetExtension(txtPath.Text);
+                if (fileExt.Equals(".xbimf", StringComparison.OrdinalIgnoreCase))
+                {
+                    Dictionary<FileInfo, OutPutFilters> FedFilters = _assetfilters.SetFedModelFilter<FileInfo>(MapRefModelsRoles);
+                    filterDlg = new FilterDlg(_assetfilters, true, FedFilters);
+                }
+                else
+                {
+                    MapRefModelsRoles.Clear();
+                    RoleFilter roles = SetRoles();
+                    _assetfilters.ApplyRoleFilters(roles);
+                    filterDlg = new FilterDlg(_assetfilters, true);
+                }
+
+                //read only
+                if (filterDlg != null)
+                {
+                    filterDlg.ShowDialog();
+                }
+            }
+            finally
+            {
+                Cursor.Current = Cursors.Default;
+            }
+            
         }
 
         /// <summary>
@@ -576,24 +580,33 @@ namespace Xbim.Client
             var result = PropMapDlg.ShowDialog(this);
             if (result == DialogResult.OK)
             {
-               
                 PropertyMaps = PropMapDlg.PropertyMaps;
                 PropertyMaps.Save();
             }
         }
 
-        private void btnFederate_Click(object sender, EventArgs e)
+        
+
+        private void checkedListSys_SelectedIndexChanged(object sender, EventArgs e)
         {
-            Federate FedDlg = new Federate(txtPath.Text);
-            var result = FedDlg.ShowDialog(this);
-            if (result == DialogResult.OK)
-            {
-                txtPath.Text = FedDlg.FileName;
-            }
-            rolesList.Enabled = (Path.GetExtension(txtPath.Text).ToUpper() != ".XBIMF");
+
+        }
+
+        private void groupBox2_Enter(object sender, EventArgs e)
+        {
+
+        }
+
+        private void chkBoxIds_CheckedChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void chkBoxLog_CheckedChanged(object sender, EventArgs e)
+        {
+
         }
     }
 
-    
 
 }

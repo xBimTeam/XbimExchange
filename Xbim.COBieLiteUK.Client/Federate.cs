@@ -78,12 +78,12 @@ namespace Xbim.Client
                     {
                         using (FederatedModel fedModel = new FederatedModel(file))
                         {
-                            if (fedModel.FedModel.IsFederation)
+                            if (fedModel.Model.IsFederation)
                             {
                                 txtAuthor.Text = fedModel.Author;
                                 txtOrg.Text = fedModel.Organisation;
                                 txtPrj.Text = fedModel.ProjectName;
-                                FileRoles = fedModel.FileRoles;
+                                FileRoles = fedModel.RefModelRoles.ToDictionary(m => new FileInfo(m.Key.DatabaseName), m => m.Value);
                                 RefModels = new BindingList<FileInfo>(FileRoles.Keys.ToList());
                                 this.Text += " : " + file.Name;
                                 FileName = filename;
@@ -134,7 +134,7 @@ namespace Xbim.Client
                 if (!string.IsNullOrEmpty(FileName))
                 {
                     CreateFedFile(new FileInfo(FileName), author, org, prj);
-
+                    
                     this.DialogResult = DialogResult.OK;
                     this.Close();
                 }

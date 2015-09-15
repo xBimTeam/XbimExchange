@@ -16,7 +16,7 @@ namespace Xbim.Client
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new COBieLiteGenerator());
+            Application.Run(new COBieLiteGeneratorDlg());
         }
     }
 }
