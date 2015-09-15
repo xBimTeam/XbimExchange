@@ -182,3 +182,4 @@ UpgradeLog*.htm
 FakesAssemblies/
 /Output
 /Xbim.DPoW.Schema/CodeGeneration.Log.xml
+SharedFileVersionInfo.cs
