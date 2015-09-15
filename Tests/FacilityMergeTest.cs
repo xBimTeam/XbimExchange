@@ -25,11 +25,11 @@ namespace Tests
                 sw.AutoFlush = true;
                 baseFacility.Merge(mergeFacility, sw);
             }
-            var rootNo = baseFacility.Attributes.Count; //should be original 6 by baseFacility - CreateFacilty + 3 added by AddDeepAttributes
-            var nest1No = baseFacility.Attributes.Last().Attributes.Count; // should be original 3 added by baseFacility - AddDeepAttributes but nothing merged as all mergeFacility - AddDeepAttributes are duplicated (3 duplicates not counted)
-            var nert2No = baseFacility.Attributes.Last().Attributes.Last().Attributes.Count; //should be original 3 added by baseFacility - AddDeepAttributes + 2 merged form mergeFacility - AddDeepAttributes (1 duplicates not counted)
+            var rootNo = baseFacility.Attributes.Count; //5 original from CreateFacilty +  3 added by AddDeepAttributes (8 duplicates not counted)
+            var nest1No = baseFacility.Attributes.Last().Attributes.Count; // should be 3 added by baseFacility - AddDeepAttributes but nothing merged as all mergeFacility - AddDeepAttributes are duplicated (3 duplicates not counted)
+            var nert2No = baseFacility.Attributes.Last().Attributes.Last().Attributes.Count; //should be 3 added by baseFacility - AddDeepAttributes + 2 merged form mergeFacility - AddDeepAttributes (1 duplicates not counted)
             var totalAtt = rootNo + nest1No + nert2No;
-            Assert.IsTrue(totalAtt == 17);
+            Assert.IsTrue(totalAtt == 16);
         }
 
         //Temp function, delete
@@ -58,7 +58,7 @@ namespace Tests
                             CreatedOn = DateTime.Now,
                             CreatedBy = new ContactKey {Email = "martin.cerny@northumbria.ac.uk"},
                             Name = "String attribute 3",
-                            Value =  new StringAttributeValue {Value = "Duplicate"},
+                            Value =  new StringAttributeValue {Value = "Depth 1c"},
                             Categories = new List<Category> {new Category {Code = "Submitted", Classification = "Sample"}},
                         },
             };
@@ -93,7 +93,7 @@ namespace Tests
                             CreatedOn = DateTime.Now,
                             CreatedBy = new ContactKey {Email = "martin.cerny@northumbria.ac.uk"},
                             Name = "String attribute 3",
-                            Value =  new StringAttributeValue {Value = "Duplicate"},
+                            Value =  new StringAttributeValue {Value = "Depth 2c"},
                             Categories = new List<Category> {new Category {Code = "Submitted", Classification = "Sample"}},
                         },
             };
@@ -357,14 +357,6 @@ namespace Tests
                         CreatedBy = new ContactKey {Email = "martin.cerny@northumbria.ac.uk"},
                         Name = "Boolean attribute",
                         Value = new BooleanAttributeValue {Value = true},
-                        Categories = new List<Category> {new Category {Code = "Submitted", Classification = "Sample"}},
-                    },
-                    new Attribute
-                    {
-                        CreatedOn = DateTime.Now,
-                        CreatedBy = new ContactKey {Email = "martin.cerny@northumbria.ac.uk"},
-                        Name = "Datetime attribute",
-                        Value = new DateTimeAttributeValue {Value = DateTime.Now},
                         Categories = new List<Category> {new Category {Code = "Submitted", Classification = "Sample"}},
                     },
                     new Attribute
