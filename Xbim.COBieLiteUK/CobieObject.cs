@@ -111,6 +111,13 @@ namespace Xbim.COBieLiteUK
                 return _facility;
             }
         }
+        /// <summary>
+        /// Object to use to report progress on WriteToCobie
+        /// </summary>
+        [XmlIgnore]
+        [JsonIgnore]
+        public ProgressReporter ReportProgress
+        { get; set; }
 
         internal IEnumerable<T> GetDeep<T>(Func<T, bool> condition = null) where T : CobieObject
         {
@@ -496,7 +503,11 @@ namespace Xbim.COBieLiteUK
             foreach (var child in GetChildren())
             {
                 child.WriteToCobie(workbook, log, this, rowNumCache, pickValuesCache, headerCache, assetfilters, version);
+                //tell progress reporter where we are
+                if (this is Facility)
+                    ReportProgress.IncrementAndUpdate();
             }
+           
         }
 
 

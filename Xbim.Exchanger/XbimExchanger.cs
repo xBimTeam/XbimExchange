@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Collections.Concurrent;
 using System.Globalization;
+using Xbim.COBieLiteUK;
+using Xbim.XbimExtensions.Interfaces;
 
 namespace XbimExchanger
 {
-    public abstract class XbimExchanger<TSourceRepository, TTargetRepository>
+    public abstract class XbimExchanger<TSourceRepository, TTargetRepository> 
     {
         private readonly ConcurrentDictionary<Type, ConcurrentDictionary<Type, IXbimMappings<TSourceRepository, TTargetRepository>>> _mappings = new ConcurrentDictionary<Type, ConcurrentDictionary<Type, IXbimMappings<TSourceRepository, TTargetRepository>>>();
 
@@ -17,6 +19,7 @@ namespace XbimExchanger
         {
             _target = target;
             _source = source;
+            ReportProgress = new ProgressReporter(); //no ReportProgressDelegate set so will not report
         }
 
         private readonly TSourceRepository _source;
@@ -24,8 +27,12 @@ namespace XbimExchanger
         public TTargetRepository TargetRepository { get { return _target; } }
         public TSourceRepository SourceRepository { get { return _source; } }
 
+        /// <summary>
+        /// Object to use to report progress on Exchangers
+        /// </summary>
+        public ProgressReporter ReportProgress
+        { get; set; }
 
-        
 
         public TMapping GetOrCreateMappings<TMapping>() where TMapping : IXbimMappings<TSourceRepository, TTargetRepository>, new()
         {
@@ -60,6 +67,6 @@ namespace XbimExchanger
         public virtual Guid GetGuidIdentifier()
         {
             return Guid.NewGuid();
-        }
+        }       
     }
 }

@@ -301,17 +301,21 @@ namespace Xbim.Client
         /// <param name="args"></param>
         public void WorkerProgressChanged(object s, ProgressChangedEventArgs args)
         {
-            if (ProgressBar.Visible == false)
-            {
-                ProgressBar.Visible = true;
-            }
-            StatusMsg.Text = (string)args.UserState;
+            
+            //Show message in Text List Box
             if (args.ProgressPercentage == 0)
             {
+                StatusMsg.Text = string.Empty;
+                ProgressBar.Visible = false;
                 AppendLog(args.UserState.ToString());
             }
-            else
+            else //show message on status bar and update progress bar
             {
+                if (ProgressBar.Visible == false)
+                {
+                    ProgressBar.Visible = true;
+                }
+                StatusMsg.Text = args.UserState.ToString();
                 ProgressBar.Value = args.ProgressPercentage;
             }
         }

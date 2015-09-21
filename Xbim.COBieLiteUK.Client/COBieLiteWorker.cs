@@ -93,6 +93,7 @@ namespace Xbim.Client
 
                 using (var file = File.Create(excelName))
                 {
+                    facilityType.ReportProgress.Progress = Worker.ReportProgress;
                     facilityType.WriteCobie(file, parameters.ExcelType, out msg, parameters.Filter, parameters.TemplateFile, true);
                 }
                 //_worker.ReportProgress(0, msg); //removed for now, kill app for some reason
@@ -146,7 +147,7 @@ namespace Xbim.Client
                     model.CreateFrom(parameters.ModelFile, xbimFile, Worker.ReportProgress, true, true);
 
                 }
-                var ifcToCoBieLiteUkExchanger = new IfcToCOBieLiteUkExchanger(model, facilities, parameters.Filter, parameters.ConfigFile, parameters.ExtId, parameters.SysMode);
+                var ifcToCoBieLiteUkExchanger = new IfcToCOBieLiteUkExchanger(model, facilities, Worker.ReportProgress, parameters.Filter, parameters.ConfigFile, parameters.ExtId, parameters.SysMode);
                 facilities = ifcToCoBieLiteUkExchanger.Convert();
             }
             return facilities;
@@ -169,7 +170,8 @@ namespace Xbim.Client
                         Dictionary<RoleFilter, List<Facility>> RolesFacilities = new Dictionary<RoleFilter, List<Facility>>();
                         foreach (var item in FedFilters)
                         {
-                            var ifcToCoBieLiteUkExchanger = new IfcToCOBieLiteUkExchanger(item.Key, new List<Facility>(), item.Value, parameters.ConfigFile, parameters.ExtId, parameters.SysMode);
+                            var ifcToCoBieLiteUkExchanger = new IfcToCOBieLiteUkExchanger(item.Key, new List<Facility>(), Worker.ReportProgress, item.Value, parameters.ConfigFile, parameters.ExtId, parameters.SysMode);
+                            ifcToCoBieLiteUkExchanger.ReportProgress.Progress = Worker.ReportProgress;
                             var rolesFacility = ifcToCoBieLiteUkExchanger.Convert();
 
                             //facilities.AddRange(rolesFacility);

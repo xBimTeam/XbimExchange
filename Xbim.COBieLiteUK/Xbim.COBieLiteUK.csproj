@@ -162,6 +162,7 @@
     <Compile Include="Job.cs" />
     <Compile Include="Metadata.cs" />
     <Compile Include="Net40Port\Net40CustomAttributeExtensions.cs" />
+    <Compile Include="ReportProgress\ProgressReporter.cs" />
     <Compile Include="Resource.cs" />
     <Compile Include="Schemas\Attributes.cs" />
     <Compile Include="Facility.cs" />

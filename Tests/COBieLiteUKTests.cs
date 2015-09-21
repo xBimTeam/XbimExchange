@@ -785,7 +785,7 @@ namespace Tests
                 RoleFilter reqRoles = RoleFilter.Unknown; //RoleFilter.Architectural |  RoleFilter.Mechanical | RoleFilter.Electrical | RoleFilter.FireProtection | RoleFilter.Plumbing;
                 rolefilters.ApplyRoleFilters(reqRoles);
 
-                var ifcToCoBieLiteUkExchanger = new IfcToCOBieLiteUkExchanger(m, facilities, rolefilters);
+                var ifcToCoBieLiteUkExchanger = new IfcToCOBieLiteUkExchanger(m, facilities, null, rolefilters);
                 facilities = ifcToCoBieLiteUkExchanger.Convert();
 
                 foreach (var facilityType in facilities)

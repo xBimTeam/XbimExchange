@@ -26,10 +26,11 @@ namespace Xbim.COBieLiteUK
         public Facility()
         {
             Metadata = new Metadata();
+            ReportProgress = new ProgressReporter();
         }
 
         /// <summary>
-        /// Creates a new class inheryting from CobieObject and sets it to belong to the facility.
+        /// Creates a new class inheriting from CobieObject and sets it to belong to the facility.
         /// </summary>
         /// <typeparam name="TNewCobieObject">The CobieObject type to create</typeparam>
         /// <returns>the created object, which will have to be added to a collection as appropriate to be in the facility tree</returns>
@@ -566,7 +567,7 @@ namespace Xbim.COBieLiteUK
             var watch = new Stopwatch();
             watch.Start();
 
-
+            ReportProgress.Reset(GetChildren().Count(), 100, "Creating Excel COBie");
 
             WriteToCobie(workbook, log, null, new Dictionary<Type, int>(), new List<string>(), new Dictionary<string, int>(), assetfilters, version);
 
@@ -588,6 +589,7 @@ namespace Xbim.COBieLiteUK
 
             message = log.ToString();
             workbook.Write(stream);
+            ReportProgress.Finalise(500);
         }
 
         public void WriteCobie(string path, out string message, OutPutFilters assetfilters = null, string version = "UK2012", bool useTemplate = true)
