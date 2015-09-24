@@ -4,6 +4,7 @@ using System.Diagnostics;
 using Xbim.COBie.Contracts;
 using Xbim.COBie.Rows;
 using Xbim.XbimExtensions.Interfaces;
+using System.Reflection;
 
 namespace Xbim.COBie.Federate
 {
@@ -95,8 +96,8 @@ namespace Xbim.COBie.Federate
                 {
                     ICOBieSheet<COBieRow> fedSheet = fedWorkbook[worksheet.SheetName];
                     if (fedSheet == null)
-                    {
-                        fedSheet = CreateSheet(worksheet.SheetName); //create sheet as it does not exist
+                    {                       
+                        fedSheet = worksheet.CreateEmptySheet();  //create sheet as it does not exist
                         fedWorkbook.Add(fedSheet);
                     }
                     else if (worksheet.SheetName == Constants.WORKSHEET_PICKLISTS)
@@ -172,65 +173,6 @@ namespace Xbim.COBie.Federate
             cOBieProgress.ReportMessage("Finished Validation");
 
             cOBieProgress.Finalise();
-
-
-        }
-
-
-
-
-        /// <summary>
-        /// Create the empty COBieSheet to the correct type decided by sheet name
-        /// </summary>
-        /// <param name="sheetname">Sheet name we want to create</param>
-        /// <returns>ICOBieSheet of COBieRow to the correct row type to match the sheet name</returns>
-        private ICOBieSheet<COBieRow> CreateSheet(string sheetname)
-        {
-            switch (sheetname)
-            {
-                case Constants.WORKSHEET_CONTACT:
-                    return new COBieSheet<COBieContactRow>(Constants.WORKSHEET_CONTACT);
-                case Constants.WORKSHEET_FACILITY:
-                    return new COBieSheet<COBieFacilityRow>(Constants.WORKSHEET_FACILITY);
-                case Constants.WORKSHEET_FLOOR:
-                    return new COBieSheet<COBieFloorRow>(Constants.WORKSHEET_FLOOR);
-                case Constants.WORKSHEET_SPACE:
-                    return new COBieSheet<COBieSpaceRow>(Constants.WORKSHEET_SPACE);
-                case Constants.WORKSHEET_ZONE:
-                    return new COBieSheet<COBieZoneRow>(Constants.WORKSHEET_ZONE);
-                case Constants.WORKSHEET_TYPE:
-                    return new COBieSheet<COBieTypeRow>(Constants.WORKSHEET_TYPE);
-                case Constants.WORKSHEET_COMPONENT:
-                    return new COBieSheet<COBieComponentRow>(Constants.WORKSHEET_COMPONENT);
-                case Constants.WORKSHEET_SYSTEM:
-                    return new COBieSheet<COBieSystemRow>(Constants.WORKSHEET_SYSTEM);
-                case Constants.WORKSHEET_ASSEMBLY:
-                    return new COBieSheet<COBieAssemblyRow>(Constants.WORKSHEET_ASSEMBLY);
-                case Constants.WORKSHEET_CONNECTION:
-                    return new COBieSheet<COBieConnectionRow>(Constants.WORKSHEET_CONNECTION);
-                case Constants.WORKSHEET_SPARE:
-                    return new COBieSheet<COBieSpareRow>(Constants.WORKSHEET_SPARE);
-                case Constants.WORKSHEET_RESOURCE:
-                    return new COBieSheet<COBieResourceRow>(Constants.WORKSHEET_RESOURCE);
-                case Constants.WORKSHEET_JOB:
-                    return new COBieSheet<COBieJobRow>(Constants.WORKSHEET_JOB);
-                case Constants.WORKSHEET_IMPACT:
-                    return new COBieSheet<COBieImpactRow>(Constants.WORKSHEET_IMPACT);
-                case Constants.WORKSHEET_DOCUMENT:
-                    return new COBieSheet<COBieDocumentRow>(Constants.WORKSHEET_DOCUMENT);
-                case Constants.WORKSHEET_ATTRIBUTE:
-                    return new COBieSheet<COBieAttributeRow>(Constants.WORKSHEET_ATTRIBUTE);
-                case Constants.WORKSHEET_COORDINATE:
-                    return new COBieSheet<COBieCoordinateRow>(Constants.WORKSHEET_COORDINATE);
-                case Constants.WORKSHEET_ISSUE:
-                    return new COBieSheet<COBieIssueRow>(Constants.WORKSHEET_ISSUE);
-                case Constants.WORKSHEET_PICKLISTS:
-                    return new COBieSheet<COBiePickListsRow>(Constants.WORKSHEET_PICKLISTS);
-                default:
-                    return null;
-            }
-        }
-
-        
+        }      
     }
 }

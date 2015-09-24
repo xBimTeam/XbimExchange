@@ -896,6 +896,11 @@ namespace Xbim.COBie
                 Rows[i].RowNumber = i + 1;
             }
         }
+
+        public ICOBieSheet<T> CreateEmptySheet() 
+        {
+            return new COBieSheet<T>(this.SheetName);
+        }
     } 
 
 }
