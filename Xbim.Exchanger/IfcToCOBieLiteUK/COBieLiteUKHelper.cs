@@ -21,6 +21,7 @@ using Xbim.Ifc2x3.SharedBldgElements;
 using Xbim.Ifc2x3.SharedFacilitiesElements;
 using Xbim.IO;
 using Xbim.XbimExtensions.SelectTypes;
+using XbimExchanger.IfcToCOBieLiteUK.EqCompare;
 using Attribute = Xbim.COBieLiteUK.Attribute;
 using SystemAssembly = System.Reflection.Assembly;
 
@@ -84,6 +85,11 @@ namespace XbimExchanger.IfcToCOBieLiteUK
     {
 
         internal static readonly ILogger Logger = LoggerFactory.GetLogger();
+        /// <summary>
+        /// Object to use to report progress on Exchangers
+        /// </summary>
+        public ProgressReporter ReportProgress
+        { get; set; }
 
         private readonly XbimModel _model;
         private readonly string _creatingApplication;
@@ -194,8 +200,9 @@ namespace XbimExchanger.IfcToCOBieLiteUK
         /// </summary>
         /// <param name="model"></param>
         /// <param name="configurationFile"></param>
-        public CoBieLiteUkHelper(XbimModel model, OutPutFilters filter = null, string configurationFile = null, EntityIdentifierMode extId = EntityIdentifierMode.IfcEntityLabels, SystemExtractionMode sysMode = SystemExtractionMode.System | SystemExtractionMode.Types)
+        public CoBieLiteUkHelper(XbimModel model, ProgressReporter reportProgress, OutPutFilters filter = null, string configurationFile = null, EntityIdentifierMode extId = EntityIdentifierMode.IfcEntityLabels, SystemExtractionMode sysMode = SystemExtractionMode.System | SystemExtractionMode.Types)
         {
+            
             //set props
             _configFileName = configurationFile;
             Filter = filter != null ? filter : new OutPutFilters();
@@ -203,17 +210,22 @@ namespace XbimExchanger.IfcToCOBieLiteUK
             EntityIdentifierMode = extId;
             SystemMode = sysMode;
             _creatingApplication = model.Header.CreatingApplication;
+            //pass the exchanger progress reporter over to helper
+            ReportProgress = reportProgress; 
 
             //init
-            LoadCobieMaps();
-            GetContacts();
-            GetClassificationDictionary();
-            GetSpacesAndZones();
+            ReportProgress.Reset(1, 1, "Creating Facility - Extracting Objects");
+            LoadCobieMaps(); //1%
+            ReportProgress.IncrementAndUpdate();
+            GetContacts(); //5%
+            GetClassificationDictionary();//8%
+            GetSpacesAndZones();//13%
             GetUnits();
-            GetTypeMaps();
-            GetPropertySets();
-            GetSystems();
-            GetSpaceAssetLookup();
+            GetTypeMaps();//25%
+            GetPropertySets();//33%
+            GetSystems();//38%
+            GetSpaceAssetLookup();//40%
+            
         }
 
 
@@ -225,23 +237,30 @@ namespace XbimExchanger.IfcToCOBieLiteUK
             {
                 _systemAssignment =
                         _model.Instances.OfType<IfcRelAssignsToGroup>().Where(r => r.RelatingGroup is IfcSystem)
+                        .Distinct(new IfcRelAssignsToGroupRelatedGroupObjCompare()) //make sure we do not have duplicate keys, or ToDictionary will throw ex. could lose RelatedObjects though. 
                         .ToDictionary(k => (IfcSystem)k.RelatingGroup, v => v.RelatedObjects);
                 _systemLookup = new Dictionary<IfcObjectDefinition, List<IfcSystem>>();
+                ReportProgress.NextStage(SystemAssignment.Count, 35);
                 foreach (var systemAssignment in SystemAssignment)
+                {
                     foreach (var objectDefinition in systemAssignment.Value)
                     {
                         if (_systemLookup.ContainsKey(objectDefinition))
                             _systemLookup[objectDefinition].Add(systemAssignment.Key);
                         else
                             _systemLookup.Add(objectDefinition, new List<IfcSystem>(new[] { systemAssignment.Key }));
-                    } 
+                    }
+                    ReportProgress.IncrementAndUpdate();
+                }
             }
 
             //Use PropertySet Property with names matching config values on section name = SystemPropertyMaps with key=SystemMaps
             SystemViaPropAssignment = new Dictionary<IfcPropertySet, IEnumerable<IfcObject>>();
             if (SystemMode.HasFlag(SystemExtractionMode.PropertyMaps))
             {
-                foreach (var propertyName in GetPropMap("SystemMaps"))
+                var props = GetPropMap("SystemMaps");
+                ReportProgress.NextStage(props.Count(), 35);
+                foreach (var propertyName in props)
                 {
                     var propmap = propertyName.Split(new Char[] { '.' }, StringSplitOptions.RemoveEmptyEntries);
                     if (propmap.Count() == 2)
@@ -258,6 +277,7 @@ namespace XbimExchanger.IfcToCOBieLiteUK
 
                         SystemViaPropAssignment = SystemViaPropAssignment.Concat(sets).ToDictionary(p => p.Key, p => p.Value);
                     }
+                    ReportProgress.IncrementAndUpdate();
                 } 
             }
         }
@@ -292,7 +312,9 @@ namespace XbimExchanger.IfcToCOBieLiteUK
             //creates a dictionary of uniqueness for type objects
             var propertySetHashes = new Dictionary<string,string>();
             var proxyTypesByKey = new Dictionary<string, XbimIfcProxyTypeObject>();
-            foreach (var typeObject in relDefinesByType.Select(r=>r.RelatingType))
+            var relDefinesByRelType = relDefinesByType.Select(r => r.RelatingType);
+            ReportProgress.NextStage(relDefinesByRelType.Count(), 17);
+            foreach (var typeObject in relDefinesByRelType)
             {
                 var hash = GetTypeObjectHashString(typeObject);
                 if (!propertySetHashes.ContainsKey(hash))
@@ -301,30 +323,33 @@ namespace XbimExchanger.IfcToCOBieLiteUK
                     propertySetHashes.Add(hash, typeName);
                     proxyTypesByKey.Add(hash, new XbimIfcProxyTypeObject(this, typeObject, typeName));
                 }
+                ReportProgress.IncrementAndUpdate();
 
             }
 
             var assemblyParts = new HashSet<IfcObjectDefinition>(_model.Instances.OfType<IfcRelAggregates>().SelectMany(a => a.RelatedObjects));
             var grouping = relDefinesByType.GroupBy(k => proxyTypesByKey[GetTypeObjectHashString(k.RelatingType)],
                 kv => kv.RelatedObjects).ToList();
-           
+            ReportProgress.NextStage(grouping.Count(), 19);
             foreach (var group in grouping)
             {
                 //filter on in assembly, and ifcElement if filtered in ProductFilter even if the ifcTypeObject is not filtered (passed filter in relDefinesByType assignment above)
                 var allObjects = group.SelectMany(o => o).OfType<IfcElement>().Where(e => !assemblyParts.Contains(e) && !Filter.ObjFilter(e, false)).ToList();  
                 _definingTypeObjectMap.Add(group.Key,allObjects);
+                ReportProgress.IncrementAndUpdate();
             }
             
             _objectToTypeObjectMap = new Dictionary<IfcObject, XbimIfcProxyTypeObject>();
 
 
-
+            ReportProgress.NextStage(_definingTypeObjectMap.Count(), 21);
             foreach (var typeObjectToObjects in _definingTypeObjectMap)
             {
                 foreach (var ifcObject in typeObjectToObjects.Value.Where(t => !(t is IfcFeatureElement) && !assemblyParts.Contains(t)))
                 {
                     _objectToTypeObjectMap.Add(ifcObject, typeObjectToObjects.Key);
                 }
+                ReportProgress.IncrementAndUpdate();
             }
 
             //**NOTE**: removed _classifiedObjects from existingAssets as some elements do not have a type but have a classification, this excludes them from the _objectToTypeObjectMap, not what we want I think
@@ -344,7 +369,7 @@ namespace XbimExchanger.IfcToCOBieLiteUK
 
             var unCategorizedAssetsWithTypes = unCategorizedAssets.GroupBy
                 (t=>GetProxyTypeObject(t).Name, v => v).ToDictionary(k=>k.Key,v=>v.ToList());
-
+            ReportProgress.NextStage(unCategorizedAssetsWithTypes.Count(), 23);
             foreach (var unCategorizedAssetsWithType in unCategorizedAssetsWithTypes)
             {
                 XbimIfcProxyTypeObject proxyType;
@@ -364,6 +389,7 @@ namespace XbimExchanger.IfcToCOBieLiteUK
                 {
                     _objectToTypeObjectMap.Add(ifcObject, proxyType);
                 }
+                ReportProgress.IncrementAndUpdate();
             }
             
            
@@ -374,11 +400,13 @@ namespace XbimExchanger.IfcToCOBieLiteUK
                 .Where(r => r.RelatingGroup is IfcAsset);
 
             _assetAsignments = new Dictionary<IfcTypeObject, IfcAsset>();
+            ReportProgress.NextStage(assetRels.Count(), 25);
             foreach (var assetRel in assetRels)
             {
                 foreach (var assetType in assetRel.RelatedObjects)
                     if ((assetType is IfcTypeObject) && !Filter.ObjFilter(assetType))
-                        AssetAsignments[(IfcTypeObject)assetType] = (IfcAsset)assetRel.RelatingGroup; 
+                        AssetAsignments[(IfcTypeObject)assetType] = (IfcAsset)assetRel.RelatingGroup;
+                ReportProgress.IncrementAndUpdate();
             }
            
         }
@@ -511,6 +539,7 @@ namespace XbimExchanger.IfcToCOBieLiteUK
         {
             _attributedObjects = new Dictionary<IfcObjectDefinition, XbimAttributedObject>();
             var relProps = _model.Instances.OfType<IfcRelDefinesByProperties>().ToList();
+            ReportProgress.NextStage(relProps.Count, 29);
             foreach (var relProp in relProps)
             {
                 //get objects left after the IfcElement filters, plus none IfcElement (floors, spaces...)
@@ -525,9 +554,12 @@ namespace XbimExchanger.IfcToCOBieLiteUK
                     }
                     attributedObject.AddPropertySetDefinition(relProp.RelatingPropertyDefinition);  
                 }
+                ReportProgress.IncrementAndUpdate();
             }
             //process type objects ignoring pure proxies
-            foreach (var typeObject in _definingTypeObjectMap.Keys.Where(t=>t.IfcTypeObject!=null))
+            var defTypeToProxy = _definingTypeObjectMap.Keys.Where(t => t.IfcTypeObject != null);
+            ReportProgress.NextStage(defTypeToProxy.Count(), 33);
+            foreach (var typeObject in defTypeToProxy)
             {
                 XbimAttributedObject attributedObject;
                 if (!_attributedObjects.TryGetValue(typeObject.IfcTypeObject, out attributedObject))
@@ -542,6 +574,7 @@ namespace XbimExchanger.IfcToCOBieLiteUK
                         attributedObject.AddPropertySetDefinition(pset);
                     }
                 }
+                ReportProgress.IncrementAndUpdate();
             }
             
         }
@@ -550,7 +583,7 @@ namespace XbimExchanger.IfcToCOBieLiteUK
         {
             _spatialDecomposition = _model.Instances.OfType<IfcRelAggregates>().Where(r=>r.RelatingObject is IfcSpatialStructureElement)
                 .ToDictionary(ifcRelAggregate => (IfcSpatialStructureElement) ifcRelAggregate.RelatingObject, ifcRelAggregate => ifcRelAggregate.RelatedObjects.OfType<IfcSpatialStructureElement>().ToList());
-
+            ReportProgress.NextStage(_spatialDecomposition.Count(), 10);
             //get the relationship between spaces and storeys
             _spaceFloorLookup = new Dictionary<IfcSpace, IfcBuildingStorey>();
             foreach (var spatialElement in _spatialDecomposition)
@@ -561,9 +594,11 @@ namespace XbimExchanger.IfcToCOBieLiteUK
                     foreach (var ifcSpace in spatialElement.Value.OfType<IfcSpace>())
                         _spaceFloorLookup[ifcSpace] = key;
                 }
+                ReportProgress.IncrementAndUpdate();
             }
 
             var relZones = _model.Instances.OfType<IfcRelAssignsToGroup>().Where(r=>r.RelatingGroup is IfcZone).ToList();
+            ReportProgress.NextStage(relZones.Count(), 13);
             _zoneSpaces = new Dictionary<IfcZone, HashSet<IfcSpace>>();
             _spaceZones = new Dictionary<IfcSpace, HashSet<IfcZone>>();
             foreach (var relZone in relZones)
@@ -593,6 +628,7 @@ namespace XbimExchanger.IfcToCOBieLiteUK
                         spaceZones.Add(zone);
                     }
                 }
+                ReportProgress.IncrementAndUpdate();
             }         
         }
 
@@ -802,6 +838,7 @@ namespace XbimExchanger.IfcToCOBieLiteUK
 
             _classifiedObjects = new Dictionary<IfcRoot, List<IfcClassificationReference>>();
             //create a dictionary of classified objects
+            ReportProgress.NextStage(_classifiedObjects.Count(), 8);
             foreach (var ifcRelAssociatesClassification in Model.Instances.OfType<IfcRelAssociatesClassification>())
             {
                 foreach (var relatedObject in ifcRelAssociatesClassification.RelatedObjects)
@@ -813,6 +850,7 @@ namespace XbimExchanger.IfcToCOBieLiteUK
                         _classifiedObjects.Add(relatedObject, classificationList);
                     }
                     classificationList.Add(((IfcClassificationReference)ifcRelAssociatesClassification.RelatingClassification));
+                    ReportProgress.IncrementAndUpdate();
                 }
             }
         }
@@ -832,7 +870,8 @@ namespace XbimExchanger.IfcToCOBieLiteUK
                     var parts = strRef.Split(new[] {':', ';', '/', '\\'}, StringSplitOptions.RemoveEmptyEntries);
                     if (parts.Length > 1)
                         category.Description = parts[1];
-                    category.Code = parts[0];
+                    if (parts.Length > 0)
+                        category.Code = parts[0];
                 }
                 else
                 {
@@ -1138,6 +1177,7 @@ namespace XbimExchanger.IfcToCOBieLiteUK
             _spaceAssetLookup = new Dictionary<IfcElement, List<IfcSpatialStructureElement>>(); 
            
             var ifcRelContainedInSpaces = _model.Instances.OfType<IfcRelContainedInSpatialStructure>().ToList();
+            ReportProgress.NextStage(ifcRelContainedInSpaces.Count, 40);
             foreach (var ifcRelContainedInSpace in ifcRelContainedInSpaces)
             {
                 foreach (var element in ifcRelContainedInSpace.RelatedElements.OfType<IfcElement>())
@@ -1151,6 +1191,7 @@ namespace XbimExchanger.IfcToCOBieLiteUK
                     }
                     spaceList.Add(ifcRelContainedInSpace.RelatingStructure);
                 }
+                ReportProgress.IncrementAndUpdate();
             }
            
         }
@@ -1239,16 +1280,20 @@ namespace XbimExchanger.IfcToCOBieLiteUK
             var persons = new HashSet<IfcActorSelect>(_model.Instances.OfType<IfcPerson>().Where(p => !personsAlreadyIn.Contains(p)));
             _contacts = actors.Concat(persons).ToList();
             _actors = new Dictionary<IfcActorSelect, IfcActor>();
+            //set progress report
+            ReportProgress.NextStage(ifcActors.Count + actors.OfType<IfcPersonAndOrganization>().Count(), 5);
             foreach (var actor in ifcActors)
             {
                 if(!_actors.ContainsKey(actor.TheActor))
                     _actors.Add(actor.TheActor,actor);
+                ReportProgress.IncrementAndUpdate();
             }
             _createdByKeys = new Dictionary<IfcPersonAndOrganization, ContactKey>();
             //sort out createdByKeys, these will always be IfcPersonAndOrganization
             foreach (var actor in actors.OfType<IfcPersonAndOrganization>())
             {
                 _createdByKeys.Add(actor, new ContactKey { Email = EmailAddressOf(actor) });
+                ReportProgress.IncrementAndUpdate();
             }
             _sundryContacts = new Dictionary<string, Contact>();
         }

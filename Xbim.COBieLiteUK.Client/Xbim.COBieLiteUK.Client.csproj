@@ -74,18 +74,26 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="COBieLiteGenerator.cs">
+    <Compile Include="COBieLiteGeneratorDlg.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="COBieLiteGenerator.Designer.cs">
-      <DependentUpon>COBieLiteGenerator.cs</DependentUpon>
+    <Compile Include="COBieLiteGeneratorDlg.Designer.cs">
+      <DependentUpon>COBieLiteGeneratorDlg.cs</DependentUpon>
     </Compile>
+    <Compile Include="COBieLiteWorker.cs" />
     <Compile Include="EditableList.cs">
       <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="EditableList.Designer.cs">
       <DependentUpon>EditableList.cs</DependentUpon>
     </Compile>
+    <Compile Include="Federate.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Federate.Designer.cs">
+      <DependentUpon>Federate.cs</DependentUpon>
+    </Compile>
+    <Compile Include="FederatedModel.cs" />
     <Compile Include="FilterDlg.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -118,11 +126,20 @@
     <Compile Include="PropertySetFilters.Designer.cs">
       <DependentUpon>PropertySetFilters.cs</DependentUpon>
     </Compile>
-    <EmbeddedResource Include="COBieLiteGenerator.resx">
-      <DependentUpon>COBieLiteGenerator.cs</DependentUpon>
+    <Compile Include="RolesList.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="RolesList.Designer.cs">
+      <DependentUpon>RolesList.cs</DependentUpon>
+    </Compile>
+    <EmbeddedResource Include="COBieLiteGeneratorDlg.resx">
+      <DependentUpon>COBieLiteGeneratorDlg.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="EditableList.resx">
       <DependentUpon>EditableList.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Federate.resx">
+      <DependentUpon>Federate.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="FilterDlg.resx">
       <DependentUpon>FilterDlg.cs</DependentUpon>
@@ -148,6 +165,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="PropertySetFilters.resx">
       <DependentUpon>PropertySetFilters.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="RolesList.resx">
+      <DependentUpon>RolesList.cs</DependentUpon>
     </EmbeddedResource>
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">

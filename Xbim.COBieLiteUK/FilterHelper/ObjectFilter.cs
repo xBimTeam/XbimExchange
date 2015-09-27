@@ -32,12 +32,15 @@ namespace Xbim.FilterHelper
         /// <summary>
         /// Items to filter out
         /// </summary>
-        private List<string> _itemsToExclude = null;
+        private List<string> _itemsToExclude;
         private List<string> ItemsToExclude
         {
             get
             {
-                return _itemsToExclude != null ? _itemsToExclude : Items.Where(e => e.Value == false).Select(e => e.Key).ToList();
+                if (_itemsToExclude == null)
+                    _itemsToExclude = Items.Where(e => e.Value == false).Select(e => e.Key).ToList();
+
+                return _itemsToExclude;
             }
         }
 
@@ -49,6 +52,7 @@ namespace Xbim.FilterHelper
         {
             Items = new SerializableDictionary<string, bool>();
             PreDefinedType = new SerializableDictionary<string, string[]>();
+            _itemsToExclude = null;
         }
 
         /// <summary>
@@ -239,6 +243,16 @@ namespace Xbim.FilterHelper
             {
                 this.PreDefinedType[pair.Key] = pair.Value;
             }
+        }
+
+        /// <summary>
+        /// Clear ObjectFilter
+        /// </summary>
+        public void Clear()
+        {
+            _itemsToExclude = null; //reset exclude
+            this.Items.Clear();
+            this.PreDefinedType.Clear();
         }
 
         #endregion

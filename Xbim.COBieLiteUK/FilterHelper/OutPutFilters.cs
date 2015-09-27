@@ -21,7 +21,16 @@ namespace Xbim.FilterHelper
     {
         #region Properties
 
+        /// <summary>
+        /// Flip results of true/false 
+        /// </summary>
+        [XmlIgnore][JsonIgnore]
         public bool FlipResult { get; set; }
+
+        /// <summary>
+        /// Roles set on this filter
+        /// </summary>
+        public RoleFilter AppliedRoles  { get; set; }
         /// <summary>
         /// IfcProduct Exclude filters
         /// </summary>
@@ -71,8 +80,10 @@ namespace Xbim.FilterHelper
         /// <summary>
         /// Temp storage for role OutPutFilters
         /// </summary>
-        //[XmlIgnore][JsonIgnore]
+        [XmlIgnore][JsonIgnore]
         private Dictionary<RoleFilter, OutPutFilters> RolesFilterHolder { get; set; }
+
+        
 
         /// <summary>
         /// Nothing set in RolesFilterHolder
@@ -113,14 +124,16 @@ namespace Xbim.FilterHelper
 
             //role storage
             RolesFilterHolder = new Dictionary<RoleFilter, OutPutFilters>();
+            
         }
         
         /// <summary>
         /// Constructor for default set configFileName = null, or passed in configuration file path
         /// </summary>
         /// <param name="configFileName"></param>
-        public OutPutFilters(string configFileName, ImportSet import = ImportSet.All) : this()
+        public OutPutFilters(string configFileName, RoleFilter role, ImportSet import = ImportSet.All) : this()
         {
+            AppliedRoles = role;
             FiltersHelperInit(import, configFileName);
         }
 
@@ -249,6 +262,8 @@ namespace Xbim.FilterHelper
         /// <param name="copyFilter">OutPutFilters to copy </param>
         public void Copy(OutPutFilters copyFilter)
         {
+            AppliedRoles = copyFilter.AppliedRoles;
+
             IfcProductFilter.Copy(copyFilter.IfcProductFilter);
             IfcTypeObjectFilter.Copy(copyFilter.IfcTypeObjectFilter);
             IfcAssemblyFilter.Copy(copyFilter.IfcAssemblyFilter);
@@ -263,6 +278,27 @@ namespace Xbim.FilterHelper
             CommonFilter.Copy(copyFilter.CommonFilter);
         }
 
+
+        /// <summary>
+        /// Clear OutPutFilters
+        /// </summary>
+        public void Clear()
+        {
+            AppliedRoles = 0;
+
+            IfcProductFilter.Clear();
+            IfcTypeObjectFilter.Clear();
+            IfcAssemblyFilter.Clear();
+
+            ZoneFilter.Clear();
+            TypeFilter.Clear();
+            SpaceFilter.Clear();
+            FloorFilter.Clear();
+            FacilityFilter.Clear();
+            SpareFilter.Clear();
+            ComponentFilter.Clear();
+            CommonFilter.Clear();
+        }
         #endregion
 
 
@@ -431,6 +467,7 @@ namespace Xbim.FilterHelper
         /// Extension method to use default role configuration resource files
         /// </summary>
         /// <param name="roles">MergeRoles, Flag enum with one or more roles</param>
+        /// <param name="append">true = add, false = overwrite existing </param>
         /// <param name="rolesFilter">Dictionary of roles to OutPutFilters to use for merge, overwrites current assigned dictionary</param>
         public void ApplyRoleFilters(RoleFilter roles, bool append = false, Dictionary<RoleFilter, OutPutFilters> rolesFilter = null)
         {
@@ -455,7 +492,7 @@ namespace Xbim.FilterHelper
                         string mergeFile = GetDefaultRoleFile(role);
                         if (!string.IsNullOrEmpty(mergeFile))
                         {
-                            mergeFilter = new OutPutFilters(mergeFile);
+                            mergeFilter = new OutPutFilters(mergeFile, role);
                             RolesFilterHolder[role] = mergeFilter;
                         }
                     }
@@ -476,10 +513,38 @@ namespace Xbim.FilterHelper
 
             }
             //add the default property filters
-            OutPutFilters defaultPropFilters = new OutPutFilters(null, ImportSet.PropertyFilters);
+            OutPutFilters defaultPropFilters = new OutPutFilters(null, RoleFilter.Unknown, ImportSet.PropertyFilters);
             this.Merge(defaultPropFilters);
+
+            //save the applied roles at end as this.Copy(mergeFilter) would set to first role in RoleFilter
+            AppliedRoles = roles; 
         }
 
+        
+
+        /// <summary>
+        /// Set filters for Federated Model, referenced models
+        /// </summary>
+        /// <param name="modelRoleMap"></param>
+        public Dictionary<T, OutPutFilters> SetFedModelFilter<T>(Dictionary<T, RoleFilter> modelRoleMap)
+        {
+            Dictionary<T, OutPutFilters> modelFilterMap = new Dictionary<T, OutPutFilters>();
+
+            //save this filter before working out all fed models
+            OutPutFilters saveFilter = new OutPutFilters();
+            saveFilter.Copy(this);
+
+            foreach (var item in modelRoleMap)
+            {
+                ApplyRoleFilters(item.Value);
+                OutPutFilters roleFilter = new OutPutFilters();
+                roleFilter.Copy(this);
+                modelFilterMap.Add(item.Key, roleFilter);
+            }
+
+            this.Copy(saveFilter); //reset this filter back to state at top of function
+            return modelFilterMap;
+        }
 
         /// <summary>
         /// Fill RolesFilterHolder with default values
@@ -491,7 +556,7 @@ namespace Xbim.FilterHelper
                 string roleFile = GetDefaultRoleFile(role);
                 if (!string.IsNullOrEmpty(roleFile))
                 {
-                    RolesFilterHolder[role] = new OutPutFilters(roleFile);
+                    RolesFilterHolder[role] = new OutPutFilters(roleFile, role);
                 }
             }
         }
@@ -520,7 +585,7 @@ namespace Xbim.FilterHelper
                         string roleFile = GetDefaultRoleFile(role);
                         if (!string.IsNullOrEmpty(roleFile))
                         {
-                            RolesFilterHolder[role] = new OutPutFilters(roleFile);
+                            RolesFilterHolder[role] = new OutPutFilters(roleFile, role);
                         }
                     }
                 }
@@ -529,7 +594,7 @@ namespace Xbim.FilterHelper
         }
 
         /// <summary>
-        /// Read in xml roleFilter files on passed directory
+        /// Write to xml roleFilter files on passed directory
         /// </summary>
         /// <param name="dir">DirectoryInfo</param>
         public void WriteXMLRolesFilterHolderToDir(DirectoryInfo dir)
@@ -586,7 +651,7 @@ namespace Xbim.FilterHelper
              string filterFile = GetDefaultRoleFile(role);
              if (!string.IsNullOrEmpty(filterFile))
              {
-                 return new OutPutFilters(filterFile);
+                 return new OutPutFilters(filterFile, role);
              }
              return null;
         }

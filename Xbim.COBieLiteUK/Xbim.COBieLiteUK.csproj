@@ -125,6 +125,31 @@
     <Compile Include="EntityKeys\ProjectStageKey.cs" />
     <Compile Include="EntityKeys\ResourceKey.cs" />
     <Compile Include="EntityKeys\SpaceKey.cs" />
+    <Compile Include="EqCompare\AssetCompareKey.cs" />
+    <Compile Include="EqCompare\AssetTypeCompareKey.cs" />
+    <Compile Include="EqCompare\AttributeCompareKey.cs" />
+    <Compile Include="EqCompare\CategoryCompareKey.cs" />
+    <Compile Include="EqCompare\CompareEqRule.cs" />
+    <Compile Include="EqCompare\CompareLogger.cs" />
+    <Compile Include="EqCompare\ConnectionCompareKey.cs" />
+    <Compile Include="EqCompare\ContactCompareKey.cs" />
+    <Compile Include="EqCompare\FloorCompareKey.cs" />
+    <Compile Include="EqCompare\EntityKeyCompareKey.cs" />
+    <Compile Include="EqCompare\ICompareEqRule.cs" />
+    <Compile Include="EqCompare\ImpactCompareKey.cs" />
+    <Compile Include="EqCompare\IssueCompareKey.cs" />
+    <Compile Include="EqCompare\JobCompareKey.cs" />
+    <Compile Include="EqCompare\JobKeyCompareKey.cs" />
+    <Compile Include="EqCompare\NameCompareKey.cs" />
+    <Compile Include="EqCompare\DocumentCompareKey.cs" />
+    <Compile Include="EqCompare\MetadataCompareKey.cs" />
+    <Compile Include="EqCompare\ProjectCompareKey.cs" />
+    <Compile Include="EqCompare\RepresentationCompareKey.cs" />
+    <Compile Include="EqCompare\SiteCompareKey.cs" />
+    <Compile Include="EqCompare\SpaceCompareKey.cs" />
+    <Compile Include="EqCompare\SpareCompareKey.cs" />
+    <Compile Include="EqCompare\StringBuilderExtender.cs" />
+    <Compile Include="EqCompare\StringCompareKey.cs" />
     <Compile Include="FilterHelper\COBiePropertyMapping.cs" />
     <Compile Include="FilterHelper\ObjectFilter.cs" />
     <Compile Include="FilterHelper\PropertyFilter.cs" />
@@ -137,13 +162,14 @@
     <Compile Include="Job.cs" />
     <Compile Include="Metadata.cs" />
     <Compile Include="Net40Port\Net40CustomAttributeExtensions.cs" />
+    <Compile Include="ReportProgress\ProgressReporter.cs" />
     <Compile Include="Resource.cs" />
     <Compile Include="Schemas\Attributes.cs" />
     <Compile Include="Facility.cs" />
-	<Compile Include="..\SharedAssemblyInfo.cs">
+    <Compile Include="..\SharedAssemblyInfo.cs">
       <Link>Properties\SharedAssemblyInfo.cs</Link>
     </Compile>
-	<Compile Include="..\SharedFileVersionInfo.cs">
+    <Compile Include="..\SharedFileVersionInfo.cs">
       <Link>Properties\SharedFileVersionInfo.cs</Link>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
