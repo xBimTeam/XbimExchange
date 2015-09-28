@@ -20,6 +20,7 @@ namespace XbimExchanger.IfcToCOBieLiteUK
             var model = ifcBuilding.ModelOf;
             facility.ExternalEntity = helper.ExternalEntityName(ifcBuilding);
             facility.ExternalId = helper.ExternalEntityIdentity(ifcBuilding);
+            facility.AlternativeExternalId = ifcBuilding.GlobalId;
             facility.ExternalSystem = helper.ExternalSystemName(ifcBuilding);
             facility.Name = helper.GetFacilityName(ifcBuilding);
             facility.Description = ifcBuilding.Description;
