@@ -53,9 +53,9 @@ namespace Xbim.COBieLiteUK {
     [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="U", Header="SiteDescription", Required=false, List=false, PickList=null, Path="Site.Description", IsExtension=false)]
     [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="V", Header="Phase", Required=true, List=false, PickList=null, Path="Phase", IsExtension=false)]
     [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="W", Header="ProjectStages", Required=false, List=true, PickList=null, Path="ProjectStages.Name", IsExtension=true)]
-    [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="X", Header="AlternativeExternalProjectIdentifier", Required=false, List=false, PickList=null, Path="Project.AlternativeExternalId", IsExtension=false)]
-    [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="Y", Header="AlternativeExternalSiteIdentifier", Required=false, List=false, PickList=null, Path="Site.AlternativeExternalId", IsExtension=false)]
-    [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="Z", Header="AlternativeExternalFacilityIdentifier", Required=false, List=false, PickList=null, Path="AlternativeExternalId", IsExtension=false)]
+    [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="X", Header="AltExternalProjectIdentifier", Required=false, List=false, PickList=null, Path="Project.AltExternalId", IsExtension=false)]
+    [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="Y", Header="AltExternalSiteIdentifier", Required=false, List=false, PickList=null, Path="Site.AltExternalId", IsExtension=false)]
+    [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="Z", Header="AltExternalFacilityIdentifier", Required=false, List=false, PickList=null, Path="AltExternalId", IsExtension=false)]
     public partial class Facility : CobieObject {
         
         private Metadata metadataField;
@@ -366,7 +366,7 @@ namespace Xbim.COBieLiteUK {
         
         private string externalIdField;
         
-        private string alternativeExternalIdField;
+        private string altExternalIdField;
         
         [global::System.Xml.Serialization.XmlElementAttribute(Form=global::System.Xml.Schema.XmlSchemaForm.Unqualified)]
         public string Name {
@@ -409,12 +409,12 @@ namespace Xbim.COBieLiteUK {
         }
         
         [global::System.Xml.Serialization.XmlElementAttribute(Form=global::System.Xml.Schema.XmlSchemaForm.Unqualified)]
-        public string AlternativeExternalId {
+        public string AltExternalId {
             get {
-                return this.alternativeExternalIdField;
+                return this.altExternalIdField;
             }
             set {
-                this.alternativeExternalIdField = value;
+                this.altExternalIdField = value;
             }
         }
     }
@@ -434,7 +434,7 @@ namespace Xbim.COBieLiteUK {
         
         private string externalIdField;
         
-        private string alternativeExternalIdField;
+        private string altExternalIdField;
         
         [global::System.Xml.Serialization.XmlElementAttribute(Form=global::System.Xml.Schema.XmlSchemaForm.Unqualified)]
         public string Name {
@@ -477,12 +477,12 @@ namespace Xbim.COBieLiteUK {
         }
         
         [global::System.Xml.Serialization.XmlElementAttribute(Form=global::System.Xml.Schema.XmlSchemaForm.Unqualified)]
-        public string AlternativeExternalId {
+        public string AltExternalId {
             get {
-                return this.alternativeExternalIdField;
+                return this.altExternalIdField;
             }
             set {
-                this.alternativeExternalIdField = value;
+                this.altExternalIdField = value;
             }
         }
     }
@@ -1250,7 +1250,7 @@ namespace Xbim.COBieLiteUK {
         
         private List<ProjectStageKey> projectStagesField;
         
-        private string alternativeExternalIdField;
+        private string altExternalIdField;
         
         [global::System.Xml.Serialization.XmlElementAttribute(Form=global::System.Xml.Schema.XmlSchemaForm.Unqualified)]
         public virtual string Name {
@@ -1400,12 +1400,12 @@ namespace Xbim.COBieLiteUK {
         }
         
         [global::System.Xml.Serialization.XmlElementAttribute(Form=global::System.Xml.Schema.XmlSchemaForm.Unqualified)]
-        public virtual string AlternativeExternalId {
+        public virtual string AltExternalId {
             get {
-                return this.alternativeExternalIdField;
+                return this.altExternalIdField;
             }
             set {
-                this.alternativeExternalIdField = value;
+                this.altExternalIdField = value;
             }
         }
         
@@ -1980,7 +1980,7 @@ namespace Xbim.COBieLiteUK {
     [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="H", Header="ExtIdentifier", Required=false, List=false, PickList=null, Path="ExternalId", IsExtension=false)]
     [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="I", Header="Description", Required=false, List=false, PickList=null, Path="Description", IsExtension=false)]
     [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="J", Header="ProjectStages", Required=false, List=true, PickList=null, Path="ProjectStages.Name", IsExtension=true)]
-    [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="K", Header="AlternativeExternalId", Required=false, List=false, PickList=null, Path="AlternativeExternalId", IsExtension=true)]
+    [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="K", Header="AltExternalId", Required=false, List=false, PickList=null, Path="AltExternalId", IsExtension=true)]
     public partial class Zone : CobieObject {
         
         private List<SpaceKey> spacesField;
@@ -2064,7 +2064,7 @@ namespace Xbim.COBieLiteUK {
     [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="H", Header="ExtIdentifier", Required=false, List=false, PickList=null, Path="ExternalId", IsExtension=false)]
     [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="I", Header="Description", Required=false, List=false, PickList=null, Path="Description", IsExtension=false)]
     [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="J", Header="ProjectStages", Required=false, List=true, PickList=null, Path="ProjectStages.Name", IsExtension=true)]
-    [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="K", Header="AlternativeExternalId", Required=false, List=false, PickList=null, Path="AlternativeExternalId", IsExtension=true)]
+    [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="K", Header="AltExternalId", Required=false, List=false, PickList=null, Path="AltExternalId", IsExtension=true)]
     public partial class System : CobieObject {
         
         private List<AssetKey> componentsField;
@@ -2107,7 +2107,7 @@ namespace Xbim.COBieLiteUK {
     [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="L", Header="GrossArea", Required=false, List=false, PickList=null, Path="GrossArea", IsExtension=false)]
     [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="M", Header="NetArea", Required=false, List=false, PickList=null, Path="NetArea", IsExtension=false)]
     [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="N", Header="ProjectStages", Required=false, List=true, PickList=null, Path="ProjectStages.Name", IsExtension=true)]
-    [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="O", Header="AlternativeExternalId", Required=false, List=false, PickList=null, Path="AlternativeExternalId", IsExtension=true)]
+    [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="O", Header="AltExternalId", Required=false, List=false, PickList=null, Path="AltExternalId", IsExtension=true)]
     public partial class Space : CobieObject {
         
         private string roomTagField;
@@ -2203,7 +2203,7 @@ namespace Xbim.COBieLiteUK {
     [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="I", Header="Elevation", Required=false, List=false, PickList=null, Path="Elevation", IsExtension=false)]
     [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="J", Header="Height", Required=false, List=false, PickList=null, Path="Height", IsExtension=false)]
     [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="K", Header="ProjectStages", Required=false, List=true, PickList=null, Path="ProjectStages.Name", IsExtension=true)]
-    [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="L", Header="AlternativeExternalId", Required=false, List=false, PickList=null, Path="AlternativeExternalId", IsExtension=true)]
+    [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="L", Header="AltExternalId", Required=false, List=false, PickList=null, Path="AltExternalId", IsExtension=true)]
     public partial class Floor : CobieObject {
         
         private global::System.Nullable<double> elevationField;
@@ -3167,7 +3167,7 @@ namespace Xbim.COBieLiteUK {
     [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="N", Header="BarCode", Required=false, List=false, PickList=null, Path="BarCode", IsExtension=false)]
     [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="O", Header="AssetIdentifier", Required=false, List=false, PickList=null, Path="AssetIdentifier", IsExtension=false)]
     [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="P", Header="ProjectStages", Required=false, List=true, PickList=null, Path="ProjectStages.Name", IsExtension=true)]
-    [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="Q", Header="AlternativeExternalId", Required=false, List=false, PickList=null, Path="AlternativeExternalId", IsExtension=true)]
+    [Xbim.COBieLiteUK.Mapping(Type="UK2012", Column="Q", Header="AltExternalId", Required=false, List=false, PickList=null, Path="AltExternalId", IsExtension=true)]
     public partial class Asset : CobieObject {
         
         private List<SpaceKey> spacesField;

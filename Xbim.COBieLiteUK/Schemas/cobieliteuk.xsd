@@ -108,7 +108,7 @@
       <xs:appinfo source="mapping">UK2012|O|AssetIdentifier|optional|item|-|AssetIdentifier</xs:appinfo>
       <!-- Experimental extensions -->
       <xs:appinfo source="mapping">UK2012|P|ProjectStages|optional|list|-|ProjectStages.Name|extension</xs:appinfo>
-      <xs:appinfo source="mapping">UK2012|Q|AlternativeExternalId|optional|item|-|AlternativeExternalId|extension</xs:appinfo>
+      <xs:appinfo source="mapping">UK2012|Q|AltExternalId|optional|item|-|AltExternalId|extension</xs:appinfo>
       
       <xs:documentation>
         Named and individually scheduled physical items and features that might require
@@ -501,9 +501,9 @@
       <!-- Experimental extensions -->
       <xs:appinfo source="mapping">UK2012|W|ProjectStages|optional|list|-|ProjectStages.Name|extension</xs:appinfo>
       
-      <xs:appinfo source="mapping">UK2012|X|AlternativeExternalProjectIdentifier|optional|item|-|Project.AlternativeExternalId</xs:appinfo>
-      <xs:appinfo source="mapping">UK2012|Y|AlternativeExternalSiteIdentifier|optional|item|-|Site.AlternativeExternalId</xs:appinfo>
-      <xs:appinfo source="mapping">UK2012|Z|AlternativeExternalFacilityIdentifier|optional|item|-|AlternativeExternalId</xs:appinfo>
+      <xs:appinfo source="mapping">UK2012|X|AltExternalProjectIdentifier|optional|item|-|Project.AltExternalId</xs:appinfo>
+      <xs:appinfo source="mapping">UK2012|Y|AltExternalSiteIdentifier|optional|item|-|Site.AltExternalId</xs:appinfo>
+      <xs:appinfo source="mapping">UK2012|Z|AltExternalFacilityIdentifier|optional|item|-|AltExternalId</xs:appinfo>
         
       <xs:documentation>
         A type for the Facility element that is the root of a COBie document.
@@ -554,7 +554,7 @@
       <xs:element name="Description" type="xs:string" minOccurs="0" />
       <xs:element name="ExternalEntity" type="xs:string" minOccurs="0" />
       <xs:element name="ExternalId" type="xs:string" minOccurs="0" />
-      <xs:element name="AlternativeExternalId" type="xs:string" minOccurs="0" />
+      <xs:element name="AltExternalId" type="xs:string" minOccurs="0" />
     </xs:sequence>
   </xs:complexType>
   <xs:complexType name="Site">
@@ -563,7 +563,7 @@
       <xs:element name="Description" type="xs:string" minOccurs="0" />
       <xs:element name="ExternalEntity" type="xs:string" minOccurs="0" />
       <xs:element name="ExternalId" type="xs:string" minOccurs="0" />
-      <xs:element name="AlternativeExternalId" type="xs:string" minOccurs="0" />
+      <xs:element name="AltExternalId" type="xs:string" minOccurs="0" />
     </xs:sequence>
   </xs:complexType>
   <xs:element name="Facility" type="cobielite:Facility">
@@ -593,7 +593,7 @@
       <xs:appinfo source="mapping">UK2012|J|Height|optional|item|-|Height</xs:appinfo>
       <!-- Experimental extensions -->
       <xs:appinfo source="mapping">UK2012|K|ProjectStages|optional|list|-|ProjectStages.Name|extension</xs:appinfo>
-      <xs:appinfo source="mapping">UK2012|L|AlternativeExternalId|optional|item|-|AlternativeExternalId|extension</xs:appinfo>
+      <xs:appinfo source="mapping">UK2012|L|AltExternalId|optional|item|-|AltExternalId|extension</xs:appinfo>
       <xs:documentation>
         Floor is a named intermediate spatial subdivision, including distinct vertical levels and
         horizontal areas and sections with Spaces allocated.
@@ -925,7 +925,7 @@
       <xs:appinfo source="mapping">UK2012|M|NetArea|optional|item|-|NetArea</xs:appinfo>
       <!-- Experimental extensions -->
       <xs:appinfo source="mapping">UK2012|N|ProjectStages|optional|list|-|ProjectStages.Name|extension</xs:appinfo>
-      <xs:appinfo source="mapping">UK2012|O|AlternativeExternalId|optional|item|-|AlternativeExternalId|extension</xs:appinfo>
+      <xs:appinfo source="mapping">UK2012|O|AltExternalId|optional|item|-|AltExternalId|extension</xs:appinfo>
       <xs:documentation>
         Space is a named location for activities such as use, inspection or maintenance, including
         un‑occupied or un‑inhabitable Spaces, but not necessarily inaccessible voids.
@@ -1018,7 +1018,7 @@
       <xs:appinfo source="mapping">UK2012|I|Description|optional|item|-|Description</xs:appinfo>
       <!-- Experimental extensions -->
       <xs:appinfo source="mapping">UK2012|J|ProjectStages|optional|list|-|ProjectStages.Name|extension</xs:appinfo>
-      <xs:appinfo source="mapping">UK2012|K|AlternativeExternalId|optional|item|-|AlternativeExternalId|extension</xs:appinfo>
+      <xs:appinfo source="mapping">UK2012|K|AltExternalId|optional|item|-|AltExternalId|extension</xs:appinfo>
       <xs:documentation>
         System is a named set of manageable Components providing a common function.
       </xs:documentation>
@@ -1055,7 +1055,7 @@
       <xs:appinfo source="mapping">UK2012|I|Description|optional|item|-|Description</xs:appinfo>
       <!-- Experimental extensions -->
       <xs:appinfo source="mapping">UK2012|J|ProjectStages|optional|list|-|ProjectStages.Name|extension</xs:appinfo>
-      <xs:appinfo source="mapping">UK2012|K|AlternativeExternalId|optional|item|-|AlternativeExternalId|extension</xs:appinfo>
+      <xs:appinfo source="mapping">UK2012|K|AltExternalId|optional|item|-|AltExternalId|extension</xs:appinfo>
       <xs:documentation>
         Zone is a named set of Spaces (locations) sharing a specific Attribute, such as activity, access,
         management or conditioning.
@@ -1140,7 +1140,7 @@
       <xs:element name="Impacts" type="cobielite:ImpactCollection" maxOccurs="1" minOccurs="0" />
       <xs:element name="Representations" type="cobielite:RepresentationCollection" maxOccurs="1" minOccurs="0" />
       <xs:element name="ProjectStages" type="cobielite:ProjectStageKeyCollection" maxOccurs="1" minOccurs="0" />
-      <xs:element name="AlternativeExternalId" type="xs:string" minOccurs="0" />
+      <xs:element name="AltExternalId" type="xs:string" minOccurs="0" />
       
     </xs:sequence>
   </xs:complexType>
