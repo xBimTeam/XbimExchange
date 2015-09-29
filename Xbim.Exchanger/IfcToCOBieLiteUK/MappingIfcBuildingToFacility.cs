@@ -38,10 +38,20 @@ namespace XbimExchanger.IfcToCOBieLiteUK
                 Exchanger.ReportProgress.IncrementAndUpdate(); 
                 var ifcSite = ifcProject.GetSpatialStructuralElements().FirstOrDefault(p => p is IfcSite) as IfcSite;
                 var siteMapping = Exchanger.GetOrCreateMappings<MappingIfcSiteToSite>();
+
+                //Facility Attributes
+                facility.Attributes = helper.GetAttributes(ifcBuilding);
+                
                 if (ifcSite != null)
                 {
                     facility.Site = new Site();
                     siteMapping.AddMapping(ifcSite, facility.Site);
+                    
+                    if(ifcSite.RefLatitude.HasValue && ifcSite.RefLongitude.HasValue)
+                    {
+                        facility.Attributes.Add(helper.MakeAttribute(ifcSite, "RefLatitude", ifcSite.RefLatitude.Value.ToDouble()));
+                        facility.Attributes.Add(helper.MakeAttribute(ifcSite, "RefLongtitude", ifcSite.RefLongitude.Value.ToDouble()));
+                    }
                 }
                 else //create a default "External area"
                 {
@@ -78,8 +88,7 @@ namespace XbimExchanger.IfcToCOBieLiteUK
                 }
 
             }
-            //Facility Attributes
-            facility.Attributes = helper.GetAttributes(ifcBuilding);
+            
 
             //Zones
             

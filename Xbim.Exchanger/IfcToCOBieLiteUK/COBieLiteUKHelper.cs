@@ -1124,7 +1124,22 @@ namespace XbimExchanger.IfcToCOBieLiteUK
             return null;
         }
 
-       
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="ifcObjectDefinition"></param>
+        /// <returns></returns>
+        public Attribute MakeAttribute(IfcObjectDefinition ifcObjectDefinition, string attributeName, object attributeValue)
+        {
+            var newAttribute = new Attribute();
+            newAttribute.CreatedBy = GetCreatedBy(ifcObjectDefinition);
+            newAttribute.CreatedOn = GetCreatedOn(ifcObjectDefinition);
+            newAttribute.ExternalId = ExternalEntityIdentity(ifcObjectDefinition);
+            newAttribute.ExternalSystem = ExternalSystemName(ifcObjectDefinition);
+            newAttribute.Name = attributeName;
+            newAttribute.Value = AttributeValue.CreateFromObject(attributeValue);
+            return newAttribute;
+        }
 
 
         /// <summary>
