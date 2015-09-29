@@ -16,7 +16,7 @@ namespace XbimExchanger.IfcToCOBieLiteUK
             var helper = ((IfcToCOBieLiteUkExchanger)Exchanger).Helper;
             target.ExternalEntity = helper.ExternalEntityName(ifcSpatialElement);
             target.ExternalId = helper.ExternalEntityIdentity(ifcSpatialElement);
-            target.AltExternalId = ifcSpatialElement.GlobalId;
+            target.AlternativeExternalId = ifcSpatialElement.GlobalId;
             target.ExternalSystem = helper.ExternalSystemName(ifcSpatialElement);
             target.Name = ifcSpatialElement.Name;
             target.Categories = helper.GetCategories(ifcSpatialElement);
