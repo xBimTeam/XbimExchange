@@ -435,7 +435,7 @@
       <xs:appinfo source="mapping">UK2012|B|CreatedBy|required|item|-|CreatedBy.Email</xs:appinfo>
       <xs:appinfo source="mapping">UK2012|C|CreatedOn|required|item|-|CreatedOn</xs:appinfo>
       <xs:appinfo source="mapping">UK2012|D|Category|required|list|PickLists.DocumentType|Categories.CategoryString</xs:appinfo>
-      <xs:appinfo source="mapping">UK2012|E|ApprovalBy|required|item|PickLists.ApprovalBy|ApprovalBy.Email</xs:appinfo>
+      <xs:appinfo source="mapping">UK2012|E|ApprovalBy|required|item|PickLists.ApprovalBy|ApprovalBy</xs:appinfo>
       <xs:appinfo source="mapping">UK2012|F|Stage|required|item|PickLists.StageType|Stage</xs:appinfo>
       <xs:appinfo source="mapping">UK2012|G|SheetName|required|item|PickLists.SheetType|parent</xs:appinfo>
       <xs:appinfo source="mapping">UK2012|H|RowName|required|item|-|parent.Name</xs:appinfo>
@@ -455,7 +455,7 @@
     <xs:complexContent>
       <xs:extension base="cobielite:CobieObject">
         <xs:sequence>
-          <xs:element name="ApprovalBy" type="cobielite:ContactKey" minOccurs="1" />
+          <xs:element name="ApprovalBy" type="xs:string" minOccurs="1" />
           <xs:element name="Stage" type="xs:string" minOccurs="1" />
           <xs:element name="Directory" type="xs:string" minOccurs="1" />
           <xs:element name="File" type="xs:string" minOccurs="1" />
