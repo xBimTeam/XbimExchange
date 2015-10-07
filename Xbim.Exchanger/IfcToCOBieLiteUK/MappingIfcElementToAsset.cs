@@ -37,6 +37,11 @@ namespace XbimExchanger.IfcToCOBieLiteUK
 
             //Attributes
             target.Attributes = helper.GetAttributes(ifcElement);
+
+            //Documents
+            var docsMappings = Exchanger.GetOrCreateMappings<MappingIfcDocumentSelectToDocument>();
+            helper.AddDocuments(docsMappings, target, ifcElement);
+
             //System Assignments
 
             //Space Assignments
@@ -64,7 +69,7 @@ namespace XbimExchanger.IfcToCOBieLiteUK
 
             //Issues
 
-            //Documents
+            
             return target;
         }
     }

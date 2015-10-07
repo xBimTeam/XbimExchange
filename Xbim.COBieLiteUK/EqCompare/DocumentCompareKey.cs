@@ -46,7 +46,8 @@ namespace Xbim.COBie.EqCompare
             sb.Clear();
 
             sb.Append(obj.Name);
-            sb.Append(obj.Stage);
+            sb.Append(obj.Directory);
+            sb.Append(obj.File);
 
             return sb.ToString();
         }

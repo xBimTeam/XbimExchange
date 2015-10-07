@@ -19,6 +19,7 @@ using Xbim.Ifc2x3.PropertyResource;
 using Xbim.Ifc2x3.QuantityResource;
 using Xbim.Ifc2x3.SharedBldgElements;
 using Xbim.Ifc2x3.SharedFacilitiesElements;
+using Xbim.Ifc2x3.UtilityResource;
 using Xbim.IO;
 using Xbim.XbimExtensions.SelectTypes;
 using XbimExchanger.IfcToCOBieLiteUK.EqCompare;
@@ -151,6 +152,39 @@ namespace XbimExchanger.IfcToCOBieLiteUK
         private Dictionary<IfcSpatialStructureElement, List<IfcSpatialStructureElement>> _spatialDecomposition;
         private readonly Dictionary<string, int> _typeNames = new Dictionary<string, int>();
 
+        #region Document Lookups
+        /// <summary>
+        /// Document to Object mapping
+        /// </summary>
+        public Dictionary<IfcRoot, IEnumerable<IfcDocumentSelect>> DocumentLookup
+        { get; private set; }
+
+        /// <summary>
+        /// Documents not attached to ant IfcRoot object
+        /// </summary>
+        public IEnumerable<IfcDocumentSelect> OrphanDocs
+        { get; private set; }
+
+        /// <summary>
+        /// Document to IfcRelAssociatesDocument mapping, fall back info from ifcRelAssociatesDocument history, if nothing set on IfcDocumentInformation dates
+        /// </summary>
+        public Dictionary<IfcDocumentSelect, IfcRelAssociatesDocument> DocumentOwnerLookup
+        { get; private set; }
+
+        /// <summary>
+        /// Document to Linked Children Documents
+        /// </summary>
+        //public Dictionary<IfcDocumentInformation, IfcDocumentInformationRelationship> DocToChildDocsLookup
+        //{ get; private set; }
+
+        /// <summary>
+        /// Lookup of documents already processed, do not want to add what we already have
+        /// </summary>
+        public List<Document> DocumentProgress
+        { get; set; }
+        #endregion
+
+
         /// <summary>
         /// Property Sets used to establish systems as per responsibility matrix 
         /// </summary>
@@ -222,13 +256,168 @@ namespace XbimExchanger.IfcToCOBieLiteUK
             GetSpacesAndZones();//13%
             GetUnits();
             GetTypeMaps();//25%
+            GetDocumentSelects();
             GetPropertySets();//33%
             GetSystems();//38%
             GetSpaceAssetLookup();//40%
             
         }
 
+        internal void AddDocuments(MappingIfcDocumentSelectToDocument docsMappings, CobieObject target, IfcRoot ifcRoot)
+        {
+            if (ifcRoot != null)
+            {
+                if (target.Documents == null)
+                {
+                    target.Documents = new List<Document>();
+                }
+                var facilitydocs = GetDocuments(ifcRoot);
 
+                foreach (var docSel in facilitydocs)
+                {
+                    List<Document> docs = docsMappings.MappingMulti(docSel);
+                    target.Documents.AddRange(docs);
+                } 
+            }
+        }
+
+        /// <summary>
+        /// Return the documents associated with the object
+        /// </summary>
+        /// <param name="ifcRoot">Object to get associated documents</param>
+        /// <returns></returns>
+        public IEnumerable<IfcDocumentSelect> GetDocuments(IfcRoot ifcRoot)
+        {
+            if (DocumentLookup.ContainsKey(ifcRoot))
+            {
+                return DocumentLookup[ifcRoot];
+            }
+
+            return Enumerable.Empty<IfcDocumentSelect>();
+        }
+
+        /// <summary>
+        /// Extract Document information
+        /// </summary>
+        private void GetDocumentSelects()
+        {
+            Dictionary<IfcDocumentSelect, List<IfcRoot>> docToObjs = GetAssociatedDocuments();
+            
+            //get orphan docs, not attached to IfcRoot objects
+            OrphanDocs = GetOrphanDocuments(docToObjs);
+
+            //reverse lookup to entity to list of documents
+            DocumentLookup = docToObjs
+                            .SelectMany(pair => pair.Value
+                            .Select(val => new { Key = val, Value = pair.Key }))
+                            .GroupBy(item => item.Key)
+                            .ToDictionary(gr => gr.Key, gr => gr.Select(item => item.Value));
+
+            DocumentProgress = new List<Document>();
+
+        }
+       
+        /// <summary>
+        /// Get Orphan documents
+        /// </summary>
+        /// <param name="docToObjs">Document linked to objects</param>
+        /// <returns>List of IfcDocumentSelect</returns>
+        private IEnumerable<IfcDocumentSelect> GetOrphanDocuments(Dictionary<IfcDocumentSelect, List<IfcRoot>> docToObjs)
+        {
+            //------GET ORPHAN DOCUMENTINFOS------
+            //Get all documents information objects held in model
+            var docAllInfos = _model.Instances.OfType<IfcDocumentInformation>();
+            //Get the child document relationships
+            var childDocRels = _model.Instances.OfType<IfcDocumentInformationRelationship>();
+
+            var xxx = docAllInfos.Where(d => d.Name != null && d.Name.ToString().StartsWith("X-Ray"));
+            //try
+            //{
+            //    DocToChildDocsLookup = childDocRels.ToDictionary(p => p.RelatingDocument, p => p);
+            //}
+            //catch (Exception) //if we fall over just set to empty, duplicate keys etc...
+            //{
+            //    DocToChildDocsLookup = new Dictionary<IfcDocumentInformation, IfcDocumentInformationRelationship>();
+            //}
+
+
+            //see if we have any documents not attached to IfcRoot objects, but could be attached as children documents to a parent document...
+
+            //get the already attached to entity documents 
+            var docInfosAttached = docToObjs.Select(dic => dic.Key).OfType<IfcDocumentInformation>();
+            var docInfosNotAttached = docAllInfos.Except(docInfosAttached);
+           
+            //get document infos attached to the IfcDocumentReference, which are directly linked to IfcRoot objects
+            var docRefsAttached = docToObjs.Select(Dictionary => Dictionary.Key).OfType<IfcDocumentReference>();//attached to IfcRoot docRefs
+            if (docRefsAttached.Any())
+            {
+                var docRefsInfos = docAllInfos.Where(info => info.DocumentReferences != null && info.DocumentReferences.Any(doc => docRefsAttached.Contains(doc)));
+                docInfosNotAttached = docAllInfos.Except(docRefsInfos); //remove the DocInfos attached to the DocRefs that are attached to IfcRoot Objects
+                docInfosAttached = docInfosAttached.Union(docRefsInfos); //add the DocInfos attached to the DocRefs that are attached to IfcRoot Objects
+            }
+           
+            List<IfcDocumentInformation> docChildren = docInfosAttached.ToList(); //first check on docs attached to IfcRoot Objects, and attached to IfcDocumentReference(which are attached to IfcRoot)
+            int idx = 0;
+            do
+            {
+                //get the relationships that are attached to the docs already associated with an IfcRoot object on first pass, then associated with all children, drilling down until nothing found
+                docChildren = childDocRels.Where(docRel => docChildren.Contains(docRel.RelatingDocument)).SelectMany(docRel => docRel.RelatedDocuments).ToList(); //docs that are children to attached entity docs, drilling down
+                docInfosNotAttached = docInfosNotAttached.Except(docChildren); //attached by association to the root parent document, so remove from none attached document list
+
+
+            } while (docChildren.Any() && (++idx < 100)); //assume that docs are not embedded deeper than 100
+
+            //------GET ORPHAN DOCUMENTREFERENCES------
+            //get all the doc reference objects held in the model
+            var docAllRefs = _model.Instances.OfType<IfcDocumentReference>();
+           
+            //checked on direct attached to object document references
+            var docRefsNotAttached = docAllRefs.Except(docRefsAttached).ToList();
+
+            //Check for document references held in the IfcDocumentInformation objects
+            var docRefsAttachedDocInfo = docAllInfos.Where(docInfo => docInfo.DocumentReferences != null).SelectMany(docInfo => docInfo.DocumentReferences);
+            //remove from Not Attached list
+            docRefsNotAttached = docRefsNotAttached.Except(docRefsAttachedDocInfo).ToList();
+
+            return docInfosNotAttached.Cast<IfcDocumentSelect>().Concat(docRefsNotAttached);
+        }
+
+
+        /// <summary>
+        /// Document linked to objects
+        /// </summary>
+        /// <returns>IfcDocumentSelect attached to ifcRoot objects,</returns>
+        private Dictionary<IfcDocumentSelect, List<IfcRoot>> GetAssociatedDocuments()
+        {
+            var ifcRelAssociatesDocuments = _model.Instances.OfType<IfcRelAssociatesDocument>(); //linked to IfcRoot objects
+
+            //get fall back owner history
+            DocumentOwnerLookup = ifcRelAssociatesDocuments.ToDictionary(p => p.RelatingDocument, p => p);
+
+            var dups = ifcRelAssociatesDocuments.GroupBy(d => d.RelatingDocument).SelectMany(grp => grp.Skip(1)); //get any duplicate documents 
+
+            //merge any duplicate IfcDocumentSelect IfcRoot objects to a single link of IfcDocumentSelect to IfcRoot list
+            Dictionary<IfcDocumentSelect, List<IfcRoot>> docToObjs = null;
+            if (dups.Any())
+            {
+                //remove the duplicates and convert to dictionary
+                docToObjs = ifcRelAssociatesDocuments.Except(dups).ToDictionary(p => p.RelatingDocument, p => p.RelatedObjects.ToList());
+                //merge any duplicate objects into list of single link of IfcDocumentSelect to IfcRoot list
+                var dupsMerge = dups.GroupBy(d => d.RelatingDocument).Select(p => new { x = p.Key, y = p.SelectMany(c => c.RelatedObjects) });
+
+                //add the duplicate lists to the DocToObjs list
+                foreach (var item in dupsMerge)
+                {
+                    docToObjs[item.x] = docToObjs[item.x].Union(item.y).ToList();
+                }
+            }
+            else
+            {
+                //no duplicates, so just convert to dictionary
+                docToObjs = ifcRelAssociatesDocuments.ToDictionary(p => p.RelatingDocument, p => p.RelatedObjects.ToList());
+            }
+            return docToObjs;
+        }
 
         private void GetSystems()
         {

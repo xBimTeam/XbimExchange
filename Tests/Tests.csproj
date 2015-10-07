@@ -63,6 +63,7 @@
     <Compile Include="IfcToCOBieLiteUKTests.cs" />
     <Compile Include="ConvertCobieLiteUKToValidationReportTests.cs" />
     <Compile Include="FacilityMergeTest.cs" />
+    <Compile Include="COBieDocumentTests.cs" />
     <Compile Include="ValidationMockUp.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -104,6 +105,9 @@
     </None>
     <None Include="TestFiles\2012-03-23-Duplex-Design.xlsx">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="TestFiles\Ifc\Clinic-Handover-v12.ifc">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="TestFiles\NewtownHighSchool.new.dpow">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>

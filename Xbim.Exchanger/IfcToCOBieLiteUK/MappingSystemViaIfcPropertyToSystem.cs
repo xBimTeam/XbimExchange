@@ -48,9 +48,13 @@ namespace XbimExchanger.IfcToCOBieLiteUK
             //Attributes, no attributes from PSet as Pset is the attributes, assume that component attributes are extracted by each component anyway
             //target.Attributes = helper.GetAttributes(pSet);
 
+            //Documents
+            var docsMappings = Exchanger.GetOrCreateMappings<MappingIfcDocumentSelectToDocument>();
+            helper.AddDocuments(docsMappings, target, pSet);
+
             //TODO:
             //System Issues
-            //System Documents
+           
             return target;
         }
 

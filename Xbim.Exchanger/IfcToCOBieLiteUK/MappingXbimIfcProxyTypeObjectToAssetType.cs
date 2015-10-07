@@ -95,6 +95,10 @@ namespace XbimExchanger.IfcToCOBieLiteUK
                     target.Warranty.GuarantorParts = helper.GetOrCreateContactKey(partsContact);
                 //Attributes
                 target.Attributes = helper.GetAttributes(ifcTypeObject);
+
+                //Documents
+                var docsMappings = Exchanger.GetOrCreateMappings<MappingIfcDocumentSelectToDocument>();
+                helper.AddDocuments(docsMappings, target, ifcTypeObject);
             }
             //The Assets
             

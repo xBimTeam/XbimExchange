@@ -27,9 +27,11 @@ namespace XbimExchanger.IfcToCOBieLiteUK
             target.Name = ifcZone.Name;
             //Attributes
             target.Attributes = helper.GetAttributes(ifcZone);
+            //Documents
+            var docsMappings = Exchanger.GetOrCreateMappings<MappingIfcDocumentSelectToDocument>();
+            helper.AddDocuments(docsMappings, target, ifcZone);
 
             //get spaces in zones
-
             var spaces = helper.GetSpaces(ifcZone);
             var ifcSpaces = spaces as IList<IfcSpace> ?? spaces.ToList();
             if (ifcSpaces.Any())
@@ -43,7 +45,7 @@ namespace XbimExchanger.IfcToCOBieLiteUK
             }
             //TODO:
             //Space Issues
-            //Space Documents
+            
             return target;
         }
     }
