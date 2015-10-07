@@ -36,7 +36,7 @@ namespace Xbim.COBie
         void AddRow(COBieRow cOBieRow);
         void AddRemovedRow(COBieRow cOBieRow);
 
-
+        ICOBieSheet<T> CreateEmptySheet();
 
         void Validate(COBieWorkbook cOBieWorkbook, ErrorRowIndexBase errorRowIdx, ICOBieSheetValidationTemplate SheetValidator);
     }
