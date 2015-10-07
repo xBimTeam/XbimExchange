@@ -126,11 +126,10 @@ namespace XbimExchanger.IfcToCOBieLiteUK
             document.Categories = (ifcDocumentInformation != null) && (!string.IsNullOrEmpty(ifcDocumentInformation.Purpose)) ? new List<Category>(new[] { new Category { Code = ifcDocumentInformation.Purpose } }) : null;
 
             //ApprovalBy will be reset to a string field as ContactKey field is incorrect but for now fill ContactKey.email
-            document.ApprovalBy = (ifcDocumentInformation != null) && (!string.IsNullOrEmpty(ifcDocumentInformation.IntendedUse)) ? new ContactKey() { Email = ifcDocumentInformation.IntendedUse } : null;
-            //document.ApprovalBy = (ifcDocumentInformation != null) && (!string.IsNullOrEmpty(ifcDocumentInformation.IntendedUse)) ? ifcDocumentInformation.IntendedUse : null; //once fixed
+            //document.ApprovalBy = (ifcDocumentInformation != null) && (!string.IsNullOrEmpty(ifcDocumentInformation.IntendedUse)) ? new ContactKey() { Email = ifcDocumentInformation.IntendedUse } : null;
+            document.ApprovalBy = (ifcDocumentInformation != null) && (!string.IsNullOrEmpty(ifcDocumentInformation.IntendedUse)) ? ifcDocumentInformation.IntendedUse : null; //once fixed
             
-            document.ApprovalBy = (ifcDocumentInformation != null) && (!string.IsNullOrEmpty(ifcDocumentInformation.IntendedUse)) ? new ContactKey() { Email = ifcDocumentInformation.IntendedUse } : null;
-            document.Stage = (ifcDocumentInformation != null) && (!string.IsNullOrEmpty(ifcDocumentInformation.Scope)) ? ifcDocumentInformation.Scope : null;
+           document.Stage = (ifcDocumentInformation != null) && (!string.IsNullOrEmpty(ifcDocumentInformation.Scope)) ? ifcDocumentInformation.Scope : null;
 
             document.Directory = GetFileDirectory(ifcDocumentReference);
             document.File = GetFileName(ifcDocumentReference);
