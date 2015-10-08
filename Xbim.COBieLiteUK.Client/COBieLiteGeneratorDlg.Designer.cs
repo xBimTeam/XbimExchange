@@ -32,12 +32,12 @@ namespace Xbim.Client
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.txtPath = new System.Windows.Forms.TextBox();
             this.btnFederate = new System.Windows.Forms.Button();
-            this.label3 = new System.Windows.Forms.Label();
             this.btnBrowseTemplate = new System.Windows.Forms.Button();
             this.txtTemplate = new System.Windows.Forms.ComboBox();
             this.label2 = new System.Windows.Forms.Label();
             this.btnBrowse = new System.Windows.Forms.Button();
             this.label1 = new System.Windows.Forms.Label();
+            this.label3 = new System.Windows.Forms.Label();
             this.cmboxFiletype = new System.Windows.Forms.ComboBox();
             this.btnClear = new System.Windows.Forms.Button();
             this.btnGenerate = new System.Windows.Forms.Button();
@@ -55,8 +55,8 @@ namespace Xbim.Client
             this.btnPropMaps = new System.Windows.Forms.Button();
             this.chkBoxIds = new System.Windows.Forms.CheckBox();
             this.checkedListSys = new System.Windows.Forms.CheckedListBox();
-            this.rolesList = new Xbim.Client.RolesList();
             this.chkBoxLog = new System.Windows.Forms.CheckBox();
+            this.rolesList = new Xbim.Client.RolesList();
             this.groupBox1.SuspendLayout();
             this.statusStrip1.SuspendLayout();
             this.groupBox2.SuspendLayout();
@@ -100,16 +100,6 @@ namespace Xbim.Client
             this.btnFederate.Text = "Federate";
             this.btnFederate.UseVisualStyleBackColor = true;
             this.btnFederate.Click += new System.EventHandler(this.btnFederate_Click);
-            // 
-            // label3
-            // 
-            this.label3.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(515, 99);
-            this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(71, 13);
-            this.label3.TabIndex = 30;
-            this.label3.Text = "System Mode";
             // 
             // btnBrowseTemplate
             // 
@@ -164,18 +154,31 @@ namespace Xbim.Client
             this.label1.TabIndex = 0;
             this.label1.Text = "Select file:";
             // 
+            // label3
+            // 
+            this.label3.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.label3.AutoSize = true;
+            this.label3.Location = new System.Drawing.Point(515, 99);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(71, 13);
+            this.label3.TabIndex = 30;
+            this.label3.Text = "System Mode";
+            // 
             // cmboxFiletype
             // 
             this.cmboxFiletype.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.cmboxFiletype.FormattingEnabled = true;
             this.cmboxFiletype.Items.AddRange(new object[] {
             "XLS",
-            "XLSX"});
+            "XLSX",
+            "JSON",
+            "XML"});
             this.cmboxFiletype.Location = new System.Drawing.Point(527, 425);
             this.cmboxFiletype.Name = "cmboxFiletype";
             this.cmboxFiletype.Size = new System.Drawing.Size(75, 21);
             this.cmboxFiletype.TabIndex = 18;
             this.cmboxFiletype.Text = "XLS";
+            this.cmboxFiletype.SelectedIndexChanged += new System.EventHandler(this.cmboxFiletype_SelectedIndexChanged);
             // 
             // btnClear
             // 
@@ -277,6 +280,7 @@ namespace Xbim.Client
             this.chkBoxOpenFile.TabIndex = 23;
             this.chkBoxOpenFile.Text = "Open Excel";
             this.chkBoxOpenFile.UseVisualStyleBackColor = true;
+            
             // 
             // btnMergeFilter
             // 
@@ -314,7 +318,7 @@ namespace Xbim.Client
             this.groupBox2.TabIndex = 26;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "Filters";
-            this.groupBox2.Enter += new System.EventHandler(this.groupBox2_Enter);
+            
             // 
             // btnPropMaps
             // 
@@ -337,7 +341,7 @@ namespace Xbim.Client
             this.chkBoxIds.TabIndex = 28;
             this.chkBoxIds.Text = "ExId as EntityId";
             this.chkBoxIds.UseVisualStyleBackColor = true;
-            this.chkBoxIds.CheckedChanged += new System.EventHandler(this.chkBoxIds_CheckedChanged);
+            
             // 
             // checkedListSys
             // 
@@ -348,15 +352,6 @@ namespace Xbim.Client
             this.checkedListSys.Name = "checkedListSys";
             this.checkedListSys.Size = new System.Drawing.Size(90, 49);
             this.checkedListSys.TabIndex = 29;
-            this.checkedListSys.SelectedIndexChanged += new System.EventHandler(this.checkedListSys_SelectedIndexChanged);
-            // 
-            // rolesList
-            // 
-            this.rolesList.Location = new System.Drawing.Point(15, 8);
-            this.rolesList.Name = "rolesList";
-            this.rolesList.Roles = Xbim.FilterHelper.RoleFilter.Unknown;
-            this.rolesList.Size = new System.Drawing.Size(137, 83);
-            this.rolesList.TabIndex = 31;
             // 
             // chkBoxLog
             // 
@@ -368,7 +363,14 @@ namespace Xbim.Client
             this.chkBoxLog.TabIndex = 32;
             this.chkBoxLog.Text = "Log (debug)";
             this.chkBoxLog.UseVisualStyleBackColor = true;
-            this.chkBoxLog.CheckedChanged += new System.EventHandler(this.chkBoxLog_CheckedChanged);
+            // 
+            // rolesList
+            // 
+            this.rolesList.Location = new System.Drawing.Point(15, 8);
+            this.rolesList.Name = "rolesList";
+            this.rolesList.Roles = Xbim.FilterHelper.RoleFilter.Unknown;
+            this.rolesList.Size = new System.Drawing.Size(137, 83);
+            this.rolesList.TabIndex = 31;
             // 
             // COBieLiteGeneratorDlg
             // 

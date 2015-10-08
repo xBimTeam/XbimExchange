@@ -22,7 +22,7 @@ namespace Xbim.Client
         /// <summary>
         /// Worker
         /// </summary>
-        private COBieLiteWorker _cobieWorker;
+        private ICOBieLiteWorker _cobieWorker;
 
         /// <summary>
         /// Filters for Extracting COBie, Role Filtering
@@ -203,6 +203,9 @@ namespace Xbim.Client
                 }
             }
             btnGenerate.Enabled = false;
+
+           
+            
             if (_cobieWorker == null)
             {
                 _cobieWorker = new COBieLiteWorker();
@@ -210,7 +213,7 @@ namespace Xbim.Client
                 _cobieWorker.Worker.RunWorkerCompleted += WorkerCompleted;
             }
             //get Excel File Type
-            ExcelTypeEnum excelType = GetExcelType();
+            ExportTypeEnum excelType = GetExcelType();
             //set filters
             RoleFilter filterRoles = SetRoles();
             if (!chkBoxNoFilter.Checked)
@@ -223,7 +226,7 @@ namespace Xbim.Client
             var args = new Params { ModelFile = txtPath.Text,
                 TemplateFile = txtTemplate.Text,
                 Roles = filterRoles,
-                ExcelType = excelType,
+                ExportType = excelType,
                 FlipFilter = chkBoxFlipFilter.Checked,
                 OpenExcel = chkBoxOpenFile.Checked,
                 FilterOff = chkBoxNoFilter.Checked,
@@ -336,16 +339,16 @@ namespace Xbim.Client
         /// Get Excel Type From Combo
         /// </summary>
         /// <returns>ExcelTypeEnum</returns>
-        private ExcelTypeEnum GetExcelType()
+        private ExportTypeEnum GetExcelType()
         {
-            ExcelTypeEnum excelType;
+            ExportTypeEnum excelType;
             try
             {
-                excelType = (ExcelTypeEnum)Enum.Parse(typeof(ExcelTypeEnum), cmboxFiletype.Text);
+                excelType = (ExportTypeEnum)Enum.Parse(typeof(ExportTypeEnum), cmboxFiletype.Text);
             }
             catch (Exception)
             {
-                excelType = ExcelTypeEnum.XLSX;
+                throw;
             }
             return excelType;
         }
@@ -359,8 +362,8 @@ namespace Xbim.Client
         private void btnBrowse_Click(object sender, EventArgs e)
         {
             OpenFileDialog dlg = new OpenFileDialog();
-            dlg.Filter = "All XBim Files|*.ifc;*.ifcxml;*.ifczip;*.xbim;*.xbimf|IFC Files|*.ifc;*.ifcxml;*.ifczip|Xbim Files|*.xbim|Xbim Federated Files|*.xbimf"; //|XLS Files|*.xls
-            dlg.Title = "Choose a source model file";
+            dlg.Filter = "All XBim Files|*.ifc;*.ifcxml;*.ifczip;*.xbim;*.xbimf|IFC Files|*.ifc;*.ifcxml;*.ifczip|Xbim Files|*.xbim|Xbim Federated Files|*.xbimf|Excel Files|*.xls;*.xlsx|Json Files|*.json|Xml Files|*.xml"; //
+            dlg.Title = "Choose a source file";
 
             dlg.CheckFileExists = true;
             // Show open file dialog box 
@@ -384,7 +387,15 @@ namespace Xbim.Client
                     }
                    
                 }
-                rolesList.Enabled = !fileExt.Equals(".xbimf", StringComparison.OrdinalIgnoreCase);
+                rolesList.Enabled = !(fileExt.Equals(".xbimf", StringComparison.OrdinalIgnoreCase) 
+                    || fileExt.Equals(".json", StringComparison.OrdinalIgnoreCase)
+                    || fileExt.Equals(".xml", StringComparison.OrdinalIgnoreCase)
+                    || fileExt.Equals(".xls", StringComparison.OrdinalIgnoreCase)
+                    || fileExt.Equals(".xlsx", StringComparison.OrdinalIgnoreCase)
+                    );
+
+                chkBoxOpenFile.Enabled = cmboxFiletype.Text.Equals("XLS", StringComparison.OrdinalIgnoreCase) || cmboxFiletype.Text.Equals("XLSX", StringComparison.OrdinalIgnoreCase);
+                chkBoxOpenFile.Checked = chkBoxOpenFile.Enabled;
             }
             
         }
@@ -591,26 +602,22 @@ namespace Xbim.Client
 
         
 
-        private void checkedListSys_SelectedIndexChanged(object sender, EventArgs e)
-        {
+        
 
+        private void cmboxFiletype_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            chkBoxOpenFile.Enabled = cmboxFiletype.Text.Equals("XLS", StringComparison.OrdinalIgnoreCase) || cmboxFiletype.Text.Equals("XLSX", StringComparison.OrdinalIgnoreCase);
+            chkBoxOpenFile.Checked = chkBoxOpenFile.Enabled;
         }
 
-        private void groupBox2_Enter(object sender, EventArgs e)
-        {
-
-        }
-
-        private void chkBoxIds_CheckedChanged(object sender, EventArgs e)
-        {
-
-        }
-
-        private void chkBoxLog_CheckedChanged(object sender, EventArgs e)
-        {
-
-        }
+        
     }
-
+    public enum ExportTypeEnum
+    {
+        XLS,
+        XLSX,
+        JSON,
+        XML,
+    }
 
 }
