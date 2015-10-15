@@ -52,6 +52,9 @@ namespace XbimExchanger.IfcToCOBieLiteUK
             //AttributeType[] ifcAttributes = helper.GetAttributes(actor);
             //if (ifcAttributes != null && ifcAttributes.Length > 0)
             //    ContactAttributes = new AttributeCollectionType { Attribute = ifcAttributes };
+            //Documents no link available IfcActorSelect not inherited from IfcRoot
+
+
             return target;
         }
 
@@ -73,7 +76,7 @@ namespace XbimExchanger.IfcToCOBieLiteUK
                 {
 
                     target.Department = postal.InternalLocation;
-                    target.Street = postal.AddressLines.ToString();
+                    target.Street = postal.AddressLines != null ? postal.AddressLines.ToString() : null;
                     target.PostalBox = postal.PostalBox;
                     target.Town = postal.Town;
                     target.StateRegion = postal.Region;

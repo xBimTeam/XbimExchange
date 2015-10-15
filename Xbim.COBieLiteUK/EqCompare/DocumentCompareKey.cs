@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using Xbim.COBieLiteUK;
 
 namespace Xbim.COBie.EqCompare
@@ -33,7 +31,7 @@ namespace Xbim.COBie.EqCompare
         /// <returns>Name string</returns>
         protected override string BuildName(Document obj)
         {
-            return (obj.Name == null) ? string.Empty : obj.Name;
+            return obj.Name ?? string.Empty;
         }
 
         /// <summary>
@@ -46,7 +44,8 @@ namespace Xbim.COBie.EqCompare
             sb.Clear();
 
             sb.Append(obj.Name);
-            sb.Append(obj.Stage);
+            sb.Append(obj.Directory);
+            sb.Append(obj.File);
 
             return sb.ToString();
         }
@@ -62,7 +61,7 @@ namespace Xbim.COBie.EqCompare
 
             sb.Append(obj.Name);
             sb.Append(obj.Description);
-            sb.Append((obj.ApprovalBy != null && obj.ApprovalBy.Email != null) ? obj.ApprovalBy.Email : string.Empty);
+            sb.Append(obj.ApprovalBy ?? string.Empty);
             sb.Append(obj.Stage);
             sb.Append(obj.Directory);
             sb.Append(obj.File);

@@ -1361,6 +1361,7 @@ namespace Xbim.COBieLiteUK
         /// Map COBie types to the compare object of type CompareEqRule, IEqualityComparer
         /// </summary>
         /// <typeparam name="T1">is CompareEqRule</typeparam>
+        /// <typeparam name="T2"> Type we are testing</typeparam>
         /// <param name="type">Mapped Type</param>
         /// <param name="advancedCompare">if true extend equal test to other properties in equalcompare if supported</param>
         /// <returns>T</returns>

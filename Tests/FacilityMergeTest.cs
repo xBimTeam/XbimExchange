@@ -32,7 +32,7 @@ namespace Tests
             Assert.IsTrue(totalAtt == 16);
         }
 
-        //Temp function, delete
+       
         private void AddDeepAttributes(Facility facility, bool change)
         {
             var addlist1 = new List<Attribute>

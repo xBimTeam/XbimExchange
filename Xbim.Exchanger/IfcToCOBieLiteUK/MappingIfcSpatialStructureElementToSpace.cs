@@ -16,6 +16,7 @@ namespace XbimExchanger.IfcToCOBieLiteUK
             var helper = ((IfcToCOBieLiteUkExchanger)Exchanger).Helper;
             target.ExternalEntity = helper.ExternalEntityName(ifcSpatialElement);
             target.ExternalId = helper.ExternalEntityIdentity(ifcSpatialElement);
+            target.AltExternalId = ifcSpatialElement.GlobalId;
             target.ExternalSystem = helper.ExternalSystemName(ifcSpatialElement);
             target.Name = ifcSpatialElement.Name;
             target.Categories = helper.GetCategories(ifcSpatialElement);
@@ -32,9 +33,12 @@ namespace XbimExchanger.IfcToCOBieLiteUK
             //Attributes
             target.Attributes = helper.GetAttributes(ifcSpatialElement);
 
+            //Documents
+            var docsMappings = Exchanger.GetOrCreateMappings<MappingIfcDocumentSelectToDocument>();
+            helper.AddDocuments(docsMappings, target, ifcSpatialElement as IfcSpace);
             //TODO:
             //Space Issues
-            //Space Documents
+            
             return target;
         }
     }

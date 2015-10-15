@@ -20,6 +20,7 @@ namespace XbimExchanger.IfcToCOBieLiteUK
             var model = ifcBuilding.ModelOf;
             facility.ExternalEntity = helper.ExternalEntityName(ifcBuilding);
             facility.ExternalId = helper.ExternalEntityIdentity(ifcBuilding);
+            facility.AltExternalId = ifcBuilding.GlobalId;
             facility.ExternalSystem = helper.ExternalSystemName(ifcBuilding);
             facility.Name = helper.GetFacilityName(ifcBuilding);
             facility.Description = ifcBuilding.Description;
@@ -37,16 +38,26 @@ namespace XbimExchanger.IfcToCOBieLiteUK
                 Exchanger.ReportProgress.IncrementAndUpdate(); 
                 var ifcSite = ifcProject.GetSpatialStructuralElements().FirstOrDefault(p => p is IfcSite) as IfcSite;
                 var siteMapping = Exchanger.GetOrCreateMappings<MappingIfcSiteToSite>();
+
+                //Facility Attributes
+                facility.Attributes = helper.GetAttributes(ifcBuilding);
+                
                 if (ifcSite != null)
                 {
                     facility.Site = new Site();
                     siteMapping.AddMapping(ifcSite, facility.Site);
+                    
+                    if(ifcSite.RefLatitude.HasValue && ifcSite.RefLongitude.HasValue)
+                    {
+                        facility.Attributes.Add(helper.MakeAttribute(ifcSite, "RefLatitude", ifcSite.RefLatitude.Value.ToDouble()));
+                        facility.Attributes.Add(helper.MakeAttribute(ifcSite, "RefLongtitude", ifcSite.RefLongitude.Value.ToDouble()));
+                    }
                 }
                 else //create a default "External area"
                 {
                     facility.Site = new Site
                     {
-                        Description = "Default  area if no site has been defined in the model",
+                        Description = "Default area if no site has been defined in the model",
                         Name = "Default"
                     };
                     
@@ -66,7 +77,7 @@ namespace XbimExchanger.IfcToCOBieLiteUK
                     cobieFloors.Add(ifcBuilding);
                 Exchanger.ReportProgress.IncrementAndUpdate();
                 facility.Floors = new List<Floor>(cobieFloors.Count);
-                Exchanger.ReportProgress.NextStage(cobieFloors.Count, 50); //finish progress at 47% 
+                Exchanger.ReportProgress.NextStage(cobieFloors.Count, 50); //finish progress at 50% 
                 var floorMappings = Exchanger.GetOrCreateMappings<MappingIfcSpatialStructureElementToFloor>();
                 for (int i = 0; i < cobieFloors.Count; i++)
                 {
@@ -77,9 +88,20 @@ namespace XbimExchanger.IfcToCOBieLiteUK
                 }
 
             }
-            //Facility Attributes
-            facility.Attributes = helper.GetAttributes(ifcBuilding);
+            
 
+            //Documents
+            var docsMappings = Exchanger.GetOrCreateMappings<MappingIfcDocumentSelectToDocument>();
+            helper.AddDocuments(docsMappings, facility, ifcBuilding);
+            if (helper.OrphanDocs.Any())
+            {
+                foreach (var docSel in helper.OrphanDocs)
+                {
+                    List<Document> docs = docsMappings.MappingMulti(docSel);
+                    facility.Documents.AddRange(docs);
+                }
+            }
+            
             //Zones
             
             var allSpaces = GetAllSpaces(ifcBuilding);
@@ -87,7 +109,7 @@ namespace XbimExchanger.IfcToCOBieLiteUK
             var ifcZones = allZones.ToArray();
             if (ifcZones.Any())
             {
-                Exchanger.ReportProgress.NextStage(ifcZones.Count(), 65); //finish progress at 57% 
+                Exchanger.ReportProgress.NextStage(ifcZones.Count(), 65); //finish progress at 65% 
                 facility.Zones = new List<Zone>(ifcZones.Length);
                 var zoneMappings = Exchanger.GetOrCreateMappings<MappingIfcZoneToZone>();
                 for (int i = 0; i < ifcZones.Length; i++)

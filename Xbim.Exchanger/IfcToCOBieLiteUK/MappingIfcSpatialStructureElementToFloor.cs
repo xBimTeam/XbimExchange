@@ -17,6 +17,7 @@ namespace XbimExchanger.IfcToCOBieLiteUK
             var helper = ((IfcToCOBieLiteUkExchanger)Exchanger).Helper;
             target.ExternalEntity = helper.ExternalEntityName(ifcSpatialStructureElement);
             target.ExternalId = helper.ExternalEntityIdentity(ifcSpatialStructureElement);
+            target.AltExternalId = ifcSpatialStructureElement.GlobalId;
             target.ExternalSystem = helper.ExternalSystemName(ifcSpatialStructureElement);
             target.Name = ifcSpatialStructureElement.Name;
 
@@ -73,7 +74,11 @@ namespace XbimExchanger.IfcToCOBieLiteUK
            
             target.Height = helper.GetCoBieAttribute<DecimalAttributeValue>("FloorHeightValue", ifcSpatialStructureElement).Value;
 
-            
+            //Documents
+            var docsMappings = Exchanger.GetOrCreateMappings<MappingIfcDocumentSelectToDocument>();
+            helper.AddDocuments(docsMappings, target, ifcSpatialStructureElement as IfcBuildingStorey);
+
+            //Add spaces
             var ifcSpatialStructureElements = spaces as IList<IfcSpatialStructureElement> ?? spaces.ToList();
             ifcSpatialStructureElements.Add(ifcSpatialStructureElement);
 
@@ -91,8 +96,7 @@ namespace XbimExchanger.IfcToCOBieLiteUK
             target.Attributes = helper.GetAttributes(ifcSpatialStructureElement);
 
             //TODO:
-            //Space Issues
-            //Space Documents
+            //Floor Issues
             return target;
         }
     }

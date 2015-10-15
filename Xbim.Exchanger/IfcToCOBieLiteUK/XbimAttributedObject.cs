@@ -341,6 +341,10 @@ namespace XbimExchanger.IfcToCOBieLiteUK
                 {
                     decimalValueType.Value = Convert.ToDouble(ifcValue.Value);
                 }
+                catch(NullReferenceException)
+                {
+                    //CoBieLiteUkHelper.Logger.WarnFormat("ifcValue is null.");
+                }
                 catch (ArgumentNullException)
                 {
                     //CoBieLiteUkHelper.Logger.WarnFormat("Decimal Conversion: String is null.");
@@ -361,6 +365,10 @@ namespace XbimExchanger.IfcToCOBieLiteUK
                 {
                     booleanValueType.Value = Convert.ToBoolean(ifcValue.Value);
                 }
+                catch (NullReferenceException)
+                {
+                    //CoBieLiteUkHelper.Logger.WarnFormat("ifcValue is null.");
+                }
                 catch (ArgumentNullException)
                 {
                     //CoBieLiteUkHelper.Logger.WarnFormat("Boolean Conversion: String is null.");
@@ -380,6 +388,10 @@ namespace XbimExchanger.IfcToCOBieLiteUK
                 {
                     //this looks like an error in COBieLite, suggest should be same as Decimal and Boolean
                     integerValueType.Value = Convert.ToInt32(ifcValue.Value);
+                }
+                catch (NullReferenceException)
+                {
+                    //CoBieLiteUkHelper.Logger.WarnFormat("ifcValue is null.");
                 }
                 catch (ArgumentNullException)
                 {
