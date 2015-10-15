@@ -618,6 +618,7 @@ namespace Xbim.Client
         XLSX,
         JSON,
         XML,
+        IFC,
     }
 
 }

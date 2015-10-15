@@ -47,6 +47,10 @@ namespace Xbim.Client
         {
             switch (sectionKey)
             {
+                case "CommonPropertyMaps":
+                    return PropertyMaps.CommonPaths;
+                case "SparePropertyMaps":
+                    return PropertyMaps.SparePaths;
                 case "SpacePropertyMaps":
                     return PropertyMaps.SpacePaths;
                 case "FloorPropertyMaps":
@@ -78,6 +82,12 @@ namespace Xbim.Client
                     var mapsTab = (PropertyMapTab)propMapTabCtr;
                     switch (tabName)
                     {
+                        case "CommonPropertyMaps":
+                            PropertyMaps.CommonPaths = mapsTab.PropPaths;
+                            break;
+                        case "SparePropertyMaps":
+                           PropertyMaps.SparePaths = mapsTab.PropPaths;
+                            break;                         
                         case "SpacePropertyMaps":
                             PropertyMaps.SpacePaths = mapsTab.PropPaths;
                             break;

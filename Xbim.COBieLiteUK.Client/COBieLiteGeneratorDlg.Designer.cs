@@ -167,17 +167,18 @@ namespace Xbim.Client
             // cmboxFiletype
             // 
             this.cmboxFiletype.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.cmboxFiletype.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cmboxFiletype.FormattingEnabled = true;
             this.cmboxFiletype.Items.AddRange(new object[] {
             "XLS",
             "XLSX",
             "JSON",
-            "XML"});
+            "XML",
+            "IFC"});
             this.cmboxFiletype.Location = new System.Drawing.Point(527, 425);
             this.cmboxFiletype.Name = "cmboxFiletype";
             this.cmboxFiletype.Size = new System.Drawing.Size(75, 21);
             this.cmboxFiletype.TabIndex = 18;
-            this.cmboxFiletype.Text = "XLS";
             this.cmboxFiletype.SelectedIndexChanged += new System.EventHandler(this.cmboxFiletype_SelectedIndexChanged);
             // 
             // btnClear
@@ -280,7 +281,6 @@ namespace Xbim.Client
             this.chkBoxOpenFile.TabIndex = 23;
             this.chkBoxOpenFile.Text = "Open Excel";
             this.chkBoxOpenFile.UseVisualStyleBackColor = true;
-            
             // 
             // btnMergeFilter
             // 
@@ -318,7 +318,6 @@ namespace Xbim.Client
             this.groupBox2.TabIndex = 26;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "Filters";
-            
             // 
             // btnPropMaps
             // 
@@ -341,7 +340,6 @@ namespace Xbim.Client
             this.chkBoxIds.TabIndex = 28;
             this.chkBoxIds.Text = "ExId as EntityId";
             this.chkBoxIds.UseVisualStyleBackColor = true;
-            
             // 
             // checkedListSys
             // 

@@ -168,7 +168,15 @@ namespace XbimExchanger.IfcToCOBieLiteUK
                 return "no";
             }
             // all other cases will convert to a string
-            return ifcValue.Value.ToString();
+            if (ifcValue.Value != null)
+            {
+                return ifcValue.Value.ToString();
+            }
+            else
+            {
+                return null;
+            }
+            
         }
 
         private string WriteDateTime(DateTime dateTime)

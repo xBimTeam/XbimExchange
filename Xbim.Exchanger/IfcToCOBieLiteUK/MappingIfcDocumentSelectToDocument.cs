@@ -16,13 +16,32 @@ namespace XbimExchanger.IfcToCOBieLiteUK
 {
     internal class MappingIfcDocumentSelectToDocument : XbimMappings<XbimModel, List<Facility>, string, IfcDocumentSelect, Document> 
     {
+
+        /// <summary>
+        /// Helper
+        /// </summary>
         private CoBieLiteUkHelper Helper
         { get; set; }
         
-       
-        public HashSet<IfcDocumentInformation> ChainInstMap
+        /// <summary>
+        /// List of created documents names, used to get next duplicate name
+        /// </summary>
+        private List<string> UsedNames
         { get; set; }
 
+        /// <summary>
+        /// Stop infinite loops
+        /// </summary>
+        private HashSet<IfcDocumentInformation> ChainInstMap
+        { get; set; }
+
+        
+        /// <summary>
+        /// Required by Interface
+        /// </summary>
+        /// <param name="source"></param>
+        /// <param name="target"></param>
+        /// <returns></returns>
         protected override Document Mapping(IfcDocumentSelect source, Document target)
         {
             throw new NotImplementedException(); //see MappingMulti method
@@ -35,8 +54,10 @@ namespace XbimExchanger.IfcToCOBieLiteUK
         /// <returns></returns>
         public List<Document> MappingMulti(IfcDocumentSelect ifcDocumentSelect)
         {
+            if (UsedNames == null) UsedNames = new List<string>();
+
             List<Document> docList = new List<Document>();
-            Helper = ((IfcToCOBieLiteUkExchanger)Exchanger).Helper;
+            if (Helper == null) Helper = ((IfcToCOBieLiteUkExchanger)Exchanger).Helper;
             //process IfcDocumentReference first
             if (ifcDocumentSelect is IfcDocumentReference)
             {
@@ -116,7 +137,7 @@ namespace XbimExchanger.IfcToCOBieLiteUK
                 name = "Document";
             }
             //check for duplicates, if found add a (#) => "DocName(1)", if none return name unchanged
-            name = GetNextName(name); 
+            name = Helper.GetNextName(name, UsedNames); 
 
             var document = new Document();
             document.Name= name;
@@ -125,11 +146,9 @@ namespace XbimExchanger.IfcToCOBieLiteUK
 
             document.Categories = (ifcDocumentInformation != null) && (!string.IsNullOrEmpty(ifcDocumentInformation.Purpose)) ? new List<Category>(new[] { new Category { Code = ifcDocumentInformation.Purpose } }) : null;
 
-            //ApprovalBy will be reset to a string field as ContactKey field is incorrect but for now fill ContactKey.email
-            //document.ApprovalBy = (ifcDocumentInformation != null) && (!string.IsNullOrEmpty(ifcDocumentInformation.IntendedUse)) ? new ContactKey() { Email = ifcDocumentInformation.IntendedUse } : null;
             document.ApprovalBy = (ifcDocumentInformation != null) && (!string.IsNullOrEmpty(ifcDocumentInformation.IntendedUse)) ? ifcDocumentInformation.IntendedUse : null; //once fixed
             
-           document.Stage = (ifcDocumentInformation != null) && (!string.IsNullOrEmpty(ifcDocumentInformation.Scope)) ? ifcDocumentInformation.Scope : null;
+            document.Stage = (ifcDocumentInformation != null) && (!string.IsNullOrEmpty(ifcDocumentInformation.Scope)) ? ifcDocumentInformation.Scope : null;
 
             document.Directory = GetFileDirectory(ifcDocumentReference);
             document.File = GetFileName(ifcDocumentReference);
@@ -143,7 +162,7 @@ namespace XbimExchanger.IfcToCOBieLiteUK
                                     (ifcDocumentInformation.DocumentId != null) && 
                                     (ifcDocumentInformation.DocumentId.Value != null) && 
                                     (!string.IsNullOrEmpty(ifcDocumentInformation.DocumentId.Value.ToString())) ? ifcDocumentInformation.DocumentId.Value.ToString() : null;
-            Helper.DocumentProgress.Add(document);
+            UsedNames.Add(document.Name);
             return document;
         }
 
@@ -159,7 +178,7 @@ namespace XbimExchanger.IfcToCOBieLiteUK
                 var created = ifcDocumentInformation.CreationTime ?? ifcDocumentInformation.LastRevisionTime;
                 if (created != null)
                 {
-                    return new DateTime(created.DateComponent.YearComponent, created.DateComponent.MonthComponent, created.DateComponent.DayComponent);
+                    return new DateTime(created.DateComponent.YearComponent, created.DateComponent.MonthComponent, created.DateComponent.DayComponent, created.TimeComponent.HourComponent, (int)created.TimeComponent.MinuteComponent, (int)created.TimeComponent.SecondComponent);
                 }
                 
             } 
@@ -192,63 +211,7 @@ namespace XbimExchanger.IfcToCOBieLiteUK
             return null;
         }
 
-        /// <summary>
-        /// Get next name for duplicates
-        /// </summary>
-        /// <param name="name"></param>
-        /// <returns></returns>
-        private string GetNextName(string name)
-        {
-            //do we have any matching names
-            if (Helper.DocumentProgress != null && Helper.DocumentProgress.Any())
-            {
-                var found = Helper.DocumentProgress.Where(d => d.Name.StartsWith(name,StringComparison.OrdinalIgnoreCase)).Select(n => n.Name);
-
-                if (found.Any())
-                {
-                    if ((found.Count() == 1) && (found.First().Length == name.Length)) //we match the whole name
-                    {
-                        return name + "(1)"; //first duplicate
-                    }
-                    var srch = name + "(";
-
-                    //we have duplicates so get names that are in correct format
-                    var correctFormat = found.Where(s => s.StartsWith(srch, StringComparison.OrdinalIgnoreCase) && s.EndsWith(")"));
-                    if (correctFormat.Any())
-                    {
-                        var number = correctFormat.Max(s => GetNextNo(srch, s));//.OrderBy(s => s).LastOrDefault();
-                        if (number > 0)
-                        {
-                            return srch + number.ToString() + ")";
-                        }
-                    }
-                } 
-            }
-            //string is not found or we failed to add next number return input argument string
-            return name;
-        }
-        /// <summary>
-        /// Get next number from string in a format Name(#), so "This Document(10)" should return 11
-        /// </summary>
-        /// <param name="prefix">string up to  and including'(', such as "Name(" </param>
-        /// <param name="number">string formated "Name(#)", such as "Name(10)" </param>
-        /// <returns>int</returns>
-        private int GetNextNo(string prefix, string number)
-        {
-            var start = prefix.Length;
-            var lgth = number.Length - start - 1;
-            number = number.Substring(start, lgth); //get the string between brackets
-            var strNo = Regex.Match(number, @"\d+").Value;
-            if (!string.IsNullOrEmpty(strNo))
-            {
-                int no;
-                if (int.TryParse(strNo, out no))
-                {
-                    return ++no;
-                }
-            }
-            return 0;
-        }
+        
         
 
         /// <summary>

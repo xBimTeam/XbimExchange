@@ -15,15 +15,23 @@ namespace XbimExchanger.IfcToCOBieLiteUK
     internal class MappingXbimIfcProxyTypeObjectToAssetType :
         XbimMappings<XbimModel, List<Facility>, string, XbimIfcProxyTypeObject, AssetType>
     {
+        public bool HasCategory
+        {
+            get;
+            private set;
+        }
+
         protected override AssetType Mapping(XbimIfcProxyTypeObject proxyIfcTypeObject, AssetType target)
         {
-           
-            var helper = ((IfcToCOBieLiteUkExchanger) Exchanger).Helper;
+
+            var helper = ((IfcToCOBieLiteUkExchanger)Exchanger).Helper;
             target.ExternalEntity = proxyIfcTypeObject.ExternalEntity;
             target.ExternalId = proxyIfcTypeObject.ExternalId;
             target.ExternalSystem = proxyIfcTypeObject.ExternalSystemName;
             target.Name = proxyIfcTypeObject.Name;
             target.Categories = proxyIfcTypeObject.Categories;
+            var cat = target.Categories.FirstOrDefault();
+            HasCategory = ((cat != null) && ((cat.Code != "unknown") || target.Categories.Count > 1)); //assume if more than 1 we have a category
             target.AssetTypeEnum = proxyIfcTypeObject.AccountingCategory;
             target.CreatedBy = proxyIfcTypeObject.GetCreatedBy();
             target.CreatedOn = proxyIfcTypeObject.GetCreatedOn();
@@ -32,16 +40,16 @@ namespace XbimExchanger.IfcToCOBieLiteUK
             List<IfcElement> allAssetsofThisType;
             helper.DefiningTypeObjectMap.TryGetValue(proxyIfcTypeObject, out allAssetsofThisType);
 
-            target.Warranty = new Warranty {GuarantorLabor = new ContactKey {Email = helper.XbimCreatedBy.Email}};
+            target.Warranty = new Warranty { GuarantorLabor = new ContactKey { Email = helper.XbimCreatedBy.Email } };
             target.Warranty.GuarantorParts = target.Warranty.GuarantorLabor;
             if (ifcTypeObject != null)
             {
                 var manuf = helper.GetCoBieProperty("AssetTypeManufacturer", ifcTypeObject);
-                if (string.IsNullOrWhiteSpace(manuf) && allAssetsofThisType!=null) //disagrrement between COBie and IFC where this value resides, look in assets
+                if (string.IsNullOrWhiteSpace(manuf) && allAssetsofThisType != null) //disagrrement between COBie and IFC where this value resides, look in assets
                 {
                     manuf = allAssetsofThisType.Select(
                         a => helper.GetCoBieProperty("AssetTypeManufacturer", a))
-                        .FirstOrDefault(a=>!string.IsNullOrWhiteSpace(a));
+                        .FirstOrDefault(a => !string.IsNullOrWhiteSpace(a));
 
                 }
                 target.Manufacturer = helper.GetOrCreateContactKey(manuf);
@@ -78,17 +86,17 @@ namespace XbimExchanger.IfcToCOBieLiteUK
                 target.CodePerformance = helper.GetCoBieProperty("AssetTypeCodePerformance", ifcTypeObject);
                 target.Finish = helper.GetCoBieProperty("AssetTypeFinishDescription", ifcTypeObject);
 
-                
+
                 target.Warranty.Description = helper.GetCoBieProperty("AssetTypeWarrantyDescription", ifcTypeObject);
                 target.Warranty.DurationLabor = helper.GetCoBieAttribute<DecimalAttributeValue>("AssetTypeWarrantyDurationLabor", ifcTypeObject).Value;
                 target.Warranty.DurationParts = helper.GetCoBieAttribute<DecimalAttributeValue>("AssetTypeWarrantyDurationParts", ifcTypeObject).Value;
 
-               
+
                 if (Enum.TryParse(helper.GetCoBieProperty("AssetTypeWarrantyDurationUnit", ifcTypeObject), true,
                     out unit))
                     target.Warranty.DurationUnit = unit;
                 var laborContact = helper.GetCoBieProperty("AssetTypeWarrantyGuarantorLabor", ifcTypeObject);
-                if(!string.IsNullOrWhiteSpace(laborContact))
+                if (!string.IsNullOrWhiteSpace(laborContact))
                     target.Warranty.GuarantorLabor = helper.GetOrCreateContactKey(laborContact);
                 var partsContact = helper.GetCoBieProperty("AssetTypeWarrantyGuarantorParts", ifcTypeObject);
                 if (!string.IsNullOrWhiteSpace(partsContact))
@@ -99,20 +107,44 @@ namespace XbimExchanger.IfcToCOBieLiteUK
                 //Documents
                 var docsMappings = Exchanger.GetOrCreateMappings<MappingIfcDocumentSelectToDocument>();
                 helper.AddDocuments(docsMappings, target, ifcTypeObject);
+
+                //Spare
+                var spareMapping = Exchanger.GetOrCreateMappings<MappingIfcConstructionProductResourceToSpare>();
+                spareMapping.ParentObject = ifcTypeObject; //set parent object 
+                if (helper.SpareLookup.ContainsKey(ifcTypeObject))
+                {
+                    foreach (var item in helper.SpareLookup[ifcTypeObject])
+                    {
+                        if (target.Spares == null)
+                            target.Spares = new List<Spare>();
+                        target.Spares.Add(spareMapping.AddMapping(item, new Spare()));
+
+                    }
+                }
             }
             //The Assets
-            
+
             var assetMappings = Exchanger.GetOrCreateMappings<MappingIfcElementToAsset>();
             if (allAssetsofThisType != null && allAssetsofThisType.Any())
             {
                 target.Assets = new List<Asset>();
 
-                    foreach (IfcElement element in allAssetsofThisType)
+                foreach (IfcElement element in allAssetsofThisType)
+                {
+                    var asset = new Asset();
+                    asset = assetMappings.AddMapping(element, asset);
+                    //pass categories over from Asset to AssetType, if none set
+                    if (!HasCategory)
                     {
-                        var asset = new Asset();
-                        asset = assetMappings.AddMapping(element, asset);
-                        target.Assets.Add(asset);
+                        var assetcat = asset.Categories.FirstOrDefault();
+                        if ((assetcat != null) && (assetcat.Code != "unknown"))
+                        {
+                            target.Categories = asset.Categories;
+                            HasCategory = true;
+                        }
                     }
+                    target.Assets.Add(asset);
+                }
             }
 
             return target;

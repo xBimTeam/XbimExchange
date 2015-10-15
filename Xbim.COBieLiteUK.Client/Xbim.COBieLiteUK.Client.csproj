@@ -80,7 +80,7 @@
     <Compile Include="COBieLiteGeneratorDlg.Designer.cs">
       <DependentUpon>COBieLiteGeneratorDlg.cs</DependentUpon>
     </Compile>
-    <Compile Include="COBieLiteWorkerToExcel.cs" />
+    <Compile Include="COBieLiteWorker.cs" />
     <Compile Include="EditableList.cs">
       <SubType>UserControl</SubType>
     </Compile>

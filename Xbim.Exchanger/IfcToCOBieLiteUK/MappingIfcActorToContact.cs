@@ -42,7 +42,7 @@ namespace XbimExchanger.IfcToCOBieLiteUK
             {
                target.Email = string.Format("unknown{0}@undefined.email", actor.EntityLabel);
             }
-            target.CreatedBy = helper.GetCreatedBy(actor);
+            target.CreatedBy = helper.GetCreatedBy(actor, true);
             target.CreatedOn = helper.GetCreatedOn(actor);
             if (target.Categories == null || !target.Categories.Any())
             {

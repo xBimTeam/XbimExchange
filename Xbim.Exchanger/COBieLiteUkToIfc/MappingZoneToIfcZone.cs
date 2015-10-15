@@ -52,6 +52,12 @@ namespace XbimExchanger.COBieLiteUkToIfc
 
             #endregion
 
+            #region Documents
+            if (zone.Documents != null && zone.Documents.Any())
+            {
+                Exchanger.ConvertDocumentsToDocumentSelect(ifcZone, zone.Documents);
+            }
+            #endregion
 
             return ifcZone;
 

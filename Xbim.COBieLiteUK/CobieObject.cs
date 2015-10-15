@@ -1011,7 +1011,7 @@ namespace Xbim.COBieLiteUK
             var log = new StringWriter();
 
             //If the value is n/a it is the same as if it was not defined at all
-            if (cell.CellType == CellType.String && cell.StringCellValue.ToLower() == "n/a")
+            if (cell.CellType == CellType.String && ((cell.StringCellValue.ToLower() == "n/a") || string.IsNullOrWhiteSpace(cell.StringCellValue)))
                 return "";
 
             var parts = path.Split('.').ToList();

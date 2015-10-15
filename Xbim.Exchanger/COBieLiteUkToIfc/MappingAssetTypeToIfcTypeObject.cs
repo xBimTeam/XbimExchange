@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Linq;
 using Xbim.COBieLiteUK;
+using Xbim.Ifc2x3.ConstructionMgmtDomain;
+using Xbim.Ifc2x3.ExternalReferenceResource;
 using Xbim.Ifc2x3.Kernel;
 using Xbim.Ifc2x3.ProductExtension;
 using Xbim.Ifc2x3.SharedBldgElements;
@@ -35,6 +37,24 @@ namespace XbimExchanger.COBieLiteUkToIfc
                     Exchanger.ConvertCategoryToClassification(category, ifcTypeObject);
                 }
 
+            #endregion
+            #region Spare
+            if (assetType.Spares != null)
+            {
+                foreach (var spare in assetType.Spares)
+                {
+                    //create the resource
+                    var resourceMapping = Exchanger.GetOrCreateMappings<MappingSpareToIfcConstructionProductResource>();
+                    IfcConstructionProductResource ifcConstructionProductResource = resourceMapping.AddMapping(spare, resourceMapping.GetOrCreateTargetObject(spare.ExternalId));
+                    //connect relationship up to the ifcTypeObject
+                    var relResource = Exchanger.TargetRepository.Instances.New<IfcRelAssignsToResource>();
+                    relResource.RelatingResource = ifcConstructionProductResource;
+                    relResource.RelatedObjects.Add(ifcTypeObject);
+                    relResource.Name = assetType.Name;
+                    relResource.Description = assetType.Description;
+                    relResource.RelatedObjectsType = IfcObjectType.Product;
+                }
+            }
             #endregion
 
             if (assetType.Assets != null && assetType.Assets.Any())
@@ -519,12 +539,12 @@ namespace XbimExchanger.COBieLiteUkToIfc
                             #endregion
 
                             default:
+#if DEBUG
                                 Console.WriteLine(assetInfoType.ExternalEntity + " has been made IfcBuildingElementProxy");
+#endif
                                 ifcElement = MapAsset<IfcBuildingElementProxy>(assetInfoType);
                                 break;
                         }
-
-
                     }
                     else
                     {
@@ -538,6 +558,13 @@ namespace XbimExchanger.COBieLiteUkToIfc
                     Exchanger.CreateObjectGeometry(ifcElement, index++);
                 }
             }
+
+            #region Documents
+            if (assetType.Documents != null && assetType.Documents.Any())
+            {
+                Exchanger.ConvertDocumentsToDocumentSelect(ifcTypeObject, assetType.Documents);
+            }
+            #endregion
 
             return ifcTypeObject;
         }

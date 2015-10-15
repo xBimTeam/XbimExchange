@@ -26,7 +26,9 @@ using XbimExchanger.COBieLiteHelpers;
 using XbimExchanger.IfcHelpers;
 using Assembly = System.Reflection.Assembly;
 using Attribute = Xbim.COBieLiteUK.Attribute;
-
+using Xbim.FilterHelper;
+using Xbim.Ifc2x3.ActorResource;
+using Xbim.Ifc2x3.UtilityResource;
 
 namespace XbimExchanger.COBieLiteUkToIfc
 {
@@ -70,22 +72,24 @@ namespace XbimExchanger.COBieLiteUkToIfc
 
         static CoBieLiteUkToIfcExchanger()
         {
+            DirectoryInfo dir = new DirectoryInfo(AppDomain.CurrentDomain.BaseDirectory);
+            var configFile = Path.Combine(dir.FullName, "COBieAttributesCustom.config");
 
-
-            var tmpFile = Path.GetTempPath() + Guid.NewGuid().ToString() + ".csv";
-
-            var asss = Assembly.GetExecutingAssembly();
-
-            using (var input = asss.GetManifestResourceStream("XbimExchanger.IfcToCOBieLiteUK.COBieAttributes.config"))
-            using (var output = File.Create(tmpFile))
+            var tmpFile = File.Exists(configFile) ? configFile : null;
+            if (tmpFile == null)
             {
-                if (input != null) input.CopyTo(output);
+
+                tmpFile = Path.GetTempPath() + Guid.NewGuid().ToString() + ".csv";
+
+                var asss = Assembly.GetExecutingAssembly();
+
+                using (var input = asss.GetManifestResourceStream("XbimExchanger.IfcToCOBieLiteUK.COBieAttributes.config"))
+                using (var output = File.Create(tmpFile))
+                {
+                    if (input != null)
+                        input.CopyTo(output);
+                }
             }
-
-
-
-            Configuration config;
-            AppSettingsSection cobiePropertyMaps;
 
             if (!File.Exists(tmpFile))
             {
@@ -96,35 +100,14 @@ namespace XbimExchanger.COBieLiteUkToIfc
                         directory.FullName)
                     );
             }
-
-            try
+            COBiePropertyMapping propertyMaps = new COBiePropertyMapping(new FileInfo(tmpFile));
+            var cobieFieldMap = propertyMaps.GetDictOfProperties().Where(d => d.Value.FirstOrDefault() != null).ToDictionary(d => d.Key, d => d.Value.First());
+            foreach (var item in cobieFieldMap)
             {
-                var configMap = new ExeConfigurationFileMap { ExeConfigFilename = tmpFile };
-                config = ConfigurationManager.OpenMappedExeConfiguration(configMap, ConfigurationUserLevel.None);
-                cobiePropertyMaps = (AppSettingsSection)config.GetSection("COBiePropertyMaps");
-                foreach (KeyValueConfigurationElement keyVal in cobiePropertyMaps.Settings)
-                {
-                    var values = keyVal.Value.Split(new[] { ';' }, StringSplitOptions.RemoveEmptyEntries);
-                    var selected = values.FirstOrDefault();
-                    if (selected != null)
-                    {
-                        var names = selected.Split(new[] { '.' }, StringSplitOptions.RemoveEmptyEntries);
-                        if (names.Length == 2)
-                            CobieToIfcPropertyMap.Add(keyVal.Key, new NamedProperty(names[0], names[1]));
-                    }
-                }
-
+                var names = item.Value.Split(new[] { '.' }, StringSplitOptions.RemoveEmptyEntries);
+                if (names.Length == 2)
+                    CobieToIfcPropertyMap.Add(item.Key, new NamedProperty(names[0], names[1]));
             }
-            catch (Exception ex)
-            {
-                var directory = new DirectoryInfo(".");
-                throw new Exception(
-                    @"Error loading configuration file ""COBieAttributes.config"". App folder is " + directory.FullName,
-                    ex);
-            }
-
-
-
         }
         #endregion
 
@@ -165,6 +148,7 @@ namespace XbimExchanger.COBieLiteUkToIfc
         private IfcDirection _downDirection;
         private IfcGeometricRepresentationContext _model3DContext;
 
+        
         #endregion
 
         #region Constructors
@@ -241,6 +225,22 @@ namespace XbimExchanger.COBieLiteUkToIfc
         {
             get { return _spaceLookup.Values; }
         }
+
+        /// <summary>
+        /// Mapping of OwnerHistory fields to IfcOwnerHistory Objects
+        /// </summary>
+        private Dictionary<OwnerHistoryKey, IfcOwnerHistory> OwnerHistories
+        { get; set; }
+
+        /// <summary>
+        /// Contacts Lookup
+        /// </summary>
+        public Dictionary<string, IfcPersonAndOrganization> Contacts
+        {
+            get;
+            set;
+        }
+
 
         #endregion
         #region Converters
@@ -934,5 +934,243 @@ namespace XbimExchanger.COBieLiteUkToIfc
             relationship.RelatedObjects.Add(ifcSpace);
             relationship.RelatedObjectsType = IfcObjectType.Product;
         }
+
+        public bool StringHasValue(string createdOn)
+        {
+            return !(string.IsNullOrWhiteSpace(createdOn) || createdOn.Equals("unknown", StringComparison.OrdinalIgnoreCase) || createdOn.Equals("n/a", StringComparison.OrdinalIgnoreCase) || createdOn.Equals("n\a", StringComparison.OrdinalIgnoreCase));
+        }
+
+
+        #region OwnerHistory
+        
+        /// <summary>
+        /// Set an existing or create a new owner history if no match is found
+        /// </summary>
+        /// <param name="ifcRoot">Object to add the owner history</param>
+        /// <param name="externalSystem">Application used to modify/create</param>
+        /// <param name="createdBy">IfcPersonAndOrganization object</param>
+        /// <param name="createdOn">Date the object was created on</param>
+        protected void SetOwnerHistory(IfcRoot ifcRoot, string externalSystem, string createdBy, DateTime createdOn)
+        {
+            try
+            {
+                IfcTimeStamp stamp = IfcTimeStamp.ToTimeStamp(createdOn);
+            }
+            catch (OverflowException)
+            {
+                IfcTimeStamp stamp = 0; //junk date passed, so set to 0 (1970) see http://www.buildingsmart-tech.org/ifc/IFC2x3/TC1/html/ifcmeasureresource/lexical/ifctimestamp.htm
+            }
+            catch(Exception)
+            {
+                throw;
+            }
+            if (OwnerHistories == null)
+            {
+                OwnerHistories = TargetRepository.Instances.OfType<IfcOwnerHistory>().Where(oh => (oh.CreationDate != null)
+                                                                           && (
+                                                                                (oh.OwningUser.ThePerson != null) && (oh.OwningUser.ThePerson.Addresses != null) && oh.OwningUser.ThePerson.Addresses.OfType<IfcTelecomAddress>().Any()
+                                                                              )
+                                                                           && (
+                                                                                ((oh.LastModifyingApplication != null) && (oh.LastModifyingApplication.ApplicationFullName != null) )
+                                                                                || ((oh.LastModifyingApplication == null) && (oh.OwningApplication != null) && (oh.OwningApplication.ApplicationFullName != null))
+                                                                              )
+                                                                           )
+                                                                           .ToDictionary(oh => new OwnerHistoryKey { CreatedBy = oh.OwningUser.ThePerson.Addresses.OfType<IfcTelecomAddress>().First().ElectronicMailAddresses.First(),
+                                                                            CreatedOn = (oh.CreationDate != null) ? IfcTimeStamp.ToDateTime(oh.CreationDate).ToString() : string.Empty,
+                                                                            ExtSystem = (oh.LastModifyingApplication == null) ? oh.OwningApplication.ApplicationFullName : oh.LastModifyingApplication.ApplicationFullName
+                                                                           }, oh => oh );
+            }
+           
+            var key = new OwnerHistoryKey { ExtSystem = externalSystem, CreatedBy = createdBy, CreatedOn = (createdOn == null) ? string.Empty : createdOn.ToString() };
+            if (OwnerHistories.ContainsKey(key))
+            {
+                ifcRoot.OwnerHistory = OwnerHistories[key];
+            }
+            else
+            {
+               ifcRoot.OwnerHistory = CreateOwnerHistory(externalSystem, SetEmailUser(createdBy), createdOn);
+                OwnerHistories.Add(key, ifcRoot.OwnerHistory);
+            }
+        }
+        /// <summary>
+        /// Create the owner history
+        /// </summary>
+        /// <param name="ifcRoot">Object to add the owner history</param>
+        /// <param name="externalSystem">Application used to modify/create</param>
+        /// <param name="createdBy">IfcPersonAndOrganization object</param>
+        /// <param name="createdOn">Date the object was created on</param>
+        protected IfcOwnerHistory CreateOwnerHistory(string externalSystem, IfcPersonAndOrganization createdBy, DateTime createdOn)
+        {
+            IfcApplication ifcApplication = null;
+            IfcOrganization ifcOrganization = null;
+            string orgName       = (StringHasValue(externalSystem)) ? externalSystem.Split(' ').FirstOrDefault() : "Unknown";
+            string appIdentifier = (StringHasValue(externalSystem)) ? externalSystem.Replace(' ', '_') : "Unknown";
+            string appName       = (StringHasValue(externalSystem)) ? externalSystem : "Unknown";
+
+            //create an organization for the external system
+            ifcOrganization = TargetRepository.Instances.OfType<IfcOrganization>().Where(o => o.Name == orgName).FirstOrDefault();
+            if (ifcOrganization == null)
+            {
+                ifcOrganization = TargetRepository.Instances.New<IfcOrganization>(org => { org.Name = orgName; });
+            }
+            //create application
+            ifcApplication = TargetRepository.Instances.OfType<IfcApplication>().Where(app => app.ApplicationFullName == appName).FirstOrDefault();
+            if (ifcApplication == null)
+            {
+                ifcApplication = TargetRepository.Instances.New<IfcApplication>(app =>
+                {
+                    app.ApplicationFullName   = appName;
+                    app.ApplicationDeveloper  = ifcOrganization;
+                    app.Version               = new IfcLabel("");
+                    app.ApplicationIdentifier = new IfcIdentifier(appIdentifier);
+                });
+            }
+            //return new owner history
+            IfcTimeStamp stamp;
+            try
+            {
+                stamp = IfcTimeStamp.ToTimeStamp(createdOn);
+            }
+            catch (OverflowException)
+            {
+                stamp = 0; //junk date passed, so set to 0 (1970) see http://www.buildingsmart-tech.org/ifc/IFC2x3/TC1/html/ifcmeasureresource/lexical/ifctimestamp.htm
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            return TargetRepository.Instances.New<IfcOwnerHistory>(oh =>
+             {
+                 oh.OwningUser               = createdBy;
+                 oh.OwningApplication        = ifcApplication;
+                 oh.LastModifyingApplication = ifcApplication;
+                 oh.CreationDate             = stamp;
+                 oh.ChangeAction             = IfcChangeActionEnum.NOCHANGE;
+             });
+        }
+
+        /// <summary>
+        /// Set the user history to a IfcRoot object
+        /// </summary>
+        /// <param name="ifcRoot">Object to set owner history</param>
+        /// <param name="extSystem">External system string</param>
+        /// <param name="createdBy">Email address of creator</param>
+        /// <param name="createdOn">Created on date as string</param>
+        public void SetUserHistory(IfcRoot ifcRoot, string extSystem, string createdBy, DateTime createdOn)
+        {
+            SetContacts();
+            SetOwnerHistory(ifcRoot, extSystem, createdBy, createdOn);
+        }
+
+        private void SetContacts()
+        {
+            if (Contacts == null)
+            {
+                Contacts = TargetRepository.Instances.OfType<IfcPersonAndOrganization>()
+                            .Where(po => po.ThePerson != null && po.ThePerson.Addresses != null
+                                    && po.ThePerson.Addresses.OfType<IfcTelecomAddress>().Any()
+                                    && po.ThePerson.Addresses.OfType<IfcTelecomAddress>().First().ElectronicMailAddresses.Any(e => !string.IsNullOrWhiteSpace(e)
+                                    )
+                                    )
+                            .ToDictionary(po => po.ThePerson.Addresses.OfType<IfcTelecomAddress>().First().ElectronicMailAddresses, po => po)
+                            .SelectMany(pair => pair.Key.Select(val => new { Key = val, Value = pair.Value }))
+                            .ToDictionary(o => o.Key.ToString(), o => o.Value);
+            }
+        }
+
+        /// <summary>
+        /// Set the IfcPersonAndOrganization from using email only
+        /// </summary>
+        /// <param name="email">email</param>
+        internal IfcPersonAndOrganization SetEmailUser(string email)
+        {
+            SetContacts();
+            //check we have a valid string, if not set to default
+            email = StringHasValue(email) ? email : "unknown@undefined.email";
+
+            if (!Contacts.ContainsKey(email)) //should filter on merge also unless Contacts is reset
+            {
+                IfcPerson ifcPerson = TargetRepository.Instances.New<IfcPerson>();
+                IfcOrganization ifcOrganization = TargetRepository.Instances.New<IfcOrganization>();
+                IfcPersonAndOrganization ifcPersonAndOrganization = TargetRepository.Instances.New<IfcPersonAndOrganization>();
+
+                Contacts.Add(email, ifcPersonAndOrganization); //build a list to reference for History objects
+
+                //add Company
+                ifcOrganization.Name = "Unknown"; //is not an optional field so fill with unknown value
+
+                //create IfcTelecomAddress
+                IfcTelecomAddress ifcTelecomAddress = TargetRepository.Instances.New<IfcTelecomAddress>();
+                if (ifcTelecomAddress.ElectronicMailAddresses == null)
+                {
+                    ifcTelecomAddress.SetElectronicMailAddress(email); //create the LabelCollection and set to ElectronicMailAddresses field
+                }
+                else
+                {
+                    ifcTelecomAddress.ElectronicMailAddresses.Add(email); //add to existing collection
+                }
+                //add Telecom Address
+                if (ifcPerson.Addresses == null)
+                {
+                    ifcPerson.SetTelecomAddresss(ifcTelecomAddress);//create the AddressCollection and set to Addresses field
+                }
+                else
+                {
+                    ifcPerson.Addresses.Add(ifcTelecomAddress);//add to existing collection
+                }
+                
+                //add postal address
+                //IfcPostalAddress ifcPostalAddress = TargetRepository.Instances.New<IfcPostalAddress>();                                               
+                //if (ifcPerson.Addresses == null)
+                //    ifcPerson.SetPostalAddresss(ifcPostalAddress);//create the AddressCollection and set to Addresses field
+                //else
+                //    ifcPerson.Addresses.Add(ifcPostalAddress);//add to existing collection
+
+                //add the person and the organization objects 
+                ifcPersonAndOrganization.ThePerson = ifcPerson;
+                ifcPersonAndOrganization.TheOrganization = ifcOrganization;
+
+                
+                return ifcPersonAndOrganization;
+            }
+            else
+            {
+                return Contacts[email];
+            }
+
+        }
+        #endregion
+
+        #region Document Conversion
+
+        /// <summary>
+        /// Convert/Import a Document List into the model repository 
+        /// </summary>
+        /// <param name="ifcRootObj">IfcRoot object to link the document list too</param>
+        /// <param name="docs">List of document to convert and import into the model</param>
+        internal void ConvertDocumentsToDocumentSelect (IfcRoot ifcRootObj, List<Document> docs)
+        {
+            var documantMapping = GetOrCreateMappings<MappingDocumentToIfcDocumentSelect>();
+            foreach (var doc in docs)
+            {
+                var ifcDocumentInformation = TargetRepository.Instances.New<IfcDocumentInformation>();
+                ifcDocumentInformation = documantMapping.AddMapping(doc, ifcDocumentInformation);
+
+                IfcRelAssociatesDocument ifcRelAssociatesDocument = TargetRepository.Instances.New<IfcRelAssociatesDocument>();
+                SetUserHistory(ifcRelAssociatesDocument, doc.ExternalSystem, (doc.CreatedBy == null) ? null : doc.CreatedBy.Email, (doc.CreatedOn == null) ? DateTime.Now : (DateTime)doc.CreatedOn);
+
+                //using statement will set the Model.OwnerHistoryAddObject to IfcConstructionProductResource.OwnerHistory as OwnerHistoryAddObject is used to reset user history on any property changes, 
+                //then swaps the original OwnerHistoryAddObject back in the dispose, so set any properties within the using statement to keep user history set in line above SetUserHistory
+                using (OwnerHistoryEditScope context = new OwnerHistoryEditScope(TargetRepository, ifcRelAssociatesDocument.OwnerHistory))
+                {
+                    ifcRelAssociatesDocument.RelatedObjects.Add(ifcRootObj);
+                    ifcRelAssociatesDocument.RelatingDocument = ifcDocumentInformation;
+                    ifcRelAssociatesDocument.Name = doc.Name;
+                    ifcRelAssociatesDocument.Description = doc.Description;
+                }
+            }
+        }
+
+        #endregion
     }
 }

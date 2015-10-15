@@ -122,12 +122,16 @@
     <Compile Include="COBieLiteUkToIfc\COBieLiteUkToIfcExchanger.cs" />
     <Compile Include="COBieLiteUkToIfc\MappingAssetToIfcElement.cs" />
     <Compile Include="COBieLiteUkToIfc\MappingAssetTypeToIfcTypeObject.cs" />
+    <Compile Include="COBieLiteUkToIfc\MappingContactToIfcPersonAndOrganization.cs" />
+    <Compile Include="COBieLiteUkToIfc\MappingDocumentToIfcDocumentSelect.cs" />
     <Compile Include="COBieLiteUkToIfc\MappingFacilityToIfcBuilding.cs" />
     <Compile Include="COBieLiteUkToIfc\MappingFloorToIfcBuildingStorey.cs" />
     <Compile Include="COBieLiteUkToIfc\MappingProjectToIfcProject.cs" />
     <Compile Include="COBieLiteUkToIfc\MappingSiteToIfcSite.cs" />
     <Compile Include="COBieLiteUkToIfc\MappingSpaceToIfcSpace.cs" />
+    <Compile Include="COBieLiteUkToIfc\MappingSpareToIfcConstructionProductResource.cs" />
     <Compile Include="COBieLiteUkToIfc\MappingZoneToIfcZone.cs" />
+    <Compile Include="COBieLiteUkToIfc\OwnerHistoryEditScope.cs" />
     <Compile Include="DPoWToCOBieLiteUK\DPoWToCOBieLiteUKExchanger.cs" />
     <Compile Include="DPoWToCOBieLiteUK\DPoWToCOBieLiteUKMapping.cs" />
     <Compile Include="DPoWToCOBieLiteUK\Extensions.cs" />
@@ -165,6 +169,7 @@
     <Compile Include="IfcToCOBieLiteUK\EqCompare\IfcRelAssignsToGroupRelatedGroupObjCompare.cs" />
     <Compile Include="IfcToCOBieLiteUK\IfcToCOBieLiteUkExchanger.cs" />
     <Compile Include="IfcToCOBieLiteUK\MappingIfcActorToContact.cs" />
+    <Compile Include="IfcToCOBieLiteUK\MappingIfcConstructionProductResourceToSpare.cs" />
     <Compile Include="IfcToCOBieLiteUK\MappingIfcDocumentSelectToDocument.cs" />
     <Compile Include="IfcToCOBieLiteUK\MappingIfcSpatialStructureElementToFloor.cs" />
     <Compile Include="IfcToCOBieLiteUK\MappingIfcElementToAsset.cs" />

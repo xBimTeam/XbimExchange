@@ -14,7 +14,15 @@ namespace Xbim.FilterHelper
         /// <summary>
         /// current section names in config file
         /// </summary>
-        private string[] _sectionKeys = new string[] { "SpacePropertyMaps", "FloorPropertyMaps", "AssetPropertyMaps", "AssetTypePropertyMaps", "SystemPropertyMaps" };
+        private string[] _sectionKeys = new string[] { "SpacePropertyMaps", "FloorPropertyMaps", "AssetPropertyMaps", "AssetTypePropertyMaps", "SystemPropertyMaps", "CommonPropertyMaps", "SparePropertyMaps" };
+
+
+        /// <summary>
+        /// Common List of attribute paths
+        /// </summary>
+        public List<AttributePaths> CommonPaths { get; set; }
+
+        public List<AttributePaths> SparePaths { get; set; }
         /// <summary>
         /// Space List of attribute paths
         /// </summary>
@@ -46,6 +54,8 @@ namespace Xbim.FilterHelper
         /// </summary>
         public COBiePropertyMapping()
         {
+            CommonPaths = new List<AttributePaths>();
+            SparePaths = new List<AttributePaths>();
             SpacePaths = new List<AttributePaths>();
             FloorPaths = new List<AttributePaths>();
             AssetPaths = new List<AttributePaths>();
@@ -89,8 +99,8 @@ namespace Xbim.FilterHelper
                     
                 }
                 catch (Exception)
-                { 
-                    throw;
+                {
+                    throw new FormatException(string.Format("Formate incorrect: Delete {0} and restart application", ConfigFile.FullName));
                 }
             }
             
@@ -134,6 +144,10 @@ namespace Xbim.FilterHelper
         {
             switch (sectionKey)
             {
+                case "CommonPropertyMaps":
+                    return CommonPaths;
+                case "SparePropertyMaps":
+                    return SparePaths;
                 case "SpacePropertyMaps":
                     return SpacePaths;
                 case "FloorPropertyMaps":
