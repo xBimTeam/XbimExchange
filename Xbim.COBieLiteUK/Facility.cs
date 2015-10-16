@@ -16,7 +16,8 @@ using NPOI.SS.UserModel;
 using NPOI.XSSF.UserModel;
 using Xbim.COBieLiteUK.Converters;
 using Formatting = System.Xml.Formatting;
-using XbimExchanger.COBieLiteHelpers;
+using Xbim.FilterHelper;
+using Xbim.COBie.EqCompare;
 
 namespace Xbim.COBieLiteUK
 {
@@ -25,10 +26,11 @@ namespace Xbim.COBieLiteUK
         public Facility()
         {
             Metadata = new Metadata();
+            ReportProgress = new ProgressReporter();
         }
 
         /// <summary>
-        /// Creates a new class inheryting from CobieObject and sets it to belong to the facility.
+        /// Creates a new class inheriting from CobieObject and sets it to belong to the facility.
         /// </summary>
         /// <typeparam name="TNewCobieObject">The CobieObject type to create</typeparam>
         /// <returns>the created object, which will have to be added to a collection as appropriate to be in the facility tree</returns>
@@ -36,41 +38,57 @@ namespace Xbim.COBieLiteUK
         {
             var retObject = new TNewCobieObject();
             retObject.SetFacility(this);
-            return  retObject;
+            return retObject;
         }
 
+        /// <summary>
+        /// This function is used to search for any object in the model which is a CobieObject. 
+        /// You can optionally pass a condition to select specific elements. Search is optimized 
+        /// for specific types so it is advisable to specify the type as specific as possible.
+        /// </summary>
+        /// <typeparam name="T">Type os the object to search for</typeparam>
+        /// <param name="condition">Optional search condition</param>
+        /// <returns>Collection of cobie objects of specified type</returns>
         public IEnumerable<T> Get<T>(Func<T, bool> condition = null) where T : CobieObject
         {
             var self = this as T;
 
             //optimization first:
-            if (typeof (T) == typeof (Facility))
+            if (typeof(T) == typeof(Facility))
             {
-                if(condition == null) yield return self;
-                else if (condition(self)) yield return self;
+                if (condition == null)
+                    yield return self;
+                else if (condition(self))
+                    yield return self;
                 yield break;
             }
 
             if (typeof(T) == typeof(AssetType))
             {
-                if(AssetTypes == null) yield break;
+                if (AssetTypes == null)
+                    yield break;
                 foreach (var o in AssetTypes.Select(assetType => assetType as T))
                 {
-                    if (condition == null) yield return o;
-                    else if (condition(o)) yield return o;
+                    if (condition == null)
+                        yield return o;
+                    else if (condition(o))
+                        yield return o;
                 }
                 yield break;
             }
 
             if (typeof(T) == typeof(Asset))
             {
-                if (AssetTypes == null) yield break;
+                if (AssetTypes == null)
+                    yield break;
                 foreach (var type in AssetTypes.Where(a => a != null && a.Assets != null))
                 {
                     foreach (var o in type.Assets.Select(o => o as T))
                     {
-                        if (condition == null) yield return o;
-                        else if (condition(o)) yield return o;
+                        if (condition == null)
+                            yield return o;
+                        else if (condition(o))
+                            yield return o;
                     }
                 }
                 yield break;
@@ -78,24 +96,30 @@ namespace Xbim.COBieLiteUK
 
             if (typeof(T) == typeof(Floor))
             {
-                if (Floors == null) yield break;
+                if (Floors == null)
+                    yield break;
                 foreach (var o in Floors.Select(o => o as T))
                 {
-                    if (condition == null) yield return o;
-                    else if (condition(o)) yield return o;
+                    if (condition == null)
+                        yield return o;
+                    else if (condition(o))
+                        yield return o;
                 }
                 yield break;
             }
 
             if (typeof(T) == typeof(Space))
             {
-                if (Floors == null) yield break;
+                if (Floors == null)
+                    yield break;
                 foreach (var type in Floors.Where(a => a != null && a.Spaces != null))
                 {
                     foreach (var o in type.Spaces.Select(o => o as T))
                     {
-                        if (condition == null) yield return o;
-                        else if (condition(o)) yield return o;
+                        if (condition == null)
+                            yield return o;
+                        else if (condition(o))
+                            yield return o;
                     }
                 }
                 yield break;
@@ -103,22 +127,28 @@ namespace Xbim.COBieLiteUK
 
             if (typeof(T) == typeof(System))
             {
-                if (Systems == null) yield break;
+                if (Systems == null)
+                    yield break;
                 foreach (var o in Systems.Select(o => o as T))
                 {
-                    if (condition == null) yield return o;
-                    else if (condition(o)) yield return o;
+                    if (condition == null)
+                        yield return o;
+                    else if (condition(o))
+                        yield return o;
                 }
                 yield break;
             }
 
             if (typeof(T) == typeof(Zone))
             {
-                if (Zones == null) yield break;
+                if (Zones == null)
+                    yield break;
                 foreach (var o in Zones.Select(o => o as T))
                 {
-                    if (condition == null) yield return o;
-                    else if (condition(o)) yield return o;
+                    if (condition == null)
+                        yield return o;
+                    else if (condition(o))
+                        yield return o;
                 }
                 yield break;
             }
@@ -128,32 +158,62 @@ namespace Xbim.COBieLiteUK
             //make Facility part of the result
             if (self != null)
             {
-                if (condition == null) yield return self;
-                else if (condition(self)) yield return self;
+                if (condition == null)
+                    yield return self;
+                else if (condition(self))
+                    yield return self;
             }
             foreach (var child in GetDeep(condition))
                 yield return child;
         }
 
         #region Enumerations
+        /// <summary>
+        /// Enumeration of area units. If custom area units are from this enumeration it will
+        /// be returned also here. Values from this enumeration are set into that respective field.
+        /// If you set this property to 'None' custom field will be set to Null. If you set custom field
+        /// to a value which doesn't exist in this enumeration, 'Custom' value will be returned as a value
+        /// of this property.
+        /// </summary>
         public AreaUnit AreaUnits
         {
             get { return GetEnumeration<AreaUnit>(AreaUnitsCustom); }
-            set { SetEnumeration(value, s => AreaUnitsCustom = s);}
+            set { SetEnumeration(value, s => AreaUnitsCustom = s); }
         }
 
+        /// <summary>
+        /// Enumeration of linear units. If custom linear units are from this enumeration it will
+        /// be returned also here. Values from this enumeration are set into that respective field.
+        /// If you set this property to 'None' custom field will be set to Null. If you set custom field
+        /// to a value which doesn't exist in this enumeration, 'Custom' value will be returned as a value
+        /// of this property.
+        /// </summary>
         public LinearUnit LinearUnits
         {
             get { return GetEnumeration<LinearUnit>(LinearUnitsCustom); }
-            set { SetEnumeration(value, s => LinearUnitsCustom = s);}
+            set { SetEnumeration(value, s => LinearUnitsCustom = s); }
         }
 
+        /// <summary>
+        /// Enumeration of volume units. If custom volume units are from this enumeration it will
+        /// be returned also here. Values from this enumeration are set into that respective field.
+        /// If you set this property to 'None' custom field will be set to Null. If you set custom field
+        /// to a value which doesn't exist in this enumeration, 'Custom' value will be returned as a value
+        /// of this property.
+        /// </summary>
         public VolumeUnit VolumeUnits
         {
             get { return GetEnumeration<VolumeUnit>(VolumeUnitsCustom); }
             set { SetEnumeration(value, s => VolumeUnitsCustom = s); }
         }
 
+        /// <summary>
+        /// Enumeration of currency units. If custom currency units are from this enumeration it will
+        /// be returned also here. Values from this enumeration are set into that respective field.
+        /// If you set this property to 'None' custom field will be set to Null. If you set custom field
+        /// to a value which doesn't exist in this enumeration, 'Custom' value will be returned as a value
+        /// of this property.
+        /// </summary>
         public CurrencyUnit CurrencyUnit
         {
             get { return GetEnumeration<CurrencyUnit>(CurrencyUnitCustom); }
@@ -166,9 +226,14 @@ namespace Xbim.COBieLiteUK
 
         private static XmlSerializer GetXmlSerializer()
         {
-            return new XmlSerializer(typeof (Facility));
+            return new XmlSerializer(typeof(Facility));
         }
 
+        /// <summary>
+        /// This function will serialize the model as an XML
+        /// </summary>
+        /// <param name="path">Path where this model should be serialized</param>
+        /// <param name="indented">Optional flag. XML will be indented if this is true. This will increase the size of the file.</param>
         public void WriteXml(string path, bool indented = false)
         {
             using (var stream = File.Create(path))
@@ -178,13 +243,18 @@ namespace Xbim.COBieLiteUK
             }
         }
 
+        /// <summary>
+        /// This function will serialize the model as an XML. Stream will be closed at the end
+        /// </summary>
+        /// <param name="stream">Target stream</param>
+        /// <param name="indented">Optional flag. XML will be indented if this is true. This will increase the size of the file.</param>
         public void WriteXml(Stream stream, bool indented = false)
         {
             var serializer = GetXmlSerializer();
             using (var w = new StreamWriter(stream))
             {
                 using (
-                    var xmlWriter = new XmlTextWriter(w) {Formatting = indented ? Formatting.Indented : Formatting.None}
+                    var xmlWriter = new XmlTextWriter(w) { Formatting = indented ? Formatting.Indented : Formatting.None }
                     )
                 {
                     serializer.Serialize(xmlWriter, this,
@@ -200,7 +270,7 @@ namespace Xbim.COBieLiteUK
         public static Facility ReadXml(Stream stream)
         {
             var serializer = GetXmlSerializer();
-            var facility = (Facility) serializer.Deserialize(stream);
+            var facility = (Facility)serializer.Deserialize(stream);
             facility.SetFacility(facility);
             return facility;
         }
@@ -219,7 +289,7 @@ namespace Xbim.COBieLiteUK
 
         #region JSON serialization
 
-        private static JsonSerializer GetJsonSerializer(bool indented = false)
+        public static JsonSerializer GetJsonSerializer(bool indented = false)
         {
             var serializerSettings = new JsonSerializerSettings
             {
@@ -261,7 +331,7 @@ namespace Xbim.COBieLiteUK
         {
             get { return _cachedCloningSerialiser ?? (_cachedCloningSerialiser = GetJsonSerializer()); }
         }
-        
+
 
         private byte[] WriteJsonToMemory<T>(T o)
         {
@@ -310,7 +380,7 @@ namespace Xbim.COBieLiteUK
             using (var textReader = new StreamReader(stream))
             {
                 var serialiser = GetJsonSerializer();
-                var facility = (Facility) serialiser.Deserialize(textReader, typeof (Facility));
+                var facility = (Facility)serialiser.Deserialize(textReader, typeof(Facility));
                 facility.SetFacility(facility);
                 return facility;
             }
@@ -332,9 +402,11 @@ namespace Xbim.COBieLiteUK
 
         public static Facility ReadCobie(string path, out string message, string version = "UK2012")
         {
-            if (path == null) throw new ArgumentNullException("path");
+            if (path == null)
+                throw new ArgumentNullException("path");
             var ext = Path.GetExtension(path).ToLower().Trim('.');
-            if (ext != "xls" && ext != "xlsx") throw new Exception("File must be an MS Excel file.");
+            if (ext != "xls" && ext != "xlsx")
+                throw new Exception("File must be an MS Excel file.");
             using (var file = File.OpenRead(path))
             {
                 var type = ext == "xlsx" ? ExcelTypeEnum.XLSX : ExcelTypeEnum.XLS;
@@ -383,12 +455,12 @@ namespace Xbim.COBieLiteUK
             {
                 message +=
                     "There is no facility in the data. Default facility will be created as a root object. This is an invalid COBie spreadsheet. \n";
-                facility = new Facility {Name = "Default facility"};
+                facility = new Facility { Name = "Default facility" };
                 flatList.Add(facility);
             }
 
             //create structure hierarchy
-            var parallelMessage = new[] {""};
+            var parallelMessage = new[] { "" };
             var newTypes = new List<AssetType>();
             var typeDictionary = CreateTypeDictionary(flatList);
             Parallel.ForEach(flatList.ToArray(), o =>
@@ -444,8 +516,8 @@ namespace Xbim.COBieLiteUK
             var result = new List<CobieObject>();
             message = "";
             var types =
-                typeof (CobieObject).Assembly.GetTypes()
-                    .Where(t => !t.IsAbstract && typeof (CobieObject).IsAssignableFrom(t));
+                typeof(CobieObject).Assembly.GetTypes()
+                    .Where(t => !t.IsAbstract && typeof(CobieObject).IsAssignableFrom(t));
             foreach (var type in types)
             {
                 var stop = new Stopwatch();
@@ -454,7 +526,7 @@ namespace Xbim.COBieLiteUK
                 string msg;
                 result.AddRange(LoadFromCobie(type, workbook, out msg, version));
                 message += msg;
-                
+
                 stop.Stop();
                 Debug.WriteLine("   Loading {0}: {1}", type.Name, stop.ElapsedMilliseconds);
             }
@@ -466,7 +538,7 @@ namespace Xbim.COBieLiteUK
         #region Writing COBie Spreadsheet
 
         public void WriteCobie(Stream stream, ExcelTypeEnum type, out string message,
-            FiltersHelper assetfilters = null, string version = "UK2012", bool useTemplate = true)
+            OutPutFilters assetfilters = null, string version = "UK2012", bool useTemplate = true)
         {
             Stream templateStream = null;
             if (useTemplate)
@@ -495,7 +567,7 @@ namespace Xbim.COBieLiteUK
             var watch = new Stopwatch();
             watch.Start();
 
-            
+            ReportProgress.Reset(GetChildren().Count(), 100, "Creating Excel COBie");
 
             WriteToCobie(workbook, log, null, new Dictionary<Type, int>(), new List<string>(), new Dictionary<string, int>(), assetfilters, version);
 
@@ -517,11 +589,13 @@ namespace Xbim.COBieLiteUK
 
             message = log.ToString();
             workbook.Write(stream);
+            ReportProgress.Finalise(500);
         }
-       
-        public void WriteCobie(string path, out string message, FiltersHelper assetfilters = null, string version = "UK2012", bool useTemplate = true)
+
+        public void WriteCobie(string path, out string message, OutPutFilters assetfilters = null, string version = "UK2012", bool useTemplate = true)
         {
-            if (path == null) throw new ArgumentNullException("path");
+            if (path == null)
+                throw new ArgumentNullException("path");
             var ext = Path.GetExtension(path).ToLower().Trim('.');
             if (ext != "xls" && ext != "xlsx")
             {
@@ -541,7 +615,7 @@ namespace Xbim.COBieLiteUK
         #endregion
 
         internal override void WriteToCobie(IWorkbook workbook, TextWriter loger, CobieObject parent,
-            Dictionary<Type, int> rowNumCache, List<string> pickValuesCache, Dictionary<string, int> headerCache, FiltersHelper assetfilters = null, string version = "UK2012")
+            Dictionary<Type, int> rowNumCache, List<string> pickValuesCache, Dictionary<string, int> headerCache, OutPutFilters assetfilters = null, string version = "UK2012")
         {
             base.WriteToCobie(workbook, loger, parent, rowNumCache, pickValuesCache, headerCache, assetfilters, version);
 
@@ -626,18 +700,21 @@ namespace Xbim.COBieLiteUK
                 {
                     logger.WriteLine("Object of type {0} (description: {1}) doesn't have a 'Name'! This is illegal.",
                         o.GetType().Name, o.Description);
-                    if (fixIfPossible) o.Name = String.Format("{0} {1}", o.GetType().Name, _counter++);
+                    if (fixIfPossible)
+                        o.Name = String.Format("{0} {1}", o.GetType().Name, _counter++);
                 }
-                if (regex.IsMatch(o.Name))
+                else if (regex.IsMatch(o.Name))
                 {
                     logger.WriteLine("Name {0} of {1} contains forbidden characters.", o.Name, o.GetType().Name);
-                    if (fixIfPossible) o.Name = regex.Replace(o.Name, "");
+                    if (fixIfPossible)
+                        o.Name = regex.Replace(o.Name, "");
                 }
                 foreach (var key in o.GetKeys().Where(key => regex.IsMatch(key.Name ?? "")))
                 {
                     logger.WriteLine("Name {0} of {1} key contains forbidden characters.", key.Name,
                         key.GetSheet("UK2012"));
-                    if (fixIfPossible) key.Name = regex.Replace(key.Name ?? "", "");
+                    if (fixIfPossible)
+                        key.Name = regex.Replace(key.Name ?? "", "");
                 }
 
                 if (o.Categories != null && o.Categories.Any())
@@ -647,12 +724,15 @@ namespace Xbim.COBieLiteUK
                         if (category.Code != null && catRegex.IsMatch(category.Code))
                         {
                             logger.WriteLine("Category code {0} contains forbidden characters.", category.Code);
-                            if (fixIfPossible) category.Code = catRegex.Replace(category.Code, "");
+                            if (fixIfPossible)
+                                category.Code = catRegex.Replace(category.Code, "");
                         }
 
-                        if (category.Description == null || !catRegex.IsMatch(category.Description)) continue;
+                        if (category.Description == null || !catRegex.IsMatch(category.Description))
+                            continue;
                         logger.WriteLine("Category description {0} contains forbidden characters.", category.Description);
-                        if (fixIfPossible) category.Description = catRegex.Replace(category.Description, "");
+                        if (fixIfPossible)
+                            category.Description = catRegex.Replace(category.Description, "");
                     }
                 }
 
@@ -663,8 +743,9 @@ namespace Xbim.COBieLiteUK
                     logger.WriteLine("{0} '{1}' doesn't have a category defined.", o.GetType().Name, o.Name);
                     if (fixIfPossible)
                     {
-                        if (o.Categories == null) o.Categories = new List<Category>();
-                        o.Categories.Add(new Category {Code = "unknown"});
+                        if (o.Categories == null)
+                            o.Categories = new List<Category>();
+                        o.Categories.Add(new Category { Code = "unknown" });
                     }
                 }
 
@@ -725,11 +806,13 @@ namespace Xbim.COBieLiteUK
                 )
             {
                 logger.WriteLine("Space '{0}' is not in any zone.", space.Name);
-                if (!fixIfPossible) continue;
+                if (!fixIfPossible)
+                    continue;
 
-                if (Zones == null) Zones = new List<Zone>();
+                if (Zones == null)
+                    Zones = new List<Zone>();
                 var defaultZone = GetDefaultZone();
-                defaultZone.Spaces.Add(new SpaceKey {Name = space.Name});
+                defaultZone.Spaces.Add(new SpaceKey { Name = space.Name });
             }
             referenceWatch.Stop();
             Debug.WriteLine("   Every space in zone: " + referenceWatch.ElapsedMilliseconds);
@@ -741,8 +824,10 @@ namespace Xbim.COBieLiteUK
                 foreach (var floor in Floors.Where(f => f.Spaces == null || !f.Spaces.Any()).ToArray())
                 {
                     logger.WriteLine("Floor {0} doesn't have any space assigned.", floor.Name);
-                    if (!fixIfPossible) continue;
-                    if (floor.Spaces == null) floor.Spaces = new List<Space>();
+                    if (!fixIfPossible)
+                        continue;
+                    if (floor.Spaces == null)
+                        floor.Spaces = new List<Space>();
                     floor.Spaces.Add(GetNewDefaultSpace(false, true));
                 }
             }
@@ -751,10 +836,12 @@ namespace Xbim.COBieLiteUK
                 foreach (var zone in Zones.Where(z => z.Spaces == null || !z.Spaces.Any()).ToArray())
                 {
                     logger.WriteLine("Zone {0} doesn't have any space assigned.", zone.Name);
-                    if (!fixIfPossible) continue;
-                    if (zone.Spaces == null) zone.Spaces = new List<SpaceKey>();
+                    if (!fixIfPossible)
+                        continue;
+                    if (zone.Spaces == null)
+                        zone.Spaces = new List<SpaceKey>();
                     var defaultSpace = GetAnyDefaultSpace(false);
-                    zone.Spaces.Add(new SpaceKey {Name = defaultSpace.Name});
+                    zone.Spaces.Add(new SpaceKey { Name = defaultSpace.Name });
                 }
             }
             referenceWatch.Stop();
@@ -768,10 +855,12 @@ namespace Xbim.COBieLiteUK
             foreach (var asset in assets.Where(a => a.Spaces == null || !a.Spaces.Any()))
             {
                 logger.WriteLine("Component {0} is not assigned to any space.", asset.Name);
-                if (!fixIfPossible) continue;
+                if (!fixIfPossible)
+                    continue;
                 var space = GetAnyDefaultSpace();
-                if (asset.Spaces == null) asset.Spaces = new List<SpaceKey>();
-                asset.Spaces.Add(new SpaceKey {Name = space.Name});
+                if (asset.Spaces == null)
+                    asset.Spaces = new List<SpaceKey>();
+                asset.Spaces.Add(new SpaceKey { Name = space.Name });
             }
             referenceWatch.Stop();
             Debug.WriteLine("   Every component is in space: " + referenceWatch.ElapsedMilliseconds);
@@ -788,7 +877,7 @@ namespace Xbim.COBieLiteUK
                 logger.WriteLine("Component {0} is not assigned to any system.", asset.Name);
                 if (fixIfPossible)
                 {
-                    GetDefaultSystem().Components.Add(new AssetKey {Name = asset.Name});
+                    GetDefaultSystem().Components.Add(new AssetKey { Name = asset.Name });
                 }
             }
             referenceWatch.Stop();
@@ -796,14 +885,16 @@ namespace Xbim.COBieLiteUK
             referenceWatch.Restart();
 
             //g) Every Type should apply to at least one Component.
-            if(AssetTypes != null)
-            foreach (var type in AssetTypes.Where(t => t.Assets == null || !t.Assets.Any()))
-            {
-                logger.WriteLine("Type {0} doesn't contain any components.", type.Name);
-                if (!fixIfPossible) continue;
-                if (type.Assets == null) type.Assets = new List<Asset>();
-                type.Assets.Add(GetNewDefaultAsset());
-            }
+            if (AssetTypes != null)
+                foreach (var type in AssetTypes.Where(t => t.Assets == null || !t.Assets.Any()))
+                {
+                    logger.WriteLine("Type {0} doesn't contain any components.", type.Name);
+                    if (!fixIfPossible)
+                        continue;
+                    if (type.Assets == null)
+                        type.Assets = new List<Asset>();
+                    type.Assets.Add(GetNewDefaultAsset());
+                }
 
             referenceWatch.Stop();
             Debug.WriteLine("   Every type has a component: " + referenceWatch.ElapsedMilliseconds);
@@ -857,13 +948,15 @@ namespace Xbim.COBieLiteUK
                                 case "ContactKey":
                                     //set contact key to the default value if it is not set at all
                                     if (String.IsNullOrWhiteSpace(key.Name))
-                                        ((ContactKey) key).Email = defaultContact.Email;
+                                        ((ContactKey)key).Email = defaultContact.Email;
                                     //create contact with this email address
                                     else
                                     {
-                                        if(Contacts == null) Contacts = new List<Contact>();
-                                        if(Contacts.Any(c => c.Email == key.Name)) break;
-                                        Contacts.Add(new Contact{Email = key.Name, CreatedOn = DateTime.Now, CreatedBy = GetDefaultContactKey()});
+                                        if (Contacts == null)
+                                            Contacts = new List<Contact>();
+                                        if (Contacts.Any(c => c.Email == key.Name))
+                                            break;
+                                        Contacts.Add(new Contact { Email = key.Name, CreatedOn = DateTime.Now, CreatedBy = GetDefaultContactKey() });
                                     }
                                     break;
                                 default:
@@ -884,9 +977,11 @@ namespace Xbim.COBieLiteUK
         private Zone GetDefaultZone()
         {
             const string defaultName = "Default zone";
-            if (Zones == null) Zones = new List<Zone>();
+            if (Zones == null)
+                Zones = new List<Zone>();
             var zone = Zones.FirstOrDefault(z => z.Name == defaultName);
-            if (zone != null) return zone;
+            if (zone != null)
+                return zone;
 
             zone = new Zone
             {
@@ -902,7 +997,8 @@ namespace Xbim.COBieLiteUK
 
         private void CheckForUniqueNames(IEnumerable<CobieObject> objects, TextWriter logger, bool fixIfPossible)
         {
-            if (objects == null) return;
+            if (objects == null)
+                return;
 
             var groups = objects.GroupBy(o => o.Name);
             foreach (var g in groups.Where(g => g.Count() > 1))
@@ -910,7 +1006,8 @@ namespace Xbim.COBieLiteUK
                 logger.WriteLine(
                     "{0} {1} doesn't have an unique name. There are {2} instances with the same name. If fixed it may break key references.",
                     g.First().GetType().Name, g.Key, g.Count());
-                if (!fixIfPossible) continue;
+                if (!fixIfPossible)
+                    continue;
 
                 var counter = 0;
                 foreach (var cobieObject in g)
@@ -925,21 +1022,23 @@ namespace Xbim.COBieLiteUK
                 Name = "Default component " + _counter++,
                 CreatedBy = GetDefaultContactKey(),
                 CreatedOn = DateTime.Now,
-                Spaces = new List<SpaceKey>(new[] {new SpaceKey {Name = GetAnyDefaultSpace().Name}}),
+                Spaces = new List<SpaceKey>(new[] { new SpaceKey { Name = GetAnyDefaultSpace().Name } }),
                 Description = "Default component"
             };
             var system = GetDefaultSystem();
-            system.Components.Add(new AssetKey {Name = result.Name});
+            system.Components.Add(new AssetKey { Name = result.Name });
             return result;
         }
 
         private System _defaultSystem;
         private System GetDefaultSystem()
         {
-            if (_defaultSystem != null) return _defaultSystem;
+            if (_defaultSystem != null)
+                return _defaultSystem;
 
             const string name = "Default system";
-            if (Systems == null) Systems = new List<System>();
+            if (Systems == null)
+                Systems = new List<System>();
             var system = Systems.FirstOrDefault(s => s.Name == name);
             if (system != null)
             {
@@ -962,13 +1061,15 @@ namespace Xbim.COBieLiteUK
         private Space _anyDefaultSpace;
         private Space GetAnyDefaultSpace(bool addToDefaultZone = true)
         {
-            if (_anyDefaultSpace != null) return _anyDefaultSpace;
+            if (_anyDefaultSpace != null)
+                return _anyDefaultSpace;
 
             foreach (var floor in Floors ?? new List<Floor>())
             {
                 foreach (var space in floor.Spaces ?? new List<Space>())
                 {
-                    if (!space.Name.StartsWith("Default space")) continue;
+                    if (!space.Name.StartsWith("Default space"))
+                        continue;
                     _anyDefaultSpace = space;
                     return space;
                 }
@@ -988,12 +1089,14 @@ namespace Xbim.COBieLiteUK
                 Categories = GetDefaultCategories(),
                 Description = "Default description"
             };
-            if(addToDefaultZone)
-                GetDefaultZone().Spaces.Add(new SpaceKey {Name = space.Name});
+            if (addToDefaultZone)
+                GetDefaultZone().Spaces.Add(new SpaceKey { Name = space.Name });
 
-            if (!addToDefaultFloor) return space;
+            if (!addToDefaultFloor)
+                return space;
 
-            if (Floors == null) Floors = new List<Floor>();
+            if (Floors == null)
+                Floors = new List<Floor>();
             var defaultFloor = GetDefaultFloor();
             defaultFloor.Spaces.Add(space);
             return space;
@@ -1002,26 +1105,28 @@ namespace Xbim.COBieLiteUK
         private ContactKey GetDefaultContactKey()
         {
             const string defaultEmail = "default.contact@default.def";
-            if (Contacts == null) Contacts = new List<Contact>();
+            if (Contacts == null)
+                Contacts = new List<Contact>();
             var contact = Contacts.FirstOrDefault(c => c.Email == defaultEmail);
-            if (contact != null) return new ContactKey {Email = defaultEmail};
+            if (contact != null)
+                return new ContactKey { Email = defaultEmail };
             contact = new Contact
             {
                 Email = defaultEmail,
                 Categories = GetDefaultCategories(),
                 CreatedOn = DateTime.Now,
-                CreatedBy = new ContactKey {Email = defaultEmail},
+                CreatedBy = new ContactKey { Email = defaultEmail },
                 Company = "Default company",
                 Phone = "+00 0000 0000"
             };
             Contacts.Add(contact);
-            return new ContactKey {Email = defaultEmail};
+            return new ContactKey { Email = defaultEmail };
         }
 
         private List<Category> GetDefaultCategories()
         {
             //unknown is the recomended value from BS 1192-4
-            return new List<Category>(new[] {new Category {Code = "unknown"}});
+            return new List<Category>(new[] { new Category { Code = "unknown" } });
         }
 
         private Floor GetDefaultFloor()
@@ -1043,6 +1148,759 @@ namespace Xbim.COBieLiteUK
         }
 
         #endregion
+
+        #region Merge Methods
+
+        /// <summary>
+        /// Mapping of type to EqualCompare Objects
+        /// </summary>
+        private Dictionary<Type, ICompareEqRule> TypeCompare
+        { get; set; }
+        /// <summary>
+        /// Mapping of COBieType to mapping of Root object to drilled down objects tree, so we do not call an object twice (try end stop ininite loops!!, say not be a problem so controled by CheckInstance)
+        /// </summary>
+        Dictionary<Type, Dictionary<object, HashSet<CobieObject>>> ChainMapInst
+        { get; set; }
+        /// <summary>
+        /// Controls if the ChainMapInst is used above
+        /// </summary>
+        private bool CheckInstance
+        { get; set; }
+
+        /// <summary>
+        /// Logger for messages, file or output windows
+        /// </summary>
+        private CompareLogger Logger
+        { get; set; }
+
+        /// <summary>
+        /// String Comparison rule to use in EqualCompare Objects
+        /// </summary>
+        private StringComparison EqRule
+        { get; set; }
+
+        /// <summary>
+        /// Compare on Name, Key, Full
+        /// </summary>
+        private CompareType CompareTypeRule
+        { get; set; }
+
+    /// <summary>
+    /// Merge a Facility to this Facility
+    /// </summary>
+    /// <param name="mFacility">Facility to merge</param>
+    /// <param name="checkInstanc">Controls if the ChainMapInst is used</param>
+    /// <param name="logIt">Logger</param>
+    public void Merge(Facility mFacility, TextWriter logIt = null)
+        {
+            //setup merge properties
+            Logger = new CompareLogger(logIt);
+            Logger.WriteLine(this, mFacility);
+            EqRule = StringComparison.OrdinalIgnoreCase;
+            CompareTypeRule = CompareType.Full;
+            CheckInstance = true;         //if true, check for repeat instances to avoid infinite loops in drill down
+            ChainMapInst = new Dictionary<Type, Dictionary<object, HashSet<CobieObject>>>();
+            TypeCompare = new Dictionary<Type, ICompareEqRule>();
+
+            //merge the COBieObject child Lists held in Facilities
+            MergeCOBieObject<Facility>(this, mFacility, 0, mFacility, this);
+
+            //Check Facility Primary Key
+            if (Name.Equals(mFacility.Name, EqRule))
+            {
+                mFacility.Name = string.Empty;
+            }
+            else
+            {
+                Logger.WriteLine(string.Format("Facility Names Do Not match: {0}/= {1}", Name, mFacility.Name));
+            }
+
+            //Metadata
+            if (mFacility.Metadata == null)
+            {
+                //do nothing
+            }
+            else if (this.Metadata == null && mFacility.Metadata != null)
+            {
+                this.Metadata = mFacility.Metadata;
+                mFacility.Metadata = null; //merged so clear out of passed in facility
+            }
+            else if (new MetadataCompareKey(EqRule, CompareType.Full).Equals(this.Metadata, mFacility.Metadata))
+            {
+                mFacility.Metadata = null; //merged so clear out of passed in facility
+            }
+            else
+            {
+                Logger.WriteLine("Metadata Do Not match");
+            }
+
+            //Project 
+            if (mFacility.Project == null)
+            {
+                //do nothing
+            }
+            else if (this.Project == null && mFacility.Project != null)
+            {
+                this.Project = mFacility.Project;
+                mFacility.Project = null; //merged so clear out of passed in facility
+            }
+            else if (new ProjectCompareKey(EqRule, CompareType.Key).Equals(this.Project, mFacility.Project))
+            {
+                mFacility.Project = null; //merged so clear out of passed in facility
+            }
+            else
+            {
+                Logger.WriteLine(string.Format("Project Objects Do Not match: {0}/= {1}", Project.Name, mFacility.Project.Name));
+            }
+
+            //Site
+            if (mFacility.Site == null)
+            {
+                //do nothing
+            }
+            else if (this.Site == null && mFacility.Site != null)
+            {
+                this.Site = mFacility.Site;
+                mFacility.Site = null; //merged so clear out of passed in facility
+            }
+            else if (new SiteCompareKey(EqRule, CompareType.Name).Equals(this.Site, mFacility.Site))
+            {
+                mFacility.Site = null; //merged so clear out of passed in facility
+            }
+            else
+            {
+                Logger.WriteLine(string.Format("Site Objects Do Not match: {0}/= {1}", Site.Name, mFacility.Site.Name));
+            }
+
+            var compareString = new StringCompareKey(EqRule, CompareType.Name);
+            //Unit LinearUnitsCustom
+            if (compareString.Equals(this.LinearUnitsCustom, mFacility.LinearUnitsCustom))
+            {
+                mFacility.LinearUnitsCustom = string.Empty;
+            }
+            else
+            {
+                Logger.WriteLine(string.Format("LinearUnitsCustom Do Not match: {0}/= {1}", LinearUnitsCustom, mFacility.LinearUnitsCustom));
+            }
+
+            //Unit AreaUnitsCustom
+            if (compareString.Equals(this.AreaUnitsCustom, mFacility.AreaUnitsCustom))
+            {
+                mFacility.AreaUnitsCustom = string.Empty;
+            }
+            else
+            {
+                Logger.WriteLine(string.Format("AreaUnitsCustom Do Not match: {0}/= {1}", AreaUnitsCustom, mFacility.AreaUnitsCustom));
+            }
+
+            //Units VolumeUnitsCustom
+            if (compareString.Equals(this.VolumeUnitsCustom, mFacility.VolumeUnitsCustom))
+            {
+                mFacility.VolumeUnitsCustom = string.Empty;
+            }
+            else
+            {
+                Logger.WriteLine(string.Format("VolumeUnitsCustom Do Not match: {0}/= {1}", VolumeUnitsCustom, mFacility.VolumeUnitsCustom));               
+            }
+
+            //Units CurrencyUnitCustom
+            if (compareString.Equals(this.CurrencyUnitCustom, mFacility.CurrencyUnitCustom))
+            {
+                mFacility.CurrencyUnitCustom = string.Empty;
+            }
+            else
+            {
+                Logger.WriteLine(string.Format("CurrencyUnitCustom Do Not match: {0}/= {1}", CurrencyUnitCustom, mFacility.CurrencyUnitCustom));
+            }
+
+            //Units AreaMeasurement
+            if (compareString.Equals(this.AreaMeasurement, mFacility.AreaMeasurement))
+            {
+                mFacility.AreaMeasurement = string.Empty;
+            }
+            else
+            {
+                Logger.WriteLine(string.Format("AreaMeasurement Do Not match: {0}/= {1}", AreaMeasurement, mFacility.AreaMeasurement));
+            }
+
+            //Phase
+            if (compareString.Equals(this.Phase, mFacility.Phase))
+            {
+                mFacility.Phase = string.Empty;
+            }
+            else
+            {
+                Logger.WriteLine(string.Format("Phase Do Not match: {0}/= {1}", Phase, mFacility.Phase));
+            }
+
+            //Floors
+            Floors = MergeLists<Floor>(Floors, mFacility.Floors, GetCompare<FloorCompareKey, Floor>());
+
+            //AssetType
+            AssetTypes = MergeLists<AssetType>(AssetTypes, mFacility.AssetTypes, GetCompare<AssetTypeCompareKey, AssetType>());
+
+            //Contacts
+            Contacts = MergeLists<Contact>(Contacts, mFacility.Contacts, GetCompare<ContactCompareKey, Contact>());
+
+            //Systems
+            Systems = MergeLists<System>(Systems, mFacility.Systems, GetCompare<NameCompareKey<System>, System>());
+
+            //Zones
+            Zones = MergeLists<Zone>(Zones, mFacility.Zones, GetCompare<NameCompareKey<Zone>, Zone>());
+
+            //Resources
+            Resources = MergeLists<Resource>(Resources, mFacility.Resources, GetCompare<NameCompareKey<Resource>, Resource>());
+
+            //Stages
+            Stages = MergeLists<ProjectStage>(Stages, mFacility.Stages, GetCompare<NameCompareKey<ProjectStage>, ProjectStage>());
+            
+        }
+
+
+        /// <summary>
+        /// Map COBie types to the compare object of type CompareEqRule, IEqualityComparer
+        /// </summary>
+        /// <typeparam name="T1">is CompareEqRule</typeparam>
+        /// <typeparam name="T2"> Type we are testing</typeparam>
+        /// <param name="type">Mapped Type</param>
+        /// <param name="advancedCompare">if true extend equal test to other properties in equalcompare if supported</param>
+        /// <returns>T</returns>
+        private T1 GetCompare<T1, T2>() where T1 : CompareEqRule<T2>,  new()
+        {
+            T1 compareKey;
+            
+            if (TypeCompare.ContainsKey(typeof(T2)))
+            {
+                compareKey = (T1)TypeCompare[typeof(T2)];
+            }
+            else
+            {
+                compareKey = new T1();
+                compareKey.EqRule = EqRule;
+                compareKey.CompareMethod = CompareTypeRule;
+                TypeCompare[typeof(T2)] = compareKey;
+            }
+
+            return compareKey;
+        }
+
+        /// <summary>
+        /// Merge COBie Objects
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="to">Merge To</param>
+        /// <param name="from">Merge from</param>
+        /// <param name="rootObj">Starting onject of the merge</param>
+        private void MergeCOBieObject<T>(T to, T from, int depthIndicator = 0, CobieObject rootObj = null, CobieObject parentObj = null) where T : CobieObject
+        {
+            //From fields:-
+            //Name - ignored (but be used in compare, so to and from should alreadty be the same)
+            //Description - ignored
+            //CreatedBy - ignored
+            //CreatedOn - ignored
+            //ExternalSystem - ignored
+            //ExternalEntity - ignored
+            //ExternalId - ignored
+
+            //Categories - end
+            to.Categories = MergeSimpleLists(to.Categories, from.Categories, GetCompare<CategoryCompareKey, Category>(), depthIndicator, rootObj, parentObj);
+            //Documents - drill down
+            to.Documents = MergeLists<Document>(to.Documents, from.Documents, GetCompare<DocumentCompareKey, Document>(), depthIndicator, rootObj, parentObj);
+
+            //Attributes - drill down
+            to.Attributes = MergeLists<Attribute>(to.Attributes, from.Attributes, GetCompare<AttributeCompareKey, Attribute>(), depthIndicator, rootObj, parentObj);
+
+            //Issues - drill down
+            to.Issues = MergeLists<Issue>(to.Issues, from.Issues, GetCompare<IssueCompareKey, Issue>(), depthIndicator, rootObj, parentObj);
+
+            //Impacts - drill down
+            to.Impacts = MergeLists<Impact>(to.Impacts, from.Impacts, GetCompare<ImpactCompareKey, Impact>(), depthIndicator, rootObj, parentObj);
+
+            //Representations - drill down 
+            to.Representations = MergeLists<Representation>(to.Representations, from.Representations, GetCompare<RepresentationCompareKey, Representation>(), depthIndicator, rootObj, parentObj);
+
+            //ProjectStages - end
+            to.ProjectStages = MergeSimpleLists(to.ProjectStages, from.ProjectStages, GetCompare<EntityKeyCompareKey, IEntityKey>(), depthIndicator, rootObj, parentObj);
+
+            //Class which inherit from
+            if (to is Floor && from is Floor) //check is Floor and not null
+            {
+                MergeFloor(to as Floor, from as Floor, depthIndicator, rootObj, parentObj);
+            }
+
+            if (to is Space && from is Space) //check is Space and not null
+            {
+                MergeSpace(to as Space, from as Space, depthIndicator, rootObj, parentObj);
+            }
+
+            if (to is AssetType && from is AssetType)//check is AssetType and not null
+            {
+                MergeAssetType(to as AssetType, from as AssetType, depthIndicator, rootObj, parentObj);
+            }
+
+            if (to is Asset && from is Asset)//check is Asset and not null
+            {
+                MergeAsset(to as Asset, from as Asset, depthIndicator, rootObj, parentObj);
+            }
+
+            if (to is Spare && from is Spare)//check is Spare and not null
+            {
+                MergeSpare(to as Spare, from as Spare, depthIndicator, rootObj, parentObj);
+            }
+
+            if (to is Job && from is Job)//check is Job and not null
+            {
+                MergeJob(to as Job, from as Job, depthIndicator, rootObj, parentObj);
+            }
+
+            if (to is System && from is System)
+            {
+                MergeSystem(to as System, from as System, depthIndicator, rootObj, parentObj);
+            }
+
+            if (to is Zone && from is Zone)
+            {
+                MergeZone(to as Zone, from as Zone, depthIndicator, rootObj, parentObj);
+            }
+
+            if (to is Resource && from is Resource)
+            {
+                //no specific proerties to merge on Resource
+            }
+
+            if (to is ProjectStage && from is ProjectStage)
+            {
+                MergeProjectStage(to as ProjectStage, from as ProjectStage, depthIndicator, rootObj, parentObj);
+            }
+        }
+
+
+
+
+
+
+
+
+        /// <summary>
+        /// Merge Floor to a Floor
+        /// </summary>
+        /// <param name="to">Floor</param>
+        /// <param name="from">Floor</param>
+        /// <param name="rootObj">Starting object of the merge</param>
+        /// <param name="parentObj">Object which caused thei mrthod to be called</param>
+        private void MergeFloor(Floor to, Floor from, int depthIndicator, CobieObject rootObj, CobieObject parentObj)
+        {
+            //From Fields: -
+            //CobieObject.Name - Compare - to and from names should be the same
+            //Elevation - Compare, Advanced = true, then to and from the same
+            //Height - Compare, Advanced = true, then to and from the same
+
+            //merge Spaces
+            to.Spaces = MergeLists<Space>(to.Spaces, from.Spaces, GetCompare<SpaceCompareKey, Space>(), depthIndicator, rootObj, parentObj);
+
+            //if camparer did not incSizing then check to see if tofloor fields have value, if not and fromfloor fields have a value, copy it over to tofloor
+            //if (!GetComparer<FloorCompareKey>(typeof(Floor)).AdvancedCompare)
+            //{
+            //    if (to.Elevation == 0.0 && from.Elevation > 0.0)
+            //    {
+            //        to.Elevation = from.Elevation;
+            //    }
+            //    if (to.Height == 0.0 && from.Height > 0.0)
+            //    {
+            //        to.Height = from.Height;
+            //    }
+            //}
+        }
+
+        /// <summary>
+        /// Merge Space To Space
+        /// </summary>
+        /// <param name="to">Space</param>
+        /// <param name="from">Space</param>
+        /// <param name="rootObj">Starting object of the merge</param>
+        /// <param name="parentObj">Object which caused thei mrthod to be called</param>
+        private void MergeSpace(Space to, Space from, int depthIndicator, CobieObject rootObj, CobieObject parentObj)
+        {
+            //From Fields: -
+            //CobieObject.Name - Compare - to and from names should be the same
+
+            //RoomTag
+            to.RoomTag += (from.RoomTag != null) ? " and " + from.RoomTag : string.Empty;
+
+            //UsableHeight - Compare, Advanced = true, then to and from the same
+            //GrossArea - Compare, Advanced = true, then to and from the same
+            //NetArea - Compare, Advanced = true, then to and from the same
+
+            //if camparer did not set AdvancedCompare then see if we need to copy through fromSpace sizing if none exists on the toSpace 
+            //if (!GetComparer<SpaceCompareKey>(typeof(Space)).AdvancedCompare)
+            //{
+            //    if (to.UsableHeight == 0.0 && from.UsableHeight > 0.0)
+            //    {
+            //        to.UsableHeight = from.UsableHeight;
+            //    }
+            //    if (to.GrossArea == 0.0 && from.GrossArea > 0.0)
+            //    {
+            //        to.GrossArea = from.GrossArea;
+            //    }
+            //    if (to.NetArea == 0.0 && from.NetArea > 0.0)
+            //    {
+            //        to.NetArea = from.NetArea;
+            //    }
+            //}
+        }
+
+        /// <summary>
+        /// Merge AssetType to AssetType
+        /// </summary>
+        /// <param name="to">AssetType</param>
+        /// <param name="from">AssetType</param>
+        /// <param name="rootObj">Starting object of the merge</param>
+        /// <param name="parentObj">Object which caused thei mrthod to be called</param>
+        private void MergeAssetType(AssetType to, AssetType from, int depthIndicator, CobieObject rootObj, CobieObject parentObj) 
+        {
+            //From Fields: -
+            //CobieObject.Name - Compare - to and from names should be the same
+            //AssetTypeCustom - ignored
+            //Manufacturer - Compare, Advanced = true, then to and from the same
+            //ModelNumber - Compare, Advanced = true, then to and from the same
+            //Warranty - ignored
+            //ReplacementCost - ignored
+            //ExpectedLife - ignored
+            //DurationUnit - ignored
+            //NominalLength - ignored
+            //NominalWidth - ignored
+            //NominalHeight - ignored
+            //ModelReference - ignored
+            //Shape - ignored
+            //Size - ignored
+            //Color - ignored
+            //Finish - ignored
+            //Grade - ignored
+            //Material - ignored
+            //Features - ignored
+            //AccessibilityPerformance - ignored
+            //CodePerformance - ignored
+            //SustainabilityPerformance - ignored
+
+            //merge Assets
+            to.Assets = MergeLists<Asset>(to.Assets, from.Assets, GetCompare<AssetCompareKey, Asset>(), depthIndicator, rootObj, parentObj);
+
+            //merge Spares
+            to.Spares = MergeLists<Spare>(to.Spares, from.Spares, GetCompare<SpareCompareKey, Spare>(), depthIndicator, rootObj, parentObj);
+
+            //merge Jobs
+            to.Jobs = MergeLists<Job>(to.Jobs, from.Jobs, GetCompare<JobCompareKey, Job>(), depthIndicator, rootObj, parentObj);
+            //AssemblyOf - ignored
+
+            //if (!GetComparer<AssetTypeCompareKey>(typeof(AssetType)).AdvancedCompare)
+            //{
+            //    if (to.Manufacturer != null)
+            //    {
+            //        if (string.IsNullOrEmpty(to.Manufacturer.Email))
+            //        {
+            //            to.Manufacturer.Email = from.Manufacturer.Email;
+            //        }
+            //    }
+            //    else
+            //    {
+            //        to.Manufacturer = from.Manufacturer;
+            //    }
+
+            //    if (string.IsNullOrEmpty(to.Manufacturer.Email))
+            //    {
+            //        to.Manufacturer.Email = from.Manufacturer.Email;
+            //    }
+
+            //    if (string.IsNullOrEmpty(to.ModelNumber))
+            //    {
+            //        to.ModelNumber = from.ModelNumber;
+            //    }
+            //}
+        }
+
+        /// <summary>
+        /// Merge Job to Job
+        /// </summary>
+        /// <param name="to">Job</param>
+        /// <param name="from">Job</param>
+        /// <param name="rootObj">Starting object of the merge</param>
+        /// <param name="parentObj">Object which caused thei mrthod to be called</param>
+        private void MergeJob(Job to, Job from, int depthIndicator, CobieObject rootObj, CobieObject parentObj)
+        {
+            //From Fields: -
+            //CobieObject.Name - Compare - to and from names should be the same
+            //Status - ignored
+            //Duration - ignored
+            //DurationUnit - ignored
+            //Start - ignored
+            //TaskStartUnit - ignored
+            //Frequency - ignored
+            //FrequencyUnit - ignored
+            //TaskNumber - - Compare - to and from TaskNumber should be the same
+
+            //merge Priors
+            to.Priors = MergeSimpleLists(to.Priors, from.Priors, GetCompare<JobKeyCompareKey, JobKey>());
+            //merge Resources
+            to.Resources = MergeSimpleLists(to.Resources, from.Resources, GetCompare<EntityKeyCompareKey, IEntityKey>(), depthIndicator, rootObj, parentObj);
+
+        }
+
+
+        /// <summary>
+        /// Merge Spare to Spare
+        /// </summary>
+        /// <param name="to">Spare</param>
+        /// <param name="from">Spare</param>
+        /// <param name="rootObj">Starting object of the merge</param>
+        /// <param name="parentObj">Object which caused thei mrthod to be called</param>
+        private void MergeSpare(Spare to, Spare from, int depthIndicator, CobieObject rootObj, CobieObject parentObj)
+        {
+            //From Fields: -
+            //CobieObject.Name - Compare - to and from names should be the same
+
+            //merge Suppliers
+            to.Suppliers = MergeSimpleLists(to.Suppliers, from.Suppliers, GetCompare<EntityKeyCompareKey, IEntityKey>(), depthIndicator, rootObj, parentObj);
+
+            //SetNumber - Compare, Advanced = true, then to and from the same
+            //PartNumber - Compare, Advanced = true, then to and from the same
+            //if (!GetComparer<SpareCompareKey>(typeof(Spare)).AdvancedCompare)
+            //{
+            //    if (string.IsNullOrEmpty(to.SetNumber))
+            //    {
+            //        to.SetNumber = from.SetNumber;
+            //    }
+            //    if (string.IsNullOrEmpty(to.PartNumber))
+            //    {
+            //        to.PartNumber = from.PartNumber;
+            //    }
+            //}
+        }
+
+        /// <summary>
+        /// Merge Asset to Asset
+        /// </summary>
+        /// <param name="to">Asset</param>
+        /// <param name="from">Asset</param>
+        /// <param name="rootObj">Root Object (started merge path)</param>
+        /// <param name="rootObj">Starting object of the merge</param>
+        /// <param name="parentObj">Object which caused thei mrthod to be called</param>
+        private void MergeAsset(Asset to, Asset from, int depthIndicator, CobieObject rootObj, CobieObject parentObj)
+        {
+            //From Fields: -
+            //SerialNumber - Compare, Advanced = true, then to and from the same
+
+            //Merge Spaces
+            to.Spaces = MergeSimpleLists(to.Spaces, from.Spaces, GetCompare<EntityKeyCompareKey, IEntityKey>(), depthIndicator, rootObj, parentObj);
+
+            //InstallationDate - ignored
+            //WarrantyStartDate - ignored
+            //TagNumber - Compare, Advanced = true, then to and from the same
+            //BarCode - Compare, Advanced = true, then to and from the same
+            //AssetIdentifier - ignored
+
+            //mergeConnections
+            to.Connections = MergeLists<Connection>(to.Connections, from.Connections, GetCompare<ConnectionCompareKey, Connection>(), depthIndicator, rootObj, parentObj);
+
+            //AssemblyOf - ignored
+
+            //if (!GetComparer<AssetCompareKey>(typeof(Asset)).AdvancedCompare)
+            //{
+            //    if (string.IsNullOrEmpty(to.SerialNumber))
+            //    {
+            //        to.SerialNumber = from.SerialNumber;
+            //    }
+
+            //    if (string.IsNullOrEmpty(to.TagNumber))
+            //    {
+            //        to.TagNumber = from.TagNumber;
+            //    }
+
+            //    if (string.IsNullOrEmpty(to.BarCode))
+            //    {
+            //        to.BarCode = from.BarCode;
+            //    }
+            //}
+        }
+
+        /// <summary>
+        /// Merge System to System
+        /// </summary>
+        /// <param name="to">System</param>
+        /// <param name="from">System</param>
+        /// <param name="rootObj">Starting object of the merge</param>
+        /// <param name="parentObj">Object which caused thei mrthod to be called</param>
+        private void MergeSystem(System to, System from, int depthIndicator, CobieObject rootObj, CobieObject parentObj)
+        {
+            //Merge Components, only prop of System
+            to.Components = MergeSimpleLists(to.Components, from.Components, GetCompare<EntityKeyCompareKey, IEntityKey>(), depthIndicator, rootObj, parentObj);
+        }
+
+        /// <summary>
+        /// Merge Zone to Zone
+        /// </summary>
+        /// <param name="to">Zone</param>
+        /// <param name="from">Zone</param>
+        /// <param name="rootObj">Starting object of the merge</param>
+        /// <param name="parentObj">Object which caused thei mrthod to be called</param>
+        private void MergeZone(Zone to, Zone from, int depthIndicator, CobieObject rootObj, CobieObject parentObj)
+        {
+            //Merge Spaces, only prop of Zone
+            to.Spaces = MergeSimpleLists(to.Spaces, from.Spaces, GetCompare<EntityKeyCompareKey, IEntityKey>(), depthIndicator, rootObj, parentObj);
+        }
+
+        /// <summary>
+        /// Merge ProjectStage to ProjectStage
+        /// </summary>
+        /// <param name="to">ProjectStage</param>
+        /// <param name="from">ProjectStage</param>
+        /// <param name="rootObj">Starting object of the merge</param>
+        /// <param name="parentObj">Object which caused thei mrthod to be called</param>
+        private void MergeProjectStage(ProjectStage projectStage1, ProjectStage projectStage2, int depthIndicator, CobieObject rootObj, CobieObject parentObj)
+        {
+            //From Fields: -
+            //Start - ignored
+            //End - ignored
+        }
+
+
+        /// <summary>
+        /// Merge two CobieObject Lists together
+        /// </summary>
+        /// <typeparam name="T">CobieObject</typeparam>
+        /// <param name="to">List to merge to</param>
+        /// <param name="from">List to merge from</param>
+        /// <param name="compareKey">IEqualityComparer</param>
+        /// <param name="rootObj">Starting object of the merge</param>
+        /// <param name="parentObj">Object which caused thei mrthod to be called</param>
+        private List<T> MergeLists<T>(List<T> to, List<T> from, IEqualityComparer<T> compareKey, int depthIndicator = 0, CobieObject rootObj = null, CobieObject parentObj = null)  where T : CobieObject
+        {
+            if (from != null && from.Any())
+            {
+                if (to != null)
+                {
+                    //Do merge
+                    var total = to.Count + from.Count;
+                    var toMerge = from.Except(to, compareKey);
+                    int toMergeCount = 0;
+                    IEnumerable<T> excluded = null;
+                    if (toMerge.Any()) 
+                    {
+                        toMergeCount = toMerge.Count();
+                        excluded = from.Except(toMerge, compareKey).ToList(); //ToList runs query now, otherwise we get full list as once toMerge is added to list "from.Except(to, compareKey)" becomes empty as it is late activated by Linq
+                        //to = to.Union(toMerge, compareKey).ToList(); //reasigns pointer so is no longer the pointer from the parent object, 
+                        to.AddRange(toMerge); //we do not want to reassign the "to" pointer, so us the AddRange method, 
+                        if (Logger.IsLogging) //we want to know the removed as we are logging
+                        {
+                            from.Clear(); //again we do not want to reassign the pointer, so use passed list, clear then add back the excludes
+                            from.AddRange(excluded);
+                        }
+                    }
+                    else
+                    {
+                        excluded = from;
+                    }
+
+                    //Check to see if all merged in
+                    if ((toMergeCount > 0) || (total != to.Count))
+                    {
+                        Logger.WriteLine(rootObj, parentObj, typeof(T), (total - to.Count), toMergeCount, depthIndicator);
+                    }
+
+                    //set up Chain of instances for this type (keyed also on parent object), too stop infinite loop i hope!!
+                    if (CheckInstance && excluded.Any() && !ChainMapInst.ContainsKey(typeof(T)))
+                    {
+                        ChainMapInst[typeof(T)] = new Dictionary<object, HashSet<CobieObject>>();
+                    }
+                    //we need to dig deeper, so indicate in log
+                    if (excluded.Any())
+                    {
+                        depthIndicator++;
+
+                        //Drill down into cobieObject excluded objects lists to check embedded list fro duplicates - Category,Documents, Attributes,Issues, Impacts, Representations, ProjectStages
+                        foreach (var item in excluded)
+                        {
+                            //do instance checking too stop infinite loop i hope!!
+                            var rootKey = rootObj != null ? rootObj : item;
+                            if (CheckInstance && !ChainMapInst[typeof(T)].ContainsKey(rootKey))
+                            {
+                                ChainMapInst[typeof(T)][rootKey] = new HashSet<CobieObject>();
+                            }
+
+                            if (!CheckInstance || !ChainMapInst[typeof(T)][rootKey].Contains(item))
+                            {
+                                if (CheckInstance && rootObj != null)
+                                    ChainMapInst[typeof(T)][rootKey].Add(item); //instance check
+                                                                                //Drill down
+                                var toItem = to.Where(f => compareKey.Equals(f, item)).OfType<T>().First();
+                                MergeCOBieObject<T>(toItem, item, depthIndicator, rootKey, item);
+                            }
+                        }
+                    }
+                }
+                else
+                {
+                    to = from; //can reassign as passed back in return
+                    from.Clear();//clear out as all merged , not reassigned as pointer
+                }
+            }
+            return to;
+        }
+        /// <summary>
+        /// Merge Lists with no drill down (do not inherit from CobieObject)
+        /// </summary>
+        /// <param name="to">List to merge to</param>
+        /// <param name="from">List to merge from</param>
+        /// <param name="compareKey">IEqualityComparer</param>
+        /// <param name="rootObj">Starting object of the merge</param>
+        /// <param name="parentObj">Object which caused thei mrthod to be called</param>
+        private List<T> MergeSimpleLists<T>(List<T> to, List<T> from, IEqualityComparer<T> compareKey, int depthIndicator = 0, CobieObject rootObj = null, CobieObject parentObj = null) 
+        {
+            if (from != null && from.Any())
+            {
+                if (to != null)
+                {
+                    var total = to.Count + from.Count;
+                    var toMerge = from.Except(to, compareKey);
+                    int toMergeCount = 0;
+                    IEnumerable<T> excluded = null;
+                    if (toMerge.Any())
+                    {
+                        toMergeCount = toMerge.Count();
+                        excluded = from.Except(toMerge, compareKey).ToList(); //ToList runs query now, otherwise we get full list as once toMerge is added to list "from.Except(to, compareKey)" becomes empty as it is late activated by Linq
+                                                                              //to = to.Union(toMerge, compareKey).ToList(); //reasigns pointer so is no longer the pointer from the parent object, BAD 
+                        to.AddRange(toMerge); //we do not want to reassign the "to" pointer, so us the AddRange method, GOOD
+                        if (Logger.IsLogging) //we want to know the removed as we are logging
+                        {
+                            from.Clear(); //again we do not want to reassign the pointer, so use passed list, clear then add back the excludes
+                            from.AddRange(excluded);
+                        }
+                    }
+                    else
+                    {
+                        excluded = from;
+                    }
+
+                    //Check to see if all merged in
+                    if ((toMergeCount > 0) || (total != to.Count))
+                    {
+                        Logger.WriteLine(rootObj, parentObj, typeof(T), (total - to.Count), toMergeCount, depthIndicator);
+                    }
+                }
+                else
+                {
+                    to = from;
+                    from = null;//clear out as all merged 
+                }
+            }
+            return to;
+        }
+
+
+        
+
+        
+        #endregion
+
     }
 
     public enum ExcelTypeEnum

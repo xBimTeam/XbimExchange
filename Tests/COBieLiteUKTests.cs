@@ -11,7 +11,7 @@ using Xbim.IO;
 using XbimExchanger.IfcToCOBieLiteUK;
 using Attribute = Xbim.COBieLiteUK.Attribute;
 using XbimExchanger.COBieLiteHelpers;
-//using System = Xbim.COBieLiteUK.System;
+using Xbim.FilterHelper;
 
 
 namespace Tests
@@ -44,6 +44,7 @@ namespace Tests
             f.AreaUnits = AreaUnit.notdefined;
             Assert.IsNull(f.AreaUnitsCustom);
         }
+
 
 
 
@@ -515,6 +516,8 @@ namespace Tests
             var f2 = Facility.ReadJson("..\\..\\2012-03-23-Duplex-Design.cobielite.json");
         }
 
+
+
         [TestMethod]
         [DeploymentItem("TestFiles\\OBN1-COBie-UK-2014.xlsx")]
         public void ReadingUkSpreadsheet()
@@ -615,6 +618,24 @@ namespace Tests
             AttributeValue dAt = new DecimalAttributeValue() {Value = Math.E};
             var fromA = AttributeValue.CreateFromObject(dAt);
         }
+
+
+        [TestMethod]
+        [DeploymentItem("TestFiles\\2012-03-23-Duplex-Design.xlsx")]
+        public void ExtractOneAssetType()
+        {
+            string msg;
+            var facility = Facility.ReadCobie("2012-03-23-Duplex-Design.xlsx", out msg);
+            var assetType = facility.AssetTypes.FirstOrDefault(t => t.Assets != null && t.Assets.Count() > 5);
+            var serializer = Facility.GetJsonSerializer(true);
+
+            using (var writer = File.CreateText("..\\..\\OneAsset.json"))
+            {
+                serializer.Serialize(writer, assetType);
+                writer.Close();
+            }
+        }
+
 
         [TestMethod]
         [DeploymentItem("TestFiles\\2012-03-23-Duplex-Design.xlsx")]
@@ -759,7 +780,12 @@ namespace Tests
                 var jsonFile = Path.ChangeExtension(ifcTestFile, "json");
                 m.CreateFrom(ifcTestFile, xbimTestFile, null, true, true);
                 var facilities = new List<Facility>();
-                var ifcToCoBieLiteUkExchanger = new IfcToCOBieLiteUkExchanger(m, facilities);
+
+                OutPutFilters rolefilters = new OutPutFilters();
+                RoleFilter reqRoles = RoleFilter.Unknown; //RoleFilter.Architectural |  RoleFilter.Mechanical | RoleFilter.Electrical | RoleFilter.FireProtection | RoleFilter.Plumbing;
+                rolefilters.ApplyRoleFilters(reqRoles);
+
+                var ifcToCoBieLiteUkExchanger = new IfcToCOBieLiteUkExchanger(m, facilities, null, rolefilters);
                 facilities = ifcToCoBieLiteUkExchanger.Convert();
 
                 foreach (var facilityType in facilities)
@@ -769,15 +795,42 @@ namespace Tests
 
                     string msg;
                     facilityType.WriteJson(jsonFile, true);
-                    //set attribute name filters
-                    FiltersHelper assetfilters = new FiltersHelper();
-                    facilityType.WriteCobie("..\\..\\Lakeside_Restaurant.xlsx", out msg, assetfilters, "UK2012", true);
+                    facilityType.WriteCobie("..\\..\\Lakeside_Restaurant.xlsx", out msg, rolefilters, "UK2012", true);
 
 
                     break;
                 }
             }
         }
+
+        //[TestMethod]
+        //public void FilterToXML ()
+        //{
+        //    FileInfo filename = new FileInfo( @"d:\FiltersOut.xml");
+        //    FileInfo mergefilename = new FileInfo(@"d:\MergeFiltersOut.xml");
+        //    OutPutFilters outfilters = new OutPutFilters(null);
+        //    outfilters.IfcProductFilter.AddPreDefinedType("TEST", new string[] { "One", "Two" });
+        //    outfilters.SerializeXML(filename);
+        //    OutPutFilters mergefilters = new OutPutFilters(null);
+        //    mergefilters.IfcProductFilter.Items["IFCBEAM"] = true;
+        //    mergefilters.IfcProductFilter.Items["IFCBEAMSTANDARDCASE"] = true;
+        //    mergefilters.IfcProductFilter.AddPreDefinedType("TEST", new string[] { "THree", "Four" });
+        //    outfilters.Merge(mergefilters);
+        //    outfilters.SerializeXML(mergefilename);
+
+        //    OutPutFilters infilters = OutPutFilters.DeserializeXML(mergefilename);
+
+        //    //Test JSON
+        //    FileInfo filenameJSon = new FileInfo(@"d:\FiltersOut.json");
+        //    infilters.SerializeJSON(filenameJSon);
+        //    OutPutFilters jsonfilters = OutPutFilters.DeserializeJSON(filenameJSon);
+
+
+        //    OutPutFilters rolefilters = new OutPutFilters();
+        //    RoleFilter reqRoles = RoleFilter.Architectural |  RoleFilter.Mechanical | RoleFilter.Electrical | RoleFilter.FireProtection | RoleFilter.Plumbing;
+        //    rolefilters.ApplyRoleFilters(reqRoles);
+            
+        //}
 
         [DeploymentItem("ValidationFiles\\Lakeside_Restaurant.json")]
         [DeploymentItem("ValidationFiles\\Lakeside_Restaurant-stage6-COBie.json")]

@@ -4,8 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Xbim.COBieLiteUK;
+using Xbim.FilterHelper;
 using Xbim.Ifc2x3.ProductExtension;
 using Xbim.IO;
+using Xbim.XbimExtensions.Interfaces;
 
 namespace XbimExchanger.IfcToCOBieLiteUK
 {
@@ -20,9 +22,12 @@ namespace XbimExchanger.IfcToCOBieLiteUK
         /// </summary>
         /// <param name="source"></param>
         /// <param name="target"></param>
-        public IfcToCOBieLiteUkExchanger(XbimModel source, List<Facility> target) : base(source, target)
+        public IfcToCOBieLiteUkExchanger(XbimModel source, List<Facility> target, ReportProgressDelegate reportProgress = null, OutPutFilters filter = null, string configFile = null, EntityIdentifierMode extId = EntityIdentifierMode.IfcEntityLabels, SystemExtractionMode sysMode = SystemExtractionMode.System | SystemExtractionMode.Types ) : base(source, target)
         {
-            Helper = new CoBieLiteUkHelper(source);
+            ReportProgress.Progress = reportProgress; //set reporter
+            Helper = new CoBieLiteUkHelper(source, ReportProgress, filter, configFile, extId, sysMode);
+            
+            
         }
 
         /// <summary>

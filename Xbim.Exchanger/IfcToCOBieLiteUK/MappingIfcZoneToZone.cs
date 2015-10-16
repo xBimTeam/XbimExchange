@@ -16,6 +16,7 @@ namespace XbimExchanger.IfcToCOBieLiteUK
             var helper = ((IfcToCOBieLiteUkExchanger)Exchanger).Helper;
             target.ExternalEntity = helper.ExternalEntityName(ifcZone);
             target.ExternalId = helper.ExternalEntityIdentity(ifcZone);
+            target.AltExternalId = ifcZone.GlobalId;
             target.ExternalSystem = helper.ExternalSystemName(ifcZone);
             target.Description = ifcZone.Description;
             target.Categories = helper.GetCategories(ifcZone);
@@ -27,9 +28,11 @@ namespace XbimExchanger.IfcToCOBieLiteUK
             target.Name = ifcZone.Name;
             //Attributes
             target.Attributes = helper.GetAttributes(ifcZone);
+            //Documents
+            var docsMappings = Exchanger.GetOrCreateMappings<MappingIfcDocumentSelectToDocument>();
+            helper.AddDocuments(docsMappings, target, ifcZone);
 
             //get spaces in zones
-
             var spaces = helper.GetSpaces(ifcZone);
             var ifcSpaces = spaces as IList<IfcSpace> ?? spaces.ToList();
             if (ifcSpaces.Any())
@@ -43,7 +46,7 @@ namespace XbimExchanger.IfcToCOBieLiteUK
             }
             //TODO:
             //Space Issues
-            //Space Documents
+            
             return target;
         }
     }

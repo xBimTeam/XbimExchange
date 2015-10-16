@@ -61,9 +61,11 @@ namespace Xbim.COBie
 			if (Context == null) { throw new InvalidOperationException("COBieReader can't initialise without a valid Context."); }
 			if (Context.Model == null) { throw new ArgumentException("COBieReader context must contain a models."); }
 
-            //set default date for this run
-            Context.RunDate = DateTime.Now.ToString(Constants.DATE_FORMAT);
-            Context.RunDateTime = DateTime.Now.ToString(Constants.DATETIME_FORMAT);
+            //set default date for this run, if not manually overridden
+            if (!Context.RunDateManuallySet)
+            {
+                Context.SetRunDate(DateTime.Now);
+            }
 
             // set all the properties
             COBieQueries cq = new COBieQueries(Context);

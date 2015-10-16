@@ -43,56 +43,58 @@ namespace SerialisationHelper
 
         private static void Main()
         {
-            var f = new FileInfo("XmlSerializationCode.tcs");
-            FixSerialisation(f, @"..\..\..\Xbim.COBieLite\COBieLite Schema\");
+            return;
 
-            f = new FileInfo("XmlSerializationCode.tcs");
-            FixSerialisation(f, @"..\..\..\Xbim.COBieLiteUK\Schemas\");
+//            var f = new FileInfo("XmlSerializationCode.tcs");
+//            FixSerialisation(f, @"..\..\..\Xbim.COBieLite\COBieLite Schema\");
 
-
-            if (true)
-            {
-                try
-                {
-// ReSharper disable UnusedVariable
-                    var a = new XmlSerializer(typeof (Xbim.COBieLite.FacilityType));
-                    // var b = new XmlSerializer(typeof (Xbim.COBieLiteUK.FacilityType));
-// ReSharper restore UnusedVariable  
-                }
-                catch (Exception exception)
-                {
-                    var exs = new List<Exception>();
-                    while (exception.InnerException != null)
-                    {
-                        exs.Add(exception);
-                        exception = exception.InnerException;
-                    }
-                    Console.ForegroundColor = ConsoleColor.Red;
-                    Console.WriteLine(exception.Message);
-                    Console.ForegroundColor = ConsoleColor.Yellow;
-                    foreach (var ec in exs)
-                    {
-                        Console.WriteLine(ec.Message);
-                    }
-                    Console.ResetColor();
-                    Console.ReadKey();
-                }
-            }
-
-            DirectoryInfo d = new DirectoryInfo(".");
-            Console.WriteLine("Current folder: " + d.FullName);
+//            f = new FileInfo("XmlSerializationCode.tcs");
+//            FixSerialisation(f, @"..\..\..\Xbim.COBieLiteUK\Schemas\");
 
 
-            var fread = @"..\..\..\Xbim.COBieLite\COBieLite Schema\cobielite.designer.cs";
-            var fwrite = @"..\..\..\Xbim.COBieLite\COBieLite Schema\cobielite.designer.RenamedClasses.cs";
-            ProcessCobieLite(fread, fwrite);
+//            if (true)
+//            {
+//                try
+//                {
+//// ReSharper disable UnusedVariable
+//                    var a = new XmlSerializer(typeof (Xbim.COBieLite.FacilityType));
+//                    // var b = new XmlSerializer(typeof (Xbim.COBieLiteUK.FacilityType));
+//// ReSharper restore UnusedVariable  
+//                }
+//                catch (Exception exception)
+//                {
+//                    var exs = new List<Exception>();
+//                    while (exception.InnerException != null)
+//                    {
+//                        exs.Add(exception);
+//                        exception = exception.InnerException;
+//                    }
+//                    Console.ForegroundColor = ConsoleColor.Red;
+//                    Console.WriteLine(exception.Message);
+//                    Console.ForegroundColor = ConsoleColor.Yellow;
+//                    foreach (var ec in exs)
+//                    {
+//                        Console.WriteLine(ec.Message);
+//                    }
+//                    Console.ResetColor();
+//                    Console.ReadKey();
+//                }
+//            }
 
-            fread = @"..\..\..\Xbim.COBieLiteUK\Schemas\cobieliteuk.designer.cs";
-            fwrite = @"..\..\..\Xbim.COBieLiteUK\Schemas\cobieliteuk.designer.RenamedClasses.cs";
-            ProcessCobieLiteUk(fread, fwrite);
+//            DirectoryInfo d = new DirectoryInfo(".");
+//            Console.WriteLine("Current folder: " + d.FullName);
 
-            Console.WriteLine("Press any key.");
-            Console.ReadKey();
+
+//            var fread = @"..\..\..\Xbim.COBieLite\COBieLite Schema\cobielite.designer.cs";
+//            var fwrite = @"..\..\..\Xbim.COBieLite\COBieLite Schema\cobielite.designer.RenamedClasses.cs";
+//            ProcessCobieLite(fread, fwrite);
+
+//            fread = @"..\..\..\Xbim.COBieLiteUK\Schemas\cobieliteuk.designer.cs";
+//            fwrite = @"..\..\..\Xbim.COBieLiteUK\Schemas\cobieliteuk.designer.RenamedClasses.cs";
+//            ProcessCobieLiteUk(fread, fwrite);
+
+//            Console.WriteLine("Press any key.");
+//            Console.ReadKey();
         }
 
         private static void FixSerialisation(FileInfo f, string p)

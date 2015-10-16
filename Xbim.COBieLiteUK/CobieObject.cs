@@ -21,8 +21,11 @@ using NPOI.HSSF.UserModel;
 using NPOI.SS.UserModel;
 using NPOI.SS.Util;
 using NPOI.XSSF.UserModel;
-using XbimExchanger.COBieLiteHelpers;
+//using XbimExchanger.COBieLiteHelpers;
 using System.Diagnostics;
+using Xbim.FilterHelper;
+//using XbimExchanger.FilterHelper;
+using Xbim.COBieLiteUK.Net40PortHelpers;
 
 namespace Xbim.COBieLiteUK
 {
@@ -108,6 +111,13 @@ namespace Xbim.COBieLiteUK
                 return _facility;
             }
         }
+        /// <summary>
+        /// Object to use to report progress on WriteToCobie
+        /// </summary>
+        [XmlIgnore]
+        [JsonIgnore]
+        public ProgressReporter ReportProgress
+        { get; set; }
 
         internal IEnumerable<T> GetDeep<T>(Func<T, bool> condition = null) where T : CobieObject
         {
@@ -310,7 +320,7 @@ namespace Xbim.COBieLiteUK
         }
 
         internal virtual void WriteToCobie(IWorkbook workbook, TextWriter log, CobieObject parent,
-            Dictionary<Type, int> rowNumCache, List<string> pickValuesCache, Dictionary<string, int> headerCache, FiltersHelper assetfilters = null,
+            Dictionary<Type, int> rowNumCache, List<string> pickValuesCache, Dictionary<string, int> headerCache, OutPutFilters assetfilters = null,
             string version = "UK2012")
         {
             if (!Filter(assetfilters, parent)) //filter out IfcElement and IfcTypeObject Excludes, property set names, and property set property names
@@ -493,7 +503,11 @@ namespace Xbim.COBieLiteUK
             foreach (var child in GetChildren())
             {
                 child.WriteToCobie(workbook, log, this, rowNumCache, pickValuesCache, headerCache, assetfilters, version);
+                //tell progress reporter where we are
+                if (this is Facility)
+                    ReportProgress.IncrementAndUpdate();
             }
+           
         }
 
 
@@ -503,8 +517,8 @@ namespace Xbim.COBieLiteUK
         /// </summary>
         /// <param name="assetfilters">FiltersHelper, filters for names and objects </param>
         /// <param name="parent">COBieLite object</param>
-        /// <returns>bool</returns>
-        private bool Filter(FiltersHelper assetfilters, CobieObject parent)
+        /// <returns>bool true = exclude</returns>
+        private bool Filter(OutPutFilters assetfilters, CobieObject parent)
         {
             if (assetfilters != null)
             {
@@ -528,16 +542,17 @@ namespace Xbim.COBieLiteUK
                     }
                     return false;
                 }
-                else
-                {
-                    if(assetfilters.ObjFilter(this))
-                    {
-#if SHOWEXCLUDES
-                        Debug.WriteLine(string.Format(@"Object, Filtering out: Object ""{0}""", this.ExternalEntity));
-#endif
-                        return true;
-                    }
-                }
+                //moved to front end for ifcTypeObjects and ifcElements
+//                else
+//                {
+//                    if (assetfilters.ObjFilter(this, parent))
+//                    {
+//#if SHOWEXCLUDES
+//                        Debug.WriteLine(string.Format(@"Object, Filtering out: Object ""{0}""", this.ExternalEntity));
+//#endif
+//                        return true;
+//                    }
+//                }
             }
             return false;
         }
@@ -659,8 +674,7 @@ namespace Xbim.COBieLiteUK
 
         public CobieValue GetCobieProperty(string name)
         {
-            var mapping = GetType().GetCustomAttributes(typeof (MappingAttribute))
-                .FirstOrDefault(a => ((MappingAttribute) a).Header == name) as MappingAttribute;
+            var mapping = GetType().GetCustomAttributes<MappingAttribute>().FirstOrDefault(a => a.Header == name);
             return mapping == null ? null : GetCobieProperty(mapping, new StringWriter());
         }
 
@@ -841,7 +855,7 @@ namespace Xbim.COBieLiteUK
             var types = typeof(CobieObject).Assembly.GetTypes().Where(t => t.IsAbstract == false && typeof(CobieObject).IsAssignableFrom(t));
             foreach (var type in types)
             {
-                _typeToParentAttributeCache.Add(type, type.GetCustomAttribute<ParentAttribute>(false));
+                _typeToParentAttributeCache.Add(type, type.GetCustomAttributes<ParentAttribute>(false).FirstOrDefault());
             }
         }
         private static Dictionary<string, Type> _typeSheetMappingsCache = new Dictionary<string, Type>();
@@ -1326,9 +1340,7 @@ namespace Xbim.COBieLiteUK
                     ? result.Select(a => a.Clone())
                     : result;
 
-            result = type.GetCustomAttributes(typeof (MappingAttribute))
-                .Where(a => ((MappingAttribute) a).Type == mapping)
-                .Cast<MappingAttribute>().ToList();
+            result = type.GetCustomAttributes<MappingAttribute>().Where(a => a.Type == mapping).ToList();
 
             //there is a special tweak for attributes where Value fiels needs to be processed as the first one 
             //in order to get the right data type

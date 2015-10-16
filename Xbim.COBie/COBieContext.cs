@@ -17,8 +17,9 @@ namespace Xbim.COBie
         //Worksheet Global
         public Dictionary<long, string> EMails { get; private set; } 
         public string TemplateFileName { get; set; } //template used by the workbook
-        public string RunDate { get; set; } //Date the Workbook was created 
-        public string RunDateTime { get; set; } //Date the Workbook was created 
+        public string RunDate { get; private set; } //Date the Workbook was created 
+        public string RunDateTime { get; private set; } //Date the Workbook was created 
+        public bool RunDateManuallySet { get; private set; } // Has the date been manually overridden
         public bool ExcludeFromPickList { get; set; }
 
         /// <summary>
@@ -68,6 +69,7 @@ namespace Xbim.COBie
         {
             RunDate = DateTime.Now.ToString(Constants.DATE_FORMAT);
             RunDateTime = DateTime.Now.ToString(Constants.DATETIME_FORMAT);
+            RunDateManuallySet = false;
             EMails = new Dictionary<long, string>();
             Model = null;
             //if no IfcZones or no IfcSpace property names of "ZoneName" then if DepartmentsUsedAsZones is true we will list 
@@ -82,6 +84,13 @@ namespace Xbim.COBie
             ErrorRowStartIndex = ErrorRowIndexBase.RowTwo; //default for excel sheet
             MapMergeRoles = new Dictionary<XbimModel, COBieMergeRoles>();
 
+        }
+
+        public void SetRunDate(DateTime dt)
+        {
+            RunDate = dt.ToString(Constants.DATE_FORMAT);
+            RunDateTime = dt.ToString(Constants.DATETIME_FORMAT);
+            RunDateManuallySet = true;
         }
 
         /// <summary>

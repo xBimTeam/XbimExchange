@@ -5,76 +5,61 @@ using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Xbim.Ifc2x3.Kernel;
+using Xbim.IO;
 
-namespace Xbim.COBieLiteUK.FilterHelper
+namespace Xbim.FilterHelper
 {
     /// <summary>
     /// Filter on object type names, used to filter Type and Component COBie Sheets
     /// </summary>
     public class ObjectFilter
     {
+
+        
+
+        #region Properties
         /// <summary>
-        /// IfcProducts to filter out
+        /// Keyed list with true or false values, true to include. false to exclude
         /// </summary>
-        public List<string> ElementsToExclude { get; private set; }
+        public SerializableDictionary<string, bool> Items { get; set; }
 
         /// <summary>
-        /// IfcTypeObjects to filter out
+        /// keyed by IfcElement to element property PredefinedType to include list
         /// </summary>
-        public List<string> TypesToExclude { get; private set; }
+        public SerializableDictionary<string, string[]> PreDefinedType { get; set; }
 
-        private void Init()
+        /// <summary>
+        /// Items to filter out
+        /// </summary>
+        private List<string> _itemsToExclude;
+        private List<string> ItemsToExclude
         {
-            ElementsToExclude = new List<string>();
-            TypesToExclude = new List<string>();
+            get
+            {
+                if (_itemsToExclude == null)
+                    _itemsToExclude = Items.Where(e => e.Value == false).Select(e => e.Key).ToList();
+
+                return _itemsToExclude;
+            }
         }
-        /// <summary>
-        /// Set Object Filters constructor
-        /// </summary>
-        /// <param name="elementsToExclude">';' delimited string for IfcProducts to exclude from components(Assets)</param>
-        /// <param name="typesToExclude">';' delimited string for IfcTypeObjects to exclude from Types</param>
-        public ObjectFilter(string elementsToExclude, string typesToExclude)
+
+        #endregion
+         
+        #region Constructors
+
+        public ObjectFilter()
         {
-            //IfcProducts and IfcTypeObjects to exclude
-            if (!string.IsNullOrEmpty(elementsToExclude))
-            {
-                ElementsToExclude.AddRange(elementsToExclude.Split(new[] { ';' }, StringSplitOptions.RemoveEmptyEntries));
-            }
-            if (!string.IsNullOrEmpty(typesToExclude))
-            {
-                TypesToExclude.AddRange(typesToExclude.Split(new[] { ';' }, StringSplitOptions.RemoveEmptyEntries));
-            }
+            Items = new SerializableDictionary<string, bool>();
+            PreDefinedType = new SerializableDictionary<string, string[]>();
+            _itemsToExclude = null;
         }
 
         /// <summary>
         /// Set Property Filters constructor via ConfigurationSection from configuration file
         /// </summary>
         /// <param name="section">ConfigurationSection from configuration file</param>
-        public ObjectFilter(ConfigurationSection section)
-        {
-            //initialize fields
-            Init();
-            switch (section.SectionInformation.Name.ToUpper())
-            {
-                case "IFCELEMENTINCLUSION":
-                    SetElements(section);
-                    break;
-                case "IFCTYPEINCLUSION":
-                    SetTypes(section);
-                    break;
-                default:
-#if DEBUG
-                    Debug.WriteLine(string.Format("Invalid Key - {0}", section.SectionInformation.Name.ToUpper()));
-#endif
-                    break;
-            }
-        }
-
-        /// <summary>
-        /// Set up IfcProducts To exclude
-        /// </summary>
-        /// <param name="section">AppSettingsSection from configuration file</param>
-        private void SetElements(ConfigurationSection section)
+        public ObjectFilter(ConfigurationSection section) : this()
         {
             if (section != null)
             {
@@ -82,56 +67,196 @@ namespace Xbim.COBieLiteUK.FilterHelper
                 {
                     if (!string.IsNullOrEmpty(keyVal.Key))
                     {
-                        if (String.Compare(keyVal.Value, "NO", StringComparison.OrdinalIgnoreCase) == 0)
+                        bool include = false;
+                        if (String.Compare(keyVal.Value, "YES", StringComparison.OrdinalIgnoreCase) == 0)
                         {
-                            ElementsToExclude.Add(keyVal.Key);
+                            include = true;
                         }
+                        Items.Add(keyVal.Key.ToUpper(), include);
                     }
                 }
             }
         }
+        #endregion
+
+        #region Methods
+        /// <summary>
+        /// see if object is empty of any values
+        /// </summary>
+        /// <returns></returns>
+        public bool IsEmpty()
+        {
+            return ((Items.Count == 0) && (PreDefinedType.Count == 0));
+        }
 
         /// <summary>
-        /// Set up IfcTypeObjects To exclude
+        /// add PreDefined types associated with ifcElements
         /// </summary>
-        /// <param name="section">AppSettingsSection from configuration file</param>
-        private void SetTypes(ConfigurationSection section)
+        /// <param name="ifcElement">string name of ifcElement</param>
+        /// <param name="definedTypes">array of strings for the ifcElement predefinedtype enum property </param>
+        /// <returns></returns>
+        public bool SetPreDefinedType(string ifcElement, string[] definedTypes)
+        {
+            ifcElement = ifcElement.ToUpper();
+            try
+            {
+                if (PreDefinedType.ContainsKey(ifcElement))
+                {
+                    PreDefinedType[ifcElement] = definedTypes;
+                    return true;
+                }
+                else
+                {
+                    PreDefinedType.Add(ifcElement, definedTypes);
+                }
+            }
+            catch (Exception)
+            {
+                return false;
+            }
+            return true;
+        }
+
+        /// <summary>
+        /// fill pre defined types
+        /// </summary>
+        /// <param name="section"></param>
+        public void FillPreDefinedTypes(ConfigurationSection section)
         {
             if (section != null)
             {
                 foreach (KeyValueConfigurationElement keyVal in ((AppSettingsSection)section).Settings)
                 {
-                    if (!string.IsNullOrEmpty(keyVal.Key))
+                    if (!string.IsNullOrEmpty(keyVal.Value))
                     {
-                        if (String.Compare(keyVal.Value, "NO", StringComparison.OrdinalIgnoreCase) == 0)
-                        {
-                            TypesToExclude.Add(keyVal.Key);
-                        }
+                        var values = keyVal.Value.Split(new[] { ';' }, StringSplitOptions.RemoveEmptyEntries).ToList().ConvertAll(s => s.ToUpper()).ToArray();
+                        PreDefinedType.Add(keyVal.Key.ToUpper(), values);
                     }
                 }
             }
         }
         
         /// <summary>
-        /// Test for string exists in ElementsToExclude string lists
+        /// Test for string exists in ItemsToExclude string lists
         /// </summary>
         /// <param name="testStr">String to test</param>
-        /// <returns>bool</returns>
-        public bool ElementsFilter(string testStr)
+        /// <param name="preDefinedType">strings for the ifcTypeObject predefinedtype enum property</param>
+        /// <returns>bool, true = exclude</returns>
+        public bool ItemsFilter(string testStr, string preDefinedType = null)
         {
-            return (ElementsToExclude.Where(a => testStr.Equals(a)).Count() > 0);
+            if (ItemsToExclude.Count == 0) return false; //nothing to test against
+            
+            testStr = testStr.ToUpper();
+            //check for predefinedtype enum value passed as string
+            bool ExcludeDefinedType = false; //if preDefinedType is null or preDefinedType does not exist in PredefinedType dictionary 
+            if ((preDefinedType != null) &&
+                PreDefinedType.ContainsKey(testStr)
+                )
+            {
+                preDefinedType = preDefinedType.ToUpper();
+                ExcludeDefinedType = !PreDefinedType[testStr].Contains(preDefinedType);
+            }
+
+            return (ItemsToExclude.Contains(testStr) || ExcludeDefinedType);
+        }
+
+
+        //TODO: Check function below, see if it works!
+        /// <summary>
+        /// Test for IfcObjectDefinition exists in IfcToExclude type lists
+        /// </summary>
+        /// <param name="obj">IfcObjectDefinition object</param>
+        /// <returns>bool, true = exclude</returns>
+        public bool ItemsFilter(IfcObjectDefinition obj)
+        {
+            if (ItemsToExclude.Count == 0) return false; //nothing to test against
+
+            var objType = obj.GetType();
+            var objString = objType.Name.ToUpper(); //obj.ToString().ToUpper(); //or this might work, obj.IfcType().IfcTypeEnum.ToString();
+            bool result = ItemsToExclude.Contains(objString);
+            
+            if (!result && (PreDefinedType.ContainsKey(objString)))
+            {
+                var objPreDefinedProp = objType.GetProperty("PredefinedType");
+            
+                if (objPreDefinedProp != null)
+                {
+
+                    var objPreDefValue = objPreDefinedProp.GetValue(obj,null);
+
+                    if (objPreDefValue != null)
+                    {
+                        var preDefType = objPreDefValue.ToString();
+                        if (!string.IsNullOrEmpty(preDefType))
+                        {
+                            result = !PreDefinedType[objString].Contains(preDefType.ToUpper());
+                        } 
+                    }
+                }
+            }
+            return result;
         }
 
         /// <summary>
-        /// Test for string exists in TypesToExclude string lists
+        /// Merge together ObjectFilter
         /// </summary>
-        /// <param name="testStr">String to test</param>
-        /// <returns>bool</returns>
-        public bool TypeObjFilter(string testStr)
+        /// <param name="mergeFilter">ObjectFilter to merge</param>
+        public void MergeInc(ObjectFilter mergeFilter)
         {
-            return (TypesToExclude.Where(a => testStr.Equals(a)).Count() > 0);
+            _itemsToExclude = null; //reset exclude
+
+            //find all includes for the incoming merge ObjectFilter
+            var mergeInc = mergeFilter.Items.Where(i => i.Value == true).ToDictionary(i => i.Key, v => v.Value);
+            //set the true flag on 'this' Items with same key as incoming merges found above in mergeInc
+            foreach (var pair in mergeInc)
+            {
+                Items[pair.Key] = pair.Value;
+            }
+            
+            var mergeData = this.PreDefinedType.Concat(mergeFilter.PreDefinedType).GroupBy(v => v.Key).ToDictionary(k => k.Key, v => v.SelectMany(x => x.Value).Distinct().ToArray());
+            //rebuild PreDefinedType from merge linq statement
+            this.PreDefinedType.Clear();
+            foreach (var item in mergeData)
+            {
+                this.PreDefinedType.Add(item.Key, item.Value);
+            }
+
         }
 
-        
+        /// <summary>
+        /// Copy values from passed ObjectFilter
+        /// </summary>
+        /// <param name="copyFilter">ObjectFilter to copy</param>
+        public void Copy(ObjectFilter copyFilter)
+        {
+            _itemsToExclude = null; //reset exclude
+
+            this.Items.Clear();
+            //fill dictionary from passed argument  Items
+            foreach (var pair in copyFilter.Items)
+            {
+                this.Items[pair.Key] = pair.Value;
+            }
+
+            this.PreDefinedType.Clear();
+            foreach (var pair in copyFilter.PreDefinedType)
+            {
+                this.PreDefinedType[pair.Key] = pair.Value;
+            }
+        }
+
+        /// <summary>
+        /// Clear ObjectFilter
+        /// </summary>
+        public void Clear()
+        {
+            _itemsToExclude = null; //reset exclude
+            this.Items.Clear();
+            this.PreDefinedType.Clear();
+        }
+
+        #endregion
+
+
     }
 }

@@ -422,9 +422,10 @@ namespace Xbim.COBie
                 {
                     // TODO: COBieColumn should own the relationship rather than creating a new one each time.
                     COBieColumnRelationship cobieReference = new COBieColumnRelationship(workbook, foreignKeyColumn);
-
-                    if (SheetValidator != null && SheetValidator.IsRequired.ContainsKey(foreignKeyColumn.ColumnOrder) &&
-                        SheetValidator.IsRequired[foreignKeyColumn.ColumnOrder])
+                    
+                    if ((SheetValidator == null) || 
+                        ( SheetValidator.IsRequired.ContainsKey(foreignKeyColumn.ColumnOrder) && SheetValidator.IsRequired[foreignKeyColumn.ColumnOrder])
+                        )
                     {
                         if (!string.IsNullOrEmpty(foreignKeyColumn.ReferenceColumnName))
                         {
@@ -561,7 +562,7 @@ namespace Xbim.COBie
                     if (SheetValidator != null && SheetValidator.IsRequired.ContainsKey(col) && SheetValidator.IsRequired[col])
                     {
                         // Override required state based on validation template
-                        if ((SheetValidator.IsRequired.ContainsKey(col) && SheetValidator.IsRequired[col]))
+                        if ((SheetValidator.IsRequired.ContainsKey(col) && SheetValidator.IsRequired[col])) //TODO: is this if requred?
                         {
                             errorLevel = COBieError.ErrorLevels.Error;
                             switch (state)
@@ -638,15 +639,19 @@ namespace Xbim.COBie
                 
                 foreach (var row in dupe.rows)
                 {
-                    if (SheetValidator != null && SheetValidator.IsRequired.ContainsKey(row.index) && SheetValidator.IsRequired[row.index]){
+                    if ((SheetValidator == null) || 
+                        (SheetValidator.IsRequired.ContainsKey(row.index) && SheetValidator.IsRequired[row.index])
+                        )
+                    {
                         indexList.Add((row.index + errorRowInc).ToString());
                     }
                 }
                 string rowIndexList = string.Join(",", indexList);
                 foreach (var row in dupe.rows)
                 {
-                    if (SheetValidator != null && SheetValidator.IsRequired.ContainsKey(row.index) &&
-                        SheetValidator.IsRequired[row.index])
+                    if ((SheetValidator == null) || 
+                        (SheetValidator.IsRequired.ContainsKey(row.index) && SheetValidator.IsRequired[row.index])
+                        )
                     {
                         string errorDescription = String.Format(ErrorDescription.PrimaryKey_Violation, keyCols,
                             rowIndexList);
@@ -890,6 +895,11 @@ namespace Xbim.COBie
             {
                 Rows[i].RowNumber = i + 1;
             }
+        }
+
+        public ICOBieSheet<T> CreateEmptySheet() 
+        {
+            return new COBieSheet<T>(this.SheetName);
         }
     } 
 

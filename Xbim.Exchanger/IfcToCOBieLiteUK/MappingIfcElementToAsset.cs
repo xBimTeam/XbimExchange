@@ -15,11 +15,11 @@ namespace XbimExchanger.IfcToCOBieLiteUK
             var helper = ((IfcToCOBieLiteUkExchanger)Exchanger).Helper;
             target.ExternalEntity = helper.ExternalEntityName(ifcElement);
             target.ExternalId = helper.ExternalEntityIdentity(ifcElement);
+            target.AltExternalId = ifcElement.GlobalId;
             target.ExternalSystem = helper.ExternalSystemName(ifcElement);
             target.Name = ifcElement.Name;
             target.CreatedBy = helper.GetCreatedBy(ifcElement);
             target.CreatedOn = helper.GetCreatedOn(ifcElement);
-
             target.AssetIdentifier = helper.GetCoBieProperty("AssetIdentifier", ifcElement);
             target.BarCode = helper.GetCoBieProperty("AssetBarCode", ifcElement);
             if(!string.IsNullOrWhiteSpace(ifcElement.Description))
@@ -37,6 +37,11 @@ namespace XbimExchanger.IfcToCOBieLiteUK
 
             //Attributes
             target.Attributes = helper.GetAttributes(ifcElement);
+
+            //Documents
+            var docsMappings = Exchanger.GetOrCreateMappings<MappingIfcDocumentSelectToDocument>();
+            helper.AddDocuments(docsMappings, target, ifcElement);
+
             //System Assignments
 
             //Space Assignments
@@ -64,7 +69,7 @@ namespace XbimExchanger.IfcToCOBieLiteUK
 
             //Issues
 
-            //Documents
+            
             return target;
         }
     }
