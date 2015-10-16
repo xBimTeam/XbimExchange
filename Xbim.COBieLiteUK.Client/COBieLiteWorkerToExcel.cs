@@ -220,7 +220,7 @@ namespace Xbim.Client
         private List<Facility> GeneratelJsonFacility(Params parameters)
         {
             var facilities = new List<Facility>();
-            string msg;
+            
             var facility = Facility.ReadJson(parameters.ModelFile);
             if (facility != null)
             {
@@ -236,7 +236,7 @@ namespace Xbim.Client
         private List<Facility> GeneratelXmlFacility(Params parameters)
         {
             var facilities = new List<Facility>();
-            string msg;
+            
             var facility = Facility.ReadXml(parameters.ModelFile);
             if (facility != null)
             {

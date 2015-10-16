@@ -165,6 +165,7 @@
     <Compile Include="IfcToCOBieLiteUK\EqCompare\IfcRelAssignsToGroupRelatedGroupObjCompare.cs" />
     <Compile Include="IfcToCOBieLiteUK\IfcToCOBieLiteUkExchanger.cs" />
     <Compile Include="IfcToCOBieLiteUK\MappingIfcActorToContact.cs" />
+    <Compile Include="IfcToCOBieLiteUK\MappingIfcDocumentSelectToDocument.cs" />
     <Compile Include="IfcToCOBieLiteUK\MappingIfcSpatialStructureElementToFloor.cs" />
     <Compile Include="IfcToCOBieLiteUK\MappingIfcElementToAsset.cs" />
     <Compile Include="IfcToCOBieLiteUK\MappingIfcProjectToProject.cs" />
