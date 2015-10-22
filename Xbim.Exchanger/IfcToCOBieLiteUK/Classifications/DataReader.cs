@@ -25,7 +25,7 @@ namespace Xbim.Exchanger.IfcToCOBieLiteUK.Classifications
         /// <param name="dataFiles">Takes an array of DataFile URIs as strings</param>
         public DataReader()
         {
-            DataFiles = Directory.GetFiles(@"DataFiles\");
+            DataFiles = Directory.GetFiles(@"IfcToCOBieLiteUK\Classifications\DataFiles\");
             MappingTable = new Dictionary<string, Pointer>();
             CheckDataFilesForClassifications();
         }
