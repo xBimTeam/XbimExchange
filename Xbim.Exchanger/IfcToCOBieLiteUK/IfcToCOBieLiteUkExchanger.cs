@@ -8,6 +8,7 @@ using Xbim.FilterHelper;
 using Xbim.Ifc2x3.ProductExtension;
 using Xbim.IO;
 using Xbim.XbimExtensions.Interfaces;
+using Xbim.Exchanger.IfcToCOBieLiteUK.Classifications;
 
 namespace XbimExchanger.IfcToCOBieLiteUK
 {
@@ -16,18 +17,24 @@ namespace XbimExchanger.IfcToCOBieLiteUK
     /// </summary>
     public class IfcToCOBieLiteUkExchanger : XbimExchanger<XbimModel, List<Facility> >
     {
+        private bool classify = false;
         internal CoBieLiteUkHelper Helper ;
         /// <summary>
-        /// 
+        /// Instantiates a new IfcToCOBieLiteUkExchanger class.
         /// </summary>
         /// <param name="source"></param>
         /// <param name="target"></param>
-        public IfcToCOBieLiteUkExchanger(XbimModel source, List<Facility> target, ReportProgressDelegate reportProgress = null, OutPutFilters filter = null, string configFile = null, EntityIdentifierMode extId = EntityIdentifierMode.IfcEntityLabels, SystemExtractionMode sysMode = SystemExtractionMode.System | SystemExtractionMode.Types ) : base(source, target)
+        /// <param name="reportProgress"></param>
+        /// <param name="filter"></param>
+        /// <param name="configFile"></param>
+        /// <param name="extId"></param>
+        /// <param name="sysMode"></param>
+        /// <param name="classify"></param>
+        public IfcToCOBieLiteUkExchanger(XbimModel source, List<Facility> target, ReportProgressDelegate reportProgress = null, OutPutFilters filter = null, string configFile = null, EntityIdentifierMode extId = EntityIdentifierMode.IfcEntityLabels, SystemExtractionMode sysMode = SystemExtractionMode.System | SystemExtractionMode.Types, bool classify = false) : base(source, target)
         {
             ReportProgress.Progress = reportProgress; //set reporter
             Helper = new CoBieLiteUkHelper(source, ReportProgress, filter, configFile, extId, sysMode);
-            
-            
+            this.classify = classify;
         }
 
         /// <summary>
@@ -42,7 +49,13 @@ namespace XbimExchanger.IfcToCOBieLiteUK
             foreach (var ifcBuilding in buildings)
             {
                 var facility = new Facility();
-                facilities.Add(mapping.AddMapping(ifcBuilding, facility));
+                facility = mapping.AddMapping(ifcBuilding, facility);
+                if(classify)
+                {
+                    Classifier c = new Classifier(facility);
+                    facility = c.facility;
+                }
+                facilities.Add(facility);
             }
             return facilities;
         }
