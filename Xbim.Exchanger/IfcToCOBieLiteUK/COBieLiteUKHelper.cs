@@ -6,10 +6,12 @@ using System.Diagnostics;
 using System.Globalization;
 using System.IO;
 using System.Linq;
+using System.Text.RegularExpressions;
 using Xbim.COBieLiteUK;
 using Xbim.Common.Logging;
 using Xbim.FilterHelper;
 using Xbim.Ifc2x3.ActorResource;
+using Xbim.Ifc2x3.ConstructionMgmtDomain;
 using Xbim.Ifc2x3.Extensions;
 using Xbim.Ifc2x3.ExternalReferenceResource;
 using Xbim.Ifc2x3.Kernel;
@@ -171,19 +173,13 @@ namespace XbimExchanger.IfcToCOBieLiteUK
         public Dictionary<IfcDocumentSelect, IfcRelAssociatesDocument> DocumentOwnerLookup
         { get; private set; }
 
-        /// <summary>
-        /// Document to Linked Children Documents
-        /// </summary>
-        //public Dictionary<IfcDocumentInformation, IfcDocumentInformationRelationship> DocToChildDocsLookup
-        //{ get; private set; }
-
-        /// <summary>
-        /// Lookup of documents already processed, do not want to add what we already have
-        /// </summary>
-        public List<Document> DocumentProgress
-        { get; set; }
         #endregion
 
+        #region Spare 
+
+        public Dictionary<IfcRoot, IEnumerable<IfcConstructionProductResource>> SpareLookup
+        { get; private set; }
+        #endregion
 
         /// <summary>
         /// Property Sets used to establish systems as per responsibility matrix 
@@ -199,7 +195,7 @@ namespace XbimExchanger.IfcToCOBieLiteUK
 
         private readonly string _configFileName;
         private List<IfcActorSelect> _contacts;
-        private Dictionary<IfcPersonAndOrganization, ContactKey> _createdByKeys;
+        private Dictionary<IfcActorSelect, ContactKey> _createdByKeys;
         private Dictionary<IfcActorSelect, IfcActor> _actors;
         public static List<Category> UnknownCategory = new List<Category>(new[] { new Category { Code = "unknown" } });
         private readonly Contact _xbimCreatedBy = new Contact
@@ -255,14 +251,69 @@ namespace XbimExchanger.IfcToCOBieLiteUK
             GetClassificationDictionary();//8%
             GetSpacesAndZones();//13%
             GetUnits();
+            GetSpare();
             GetTypeMaps();//25%
             GetDocumentSelects();
             GetPropertySets();//33%
             GetSystems();//38%
             GetSpaceAssetLookup();//40%
-            
         }
 
+        /// <summary>
+        /// Get Spare lookup and set SpareLookup property
+        /// </summary>
+        public void GetSpare()
+        {
+            Dictionary<IfcConstructionProductResource, List<IfcRoot>> spareToObjs = GetSpareResource();
+
+            //reverse lookup to entity to list of documents
+            SpareLookup = spareToObjs
+                            .SelectMany(pair => pair.Value
+                            .Select(val => new { Key = val, Value = pair.Key }))
+                            .GroupBy(item => item.Key)
+                            .ToDictionary(gr => gr.Key, gr => gr.Select(item => item.Value));
+        }
+
+        /// <summary>
+        /// Convert all IfcRelAssignsToResource to a dictionary of IfcConstructionProductResource, List of IfcRoot
+        /// </summary>
+        /// <returns>Dictionary of IfcConstructionProductResource, List of IfcRoot</returns>
+        private Dictionary<IfcConstructionProductResource, List<IfcRoot>> GetSpareResource()
+        {
+            Dictionary<IfcResource, List<IfcObjectDefinition>> resourceToObjs = null;
+
+            var ifcRelAssignsToResource = _model.Instances.OfType<IfcRelAssignsToResource>().Where(r => r.RelatingResource is IfcConstructionProductResource && (r.RelatedObjectsType == null || r.RelatedObjectsType == IfcObjectType.Product || r.RelatedObjectsType == IfcObjectType.NotDefined)); //linked to IfcRoot objects
+
+            var dups = ifcRelAssignsToResource.GroupBy(d => d.RelatingResource).SelectMany(grp => grp.Skip(1)); //get any duplicate related resource objects
+            if (dups.Any())
+            {
+                //remove the duplicates related resource objects and convert to dictionary
+                resourceToObjs = ifcRelAssignsToResource.Except(dups).ToDictionary(p => p.RelatingResource, p => p.RelatedObjects.ToList());
+                //merge any duplicate related resource objects resource into list of single link of IfcConstructionProductResource to IfcRoot list, as duplicate related object could hold different IfcConstructionProductResource so lets not lose them
+                var dupsMerge = dups.GroupBy(d => d.RelatingResource).Select(p => new { x = p.Key, y = p.SelectMany(c => c.RelatedObjects) });
+
+                //add the duplicate lists to the resourceToObjs list
+                foreach (var item in dupsMerge)
+                {
+                    resourceToObjs[item.x] = resourceToObjs[item.x].Union(item.y).ToList(); //union will exclude any duplicates
+                }
+            }
+            else
+            {
+                //no duplicates, so just convert to dictionary
+                resourceToObjs = ifcRelAssignsToResource.ToDictionary(p => p.RelatingResource, p => p.RelatedObjects.ToList());
+            }
+            //finally convert to correct types in Dictionary
+            return resourceToObjs.ToDictionary(r => r.Key as IfcConstructionProductResource, r => r.Value.ConvertAll(x => (IfcRoot)x));
+        } 
+
+
+        /// <summary>
+        /// Add document to List of Documents
+        /// </summary>
+        /// <param name="docsMappings">Mapping object</param>
+        /// <param name="target">Target object holding the document list - CobieObject</param>
+        /// <param name="ifcRoot">Object holding the documents</param>
         internal void AddDocuments(MappingIfcDocumentSelectToDocument docsMappings, CobieObject target, IfcRoot ifcRoot)
         {
             if (ifcRoot != null)
@@ -302,7 +353,7 @@ namespace XbimExchanger.IfcToCOBieLiteUK
         private void GetDocumentSelects()
         {
             Dictionary<IfcDocumentSelect, List<IfcRoot>> docToObjs = GetAssociatedDocuments();
-            
+
             //get orphan docs, not attached to IfcRoot objects
             OrphanDocs = GetOrphanDocuments(docToObjs);
 
@@ -312,8 +363,6 @@ namespace XbimExchanger.IfcToCOBieLiteUK
                             .Select(val => new { Key = val, Value = pair.Key }))
                             .GroupBy(item => item.Key)
                             .ToDictionary(gr => gr.Key, gr => gr.Select(item => item.Value));
-
-            DocumentProgress = new List<Document>();
 
         }
        
@@ -329,17 +378,6 @@ namespace XbimExchanger.IfcToCOBieLiteUK
             var docAllInfos = _model.Instances.OfType<IfcDocumentInformation>();
             //Get the child document relationships
             var childDocRels = _model.Instances.OfType<IfcDocumentInformationRelationship>();
-
-            var xxx = docAllInfos.Where(d => d.Name != null && d.Name.ToString().StartsWith("X-Ray"));
-            //try
-            //{
-            //    DocToChildDocsLookup = childDocRels.ToDictionary(p => p.RelatingDocument, p => p);
-            //}
-            //catch (Exception) //if we fall over just set to empty, duplicate keys etc...
-            //{
-            //    DocToChildDocsLookup = new Dictionary<IfcDocumentInformation, IfcDocumentInformationRelationship>();
-            //}
-
 
             //see if we have any documents not attached to IfcRoot objects, but could be attached as children documents to a parent document...
 
@@ -394,21 +432,21 @@ namespace XbimExchanger.IfcToCOBieLiteUK
             //get fall back owner history
             DocumentOwnerLookup = ifcRelAssociatesDocuments.ToDictionary(p => p.RelatingDocument, p => p);
 
-            var dups = ifcRelAssociatesDocuments.GroupBy(d => d.RelatingDocument).SelectMany(grp => grp.Skip(1)); //get any duplicate documents 
+            var dups = ifcRelAssociatesDocuments.GroupBy(d => d.RelatingDocument).SelectMany(grp => grp.Skip(1)); //get any duplicate related documents objects
 
             //merge any duplicate IfcDocumentSelect IfcRoot objects to a single link of IfcDocumentSelect to IfcRoot list
             Dictionary<IfcDocumentSelect, List<IfcRoot>> docToObjs = null;
             if (dups.Any())
             {
-                //remove the duplicates and convert to dictionary
+                //remove the duplicates related documents objects and convert to dictionary
                 docToObjs = ifcRelAssociatesDocuments.Except(dups).ToDictionary(p => p.RelatingDocument, p => p.RelatedObjects.ToList());
-                //merge any duplicate objects into list of single link of IfcDocumentSelect to IfcRoot list
+                //merge any duplicate related documents objects documents into list of single link of IfcDocumentSelect to IfcRoot list, as duplicate related object could hold different documents so lets not lose them
                 var dupsMerge = dups.GroupBy(d => d.RelatingDocument).Select(p => new { x = p.Key, y = p.SelectMany(c => c.RelatedObjects) });
 
                 //add the duplicate lists to the DocToObjs list
                 foreach (var item in dupsMerge)
                 {
-                    docToObjs[item.x] = docToObjs[item.x].Union(item.y).ToList();
+                    docToObjs[item.x] = docToObjs[item.x].Union(item.y).ToList(); //union will exclude any duplicates
                 }
             }
             else
@@ -417,6 +455,66 @@ namespace XbimExchanger.IfcToCOBieLiteUK
                 docToObjs = ifcRelAssociatesDocuments.ToDictionary(p => p.RelatingDocument, p => p.RelatedObjects.ToList());
             }
             return docToObjs;
+        }
+
+        /// <summary>
+        /// Get next name for duplicates
+        /// </summary>
+        /// <param name="name">name to check</param>
+        /// <param name="usedNames">List of names already used</param>
+        /// <returns>name to use</returns>
+        public string GetNextName(string name, List<string> usedNames)
+        {
+            //do we have any matching names
+            if (usedNames != null && usedNames.Any())
+            {
+                var found = usedNames.Where(d => d.StartsWith(name, StringComparison.OrdinalIgnoreCase)).Select(n => n);
+
+                if (found.Any())
+                {
+                    if ((found.Count() == 1) && (found.First().Length == name.Length)) //we match the whole name
+                    {
+                        return name + "(1)"; //first duplicate
+                    }
+                    var srch = name + "(";
+
+                    //we have duplicates so get names that are in correct format
+                    var correctFormat = found.Where(s => s.StartsWith(srch, StringComparison.OrdinalIgnoreCase) && s.EndsWith(")"));
+                    if (correctFormat.Any())
+                    {
+                        var number = correctFormat.Max(s => GetNextNo(srch, s));//.OrderBy(s => s).LastOrDefault();
+                        if (number > 0)
+                        {
+                            return srch + number.ToString() + ")";
+                        }
+                    }
+                }
+            }
+            //string is not found or we failed to add next number return input argument string
+            return name;
+        }
+
+        /// <summary>
+        /// Get next number from string in a format Name(#), so "This Document(10)" should return 11
+        /// </summary>
+        /// <param name="prefix">string up to  and including'(', such as "Name(" </param>
+        /// <param name="number">string formated "Name(#)", such as "Name(10)" </param>
+        /// <returns>int</returns>
+        private int GetNextNo(string prefix, string number)
+        {
+            var start = prefix.Length;
+            var lgth = number.Length - start - 1;
+            number = number.Substring(start, lgth); //get the string between brackets
+            var strNo = Regex.Match(number, @"\d+").Value;
+            if (!string.IsNullOrEmpty(strNo))
+            {
+                int no;
+                if (int.TryParse(strNo, out no))
+                {
+                    return ++no;
+                }
+            }
+            return 0;
         }
 
         private void GetSystems()
@@ -662,7 +760,7 @@ namespace XbimExchanger.IfcToCOBieLiteUK
            //get element name
            string name = element.Name;
            //look to see if it has been classified
-           var categories = GetCategories(element);
+           var categories = GetCategories(element, false);
            if (categories != null && categories.Any())
            {
                //prefer the Uniclass2015 code
@@ -1072,12 +1170,49 @@ namespace XbimExchanger.IfcToCOBieLiteUK
             }
             return categories;
         }
+
+        /// <summary>
+        /// Set Category with code and description as single delimited string
+        /// </summary>
+        /// <param name="strRef">Uniclass string</param>
+        /// <returns>List of Category Objects</returns>
+        private List<Category> ConvertToCategories(string strRef)
+        {
+            var categories = new List<Category>();
+            var category = new Category();
+            var parts = strRef.Split(new[] { ':', ';', '/', '\\' }, StringSplitOptions.RemoveEmptyEntries);
+            if (parts.Length > 1)
+                category.Description = parts[1];
+            if (parts.Length > 0)
+                category.Code = parts[0];
+            categories.Add(category);
+            return categories;
+        }
+
+        /// <summary>
+        /// Set Category with code and description
+        /// </summary>
+        /// <param name="code">Uniclass code</param>
+        /// <param name="desc">Uniclass description</param>
+        /// <returns>List of Category Objects</returns>
+        private List<Category> ConvertToCategories(string code, string desc)
+        {
+            var categories = new List<Category>();
+            var category = new Category();
+            if (!string.IsNullOrEmpty(code))
+                category.Code = code;
+            if (!string.IsNullOrEmpty(desc))
+                category.Description = desc;
+            categories.Add(category);
+            return categories;
+        }
+
         /// <summary>
         /// Returns the COBie Category for this object, based on the Ifc Classification
         /// </summary>
         /// <param name="classifiedObject"></param>
         /// <returns></returns>
-        public List<Category> GetCategories(IfcRoot classifiedObject)
+        public List<Category> GetCategories(IfcRoot classifiedObject, bool useProp = true)
         {
             List<IfcClassificationReference> classifications;
             if (_classifiedObjects.TryGetValue(classifiedObject, out classifications))
@@ -1093,7 +1228,33 @@ namespace XbimExchanger.IfcToCOBieLiteUK
                         return ConvertToCategories(classifications);
                 }
             }
-          
+            //get category from properties
+            if (useProp && (classifiedObject is IfcObjectDefinition))
+            {
+               
+                var code = GetCoBieProperty("CommonCategoryCode", classifiedObject as IfcObjectDefinition);
+                var desc = GetCoBieProperty("CommonCategoryDescription", classifiedObject as IfcObjectDefinition);
+                if (!string.IsNullOrEmpty(code) && !string.IsNullOrEmpty(desc))
+                {
+                    return ConvertToCategories(code, desc);
+                }
+                else
+                {
+                    var cat = GetCoBieProperty("CommonCategoryCode", classifiedObject as IfcObjectDefinition);
+                    if (!string.IsNullOrEmpty(cat))
+                    {
+                        return ConvertToCategories(cat);
+                    }
+                    else if (string.IsNullOrEmpty(code) && string.IsNullOrEmpty(desc))
+                    {
+                        return UnknownCategory;
+                    }
+                    else //have code, or description
+                    {
+                        return ConvertToCategories(cat);
+                    }
+                }
+            }
             return UnknownCategory;
         }
 
@@ -1364,11 +1525,19 @@ namespace XbimExchanger.IfcToCOBieLiteUK
             return ifcObject.GetType().Name;
         }
 
-        internal string ExternalSystemName(IfcRoot ifcObject = null)
+        internal string ExternalSystemName(IfcRoot ifcObject = null, bool usePropFirst = false)
         {
             if (ExternalReferenceMode == ExternalReferenceMode.IgnoreSystem ||
                 ExternalReferenceMode == ExternalReferenceMode.IgnoreSystemAndEntityName)
                 return null;
+            if (usePropFirst && (ifcObject is IfcObjectDefinition))//support for COBie Toolkit for Autodesk Revit(had this in on old code, not sure if still relevant. this note date 8/10/2015)
+            {
+                var extSystem = GetCoBieProperty("CommonExtSystem", ifcObject as IfcObjectDefinition);
+                if (!string.IsNullOrEmpty(extSystem))
+                {
+                    return extSystem;
+                }
+            }
             return "xBIM"; //GetCreatingApplication(ifcObject);
         }
 
@@ -1477,12 +1646,20 @@ namespace XbimExchanger.IfcToCOBieLiteUK
             //get any actors and select their
             var ifcActors = _model.Instances.OfType<IfcActor>().ToList();
             var actors = new HashSet<IfcActorSelect>(ifcActors.Select(a => a.TheActor)); //unique actors
+
             var personOrgs =  new HashSet<IfcActorSelect>(_model.Instances.OfType<IfcPersonAndOrganization>().Where(p => !actors.Contains(p)));
             actors = new HashSet<IfcActorSelect>(actors.Concat(personOrgs));
-            var personsAlreadyIn = new HashSet<IfcActorSelect>(actors.Where(a => a is IfcPerson));
 
+            var orgAlreadyIn = actors.OfType<IfcPersonAndOrganization>().Select(po => po.TheOrganization);
+            var orgs = _model.Instances.OfType<IfcOrganization>().Where(p => !orgAlreadyIn.Contains(p) && p.Addresses != null); //lets only see ones with any address info
+            actors = new HashSet<IfcActorSelect>(actors.Union(orgs)); //union will exclude duplicates
+
+            var personsAlreadyIn = actors.Where(a => a is IfcPerson);
+            personsAlreadyIn = personsAlreadyIn.Union(actors.OfType<IfcPersonAndOrganization>().Select(po => po.ThePerson));//union will exclude duplicates
             var persons = new HashSet<IfcActorSelect>(_model.Instances.OfType<IfcPerson>().Where(p => !personsAlreadyIn.Contains(p)));
+
             _contacts = actors.Concat(persons).ToList();
+
             _actors = new Dictionary<IfcActorSelect, IfcActor>();
             //set progress report
             ReportProgress.NextStage(ifcActors.Count + actors.OfType<IfcPersonAndOrganization>().Count(), 5);
@@ -1492,8 +1669,9 @@ namespace XbimExchanger.IfcToCOBieLiteUK
                     _actors.Add(actor.TheActor,actor);
                 ReportProgress.IncrementAndUpdate();
             }
-            _createdByKeys = new Dictionary<IfcPersonAndOrganization, ContactKey>();
-            //sort out createdByKeys, these will always be IfcPersonAndOrganization
+
+            _createdByKeys = new Dictionary<IfcActorSelect, ContactKey>();
+            //sort out createdByKeys, these will always be IfcPersonAndOrganization which are held in IfcOwnerHistory fields
             foreach (var actor in actors.OfType<IfcPersonAndOrganization>())
             {
                 _createdByKeys.Add(actor, new ContactKey { Email = EmailAddressOf(actor) });
@@ -1502,20 +1680,34 @@ namespace XbimExchanger.IfcToCOBieLiteUK
             _sundryContacts = new Dictionary<string, Contact>();
         }
 
-        public string EmailAddressOf(IfcPersonAndOrganization personOrg)
+        public string EmailAddressOf(IfcActorSelect personOrg)
         {
-            var person = personOrg.ThePerson;
-            var organisation = personOrg.TheOrganization;
+            IfcPerson person = null;
+            IfcOrganization organisation= null;
+            if (personOrg is IfcPerson)
+            {
+                person = personOrg as IfcPerson;
+            }
+            if (personOrg is IfcOrganization)
+            {
+                organisation = personOrg as IfcOrganization;
+            }
+            if (personOrg is IfcPersonAndOrganization)
+            {
+                person = (personOrg as IfcPersonAndOrganization).ThePerson;
+                organisation = (personOrg as IfcPersonAndOrganization).TheOrganization;
+            }
+            
             //get a default that will be unique
             var email = string.Format("unknown{0}@undefined.email", personOrg.EntityLabel);
-            if (organisation.Addresses != null)
+            if ((organisation != null) && (organisation.Addresses != null))
             {
                 var telecom = organisation.Addresses.OfType<IfcTelecomAddress>().FirstOrDefault(a=>a.ElectronicMailAddresses.Any(e=>!string.IsNullOrWhiteSpace(e)));
                 if (telecom != null)
                     email = telecom.ElectronicMailAddresses.FirstOrDefault(e => !string.IsNullOrWhiteSpace(e));
             }
             //overwrite if we have it at person level
-            if (person.Addresses != null)
+            if ((person != null) && (person.Addresses != null))
             {
                 var telecom = person.Addresses.OfType<IfcTelecomAddress>().FirstOrDefault(a => a.ElectronicMailAddresses.Any(e => !string.IsNullOrWhiteSpace(e)));
                 if (telecom != null)
@@ -1588,12 +1780,20 @@ namespace XbimExchanger.IfcToCOBieLiteUK
             
         }
 
-        internal ContactKey GetCreatedBy(IfcRoot ifcRoot = null)
+        internal ContactKey GetCreatedBy(IfcRoot ifcRoot = null, bool usePropFirst = false)
         {
             ContactKey key;
             if (ifcRoot != null)
             {
-                if (ifcRoot.OwnerHistory.LastModifyingUser != null)
+                if (usePropFirst && (ifcRoot is IfcObjectDefinition))//support for COBie Toolkit for Autodesk Revit(had this in on old code, not sure if still relevant. this note date 8/10/2015)
+                {
+                    var email = GetCoBieProperty("CommonCreatedBy", ifcRoot as IfcObjectDefinition);
+                    if (!string.IsNullOrEmpty(email))
+                    {
+                        return new ContactKey { Email = email };
+                    }
+                }
+                else if (ifcRoot.OwnerHistory.LastModifyingUser != null)
                 {
                     if (_createdByKeys.TryGetValue(ifcRoot.OwnerHistory.LastModifyingUser, out key))
                         return key;
@@ -1603,24 +1803,96 @@ namespace XbimExchanger.IfcToCOBieLiteUK
                     if (_createdByKeys.TryGetValue(ifcRoot.OwnerHistory.OwningUser, out key))
                         return key;
                 }
+
             }
             key = new ContactKey {Email=XbimCreatedBy.Email};
             return key;
         }
 
-        internal DateTime? GetCreatedOn(IfcRoot ifcRoot = null)
+        internal DateTime? GetCreatedOn(IfcRoot ifcRoot = null, bool usePropFirst = false)
         {
             //use last modified date if we have one
-            if(ifcRoot!=null)
-            return IfcTimeStamp.ToDateTime(ifcRoot.OwnerHistory.LastModifiedDate ?? ifcRoot.OwnerHistory.CreationDate);
+            if (ifcRoot != null)
+            {
+                if (usePropFirst)
+                {
+                    DateTime? propDate;
+                    if (GetCreatedOnFromProp(ifcRoot, out propDate))
+                    {
+                        return propDate;
+                    }
+                }
+                var dateTime = ifcRoot.OwnerHistory.LastModifiedDate ?? ifcRoot.OwnerHistory.CreationDate;
+                if (dateTime != null)
+                {
+                    return IfcTimeStamp.ToDateTime(dateTime);
+                }
+                
+               
+            }
             return DateTime.Now;
         }
+        /// <summary>
+        /// Get CreateDate from properties
+        /// </summary>
+        /// <param name="ifcRoot">object to get properties on</param>
+        /// <param name="date">out Date</param>
+        /// <returns>bool</returns>
+        private bool GetCreatedOnFromProp(IfcRoot ifcRoot, out DateTime? date)
+        {
+            DateTime foundDate;
+            if (ifcRoot is IfcObjectDefinition)//support for COBie Toolkit for Autodesk Revit(had this in on old code, not sure if still relevant. this note date 8/10/2015)
+            {
+                var createdOn = GetCoBieProperty("CommonCreatedOn", ifcRoot as IfcObjectDefinition);
+                if (!string.IsNullOrEmpty(createdOn))
+                {
+                   if (DateTime.TryParse(createdOn, out foundDate))
+                    {
+                        date = foundDate;
+                        return true;
+                    }
+                    else
+                    {
+                        //try and get just the date part of the date time, as a conversion above failed, so assume time might be corrupt
+                        int idx = createdOn.IndexOf("T");
+                        if (idx > -1)
+                        {
+                            string datestr = createdOn.Substring(0, idx);
+                            if (DateTime.TryParse(datestr, out foundDate))
+                            {
+                                date = foundDate;
+                                return true;
+                            }
+                        }
+                    }
+                }
+            }
+            date = null;
+            return false;
+        }
 
-        internal ContactKey GetCreatedBy(IfcActorSelect actorSelect)
+        /// <summary>
+        /// Get ContactKey for CreatedBy, first from IfcActor oOwnerHistory, then IfcActorSelect returning the ContactKey for the IfcActorSelect, unless defaultOnNoActor is true then default is returned, no matches also returns default
+        /// </summary>
+        /// <param name="actorSelect">IfcActorSelect Object</param>
+        /// <param name="defaultOnNoActor">bool true skips IfcActorSelect key lookup</param>
+        /// <returns>ContactKey</returns>
+        internal ContactKey GetCreatedBy(IfcActorSelect actorSelect, bool defaultOnNoActor = false)
         {
             IfcActor actor;
             if (_actors.TryGetValue(actorSelect, out actor))
+            {
                 return GetCreatedBy(actor);
+            }
+            if (defaultOnNoActor)
+            {
+                return new ContactKey { Email = XbimCreatedBy.Email };
+            }
+            ContactKey key;
+            if (_createdByKeys.TryGetValue(actorSelect, out key))
+            {
+                return key;
+            }
             return new ContactKey {Email = XbimCreatedBy.Email};
         }
 
@@ -1631,6 +1903,8 @@ namespace XbimExchanger.IfcToCOBieLiteUK
                 return GetCreatedOn(actor);
             return DateTime.Now;
         }
+
+        
 
         internal Zone CreateXbimDefaultZone()
         {

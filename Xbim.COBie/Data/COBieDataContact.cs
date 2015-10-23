@@ -56,7 +56,7 @@ namespace Xbim.COBie.Data
                 {
                     continue;
                 }
-
+                 
                 COBieContactRow contact = new COBieContactRow(contacts);
                 // get person and organization
                 IfcOrganization ifcOrganization = ifcPersonAndOrganization.TheOrganization;

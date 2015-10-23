@@ -20,6 +20,7 @@ namespace XbimExchanger.IfcToCOBieLiteUK
             target.Name = ifcElement.Name;
             target.CreatedBy = helper.GetCreatedBy(ifcElement);
             target.CreatedOn = helper.GetCreatedOn(ifcElement);
+            target.Categories = helper.GetCategories(ifcElement);
             target.AssetIdentifier = helper.GetCoBieProperty("AssetIdentifier", ifcElement);
             target.BarCode = helper.GetCoBieProperty("AssetBarCode", ifcElement);
             if(!string.IsNullOrWhiteSpace(ifcElement.Description))

@@ -50,6 +50,13 @@ namespace XbimExchanger.COBieLiteUkToIfc
             }
             #endregion
 
+            #region Documents
+            if (asset.Documents != null && asset.Documents.Any())
+            {
+                Exchanger.ConvertDocumentsToDocumentSelect(ifcElement, asset.Documents);
+            }
+            #endregion
+
             return ifcElement;
         }
     }
