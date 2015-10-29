@@ -6,6 +6,7 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Xbim.Exchanger.IfcToCOBieLiteUK.Classifications.Components;
+using Assembly = System.Reflection.Assembly;
 
 namespace Xbim.Exchanger.IfcToCOBieLiteUK.Classifications
 {
@@ -25,9 +26,30 @@ namespace Xbim.Exchanger.IfcToCOBieLiteUK.Classifications
         /// <param name="dataFiles">Takes an array of DataFile URIs as strings</param>
         public DataReader()
         {
-            DataFiles = Directory.GetFiles(@"IfcToCOBieLiteUK\Classifications\DataFiles\");
+            GetDataFiles();
+
             MappingTable = new Dictionary<string, Pointer>();
             CheckDataFilesForClassifications();
+        }
+
+        public void GetDataFiles()
+        {
+            //Get the executing Assembly
+            Assembly asmbly = Assembly.GetExecutingAssembly();
+
+            //Get the Directory path by getting the filepath of the executing dll and removing the DLL files name from the end.
+            string dirPath = asmbly.CodeBase.Substring(0, asmbly.CodeBase.IndexOf(asmbly.GetName().Name.ToString()));
+
+            //The Direcory (in relation to the dirPath) where the resources are stored.
+            string resourceDirectory = "IfcToCOBieLiteUK\\Classifications\\DataFiles\\";
+
+            //Get the LocalPath of the resource directory
+            string uri = new Uri(dirPath + resourceDirectory).AbsolutePath;
+
+            //Get the data files from the resource directory.
+            DataFiles = Directory.GetFiles(uri);
+
+            //DataFiles = Directory.GetFiles(@"IfcToCOBieLiteUK\Classifications\DataFiles\");
         }
 
         /// <summary>
