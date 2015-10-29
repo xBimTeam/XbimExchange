@@ -41,10 +41,10 @@ namespace Xbim.Exchanger.IfcToCOBieLiteUK.Classifications
             string dirPath = asmbly.CodeBase.Substring(0, asmbly.CodeBase.IndexOf(asmbly.GetName().Name.ToString()));
 
             //The Direcory (in relation to the dirPath) where the resources are stored.
-            string resourceDirectory = "IfcToCOBieLiteUK\\Classifications\\DataFiles\\";
+            string resourceDirectory = "IfcToCOBieLiteUK\\Classifications\\DataFiles";
 
             //Get the LocalPath of the resource directory
-            string uri = new Uri(dirPath + resourceDirectory).AbsolutePath;
+            string uri = (new Uri(dirPath + resourceDirectory).AbsolutePath).Replace("%20", " ");
 
             //Get the data files from the resource directory.
             DataFiles = Directory.GetFiles(uri);
