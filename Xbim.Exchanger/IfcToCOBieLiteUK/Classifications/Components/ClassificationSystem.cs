@@ -10,8 +10,8 @@ namespace Xbim.Exchanger.IfcToCOBieLiteUK.Classifications.Components
     /// Enum of classifiers which refers
     /// to the column number of each file
     /// </summary>
-    public enum ClassificationSystem
+    public enum ClassificationSystem :byte
     {
-        UNI, NBS, NRM
+        UNI=1, NBS=2, NRM=3
     }
 }

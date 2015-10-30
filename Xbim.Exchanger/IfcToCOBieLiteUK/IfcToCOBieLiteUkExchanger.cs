@@ -50,11 +50,8 @@ namespace XbimExchanger.IfcToCOBieLiteUK
             {
                 var facility = new Facility();
                 facility = mapping.AddMapping(ifcBuilding, facility);
-                if(classify)
-                {
-                    Classifier c = new Classifier(facility);
-                    facility = c.facility;
-                }
+                if(classify)       
+                    facility.Classify();
                 facilities.Add(facility);
             }
             return facilities;

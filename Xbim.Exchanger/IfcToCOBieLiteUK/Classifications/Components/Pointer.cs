@@ -10,21 +10,23 @@ namespace Xbim.Exchanger.IfcToCOBieLiteUK.Classifications.Components
     /// Struct for storing pointer data into the
     /// Dictionary of mappings.
     /// </summary>
-    public struct Pointer
+    public class Pointer
     {
-        public bool HasMultipleReferences { get; set; }
-        public int Classification { get; private set; }
-        public List<int> Rows { get; set; }
-        public List<int> FileNumbers { get; set; }
-        public Pointer(ClassificationSystem classification, int row, int fileNumber)
-            : this()
-        {
-            Rows = new List<int>();
-            FileNumbers = new List<int>();
+        private ClassificationSystem _classification;
+        private List<int> _rows;
+        private List<int> _fileNumbers;
+        public bool HasMultipleReferences { get { return _rows.Count > 1; } }
+        public ClassificationSystem Classification { get { return _classification; } }
 
-            Classification = (int)classification;
-            Rows.Add(row);
-            FileNumbers.Add(fileNumber);
+        public IList<int> Rows { get { return _rows; } }
+        public IList<int> FileNumbers { get { return _fileNumbers; } }
+        public Pointer(ClassificationSystem classification, int row, int fileNumber)
+        {
+            _rows = new List<int>();
+            _rows.Add(row);
+            _fileNumbers = new List<int>(); 
+            _fileNumbers.Add(fileNumber);
+            _classification = classification;
         }
     }
 }

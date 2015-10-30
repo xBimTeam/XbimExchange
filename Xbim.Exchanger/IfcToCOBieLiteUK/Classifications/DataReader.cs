@@ -12,27 +12,28 @@ namespace Xbim.Exchanger.IfcToCOBieLiteUK.Classifications
 {
     class DataReader
     {
-        public Dictionary<string, Pointer> MappingTable { get; private set; }
+        private Dictionary<string, Pointer> _mappingTable = new Dictionary<string, Pointer>();
 
-        public string[] DataFiles;
+        private string[] _dataFiles;
 
         int UNIColumn, NBSColumn, NRMColumn, Row, FileNumber;
         bool UNIColumnIsSet, NBSColumnIsSet, NRMColumnIsSet;
         int totalColumns;
 
-        /// <summary>
-        /// Constructor for DataReader Class
-        /// </summary>
-        /// <param name="dataFiles">Takes an array of DataFile URIs as strings</param>
-        public DataReader()
+        public Pointer GetMatchingPointer(string match)
+        {
+            Pointer pointer = null;
+            _mappingTable.TryGetValue(match, out pointer);
+            return pointer;
+
+        }
+        private void Init()
         {
             GetDataFiles();
-
-            MappingTable = new Dictionary<string, Pointer>();
             CheckDataFilesForClassifications();
         }
 
-        public void GetDataFiles()
+        private void GetDataFiles()
         {
             //Get the executing Assembly
             Assembly asmbly = Assembly.GetExecutingAssembly();
@@ -47,7 +48,7 @@ namespace Xbim.Exchanger.IfcToCOBieLiteUK.Classifications
             string uri = (new Uri(dirPath + resourceDirectory).AbsolutePath).Replace("%20", " ");
 
             //Get the data files from the resource directory.
-            DataFiles = Directory.GetFiles(uri);
+            _dataFiles = Directory.GetFiles(uri);
 
             //DataFiles = Directory.GetFiles(@"IfcToCOBieLiteUK\Classifications\DataFiles\");
         }
@@ -57,17 +58,17 @@ namespace Xbim.Exchanger.IfcToCOBieLiteUK.Classifications
         /// Dictionary of Classification numbers and a
         /// reference pointer to the file they come from.
         /// </summary>
-        public void CheckDataFilesForClassifications()
+        private void CheckDataFilesForClassifications()
         {
             //Skip if No DataFiles found.
-            if (DataFiles.Length > 0)
+            if (_dataFiles.Length > 0)
             {
                 //Loop through DataFiles
-                foreach (var DataFile in DataFiles)
+                foreach (var DataFile in _dataFiles)
                 {
                     FindColumnNumbers(DataFile);
 
-                    using (StreamReader sr = new StreamReader(DataFile))
+                    using (var sr = new StreamReader(DataFile))
                     {
                         string line;
                         // Read and display lines from the file until the end of 
@@ -135,6 +136,65 @@ namespace Xbim.Exchanger.IfcToCOBieLiteUK.Classifications
             }
         }
 
+        internal IEnumerable<InferredClassification> GetInferredMapping(Pointer match)
+        {
+            var ICs = new List<InferredClassification>();
+            //If the match has a value.
+            var lines = new List<string>();
+            for (int i = 0; i < match.Rows.Count; i++)
+            {
+                //Read one line of the file that matches the Pointer's file number and line number.
+                lines.Add(File.ReadLines(GetDataFile(match.FileNumbers[i])).Skip(match.Rows[i]).Take(1).First());
+            }
+            foreach (string line in lines)
+            {
+                var IC = new InferredClassification();
+                //Split the line using the CSV pattern so that columns are split by commas, unless the comma is inside quotes.
+                string[] columns = Regex.Split(line.Substring(0, line.Length - 1), RegexPatterns.CSVpattern);
+
+                //Search for classifications in each column.
+                for (int i = 0; i < columns.Length; i++)
+                {
+                    //Proceed if the column is not empty.
+                    if (columns[i] != null)
+                    {
+                        if (Regex.Match(columns[i], RegexPatterns.UNIPattern).Success) //If the column contains a Uniclass reference.
+                        {
+                            IC.UNICode = columns[i];
+                            IC.UNIDescription = columns[5]; //Get the Uniclass Description from column 5
+                        }
+                        else if (Regex.Match(columns[i], RegexPatterns.NBSPattern).Success) //Else - If the column contains an NBS reference.
+                        {
+                            IC.NBSCode = Regex.Match(columns[i], RegexPatterns.NBSPattern).Value.Trim();
+                            IC.NBSDescription = Regex.Split(columns[i], RegexPatterns.NBSPattern)[1].ToString().Trim().TrimEnd(new Char[] { ';' });
+                        }
+                        else if (Regex.Match(columns[i], RegexPatterns.NRMPattern).Success) //Else - If the column contains an NRM reference.
+                        {
+                            //Split the NRM column by ';' so to get all associated NRM references.
+                            var NRMs = columns[i].Split(new Char[] { ';' });
+                            //Loop through each NRM reference.
+                            foreach (var NRM in NRMs)
+                            {
+                                //Only use values that contain '(default)'.
+                                if (NRM.ToLower().Contains("(default)"))
+                                {
+                                    //Get just the NRM code
+                                    IC.NRMCode = Regex.Match(NRM, RegexPatterns.NRMPattern).Value.Trim();
+
+                                    //Get just the NRM description
+                                    string str = Regex.Split(NRM, RegexPatterns.NRMPattern)[1].ToString().Trim();
+                                    IC.NRMDescription = str.TrimEnd(new Char[] { ';' }).Substring(0, str.IndexOf('(') - 1).Trim();
+                                    //IC.NRMDescription = str.Substring(0, str.IndexOf('(') - 1).Trim();
+                                }
+                            }
+                        }
+                    }
+                }
+                ICs.Add(IC);
+            }
+            return ICs;   
+    }
+
         /// <summary>
         /// Finds whether the data contains valid
         /// classifications and stores the column
@@ -143,7 +203,7 @@ namespace Xbim.Exchanger.IfcToCOBieLiteUK.Classifications
         /// <param name="DataFile">The URI of the data file as a string.</param>
         private void FindColumnNumbers(string DataFile)
         {
-            using (StreamReader sr = new StreamReader(DataFile))
+            using (var sr = new StreamReader(DataFile))
             {
                 // Unset the boolean values that say whether a column has bee set.
                 UnsetColumns();
@@ -207,7 +267,7 @@ namespace Xbim.Exchanger.IfcToCOBieLiteUK.Classifications
                     {
                         //classReference = Regex.Match(NRM, NRMPattern).Value;
                         //If the Mapping table does not contain this NRM value set classReference to the processed NRM value.
-                        if (!MappingTable.Keys.Contains(NRM.Trim()))
+                        if (!_mappingTable.Keys.Contains(NRM.Trim()))
                         {
                             classReference = Regex.Match(NRM, RegexPatterns.NRMPattern).Value;
                         }
@@ -222,17 +282,16 @@ namespace Xbim.Exchanger.IfcToCOBieLiteUK.Classifications
                 classReference = Regex.Match(classReference, RegexPatterns.NBSPattern).Value;
             }
             //Add the references to the mapping table if they don't already exist.
-            if (!MappingTable.Keys.Contains(classReference))
+            if (!_mappingTable.Keys.Contains(classReference))
             {
                 //MappingTable.Add(classReference, new Pointer(classifier, row, fileNumber));
-                MappingTable.Add(classReference, new Pointer(classifier, row, fileNumber));
+                _mappingTable.Add(classReference, new Pointer(classifier, row, fileNumber));
             }
             else
             {
-                var map = MappingTable[classReference];
+                var map = _mappingTable[classReference];
                 map.Rows.Add(row);
-                map.FileNumbers.Add(fileNumber);
-                map.HasMultipleReferences = true;
+                map.FileNumbers.Add(fileNumber);               
             }
         }
 
@@ -256,7 +315,7 @@ namespace Xbim.Exchanger.IfcToCOBieLiteUK.Classifications
         /// <returns>URL of the data file as a string</returns>
         public string GetDataFile(int fileNumber)
         {
-            return DataFiles[fileNumber];
+            return _dataFiles[fileNumber];
         }
     }
 }
