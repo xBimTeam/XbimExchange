@@ -1872,27 +1872,26 @@ namespace XbimExchanger.IfcToCOBieLiteUK
         }
 
         /// <summary>
-        /// Get ContactKey for CreatedBy, first from IfcActor oOwnerHistory, then IfcActorSelect returning the ContactKey for the IfcActorSelect, unless defaultOnNoActor is true then default is returned, no matches also returns default
+        /// Get ContactKey for CreatedBy, first from IfcActor OwnerHistory if useOwnerHistory = true, then IfcActorSelect returning the ContactKey for the IfcActorSelect
         /// </summary>
         /// <param name="actorSelect">IfcActorSelect Object</param>
-        /// <param name="defaultOnNoActor">bool true skips IfcActorSelect key lookup</param>
+        /// <param name="useOwnerHistory">bool true get created by from owner history</param>
         /// <returns>ContactKey</returns>
-        internal ContactKey GetCreatedBy(IfcActorSelect actorSelect, bool defaultOnNoActor = false)
+        internal ContactKey GetCreatedBy(IfcActorSelect actorSelect, bool useOwnerHistory = false)
         {
+            //As IfcActor have Owner History, and we are looking for ownerHistory, try and see if IfcActor is associated with the Actor Select
             IfcActor actor;
-            if (_actors.TryGetValue(actorSelect, out actor))
+            if (useOwnerHistory && _actors.TryGetValue(actorSelect, out actor))
             {
                 return GetCreatedBy(actor);
             }
-            if (defaultOnNoActor)
-            {
-                return new ContactKey { Email = XbimCreatedBy.Email };
-            }
+
             ContactKey key;
             if (_createdByKeys.TryGetValue(actorSelect, out key))
             {
                 return key;
             }
+
             return new ContactKey {Email = XbimCreatedBy.Email};
         }
 
