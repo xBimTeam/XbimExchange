@@ -10,29 +10,32 @@ namespace XbimExchanger.COBieLiteUkToIfc
     {
         protected override IfcSpace Mapping(Space spaceType, IfcSpace ifcSpace)
         {
-            ifcSpace.Name = spaceType.Name;
-            ifcSpace.Description = spaceType.Description;
-            ifcSpace.CompositionType=IfcElementCompositionEnum.ELEMENT;
-            Exchanger.TryCreatePropertySingleValue(ifcSpace, new DecimalAttributeValue{ Value = spaceType.GrossArea}, "SpaceGrossAreaValue", Exchanger.DefaultAreaUnit);
-            Exchanger.TryCreatePropertySingleValue(ifcSpace, new DecimalAttributeValue{ Value =spaceType.NetArea}, "SpaceNetAreaValue", Exchanger.DefaultAreaUnit);
-            Exchanger.TryCreatePropertySingleValue(ifcSpace, spaceType.RoomTag, "SpaceSignageName");
-            Exchanger.TryCreatePropertySingleValue(ifcSpace, new DecimalAttributeValue{ Value =spaceType.UsableHeight}, "SpaceUsableHeightValue", Exchanger.DefaultAreaUnit);
-
-            #region Attributes
-            if (spaceType.Attributes != null)
+            Exchanger.SetUserHistory(ifcSpace, spaceType.ExternalSystem, (spaceType.CreatedBy == null) ? null : spaceType.CreatedBy.Email, (spaceType.CreatedOn == null) ? DateTime.Now : (DateTime)spaceType.CreatedOn);
+            using (OwnerHistoryEditScope ohContext = new OwnerHistoryEditScope(Exchanger.TargetRepository, ifcSpace.OwnerHistory))
             {
-                foreach (var attribute in spaceType.Attributes)
-                    Exchanger.ConvertAttributeTypeToIfcObjectProperty(ifcSpace, attribute);
-            }
-            #endregion
+                ifcSpace.Name = spaceType.Name;
+                ifcSpace.Description = spaceType.Description;
+                ifcSpace.CompositionType = IfcElementCompositionEnum.ELEMENT;
+                Exchanger.TryCreatePropertySingleValue(ifcSpace, new DecimalAttributeValue { Value = spaceType.GrossArea }, "SpaceGrossAreaValue", Exchanger.DefaultAreaUnit);
+                Exchanger.TryCreatePropertySingleValue(ifcSpace, new DecimalAttributeValue { Value = spaceType.NetArea }, "SpaceNetAreaValue", Exchanger.DefaultAreaUnit);
+                Exchanger.TryCreatePropertySingleValue(ifcSpace, spaceType.RoomTag, "SpaceSignageName");
+                Exchanger.TryCreatePropertySingleValue(ifcSpace, new DecimalAttributeValue { Value = spaceType.UsableHeight }, "SpaceUsableHeightValue", Exchanger.DefaultAreaUnit);
 
-            #region Documents
-            if (spaceType.Documents != null && spaceType.Documents.Any())
-            {
-                Exchanger.ConvertDocumentsToDocumentSelect(ifcSpace, spaceType.Documents);
+                #region Attributes
+                if (spaceType.Attributes != null)
+                {
+                    foreach (var attribute in spaceType.Attributes)
+                        Exchanger.ConvertAttributeTypeToIfcObjectProperty(ifcSpace, attribute);
+                }
+                #endregion
+
+                #region Documents
+                if (spaceType.Documents != null && spaceType.Documents.Any())
+                {
+                    Exchanger.ConvertDocumentsToDocumentSelect(ifcSpace, spaceType.Documents);
+                }
+                #endregion
             }
-            #endregion
-            
             return ifcSpace;
         }
     }

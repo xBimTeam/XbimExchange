@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using Xbim.COBieLiteUK;
 using Xbim.Ifc2x3.Extensions;
 using Xbim.Ifc2x3.ProductExtension;
@@ -19,53 +20,57 @@ namespace XbimExchanger.COBieLiteUkToIfc
         /// <returns></returns>
         protected override IfcBuildingStorey Mapping(Floor floor, IfcBuildingStorey buildingStorey)
         {
-            buildingStorey.Name = floor.Name;
-            buildingStorey.Description = floor.Description;
-            buildingStorey.CompositionType = IfcElementCompositionEnum.ELEMENT;
-            buildingStorey.Elevation = floor.Elevation;
+            Exchanger.SetUserHistory(buildingStorey, floor.ExternalSystem, (floor.CreatedBy == null) ? null : floor.CreatedBy.Email, (floor.CreatedOn == null) ? DateTime.Now : (DateTime)floor.CreatedOn);
+            using (OwnerHistoryEditScope ohContext = new OwnerHistoryEditScope(Exchanger.TargetRepository, buildingStorey.OwnerHistory))
+            {
+                buildingStorey.Name = floor.Name;
+                buildingStorey.Description = floor.Description;
+                buildingStorey.CompositionType = IfcElementCompositionEnum.ELEMENT;
+                buildingStorey.Elevation = floor.Elevation;
 
-            #region Categories
+                #region Categories
 
-            if (floor.Categories != null)
-                foreach (var category in floor.Categories)
+                if (floor.Categories != null)
+                    foreach (var category in floor.Categories)
+                    {
+                        Exchanger.ConvertCategoryToClassification(category, buildingStorey);
+                    }
+
+                #endregion
+
+                Exchanger.TryCreatePropertySingleValue(buildingStorey, new DecimalAttributeValue { Value = floor.Height }, "FloorHeightValue", Exchanger.DefaultLinearUnit);
+
+                //write out the spaces
+                if (floor.Spaces != null)
                 {
-                    Exchanger.ConvertCategoryToClassification(category, buildingStorey);
+                    var spaceMapping = Exchanger.GetOrCreateMappings<MappingSpaceToIfcSpace>();
+                    foreach (var space in floor.Spaces)
+                    {
+                        var ifcSpace = spaceMapping.AddMapping(space, spaceMapping.GetOrCreateTargetObject(space.ExternalId));
+                        buildingStorey.AddToSpatialDecomposition(ifcSpace);
+                        Exchanger.AddToSpaceMap(ifcSpace);
+                    }
                 }
 
-            #endregion
+                #region Attributes
 
-            Exchanger.TryCreatePropertySingleValue(buildingStorey, new DecimalAttributeValue { Value = floor.Height}, "FloorHeightValue", Exchanger.DefaultLinearUnit);
-            
-            //write out the spaces
-            if (floor.Spaces != null)
-            {
-                var spaceMapping = Exchanger.GetOrCreateMappings<MappingSpaceToIfcSpace>();
-                foreach (var space in floor.Spaces)
+                if (floor.Attributes != null)
                 {
-                    var ifcSpace = spaceMapping.AddMapping(space, spaceMapping.GetOrCreateTargetObject(space.ExternalId));
-                    buildingStorey.AddToSpatialDecomposition(ifcSpace);
-                    Exchanger.AddToSpaceMap(ifcSpace);
+
+                    foreach (var attribute in floor.Attributes)
+                    {
+                        Exchanger.ConvertAttributeTypeToIfcObjectProperty(buildingStorey, attribute);
+                    }
                 }
-            }
+                #endregion
 
-            #region Attributes
-
-            if (floor.Attributes != null)
-            {
-
-                foreach (var attribute in floor.Attributes)
+                #region Documents
+                if (floor.Documents != null && floor.Documents.Any())
                 {
-                   Exchanger.ConvertAttributeTypeToIfcObjectProperty(buildingStorey, attribute);
+                    Exchanger.ConvertDocumentsToDocumentSelect(buildingStorey, floor.Documents);
                 }
+                #endregion
             }
-            #endregion
-
-            #region Documents
-            if (floor.Documents != null && floor.Documents.Any())
-            {
-                Exchanger.ConvertDocumentsToDocumentSelect(buildingStorey, floor.Documents);
-            }
-            #endregion
             return buildingStorey;
         }
     }

@@ -11,54 +11,57 @@ namespace XbimExchanger.COBieLiteUkToIfc
     {
         protected override IfcZone Mapping(Zone zone, IfcZone ifcZone)
         {
-            ifcZone.Name = zone.Name;
-            ifcZone.Description = zone.Description;
-
-            #region Properties
-           
-            
-
-            #endregion
-
-            #region Categories
-
-            if (zone.Categories != null)
-                foreach (var category in zone.Categories)
-                {
-                    Exchanger.ConvertCategoryToClassification(category, ifcZone);
-                }
-
-            #endregion
-
-            #region Attributes
-
-            if (zone.Attributes != null)
+            Exchanger.SetUserHistory(ifcZone, zone.ExternalSystem, (zone.CreatedBy == null) ? null : zone.CreatedBy.Email, (zone.CreatedOn == null) ? DateTime.Now : (DateTime)zone.CreatedOn);
+            using (OwnerHistoryEditScope ohContext = new OwnerHistoryEditScope(Exchanger.TargetRepository, ifcZone.OwnerHistory))
             {
+                ifcZone.Name = zone.Name;
+                ifcZone.Description = zone.Description;
 
-                foreach (var attribute in zone.Attributes)
+                #region Properties
+
+
+
+                #endregion
+
+                #region Categories
+
+                if (zone.Categories != null)
+                    foreach (var category in zone.Categories)
+                    {
+                        Exchanger.ConvertCategoryToClassification(category, ifcZone);
+                    }
+
+                #endregion
+
+                #region Attributes
+
+                if (zone.Attributes != null)
                 {
-                    Exchanger.ConvertAttributeTypeToIfcObjectProperty(ifcZone, attribute);
+
+                    foreach (var attribute in zone.Attributes)
+                    {
+                        Exchanger.ConvertAttributeTypeToIfcObjectProperty(ifcZone, attribute);
+                    }
                 }
-            }
-            #endregion
+                #endregion
 
-            #region Spaces
+                #region Spaces
 
-            if (zone.Spaces != null)
-                foreach (var spaceKey in zone.Spaces)
+                if (zone.Spaces != null)
+                    foreach (var spaceKey in zone.Spaces)
+                    {
+                        Exchanger.AddSpaceToZone(spaceKey, ifcZone);
+                    }
+
+                #endregion
+
+                #region Documents
+                if (zone.Documents != null && zone.Documents.Any())
                 {
-                    Exchanger.AddSpaceToZone(spaceKey, ifcZone);
+                    Exchanger.ConvertDocumentsToDocumentSelect(ifcZone, zone.Documents);
                 }
-
-            #endregion
-
-            #region Documents
-            if (zone.Documents != null && zone.Documents.Any())
-            {
-                Exchanger.ConvertDocumentsToDocumentSelect(ifcZone, zone.Documents);
+                #endregion
             }
-            #endregion
-
             return ifcZone;
 
         }

@@ -11,52 +11,55 @@ namespace XbimExchanger.COBieLiteUkToIfc
 
         protected override TToObject Mapping(Asset asset, TToObject ifcElement)
         {
-            ifcElement.Name = asset.Name;
-            ifcElement.Description = asset.Description;
-
-            #region Categories
-            if (asset.Categories != null)
-                foreach (var category in asset.Categories)
-                {
-                    Exchanger.ConvertCategoryToClassification(category, ifcElement);
-                }
-
-            #endregion
-
-            #region Attributes
-
-            if (asset.Attributes != null)
+            Exchanger.SetUserHistory(ifcElement, asset.ExternalSystem, (asset.CreatedBy == null) ? null : asset.CreatedBy.Email, (asset.CreatedOn == null) ? DateTime.Now : (DateTime)asset.CreatedOn);
+            using (OwnerHistoryEditScope context = new OwnerHistoryEditScope(Exchanger.TargetRepository, ifcElement.OwnerHistory))
             {
+                ifcElement.Name = asset.Name;
+                ifcElement.Description = asset.Description;
 
-                foreach (var attribute in asset.Attributes)
+                #region Categories
+                if (asset.Categories != null)
+                    foreach (var category in asset.Categories)
+                    {
+                        Exchanger.ConvertCategoryToClassification(category, ifcElement);
+                    }
+
+                #endregion
+
+                #region Attributes
+
+                if (asset.Attributes != null)
                 {
-                    Exchanger.ConvertAttributeTypeToIfcObjectProperty(ifcElement, attribute);
+
+                    foreach (var attribute in asset.Attributes)
+                    {
+                        Exchanger.ConvertAttributeTypeToIfcObjectProperty(ifcElement, attribute);
+                    }
                 }
-            }
-            #endregion
+                #endregion
 
-            #region Space Assignments
+                #region Space Assignments
 
-            if (asset.Spaces != null && asset.Spaces.Any())
-            {
-                foreach (var spaceAssignment in asset.Spaces)
+                if (asset.Spaces != null && asset.Spaces.Any())
                 {
-                    var ifcSpace = Exchanger.GetIfcSpace(spaceAssignment);
-                    if (ifcSpace != null) 
-                        //throw new Exception("Space " + spaceAssignment.Name + " - " + spaceAssignment.Name+" cannot be found");
+                    foreach (var spaceAssignment in asset.Spaces)
+                    {
+                        var ifcSpace = Exchanger.GetIfcSpace(spaceAssignment);
+                        if (ifcSpace != null)
+                            //throw new Exception("Space " + spaceAssignment.Name + " - " + spaceAssignment.Name+" cannot be found");
 
-                    ifcSpace.AddElement(ifcElement);
+                            ifcSpace.AddElement(ifcElement);
+                    }
                 }
-            }
-            #endregion
+                #endregion
 
-            #region Documents
-            if (asset.Documents != null && asset.Documents.Any())
-            {
-                Exchanger.ConvertDocumentsToDocumentSelect(ifcElement, asset.Documents);
+                #region Documents
+                if (asset.Documents != null && asset.Documents.Any())
+                {
+                    Exchanger.ConvertDocumentsToDocumentSelect(ifcElement, asset.Documents);
+                }
+                #endregion
             }
-            #endregion
-
             return ifcElement;
         }
     }

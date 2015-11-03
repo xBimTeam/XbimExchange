@@ -278,7 +278,7 @@ namespace XbimExchanger.COBieLiteUkToIfc
                 propertySetDefinitionList = new List<IfcPropertySetDefinition>();
                 _objectsToPropertySets.Add(ifcObjectDefinition, propertySetDefinitionList);
             }
-            var propertySet = propertySetDefinitionList.Find(p => p.Name == propertySetName);
+            IfcPropertySetDefinition propertySet = propertySetDefinitionList.Find(p => p.Name == propertySetName);
             if (propertySet == null)
             {
                 //simplistic way to decide if this should be a quantity, IFC 4 specifies the name starts with QTO, under 2x3 most vendors have gone for BaseQuantities
@@ -577,7 +577,12 @@ namespace XbimExchanger.COBieLiteUkToIfc
             //need to add in consideration for quantities not just properties
             var ifcSimpleProperty = ConvertAttributeToIfcSimpleProperty(attributeType);
             var propertySet = GetOrCreatePropertySetDefinition(ifcObjectDefinition, attributeType.PropertySetName);
-            propertySet.Add(ifcSimpleProperty);
+
+            SetUserHistory(propertySet, attributeType.ExternalSystem, (attributeType.CreatedBy == null) ? null : attributeType.CreatedBy.Email, (attributeType.CreatedOn == null) ? DateTime.Now : (DateTime)attributeType.CreatedOn);
+            using (OwnerHistoryEditScope ohContext = new OwnerHistoryEditScope(TargetRepository, propertySet.OwnerHistory))
+            {
+                propertySet.Add(ifcSimpleProperty);
+            }
         }
 
         /// <summary>
