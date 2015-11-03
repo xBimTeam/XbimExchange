@@ -576,7 +576,9 @@ namespace XbimExchanger.COBieLiteUkToIfc
         {
             //need to add in consideration for quantities not just properties
             var ifcSimpleProperty = ConvertAttributeToIfcSimpleProperty(attributeType);
-            var propertySet = GetOrCreatePropertySetDefinition(ifcObjectDefinition, attributeType.PropertySetName);
+            //if no property set name i.e. null, then use this default. If null is excluded on round trip hence the PSet_XBim_IfcExport name.
+            string psetName = StringHasValue(attributeType.PropertySetName) ? attributeType.PropertySetName : "PSet_XBim_IfcExport";
+            var propertySet = GetOrCreatePropertySetDefinition(ifcObjectDefinition, psetName);
 
             SetUserHistory(propertySet, attributeType.ExternalSystem, (attributeType.CreatedBy == null) ? null : attributeType.CreatedBy.Email, (attributeType.CreatedOn == null) ? DateTime.Now : (DateTime)attributeType.CreatedOn);
             using (OwnerHistoryEditScope ohContext = new OwnerHistoryEditScope(TargetRepository, propertySet.OwnerHistory))
