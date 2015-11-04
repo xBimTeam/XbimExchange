@@ -2,9 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Text;
 using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 using Xbim.Exchanger.IfcToCOBieLiteUK.Classifications.Components;
 using Assembly = System.Reflection.Assembly;
 
@@ -19,6 +17,11 @@ namespace Xbim.Exchanger.IfcToCOBieLiteUK.Classifications
         int UNIColumn, NBSColumn, NRMColumn, Row, FileNumber;
         bool UNIColumnIsSet, NBSColumnIsSet, NRMColumnIsSet;
         int totalColumns;
+
+        public DataReader()
+        {
+            Init();
+        }
 
         public Pointer GetMatchingPointer(string match)
         {
