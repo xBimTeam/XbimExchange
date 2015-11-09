@@ -13,7 +13,6 @@ namespace Xbim.Exchanger.IfcToCOBieLiteUK.Classifications
         /// </summary>
         static public void Classify(this Facility facility)
         {
-            
             AddClassificationsToAssets(facility);
         }
 
@@ -44,61 +43,59 @@ namespace Xbim.Exchanger.IfcToCOBieLiteUK.Classifications
                         {
                             //Get the Inferred Classifications
 
-                            var ICs = FindInferredClassifications(attr.Value.GetStringValue(), dataReader);
+                            var inferredClassifications = FindInferredClassifications(attr.Value.GetStringValue(), dataReader);
 
-                            foreach (var IC in ICs)
+                            foreach (var ic in inferredClassifications)
                             {
-                                bool UNIMatch = false;
-                                bool NBSMatch = false;
-                                bool NRMMatch = false;
+                                bool UniclassMatch = false;
+                                bool NbsMatch = false;
+                                bool NrmMatch = false;
 
                                 foreach (var cat in a.Categories)
                                 {
-                                    if (IC.UNICode != null && cat.Code == IC.UNICode)
+                                    if (ic.UniclassCode != null && cat.Code == ic.UniclassCode)
                                     {
-                                        UNIMatch = true;
+                                        UniclassMatch = true;
                                     }
-                                    if (IC.NBSCode != null && cat.Code == IC.NBSCode)
+                                    if (ic.NbsCode != null && cat.Code == ic.NbsCode)
                                     {
-                                        NBSMatch = true;
+                                        NbsMatch = true;
                                     }
-                                    if (IC.NRMCode != null && cat.Code == IC.NRMCode)
+                                    if (ic.NrmCode != null && cat.Code == ic.NrmCode)
                                     {
-                                        NRMMatch = true;
+                                        NrmMatch = true;
                                     }
                                 }
                                 //Add the Classifications as categories if they exist.
-                                if (IC.UNICode != null && !UNIMatch)
+                                if (ic.UniclassCode != null && !UniclassMatch)
                                 {
                                     var uniClass = new Xbim.COBieLiteUK.Category();
                                     uniClass.Classification = "Uniclass 2015 Reference (Inferred)";
-                                    uniClass.Code = IC.UNICode;
-                                    uniClass.Description = IC.UNIDescription;
+                                    uniClass.Code = ic.UniclassCode;
+                                    uniClass.Description = ic.UniclassDescription;
                                     a.Categories.Add(uniClass);
                                 }
-                                if (IC.NBSCode != null && !NBSMatch)
+                                if (ic.NbsCode != null && !NbsMatch)
                                 {
-                                    Xbim.COBieLiteUK.Category NBS = new Xbim.COBieLiteUK.Category();
-                                    NBS.Classification = "NBS Reference (Inferred)";
-                                    NBS.Code = IC.NBSCode;
-                                    NBS.Description = IC.NBSDescription;
-                                    a.Categories.Add(NBS);
+                                    Xbim.COBieLiteUK.Category Nbs = new Xbim.COBieLiteUK.Category();
+                                    Nbs.Classification = "NBS Reference (Inferred)";
+                                    Nbs.Code = ic.NbsCode;
+                                    Nbs.Description = ic.NbsDescription;
+                                    a.Categories.Add(Nbs);
                                 }
-                                if (IC.NRMCode != null && !NRMMatch)
+                                if (ic.NrmCode != null && !NrmMatch)
                                 {
-                                    Xbim.COBieLiteUK.Category NRM = new Xbim.COBieLiteUK.Category();
-                                    NRM.Classification = "NRM Reference (Inferred)";
-                                    NRM.Code = IC.NRMCode;
-                                    NRM.Description = IC.NRMDescription;
-                                    a.Categories.Add(NRM);
+                                    Xbim.COBieLiteUK.Category Nrm = new Xbim.COBieLiteUK.Category();
+                                    Nrm.Classification = "NRM Reference (Inferred)";
+                                    Nrm.Code = ic.NrmCode;
+                                    Nrm.Description = ic.NrmDescription;
+                                    a.Categories.Add(Nrm);
                                 }
                             }
 
                         }
                     }
                 }
-
-
             }
         }
 
@@ -113,17 +110,17 @@ namespace Xbim.Exchanger.IfcToCOBieLiteUK.Classifications
         {
             //Check to see if the property is a valid classification            
             Pointer match = null;
-            var classificationMatches = Regex.Match(property, RegexPatterns.UNIPattern);
+            var classificationMatches = Regex.Match(property, RegexPatterns.UniclassPattern);
             if (classificationMatches.Success)
                 match = dataReader.GetMatchingPointer(classificationMatches.Value); //Get Uniclass matches from the Mappings Table
             else
             {
-                classificationMatches = Regex.Match(property, RegexPatterns.NBSPattern);
+                classificationMatches = Regex.Match(property, RegexPatterns.NbsPattern);
                 if (classificationMatches.Success)
                     match = dataReader.GetMatchingPointer(classificationMatches.Value);
                 else
                 {
-                    classificationMatches = Regex.Match(property, RegexPatterns.NRMPattern);
+                    classificationMatches = Regex.Match(property, RegexPatterns.NrmPattern);
                     if (classificationMatches.Success)
                         match = dataReader.GetMatchingPointer(classificationMatches.Value);
                 }

@@ -17,7 +17,7 @@ namespace XbimExchanger.IfcToCOBieLiteUK
     /// </summary>
     public class IfcToCOBieLiteUkExchanger : XbimExchanger<XbimModel, List<Facility> >
     {
-        private bool classify = false;
+        private bool _classify = false;
         internal CoBieLiteUkHelper Helper ;
         /// <summary>
         /// Instantiates a new IfcToCOBieLiteUkExchanger class.
@@ -34,7 +34,7 @@ namespace XbimExchanger.IfcToCOBieLiteUK
         {
             ReportProgress.Progress = reportProgress; //set reporter
             Helper = new CoBieLiteUkHelper(source, ReportProgress, filter, configFile, extId, sysMode);
-            this.classify = classify;
+            this._classify = classify;
         }
 
         /// <summary>
@@ -50,7 +50,7 @@ namespace XbimExchanger.IfcToCOBieLiteUK
             {
                 var facility = new Facility();
                 facility = mapping.AddMapping(ifcBuilding, facility);
-                if(classify)       
+                if(_classify)       
                     facility.Classify();
                 facilities.Add(facility);
             }

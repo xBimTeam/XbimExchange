@@ -12,6 +12,6 @@ namespace Xbim.Exchanger.IfcToCOBieLiteUK.Classifications.Components
     /// </summary>
     public enum ClassificationSystem :byte
     {
-        UNI=1, NBS=2, NRM=3
+        Uniclass=1, Nbs=2, Nrm=3
     }
 }

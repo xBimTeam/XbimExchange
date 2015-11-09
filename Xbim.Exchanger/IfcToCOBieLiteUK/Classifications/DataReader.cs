@@ -14,9 +14,9 @@ namespace Xbim.Exchanger.IfcToCOBieLiteUK.Classifications
 
         private string[] _dataFiles;
 
-        int UNIColumn, NBSColumn, NRMColumn, Row, FileNumber;
-        bool UNIColumnIsSet, NBSColumnIsSet, NRMColumnIsSet;
-        int totalColumns;
+        private int _uniclassColumn, _nbsColumn, _nrmColumn, _row, _fileNumber, _totalColumns;
+        private bool _uniclassColumnIsSet, _nbsColumnIsSet, _nrmColumnIsSet;
+      
 
         public DataReader()
         {
@@ -76,72 +76,72 @@ namespace Xbim.Exchanger.IfcToCOBieLiteUK.Classifications
                         string line;
                         // Read and display lines from the file until the end of 
                         // the file is reached.
-                        Row = 0;
+                        _row = 0;
 
                         while ((line = sr.ReadLine()) != null)
                         {
                             //Split Columns by comma, ignoring commas inside of fields.
-                            string[] columns = Regex.Split(line.Substring(0, line.Length - 1), RegexPatterns.CSVpattern);
+                            string[] columns = Regex.Split(line.Substring(0, line.Length - 1), RegexPatterns.CsvPattern);
 
                             //Only look at columns with UNIClass value
-                            var match = Regex.Match(columns[UNIColumn], RegexPatterns.UNIPattern);
+                            var match = Regex.Match(columns[_uniclassColumn], RegexPatterns.UniclassPattern);
                             if (match.Value != "" && columns.Length >= 7)
                             {
                                 //Check if both NBS and NRM existin DataFile and that current row has enough columns to have them
-                                if (NBSColumnIsSet && NRMColumnIsSet && columns.Length == totalColumns)
+                                if (_nbsColumnIsSet && _nrmColumnIsSet && columns.Length == _totalColumns)
                                 {
                                     //Check if both NBS and NRM exist in DataFile, and have values in this row
-                                    if (columns[NBSColumn] != "" && columns[NRMColumn] != "")
+                                    if (columns[_nbsColumn] != "" && columns[_nrmColumn] != "")
                                     {
-                                        AddConditionalMapping(columns[UNIColumn], ClassificationSystem.UNI, Row, FileNumber);
-                                        AddConditionalMapping(columns[NBSColumn], ClassificationSystem.NBS, Row, FileNumber);
-                                        AddConditionalMapping(columns[NRMColumn], ClassificationSystem.NRM, Row, FileNumber);
+                                        AddConditionalMapping(columns[_uniclassColumn], ClassificationSystem.Uniclass, _row, _fileNumber);
+                                        AddConditionalMapping(columns[_nbsColumn], ClassificationSystem.Nbs, _row, _fileNumber);
+                                        AddConditionalMapping(columns[_nrmColumn], ClassificationSystem.Nrm, _row, _fileNumber);
                                     }
                                     //Check if both NBS and NRM exist in DataFile, but only NRM has a value
-                                    else if (columns[NBSColumn] != "" && columns[NRMColumn] == "")
+                                    else if (columns[_nbsColumn] != "" && columns[_nrmColumn] == "")
                                     {
-                                        AddConditionalMapping(columns[UNIColumn], ClassificationSystem.UNI, Row, FileNumber);
-                                        AddConditionalMapping(columns[NBSColumn], ClassificationSystem.NBS, Row, FileNumber);
+                                        AddConditionalMapping(columns[_uniclassColumn], ClassificationSystem.Uniclass, _row, _fileNumber);
+                                        AddConditionalMapping(columns[_nbsColumn], ClassificationSystem.Nbs, _row, _fileNumber);
                                     }
                                     //Check if both NBS and NRM exist in DataFile, but only NBS has a value
-                                    else if (columns[NBSColumn] == "" && columns[NRMColumn] != "")
+                                    else if (columns[_nbsColumn] == "" && columns[_nrmColumn] != "")
                                     {
-                                        AddConditionalMapping(columns[UNIColumn], ClassificationSystem.UNI, Row, FileNumber);
-                                        AddConditionalMapping(columns[NRMColumn], ClassificationSystem.NRM, Row, FileNumber);
+                                        AddConditionalMapping(columns[_uniclassColumn], ClassificationSystem.Uniclass, _row, _fileNumber);
+                                        AddConditionalMapping(columns[_nrmColumn], ClassificationSystem.Nrm, _row, _fileNumber);
                                     }
                                 }
                                 //Check if only NBS exists in DataFile and that current row has enough columns to have NBS
-                                else if (NBSColumnIsSet && !NRMColumnIsSet && columns.Length == totalColumns)
+                                else if (_nbsColumnIsSet && !_nrmColumnIsSet && columns.Length == _totalColumns)
                                 {
                                     //Check if NBS value is set
-                                    if (columns[NBSColumn] != "")
+                                    if (columns[_nbsColumn] != "")
                                     {
-                                        AddConditionalMapping(columns[UNIColumn], ClassificationSystem.UNI, Row, FileNumber);
-                                        AddConditionalMapping(columns[NBSColumn], ClassificationSystem.NBS, Row, FileNumber);
+                                        AddConditionalMapping(columns[_uniclassColumn], ClassificationSystem.Uniclass, _row, _fileNumber);
+                                        AddConditionalMapping(columns[_nbsColumn], ClassificationSystem.Nbs, _row, _fileNumber);
                                     }
                                 }
                                 //Check if only NRM exists in DataFile and that current row has enough columns to have NRM
-                                else if (!NBSColumnIsSet && NRMColumnIsSet && columns.Length == totalColumns)
+                                else if (!_nbsColumnIsSet && _nrmColumnIsSet && columns.Length == _totalColumns)
                                 {
                                     //Check if NRM value is set
-                                    if (columns[NRMColumn] != "")
+                                    if (columns[_nrmColumn] != "")
                                     {
-                                        AddConditionalMapping(columns[UNIColumn], ClassificationSystem.UNI, Row, FileNumber);
-                                        AddConditionalMapping(columns[NRMColumn], ClassificationSystem.NRM, Row, FileNumber);
+                                        AddConditionalMapping(columns[_uniclassColumn], ClassificationSystem.Uniclass, _row, _fileNumber);
+                                        AddConditionalMapping(columns[_nrmColumn], ClassificationSystem.Nrm, _row, _fileNumber);
                                     }
                                 }
                             }
-                            Row++; // End of Row
+                            _row++; // End of Row
                         }
                     }
-                    FileNumber++; // End of File
+                    _fileNumber++; // End of File
                 }
             }
         }
 
         internal IEnumerable<InferredClassification> GetInferredMapping(Pointer match)
         {
-            var ICs = new List<InferredClassification>();
+            var inferredClassifications = new List<InferredClassification>();
             //If the match has a value.
             var lines = new List<string>();
             for (int i = 0; i < match.Rows.Count; i++)
@@ -151,9 +151,9 @@ namespace Xbim.Exchanger.IfcToCOBieLiteUK.Classifications
             }
             foreach (string line in lines)
             {
-                var IC = new InferredClassification();
+                var ic = new InferredClassification();
                 //Split the line using the CSV pattern so that columns are split by commas, unless the comma is inside quotes.
-                string[] columns = Regex.Split(line.Substring(0, line.Length - 1), RegexPatterns.CSVpattern);
+                string[] columns = Regex.Split(line.Substring(0, line.Length - 1), RegexPatterns.CsvPattern);
 
                 //Search for classifications in each column.
                 for (int i = 0; i < columns.Length; i++)
@@ -161,41 +161,41 @@ namespace Xbim.Exchanger.IfcToCOBieLiteUK.Classifications
                     //Proceed if the column is not empty.
                     if (columns[i] != null)
                     {
-                        if (Regex.Match(columns[i], RegexPatterns.UNIPattern).Success) //If the column contains a Uniclass reference.
+                        if (Regex.Match(columns[i], RegexPatterns.UniclassPattern).Success) //If the column contains a Uniclass reference.
                         {
-                            IC.UNICode = columns[i];
-                            IC.UNIDescription = columns[5]; //Get the Uniclass Description from column 5
+                            ic.UniclassCode = columns[i];
+                            ic.UniclassDescription = columns[5]; //Get the Uniclass Description from column 5
                         }
-                        else if (Regex.Match(columns[i], RegexPatterns.NBSPattern).Success) //Else - If the column contains an NBS reference.
+                        else if (Regex.Match(columns[i], RegexPatterns.NbsPattern).Success) //Else - If the column contains an NBS reference.
                         {
-                            IC.NBSCode = Regex.Match(columns[i], RegexPatterns.NBSPattern).Value.Trim();
-                            IC.NBSDescription = Regex.Split(columns[i], RegexPatterns.NBSPattern)[1].ToString().Trim().TrimEnd(new Char[] { ';' });
+                            ic.NbsCode = Regex.Match(columns[i], RegexPatterns.NbsPattern).Value.Trim();
+                            ic.NbsDescription = Regex.Split(columns[i], RegexPatterns.NbsPattern)[1].ToString().Trim().TrimEnd(new Char[] { ';' });
                         }
-                        else if (Regex.Match(columns[i], RegexPatterns.NRMPattern).Success) //Else - If the column contains an NRM reference.
+                        else if (Regex.Match(columns[i], RegexPatterns.NrmPattern).Success) //Else - If the column contains an NRM reference.
                         {
                             //Split the NRM column by ';' so to get all associated NRM references.
-                            var NRMs = columns[i].Split(new Char[] { ';' });
+                            var nrms = columns[i].Split(new Char[] { ';' });
                             //Loop through each NRM reference.
-                            foreach (var NRM in NRMs)
+                            foreach (var nrm in nrms)
                             {
                                 //Only use values that contain '(default)'.
-                                if (NRM.ToLower().Contains("(default)"))
+                                if (nrm.ToLower().Contains("(default)"))
                                 {
                                     //Get just the NRM code
-                                    IC.NRMCode = Regex.Match(NRM, RegexPatterns.NRMPattern).Value.Trim();
+                                    ic.NrmCode = Regex.Match(nrm, RegexPatterns.NrmPattern).Value.Trim();
 
                                     //Get just the NRM description
-                                    string str = Regex.Split(NRM, RegexPatterns.NRMPattern)[1].ToString().Trim();
-                                    IC.NRMDescription = str.TrimEnd(new Char[] { ';' }).Substring(0, str.IndexOf('(') - 1).Trim();
+                                    string str = Regex.Split(nrm, RegexPatterns.NrmPattern)[1].ToString().Trim();
+                                    ic.NrmDescription = str.TrimEnd(new Char[] { ';' }).Substring(0, str.IndexOf('(') - 1).Trim();
                                     //IC.NRMDescription = str.Substring(0, str.IndexOf('(') - 1).Trim();
                                 }
                             }
                         }
                     }
                 }
-                ICs.Add(IC);
+                inferredClassifications.Add(ic);
             }
-            return ICs;   
+            return inferredClassifications;   
     }
 
         /// <summary>
@@ -213,32 +213,32 @@ namespace Xbim.Exchanger.IfcToCOBieLiteUK.Classifications
 
                 string line; //String line for StreamReader
                 //Get Line from StreamReader if the ColumnIsSet values are false
-                while ((line = sr.ReadLine()) != null && !(UNIColumnIsSet && NBSColumnIsSet && NRMColumnIsSet))
+                while ((line = sr.ReadLine()) != null && !(_uniclassColumnIsSet && _nbsColumnIsSet && _nrmColumnIsSet))
                 {
                     //Split the line with CSV pattern
-                    string[] columns = Regex.Split(line.Substring(0, line.Length - 1), RegexPatterns.CSVpattern);
+                    string[] columns = Regex.Split(line.Substring(0, line.Length - 1), RegexPatterns.CsvPattern);
 
                     for (int i = 0; i < columns.Length; i++)
                     {
                         // Set column number if the column is not set and a Uniclass pattern is found.
-                        if ((Regex.Match(columns[i], RegexPatterns.UNIPattern).Value != "") && !UNIColumnIsSet)
+                        if ((Regex.Match(columns[i], RegexPatterns.UniclassPattern).Value != "") && !_uniclassColumnIsSet)
                         {
-                            UNIColumn = i;
-                            UNIColumnIsSet = true;
+                            _uniclassColumn = i;
+                            _uniclassColumnIsSet = true;
                         }
                         // Set column number if the column is not set and a NBS pattern is found.
-                        if ((Regex.Match(columns[i], RegexPatterns.NBSPattern).Value != "") && !NBSColumnIsSet)
+                        if ((Regex.Match(columns[i], RegexPatterns.NbsPattern).Value != "") && !_nbsColumnIsSet)
                         {
-                            NBSColumn = i;
-                            NBSColumnIsSet = true;
-                            totalColumns = columns.Length;
+                            _nbsColumn = i;
+                            _nbsColumnIsSet = true;
+                            _totalColumns = columns.Length;
                         }
                         // Set column number if the column is not set and a NRM pattern is found.
-                        if ((Regex.Match(columns[i], RegexPatterns.NRMPattern).Value != "") && !NRMColumnIsSet)
+                        if ((Regex.Match(columns[i], RegexPatterns.NrmPattern).Value != "") && !_nrmColumnIsSet)
                         {
-                            NRMColumn = i;
-                            NRMColumnIsSet = true;
-                            totalColumns = columns.Length;
+                            _nrmColumn = i;
+                            _nrmColumnIsSet = true;
+                            _totalColumns = columns.Length;
                         }
                     }
                 }
@@ -258,31 +258,31 @@ namespace Xbim.Exchanger.IfcToCOBieLiteUK.Classifications
         private void AddConditionalMapping(string classReference, ClassificationSystem classifier, int row, int fileNumber)
         {
             // If NRM value
-            if (classifier == ClassificationSystem.NRM)
+            if (classifier == ClassificationSystem.Nrm)
             {
                 //Split the NRM column by ';' so to get all associated NRM references.
-                var NRMs = classReference.Split(new Char[] { ';' });
+                var nrms = classReference.Split(new Char[] { ';' });
                 //Loop through each NRM reference.
-                foreach (var NRM in NRMs)
+                foreach (var nrm in nrms)
                 {
                     //Only use values that contain '(default)'.
-                    if (NRM.ToLower().Contains("(default)"))
+                    if (nrm.ToLower().Contains("(default)"))
                     {
                         //classReference = Regex.Match(NRM, NRMPattern).Value;
                         //If the Mapping table does not contain this NRM value set classReference to the processed NRM value.
-                        if (!_mappingTable.Keys.Contains(NRM.Trim()))
+                        if (!_mappingTable.Keys.Contains(nrm.Trim()))
                         {
-                            classReference = Regex.Match(NRM, RegexPatterns.NRMPattern).Value;
+                            classReference = Regex.Match(nrm, RegexPatterns.NrmPattern).Value;
                         }
                     }
                 }
             }
 
             // If NBS value
-            else if (classifier == ClassificationSystem.NBS)
+            else if (classifier == ClassificationSystem.Nbs)
             {
                 // Set classReference to just the NBS code taken from the column
-                classReference = Regex.Match(classReference, RegexPatterns.NBSPattern).Value;
+                classReference = Regex.Match(classReference, RegexPatterns.NbsPattern).Value;
             }
             //Add the references to the mapping table if they don't already exist.
             if (!_mappingTable.Keys.Contains(classReference))
@@ -304,9 +304,9 @@ namespace Xbim.Exchanger.IfcToCOBieLiteUK.Classifications
         /// </summary>
         private void UnsetColumns()
         {
-            UNIColumnIsSet = false;
-            NBSColumnIsSet = false;
-            NRMColumnIsSet = false;
+            _uniclassColumnIsSet = false;
+            _nbsColumnIsSet = false;
+            _nrmColumnIsSet = false;
         }
 
         /// <summary>
