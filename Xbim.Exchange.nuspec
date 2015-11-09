@@ -2,7 +2,7 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2011/10/nuspec.xsd">
     <metadata>
         <id>Xbim.Exchange</id>
-        <version>3.1.12-V0008</version>
+        <version>3.1.12-V0009</version>
         <title>xBIM Exchange</title>
         <authors>xBIM team</authors>
         <owners>Steve Lockley</owners>
@@ -51,9 +51,9 @@ IOS and Android versions are under development.</description>
       <file src="Output\Release\Xbim.DPoW.pdb" target="lib\net40\Xbim.DPoW.pdb" />
       <file src="Output\Release\Xbim.Exchanger.pdb" target="lib\net40\Xbim.Exchanger.pdb" />
 
-      <file src="Output\Release\IfcToCOBieLiteUK\Classifications\DataFiles\Uniclass2015_Ac_v0_1.csv" target="content\net40\bin\IfcToCOBieLiteUK\Classifications\DataFiles\Uniclass2015_Ac_v0_1.csv" />
-      <file src="Output\Release\IfcToCOBieLiteUK\Classifications\DataFiles\Uniclass2015_Pr_v1_1.csv" target="content\net40\bin\IfcToCOBieLiteUK\Classifications\DataFiles\Uniclass2015_Pr_v1_1.csv" />
-      <file src="Output\Release\IfcToCOBieLiteUK\Classifications\DataFiles\Uniclass2015_Ss_v1_1.csv" target="content\net40\bin\IfcToCOBieLiteUK\Classifications\DataFiles\Uniclass2015_Ss_v1_1.csv" />
+      <file src="Output\Release\IfcToCOBieLiteUK\Classifications\DataFiles\Uniclass2015_Ac_v0_1.csv" target="content\net40\IfcToCOBieLiteUK\Classifications\DataFiles\Uniclass2015_Ac_v0_1.csv" />
+      <file src="Output\Release\IfcToCOBieLiteUK\Classifications\DataFiles\Uniclass2015_Pr_v1_1.csv" target="content\net40\IfcToCOBieLiteUK\Classifications\DataFiles\Uniclass2015_Pr_v1_1.csv" />
+      <file src="Output\Release\IfcToCOBieLiteUK\Classifications\DataFiles\Uniclass2015_Ss_v1_1.csv" target="content\net40\IfcToCOBieLiteUK\Classifications\DataFiles\Uniclass2015_Ss_v1_1.csv" />
     </files>
 
   </package>

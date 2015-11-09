@@ -26,7 +26,7 @@ namespace Xbim.Exchanger.IfcToCOBieLiteUK.Classifications
         /// </summary>
         static private void AddClassificationsToAssets(Facility facility)
         {
-            var dataReader = new DataReader();//DataReader Object which will create and populate the mappings table.
+            var dataReader = new ClassificationMappingReader();//DataReader Object which will create and populate the mappings table.
             //Get Each AssetType
             foreach (AssetType at in facility.AssetTypes)
             {
@@ -106,7 +106,7 @@ namespace Xbim.Exchanger.IfcToCOBieLiteUK.Classifications
         /// </summary>
         /// <param name="property">A string value of the assets property</param>
         /// <returns>An InferredClassification which contains the classification mappings</returns>
-        static private IEnumerable<InferredClassification> FindInferredClassifications(string property, DataReader dataReader)
+        static private IEnumerable<InferredClassification> FindInferredClassifications(string property, ClassificationMappingReader dataReader)
         {
             //Check to see if the property is a valid classification            
             Pointer match = null;

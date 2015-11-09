@@ -64,6 +64,7 @@
     <Compile Include="ConvertCobieLiteUKToValidationReportTests.cs" />
     <Compile Include="FacilityMergeTest.cs" />
     <Compile Include="COBieDocumentTests.cs" />
+    <Compile Include="ClassificationMappingReaderTests.cs" />
     <Compile Include="ValidationMockUp.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -89,7 +90,9 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <None Include="App.config" />
+    <None Include="App.config">
+      <SubType>Designer</SubType>
+    </None>
     <None Include="DemoFiles\LakesideRestaurant_Deliverables.DPoW.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
@@ -208,6 +211,7 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="System" />
+    <Reference Include="System.configuration" />
     <Reference Include="System.Data" />
     <Reference Include="System.Data.Linq" />
     <Reference Include="System.XML" />

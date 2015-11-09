@@ -165,7 +165,7 @@
     <Compile Include="IfcHelpers\IfcUnitComparer.cs" />
     <Compile Include="IfcHelpers\IfcUnitConverter.cs" />
     <Compile Include="IfcToCOBieLiteUK\Classifications\Classifier.cs" />
-    <Compile Include="IfcToCOBieLiteUK\Classifications\DataReader.cs" />
+    <Compile Include="IfcToCOBieLiteUK\Classifications\ClassificationMappingReader.cs" />
     <Compile Include="IfcToCOBieLiteUK\COBieLiteUKHelper.cs" />
     <Compile Include="IfcToCOBieLiteUK\Classifications\Components\ClassificationSystem.cs" />
     <Compile Include="IfcToCOBieLiteUK\Classifications\Components\InferredClassification.cs" />
