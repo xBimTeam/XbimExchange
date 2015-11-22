@@ -1,8 +1,5 @@
-﻿
-using System;
+﻿using System;
 using System.Collections.Generic;
-using System.Configuration;
-using System.Diagnostics;
 using System.Globalization;
 using System.IO;
 using System.Linq;
@@ -21,7 +18,6 @@ using Xbim.Ifc2x3.PropertyResource;
 using Xbim.Ifc2x3.QuantityResource;
 using Xbim.Ifc2x3.SharedBldgElements;
 using Xbim.Ifc2x3.SharedFacilitiesElements;
-using Xbim.Ifc2x3.UtilityResource;
 using Xbim.IO;
 using Xbim.XbimExtensions.SelectTypes;
 using XbimExchanger.IfcToCOBieLiteUK.EqCompare;
@@ -232,10 +228,10 @@ namespace XbimExchanger.IfcToCOBieLiteUK
         /// <param name="configurationFile"></param>
         public CoBieLiteUkHelper(XbimModel model, ProgressReporter reportProgress, OutPutFilters filter = null, string configurationFile = null, EntityIdentifierMode extId = EntityIdentifierMode.IfcEntityLabels, SystemExtractionMode sysMode = SystemExtractionMode.System | SystemExtractionMode.Types)
         {
-            
             //set props
             _configFileName = configurationFile;
-            Filter = filter != null ? filter : new OutPutFilters();
+            Filter = filter 
+                ?? new OutPutFilters();
             _model = model;
             EntityIdentifierMode = extId;
             SystemMode = sysMode;
@@ -280,11 +276,17 @@ namespace XbimExchanger.IfcToCOBieLiteUK
         /// <returns>Dictionary of IfcConstructionProductResource, List of IfcRoot</returns>
         private Dictionary<IfcConstructionProductResource, List<IfcRoot>> GetSpareResource()
         {
-            Dictionary<IfcResource, List<IfcObjectDefinition>> resourceToObjs = null;
+            Dictionary<IfcResource, List<IfcObjectDefinition>> resourceToObjs;
 
-            var ifcRelAssignsToResource = _model.Instances.OfType<IfcRelAssignsToResource>().Where(r => r.RelatingResource is IfcConstructionProductResource && (r.RelatedObjectsType == null || r.RelatedObjectsType == IfcObjectType.Product || r.RelatedObjectsType == IfcObjectType.NotDefined)); //linked to IfcRoot objects
+            var ifcRelAssignsToResource = _model.Instances.OfType<IfcRelAssignsToResource>().Where(
+                r => r.RelatingResource is IfcConstructionProductResource && 
+                    (
+                        r.RelatedObjectsType == null 
+                        || r.RelatedObjectsType == IfcObjectType.Product 
+                        || r.RelatedObjectsType == IfcObjectType.NotDefined)
+                    ).ToList(); //linked to IfcRoot objects
 
-            var dups = ifcRelAssignsToResource.GroupBy(d => d.RelatingResource).SelectMany(grp => grp.Skip(1)); //get any duplicate related resource objects
+            var dups = ifcRelAssignsToResource.GroupBy(d => d.RelatingResource).SelectMany(grp => grp.Skip(1)).ToList(); //get any duplicate related resource objects
             if (dups.Any())
             {
                 //remove the duplicates related resource objects and convert to dictionary
@@ -316,19 +318,18 @@ namespace XbimExchanger.IfcToCOBieLiteUK
         /// <param name="ifcRoot">Object holding the documents</param>
         internal void AddDocuments(MappingIfcDocumentSelectToDocument docsMappings, CobieObject target, IfcRoot ifcRoot)
         {
-            if (ifcRoot != null)
+            if (ifcRoot == null) 
+                return;
+            if (target.Documents == null)
             {
-                if (target.Documents == null)
-                {
-                    target.Documents = new List<Document>();
-                }
-                var facilitydocs = GetDocuments(ifcRoot);
+                target.Documents = new List<Document>();
+            }
+            var facilitydocs = GetDocuments(ifcRoot);
 
-                foreach (var docSel in facilitydocs)
-                {
-                    List<Document> docs = docsMappings.MappingMulti(docSel);
-                    target.Documents.AddRange(docs);
-                } 
+            foreach (var docSel in facilitydocs)
+            {
+                var docs = docsMappings.MappingMulti(docSel);
+                target.Documents.AddRange(docs);
             }
         }
 
@@ -339,12 +340,9 @@ namespace XbimExchanger.IfcToCOBieLiteUK
         /// <returns></returns>
         public IEnumerable<IfcDocumentSelect> GetDocuments(IfcRoot ifcRoot)
         {
-            if (DocumentLookup.ContainsKey(ifcRoot))
-            {
-                return DocumentLookup[ifcRoot];
-            }
-
-            return Enumerable.Empty<IfcDocumentSelect>();
+            return DocumentLookup.ContainsKey(ifcRoot) 
+                ? DocumentLookup[ifcRoot] 
+                : Enumerable.Empty<IfcDocumentSelect>();
         }
 
         /// <summary>
@@ -352,7 +350,7 @@ namespace XbimExchanger.IfcToCOBieLiteUK
         /// </summary>
         private void GetDocumentSelects()
         {
-            Dictionary<IfcDocumentSelect, List<IfcRoot>> docToObjs = GetAssociatedDocuments();
+            var docToObjs = GetAssociatedDocuments();
 
             //get orphan docs, not attached to IfcRoot objects
             OrphanDocs = GetOrphanDocuments(docToObjs);
