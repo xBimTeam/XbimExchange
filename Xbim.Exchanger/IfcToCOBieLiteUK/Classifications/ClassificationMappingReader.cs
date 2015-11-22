@@ -66,14 +66,14 @@ namespace Xbim.Exchanger.IfcToCOBieLiteUK.Classifications
                 if (!string.IsNullOrEmpty(configValue))
                     uri = configValue;
             }
-                        
-            Log.DebugFormat("Trying to load classification mapping files from {0}", uri);
+            var diLocal = new DirectoryInfo(".");
+            Log.DebugFormat("Trying to load classification mapping files from '{0}' running in '{1}'", uri, diLocal.FullName);
             var d = new DirectoryInfo(uri);
             if (d.Exists)
                 _classificationMappingFiles = Directory.GetFiles(uri);
             else
             {
-                Log.ErrorFormat("Failed to load classification mapping files from {0}", uri);
+                Log.ErrorFormat("Failed to load classification mapping files from '{0}' running in '{1}'", uri, diLocal.FullName);
             }
         }
 

@@ -5,6 +5,7 @@ using Xbim.Exchanger.IfcToCOBieLiteUK.Classifications;
 namespace ConfigurationLessTests
 {
     [TestClass]
+    [DeploymentItem(@"IfcToCOBieLiteUK\Classifications\DataFiles", @"IfcToCOBieLiteUK\Classifications\DataFiles")]
     public class ClassificationMappingReaderTests
     {
         [TestMethod]
