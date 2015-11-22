@@ -73,9 +73,11 @@ namespace Xbim.Client
             this.groupBox1.Controls.Add(this.label2);
             this.groupBox1.Controls.Add(this.btnBrowse);
             this.groupBox1.Controls.Add(this.label1);
-            this.groupBox1.Location = new System.Drawing.Point(158, 8);
+            this.groupBox1.Location = new System.Drawing.Point(211, 10);
+            this.groupBox1.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(461, 83);
+            this.groupBox1.Padding = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.groupBox1.Size = new System.Drawing.Size(615, 102);
             this.groupBox1.TabIndex = 1;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "File Location";
@@ -84,18 +86,20 @@ namespace Xbim.Client
             // 
             this.txtPath.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.txtPath.Location = new System.Drawing.Point(74, 19);
+            this.txtPath.Location = new System.Drawing.Point(99, 23);
+            this.txtPath.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.txtPath.Name = "txtPath";
             this.txtPath.ReadOnly = true;
-            this.txtPath.Size = new System.Drawing.Size(247, 20);
+            this.txtPath.Size = new System.Drawing.Size(328, 22);
             this.txtPath.TabIndex = 6;
             // 
             // btnFederate
             // 
             this.btnFederate.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnFederate.Location = new System.Drawing.Point(387, 20);
+            this.btnFederate.Location = new System.Drawing.Point(516, 25);
+            this.btnFederate.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.btnFederate.Name = "btnFederate";
-            this.btnFederate.Size = new System.Drawing.Size(62, 23);
+            this.btnFederate.Size = new System.Drawing.Size(83, 28);
             this.btnFederate.TabIndex = 5;
             this.btnFederate.Text = "Federate";
             this.btnFederate.UseVisualStyleBackColor = true;
@@ -105,9 +109,10 @@ namespace Xbim.Client
             // 
             this.btnBrowseTemplate.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.btnBrowseTemplate.Enabled = false;
-            this.btnBrowseTemplate.Location = new System.Drawing.Point(325, 44);
+            this.btnBrowseTemplate.Location = new System.Drawing.Point(433, 54);
+            this.btnBrowseTemplate.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.btnBrowseTemplate.Name = "btnBrowseTemplate";
-            this.btnBrowseTemplate.Size = new System.Drawing.Size(124, 23);
+            this.btnBrowseTemplate.Size = new System.Drawing.Size(165, 28);
             this.btnBrowseTemplate.TabIndex = 4;
             this.btnBrowseTemplate.Text = "&Browse...";
             this.btnBrowseTemplate.UseVisualStyleBackColor = true;
@@ -119,27 +124,30 @@ namespace Xbim.Client
             | System.Windows.Forms.AnchorStyles.Right)));
             this.txtTemplate.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.txtTemplate.FormattingEnabled = true;
-            this.txtTemplate.Location = new System.Drawing.Point(74, 46);
+            this.txtTemplate.Location = new System.Drawing.Point(99, 57);
+            this.txtTemplate.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.txtTemplate.Name = "txtTemplate";
-            this.txtTemplate.Size = new System.Drawing.Size(245, 21);
+            this.txtTemplate.Size = new System.Drawing.Size(325, 24);
             this.txtTemplate.TabIndex = 3;
             this.txtTemplate.SelectedIndexChanged += new System.EventHandler(this.txtTemplate_SelectedIndexChanged);
             // 
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(12, 49);
+            this.label2.Location = new System.Drawing.Point(16, 60);
+            this.label2.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(54, 13);
+            this.label2.Size = new System.Drawing.Size(71, 17);
             this.label2.TabIndex = 2;
             this.label2.Text = "Template:";
             // 
             // btnBrowse
             // 
             this.btnBrowse.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnBrowse.Location = new System.Drawing.Point(325, 20);
+            this.btnBrowse.Location = new System.Drawing.Point(433, 25);
+            this.btnBrowse.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.btnBrowse.Name = "btnBrowse";
-            this.btnBrowse.Size = new System.Drawing.Size(63, 23);
+            this.btnBrowse.Size = new System.Drawing.Size(84, 28);
             this.btnBrowse.TabIndex = 1;
             this.btnBrowse.Text = "&Browse...";
             this.btnBrowse.UseVisualStyleBackColor = true;
@@ -148,9 +156,10 @@ namespace Xbim.Client
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(12, 23);
+            this.label1.Location = new System.Drawing.Point(16, 28);
+            this.label1.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(56, 13);
+            this.label1.Size = new System.Drawing.Size(73, 17);
             this.label1.TabIndex = 0;
             this.label1.Text = "Select file:";
             // 
@@ -158,9 +167,10 @@ namespace Xbim.Client
             // 
             this.label3.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(515, 99);
+            this.label3.Location = new System.Drawing.Point(687, 122);
+            this.label3.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(71, 13);
+            this.label3.Size = new System.Drawing.Size(93, 17);
             this.label3.TabIndex = 30;
             this.label3.Text = "System Mode";
             // 
@@ -175,18 +185,20 @@ namespace Xbim.Client
             "JSON",
             "XML",
             "IFC"});
-            this.cmboxFiletype.Location = new System.Drawing.Point(527, 425);
+            this.cmboxFiletype.Location = new System.Drawing.Point(703, 523);
+            this.cmboxFiletype.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.cmboxFiletype.Name = "cmboxFiletype";
-            this.cmboxFiletype.Size = new System.Drawing.Size(75, 21);
+            this.cmboxFiletype.Size = new System.Drawing.Size(99, 24);
             this.cmboxFiletype.TabIndex = 18;
             this.cmboxFiletype.SelectedIndexChanged += new System.EventHandler(this.cmboxFiletype_SelectedIndexChanged);
             // 
             // btnClear
             // 
             this.btnClear.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnClear.Location = new System.Drawing.Point(527, 367);
+            this.btnClear.Location = new System.Drawing.Point(703, 452);
+            this.btnClear.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.btnClear.Name = "btnClear";
-            this.btnClear.Size = new System.Drawing.Size(75, 23);
+            this.btnClear.Size = new System.Drawing.Size(100, 28);
             this.btnClear.TabIndex = 17;
             this.btnClear.Text = "&Clear";
             this.btnClear.UseVisualStyleBackColor = true;
@@ -195,9 +207,10 @@ namespace Xbim.Client
             // btnGenerate
             // 
             this.btnGenerate.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnGenerate.Location = new System.Drawing.Point(527, 396);
+            this.btnGenerate.Location = new System.Drawing.Point(703, 487);
+            this.btnGenerate.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.btnGenerate.Name = "btnGenerate";
-            this.btnGenerate.Size = new System.Drawing.Size(75, 23);
+            this.btnGenerate.Size = new System.Drawing.Size(100, 28);
             this.btnGenerate.TabIndex = 16;
             this.btnGenerate.Text = "&Generate";
             this.btnGenerate.UseVisualStyleBackColor = true;
@@ -205,13 +218,15 @@ namespace Xbim.Client
             // 
             // statusStrip1
             // 
+            this.statusStrip1.ImageScalingSize = new System.Drawing.Size(20, 20);
             this.statusStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.ProgressBar,
             this.StatusMsg,
             this.toolStripStatusLabel1});
-            this.statusStrip1.Location = new System.Drawing.Point(0, 474);
+            this.statusStrip1.Location = new System.Drawing.Point(0, 588);
             this.statusStrip1.Name = "statusStrip1";
-            this.statusStrip1.Size = new System.Drawing.Size(627, 22);
+            this.statusStrip1.Padding = new System.Windows.Forms.Padding(1, 0, 19, 0);
+            this.statusStrip1.Size = new System.Drawing.Size(836, 22);
             this.statusStrip1.TabIndex = 19;
             this.statusStrip1.Text = "statusStrip1";
             // 
@@ -219,13 +234,13 @@ namespace Xbim.Client
             // 
             this.ProgressBar.AutoSize = false;
             this.ProgressBar.Name = "ProgressBar";
-            this.ProgressBar.Size = new System.Drawing.Size(150, 16);
+            this.ProgressBar.Size = new System.Drawing.Size(200, 20);
             this.ProgressBar.Visible = false;
             // 
             // StatusMsg
             // 
             this.StatusMsg.Name = "StatusMsg";
-            this.StatusMsg.Size = new System.Drawing.Size(612, 17);
+            this.StatusMsg.Size = new System.Drawing.Size(816, 17);
             this.StatusMsg.Spring = true;
             this.StatusMsg.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
@@ -239,19 +254,21 @@ namespace Xbim.Client
             this.txtOutput.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.txtOutput.Location = new System.Drawing.Point(15, 97);
+            this.txtOutput.Location = new System.Drawing.Point(20, 119);
+            this.txtOutput.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.txtOutput.Name = "txtOutput";
             this.txtOutput.ReadOnly = true;
-            this.txtOutput.Size = new System.Drawing.Size(499, 374);
+            this.txtOutput.Size = new System.Drawing.Size(664, 459);
             this.txtOutput.TabIndex = 20;
             this.txtOutput.Text = "";
             // 
             // btnClassFilter
             // 
             this.btnClassFilter.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnClassFilter.Location = new System.Drawing.Point(6, 62);
+            this.btnClassFilter.Location = new System.Drawing.Point(8, 76);
+            this.btnClassFilter.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.btnClassFilter.Name = "btnClassFilter";
-            this.btnClassFilter.Size = new System.Drawing.Size(75, 26);
+            this.btnClassFilter.Size = new System.Drawing.Size(100, 32);
             this.btnClassFilter.TabIndex = 21;
             this.btnClassFilter.Text = "Set Filters";
             this.btnClassFilter.UseVisualStyleBackColor = true;
@@ -261,9 +278,10 @@ namespace Xbim.Client
             // 
             this.chkBoxFlipFilter.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.chkBoxFlipFilter.AutoSize = true;
-            this.chkBoxFlipFilter.Location = new System.Drawing.Point(6, 39);
+            this.chkBoxFlipFilter.Location = new System.Drawing.Point(10, 48);
+            this.chkBoxFlipFilter.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.chkBoxFlipFilter.Name = "chkBoxFlipFilter";
-            this.chkBoxFlipFilter.Size = new System.Drawing.Size(67, 17);
+            this.chkBoxFlipFilter.Size = new System.Drawing.Size(87, 21);
             this.chkBoxFlipFilter.TabIndex = 22;
             this.chkBoxFlipFilter.Text = "Flip Filter";
             this.chkBoxFlipFilter.UseVisualStyleBackColor = true;
@@ -275,9 +293,10 @@ namespace Xbim.Client
             this.chkBoxOpenFile.AutoSize = true;
             this.chkBoxOpenFile.Checked = true;
             this.chkBoxOpenFile.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.chkBoxOpenFile.Location = new System.Drawing.Point(527, 452);
+            this.chkBoxOpenFile.Location = new System.Drawing.Point(709, 556);
+            this.chkBoxOpenFile.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.chkBoxOpenFile.Name = "chkBoxOpenFile";
-            this.chkBoxOpenFile.Size = new System.Drawing.Size(81, 17);
+            this.chkBoxOpenFile.Size = new System.Drawing.Size(102, 21);
             this.chkBoxOpenFile.TabIndex = 23;
             this.chkBoxOpenFile.Text = "Open Excel";
             this.chkBoxOpenFile.UseVisualStyleBackColor = true;
@@ -285,9 +304,10 @@ namespace Xbim.Client
             // btnMergeFilter
             // 
             this.btnMergeFilter.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnMergeFilter.Location = new System.Drawing.Point(7, 92);
+            this.btnMergeFilter.Location = new System.Drawing.Point(9, 113);
+            this.btnMergeFilter.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.btnMergeFilter.Name = "btnMergeFilter";
-            this.btnMergeFilter.Size = new System.Drawing.Size(75, 23);
+            this.btnMergeFilter.Size = new System.Drawing.Size(100, 28);
             this.btnMergeFilter.TabIndex = 24;
             this.btnMergeFilter.Text = "Applied Filter";
             this.btnMergeFilter.UseVisualStyleBackColor = true;
@@ -297,9 +317,10 @@ namespace Xbim.Client
             // 
             this.chkBoxNoFilter.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.chkBoxNoFilter.AutoSize = true;
-            this.chkBoxNoFilter.Location = new System.Drawing.Point(6, 18);
+            this.chkBoxNoFilter.Location = new System.Drawing.Point(11, 22);
+            this.chkBoxNoFilter.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.chkBoxNoFilter.Name = "chkBoxNoFilter";
-            this.chkBoxNoFilter.Size = new System.Drawing.Size(70, 17);
+            this.chkBoxNoFilter.Size = new System.Drawing.Size(90, 21);
             this.chkBoxNoFilter.TabIndex = 25;
             this.chkBoxNoFilter.Text = "No Filters";
             this.chkBoxNoFilter.UseVisualStyleBackColor = true;
@@ -312,9 +333,11 @@ namespace Xbim.Client
             this.groupBox2.Controls.Add(this.btnClassFilter);
             this.groupBox2.Controls.Add(this.btnMergeFilter);
             this.groupBox2.Controls.Add(this.chkBoxFlipFilter);
-            this.groupBox2.Location = new System.Drawing.Point(518, 170);
+            this.groupBox2.Location = new System.Drawing.Point(691, 209);
+            this.groupBox2.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Size = new System.Drawing.Size(88, 123);
+            this.groupBox2.Padding = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.groupBox2.Size = new System.Drawing.Size(117, 151);
             this.groupBox2.TabIndex = 26;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "Filters";
@@ -322,9 +345,10 @@ namespace Xbim.Client
             // btnPropMaps
             // 
             this.btnPropMaps.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnPropMaps.Location = new System.Drawing.Point(524, 298);
+            this.btnPropMaps.Location = new System.Drawing.Point(699, 367);
+            this.btnPropMaps.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.btnPropMaps.Name = "btnPropMaps";
-            this.btnPropMaps.Size = new System.Drawing.Size(75, 23);
+            this.btnPropMaps.Size = new System.Drawing.Size(100, 28);
             this.btnPropMaps.TabIndex = 27;
             this.btnPropMaps.Text = "Mappings";
             this.btnPropMaps.UseVisualStyleBackColor = true;
@@ -334,9 +358,10 @@ namespace Xbim.Client
             // 
             this.chkBoxIds.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.chkBoxIds.AutoSize = true;
-            this.chkBoxIds.Location = new System.Drawing.Point(525, 324);
+            this.chkBoxIds.Location = new System.Drawing.Point(703, 399);
+            this.chkBoxIds.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.chkBoxIds.Name = "chkBoxIds";
-            this.chkBoxIds.Size = new System.Drawing.Size(99, 17);
+            this.chkBoxIds.Size = new System.Drawing.Size(125, 21);
             this.chkBoxIds.TabIndex = 28;
             this.chkBoxIds.Text = "ExId as EntityId";
             this.chkBoxIds.UseVisualStyleBackColor = true;
@@ -346,35 +371,38 @@ namespace Xbim.Client
             this.checkedListSys.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.checkedListSys.CheckOnClick = true;
             this.checkedListSys.FormattingEnabled = true;
-            this.checkedListSys.Location = new System.Drawing.Point(518, 115);
+            this.checkedListSys.Location = new System.Drawing.Point(691, 142);
+            this.checkedListSys.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.checkedListSys.Name = "checkedListSys";
-            this.checkedListSys.Size = new System.Drawing.Size(90, 49);
+            this.checkedListSys.Size = new System.Drawing.Size(119, 55);
             this.checkedListSys.TabIndex = 29;
             // 
             // chkBoxLog
             // 
             this.chkBoxLog.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.chkBoxLog.AutoSize = true;
-            this.chkBoxLog.Location = new System.Drawing.Point(525, 341);
+            this.chkBoxLog.Location = new System.Drawing.Point(703, 420);
+            this.chkBoxLog.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.chkBoxLog.Name = "chkBoxLog";
-            this.chkBoxLog.Size = new System.Drawing.Size(83, 17);
+            this.chkBoxLog.Size = new System.Drawing.Size(108, 21);
             this.chkBoxLog.TabIndex = 32;
             this.chkBoxLog.Text = "Log (debug)";
             this.chkBoxLog.UseVisualStyleBackColor = true;
             // 
             // rolesList
             // 
-            this.rolesList.Location = new System.Drawing.Point(15, 8);
+            this.rolesList.Location = new System.Drawing.Point(20, 10);
+            this.rolesList.Margin = new System.Windows.Forms.Padding(5, 5, 5, 5);
             this.rolesList.Name = "rolesList";
             this.rolesList.Roles = Xbim.FilterHelper.RoleFilter.Unknown;
-            this.rolesList.Size = new System.Drawing.Size(137, 83);
+            this.rolesList.Size = new System.Drawing.Size(183, 102);
             this.rolesList.TabIndex = 31;
             // 
             // COBieLiteGeneratorDlg
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(627, 496);
+            this.ClientSize = new System.Drawing.Size(836, 610);
             this.Controls.Add(this.chkBoxLog);
             this.Controls.Add(this.rolesList);
             this.Controls.Add(this.label3);
@@ -390,6 +418,7 @@ namespace Xbim.Client
             this.Controls.Add(this.btnGenerate);
             this.Controls.Add(this.groupBox1);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
+            this.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.MaximizeBox = false;
             this.MinimizeBox = false;
             this.Name = "COBieLiteGeneratorDlg";

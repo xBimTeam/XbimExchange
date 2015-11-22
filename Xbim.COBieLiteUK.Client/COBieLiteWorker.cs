@@ -299,13 +299,13 @@ namespace Xbim.Client
                 {
                     var xbimFile = Path.ChangeExtension(parameters.ModelFile, "xbim");
                     model.CreateFrom(parameters.ModelFile, xbimFile, Worker.ReportProgress, true, true);
-
                 }
                 var ifcToCoBieLiteUkExchanger = new IfcToCOBieLiteUkExchanger(model, facilities, Worker.ReportProgress, parameters.Filter, parameters.ConfigFile, parameters.ExtId, parameters.SysMode);
                 facilities = ifcToCoBieLiteUkExchanger.Convert();
             }
             return facilities;
         }
+
         /// <summary>
         /// Generate Facilities for a xbimf federated file
         /// </summary>
@@ -318,62 +318,7 @@ namespace Xbim.Client
             {
                 using (var fedModel = new FederatedModel(new FileInfo(parameters.ModelFile)))
                 {
-                    if (fedModel.Model.IsFederation)
-                    {
-                        Dictionary<XbimModel, OutPutFilters> FedFilters = parameters.Filter.SetFedModelFilter<XbimModel>(fedModel.RefModelRoles);
-                        Dictionary<RoleFilter, List<Facility>> RolesFacilities = new Dictionary<RoleFilter, List<Facility>>();
-                        foreach (var item in FedFilters)
-                        {
-                            var ifcToCoBieLiteUkExchanger = new IfcToCOBieLiteUkExchanger(item.Key, new List<Facility>(), Worker.ReportProgress, item.Value, parameters.ConfigFile, parameters.ExtId, parameters.SysMode);
-                            ifcToCoBieLiteUkExchanger.ReportProgress.Progress = Worker.ReportProgress;
-                            var rolesFacility = ifcToCoBieLiteUkExchanger.Convert();
-
-                            //facilities.AddRange(rolesFacility);
-                            if (RolesFacilities.ContainsKey(item.Value.AppliedRoles))
-                            {
-                                RolesFacilities[item.Value.AppliedRoles].AddRange(rolesFacility);
-                            }
-                            else
-                            {
-                                RolesFacilities.Add(item.Value.AppliedRoles, rolesFacility);
-                            }
-
-                        }
-                        var fedFacilities = RolesFacilities.OrderByDescending(d => d.Key.HasFlag(RoleFilter.Architectural)).SelectMany(p => p.Value).ToList(); //pull architectural roles facilities to the top
-                        //fedFacilities = RolesFacilities.Values.SelectMany(f => f).OrderByDescending(f => f.AssetTypes.Count).ToList(); //pull facility with largest number of AssetTypes to the top
-                        //fedFacilities = RolesFacilities.Values.SelectMany(f => f).ToList(); //flatten value lists
-                        if (fedFacilities.Any())
-                        {
-                            Facility baseFacility = fedFacilities.First();
-                            fedFacilities.RemoveAt(0);
-                            if (parameters.Log)
-                            {
-                                var logfile = Path.ChangeExtension(parameters.ModelFile, "merge.log");
-                                using (StreamWriter sw = new StreamWriter(logfile))
-                                //using (StreamWriter sw = new StreamWriter(Console.OpenStandardOutput())) //to debug console **slow**
-                                {
-                                    sw.AutoFlush = true;
-                                    foreach (Facility mergeFacility in fedFacilities)
-                                    {
-                                        baseFacility.Merge(mergeFacility, sw);
-                                    }
-                                }
-                            }
-                            else
-                            {
-                                foreach (Facility mergeFacility in fedFacilities)
-                                {
-                                    baseFacility.Merge(mergeFacility, null);
-                                }
-                            }
-                            facilities.Add(baseFacility);
-                        }
-
-                    }
-                    else
-                    {
-                        throw new XbimException(string.Format("Model is not Federated: {0}", fedModel.FileNameXbimf));
-                    }
+                    facilities = ProcessFederatedModel(fedModel, parameters);
                 }
             }
             catch (ArgumentException Ex) //bad paths etc..
@@ -384,11 +329,68 @@ namespace Xbim.Client
             {
                 Worker.ReportProgress(0, Ex.Message);
             }
-
             return facilities;
         }
 
+        private List<Facility> ProcessFederatedModel(FederatedModel fedModel, Params parameters)
+        {
+            var facilities = new List<Facility>();
+            if (fedModel.Model.IsFederation)
+            {
+                var fedFilters = parameters.Filter.SetFedModelFilter(fedModel.RefModelRoles);
+                var rolesFacilities = new Dictionary<RoleFilter, List<Facility>>();
+                foreach (var filter in fedFilters)
+                {
+                    var ifcToCoBieLiteUkExchanger = new IfcToCOBieLiteUkExchanger(filter.Key, new List<Facility>(),
+                        Worker.ReportProgress, filter.Value, parameters.ConfigFile, parameters.ExtId, parameters.SysMode);
+                    ifcToCoBieLiteUkExchanger.ReportProgress.Progress = Worker.ReportProgress;
+                    var rolesFacility = ifcToCoBieLiteUkExchanger.Convert();
 
+                    //facilities.AddRange(rolesFacility);
+                    if (rolesFacilities.ContainsKey(filter.Value.AppliedRoles))
+                    {
+                        rolesFacilities[filter.Value.AppliedRoles].AddRange(rolesFacility);
+                    }
+                    else
+                    {
+                        rolesFacilities.Add(filter.Value.AppliedRoles, rolesFacility);
+                    }
+                }
+                var fedFacilities =
+                    rolesFacilities.OrderByDescending(d => d.Key.HasFlag(RoleFilter.Architectural))
+                        .SelectMany(p => p.Value)
+                        .ToList();
+                if (!fedFacilities.Any()) 
+                    return facilities;
+                var baseFacility = fedFacilities.First();
+                fedFacilities.RemoveAt(0);
+                if (parameters.Log)
+                {
+                    var logfile = Path.ChangeExtension(parameters.ModelFile, "merge.log");
+                    using (var sw = new StreamWriter(logfile))
+                    {
+                        sw.AutoFlush = true;
+                        foreach (var mergeFacility in fedFacilities)
+                        {
+                            baseFacility.Merge(mergeFacility, sw);
+                        }
+                    }
+                }
+                else
+                {
+                    foreach (var mergeFacility in fedFacilities)
+                    {
+                        baseFacility.Merge(mergeFacility);
+                    }
+                }
+                facilities.Add(baseFacility);
+            }
+            else
+            {
+                throw new XbimException(string.Format("Model is not Federated: {0}", fedModel.FileNameXbimf));
+            }
+            return facilities;
+        }
     }
 
     /// <summary>

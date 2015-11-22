@@ -476,7 +476,7 @@ namespace Xbim.FilterHelper
                 RolesFilterHolder = rolesFilter;
             }
 
-            bool init = append ? !this.IsEmpty(): false;
+            var init = append && !this.IsEmpty();
             
             OutPutFilters mergeFilter = null;
             foreach (RoleFilter role in Enum.GetValues(typeof(RoleFilter)))
