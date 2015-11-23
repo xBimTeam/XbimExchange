@@ -18,7 +18,7 @@ namespace Xbim.COBie.Serialisers
 
         }
 
-        public void Serialise(COBieWorkbook workbook, ICOBieValidationTemplate ValidationTemplate = null)
+        public void Serialise(COBieWorkbook workbook, ICOBieValidationTemplate validationTemplate = null)
         {
             if (workbook == null)
             {

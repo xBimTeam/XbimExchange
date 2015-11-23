@@ -88,7 +88,7 @@ namespace Xbim.COBie.Serialisers
         /// XBim Serialise
         /// </summary>
         /// <param name="workbook">COBieWorkbook to Serialise</param>
-        public void Serialise(COBieWorkbook workbook, ICOBieValidationTemplate ValidationTemplate = null)
+        public void Serialise(COBieWorkbook workbook, ICOBieValidationTemplate validationTemplate = null)
         {
             Create(workbook);
             if (!string.IsNullOrEmpty(FileName))
