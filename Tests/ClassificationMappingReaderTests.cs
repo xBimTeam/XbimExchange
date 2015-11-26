@@ -12,6 +12,7 @@ namespace Tests
     public class ClassificationMappingReaderTests
     {
         [TestMethod]
+        [DeploymentItem(@"TestFiles\ClassificationFiles", @"TestFiles\ClassificationFiles")]
         public void CanLoadMappingsWithSettings()
         {
             var r = new ClassificationMappingReader();
