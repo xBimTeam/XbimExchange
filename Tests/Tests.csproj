@@ -52,6 +52,7 @@
     <Otherwise />
   </Choose>
   <ItemGroup>
+    <Compile Include="ClassificationMappingReaderTests.cs" />
     <Compile Include="COBieLiteTests.cs" />
     <Compile Include="CobieLiteUKValidationExtraTests.cs" />
     <Compile Include="CobieLiteUKValidationTests.cs" />
@@ -105,6 +106,15 @@
     </None>
     <None Include="TestFiles\2012-03-23-Duplex-Design.xlsx">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="TestFiles\ClassificationFiles\Uniclass2015_Ac_v0_1.csv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="TestFiles\ClassificationFiles\Uniclass2015_Pr_v1_1.csv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="TestFiles\ClassificationFiles\Uniclass2015_Ss_v1_1.csv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="TestFiles\Ifc\Clinic-Handover-v12.ifc">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
