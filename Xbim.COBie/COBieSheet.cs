@@ -2,11 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using System.Resources;
 using Xbim.COBie.Resources;
-using System.Diagnostics;
 using Xbim.IO;
-using Xbim.Ifc2x3.SharedBldgElements;
 using Xbim.Ifc2x3.ProductExtension;
 using Xbim.Ifc2x3.Kernel;
 using Xbim.COBie.Contracts;

@@ -1,8 +1,5 @@
 ﻿using System.Xml.Serialization;
 using Newtonsoft.Json;
-using Newtonsoft.Json.Converters;
-using Xbim.COBieLiteUK.Converters;
-using System.IO;
 
 namespace Xbim.COBieLiteUK
 {

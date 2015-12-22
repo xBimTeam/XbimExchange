@@ -1,5 +1,4 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using NPOI.HSSF.UserModel;
 using Xbim.COBieLiteUK;
 using Xbim.CobieLiteUK.Validation.Reporting;
 

@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Text.RegularExpressions;
 using Xbim.Ifc2x3.MeasureResource;
 using Xbim.IO;
-using Xbim.XbimExtensions.SelectTypes;
 
 namespace XbimExchanger.IfcHelpers
 {

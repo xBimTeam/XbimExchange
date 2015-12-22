@@ -4,9 +4,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Newtonsoft.Json;
 using Xbim.COBieLite;
-using Xbim.COBieLite.Converters;
 using Xbim.IO;
 
 // ReSharper disable once CheckNamespace

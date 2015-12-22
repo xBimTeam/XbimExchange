@@ -1,10 +1,7 @@
-﻿using System.Linq;
-using Xbim.COBieLite;
+﻿using Xbim.COBieLite;
 using Xbim.Ifc2x3.Extensions;
-using Xbim.Ifc2x3.MeasureResource;
 using Xbim.Ifc2x3.ProductExtension;
 using XbimExchanger.COBieLiteHelpers;
-using XbimExchanger.IfcHelpers;
 
 namespace XbimExchanger.COBieLiteToIfc
 {

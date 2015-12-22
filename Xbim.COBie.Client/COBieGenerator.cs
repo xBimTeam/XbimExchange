@@ -4,17 +4,17 @@ using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
-using System.IO;
-using Xbim.IO;
 using Xbim.ModelGeometry.Scene;
-using Xbim.XbimExtensions;
 using System.Diagnostics;
+using System.IO;
+using Xbim.Common;
 using Xbim.Ifc2x3.Kernel;
 using Xbim.COBie.Contracts;
 using Xbim.COBie.Serialisers;
 using Xbim.COBie.Rows;
-using Xbim.XbimExtensions.Interfaces;
 using Xbim.COBie.Federate;
+using Xbim.Ifc2x3.IO;
+using Xbim.IO.Esent;
 
 namespace Xbim.COBie.Client
 {
@@ -76,11 +76,11 @@ namespace Xbim.COBie.Client
                 IsGenerating = true;
                 Roles = COBieMergeRoles.Unknown; //set to unknown, reset below if any, if not will stay as unknown
                 var checkedRoles = checkedListRoles.CheckedItems;
-                int index = 0;
+                var index = 0;
                 foreach (var item in checkedRoles)
                 {
-                    string rolestr = (string)item;
-                    COBieMergeRoles role = (COBieMergeRoles)Enum.Parse(typeof(COBieMergeRoles), rolestr);
+                    var rolestr = (string)item;
+                    var role = (COBieMergeRoles)Enum.Parse(typeof(COBieMergeRoles), rolestr);
                     if (index == 0)
                     {
                         Roles = role;
@@ -106,7 +106,7 @@ namespace Xbim.COBie.Client
             CreateWorker();
             _worker.DoWork += COBieWorker;
 
-            Params cobieParams = BuildParams();
+            var cobieParams = BuildParams();
             _worker.RunWorkerAsync(cobieParams);
         }
 
@@ -126,7 +126,7 @@ namespace Xbim.COBie.Client
         {
             try
             {
-                Params parameters = args.Argument as Params;
+                var parameters = args.Argument as Params;
 
                 if ((parameters.ModelFile == null) || (!File.Exists(parameters.ModelFile)))
                 {
@@ -169,28 +169,30 @@ namespace Xbim.COBie.Client
         /// <returns>COBieBuilder</returns>
         private COBieWorkbook GenerateFederatedCOBieWorkBook(Params parameters)
         {
-            string xbimFile = parameters.ModelFile;
+            var xbimFile = parameters.ModelFile;
             COBieBuilder builder = null;
             COBieWorkbook fedWorkBook = null;
-            List<COBieWorkbook> workbooks = new List<COBieWorkbook>();
+            var workbooks = new List<COBieWorkbook>();
 
             LogBackground(String.Format("Loading federated model {0}...", xbimFile));
-            using (XbimModel model = new XbimModel())
+            using (var model = new XbimModel())
             {
                 model.Open(xbimFile, XbimDBAccess.ReadWrite);
                 Model = model; //used to check we close file on Close event
 
                 // Build context on the XBimF model to link roles
-                COBieContext context = new COBieContext(_worker.ReportProgress);
-                context.TemplateFileName = parameters.TemplateFile;
-                context.Model = model;
-                context.Exclude = UserFilters;
+                var context = new COBieContext(_worker.ReportProgress)
+                {
+                    TemplateFileName = parameters.TemplateFile,
+                    Model = model,
+                    Exclude = UserFilters
+                };
                 foreach (var ModelRoles in context.MapMergeRoles)
                 {
-                    XbimModel refModel = ModelRoles.Key;
-                    COBieMergeRoles roles = ModelRoles.Value;
+                    var refModel = ModelRoles.Key;
+                    var roles = ModelRoles.Value;
 
-                    COBieContext refContext = new COBieContext(_worker.ReportProgress);
+                    var refContext = new COBieContext(_worker.ReportProgress);
                     refContext.TemplateFileName = parameters.TemplateFile;
                     refContext.Model = refModel;
                     refContext.MapMergeRoles[refModel] = roles;
@@ -204,7 +206,7 @@ namespace Xbim.COBie.Client
             }
             if (workbooks.Count > 1)
             {
-                FederateCOBie fedCOBie = new FederateCOBie(_worker.ReportProgress);
+                var fedCOBie = new FederateCOBie(_worker.ReportProgress);
                 fedWorkBook = fedCOBie.Merge(workbooks);
             }
             else if (workbooks.Count == 1)
@@ -221,16 +223,16 @@ namespace Xbim.COBie.Client
         /// <param name="parameters">Params</param>
         private void GenerateFederatedCOBieFile(Params parameters, ICOBieValidationTemplate ValidationTemplate = null)
         {
-            string outputFile = Path.ChangeExtension(parameters.ModelFile, ".xls");
-            Stopwatch timer = new Stopwatch();
+            var outputFile = Path.ChangeExtension(parameters.ModelFile, ".xls");
+            var timer = new Stopwatch();
             timer.Start();
-            COBieWorkbook fedWorkBook = GenerateFederatedCOBieWorkBook(parameters);
+            var fedWorkBook = GenerateFederatedCOBieWorkBook(parameters);
             timer.Stop();
             LogBackground(String.Format("Time to generate Federated COBie data = {0} seconds", timer.Elapsed.TotalSeconds.ToString("F3")));
 
             // Export
             LogBackground(String.Format("Formatting as {1} using {0} template...", Path.GetFileName(parameters.TemplateFile), parameters.IsXLSX ? "XLSX" : "XLS"));
-            COBieXLSXSerialiser serialiser = new COBieXLSXSerialiser(outputFile, parameters.TemplateFile);
+            var serialiser = new COBieXLSXSerialiser(outputFile, parameters.TemplateFile);
             serialiser.Excludes = UserFilters;
             serialiser.IsXlsx = parameters.IsXLSX;
             serialiser.Serialise(fedWorkBook, ValidationTemplate);
@@ -248,16 +250,16 @@ namespace Xbim.COBie.Client
         /// <param name="parameters">Params</param>
         private void GenerateCOBieFile(Params parameters)
         {
-            string outputFile = Path.ChangeExtension(parameters.ModelFile, ".xls");
-            Stopwatch timer = new Stopwatch();
+            var outputFile = Path.ChangeExtension(parameters.ModelFile, ".xls");
+            var timer = new Stopwatch();
             timer.Start();
-            COBieBuilder builder = GenerateCOBieWorkBook(parameters);
+            var builder = GenerateCOBieWorkBook(parameters);
             timer.Stop();
             LogBackground(String.Format("Time to generate COBie data = {0} seconds", timer.Elapsed.TotalSeconds.ToString("F3")));
 
             // Export
             LogBackground(String.Format("Formatting as {1} using {0} template...", Path.GetFileName(parameters.TemplateFile), parameters.IsXLSX ? "XLSX" : "XLS"));
-            COBieXLSXSerialiser serialiser = new COBieXLSXSerialiser(outputFile, parameters.TemplateFile);
+            var serialiser = new COBieXLSXSerialiser(outputFile, parameters.TemplateFile);
             serialiser.Excludes = UserFilters;
             serialiser.IsXlsx = parameters.IsXLSX;
             builder.Export(serialiser);
@@ -276,11 +278,11 @@ namespace Xbim.COBie.Client
         /// <returns>COBieBuilder</returns>
         private COBieBuilder GenerateCOBieWorkBook(Params parameters)
         {
-            string xbimFile = string.Empty;
-            string fileExt = Path.GetExtension(parameters.ModelFile);
+            var xbimFile = string.Empty;
+            var fileExt = Path.GetExtension(parameters.ModelFile);
             COBieBuilder builder = null;
             LogBackground(String.Format("Loading model {0}...", Path.GetFileName(parameters.ModelFile)));
-            using (XbimModel model = new XbimModel())
+            using (var model = new XbimModel())
             {
                 if ((fileExt.Equals(".xbim", StringComparison.OrdinalIgnoreCase)) ||
                     (fileExt.Equals(".xbimf", StringComparison.OrdinalIgnoreCase))
@@ -299,7 +301,7 @@ namespace Xbim.COBie.Client
 
 
                 // Build context
-                COBieContext context = new COBieContext(_worker.ReportProgress);
+                var context = new COBieContext(_worker.ReportProgress);
                 context.TemplateFileName = parameters.TemplateFile;
                 context.Model = model;
                 context.MapMergeRoles[model] = Roles;
@@ -329,8 +331,8 @@ namespace Xbim.COBie.Client
 
             //read xls file
             LogBackground(String.Format("Reading {0}....", parameters.ModelFile));
-            COBieXLSDeserialiser deSerialiser = new COBieXLSDeserialiser(parameters.ModelFile);
-            COBieWorkbook Workbook = deSerialiser.Deserialise();
+            var deSerialiser = new COBieXLSDeserialiser(parameters.ModelFile);
+            var Workbook = deSerialiser.Deserialise();
 
             //extract pick list from the template sheet and swap into workbook (US / UK)
             LogBackground("Swapping PickList from template...");
@@ -340,8 +342,8 @@ namespace Xbim.COBie.Client
                 )
             {
                 //extract the pick list sheet from template
-                COBieXLSDeserialiser deSerialiserPickList = new COBieXLSDeserialiser(parameters.TemplateFile, Constants.WORKSHEET_PICKLISTS);
-                COBieWorkbook wbookPickList = deSerialiserPickList.Deserialise();
+                var deSerialiserPickList = new COBieXLSDeserialiser(parameters.TemplateFile, Constants.WORKSHEET_PICKLISTS);
+                var wbookPickList = deSerialiserPickList.Deserialise();
                 if (wbookPickList.Count > 0) CobiePickLists = (COBieSheet<COBiePickListsRow>)wbookPickList.FirstOrDefault();
                 //check the workbook last sheet is a pick list
                 if (Workbook.LastOrDefault() is COBieSheet<COBiePickListsRow>)
@@ -357,14 +359,14 @@ namespace Xbim.COBie.Client
 
             }
 
-            COBieContext context = new COBieContext(_worker.ReportProgress);
-            COBieProgress progress = new COBieProgress(context);
+            var context = new COBieContext(_worker.ReportProgress);
+            var progress = new COBieProgress(context);
             context.Exclude = UserFilters;
 
             //Validate
             progress.Initialise("Validating Workbooks", Workbook.Count, 0);
             progress.ReportMessage("Building Indices...");
-            foreach (ICOBieSheet<COBieRow> item in Workbook)
+            foreach (var item in Workbook)
             {
                 item.BuildIndices();
             }
@@ -383,7 +385,7 @@ namespace Xbim.COBie.Client
 
             // Export
             LogBackground(String.Format("Formatting as {1} using {0} template...", Path.GetFileName(parameters.TemplateFile), parameters.IsXLSX ? "XLSX" : "XLS"));
-            COBieXLSXSerialiser serialiser = new COBieXLSXSerialiser(parameters.ModelFile, parameters.TemplateFile);
+            var serialiser = new COBieXLSXSerialiser(parameters.ModelFile, parameters.TemplateFile);
             serialiser.Excludes = UserFilters;
             serialiser.IsXlsx = parameters.IsXLSX;
             serialiser.Serialise(Workbook, ValidationTemplate);
@@ -407,17 +409,17 @@ namespace Xbim.COBie.Client
             string outputFile;
 
             LogBackground(String.Format("Reading {0}....", parameters.ModelFile));
-            COBieXLSDeserialiser deSerialiser = new COBieXLSDeserialiser(parameters.ModelFile);
-            COBieWorkbook newbook = deSerialiser.Deserialise();
+            var deSerialiser = new COBieXLSDeserialiser(parameters.ModelFile);
+            var newbook = deSerialiser.Deserialise();
 
             LogBackground("Creating xBim objects...");
-            Stopwatch timer = new Stopwatch();
+            var timer = new Stopwatch();
             timer.Start();
 
             outputFile = Path.GetFileNameWithoutExtension(parameters.ModelFile) + "-COBieToIFC.ifc";
             outputFile = Path.GetDirectoryName(parameters.ModelFile) + "\\" + outputFile;
 
-            using (COBieXBimSerialiser xBimSerialiser = new COBieXBimSerialiser(outputFile, _worker.ReportProgress))
+            using (var xBimSerialiser = new COBieXBimSerialiser(outputFile, _worker.ReportProgress))
             {
                 xBimSerialiser.Serialise(newbook);
                 timer.Stop();
@@ -435,15 +437,15 @@ namespace Xbim.COBie.Client
         /// <returns>Created file name</returns>
         private string MergeCOBieFiles(MergeParams parameters)
         {
-            List<string> mergeList = new List<string>();
+            var mergeList = new List<string>();
             mergeList.AddRange(parameters.MergeItemsList);
-            string outputFile = string.Empty;
+            var outputFile = string.Empty;
             if (mergeList.Count > 0)
             {
-                Stopwatch timer = new Stopwatch();
+                var timer = new Stopwatch();
                 timer.Start();
 
-                string mainFile = mergeList.First();
+                var mainFile = mergeList.First();
                 mergeList.RemoveAt(0);
 
                 if (!File.Exists(mainFile))
@@ -455,23 +457,23 @@ namespace Xbim.COBie.Client
                 outputFile = Path.GetFileNameWithoutExtension(mainFile) + "-COBieMergeToIFC.ifc";
                 outputFile = Path.GetDirectoryName(mainFile) + "\\" + outputFile;
                 parameters.ModelFile = mainFile;
-                using (COBieXBimSerialiser xBimSerialiser = new COBieXBimSerialiser(outputFile, _worker.ReportProgress))
+                using (var xBimSerialiser = new COBieXBimSerialiser(outputFile, _worker.ReportProgress))
                 {
 
                     LogBackground(String.Format("Reading main file {0}....", Path.GetFileName(mainFile)));
-                    COBieWorkbook mainWorkBook = GetWorkBook(parameters);
+                    var mainWorkBook = GetWorkBook(parameters);
 
                     LogBackground(String.Format("Writing main file {0} to {1}....", Path.GetFileName(mainFile), Path.GetFileName(outputFile)));
                     xBimSerialiser.Create(mainWorkBook);
                     xBimSerialiser.MergeGeometryOnly = GeoOnlyChkBox.Checked;
-                    foreach (string mergeFile in mergeList)
+                    foreach (var mergeFile in mergeList)
                     {
                         if (File.Exists(mergeFile))
                         {
-                            string mergExt = Path.GetExtension(mergeFile).ToLower();
+                            var mergExt = Path.GetExtension(mergeFile).ToLower();
                             LogBackground(String.Format("Reading file to merge {0}....", Path.GetFileName(mergeFile)));
                             parameters.ModelFile = mergeFile;
-                            COBieWorkbook mergeWorkBook = GetWorkBook(parameters);
+                            var mergeWorkBook = GetWorkBook(parameters);
                             LogBackground(String.Format("Writing merge file {0} into {1}....", Path.GetFileName(mergeFile), Path.GetFileName(outputFile)));
                             xBimSerialiser.Merge(mergeWorkBook);
 
@@ -502,18 +504,18 @@ namespace Xbim.COBie.Client
         /// <returns>COBieWorkbook</returns>
         private COBieWorkbook GetWorkBook(MergeParams parameters)
         {
-            string mainFile = parameters.ModelFile;
-            string mainExt = Path.GetExtension(mainFile).ToLower();
+            var mainFile = parameters.ModelFile;
+            var mainExt = Path.GetExtension(mainFile).ToLower();
 
             COBieWorkbook workBook = null;
             if (mainExt == ".xls")
             {
-                COBieXLSDeserialiser deSerialiser = new COBieXLSDeserialiser(mainFile);
+                var deSerialiser = new COBieXLSDeserialiser(mainFile);
                 workBook = deSerialiser.Deserialise();
             }
             else if ((mainExt == ".ifc") || (mainExt == ".xbim"))
             {
-                COBieBuilder builder = GenerateCOBieWorkBook(parameters);
+                var builder = GenerateCOBieWorkBook(parameters);
                 workBook = builder.Workbook;
             }
             return workBook;
@@ -526,8 +528,8 @@ namespace Xbim.COBie.Client
         private void GenerateGeometry(COBieContext context)
         {
             //now convert the geometry
-            XbimModel model = context.Model;
-            int total = (int)model.Instances.CountOf<IfcProduct>();
+            var model = context.Model;
+            var total = (int)model.Instances.CountOf<IfcProduct>();
             ReportProgressDelegate progDelegate = delegate(int percentProgress, object userState)
             {
                 context.UpdateStatus("Creating Geometry File", total, (total * percentProgress / 100));
@@ -559,7 +561,7 @@ namespace Xbim.COBie.Client
 
         private void btnBrowse_Click(object sender, EventArgs e)
         {
-            OpenFileDialog dlg = new OpenFileDialog();
+            var dlg = new OpenFileDialog();
             dlg.Filter = "All XBim Files|*.ifc;*.ifcxml;*.ifczip;*.xbim;*.xbimf|IFC Files|*.ifc;*.ifcxml;*.ifczip|Xbim Files|*.xbim|Xbim Federated Files|*.xbimf|XLS Files|*.xls";
             dlg.Title = "Choose a source model file";
 
@@ -571,7 +573,7 @@ namespace Xbim.COBie.Client
 
         private void dlg_FileOk(object sender, CancelEventArgs ce)
         {
-            OpenFileDialog dlg = sender as OpenFileDialog;
+            var dlg = sender as OpenFileDialog;
             if (dlg != null)
             {
                 txtPath.Text = dlg.FileName;
@@ -596,7 +598,7 @@ namespace Xbim.COBie.Client
 
         private void btnBrowseTemplate_Click(object sender, EventArgs e)
         {
-            OpenFileDialog dlg = new OpenFileDialog();
+            var dlg = new OpenFileDialog();
             dlg.Title = "Choose a COBie template file";
             dlg.Filter = "XLS Files|*.xls";
 
@@ -608,7 +610,7 @@ namespace Xbim.COBie.Client
 
         private void dlg_TemplateFileOk(object sender, CancelEventArgs ce)
         {
-            OpenFileDialog dlg = sender as OpenFileDialog;
+            var dlg = sender as OpenFileDialog;
             if (dlg != null)
             {
                 txtTemplate.Text = dlg.FileName;
@@ -622,7 +624,7 @@ namespace Xbim.COBie.Client
             _worker = new BackgroundWorker();
             _worker.WorkerReportsProgress = true;
             _worker.WorkerSupportsCancellation = false;
-            _worker.ProgressChanged += (object s, ProgressChangedEventArgs args) =>
+            _worker.ProgressChanged += (s, args) =>
             {
                 StatusMsg.Text = (string)args.UserState;
                 if (args.ProgressPercentage == 0)
@@ -637,16 +639,16 @@ namespace Xbim.COBie.Client
 
             _worker.RunWorkerCompleted += (object s, RunWorkerCompletedEventArgs args) =>
             {
-                string errMsg = args.Result as String;
+                var errMsg = args.Result as String;
                 if (!string.IsNullOrEmpty(errMsg))
                     AppendLog(errMsg);
 
                 if (args.Result is Exception)
                 {
 
-                    StringBuilder sb = new StringBuilder();
-                    Exception ex = args.Result as Exception;
-                    String indent = "";
+                    var sb = new StringBuilder();
+                    var ex = args.Result as Exception;
+                    var indent = "";
                     while (ex != null)
                     {
                         sb.AppendFormat("{0}{1}\n", indent, ex.Message);
@@ -691,12 +693,12 @@ namespace Xbim.COBie.Client
 
         private void mergeBtn_Click(object sender, EventArgs e)
         {
-            MergeSelect mergeSelectDlg = new MergeSelect(MergeItemsList);
+            var mergeSelectDlg = new MergeSelect(MergeItemsList);
             if (mergeSelectDlg.ShowDialog() == DialogResult.OK)
             {
                 MergeItemsList = mergeSelectDlg.mergeItemsOut;
                 AppendLog("Files to merge");
-                foreach (string item in MergeItemsList)
+                foreach (var item in MergeItemsList)
                 {
                     AppendLog(Path.GetFileName(item));
                 }
@@ -736,7 +738,7 @@ namespace Xbim.COBie.Client
 
         private void btnClassFilter_Click(object sender, EventArgs e)
         {
-            ClassFilter classFilterDlg = new ClassFilter(UserFilters);
+            var classFilterDlg = new ClassFilter(UserFilters);
             if (classFilterDlg.ShowDialog() == DialogResult.OK)
             {
                 UserFilters = classFilterDlg.UserFilters; //not needed but just to make it clear 

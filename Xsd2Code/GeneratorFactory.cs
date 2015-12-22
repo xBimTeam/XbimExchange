@@ -1,7 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using Xsd2Code.Library.Extensions;
 using Xsd2Code.Library.Helpers;
 using System.Reflection;

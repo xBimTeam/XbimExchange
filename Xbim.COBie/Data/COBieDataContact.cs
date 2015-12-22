@@ -1,14 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using Xbim.COBie.Rows;
 using Xbim.Ifc2x3.ActorResource;
-using Xbim.Ifc2x3.MeasureResource;
-using Xbim.Ifc2x3.UtilityResource;
-using Xbim.XbimExtensions;
-using Xbim.Ifc2x3.Kernel;
-using Xbim.XbimExtensions.SelectTypes;
 using Xbim.Ifc2x3.PropertyResource;
 
 namespace Xbim.COBie.Data
@@ -39,28 +32,28 @@ namespace Xbim.COBie.Data
             ClearEMails(); //clear the email dictionary for a new file conversion
 
             //create new sheet
-            COBieSheet<COBieContactRow> contacts = new COBieSheet<COBieContactRow>(Constants.WORKSHEET_CONTACT);
-            IEnumerable<string> cobieContacts = Model.Instances.OfType<IfcPropertySingleValue>().Where(psv => psv.Name == "COBieCreatedBy" || psv.Name == "COBieTypeCreatedBy").GroupBy(psv => psv.NominalValue).Select(g => g.First().NominalValue.ToString());
-            IEnumerable<IfcPersonAndOrganization> ifcPersonAndOrganizations = Model.Instances.OfType<IfcPersonAndOrganization>();
+            var contacts = new COBieSheet<COBieContactRow>(Constants.WORKSHEET_CONTACT);
+            var cobieContacts = Model.Instances.OfType<IfcPropertySingleValue>().Where(psv => psv.Name == "COBieCreatedBy" || psv.Name == "COBieTypeCreatedBy").GroupBy(psv => psv.NominalValue).Select(g => g.First().NominalValue.ToString());
+            var ifcPersonAndOrganizations = Model.Instances.OfType<IfcPersonAndOrganization>();
             ProgressIndicator.Initialise("Creating Contacts", ifcPersonAndOrganizations.Count() + cobieContacts.Count());
 
             List<IfcOrganizationRelationship> ifcOrganizationRelationships = null;
 
-            foreach (IfcPersonAndOrganization ifcPersonAndOrganization in ifcPersonAndOrganizations)
+            foreach (var ifcPersonAndOrganization in ifcPersonAndOrganizations)
             {
                 ProgressIndicator.IncrementAndUpdate();
                 
                 //check we do not have a default email address, if skip it as we want the validation warning
-                string email = GetTelecomEmailAddress(ifcPersonAndOrganization);
+                var email = GetTelecomEmailAddress(ifcPersonAndOrganization);
                 if (email == Constants.DEFAULT_EMAIL)
                 {
                     continue;
                 }
                  
-                COBieContactRow contact = new COBieContactRow(contacts);
+                var contact = new COBieContactRow(contacts);
                 // get person and organization
-                IfcOrganization ifcOrganization = ifcPersonAndOrganization.TheOrganization;
-                IfcPerson ifcPerson = ifcPersonAndOrganization.ThePerson;
+                var ifcOrganization = ifcPersonAndOrganization.TheOrganization;
+                var ifcPerson = ifcPersonAndOrganization.ThePerson;
                 contact.Email = email;
 
                 //lets default the creator to that user who created the project for now, no direct link to OwnerHistory on IfcPersonAndOrganization, IfcPerson or IfcOrganization
@@ -89,10 +82,10 @@ namespace Xbim.COBie.Data
                     contact.ExtIdentifier = ifcPerson.Id;
                 }
                 //get department
-                string department = "";
+                var department = "";
                 if (ifcPerson.Addresses != null)
                 {
-                    department = ifcPerson.Addresses.PostalAddresses.Select(dept => dept.InternalLocation).Where(dept => !string.IsNullOrEmpty(dept)).FirstOrDefault();
+                    department = ifcPerson.Addresses.OfType<IfcPostalAddress>().Select(dept => dept.InternalLocation).FirstOrDefault(dept => !string.IsNullOrEmpty(dept));
                 }
                 if (string.IsNullOrEmpty(department))
                 {
@@ -100,7 +93,7 @@ namespace Xbim.COBie.Data
                     {
                         ifcOrganizationRelationships = Model.Instances.OfType<IfcOrganizationRelationship>().ToList();
                     }
-                    IfcOrganization ifcRelOrganization = ifcOrganizationRelationships
+                    var ifcRelOrganization = ifcOrganizationRelationships
                                                         .Where(Or => Or.RelatingOrganization.EntityLabel == ifcOrganization.EntityLabel && Or.RelatedOrganizations.Last() != null)
                                                         .Select(Or => Or.RelatedOrganizations.Last())
                                                         .LastOrDefault();
@@ -122,10 +115,10 @@ namespace Xbim.COBie.Data
                 contacts.AddRow(contact);
             }
 
-            foreach (string email in cobieContacts)
+            foreach (var email in cobieContacts)
             {
                 ProgressIndicator.IncrementAndUpdate();
-                COBieContactRow contact = new COBieContactRow(contacts);
+                var contact = new COBieContactRow(contacts);
                 contact.Email = email;
 
                 //lets default the creator to that user who created the project for now, no direct link to OwnerHistory on IfcPersonAndOrganization, IfcPerson or IfcOrganization
@@ -158,14 +151,15 @@ namespace Xbim.COBie.Data
             return contacts;
         }
 
-        private static void GetContactAddress(COBieContactRow contact, AddressCollection addresses)
+        private static void GetContactAddress(COBieContactRow contact, IEnumerable<IfcAddress> addresses)
         {
-            if ((addresses != null) && (addresses.PostalAddresses  != null))
+            var ifcAddresses = addresses as IfcAddress[] ?? addresses.ToArray();
+            if ((addresses != null) && ifcAddresses.Any())
             {
-                IfcPostalAddress ifcPostalAddress = addresses.PostalAddresses.FirstOrDefault();
+                var ifcPostalAddress = ifcAddresses.OfType<IfcPostalAddress>().FirstOrDefault();
                 if (ifcPostalAddress != null) 
                 {
-                    List<string> street = new List<string>();
+                    var street = new List<string>();
                     if (ifcPostalAddress.AddressLines != null)
                         street = ifcPostalAddress.AddressLines.Select(st => st.Value.ToString()).ToList();
                     

@@ -6,11 +6,8 @@ using Xbim.CobieLiteUK.Validation.Reporting;
 using Xbim.COBieLiteUK;
 using Xbim.IO;
 using Xbim.ModelGeometry.Scene;
-using Xbim.XbimExtensions;
-using Xbim.XbimExtensions.Interfaces;
 using XbimExchanger.COBieLiteUkToIfc;
 using XbimExchanger.IfcToCOBieLiteUK;
-using XbimGeometry.Interfaces;
 
 
 namespace Xbim.Exchange

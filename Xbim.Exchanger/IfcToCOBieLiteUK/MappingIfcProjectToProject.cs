@@ -1,11 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 using Xbim.COBieLiteUK;
 using Xbim.Ifc2x3.Kernel;
-using Xbim.Ifc2x3.ProductExtension;
 using Xbim.IO;
 
 namespace XbimExchanger.IfcToCOBieLiteUK

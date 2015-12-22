@@ -1,17 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using Xbim.COBie.Rows;
-using Xbim.XbimExtensions.Transactions;
 using Xbim.Ifc2x3.Kernel;
-using Xbim.XbimExtensions;
 using System.Reflection;
+using Xbim.Common;
+using Xbim.Common.Metadata;
 using Xbim.Ifc2x3.ProductExtension;
 using Xbim.Ifc2x3.MeasureResource;
 using Xbim.Ifc2x3.Extensions;
-using Xbim.XbimExtensions.Interfaces;
-using Xbim.IO;
+using Xbim.IO.Esent;
 
 namespace Xbim.COBie.Serialisers.XbimSerialiser
 {
@@ -38,23 +36,23 @@ namespace Xbim.COBie.Serialisers.XbimSerialiser
         /// <param name="cOBieSheet">COBieSheet of COBieComponentRow to read data from</param>
         public void SerialiseComponent(COBieSheet<COBieComponentRow> cOBieSheet)
         {
-            using (XbimReadWriteTransaction trans = Model.BeginTransaction("Add Component"))
+            using (var trans = Model.BeginTransaction("Add Component"))
             {
 
                 try
                 {
-                    int count = 1;
+                    var count = 1;
                     IfcTypeObjects = Model.Instances.OfType<IfcTypeObject>();
                     IfcSpaces = Model.Instances.OfType<IfcSpace>();
                     IfcBuildingStoreys = Model.Instances.OfType<IfcBuildingStorey>();
                     ProgressIndicator.ReportMessage("Starting Components...");
                     ProgressIndicator.Initialise("Creating Components", cOBieSheet.RowCount);
-                    for (int i = 0; i < cOBieSheet.RowCount; i++)
+                    for (var i = 0; i < cOBieSheet.RowCount; i++)
                     {
                         BumpTransaction(trans, count);
                         count++;
                         ProgressIndicator.IncrementAndUpdate();
-                        COBieComponentRow row = cOBieSheet[i]; 
+                        var row = cOBieSheet[i]; 
                         AddComponent(row);
                     }
 
@@ -84,7 +82,7 @@ namespace Xbim.COBie.Serialisers.XbimSerialiser
             }
             //we need the ExtObject to exist to create the object
             //Create object using reflection
-            IfcElement ifcElement = GetElementInstance(row.ExtObject, Model);
+            var ifcElement = GetElementInstance(row.ExtObject, Model);
                     
             if(ifcElement != null)
             {
@@ -92,10 +90,10 @@ namespace Xbim.COBie.Serialisers.XbimSerialiser
                 SetUserHistory(ifcElement, row.ExtSystem, row.CreatedBy, row.CreatedOn);
                 //using statement will set the Model.OwnerHistoryAddObject to ifcElement.OwnerHistory as OwnerHistoryAddObject is used upon any property changes, 
                 //then swaps the original OwnerHistoryAddObject back in the dispose, so set any properties within the using statement
-                using (COBieXBimEditScope context = new COBieXBimEditScope(Model, ifcElement.OwnerHistory))
+                using (var context = new COBieXBimEditScope(Model, ifcElement.OwnerHistory))
                 {
                     //Add Name
-                    string name = row.Name;
+                    var name = row.Name;
                     if (ValidateString(name)) ifcElement.Name = name;
 
                     //Add description
@@ -120,7 +118,7 @@ namespace Xbim.COBie.Serialisers.XbimSerialiser
                     //set up relationship of the component to the type the component is
                     if (ValidateString(row.TypeName))
                     {
-                        IfcTypeObject ifcTypeObject = IfcTypeObjects.Where(to => to.Name.ToString().ToLower() == row.TypeName.ToLower()).FirstOrDefault();
+                        var ifcTypeObject = IfcTypeObjects.Where(to => to.Name.ToString().ToLower() == row.TypeName.ToLower()).FirstOrDefault();
                         if (ifcTypeObject != null)
                             ifcElement.SetDefiningType(ifcTypeObject, Model);
                         else
@@ -166,13 +164,13 @@ namespace Xbim.COBie.Serialisers.XbimSerialiser
                     ifcBuildingStorey.AddElement(ifcElement);
                 else //not in floors so see if the space names is a delimited list
                 {
-                    char splitKey = GetSplitChar(spaceNames);
-                    string[] spaceArray = spaceNames.Split(splitKey);
+                    var splitKey = GetSplitChar(spaceNames);
+                    var spaceArray = spaceNames.Split(splitKey);
                     if (spaceArray.Count() > 1) //if one we have already tried above, if more than one then try each item 
                     {
-                        foreach (string spaceitem in spaceArray)
+                        foreach (var spaceitem in spaceArray)
                         {
-                            string spaceName = spaceitem.Trim();
+                            var spaceName = spaceitem.Trim();
                             ifcSpace = IfcSpaces.Where(space => space.Name.ToString().ToLower().Trim() == spaceName).FirstOrDefault();
                             if (ifcSpace != null)
                                 ifcSpace.AddElement(ifcElement);
@@ -204,12 +202,12 @@ namespace Xbim.COBie.Serialisers.XbimSerialiser
         public static IfcElement GetElementInstance(string elementTypeName, IModel model)
         {
             elementTypeName = elementTypeName.Trim().ToUpper();
-            IfcType ifcType;
+            ExpressType ifcType;
             IfcElement ifcElement = null;
-            if (IfcMetaData.TryGetIfcType(elementTypeName, out ifcType))
+            if (model.Metadata.TryGetExpressType(elementTypeName, out ifcType))
             {
-                MethodInfo method = typeof(IXbimInstanceCollection).GetMethod("New", Type.EmptyTypes);
-                MethodInfo generic = method.MakeGenericMethod(ifcType.Type);
+                var method = typeof(IEntityCollection).GetMethod("New", Type.EmptyTypes);
+                var generic = method.MakeGenericMethod(ifcType.Type);
                 var eleObj = generic.Invoke(model.Instances, null);
                 if (eleObj is IfcElement)
                     ifcElement = (IfcElement)eleObj;

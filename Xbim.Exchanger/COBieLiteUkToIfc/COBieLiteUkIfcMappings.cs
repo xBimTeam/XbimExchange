@@ -1,6 +1,5 @@
 ﻿
 using Xbim.COBieLiteUK;
-using Xbim.XbimExtensions.Interfaces;
 using XbimExchanger.IfcHelpers;
 
 namespace XbimExchanger.COBieLiteUkToIfc

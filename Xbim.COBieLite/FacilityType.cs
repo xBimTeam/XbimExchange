@@ -1,5 +1,4 @@
 ﻿using Microsoft.Xml.Serialization.GeneratedAssembly;
-using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -8,10 +7,8 @@ using System.Xml.Serialization;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Bson;
 using Xbim.COBieLite.CollectionTypes;
-using Xbim.Ifc2x3.Extensions;
 using Xbim.Ifc2x3.Kernel;
 using Xbim.Ifc2x3.ProductExtension;
-using Xbim.XbimExtensions.SelectTypes;
 using Xbim.COBieLite.Converters;
 using Newtonsoft.Json.Converters;
 using Formatting = Newtonsoft.Json.Formatting;

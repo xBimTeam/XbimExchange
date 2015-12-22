@@ -2,17 +2,11 @@
 using System.Globalization;
 using System.Linq;
 using Xbim.COBie.Rows;
-using Xbim.Ifc2x3.Extensions;
-using Xbim.Ifc2x3.ExternalReferenceResource;
 using Xbim.Ifc2x3.GeometricConstraintResource;
 using Xbim.Ifc2x3.Kernel;
 using Xbim.Ifc2x3.MeasureResource;
 using Xbim.Ifc2x3.ProductExtension;
-using Xbim.Ifc2x3.UtilityResource;
-using Xbim.XbimExtensions.Transactions;
-using System.Collections.Generic;
 using Xbim.Ifc2x3.QuantityResource;
-using Xbim.IO;
 
 namespace Xbim.COBie.Serialisers.XbimSerialiser
 {

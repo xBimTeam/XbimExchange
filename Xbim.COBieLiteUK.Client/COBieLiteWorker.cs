@@ -8,7 +8,6 @@ using Xbim.COBieLiteUK;
 using Xbim.Common.Exceptions;
 using Xbim.FilterHelper;
 using Xbim.IO;
-using Xbim.XbimExtensions.Interfaces;
 using XbimExchanger.COBieLiteUkToIfc;
 using XbimExchanger.IfcToCOBieLiteUK;
 

@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using Xbim.COBie.Contracts;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.IO;

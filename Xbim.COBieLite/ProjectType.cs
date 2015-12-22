@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Xbim.Ifc2x3.Kernel;
+﻿using Xbim.Ifc2x3.Kernel;
 
 namespace Xbim.COBieLite
 {

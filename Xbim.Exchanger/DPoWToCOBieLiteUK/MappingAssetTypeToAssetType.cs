@@ -1,9 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using Xbim.COBieLiteUK;
-using Xbim.DPoW;
 using CAssetType = Xbim.COBieLiteUK.AssetType;
 using DAssetType = Xbim.DPoW.AssetType;
 

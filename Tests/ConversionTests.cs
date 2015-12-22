@@ -5,10 +5,8 @@ using Xbim.COBieLite;
 using Xbim.Ifc2x3.MeasureResource;
 using Xbim.IO;
 using Xbim.ModelGeometry.Scene;
-using Xbim.XbimExtensions.Interfaces;
 using XbimExchanger.COBieLiteToIfc;
 using XbimExchanger.IfcHelpers;
-using XbimGeometry.Interfaces;
 
 namespace Tests
 {

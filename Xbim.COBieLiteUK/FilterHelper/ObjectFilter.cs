@@ -1,12 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Configuration;
-using System.Diagnostics;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Xbim.Ifc2x3.Kernel;
-using Xbim.IO;
 
 namespace Xbim.FilterHelper
 {

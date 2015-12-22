@@ -2,8 +2,6 @@
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Xbim.COBieLiteUK;
 using Xbim.DPoW;
 using AssetType = Xbim.COBieLiteUK.AssetType;
@@ -12,7 +10,6 @@ using Contact = Xbim.COBieLiteUK.Contact;
 using SpaceType = Xbim.DPoW.SpaceType;
 using FacilityType = Xbim.COBieLiteUK.Facility;
 using ProjectStage = Xbim.COBieLiteUK.ProjectStage;
-using System = Xbim.COBieLiteUK.System;
 
 namespace XbimExchanger.DPoWToCOBieLiteUK
 {

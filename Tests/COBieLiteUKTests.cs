@@ -5,12 +5,10 @@ using Xbim.COBieLiteUK;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
-using System.Text.RegularExpressions;
 using Xbim.CobieLiteUK.Validation;
 using Xbim.IO;
 using XbimExchanger.IfcToCOBieLiteUK;
 using Attribute = Xbim.COBieLiteUK.Attribute;
-using XbimExchanger.COBieLiteHelpers;
 using Xbim.FilterHelper;
 
 

@@ -3,7 +3,6 @@ using System.Linq;
 using Xbim.COBieLiteUK;
 using Xbim.Ifc2x3.ActorResource;
 using Xbim.IO;
-using Xbim.XbimExtensions.SelectTypes;
 
 namespace XbimExchanger.IfcToCOBieLiteUK
 {

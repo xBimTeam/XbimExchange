@@ -12,17 +12,15 @@ using Newtonsoft.Json.Bson;
 using Newtonsoft.Json.Converters;
 using Xbim.Common.Logging;
 using Xbim.Ifc2x3.ActorResource;
-using Xbim.Ifc2x3.Extensions;
 using Xbim.Ifc2x3.ExternalReferenceResource;
 using Xbim.Ifc2x3.Kernel;
 using Xbim.Ifc2x3.MeasureResource;
 using Xbim.Ifc2x3.ProductExtension;
-using Xbim.Ifc2x3.PropertyResource;
 using Xbim.Ifc2x3.QuantityResource;
 using Xbim.Ifc2x3.SharedFacilitiesElements;
-using Xbim.IO;
 using System.Xml;
-using Xbim.XbimExtensions.SelectTypes;
+using Xbim.Common.Metadata;
+using Xbim.Ifc2x3.IO;
 using Formatting = System.Xml.Formatting;
 
 namespace Xbim.COBieLite
@@ -100,7 +98,7 @@ namespace Xbim.COBieLite
         private Dictionary<string, string[]> _cobieFieldMap;
 
 
-        private readonly HashSet<IfcType> _includedTypes = new HashSet<IfcType>();
+        private readonly HashSet<ExpressType> _includedTypes = new HashSet<ExpressType>();
 
         private Dictionary<IfcObject,IfcTypeObject> _objectToTypeObjectMap;
         private Dictionary<IfcTypeObject, List<IfcElement>> _definingTypeObjectMap;
@@ -108,9 +106,9 @@ namespace Xbim.COBieLite
         private Lookup<string, IfcElement> _elementTypeToElementObjectMap;
 */
         private Dictionary<IfcTypeObject, IfcAsset> _assetAsignments;
-        private Dictionary<IfcSystem, ObjectDefinitionSet> _systemAssignment;
+        private Dictionary<IfcSystem, IEnumerable<IfcObjectDefinition>> _systemAssignment;
         private Dictionary<IfcObjectDefinition, List<IfcSystem>> _systemLookup;
-        private HashSet<string> _cobieProperties = new HashSet<string>();
+        private readonly HashSet<string> _cobieProperties = new HashSet<string>();
         private Dictionary<IfcElement, List<IfcSpace>> _spaceAssetLookup;
         private Dictionary<IfcSpace, IfcBuildingStorey> _spaceFloorLookup;
         private Dictionary<IfcSpatialStructureElement, List<IfcSpatialStructureElement>> _spatialDecomposition;
@@ -139,7 +137,7 @@ namespace Xbim.COBieLite
         {
             _systemAssignment = 
                 _model.Instances.OfType<IfcRelAssignsToGroup>().Where(r => r.RelatingGroup is IfcSystem)
-                .ToDictionary(k => (IfcSystem)k.RelatingGroup, v => v.RelatedObjects);
+                .ToDictionary(k => (IfcSystem)k.RelatingGroup, v => v.RelatedObjects.Cast<IfcObjectDefinition>());
             _systemLookup = new Dictionary<IfcObjectDefinition, List<IfcSystem>>();
             foreach (var systemAssignment in SystemAssignment)
                 foreach (var objectDefinition in systemAssignment.Value)
@@ -262,11 +260,9 @@ namespace Xbim.COBieLite
             {
                 foreach (KeyValueConfigurationElement keyVal in ifcElementInclusion.Settings)
                 {
-                    if (String.Compare(keyVal.Value, "YES", StringComparison.OrdinalIgnoreCase) == 0)
-                    {
-                        var includedType = IfcMetaData.IfcType(keyVal.Key.ToUpper());
-                        if (includedType != null) _includedTypes.Add(includedType);
-                    }
+                    if (string.Compare(keyVal.Value, "YES", StringComparison.OrdinalIgnoreCase) != 0) continue;
+                    var includedType = Model.Metadata.ExpressType(keyVal.Key.ToUpper());
+                    if (includedType != null) _includedTypes.Add(includedType);
                 }
             }
 
@@ -423,7 +419,7 @@ namespace Xbim.COBieLite
         {
             get { return _systemLookup; }
         }
-        public IDictionary<IfcSystem, ObjectDefinitionSet> SystemAssignment
+        public IDictionary<IfcSystem, IEnumerable<IfcObjectDefinition>> SystemAssignment
         {
             get { return _systemAssignment; }
         }
@@ -443,28 +439,29 @@ namespace Xbim.COBieLite
             var ifcProject = Model.IfcProject;
             foreach (var unit in ifcProject.UnitsInContext.Units)
             {
-                if (unit is IfcNamedUnit)
+                var namedUnit = unit as IfcNamedUnit;
+                if (namedUnit != null)
                 {
-                    var unitType = (unit as IfcNamedUnit).UnitType;
+                    var unitType = namedUnit.UnitType;
                     switch (unitType)
                     {
                         case IfcUnitEnum.AREAUNIT:
-                            _hasAreaUnit = Enum.TryParse(AdjustUnitName(unit.GetName()), true,
+                            _hasAreaUnit = Enum.TryParse(AdjustUnitName(namedUnit.FullName), true,
                                 out _modelAreaUnit);
                             break;
                         case IfcUnitEnum.LENGTHUNIT:
-                            _hasLinearUnit = Enum.TryParse(AdjustUnitName(unit.GetName()), true,
+                            _hasLinearUnit = Enum.TryParse(AdjustUnitName(namedUnit.FullName), true,
                                 out _modelLinearUnit);
                             break;
                         case IfcUnitEnum.VOLUMEUNIT:
-                            _hasVolumeUnit = Enum.TryParse(AdjustUnitName(unit.GetName()), true,
+                            _hasVolumeUnit = Enum.TryParse(AdjustUnitName(namedUnit.FullName), true,
                                 out _modelVolumeUnit);
                             break;
                     }
                 }
                 else if (unit is IfcMonetaryUnit)
                 {
-                    _hasCurrencyUnit = Enum.TryParse(unit.GetName(), true,
+                    _hasCurrencyUnit = Enum.TryParse(unit.ToString(), true,
                         out _modelCurrencyUnit);
                 }
 
@@ -626,17 +623,17 @@ namespace Xbim.COBieLite
 
         public string GetAreaUnit(IfcQuantityArea areaUnit)
         {
-            return areaUnit.Unit != null ? areaUnit.Unit.GetName() : ModelAreaUnit.ToString();
+            return areaUnit.Unit != null ? areaUnit.Unit.FullName : ModelAreaUnit.ToString();
         }
 
         public string GetLinearUnit(IfcQuantityLength lengthUnit)
         {
-            return lengthUnit.Unit != null ? lengthUnit.Unit.GetName() : ModelLinearUnit.ToString();
+            return lengthUnit.Unit != null ? lengthUnit.Unit.FullName : ModelLinearUnit.ToString();
         }
 
         public string GetVolumeUnit(IfcQuantityVolume volumeUnit)
         {
-            return volumeUnit.Unit != null ? volumeUnit.Unit.GetName() : ModelVolumeUnit.ToString();
+            return volumeUnit.Unit != null ? volumeUnit.Unit.FullName : ModelVolumeUnit.ToString();
         }
 
         #endregion

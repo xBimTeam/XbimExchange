@@ -1,11 +1,9 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using Xbim.COBieLiteUK;
-using Xbim.Ifc2x3.Extensions;
 using Xbim.Ifc2x3.Kernel;
 using Xbim.Ifc2x3.ProductExtension;
 using Xbim.IO;
-using System = Xbim.COBieLiteUK.System;
 using netSystem = System;
 
 namespace XbimExchanger.IfcToCOBieLiteUK 

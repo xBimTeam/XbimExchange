@@ -1,6 +1,4 @@
 ﻿using Xbim.IO;
-using Xbim.XbimExtensions.Interfaces;
-using XbimExchanger.COBieLiteToIfc;
 
 namespace XbimExchanger.IfcHelpers
 {

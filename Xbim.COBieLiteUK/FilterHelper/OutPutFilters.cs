@@ -2,10 +2,6 @@
 using System.Collections.Generic;
 using System.Configuration;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Xbim.IO;
-using System.Reflection;
 using Newtonsoft.Json;
 using System.Xml.Serialization;
 using System.IO;

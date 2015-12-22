@@ -1,11 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Xbim.Ifc2x3.Extensions;
 using Xbim.Ifc2x3.MeasureResource;
-using Xbim.XbimExtensions.SelectTypes;
 
 namespace XbimExchanger.IfcHelpers
 {

@@ -1,19 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Xml;
-using System.Xml.Serialization;
 using Xbim.COBie.Rows;
-using Xbim.XbimExtensions;
-using Xbim.Ifc2x3.Extensions;
 using System.Linq;
-using System.Reflection;
 using Xbim.COBie.Contracts;
 using Xbim.COBie.Serialisers;
 using Xbim.Ifc2x3.ProductExtension;
 using Xbim.Ifc2x3.Kernel;
-using Xbim.IO;
-
 
 
 namespace Xbim.COBie

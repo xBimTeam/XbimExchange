@@ -1,9 +1,5 @@
 ﻿using Xbim.COBieLiteUK;
-using Xbim.Ifc2x3.Extensions;
-using Xbim.Ifc2x3.GeometryResource;
 using Xbim.Ifc2x3.Kernel;
-using Xbim.Ifc2x3.MeasureResource;
-using Xbim.Ifc2x3.RepresentationResource;
 
 namespace XbimExchanger.COBieLiteUkToIfc
 {

@@ -1,7 +1,5 @@
-﻿using System;
-using Xbim.COBieLite;
+﻿using Xbim.COBieLite;
 using Xbim.Ifc2x3.ProductExtension;
-using XbimExchanger.IfcHelpers;
 
 namespace XbimExchanger.COBieLiteToIfc
 {

@@ -1,18 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using Xbim.COBie.Rows;
-using Xbim.XbimExtensions.Transactions;
 using Xbim.Ifc2x3.Kernel;
 using Xbim.Ifc2x3.ProductExtension;
-using Xbim.Ifc2x3.UtilityResource;
 using Xbim.Ifc2x3.Extensions;
-using Xbim.XbimExtensions;
 using System.Reflection;
-using Xbim.IO;
-using Xbim.XbimExtensions.Interfaces;
-using Xbim.Ifc2x3.PropertyResource;
 
 namespace Xbim.COBie.Serialisers.XbimSerialiser
 {

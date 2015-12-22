@@ -5,7 +5,6 @@ using System.Diagnostics;
 using System.Globalization;
 using System.Linq;
 using Xbim.COBieLite;
-using Xbim.Ifc2x3.Extensions;
 using Xbim.Ifc2x3.GeometricConstraintResource;
 using Xbim.Ifc2x3.GeometricModelResource;
 using Xbim.Ifc2x3.GeometryResource;
@@ -17,7 +16,6 @@ using Xbim.Ifc2x3.PropertyResource;
 using Xbim.Ifc2x3.QuantityResource;
 using Xbim.Ifc2x3.RepresentationResource;
 using Xbim.IO;
-using Xbim.XbimExtensions.SelectTypes;
 using XbimExchanger.COBieLiteHelpers;
 using XbimExchanger.IfcHelpers;
 

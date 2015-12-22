@@ -2,16 +2,12 @@
 using System.Linq;
 using System.Reflection;
 using Xbim.COBie.Rows;
-using Xbim.Ifc2x3.Extensions;
-using Xbim.Ifc2x3.ExternalReferenceResource;
 using Xbim.Ifc2x3.Kernel;
 using Xbim.Ifc2x3.MeasureResource;
 using Xbim.Ifc2x3.PropertyResource;
 using Xbim.Ifc2x3.SharedFacilitiesElements;
 using Xbim.Ifc2x3.UtilityResource;
 using Xbim.Ifc2x3.MaterialResource;
-using System.Diagnostics;
-using System;
 
 namespace Xbim.COBie.Data
 {

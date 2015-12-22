@@ -5,12 +5,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Xbim.COBie.Rows;
-using Xbim.XbimExtensions.SelectTypes;
 using Xbim.Ifc2x3.Kernel;
 using Xbim.Ifc2x3.PropertyResource;
-using Xbim.Ifc2x3.MeasureResource;
 using Xbim.Ifc2x3.ExternalReferenceResource;
-using Xbim.Ifc2x3.UtilityResource;
 
 namespace Xbim.COBie.Data
 {

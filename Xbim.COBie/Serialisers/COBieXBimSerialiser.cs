@@ -1,21 +1,19 @@
 ﻿using System;
 using System.Diagnostics;
 using System.IO;
-using System.Collections.Generic;
-using System.Linq;
 using System.Reflection;
+using Xbim.Common;
+using Xbim.Common.Step21;
 using Xbim.COBie.Contracts;
 using Xbim.COBie.Rows;
 using Xbim.COBie.Serialisers.XbimSerialiser;
 using Xbim.Ifc2x3.Extensions;
 using Xbim.Ifc2x3.Kernel;
-using Xbim.IO;
-using Xbim.XbimExtensions;
-using Xbim.XbimExtensions.Transactions;
-using Xbim.Ifc2x3.ProductExtension;
-using Xbim.Ifc2x3.UtilityResource;
-using Xbim.XbimExtensions.Interfaces;
 using Xbim.Ifc2x3.GeometryResource;
+using Xbim.IO;
+using Xbim.IO.Esent;
+using XbimModel = Xbim.Ifc2x3.IO.XbimModel;
+
 //using Xbim.XbimExtensions.Parser;
 
 namespace Xbim.COBie.Serialisers
@@ -62,9 +60,8 @@ namespace Xbim.COBie.Serialisers
         /// <param name="fileName">.xBIM file name and path</param>
         public COBieXBimSerialiser(string fileName)
         {
-            string fileNameDB = Path.ChangeExtension(fileName, ".xBIM");
-            XBimContext = new COBieXBimContext(XbimModel.CreateModel(fileNameDB));
-            XBimContext.IsMerge = false;
+            var fileNameDB = Path.ChangeExtension(fileName, ".xBIM");
+            XBimContext = new COBieXBimContext(XbimModel.CreateModel(fileNameDB)) {IsMerge = false};
             FileName = fileName;
             MergeGeometryOnly = true;
         }
@@ -74,9 +71,8 @@ namespace Xbim.COBie.Serialisers
         /// </summary>
         public COBieXBimSerialiser(string fileName, ReportProgressDelegate progressHandler) 
         {
-            string fileNameDB = Path.ChangeExtension(fileName, ".xBIM");
-            XBimContext = new COBieXBimContext(XbimModel.CreateModel(fileNameDB), progressHandler);
-            XBimContext.IsMerge = false;
+            var fileNameDB = Path.ChangeExtension(fileName, ".xBIM");
+            XBimContext = new COBieXBimContext(XbimModel.CreateModel(fileNameDB), progressHandler) {IsMerge = false};
             FileName = fileName;
             MergeGeometryOnly = true;
         }
@@ -108,58 +104,58 @@ namespace Xbim.COBie.Serialisers
             XBimContext.WorkBook = workbook;
             ModelSetUp();
 
-            COBieXBimContact xBimContact = new COBieXBimContact(XBimContext);
+            var xBimContact = new COBieXBimContact(XBimContext);
             xBimContact.SerialiseContacts((COBieSheet<COBieContactRow>)WorkBook[Constants.WORKSHEET_CONTACT]);
 
-            COBieXBimFacility xBimFacility = new COBieXBimFacility(XBimContext);
+            var xBimFacility = new COBieXBimFacility(XBimContext);
             xBimFacility.SerialiseFacility((COBieSheet<COBieFacilityRow>)WorkBook[Constants.WORKSHEET_FACILITY]);
 
-            COBieXBimFloor xBimFloor = new COBieXBimFloor(XBimContext);
+            var xBimFloor = new COBieXBimFloor(XBimContext);
             xBimFloor.SerialiseFloor((COBieSheet<COBieFloorRow>)WorkBook[Constants.WORKSHEET_FLOOR]);
             
-            COBieXBimSpace xBimSpace = new COBieXBimSpace(XBimContext);
+            var xBimSpace = new COBieXBimSpace(XBimContext);
             xBimSpace.SerialiseSpace((COBieSheet<COBieSpaceRow>)WorkBook[Constants.WORKSHEET_SPACE]);
 
-            COBieXBimZone xBimZone = new COBieXBimZone(XBimContext);
+            var xBimZone = new COBieXBimZone(XBimContext);
             xBimZone.SerialiseZone((COBieSheet<COBieZoneRow>)WorkBook[Constants.WORKSHEET_ZONE]);
 
-            COBieXBimType xBimType = new COBieXBimType(XBimContext);
+            var xBimType = new COBieXBimType(XBimContext);
             xBimType.SerialiseType((COBieSheet<COBieTypeRow>)WorkBook[Constants.WORKSHEET_TYPE]);
 
-            COBieXBimComponent xBimComponent = new COBieXBimComponent(XBimContext);
+            var xBimComponent = new COBieXBimComponent(XBimContext);
             xBimComponent.SerialiseComponent((COBieSheet<COBieComponentRow>)WorkBook[Constants.WORKSHEET_COMPONENT]);
 
-            COBieXBimSystem xBimSystem = new COBieXBimSystem(XBimContext);
+            var xBimSystem = new COBieXBimSystem(XBimContext);
             xBimSystem.SerialiseSystem((COBieSheet<COBieSystemRow>)WorkBook[Constants.WORKSHEET_SYSTEM]);
 
-            COBieXBimAssembly xBimAssembly = new COBieXBimAssembly(XBimContext);
+            var xBimAssembly = new COBieXBimAssembly(XBimContext);
             xBimAssembly.SerialiseAssembly((COBieSheet<COBieAssemblyRow>)WorkBook[Constants.WORKSHEET_ASSEMBLY]);
 
-            COBieXBimConnection xBimConnection = new COBieXBimConnection(XBimContext);
+            var xBimConnection = new COBieXBimConnection(XBimContext);
             xBimConnection.SerialiseConnection((COBieSheet<COBieConnectionRow>)WorkBook[Constants.WORKSHEET_CONNECTION]);
             
-            COBieXBimSpare xBimSpare = new COBieXBimSpare(XBimContext);
+            var xBimSpare = new COBieXBimSpare(XBimContext);
             xBimSpare.SerialiseSpare((COBieSheet<COBieSpareRow>)WorkBook[Constants.WORKSHEET_SPARE]);
 
-            COBieXBimResource xBimResource = new COBieXBimResource(XBimContext);
+            var xBimResource = new COBieXBimResource(XBimContext);
             xBimResource.SerialiseResource((COBieSheet<COBieResourceRow>)WorkBook[Constants.WORKSHEET_RESOURCE]);
 
-            COBieXBimJob xBimJob = new COBieXBimJob(XBimContext);
+            var xBimJob = new COBieXBimJob(XBimContext);
             xBimJob.SerialiseJob((COBieSheet<COBieJobRow>)WorkBook[Constants.WORKSHEET_JOB]);
 
-            COBieXBimImpact xBimImpact = new COBieXBimImpact(XBimContext);
+            var xBimImpact = new COBieXBimImpact(XBimContext);
             xBimImpact.SerialiseImpact((COBieSheet<COBieImpactRow>)WorkBook[Constants.WORKSHEET_IMPACT]);
 
-            COBieXBimDocument xBimDocument = new COBieXBimDocument(XBimContext);
+            var xBimDocument = new COBieXBimDocument(XBimContext);
             xBimDocument.SerialiseDocument((COBieSheet<COBieDocumentRow>)WorkBook[Constants.WORKSHEET_DOCUMENT]);
 
-            COBieXBimAttribute xBimAttribute = new COBieXBimAttribute(XBimContext);
+            var xBimAttribute = new COBieXBimAttribute(XBimContext);
             xBimAttribute.SerialiseAttribute((COBieSheet<COBieAttributeRow>)WorkBook[Constants.WORKSHEET_ATTRIBUTE]);
             
-            COBieXBimCoordinate xBimCoordinate = new COBieXBimCoordinate(XBimContext);
+            var xBimCoordinate = new COBieXBimCoordinate(XBimContext);
             xBimCoordinate.SerialiseCoordinate((COBieSheet<COBieCoordinateRow>)WorkBook[Constants.WORKSHEET_COORDINATE]);
             
-            COBieXBimIssue xBimIssue = new COBieXBimIssue(XBimContext);
+            var xBimIssue = new COBieXBimIssue(XBimContext);
             xBimIssue.SerialiseIssue((COBieSheet<COBieIssueRow>)WorkBook[Constants.WORKSHEET_ISSUE]);
             
             
@@ -176,7 +172,7 @@ namespace Xbim.COBie.Serialisers
 
             if (!MergeGeometryOnly)
             {
-                COBieXBimContact xBimContact = new COBieXBimContact(XBimContext);
+                var xBimContact = new COBieXBimContact(XBimContext);
                 xBimContact.SerialiseContacts((COBieSheet<COBieContactRow>)WorkBook[Constants.WORKSHEET_CONTACT]);
             }
             
@@ -184,58 +180,58 @@ namespace Xbim.COBie.Serialisers
             //COBieXBimFacility xBimFacility = new COBieXBimFacility(XBimContext);
             //xBimFacility.SerialiseFacility((COBieSheet<COBieFacilityRow>)WorkBook[Constants.WORKSHEET_FACILITY]);
 
-            COBieXBimFloor xBimFloor = new COBieXBimFloor(XBimContext);
+            var xBimFloor = new COBieXBimFloor(XBimContext);
             xBimFloor.SerialiseFloor((COBieSheet<COBieFloorRow>)WorkBook[Constants.WORKSHEET_FLOOR]);
 
-            COBieXBimSpace xBimSpace = new COBieXBimSpace(XBimContext);
+            var xBimSpace = new COBieXBimSpace(XBimContext);
             xBimSpace.SerialiseSpace((COBieSheet<COBieSpaceRow>)WorkBook[Constants.WORKSHEET_SPACE]);
 
             if (!MergeGeometryOnly)
             {
-                COBieXBimZone xBimZone = new COBieXBimZone(XBimContext);
+                var xBimZone = new COBieXBimZone(XBimContext);
                 xBimZone.SerialiseZone((COBieSheet<COBieZoneRow>)WorkBook[Constants.WORKSHEET_ZONE]);
             } 
-            COBieXBimType xBimType = new COBieXBimType(XBimContext);
+            var xBimType = new COBieXBimType(XBimContext);
             xBimType.SerialiseType((COBieSheet<COBieTypeRow>)WorkBook[Constants.WORKSHEET_TYPE]);
 
-            COBieXBimComponent xBimComponent = new COBieXBimComponent(XBimContext);
+            var xBimComponent = new COBieXBimComponent(XBimContext);
             xBimComponent.SerialiseComponent((COBieSheet<COBieComponentRow>)WorkBook[Constants.WORKSHEET_COMPONENT]);
 
             if (!MergeGeometryOnly)
             {
-                COBieXBimSystem xBimSystem = new COBieXBimSystem(XBimContext);
+                var xBimSystem = new COBieXBimSystem(XBimContext);
                 xBimSystem.SerialiseSystem((COBieSheet<COBieSystemRow>)WorkBook[Constants.WORKSHEET_SYSTEM]);
 
-                COBieXBimAssembly xBimAssembly = new COBieXBimAssembly(XBimContext);
+                var xBimAssembly = new COBieXBimAssembly(XBimContext);
                 xBimAssembly.SerialiseAssembly((COBieSheet<COBieAssemblyRow>)WorkBook[Constants.WORKSHEET_ASSEMBLY]);
 
-                COBieXBimConnection xBimConnection = new COBieXBimConnection(XBimContext);
+                var xBimConnection = new COBieXBimConnection(XBimContext);
                 xBimConnection.SerialiseConnection((COBieSheet<COBieConnectionRow>)WorkBook[Constants.WORKSHEET_CONNECTION]);
 
-                COBieXBimSpare xBimSpare = new COBieXBimSpare(XBimContext);
+                var xBimSpare = new COBieXBimSpare(XBimContext);
                 xBimSpare.SerialiseSpare((COBieSheet<COBieSpareRow>)WorkBook[Constants.WORKSHEET_SPARE]);
 
-                COBieXBimResource xBimResource = new COBieXBimResource(XBimContext);
+                var xBimResource = new COBieXBimResource(XBimContext);
                 xBimResource.SerialiseResource((COBieSheet<COBieResourceRow>)WorkBook[Constants.WORKSHEET_RESOURCE]);
 
-                COBieXBimJob xBimJob = new COBieXBimJob(XBimContext);
+                var xBimJob = new COBieXBimJob(XBimContext);
                 xBimJob.SerialiseJob((COBieSheet<COBieJobRow>)WorkBook[Constants.WORKSHEET_JOB]);
 
-                COBieXBimImpact xBimImpact = new COBieXBimImpact(XBimContext);
+                var xBimImpact = new COBieXBimImpact(XBimContext);
                 xBimImpact.SerialiseImpact((COBieSheet<COBieImpactRow>)WorkBook[Constants.WORKSHEET_IMPACT]);
 
-                COBieXBimDocument xBimDocument = new COBieXBimDocument(XBimContext);
+                var xBimDocument = new COBieXBimDocument(XBimContext);
                 xBimDocument.SerialiseDocument((COBieSheet<COBieDocumentRow>)WorkBook[Constants.WORKSHEET_DOCUMENT]);
 
-                COBieXBimAttribute xBimAttribute = new COBieXBimAttribute(XBimContext);
+                var xBimAttribute = new COBieXBimAttribute(XBimContext);
                 xBimAttribute.SerialiseAttribute((COBieSheet<COBieAttributeRow>)WorkBook[Constants.WORKSHEET_ATTRIBUTE]);
             }
 
-            COBieXBimCoordinate xBimCoordinate = new COBieXBimCoordinate(XBimContext);
+            var xBimCoordinate = new COBieXBimCoordinate(XBimContext);
             xBimCoordinate.SerialiseCoordinate((COBieSheet<COBieCoordinateRow>)WorkBook[Constants.WORKSHEET_COORDINATE]);
             if (!MergeGeometryOnly)
             {
-                COBieXBimIssue xBimIssue = new COBieXBimIssue(XBimContext);
+                var xBimIssue = new COBieXBimIssue(XBimContext);
                 xBimIssue.SerialiseIssue((COBieSheet<COBieIssueRow>)WorkBook[Constants.WORKSHEET_ISSUE]);
             }
             
@@ -245,11 +241,11 @@ namespace Xbim.COBie.Serialisers
         /// </summary>
         private void ModelSetUp()
         {
-            using (XbimReadWriteTransaction trans = Model.BeginTransaction("Model initialization"))
+            using (var trans = Model.BeginTransaction("Model initialization"))
             {
-                Assembly assembly = Assembly.GetExecutingAssembly();
-                FileVersionInfo fvi = FileVersionInfo.GetVersionInfo(assembly.Location);
-                string version = fvi.ProductVersion;
+                var assembly = Assembly.GetExecutingAssembly();
+                var fvi = FileVersionInfo.GetVersionInfo(assembly.Location);
+                var version = fvi.ProductVersion;
 
                 Model.DefaultOwningApplication.ApplicationIdentifier = fvi.Comments;
                 Model.DefaultOwningApplication.ApplicationDeveloper.Name = fvi.CompanyName;
@@ -260,14 +256,14 @@ namespace Xbim.COBie.Serialisers
                 Model.DefaultOwningUser.TheOrganization.Name = "Unknown";
                 if (Model.Header == null)
                 {
-                    Model.Header = new IfcFileHeader(IfcFileHeader.HeaderCreationMode.InitWithXbimDefaults);
+                    Model.Header = new StepFileHeader(StepFileHeader.HeaderCreationMode.InitWithXbimDefaults);
                 }
                 Model.Header.FileDescription.Description.Clear();
                 Model.Header.FileDescription.Description.Add("ViewDefinition[CoordinationView]");
                 Model.Header.FileName.Name = Path.GetFileName(FileName);
                 Model.Header.FileName.AuthorName.Add("4Projects");
                 Model.Header.FileName.AuthorizationName = "4Projects";
-                IfcProject project = Model.Instances.New<IfcProject>();
+                var project = Model.Instances.New<IfcProject>();
                 //set world coordinate system
                 XBimContext.WCS = Model.Instances.New<IfcAxis2Placement3D>();
                 XBimContext.WCS.SetNewDirectionOf_XZ(1, 0, 0, 0, 0, 1);
@@ -300,12 +296,9 @@ namespace Xbim.COBie.Serialisers
         /// <returns></returns>
         public String Validate(XbimReadWriteTransaction trans)
         {
-            StringWriter sw = new StringWriter();
-            int errors = Model.Validate(trans.Modified(), sw);
-            if (errors > 0)
-                return sw.ToString();
-            else
-                return null;
+            var sw = new StringWriter();
+            var errors = Model.Validate(trans.Modified(), sw);
+            return errors > 0 ? sw.ToString() : null;
         }
 
         /// <summary>
@@ -317,7 +310,7 @@ namespace Xbim.COBie.Serialisers
             try
             {
                 //write the Ifc File
-                Model.SaveAs(FileName, XbimStorageType.IFC);
+                Model.SaveAs(FileName, IfcStorageType.Ifc);
                 //Model.Close(); //let dispose close use COBieXBimSerialiser in a using statement
 #if DEBUG
                 Console.WriteLine(FileName + " has been successfully written");

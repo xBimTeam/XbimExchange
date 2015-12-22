@@ -1,18 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using Xbim.COBie.Rows;
-using Xbim.XbimExtensions.Transactions;
 using Xbim.Ifc2x3.Kernel;
 using Xbim.Ifc2x3.ApprovalResource;
 using Xbim.Ifc2x3.ControlExtension;
-using Xbim.Ifc.SelectTypes;
 using Xbim.Ifc2x3.MeasureResource;
-using Xbim.Ifc2x3.ProcessExtensions;
 using Xbim.Ifc2x3.ActorResource;
-using Xbim.XbimExtensions.SelectTypes;
-using Xbim.IO;
+using Xbim.Ifc2x3.ProcessExtension;
 
 namespace Xbim.COBie.Serialisers.XbimSerialiser
 {
@@ -50,19 +45,19 @@ namespace Xbim.COBie.Serialisers.XbimSerialiser
         /// <param name="cOBieSheet">COBieSheet of COBieIssueRow to read data from</param>
         public void SerialiseIssue(COBieSheet<COBieIssueRow> cOBieSheet)
         {
-            using (XbimReadWriteTransaction trans = Model.BeginTransaction("Add Issue"))
+            using (var trans = Model.BeginTransaction("Add Issue"))
             {
                 try
                 {
-                    int count = 1;
+                    var count = 1;
                     ProgressIndicator.ReportMessage("Starting Issues...");
                     ProgressIndicator.Initialise("Creating Issues", cOBieSheet.RowCount);
-                    for (int i = 0; i < cOBieSheet.RowCount; i++)
+                    for (var i = 0; i < cOBieSheet.RowCount; i++)
                     {
                         BumpTransaction(trans, count);
                         count++;
                         ProgressIndicator.IncrementAndUpdate();
-                        COBieIssueRow row = cOBieSheet[i];
+                        var row = cOBieSheet[i];
                         AddIssue(row);
                     }
 
@@ -89,7 +84,7 @@ namespace Xbim.COBie.Serialisers.XbimSerialiser
                 return; //already exists
 
             //create the property set to attach to the approval
-            IfcPropertySet ifcPropertySet = Model.Instances.New<IfcPropertySet>();
+            var ifcPropertySet = Model.Instances.New<IfcPropertySet>();
             ifcPropertySet.Name = "Pset_Risk";
             ifcPropertySet.Description = "An indication of exposure to mischance, peril, menace, hazard or loss";
            
@@ -99,12 +94,12 @@ namespace Xbim.COBie.Serialisers.XbimSerialiser
             
             //using statement will set the Model.OwnerHistoryAddObject to ifcPropertySet.OwnerHistory as OwnerHistoryAddObject is used upon any property changes, 
             //then swaps the original OwnerHistoryAddObject back in the dispose, so set any properties within the using statement
-            using (COBieXBimEditScope context = new COBieXBimEditScope(Model, ifcPropertySet.OwnerHistory))
+            using (var context = new COBieXBimEditScope(Model, ifcPropertySet.OwnerHistory))
             {
                 //create the approval object
-                IfcApproval ifcApproval = Model.Instances.New<IfcApproval>();
+                var ifcApproval = Model.Instances.New<IfcApproval>();
                 //set relationship
-                IfcRelAssociatesApproval ifcRelAssociatesApproval = Model.Instances.New<IfcRelAssociatesApproval>();
+                var ifcRelAssociatesApproval = Model.Instances.New<IfcRelAssociatesApproval>();
                 ifcRelAssociatesApproval.RelatingApproval = ifcApproval;
                 ifcRelAssociatesApproval.RelatedObjects.Add(ifcPropertySet);
 
@@ -113,25 +108,25 @@ namespace Xbim.COBie.Serialisers.XbimSerialiser
 
                 if (ValidateString(row.Type))
                 {
-                    IfcValue[] ifcValues = GetValueArray(row.Type);
+                    var ifcValues = GetValueArray(row.Type);
                     AddPropertyEnumeratedValue(ifcPropertySet, "RiskType", "Identifies the predefined types of risk from which the type required may be set.", ifcValues, _riskTypeEnum, null);
                 }
 
                 if (ValidateString(row.Risk))
                 {
-                    IfcValue[] ifcValues = GetValueArray(row.Risk);
+                    var ifcValues = GetValueArray(row.Risk);
                     AddPropertyEnumeratedValue(ifcPropertySet, "RiskRating", "Rating of the risk that may be determined from a combination of the risk assessment and risk consequence.", ifcValues, _riskRatingEnum, null);
                 }
 
                 if (ValidateString(row.Chance))
                 {
-                    IfcValue[] ifcValues = GetValueArray(row.Chance);
+                    var ifcValues = GetValueArray(row.Chance);
                     AddPropertyEnumeratedValue(ifcPropertySet, "AssessmentOfRisk", "Likelihood of risk event occurring.", ifcValues, _assessmentOfRiskEnum, null);
                 }
 
                 if (ValidateString(row.Impact))
                 {
-                    IfcValue[] ifcValues = GetValueArray(row.Impact);
+                    var ifcValues = GetValueArray(row.Impact);
                     AddPropertyEnumeratedValue(ifcPropertySet, "RiskConsequence", "Indicates the level of severity of the consequences that the risk would have in case it happens.", ifcValues, _riskConsequenceEnum, null);
                 }
 
@@ -150,7 +145,7 @@ namespace Xbim.COBie.Serialisers.XbimSerialiser
 
                 if (ValidateString(row.Owner))
                 {
-                    IfcValue[] ifcValues = GetValueArray(row.Owner);
+                    var ifcValues = GetValueArray(row.Owner);
                     AddPropertyEnumeratedValue(ifcPropertySet, "RiskOwner", "A determination of who is the owner of the risk by reference to principal roles of organizations within a project.", ifcValues, _riskOwnerEnum, null);
                 }
 
@@ -174,8 +169,8 @@ namespace Xbim.COBie.Serialisers.XbimSerialiser
             {
                 if (ValidateString(row.Name)) //we have a primary key to check
                 {
-                    string testName = row.Name.ToLower().Trim();
-                    IfcApproval testObj = Model.Instances.Where<IfcApproval>(bs => bs.Name.ToString().ToLower().Trim() == testName).FirstOrDefault();
+                    var testName = row.Name.ToLower().Trim();
+                    var testObj = Model.Instances.Where<IfcApproval>(bs => bs.Name.ToString().ToLower().Trim() == testName).FirstOrDefault();
                     if (testObj != null)
                     {
 #if DEBUG
@@ -197,7 +192,7 @@ namespace Xbim.COBie.Serialisers.XbimSerialiser
         /// <param name="ifcRelAssociatesApproval">IfcRelAssociatesApproval object</param>
         private void SetRelObjectToApproval(string sheetName, string rowName, IfcApproval ifcApproval, IfcRelAssociatesApproval ifcRelAssociatesApproval)
         {
-            IfcRoot ifcRoot = GetRootObject(sheetName, rowName);
+            var ifcRoot = GetRootObject(sheetName, rowName);
             //sheetName = sheetName.ToLower().Trim();
             if (ifcRoot != null) //we have a object
             {
@@ -207,18 +202,18 @@ namespace Xbim.COBie.Serialisers.XbimSerialiser
 
             if (sheetName == Constants.WORKSHEET_CONTACT)
             {
-                IfcActorSelect ifcActorSelect = GetActorSelect(rowName);
+                var ifcActorSelect = GetActorSelect(rowName);
                 if (ifcActorSelect != null)
                 {
                     //see if the relation ship exists, if so no need to create
-                    IfcActorSelect IfcActorSelectTest = Model.Instances.OfType<IfcApprovalActorRelationship>()
+                    var IfcActorSelectTest = Model.Instances.OfType<IfcApprovalActorRelationship>()
                                                         .Where(aar => aar.Approval == ifcApproval)
                                                         .Select(aar => aar.Actor).OfType<IfcActorSelect>()
                                                         .Where(po => po == ifcActorSelect)
                                                         .FirstOrDefault();
                     if (IfcActorSelectTest == null)
                     {
-                        IfcApprovalActorRelationship ifcApprovalActorRelationship = Model.Instances.New<IfcApprovalActorRelationship>();
+                        var ifcApprovalActorRelationship = Model.Instances.New<IfcApprovalActorRelationship>();
                         ifcApprovalActorRelationship.Actor = ifcActorSelect;
                         ifcApprovalActorRelationship.Approval = ifcApproval;
                     }

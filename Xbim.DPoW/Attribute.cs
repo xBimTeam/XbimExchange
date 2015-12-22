@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
-namespace Xbim.DPoW
+﻿namespace Xbim.DPoW
 {
     /// <summary>
     /// Arbitrary attributes which can be assigned to any object implementing abstract class DPoWAttributableObject

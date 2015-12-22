@@ -2,15 +2,9 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Text;
-using System.Text.RegularExpressions;
 using Xbim.COBieLiteUK;
-using Xbim.Ifc2x3.DateTimeResource;
 using Xbim.Ifc2x3.ExternalReferenceResource;
-using Xbim.Ifc2x3.Kernel;
-using Xbim.Ifc2x3.MeasureResource;
 using Xbim.IO;
-using Xbim.XbimExtensions.SelectTypes;
 
 namespace XbimExchanger.IfcToCOBieLiteUK
 {

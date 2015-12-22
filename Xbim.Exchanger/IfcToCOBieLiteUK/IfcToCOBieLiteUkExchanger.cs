@@ -4,7 +4,6 @@ using Xbim.COBieLiteUK;
 using Xbim.FilterHelper;
 using Xbim.Ifc2x3.ProductExtension;
 using Xbim.IO;
-using Xbim.XbimExtensions.Interfaces;
 using Xbim.Exchanger.IfcToCOBieLiteUK.Classifications;
 
 namespace XbimExchanger.IfcToCOBieLiteUK

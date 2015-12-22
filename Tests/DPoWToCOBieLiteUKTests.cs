@@ -1,15 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Newtonsoft.Json;
-using Xbim.COBieLiteUK;
 using Xbim.DPoW;
-using Xbim.Ifc2x3.Kernel;
-using Xbim.IO;
-using Xbim.XbimExtensions.Interfaces;
-using XbimExchanger.COBieLiteToIfc;
 using XbimExchanger.DPoWToCOBieLiteUK;
 using ProjectStage = Xbim.DPoW.ProjectStage;
 

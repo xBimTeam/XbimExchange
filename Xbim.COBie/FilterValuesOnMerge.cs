@@ -1,15 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using Xbim.Ifc2x3.SharedBldgServiceElements;
 using Xbim.Ifc2x3.ProductExtension;
 using Xbim.Ifc2x3.StructuralElementsDomain;
 using Xbim.Ifc2x3.SharedBldgElements;
 using Xbim.Ifc2x3.ElectricalDomain;
-using Xbim.XbimExtensions;
 using Xbim.Ifc2x3.Kernel;
-using Xbim.Ifc2x3.BuildingControlsDomain;
 using Xbim.Ifc2x3.HVACDomain;
 using Xbim.Ifc2x3.SharedFacilitiesElements;
 using Xbim.Ifc2x3.PlumbingFireProtectionDomain;

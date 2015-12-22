@@ -1,15 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using Xbim.XbimExtensions;
+﻿using System.Collections.Generic;
+using Xbim.Common;
 using Xbim.Ifc2x3.ActorResource;
 using Xbim.Ifc2x3.GeometryResource;
+using Xbim.Ifc2x3.IO;
 using Xbim.Ifc2x3.MeasureResource;
-using Xbim.Ifc2x3.ProductExtension;
-using Xbim.Ifc2x3.Kernel;
-using Xbim.IO;
-using Xbim.XbimExtensions.Interfaces;
 
 namespace Xbim.COBie.Serialisers.XbimSerialiser
 {

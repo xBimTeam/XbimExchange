@@ -1,13 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using Xbim.XbimExtensions.Transactions;
 using Xbim.COBie.Rows;
 using Xbim.Ifc2x3.ProductExtension;
-using Xbim.Ifc2x3.Kernel;
 using Xbim.Ifc2x3.SharedBldgServiceElements;
-using Xbim.IO;
 
 namespace Xbim.COBie.Serialisers.XbimSerialiser
 {

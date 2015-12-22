@@ -2,12 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Reflection;
-using Xbim.Ifc2x3.Kernel;
-using Xbim.Ifc2x3.ExternalReferenceResource;
-using Xbim.COBie.Data;
 using System.Security.Cryptography;
-using System.Runtime.Serialization;
 
 namespace Xbim.COBie
 {
