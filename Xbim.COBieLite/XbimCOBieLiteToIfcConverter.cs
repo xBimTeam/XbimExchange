@@ -1,18 +1,20 @@
 ﻿using System;
-using Xbim.IO;
+using Xbim.Common.Step21;
+using Xbim.Ifc;
+
 
 namespace Xbim.COBieLite
 {
-    class XbimCoBieLiteToIfcConverter : IDisposable
+    class XbimCoBieLiteToIIfcConverter : IDisposable
     {
-        private XbimModel _model;
+        private IfcStore _model;
        
-        public bool Convert(FacilityType facility, XbimModel model=null)
+        public bool Convert(FacilityType facility, IfcStore model=null)
         {
             if (model == null)
             {
-                _model = XbimModel.CreateTemporaryModel();
-                
+                var credentials = new XbimEditorCredentials();
+                _model = IfcStore.Create(credentials, IfcSchemaVersion.Ifc4, XbimStoreType.EsentDatabase);               
             }
             else
             {

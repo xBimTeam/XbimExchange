@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using Xbim.Ifc2x3.ExternalReferenceResource;
 using Xbim.COBie.Data;
-using Xbim.Ifc2x3.ActorResource;
-using Xbim.Ifc2x3.IO;
+
 using Xbim.Common;
+using Xbim.Ifc;
+using Xbim.Ifc4.Interfaces;
 
 namespace Xbim.COBie
 {
@@ -25,7 +25,7 @@ namespace Xbim.COBie
         /// <summary>
         /// Map models to roles for federated models
         /// </summary>
-        public Dictionary<XbimModel, COBieMergeRoles> MapMergeRoles { get; private set; } 
+        public Dictionary<IfcStore, COBieMergeRoles> MapMergeRoles { get; private set; } 
  
         private  GlobalUnits _workBookUnits;
         /// <summary>
@@ -49,8 +49,8 @@ namespace Xbim.COBie
            
         }
         /// <summary>
-        /// if set to true and no IfcZones or no IfcSpace property names of "ZoneName", we will list 
-        /// any IfcSpace property names "Department" in the Zone sheet
+        /// if set to true and no IIfcZones or no IIfcSpace property names of "ZoneName", we will list 
+        /// any IIfcSpace property names "Department" in the Zone sheet
         /// </summary>
         public bool DepartmentsUsedAsZones { get; set; } //indicate if we have taken departments as Zones
 
@@ -72,8 +72,8 @@ namespace Xbim.COBie
             RunDateManuallySet = false;
             EMails = new Dictionary<long, string>();
             Model = null;
-            //if no IfcZones or no IfcSpace property names of "ZoneName" then if DepartmentsUsedAsZones is true we will list 
-            //any IfcSpace property names "Department" in the Zone sheet and remove the "Department" property from the attribute sheet
+            //if no IIfcZones or no IIfcSpace property names of "ZoneName" then if DepartmentsUsedAsZones is true we will list 
+            //any IIfcSpace property names "Department" in the Zone sheet and remove the "Department" property from the attribute sheet
             DepartmentsUsedAsZones = false;
 
             Exclude = new FilterValues();
@@ -82,7 +82,7 @@ namespace Xbim.COBie
 
             //set the row index to report error rows on
             ErrorRowStartIndex = ErrorRowIndexBase.RowTwo; //default for excel sheet
-            MapMergeRoles = new Dictionary<XbimModel, COBieMergeRoles>();
+            MapMergeRoles = new Dictionary<IfcStore, COBieMergeRoles>();
 
         }
 
@@ -96,18 +96,18 @@ namespace Xbim.COBie
         /// <summary>
         /// Get merge roles for federated models, used to work out Model Merge Precedence Rules
         /// </summary>
-        private Dictionary<XbimModel, COBieMergeRoles> LinkRoleToModel()
+        private Dictionary<IfcStore, COBieMergeRoles> LinkRoleToModel()
         {
             var mapMergeRoles = MapRolesForMerge();//assign merge role to a IfcRoleEnum value
-            var mapModelToMergeRoles = new Dictionary<XbimModel, COBieMergeRoles>();
+            var mapModelToMergeRoles = new Dictionary<IfcStore, COBieMergeRoles>();
             
             //mapModelToMergeRoles.Add(Model, COBieMergeRoles.Unknown); //assume that it is just the holder model(xBIMf) (as xbim is creating holding file .xbimf) for and all the models are in the Model.RefencedModels property
             
             //now get the referenced models
             foreach (var refModel in Model.ReferencedModels)
             {
-                IfcDocumentInformation doc = refModel.DocumentInformation;
-                var owner = doc.DocumentOwner as IfcOrganization;
+                IIfcDocumentInformation doc = refModel.DocumentInformation;
+                var owner = doc.DocumentOwner as IIfcOrganization;
                 if ((owner != null) && (owner.Roles != null))
                 {
                     var mergeRoles = COBieMergeRoles.Unknown;
@@ -196,9 +196,9 @@ namespace Xbim.COBie
         /// Gets the model defined in this context to generate COBie data from
         /// </summary>
         
-        private XbimModel _model;
+        private IfcStore _model;
 
-        public XbimModel Model
+        public IfcStore Model
         {
             get { return _model; }
             set { 

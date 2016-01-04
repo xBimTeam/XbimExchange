@@ -1,63 +1,64 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using Xbim.Ifc2x3.MeasureResource;
+
+using Xbim.Ifc4.Interfaces;
 
 namespace XbimExchanger.IfcHelpers
 {
-    public struct IfcUnitComparer : IEqualityComparer<IfcUnit>
+    public struct IfcUnitComparer : IEqualityComparer<IIfcUnit>
     {
-        public bool Equals(IfcUnit x, IfcUnit y)
+        public bool Equals(IIfcUnit x, IIfcUnit y)
         {
            
-            if (x is IfcSIUnit && y is IfcSIUnit)
+            if (x is IIfcSIUnit && y is IIfcSIUnit)
             {
-                var xs = x as IfcSIUnit;
-                var ys = y as IfcSIUnit;
+                var xs = x as IIfcSIUnit;
+                var ys = y as IIfcSIUnit;
                 return xs.UnitType == ys.UnitType 
                     && xs.Name == ys.Name 
                     && xs.Prefix == ys.Prefix
                     && Equals(xs.Dimensions, ys.Dimensions);
             }
-            if (x is IfcConversionBasedUnit && y is IfcConversionBasedUnit)
+            if (x is IIfcConversionBasedUnit && y is IIfcConversionBasedUnit)
             {
-                var xs = x as IfcConversionBasedUnit;
-                var ys = y as IfcConversionBasedUnit;
+                var xs = x as IIfcConversionBasedUnit;
+                var ys = y as IIfcConversionBasedUnit;
                 return xs.UnitType == ys.UnitType 
                     && xs.Name == ys.Name 
                     && xs.ConversionFactor.ValueComponent.Equals(ys.ConversionFactor.ValueComponent)  
                     && Equals(xs.ConversionFactor.UnitComponent, xs.ConversionFactor.UnitComponent)
                     && Equals(xs.Dimensions, ys.Dimensions);
             }
-            if (x is IfcContextDependentUnit && y is IfcContextDependentUnit)
+            if (x is IIfcContextDependentUnit && y is IIfcContextDependentUnit)
             {
-                var xs = x as IfcContextDependentUnit;
-                var ys = y as IfcContextDependentUnit;
+                var xs = x as IIfcContextDependentUnit;
+                var ys = y as IIfcContextDependentUnit;
                 return xs.UnitType == ys.UnitType 
                     && xs.Name == ys.Name
                     && Equals(xs.Dimensions, ys.Dimensions);
             }
-            if (x is IfcDerivedUnit && y is IfcDerivedUnit)
+            if (x is IIfcDerivedUnit && y is IIfcDerivedUnit)
             {
-                var xs = x as IfcDerivedUnit;
-                var ys = y as IfcDerivedUnit;
+                var xs = x as IIfcDerivedUnit;
+                var ys = y as IIfcDerivedUnit;
                 return xs.UnitType==ys.UnitType 
                     && xs.UserDefinedType==ys.UserDefinedType
                     && Equals(xs.Elements,ys.Elements);
             }
-            if (x is IfcMonetaryUnit && y is IfcMonetaryUnit)
+            if (x is IIfcMonetaryUnit && y is IIfcMonetaryUnit)
             {
-                var xs = x as IfcMonetaryUnit;
-                var ys = y as IfcMonetaryUnit;
+                var xs = x as IIfcMonetaryUnit;
+                var ys = y as IIfcMonetaryUnit;
                 return xs.Currency == ys.Currency;
             }
             return false;
             
         }
 
-        private bool Equals(IEnumerable<IfcDerivedUnitElement> a, IEnumerable<IfcDerivedUnitElement> b)
+        private bool Equals(IEnumerable<IIfcDerivedUnitElement> a, IEnumerable<IIfcDerivedUnitElement> b)
         {
-            var ifcDerivedUnitElementsA = a as IList<IfcDerivedUnitElement> ?? a.ToList();
-            var ifcDerivedUnitElementsB = a as IList<IfcDerivedUnitElement> ?? b.ToList();
+            var ifcDerivedUnitElementsA = a as IList<IIfcDerivedUnitElement> ?? a.ToList();
+            var ifcDerivedUnitElementsB = a as IList<IIfcDerivedUnitElement> ?? b.ToList();
             if (ifcDerivedUnitElementsA.Count != ifcDerivedUnitElementsB.Count)
                 return false;
             for (int i = 0; i < ifcDerivedUnitElementsA.Count; i++)
@@ -68,18 +69,21 @@ namespace XbimExchanger.IfcHelpers
             return true;
         }
 
-        private bool Equals(IfcDimensionalExponents a, IfcDimensionalExponents b)
+        private bool Equals(IIfcDimensionalExponents a, IIfcDimensionalExponents b)
         {
-            for (int i = 0; i < 7; i++)
-            {
-               if( a[i] != b[i])
-                   return false;
-            }
-            return true;
+            return (
+                a.AmountOfSubstanceExponent == b.AmountOfSubstanceExponent &&
+                a.ElectricCurrentExponent == b.ElectricCurrentExponent &&
+                a.LengthExponent == b.LengthExponent &&
+                a.LuminousIntensityExponent == b.LuminousIntensityExponent &&
+                a.MassExponent == b.MassExponent &&
+                a.ThermodynamicTemperatureExponent == b.ThermodynamicTemperatureExponent &&
+                a.TimeExponent == b.TimeExponent
+            );          
         }
-        public int GetHashCode(IfcUnit obj)
+        public int GetHashCode(IIfcUnit obj)
         {
-            return obj.GetName().GetHashCode();
+            return obj.FullName.GetHashCode();
         }
     }
 }

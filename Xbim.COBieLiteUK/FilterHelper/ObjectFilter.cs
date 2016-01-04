@@ -2,7 +2,8 @@
 using System.Collections.Generic;
 using System.Configuration;
 using System.Linq;
-using Xbim.Ifc2x3.Kernel;
+
+using Xbim.Ifc4.Interfaces;
 
 namespace Xbim.FilterHelper
 {
@@ -163,7 +164,7 @@ namespace Xbim.FilterHelper
         /// </summary>
         /// <param name="obj">IfcObjectDefinition object</param>
         /// <returns>bool, true = exclude</returns>
-        public bool ItemsFilter(IfcObjectDefinition obj)
+        public bool ItemsFilter(IIfcObjectDefinition obj)
         {
             if (ItemsToExclude.Count == 0) return false; //nothing to test against
 

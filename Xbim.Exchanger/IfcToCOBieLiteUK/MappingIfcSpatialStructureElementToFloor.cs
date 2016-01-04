@@ -1,14 +1,15 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using Xbim.COBieLiteUK;
-using Xbim.Ifc2x3.ProductExtension;
-using Xbim.IO;
+using Xbim.Ifc;
+using Xbim.Ifc4.Interfaces;
+
 
 namespace XbimExchanger.IfcToCOBieLiteUK
 {
-    class MappingIfcSpatialStructureElementToFloor : XbimMappings<XbimModel, List<Facility>, string, IfcSpatialStructureElement, Floor>
+    class MappingIfcSpatialStructureElementToFloor : XbimMappings<IfcStore, List<Facility>, string, IIfcSpatialStructureElement, Floor>
     {
-        protected override Floor Mapping(IfcSpatialStructureElement ifcSpatialStructureElement, Floor target)
+        protected override Floor Mapping(IIfcSpatialStructureElement ifcSpatialStructureElement, Floor target)
         {
             var helper = ((IfcToCOBieLiteUkExchanger)Exchanger).Helper;
             target.ExternalEntity = helper.ExternalEntityName(ifcSpatialStructureElement);
@@ -23,11 +24,11 @@ namespace XbimExchanger.IfcToCOBieLiteUK
                 target.Categories = new List<Category>();
 
 
-            IEnumerable<IfcSpatialStructureElement> spaces = null;
-            var site = ifcSpatialStructureElement as IfcSite;
-            var building = ifcSpatialStructureElement as IfcBuilding;
-            var storey = ifcSpatialStructureElement as IfcBuildingStorey;
-            var spaceElement = ifcSpatialStructureElement as IfcSpace;
+            IEnumerable<IIfcSpatialStructureElement> spaces = null;
+            var site = ifcSpatialStructureElement as IIfcSite;
+            var building = ifcSpatialStructureElement as IIfcBuilding;
+            var storey = ifcSpatialStructureElement as IIfcBuildingStorey;
+            var spaceElement = ifcSpatialStructureElement as IIfcSpace;
             if (site != null)
             {
                 target.Categories.Add(new Category() { Code = "Site" });
@@ -37,14 +38,14 @@ namespace XbimExchanger.IfcToCOBieLiteUK
                 {
                     var decomp = site.IsDecomposedBy;
                     var objs = decomp.SelectMany(s => s.RelatedObjects);
-                    spaces = objs.OfType<IfcSpace>();
+                    spaces = objs.OfType<IIfcSpace>();
                 }
 
             }
             else if (building != null)
             {
                 target.Categories.Add(new Category() { Code = "Building" });
-                spaces = building.GetSpaces();
+                spaces = building.Spaces;
             }
             else if (storey != null)
             {
@@ -53,12 +54,12 @@ namespace XbimExchanger.IfcToCOBieLiteUK
                 {
                     target.Elevation = storey.Elevation.Value;
                 }
-                spaces = storey.GetSpaces();
+                spaces = storey.Spaces;
             }
             else if (spaceElement != null)
             {
                 target.Categories.Add(new Category() { Code = "Space" });
-                spaces = spaceElement.GetSpaces();
+                spaces = spaceElement.Spaces;
             }
 
 
@@ -72,10 +73,10 @@ namespace XbimExchanger.IfcToCOBieLiteUK
 
             //Documents
             var docsMappings = Exchanger.GetOrCreateMappings<MappingIfcDocumentSelectToDocument>();
-            helper.AddDocuments(docsMappings, target, ifcSpatialStructureElement as IfcBuildingStorey);
+            helper.AddDocuments(docsMappings, target, ifcSpatialStructureElement as IIfcBuildingStorey);
 
             //Add spaces
-            var ifcSpatialStructureElements = spaces as IList<IfcSpatialStructureElement> ?? spaces.ToList();
+            var ifcSpatialStructureElements = spaces.ToList();
             ifcSpatialStructureElements.Add(ifcSpatialStructureElement);
 
             target.Spaces = new List<Space>(ifcSpatialStructureElements.Count);
@@ -94,6 +95,11 @@ namespace XbimExchanger.IfcToCOBieLiteUK
             //TODO:
             //Floor Issues
             return target;
+        }
+
+        public override Floor CreateTargetObject()
+        {
+            return new Floor();
         }
     }
 }

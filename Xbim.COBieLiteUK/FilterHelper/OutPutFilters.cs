@@ -6,7 +6,8 @@ using Newtonsoft.Json;
 using System.Xml.Serialization;
 using System.IO;
 using Xbim.COBieLiteUK;
-using Xbim.Ifc2x3.Kernel;
+
+using Xbim.Ifc4.Interfaces;
 
 
 
@@ -412,16 +413,16 @@ namespace Xbim.FilterHelper
         /// </summary>
         /// <param name="obj"></param>
         /// <returns>bool true = exclude</returns>
-        public bool ObjFilter(IfcObjectDefinition obj, bool checkType = true)
+        public bool ObjFilter(IIfcObjectDefinition obj, bool checkType = true)
         {
             bool exclude = false;
-            if (obj is IfcProduct)
+            if (obj is IIfcProduct)
             {
                 exclude = IfcProductFilter.ItemsFilter(obj);
                 //check the element is not defined by a type which is excluded, by default if no type, then no element included
                 if (!exclude && checkType)
                 {
-                    IfcTypeObject objType = ((IfcProduct)obj).IsDefinedBy.OfType<IfcRelDefinesByType>().Select(rdbt => rdbt.RelatingType).FirstOrDefault(); //assuming only one IfcRelDefinesByType
+                    var objType = ((IIfcProduct)obj).IsDefinedBy.OfType<IIfcRelDefinesByType>().Select(rdbt => rdbt.RelatingType).FirstOrDefault(); //assuming only one IfcRelDefinesByType
                     if (objType != null) //if no type defined lets include it for now
                     {
                         exclude = IfcTypeObjectFilter.ItemsFilter(objType); 
@@ -429,7 +430,7 @@ namespace Xbim.FilterHelper
                 }
                 
             }
-            else if (obj is IfcTypeProduct)
+            else if (obj is IIfcTypeProduct)
             {
                 exclude = IfcTypeObjectFilter.ItemsFilter(obj);
             }

@@ -50,7 +50,7 @@ namespace XbimExchanger.COBieLiteUkToIfc
                     relResource.RelatedObjects.Add(ifcTypeObject);
                     relResource.Name = assetType.Name;
                     relResource.Description = assetType.Description;
-                    relResource.RelatedObjectsType = IfcObjectType.Product;
+                    relResource.RelatedObjectsType = IfcObjectTypeEnum.PRODUCT;
                 }
             }
             #endregion
@@ -538,7 +538,7 @@ namespace XbimExchanger.COBieLiteUkToIfc
 
                             default:
 #if DEBUG
-                                Console.WriteLine(assetInfoType.ExternalEntity + " has been made IfcBuildingElementProxy");
+                                System.Console.WriteLine(assetInfoType.ExternalEntity + " has been made IfcBuildingElementProxy");
 #endif
                                 ifcElement = MapAsset<IfcBuildingElementProxy>(assetInfoType);
                                 break;
@@ -567,7 +567,7 @@ namespace XbimExchanger.COBieLiteUkToIfc
             return ifcTypeObject;
         }
 
-        TAsset MapAsset<TAsset>(Asset assetInfoType) where TAsset : IfcElement, new()
+        TAsset MapAsset<TAsset>(Asset assetInfoType) where TAsset : IfcElement
         {
             var assetInfoTypeMapping = Exchanger.GetOrCreateMappings<MappingAssetToIfcElement<TAsset>>();
             return assetInfoTypeMapping.AddMapping(assetInfoType, assetInfoTypeMapping.GetOrCreateTargetObject(assetInfoType.ExternalId));

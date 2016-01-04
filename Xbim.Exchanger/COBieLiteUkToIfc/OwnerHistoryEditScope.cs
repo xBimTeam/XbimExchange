@@ -1,6 +1,8 @@
 ﻿using System;
+using Xbim.Ifc;
+using Xbim.Ifc2x3.Kernel;
 using Xbim.Ifc2x3.UtilityResource;
-using Xbim.IO;
+
 
 namespace XbimExchanger.COBieLiteUkToIfc
 {
@@ -13,20 +15,35 @@ namespace XbimExchanger.COBieLiteUkToIfc
     {
         private IfcOwnerHistory ifcOwnerHistory
         { get; set; }
-        private XbimModel Model
+        private IfcStore Model
         { get; set; }
 
-        public OwnerHistoryEditScope(XbimModel model, IfcOwnerHistory owner)
+        private IfcOwnerHistory _owner;
+        
+        public OwnerHistoryEditScope(IfcStore model, IfcOwnerHistory owner)
         {
             Model = model;
-            ifcOwnerHistory = Model.OwnerHistoryAddObject;
-            Model.OwnerHistoryAddObject = owner;
 
+            Model.EntityNew += model_EntityNew;
+            _owner = owner;
+
+            //ifcOwnerHistory = Model.OwnerHistoryAddObject;
+            //Model.OwnerHistoryAddObject = owner;
+
+        }
+
+        void model_EntityNew(Xbim.Common.IPersistEntity entity)
+        {
+            var root = entity as IfcRoot;
+            if (root != null)
+            {
+                root.OwnerHistory = _owner;
+            }
         }
 
         public void Dispose()
         {
-            Model.OwnerHistoryAddObject = ifcOwnerHistory;
+            Model.EntityNew -= model_EntityNew;
         }
     }
 

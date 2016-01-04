@@ -1,13 +1,14 @@
 ﻿using System.Collections.Generic;
 using Xbim.COBieLiteUK;
-using Xbim.Ifc2x3.ProductExtension;
-using Xbim.IO;
+using Xbim.Ifc;
+using Xbim.Ifc4.Interfaces;
+
 
 namespace XbimExchanger.IfcToCOBieLiteUK
 {
-    class MappingIfcSpatialStructureElementToSpace : XbimMappings<XbimModel, List<Facility>, string, IfcSpatialStructureElement, Space>
+    class MappingIfcSpatialStructureElementToSpace : XbimMappings<IfcStore, List<Facility>, string, IIfcSpatialStructureElement, Space>
     {
-        protected override Space Mapping(IfcSpatialStructureElement ifcSpatialElement, Space target)
+        protected override Space Mapping(IIfcSpatialStructureElement ifcSpatialElement, Space target)
         {
             var helper = ((IfcToCOBieLiteUkExchanger)Exchanger).Helper;
             target.ExternalEntity = helper.ExternalEntityName(ifcSpatialElement);
@@ -31,11 +32,17 @@ namespace XbimExchanger.IfcToCOBieLiteUK
 
             //Documents
             var docsMappings = Exchanger.GetOrCreateMappings<MappingIfcDocumentSelectToDocument>();
-            helper.AddDocuments(docsMappings, target, ifcSpatialElement as IfcSpace);
+            helper.AddDocuments(docsMappings, target, ifcSpatialElement as IIfcSpace);
             //TODO:
             //Space Issues
             
             return target;
+        }
+
+
+        public override Space CreateTargetObject()
+        {
+            return new Space();
         }
     }
 }

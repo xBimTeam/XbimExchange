@@ -1,13 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using Xbim.COBieLiteUK;
-using Xbim.Ifc2x3.ConstructionMgmtDomain;
-using Xbim.Ifc2x3.Kernel;
-using Xbim.IO;
+using Xbim.Ifc;
+using Xbim.Ifc4.Interfaces;
+
+
 
 namespace XbimExchanger.IfcToCOBieLiteUK
 {
-    internal class MappingIfcConstructionProductResourceToSpare : XbimMappings<XbimModel, List<Facility>, string, IfcConstructionProductResource, Spare>
+    internal class MappingIfcConstructionProductResourceToSpare : XbimMappings<IfcStore, List<Facility>, string, IIfcConstructionProductResource, Spare>
     {
         /// <summary>
         /// Helper
@@ -15,7 +16,7 @@ namespace XbimExchanger.IfcToCOBieLiteUK
         private CoBieLiteUkHelper Helper
         { get; set; }
 
-        public IfcTypeObject ParentObject
+        public IIfcTypeObject ParentObject
         { get; set; }
         /// <summary>
         /// List of created documents names, used to get next duplicate name
@@ -29,7 +30,7 @@ namespace XbimExchanger.IfcToCOBieLiteUK
         /// <param name="source">IfcConstructionProductResource to convert</param>
         /// <param name="target">Empty Spare Object</param>
         /// <returns>Filled Spare Object</returns>
-        protected override Spare Mapping(IfcConstructionProductResource source, Spare target)
+        protected override Spare Mapping(IIfcConstructionProductResource source, Spare target)
         {
             if (Helper == null) Helper = ((IfcToCOBieLiteUkExchanger)Exchanger).Helper;
             if (UsedNames == null) UsedNames = new List<string>();
@@ -61,7 +62,7 @@ namespace XbimExchanger.IfcToCOBieLiteUK
         /// </summary>
         /// <param name="source">IfcConstructionProductResource object</param>
         /// <returns>List of suppliers ContactKeys</returns>
-        private List<ContactKey> GetSuppliers(IfcConstructionProductResource source)
+        private List<ContactKey> GetSuppliers(IIfcConstructionProductResource source)
         {
             List<ContactKey> suppliers = new List<ContactKey>();
             string emailDelimited = string.Empty;
@@ -100,7 +101,7 @@ namespace XbimExchanger.IfcToCOBieLiteUK
         /// </summary>
         /// <param name="source">IfcConstructionProductResource object</param>
         /// <returns>SetNumber as a string</returns>
-        private string GetSetNumber (IfcConstructionProductResource source)
+        private string GetSetNumber (IIfcConstructionProductResource source)
         {
             //check IfcTypeObject
             var setNo = Helper.GetCoBieProperty("SpareSetNumber", ParentObject);
@@ -123,7 +124,7 @@ namespace XbimExchanger.IfcToCOBieLiteUK
         /// </summary>
         /// <param name="source">IfcConstructionProductResource object</param>
         /// <returns>PartNumber as a string</returns>
-        private string GetPartNumber(IfcConstructionProductResource source)
+        private string GetPartNumber(IIfcConstructionProductResource source)
         {
             //check IfcTypeObject
             var partno = Helper.GetCoBieProperty("SparePartNumber", ParentObject);
@@ -146,7 +147,7 @@ namespace XbimExchanger.IfcToCOBieLiteUK
         /// </summary>
         /// <param name="source">IfcConstructionProductResource object</param>
         /// <returns>Description</returns>
-        private string GetDescription(IfcConstructionProductResource source)
+        private string GetDescription(IIfcConstructionProductResource source)
         {
             //Check IfcConstructionProductResource Object
             var desc = source.Description.ToString();
@@ -174,5 +175,10 @@ namespace XbimExchanger.IfcToCOBieLiteUK
         }
 
 
+
+        public override Spare CreateTargetObject()
+        {
+            return new Spare();
+        }
     }
 }

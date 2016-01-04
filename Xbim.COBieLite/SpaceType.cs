@@ -3,7 +3,8 @@ using System.Linq;
 using System.Xml.Serialization;
 using Newtonsoft.Json;
 using Xbim.COBieLite.CollectionTypes;
-using Xbim.Ifc2x3.ProductExtension;
+using Xbim.Ifc4.Interfaces;
+
 
 namespace Xbim.COBieLite
 {
@@ -12,7 +13,7 @@ namespace Xbim.COBieLite
         
         //private IfcSpace _ifcSpace;
 
-        public SpaceType(IfcSpace ifcSpace, CoBieLiteHelper helper)
+        public SpaceType(IIfcSpace ifcSpace, CoBieLiteHelper helper)
             : this()
         {
            // _ifcSpace = ifcSpace;

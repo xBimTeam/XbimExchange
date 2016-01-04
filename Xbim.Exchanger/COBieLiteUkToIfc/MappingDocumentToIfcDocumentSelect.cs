@@ -34,7 +34,7 @@ namespace XbimExchanger.COBieLiteUkToIfc
             ifcDocumentInformation.Scope = document.Stage;
 
             var ifcDocumentReference = Exchanger.TargetRepository.Instances.New<IfcDocumentReference>(dr => { dr.Location = document.Directory; dr.Name = document.File; });
-            ifcDocumentInformation.SetDocumentReferences(false, new IfcDocumentReference[] { ifcDocumentReference });
+            ifcDocumentInformation.DocumentReferences.Add(ifcDocumentReference );
             ifcDocumentInformation.Description = document.Description;
             ifcDocumentInformation.DocumentId = document.Reference;
 

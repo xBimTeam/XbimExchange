@@ -307,7 +307,7 @@ namespace Xbim.Client
         /// <param name="role">RoleFilter</param>
         /// <param name="ifcRole">IfcRole</param>
         /// <returns></returns>
-        private IfcActorRole MapRole(RoleFilter role, IfcRole ifcRole)
+        private IIfcActorRole MapRole(RoleFilter role, IIfcRole ifcRole)
         {
             if (_fedModel.IsTransacting)
             {

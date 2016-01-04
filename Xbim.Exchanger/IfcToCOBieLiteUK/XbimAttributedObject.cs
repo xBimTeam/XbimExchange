@@ -2,11 +2,10 @@
 using System.Collections.Generic;
 using System.Linq;
 using Xbim.COBieLiteUK;
-using Xbim.Ifc2x3.Kernel;
-using Xbim.Ifc2x3.MeasureResource;
-using Xbim.Ifc2x3.ProductExtension;
-using Xbim.Ifc2x3.PropertyResource;
-using Xbim.Ifc2x3.QuantityResource;
+using Xbim.Common;
+using Xbim.Ifc4.DateTimeResource;
+using Xbim.Ifc4.Interfaces;
+using Xbim.Ifc4.MeasureResource;
 using Attribute = Xbim.COBieLiteUK.Attribute;
 
 namespace XbimExchanger.IfcToCOBieLiteUK
@@ -17,29 +16,37 @@ namespace XbimExchanger.IfcToCOBieLiteUK
     /// </summary>
     public class XbimAttributedObject
     {
-        private readonly IfcObjectDefinition _ifcObject;
-        private Dictionary<string, IfcProperty> _properties = new Dictionary<string, IfcProperty>();
-        private Dictionary<string, IfcPhysicalQuantity> _quantities = new Dictionary<string, IfcPhysicalQuantity>();
-        private Dictionary<string, IfcPropertySetDefinition> _propertySets=new Dictionary<string, IfcPropertySetDefinition>();
+        private readonly IIfcObjectDefinition _ifcObject;
+        private Dictionary<string, IIfcProperty> _properties = new Dictionary<string, IIfcProperty>();
+        private Dictionary<string, IIfcPhysicalQuantity> _quantities = new Dictionary<string, IIfcPhysicalQuantity>();
+        private Dictionary<string, IIfcPropertySetDefinition> _propertySets=new Dictionary<string, IIfcPropertySetDefinition>();
 
         /// <summary>
         /// 
         /// </summary>
         /// <param name="obj"></param>
-        public XbimAttributedObject(IfcObjectDefinition obj)
+        public XbimAttributedObject(IIfcObjectDefinition obj)
         {
             _ifcObject = obj;
         }
 
         /// <summary />
-        public IfcObjectDefinition IfcObject
+        public IIfcObjectDefinition IfcObject
         {
             get { return _ifcObject; }
         }
 
+        public void AddPropertySetDefinition(IIfcPropertySetDefinitionSelect pSetDefSelect)
+        {
+            foreach (var pSetDef in pSetDefSelect.PropertySetDefinitions)
+            {
+                AddPropertySetDefinition(pSetDef);
+            }
+
+        }
         /// <summary />
         /// <param name="pSetDef"></param>
-        public void AddPropertySetDefinition(IfcPropertySetDefinition pSetDef)
+        public void AddPropertySetDefinition(IIfcPropertySetDefinition pSetDef)
         {
             if (!pSetDef.Name.HasValue || string.IsNullOrWhiteSpace(pSetDef.Name))
             {
@@ -52,8 +59,8 @@ namespace XbimExchanger.IfcToCOBieLiteUK
                 return;
             }
             _propertySets.Add(pSetDef.Name,pSetDef);
-            var propertySet = pSetDef as IfcPropertySet;
-            var quantitySet = pSetDef as IfcElementQuantity;
+            var propertySet = pSetDef as IIfcPropertySet;
+            var quantitySet = pSetDef as IIfcElementQuantity;
             if (propertySet != null)
             {
                 foreach (var prop in propertySet.HasProperties)
@@ -84,7 +91,7 @@ namespace XbimExchanger.IfcToCOBieLiteUK
         /// <summary>
         /// 
         /// </summary>
-        public IDictionary<string, IfcPhysicalQuantity> Quantities
+        public IDictionary<string, IIfcPhysicalQuantity> Quantities
         {
             get { return _quantities; }
         }
@@ -92,7 +99,7 @@ namespace XbimExchanger.IfcToCOBieLiteUK
         /// <summary>
         /// 
         /// </summary>
-        public IDictionary<string, IfcProperty> Properties
+        public IDictionary<string, IIfcProperty> Properties
         {
             get { return _properties; }
         }
@@ -102,9 +109,9 @@ namespace XbimExchanger.IfcToCOBieLiteUK
         /// </summary>
         /// <param name="pSetName"></param>
         /// <returns></returns>
-        public IfcPropertySetDefinition GetPropertySetDefinition(string pSetName)
+        public IIfcPropertySetDefinition GetPropertySetDefinition(string pSetName)
         {
-            IfcPropertySetDefinition pSetDef;
+            IIfcPropertySetDefinition pSetDef;
             if (_propertySets.TryGetValue(pSetName, out pSetDef))
                 return pSetDef;
             return null;
@@ -119,7 +126,7 @@ namespace XbimExchanger.IfcToCOBieLiteUK
         /// <returns></returns>
         public bool GetSimplePropertyValue<TValue>(string propertyName, out TValue val) where TValue : struct
         {
-            IfcProperty ifcProperty;
+            IIfcProperty ifcProperty;
             val = default(TValue);
             if (_properties.TryGetValue(propertyName, out ifcProperty))
             {
@@ -138,7 +145,7 @@ namespace XbimExchanger.IfcToCOBieLiteUK
         /// <returns></returns>
         public bool GetSimplePropertyValue(string propertyName, out string val)
         {
-            IfcProperty ifcProperty;
+            IIfcProperty ifcProperty;
             val = null;
             if (_properties.TryGetValue(propertyName, out ifcProperty))
             {
@@ -149,25 +156,26 @@ namespace XbimExchanger.IfcToCOBieLiteUK
 
         }
 
-        private string ConvertToString(IfcPropertySingleValue ifcProperty)
+        private string ConvertToString(IIfcPropertySingleValue ifcProperty)
         {
-            IfcValue ifcValue = ifcProperty.NominalValue;
+            IIfcValue ifcValue = ifcProperty.NominalValue;
             if (ifcValue == null) return null;
             if (ifcValue is IfcTimeStamp)
             {
                 var timeStamp = (IfcTimeStamp)ifcValue;
-                return WriteDateTime(IfcTimeStamp.ToDateTime(timeStamp));
+                return WriteDateTime(timeStamp.ToDateTime());
             }
-            if (ifcValue.UnderlyingSystemType == typeof(bool) || ifcValue.UnderlyingSystemType == typeof(bool?))
+            var expressVal = (IExpressValueType)ifcValue ;
+            if (expressVal.UnderlyingSystemType == typeof(bool) || expressVal.UnderlyingSystemType == typeof(bool?))
             {
-                if (ifcValue.Value != null && (bool)ifcValue.Value)
+                if (expressVal.Value != null && (bool)expressVal.Value)
                     return "yes";
                 return "no";
             }
             // all other cases will convert to a string
-            if (ifcValue.Value != null)
+            if (expressVal.Value != null)
             {
-                return ifcValue.Value.ToString();
+                return expressVal.Value.ToString();
             }
             else
             {
@@ -184,10 +192,10 @@ namespace XbimExchanger.IfcToCOBieLiteUK
                 dateTime.Hour, dateTime.Minute, dateTime.Second, dateTime.Kind == DateTimeKind.Utc ? "Z" : "");
         }
 
-        private string ConvertToString(IfcProperty ifcProperty)
+        private string ConvertToString(IIfcProperty ifcProperty)
         {
-            var ifcPropertySingleValue = ifcProperty as IfcPropertySingleValue;
-            var ifcPropertyEnumeratedValue = ifcProperty as IfcPropertyEnumeratedValue;
+            var ifcPropertySingleValue = ifcProperty as IIfcPropertySingleValue;
+            var ifcPropertyEnumeratedValue = ifcProperty as IIfcPropertyEnumeratedValue;
            
             if (ifcPropertySingleValue != null)
             {
@@ -196,8 +204,8 @@ namespace XbimExchanger.IfcToCOBieLiteUK
             if (ifcPropertyEnumeratedValue != null)
             {
 
-                if (ifcPropertyEnumeratedValue.EnumerationValues.Count == 1)
-                    return ifcPropertyEnumeratedValue.EnumerationValues[0].ToString();
+                if (ifcPropertyEnumeratedValue.EnumerationValues.Count() == 1)
+                    return ifcPropertyEnumeratedValue.EnumerationValues.FirstOrDefault().ToString();
                 var result = "";
                 foreach (var enumValue in ifcPropertyEnumeratedValue.EnumerationValues)
                 {
@@ -219,8 +227,8 @@ namespace XbimExchanger.IfcToCOBieLiteUK
         /// <returns></returns>
         public bool GetAttributeValue<TCoBieValueBaseType>(string propertyName, ref TCoBieValueBaseType val) where TCoBieValueBaseType : AttributeValue, new()
         {
-            IfcProperty ifcProperty;
-            IfcPhysicalQuantity ifcQuantity;
+            IIfcProperty ifcProperty;
+            IIfcPhysicalQuantity ifcQuantity;
             if (_properties.TryGetValue(propertyName, out ifcProperty))
             {
                 val = ConvertAttribute<TCoBieValueBaseType>(ifcProperty);
@@ -242,14 +250,14 @@ namespace XbimExchanger.IfcToCOBieLiteUK
         /// <param name="ifcProperty"></param>
         /// <typeparam name="TCoBieValueBaseType"></typeparam>
         /// <returns></returns>
-        public static TCoBieValueBaseType ConvertAttribute<TCoBieValueBaseType>(IfcProperty ifcProperty) where TCoBieValueBaseType : AttributeValue, new()
+        public static TCoBieValueBaseType ConvertAttribute<TCoBieValueBaseType>(IIfcProperty ifcProperty) where TCoBieValueBaseType : AttributeValue, new()
         {
-            var ifcPropertySingleValue = ifcProperty as IfcPropertySingleValue;
-            var ifcPropertyEnumeratedValue = ifcProperty as IfcPropertyEnumeratedValue;
-            var ifcPropertyBoundedValue = ifcProperty as IfcPropertyBoundedValue;
-            var ifcPropertyTableValue = ifcProperty as IfcPropertyTableValue;
-            var ifcPropertyReferenceValue = ifcProperty as IfcPropertyReferenceValue;
-            var ifcPropertyListValue = ifcProperty as IfcPropertyListValue;
+            var ifcPropertySingleValue = ifcProperty as IIfcPropertySingleValue;
+            var ifcPropertyEnumeratedValue = ifcProperty as IIfcPropertyEnumeratedValue;
+            var ifcPropertyBoundedValue = ifcProperty as IIfcPropertyBoundedValue;
+            var ifcPropertyTableValue = ifcProperty as IIfcPropertyTableValue;
+            var ifcPropertyReferenceValue = ifcProperty as IIfcPropertyReferenceValue;
+            var ifcPropertyListValue = ifcProperty as IIfcPropertyListValue;
 
             var result = new TCoBieValueBaseType();
             
@@ -257,14 +265,14 @@ namespace XbimExchanger.IfcToCOBieLiteUK
             {
                 SetCoBieAttributeValue(result, ifcPropertySingleValue.NominalValue);
                 if(ifcPropertySingleValue.Unit!=null)
-                    result.Unit = ifcPropertySingleValue.Unit.GetName();
+                    result.Unit = ((IIfcUnit)ifcPropertySingleValue).FullName;
             }
             else if (ifcPropertyEnumeratedValue != null)
             {
                 if (ifcPropertyEnumeratedValue.EnumerationReference != null)
-                    result.Unit = ifcPropertyEnumeratedValue.EnumerationReference.Unit.GetName();
-                if (ifcPropertyEnumeratedValue.EnumerationValues.Count==1)
-                    SetCoBieAttributeValue(result, ifcPropertyEnumeratedValue.EnumerationValues[0]);
+                    result.Unit = ((IIfcUnit)ifcPropertyEnumeratedValue.EnumerationReference).FullName;
+                if (ifcPropertyEnumeratedValue.EnumerationValues.Count()==1)
+                    SetCoBieAttributeValue(result, ifcPropertyEnumeratedValue.EnumerationValues.FirstOrDefault());
                 else if (result is StringAttributeValue) //if it is a string we can add all the  values in a list
                 {
                     var stringValueType = result as StringAttributeValue;
@@ -285,7 +293,7 @@ namespace XbimExchanger.IfcToCOBieLiteUK
                 if (result is StringAttributeValue) //if it is a string we can add  the bounded values in a statement
                 {
                     if (ifcPropertyBoundedValue.Unit != null)
-                        result.Unit = ifcPropertyBoundedValue.Unit.GetName();
+                        result.Unit = ((IIfcUnit)ifcPropertyBoundedValue).FullName;
                     var stringValueType = result as StringAttributeValue;
                     stringValueType.Value = ifcPropertyBoundedValue.LowerBoundValue + " to " +
                                                   ifcPropertyBoundedValue.UpperBoundValue;
@@ -307,9 +315,9 @@ namespace XbimExchanger.IfcToCOBieLiteUK
             else if (ifcPropertyListValue != null)
             {
                 if (ifcPropertyListValue.Unit!=null)
-                    result.Unit = ifcPropertyListValue.Unit.GetName();
-                if (ifcPropertyListValue.ListValues.Count == 1)
-                    SetCoBieAttributeValue(result, ifcPropertyListValue.ListValues[0]);
+                    result.Unit = ((IIfcUnit)ifcPropertyListValue).FullName;
+                if (ifcPropertyListValue.ListValues.Count() == 1)
+                    SetCoBieAttributeValue(result, ifcPropertyListValue.ListValues.FirstOrDefault());
                 else if (result is StringAttributeValue) //if it is a string we can add all the  values in a list
                 {
                     var stringValueType = result as StringAttributeValue;
@@ -329,7 +337,13 @@ namespace XbimExchanger.IfcToCOBieLiteUK
 
         }
 
-        private static void SetCoBieAttributeValue<TCoBieValueBaseType>(TCoBieValueBaseType result, IfcValue ifcValue) where TCoBieValueBaseType : AttributeValue
+        //private static void SetCoBieAttributeValue<TCoBieValueBaseType>(TCoBieValueBaseType result, IIfcValue ifcValue) where TCoBieValueBaseType : AttributeValue
+        //{
+        //    SetCoBieAttributeValue(result, (IExpressValueType)ifcValue);
+        //}
+
+
+        private static void SetCoBieAttributeValue<TCoBieValueBaseType>(TCoBieValueBaseType result, IExpressValueType ifcValue) where TCoBieValueBaseType : AttributeValue
         {
             var stringValueType = result as StringAttributeValue;
             var decimalValueType = result as DecimalAttributeValue;
@@ -415,19 +429,19 @@ namespace XbimExchanger.IfcToCOBieLiteUK
             else
                 CoBieLiteUkHelper.Logger.Warn("Unexpected ValueBaseType");
         }
-        internal static TCoBieValueBaseType ConvertAttribute<TCoBieValueBaseType>(IfcPhysicalQuantity ifcQuantity) where TCoBieValueBaseType : AttributeValue, new()
+        internal static TCoBieValueBaseType ConvertAttribute<TCoBieValueBaseType>(IIfcPhysicalQuantity ifcQuantity) where TCoBieValueBaseType : AttributeValue, new()
         {
-            var ifcQuantityLength = ifcQuantity as IfcQuantityLength;
-            var ifcQuantityArea = ifcQuantity as IfcQuantityArea;
-            var ifcQuantityVolume = ifcQuantity as IfcQuantityVolume;
-            var ifcQuantityCount = ifcQuantity as IfcQuantityCount;
-            var ifcQuantityWeight = ifcQuantity as IfcQuantityWeight;
-            var ifcQuantityTime = ifcQuantity as IfcQuantityTime;
-            var ifcPhysicalComplexQuantity = ifcQuantity as IfcPhysicalComplexQuantity;
-            var ifcPhysicalSimpleQuantity = ifcQuantity as IfcPhysicalSimpleQuantity;
+            var ifcQuantityLength = ifcQuantity as IIfcQuantityLength;
+            var ifcQuantityArea = ifcQuantity as IIfcQuantityArea;
+            var ifcQuantityVolume = ifcQuantity as IIfcQuantityVolume;
+            var ifcQuantityCount = ifcQuantity as IIfcQuantityCount;
+            var ifcQuantityWeight = ifcQuantity as IIfcQuantityWeight;
+            var ifcQuantityTime = ifcQuantity as IIfcQuantityTime;
+            var ifcPhysicalComplexQuantity = ifcQuantity as IIfcPhysicalComplexQuantity;
+            var ifcPhysicalSimpleQuantity = ifcQuantity as IIfcPhysicalSimpleQuantity;
             var result = new TCoBieValueBaseType();
             if (ifcPhysicalSimpleQuantity != null && ifcPhysicalSimpleQuantity.Unit != null)
-                result.Unit = ifcPhysicalSimpleQuantity.Unit.GetName();
+                result.Unit = ((IIfcUnit)ifcPhysicalSimpleQuantity).FullName;
             if (ifcQuantityLength != null)
             {
                 SetCoBieAttributeValue(result, ifcQuantityLength.LengthValue);
@@ -468,15 +482,15 @@ namespace XbimExchanger.IfcToCOBieLiteUK
         /// </summary>
         /// <param name="ifcProperty"></param>
         /// <returns></returns>
-        static public TValue ConvertToSimpleType<TValue>(IfcProperty ifcProperty) where TValue:struct
+        static public TValue ConvertToSimpleType<TValue>(IIfcProperty ifcProperty) where TValue:struct
         {
 
-            var ifcPropertySingleValue = ifcProperty as IfcPropertySingleValue;
-            var ifcPropertyEnumeratedValue = ifcProperty as IfcPropertyEnumeratedValue;
-            var ifcPropertyBoundedValue = ifcProperty as IfcPropertyBoundedValue;
-            var ifcPropertyTableValue = ifcProperty as IfcPropertyTableValue;
-            var ifcPropertyReferenceValue = ifcProperty as IfcPropertyReferenceValue;
-            var ifcPropertyListValue = ifcProperty as IfcPropertyListValue;
+            var ifcPropertySingleValue = ifcProperty as IIfcPropertySingleValue;
+            var ifcPropertyEnumeratedValue = ifcProperty as IIfcPropertyEnumeratedValue;
+            var ifcPropertyBoundedValue = ifcProperty as IIfcPropertyBoundedValue;
+            var ifcPropertyTableValue = ifcProperty as IIfcPropertyTableValue;
+            var ifcPropertyReferenceValue = ifcProperty as IIfcPropertyReferenceValue;
+            var ifcPropertyListValue = ifcProperty as IIfcPropertyListValue;
 
             if (ifcPropertySingleValue != null)
             {
@@ -485,8 +499,8 @@ namespace XbimExchanger.IfcToCOBieLiteUK
             if (ifcPropertyEnumeratedValue != null)
             {
                
-                if (ifcPropertyEnumeratedValue.EnumerationValues.Count == 1)
-                    return (TValue) Convert.ChangeType(ifcPropertyEnumeratedValue.EnumerationValues[0].ToString(), typeof(TValue));
+                if (ifcPropertyEnumeratedValue.EnumerationValues.Count() == 1)
+                    return (TValue) Convert.ChangeType(ifcPropertyEnumeratedValue.EnumerationValues.FirstOrDefault().ToString(), typeof(TValue));
                 var result = "";
                 foreach (var enumValue in ifcPropertyEnumeratedValue.EnumerationValues)
                 {
@@ -520,7 +534,7 @@ namespace XbimExchanger.IfcToCOBieLiteUK
         /// </summary>
         /// <param name="ifcProperty"></param>
         /// <returns></returns>
-        static public Attribute ConvertToAttributeType(IfcProperty ifcProperty)
+        static public Attribute ConvertToAttributeType(IIfcProperty ifcProperty)
         {
             
              var attributeType = new Attribute
@@ -536,12 +550,12 @@ namespace XbimExchanger.IfcToCOBieLiteUK
              };
 
            
-            var ifcPropertySingleValue = ifcProperty as IfcPropertySingleValue;
-            var ifcPropertyEnumeratedValue = ifcProperty as IfcPropertyEnumeratedValue;
-            var ifcPropertyBoundedValue = ifcProperty as IfcPropertyBoundedValue;
-            var ifcPropertyTableValue = ifcProperty as IfcPropertyTableValue;
-            var ifcPropertyReferenceValue = ifcProperty as IfcPropertyReferenceValue;
-            var ifcPropertyListValue = ifcProperty as IfcPropertyListValue;
+            var ifcPropertySingleValue = ifcProperty as IIfcPropertySingleValue;
+            var ifcPropertyEnumeratedValue = ifcProperty as IIfcPropertyEnumeratedValue;
+            var ifcPropertyBoundedValue = ifcProperty as IIfcPropertyBoundedValue;
+            var ifcPropertyTableValue = ifcProperty as IIfcPropertyTableValue;
+            var ifcPropertyReferenceValue = ifcProperty as IIfcPropertyReferenceValue;
+            var ifcPropertyListValue = ifcProperty as IIfcPropertyListValue;
             
             if (ifcPropertySingleValue != null)
             {
@@ -554,9 +568,9 @@ namespace XbimExchanger.IfcToCOBieLiteUK
                 attributeType.Value = valueItem;
                
                 if (ifcPropertyEnumeratedValue.EnumerationReference != null && ifcPropertyEnumeratedValue.EnumerationReference.Unit!= null)
-                    valueItem.Unit = ifcPropertyEnumeratedValue.EnumerationReference.Unit.GetName();
-                if (ifcPropertyEnumeratedValue.EnumerationValues.Count==1)
-                    valueItem.Value =  ifcPropertyEnumeratedValue.EnumerationValues[0].ToString();
+                    valueItem.Unit = ((IIfcUnit)ifcPropertyEnumeratedValue.EnumerationReference).FullName;
+                if (ifcPropertyEnumeratedValue.EnumerationValues.Count()==1)
+                    valueItem.Value =  ifcPropertyEnumeratedValue.EnumerationValues.FirstOrDefault().ToString();
                 else
                 {
                     valueItem.Value = "";
@@ -568,9 +582,9 @@ namespace XbimExchanger.IfcToCOBieLiteUK
                 }
                 //add in the allowed values
                
-                if (ifcPropertyEnumeratedValue.EnumerationReference != null && ifcPropertyEnumeratedValue.EnumerationReference.EnumerationValues.Count>0)
+                if (ifcPropertyEnumeratedValue.EnumerationReference != null && ifcPropertyEnumeratedValue.EnumerationReference.EnumerationValues.Any())
                 {
-                    var allowedValues = new List<string>(ifcPropertyEnumeratedValue.EnumerationReference.EnumerationValues.Count);
+                    var allowedValues = new List<string>();
                    
                     foreach (var enumValue in ifcPropertyEnumeratedValue.EnumerationReference.EnumerationValues)
                     {
@@ -598,9 +612,9 @@ namespace XbimExchanger.IfcToCOBieLiteUK
             return attributeType;
         }
 
-        static private AttributeValue GetAttributeValue(IfcPropertyBoundedValue ifcPropertyBoundedValue)
+        static private AttributeValue GetAttributeValue(IIfcPropertyBoundedValue ifcPropertyBoundedValue)
         {            
-            var ifcValue = ifcPropertyBoundedValue.LowerBoundValue;
+            var ifcValue = (IExpressValueType) ifcPropertyBoundedValue.LowerBoundValue ;
             //only upper and lowwer bounds are supported by COBie on integer and decimal values
             if (ifcValue.UnderlyingSystemType == typeof(int) || ifcValue.UnderlyingSystemType == typeof(long) || ifcValue.UnderlyingSystemType == typeof(short) || ifcValue.UnderlyingSystemType == typeof(byte)
                 || ifcValue.UnderlyingSystemType == typeof(int?) || ifcValue.UnderlyingSystemType == typeof(long?) || ifcValue.UnderlyingSystemType == typeof(short?) || ifcValue.UnderlyingSystemType == typeof(byte?))
@@ -608,11 +622,11 @@ namespace XbimExchanger.IfcToCOBieLiteUK
                 var integerValue = new IntegerAttributeValue();
                 if (ifcPropertyBoundedValue.UpperBoundValue != null)
                 {
-                    integerValue.MaximalValue = Convert.ToInt32(ifcPropertyBoundedValue.UpperBoundValue.Value);
+                    integerValue.MaximalValue = Convert.ToInt32(ifcPropertyBoundedValue.UpperBoundValue);
                 }
                 if (ifcPropertyBoundedValue.LowerBoundValue != null)
                 {
-                    integerValue.MinimalValue = Convert.ToInt32(ifcPropertyBoundedValue.LowerBoundValue.Value);
+                    integerValue.MinimalValue = Convert.ToInt32(ifcPropertyBoundedValue.LowerBoundValue);
                 }
                 return integerValue;
             }
@@ -621,9 +635,9 @@ namespace XbimExchanger.IfcToCOBieLiteUK
             {
                 var decimalValue = new DecimalAttributeValue();
                 if (ifcPropertyBoundedValue.UpperBoundValue != null)
-                    decimalValue.MaximalValue = (double) ifcPropertyBoundedValue.UpperBoundValue.Value;
+                    decimalValue.MaximalValue = (double) ((IExpressValueType)ifcPropertyBoundedValue.UpperBoundValue).Value;
                 if (ifcPropertyBoundedValue.LowerBoundValue != null)
-                    decimalValue.MinimalValue = (double) ifcPropertyBoundedValue.LowerBoundValue.Value;
+                    decimalValue.MinimalValue = (double) ((IExpressValueType)ifcPropertyBoundedValue.LowerBoundValue).Value;
                 return decimalValue;
             }
             return null;
@@ -635,9 +649,9 @@ namespace XbimExchanger.IfcToCOBieLiteUK
         /// <param name="ifcProperty"></param>
         /// <typeparam name="TValue"></typeparam>
         /// <returns></returns>
-        static public TValue ConvertToSimpleType<TValue>(IfcPropertySingleValue ifcProperty) where TValue : struct
+        static public TValue ConvertToSimpleType<TValue>(IIfcPropertySingleValue ifcProperty) where TValue : struct
         {
-            IfcValue ifcValue = ifcProperty.NominalValue;
+            var ifcValue = (IExpressValueType)ifcProperty.NominalValue;
             var value = new TValue();
             if (ifcValue is IfcMonetaryMeasure)
             {
@@ -646,7 +660,7 @@ namespace XbimExchanger.IfcToCOBieLiteUK
             else if (ifcValue is IfcTimeStamp)
             {    
                 var timeStamp = (IfcTimeStamp)ifcValue;
-                value = (TValue)Convert.ChangeType(IfcTimeStamp.ToDateTime(timeStamp), typeof(TValue)); 
+                value = (TValue)Convert.ChangeType(timeStamp.ToDateTime(), typeof(TValue)); 
             }
             else if (value is DateTime) //sometimes these are written as strings in the ifc file
             {
@@ -705,9 +719,9 @@ namespace XbimExchanger.IfcToCOBieLiteUK
         /// </summary>
         /// <param name="ifcProperty"></param>
         /// <returns></returns>
-        static public AttributeValue GetAttributeValueType(IfcPropertySingleValue ifcProperty)
+        static public AttributeValue GetAttributeValueType(IIfcPropertySingleValue ifcProperty)
         {
-            var ifcValue = ifcProperty.NominalValue;
+            var ifcValue = (IExpressValueType)ifcProperty.NominalValue;
             
             if (ifcValue == null) 
                 return null;
@@ -722,8 +736,8 @@ namespace XbimExchanger.IfcToCOBieLiteUK
             }
             else if (ifcValue is IfcTimeStamp)
             {
-                var timeStamp = (IfcTimeStamp)ifcValue;       
-                return new DateTimeAttributeValue {Value = IfcTimeStamp.ToDateTime(timeStamp)};
+                var timeStamp = (IfcTimeStamp)ifcValue;
+                return new DateTimeAttributeValue { Value = timeStamp.ToDateTime() };
             }
             else if (ifcValue.UnderlyingSystemType == typeof(int) || ifcValue.UnderlyingSystemType == typeof(long) || ifcValue.UnderlyingSystemType == typeof(short) || ifcValue.UnderlyingSystemType == typeof(byte))
             {

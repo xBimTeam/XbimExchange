@@ -69,9 +69,13 @@ namespace XbimExchanger.COBieLiteUkToIfc
 
 
             #region Project
-            var projectMapping = Exchanger.GetOrCreateMappings<MappingProjectToIfcProject>();
+            
+            
+            
             //COBie does nor require a project but Ifc does
-            var ifcProject = Exchanger.TargetRepository.IfcProject;
+            var ifcProject = Exchanger.TargetRepository.Instances.OfType<IfcProject>().FirstOrDefault();
+            
+            var projectMapping = Exchanger.GetOrCreateMappings<MappingProjectToIfcProject>();
             projectMapping.AddMapping(facility.Project, ifcProject);
             InitialiseUnits(ifcProject);
             #endregion
@@ -170,7 +174,7 @@ namespace XbimExchanger.COBieLiteUkToIfc
         private void InitialiseUnits(IfcProject ifcProject)
         {      
             //Area
-            var areaUnit = ifcProject.UnitsInContext.GetAreaUnit() as IfcSIUnit; //they always are as we are initialising to this
+            var areaUnit = ifcProject.UnitsInContext.AreaUnit as IfcSIUnit; //they always are as we are initialising to this
             if (areaUnit!=null && Exchanger.DefaultAreaUnit.HasValue)
             {
                 var defaultAreaUnit = Exchanger.DefaultAreaUnit.Value;
@@ -193,7 +197,7 @@ namespace XbimExchanger.COBieLiteUkToIfc
             }
 
             //Length
-            var linearUnit = ifcProject.UnitsInContext.GetLengthUnit() as IfcSIUnit; //they always are as we are initialising to this
+            var linearUnit = ifcProject.UnitsInContext.LengthUnit as IfcSIUnit; //they always are as we are initialising to this
             if (linearUnit != null && Exchanger.DefaultLinearUnit.HasValue)
             {
                 var defaultLinearUnit = Exchanger.DefaultLinearUnit.Value;
@@ -215,7 +219,7 @@ namespace XbimExchanger.COBieLiteUkToIfc
                 }
             }
             //Volume
-            var volumeUnit = ifcProject.UnitsInContext.GetVolumeUnit() as IfcSIUnit; //they always are as we are initialising to this
+            var volumeUnit = ifcProject.UnitsInContext.VolumeUnit as IfcSIUnit; //they always are as we are initialising to this
             if (volumeUnit != null && Exchanger.DefaultVolumeUnit.HasValue)
             {
                 var defaultVolumeUnit = Exchanger.DefaultVolumeUnit.Value;

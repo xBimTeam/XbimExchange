@@ -5,6 +5,7 @@ using System.Diagnostics;
 using System.Globalization;
 using System.Linq;
 using Xbim.COBieLite;
+using Xbim.Ifc;
 using Xbim.Ifc2x3.GeometricConstraintResource;
 using Xbim.Ifc2x3.GeometricModelResource;
 using Xbim.Ifc2x3.GeometryResource;
@@ -15,7 +16,6 @@ using Xbim.Ifc2x3.ProfileResource;
 using Xbim.Ifc2x3.PropertyResource;
 using Xbim.Ifc2x3.QuantityResource;
 using Xbim.Ifc2x3.RepresentationResource;
-using Xbim.IO;
 using XbimExchanger.COBieLiteHelpers;
 using XbimExchanger.IfcHelpers;
 
@@ -24,7 +24,7 @@ namespace XbimExchanger.COBieLiteToIfc
     /// <summary>
     /// Constructs the exchanger
     /// </summary>
-    public class CoBieLiteToIfcExchanger : XbimExchanger<FacilityType, XbimModel>
+    public class CoBieLiteToIfcExchanger : XbimExchanger<FacilityType, IfcStore>
     {
         #region Nested Structures
         /// <summary>
@@ -121,7 +121,7 @@ namespace XbimExchanger.COBieLiteToIfc
         /// </summary>
         /// <param name="facility"></param>
         /// <param name="repository"></param>
-        public CoBieLiteToIfcExchanger(FacilityType facility, XbimModel repository)
+        public CoBieLiteToIfcExchanger(FacilityType facility, IfcStore repository)
             : base(facility, repository)
         {
             LoadPropertySetDefinitions();
@@ -136,16 +136,20 @@ namespace XbimExchanger.COBieLiteToIfc
             _origin3D = modelInstances.New<IfcCartesianPoint>(c => c.SetXYZ(0, 0, 0));
             _origin2D = modelInstances.New<IfcCartesianPoint>(c => c.SetXY(0, 0));
             _downDirection = modelInstances.New<IfcDirection>(d => d.SetXYZ(0, 0, -1));
-            var mainContext = TargetRepository.IfcProject.ModelContext();
-            mainContext.ContextIdentifier = null; //balnk of the main context
-            _model3DContext = modelInstances.New<IfcGeometricRepresentationSubContext>(c =>
+            var project = TargetRepository.Instances.OfType<IfcProject>().FirstOrDefault();
+            if (project != null)
             {
-                c.ContextType = "Model";
-                c.ContextIdentifier = "Body";
-                c.ParentContext = TargetRepository.IfcProject.ModelContext();
-                c.TargetView=IfcGeometricProjectionEnum.MODEL_VIEW;
+                var mainContext = project.ModelContext;
+                mainContext.ContextIdentifier = null; //balnk of the main context
+                _model3DContext = modelInstances.New<IfcGeometricRepresentationSubContext>(c =>
+                {
+                    c.ContextType = "Model";
+                    c.ContextIdentifier = "Body";
+                    c.ParentContext = project.ModelContext;
+                    c.TargetView = IfcGeometricProjectionEnum.MODEL_VIEW;
+                }
+                );
             }
-            );
         }
 
         #endregion
@@ -208,7 +212,7 @@ namespace XbimExchanger.COBieLiteToIfc
         /// Converts the facility to an IfcBuilding
         /// </summary>
         /// <returns></returns>
-        public override XbimModel Convert()
+        public override IfcStore Convert()
         {
             Convert(SourceRepository);         
             return TargetRepository;
@@ -246,7 +250,6 @@ namespace XbimExchanger.COBieLiteToIfc
                     }
                     else if (ifcTypeObject != null)
                     {
-                        if (ifcTypeObject.HasPropertySets == null) ifcTypeObject.CreateHasPropertySets();
                         ifcTypeObject.HasPropertySets.Add(quantitySet);
                     }
                     else
@@ -268,8 +271,7 @@ namespace XbimExchanger.COBieLiteToIfc
                         relDef.RelatedObjects.Add(ifcObject);
                     }
                     else if (ifcTypeObject != null)
-                    {
-                        if (ifcTypeObject.HasPropertySets == null) ifcTypeObject.CreateHasPropertySets();
+                    {                      
                         ifcTypeObject.HasPropertySets.Add(propertySet);
                     }
                     else
@@ -639,7 +641,7 @@ namespace XbimExchanger.COBieLiteToIfc
                             simpleMonetaryProperty.NominalValue = new IfcReal(monetaryValue);
                             IfcCurrencyEnum currencyEnum;
                             if (Enum.TryParse(attributeMonetaryValueType.MonetaryUnit.ToString(), true, out currencyEnum))
-                                simpleMonetaryProperty.Unit = new IfcMonetaryUnit {Currency = currencyEnum};
+                                simpleMonetaryProperty.Unit = TargetRepository.Instances.New<IfcMonetaryUnit>(c=>c.Currency = currencyEnum);
                         }
                         break;
                     case XbimSimplePropertyType.EnumerationString:

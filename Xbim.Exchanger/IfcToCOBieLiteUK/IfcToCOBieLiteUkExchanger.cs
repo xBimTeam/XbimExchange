@@ -2,20 +2,21 @@
 using System.Linq;
 using Xbim.COBieLiteUK;
 using Xbim.FilterHelper;
-using Xbim.Ifc2x3.ProductExtension;
-using Xbim.IO;
 using Xbim.Exchanger.IfcToCOBieLiteUK.Classifications;
+using Xbim.Common;
+using Xbim.Ifc4.Interfaces;
+using Xbim.Ifc;
 
 namespace XbimExchanger.IfcToCOBieLiteUK
 {
-    public class IfcToCOBieLiteUkExchanger : XbimExchanger<XbimModel, List<Facility>>
+    public class IfcToCOBieLiteUkExchanger : XbimExchanger<IfcStore, List<Facility>>
     {
         private readonly bool _classify;
         internal CoBieLiteUkHelper Helper ;
         /// <summary>
-        /// Instantiates a new IfcToCOBieLiteUkExchanger class.
+        /// Instantiates a new IIfcToCOBieLiteUkExchanger class.
         /// </summary>
-        public IfcToCOBieLiteUkExchanger(XbimModel source, List<Facility> target, ReportProgressDelegate reportProgress = null, OutPutFilters filter = null, string configFile = null, EntityIdentifierMode extId = EntityIdentifierMode.IfcEntityLabels, SystemExtractionMode sysMode = SystemExtractionMode.System | SystemExtractionMode.Types, bool classify = false) 
+        public IfcToCOBieLiteUkExchanger(IfcStore source, List<Facility> target, ReportProgressDelegate reportProgress = null, OutPutFilters filter = null, string configFile = null, EntityIdentifierMode extId = EntityIdentifierMode.IfcEntityLabels, SystemExtractionMode sysMode = SystemExtractionMode.System | SystemExtractionMode.Types, bool classify = false) 
             : base(source, target)
         {
             ReportProgress.Progress = reportProgress; //set reporter
@@ -30,7 +31,7 @@ namespace XbimExchanger.IfcToCOBieLiteUK
         public override List<Facility> Convert()
         {
             var mapping = GetOrCreateMappings<MappingIfcBuildingToFacility>();
-            var buildings = SourceRepository.Instances.OfType<IfcBuilding>().ToList();
+            var buildings = SourceRepository.Instances.OfType<IIfcBuilding>().ToList();
             var facilities = new List<Facility>(buildings.Count);
             foreach (var ifcBuilding in buildings)
             {

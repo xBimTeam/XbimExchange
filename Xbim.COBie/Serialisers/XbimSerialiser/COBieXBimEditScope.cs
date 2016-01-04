@@ -1,25 +1,26 @@
 ﻿using System;
-using Xbim.Ifc2x3.IO;
-using Xbim.Ifc2x3.UtilityResource;
+using Xbim.Ifc;
+using Xbim.Ifc4.Interfaces;
+
 
 namespace Xbim.COBie.Serialisers.XbimSerialiser
 {
     class COBieXBimEditScope : IDisposable
     {
-        private IfcOwnerHistory IfcOwnerHistory {  get;  set; }
-        private XbimModel Model {  get;  set; }
+        private IIfcOwnerHistory IfcOwnerHistory {  get;  set; }
+        private IfcStore Model { get; set; }
 
-        public COBieXBimEditScope(XbimModel model, IfcOwnerHistory owner)
+        public COBieXBimEditScope(IfcStore model, IIfcOwnerHistory owner)
         {
             Model = model;
-            IfcOwnerHistory = Model.OwnerHistoryAddObject;
+            IIfcOwnerHistory = Model.OwnerHistoryAddObject;
             Model.OwnerHistoryAddObject = owner;
             
         }
 
         public void Dispose()
         {
-            Model.OwnerHistoryAddObject = IfcOwnerHistory;
+            Model.OwnerHistoryAddObject = IIfcOwnerHistory;
         }
     }
 }

@@ -2,14 +2,15 @@
 using System.Collections.Generic;
 using System.Linq;
 using Xbim.COBieLiteUK;
-using Xbim.Ifc2x3.ProductExtension;
-using Xbim.IO;
+using Xbim.Ifc;
+
+using Xbim.Ifc4.Interfaces;
 
 namespace XbimExchanger.IfcToCOBieLiteUK
 {
-    class MappingIfcElementToAsset : XbimMappings<XbimModel, List<Facility>, string, IfcElement, Asset>
+    class MappingIfcElementToAsset : XbimMappings<IfcStore, List<Facility>, string, IIfcElement, Asset>
     {
-        protected override Asset Mapping(IfcElement ifcElement, Asset target)
+        protected override Asset Mapping(IIfcElement ifcElement, Asset target)
         {
             var helper = ((IfcToCOBieLiteUkExchanger)Exchanger).Helper;
             target.ExternalEntity = helper.ExternalEntityName(ifcElement);
@@ -47,7 +48,7 @@ namespace XbimExchanger.IfcToCOBieLiteUK
             //Space Assignments
             var spatialElements = helper.GetSpaces(ifcElement);
 
-            var ifcSpatialStructureElements = spatialElements as IList<IfcSpatialStructureElement> ?? spatialElements.ToList();
+            var ifcSpatialStructureElements = spatialElements.ToList();
             target.Spaces = new List<SpaceKey>();
             if (ifcSpatialStructureElements.Any())
             {
@@ -71,6 +72,11 @@ namespace XbimExchanger.IfcToCOBieLiteUK
 
             
             return target;
+        }
+
+        public override Asset CreateTargetObject()
+        {
+            return new Asset();
         }
     }
 }

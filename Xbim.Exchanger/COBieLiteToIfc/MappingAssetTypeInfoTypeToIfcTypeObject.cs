@@ -535,7 +535,7 @@ namespace XbimExchanger.COBieLiteToIfc
             return ifcTypeObject;
         }
 
-        TAsset MapAsset<TAsset>(AssetInfoType assetInfoType) where TAsset : IfcElement, new()
+        TAsset MapAsset<TAsset>(AssetInfoType assetInfoType) where TAsset : IfcElement
         {
             var assetInfoTypeMapping = Exchanger.GetOrCreateMappings<MappingAssetInfoTypeToIfcElement<TAsset>>();
             return assetInfoTypeMapping.AddMapping(assetInfoType, assetInfoTypeMapping.GetOrCreateTargetObject(assetInfoType.externalID));

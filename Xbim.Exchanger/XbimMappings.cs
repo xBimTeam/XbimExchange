@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
+using Xbim.Common;
 
 namespace XbimExchanger
 {
@@ -12,7 +13,7 @@ namespace XbimExchanger
     /// <typeparam name="TTargetObject">Type of the object to map to</typeparam>
     /// <typeparam name="TSourceRepository"></typeparam>
     /// <typeparam name="TTargetRepository"></typeparam>
-    public abstract class XbimMappings<TSourceRepository, TTargetRepository, TSourceKey, TSourceObject, TTargetObject> : IXbimMappings<TSourceRepository, TTargetRepository> where TTargetObject : new()
+    public abstract class XbimMappings<TSourceRepository, TTargetRepository, TSourceKey, TSourceObject, TTargetObject> : IXbimMappings<TSourceRepository, TTargetRepository> 
     {
         protected ConcurrentDictionary<TSourceKey, TTargetObject> Results = new ConcurrentDictionary<TSourceKey, TTargetObject>();
 
@@ -39,10 +40,8 @@ namespace XbimExchanger
         /// Creates an instance of toObject, override for special creation situations
         /// </summary>
         /// <returns></returns>
-        public virtual TTargetObject CreateTargetObject()
-        {
-            return new TTargetObject();
-        }
+        public abstract TTargetObject CreateTargetObject();
+        
         /// <summary>
         /// Gets the ToObject with the specified key
         /// </summary>

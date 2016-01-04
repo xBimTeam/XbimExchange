@@ -2,8 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using Xbim.COBieLiteUK;
-using Xbim.Ifc2x3.ProductExtension;
-using Xbim.IO;
+using Xbim.Ifc;
+using Xbim.Ifc4.Interfaces;
 
 namespace XbimExchanger.IfcToCOBieLiteUK
 {
@@ -11,7 +11,7 @@ namespace XbimExchanger.IfcToCOBieLiteUK
     /// Maps a list of IfcTypeObject that are all the same
     /// </summary>
     internal class MappingXbimIfcProxyTypeObjectToAssetType :
-        XbimMappings<XbimModel, List<Facility>, string, XbimIfcProxyTypeObject, AssetType>
+        XbimMappings<IfcStore, List<Facility>, string, XbimIfcProxyTypeObject, AssetType>
     {
         public bool HasCategory
         {
@@ -35,20 +35,25 @@ namespace XbimExchanger.IfcToCOBieLiteUK
             target.CreatedOn = proxyIfcTypeObject.GetCreatedOn();
             target.Description = proxyIfcTypeObject.Description;
             var ifcTypeObject = proxyIfcTypeObject.IfcTypeObject;
-            List<IfcElement> allAssetsofThisType;
+            List<IIfcElement> allAssetsofThisType;
             helper.DefiningTypeObjectMap.TryGetValue(proxyIfcTypeObject, out allAssetsofThisType);
 
             target.Warranty = new Warranty { GuarantorLabor = new ContactKey { Email = helper.XbimCreatedBy.Email } };
             target.Warranty.GuarantorParts = target.Warranty.GuarantorLabor;
             if (ifcTypeObject != null)
             {
-                var manuf = helper.GetCoBieProperty("AssetTypeManufacturer", ifcTypeObject);
+                string manuf = helper.GetCoBieProperty("AssetTypeManufacturer", ifcTypeObject);
                 if (string.IsNullOrWhiteSpace(manuf) && allAssetsofThisType != null) //disagrrement between COBie and IFC where this value resides, look in assets
                 {
-                    manuf = allAssetsofThisType.Select(
-                        a => helper.GetCoBieProperty("AssetTypeManufacturer", a))
-                        .FirstOrDefault(a => !string.IsNullOrWhiteSpace(a));
-
+                    foreach (var element in allAssetsofThisType)
+                    {
+                        var prop = helper.GetCoBieProperty("AssetTypeManufacturer", element);
+                        if(!string.IsNullOrWhiteSpace(prop))
+                        {
+                            manuf = prop;
+                            break;
+                        }
+                    }
                 }
                 target.Manufacturer = helper.GetOrCreateContactKey(manuf);
 
@@ -127,7 +132,7 @@ namespace XbimExchanger.IfcToCOBieLiteUK
             {
                 target.Assets = new List<Asset>();
 
-                foreach (IfcElement element in allAssetsofThisType)
+                foreach (IIfcElement element in allAssetsofThisType)
                 {
                     var asset = new Asset();
                     asset = assetMappings.AddMapping(element, asset);
@@ -148,5 +153,10 @@ namespace XbimExchanger.IfcToCOBieLiteUK
             return target;
         }
 
+
+        public override AssetType CreateTargetObject()
+        {
+            return new AssetType();
+        }
     }
 }

@@ -17,7 +17,6 @@ using Xbim.Ifc2x3.ProfileResource;
 using Xbim.Ifc2x3.PropertyResource;
 using Xbim.Ifc2x3.QuantityResource;
 using Xbim.Ifc2x3.RepresentationResource;
-using Xbim.IO;
 using XbimExchanger.COBieLiteHelpers;
 using XbimExchanger.IfcHelpers;
 using Assembly = System.Reflection.Assembly;
@@ -25,13 +24,14 @@ using Attribute = Xbim.COBieLiteUK.Attribute;
 using Xbim.FilterHelper;
 using Xbim.Ifc2x3.ActorResource;
 using Xbim.Ifc2x3.UtilityResource;
+using Xbim.Ifc;
 
 namespace XbimExchanger.COBieLiteUkToIfc
 {
     /// <summary>
     /// Constructs the exchanger
     /// </summary>
-    public class CoBieLiteUkToIfcExchanger : XbimExchanger<Facility, XbimModel>
+    public class CoBieLiteUkToIfcExchanger : XbimExchanger<Facility, IfcStore>
     {
         #region Nested Structures
         /// <summary>
@@ -154,7 +154,7 @@ namespace XbimExchanger.COBieLiteUkToIfc
         /// </summary>
         /// <param name="facility"></param>
         /// <param name="repository"></param>
-        public CoBieLiteUkToIfcExchanger(Facility facility, XbimModel repository)
+        public CoBieLiteUkToIfcExchanger(Facility facility, IfcStore repository)
             : base(facility, repository)
         {
             LoadPropertySetDefinitions();
@@ -169,16 +169,20 @@ namespace XbimExchanger.COBieLiteUkToIfc
             _origin3D = modelInstances.New<IfcCartesianPoint>(c => c.SetXYZ(0, 0, 0));
             _origin2D = modelInstances.New<IfcCartesianPoint>(c => c.SetXY(0, 0));
             _downDirection = modelInstances.New<IfcDirection>(d => d.SetXYZ(0, 0, -1));
-            var mainContext = TargetRepository.IfcProject.ModelContext();
-            mainContext.ContextIdentifier = null; //balnk of the main context
-            _model3DContext = modelInstances.New<IfcGeometricRepresentationSubContext>(c =>
+            var project = TargetRepository.Instances.FirstOrDefault<IfcProject>();
+            if (project != null)
             {
-                c.ContextType = "Model";
-                c.ContextIdentifier = "Body";
-                c.ParentContext = TargetRepository.IfcProject.ModelContext();
-                c.TargetView = IfcGeometricProjectionEnum.MODEL_VIEW;
+                var mainContext = project.ModelContext;
+                mainContext.ContextIdentifier = null; //balnk of the main context
+                _model3DContext = modelInstances.New<IfcGeometricRepresentationSubContext>(c =>
+                {
+                    c.ContextType = "Model";
+                    c.ContextIdentifier = "Body";
+                    c.ParentContext = project.ModelContext;
+                    c.TargetView = IfcGeometricProjectionEnum.MODEL_VIEW;
+                }
+                );
             }
-            );
         }
 
         #endregion
@@ -257,7 +261,7 @@ namespace XbimExchanger.COBieLiteUkToIfc
         /// Converts the facility to an IfcBuilding
         /// </summary>
         /// <returns></returns>
-        public override XbimModel Convert()
+        public override IfcStore Convert()
         {
             Convert(SourceRepository);
             return TargetRepository;
@@ -294,8 +298,7 @@ namespace XbimExchanger.COBieLiteUkToIfc
                         relDef.RelatedObjects.Add(ifcObject);
                     }
                     else if (ifcTypeObject != null)
-                    {
-                        if (ifcTypeObject.HasPropertySets == null) ifcTypeObject.CreateHasPropertySets();
+                    {                     
                         ifcTypeObject.HasPropertySets.Add(quantitySet);
                     }
                     else
@@ -317,8 +320,7 @@ namespace XbimExchanger.COBieLiteUkToIfc
                         relDef.RelatedObjects.Add(ifcObject);
                     }
                     else if (ifcTypeObject != null)
-                    {
-                        if (ifcTypeObject.HasPropertySets == null) ifcTypeObject.CreateHasPropertySets();
+                    {                      
                         ifcTypeObject.HasPropertySets.Add(propertySet);
                     }
                     else
@@ -928,7 +930,7 @@ namespace XbimExchanger.COBieLiteUkToIfc
             }
             var ifcSpace = GetIfcSpace(spaceKey);
             relationship.RelatedObjects.Add(ifcSpace);
-            relationship.RelatedObjectsType = IfcObjectType.Product;
+            relationship.RelatedObjectsType = IfcObjectTypeEnum.PRODUCT;
         }
 
         public bool StringHasValue(string createdOn)
@@ -1097,24 +1099,13 @@ namespace XbimExchanger.COBieLiteUkToIfc
 
                 //create IfcTelecomAddress
                 IfcTelecomAddress ifcTelecomAddress = TargetRepository.Instances.New<IfcTelecomAddress>();
-                if (ifcTelecomAddress.ElectronicMailAddresses == null)
-                {
-                    ifcTelecomAddress.SetElectronicMailAddress(email); //create the LabelCollection and set to ElectronicMailAddresses field
-                }
-                else
-                {
-                    ifcTelecomAddress.ElectronicMailAddresses.Add(email); //add to existing collection
-                }
-                //add Telecom Address
-                if (ifcPerson.Addresses == null)
-                {
-                    ifcPerson.SetTelecomAddresss(ifcTelecomAddress);//create the AddressCollection and set to Addresses field
-                }
-                else
-                {
-                    ifcPerson.Addresses.Add(ifcTelecomAddress);//add to existing collection
-                }
                 
+                ifcTelecomAddress.ElectronicMailAddresses.Add(email); //add to existing collection
+                
+                //add Telecom Address
+               
+                ifcPerson.Addresses.Add(ifcTelecomAddress);//add to existing collection
+
                 //add postal address
                 //IfcPostalAddress ifcPostalAddress = TargetRepository.Instances.New<IfcPostalAddress>();                                               
                 //if (ifcPerson.Addresses == null)

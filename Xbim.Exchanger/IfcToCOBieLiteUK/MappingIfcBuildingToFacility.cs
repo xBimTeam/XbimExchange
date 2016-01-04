@@ -1,21 +1,21 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using Xbim.COBieLiteUK;
-using Xbim.Ifc2x3.Kernel;
-using Xbim.Ifc2x3.ProductExtension;
-using Xbim.IO;
+using Xbim.Ifc;
+
+using Xbim.Ifc4.Interfaces;
 using netSystem = System;
 
 namespace XbimExchanger.IfcToCOBieLiteUK 
 {
-    class MappingIfcBuildingToFacility : XbimMappings<XbimModel, List<Facility>, string, IfcBuilding,Facility> 
+    class MappingIfcBuildingToFacility : XbimMappings<IfcStore, List<Facility>, string, IIfcBuilding,Facility> 
     {
-        protected override Facility Mapping(IfcBuilding ifcBuilding, Facility facility)
+        protected override Facility Mapping(IIfcBuilding ifcBuilding, Facility facility)
         {
             //Helper should do 10% of progress
             Exchanger.ReportProgress.NextStage(4, 42, string.Format("Creating Facility {0}", ifcBuilding.Name != null ? ifcBuilding.Name.ToString() : string.Empty));//finish progress at 42% 
             var helper = ((IfcToCOBieLiteUkExchanger)Exchanger).Helper;
-            var model = ifcBuilding.ModelOf;
+            var model = ifcBuilding.Model;
             facility.ExternalEntity = helper.ExternalEntityName(ifcBuilding);
             facility.ExternalId = helper.ExternalEntityIdentity(ifcBuilding);
             facility.AltExternalId = ifcBuilding.GlobalId;
@@ -25,7 +25,7 @@ namespace XbimExchanger.IfcToCOBieLiteUK
             facility.CreatedBy = helper.GetCreatedBy(ifcBuilding);
             facility.CreatedOn = helper.GetCreatedOn(ifcBuilding);
             facility.Categories = helper.GetCategories(ifcBuilding);
-            var ifcProject = model.Instances.OfType<IfcProject>().FirstOrDefault();
+            var ifcProject = model.Instances.OfType<IIfcProject>().FirstOrDefault();
             if (ifcProject != null)
             {
                 if (facility.Categories == null) //use the project Categories instead
@@ -34,7 +34,7 @@ namespace XbimExchanger.IfcToCOBieLiteUK
                 var projectMapping = Exchanger.GetOrCreateMappings<MappingIfcProjectToProject>();
                 projectMapping.AddMapping(ifcProject, facility.Project);
                 Exchanger.ReportProgress.IncrementAndUpdate(); 
-                var ifcSite = ifcProject.GetSpatialStructuralElements().FirstOrDefault(p => p is IfcSite) as IfcSite;
+                var ifcSite = ifcProject.Sites.FirstOrDefault();
                 var siteMapping = Exchanger.GetOrCreateMappings<MappingIfcSiteToSite>();
 
                 //Facility Attributes
@@ -47,8 +47,8 @@ namespace XbimExchanger.IfcToCOBieLiteUK
                     
                     if(ifcSite.RefLatitude.HasValue && ifcSite.RefLongitude.HasValue)
                     {
-                        facility.Attributes.Add(helper.MakeAttribute(ifcSite, "RefLatitude", ifcSite.RefLatitude.Value.ToDouble()));
-                        facility.Attributes.Add(helper.MakeAttribute(ifcSite, "RefLongtitude", ifcSite.RefLongitude.Value.ToDouble()));
+                        facility.Attributes.Add(helper.MakeAttribute(ifcSite, "RefLatitude", ifcSite.RefLatitude.Value.AsDouble));
+                        facility.Attributes.Add(helper.MakeAttribute(ifcSite, "RefLongtitude", ifcSite.RefLongitude.Value.AsDouble));
                     }
                 }
                 else //create a default "External area"
@@ -66,8 +66,8 @@ namespace XbimExchanger.IfcToCOBieLiteUK
                 facility.VolumeUnits = helper.ModelVolumeUnit ?? VolumeUnit.notdefined;
                 facility.CurrencyUnit = helper.ModelCurrencyUnit ?? CurrencyUnit.notdefined;
 
-                var storeys = ifcBuilding.GetBuildingStoreys(true);
-                var cobieFloors = storeys.Cast<IfcSpatialStructureElement>().ToList();
+                var storeys = ifcBuilding.BuildingStoreys;
+                var cobieFloors = storeys.Cast<IIfcSpatialStructureElement>().ToList();
                 if (ifcSite != null)
                     cobieFloors.Add(ifcSite);
                 Exchanger.ReportProgress.IncrementAndUpdate();
@@ -283,30 +283,35 @@ namespace XbimExchanger.IfcToCOBieLiteUK
         //    return allAssetTypesInThisFacility;
         //}
 
-        private IEnumerable<IfcZone> GetAllZones(IEnumerable<IfcSpace> allSpaces, CoBieLiteUkHelper helper)
+        private IEnumerable<IIfcZone> GetAllZones(IEnumerable<IIfcSpace> allSpaces, CoBieLiteUkHelper helper)
         {
-            var allZones = new HashSet<IfcZone>();
+            var allZones = new HashSet<IIfcZone>();
             foreach (var space in allSpaces)
                 foreach (var zone in helper.GetZones(space))
                     allZones.Add(zone);
             return allZones;
         }
 
-        private IEnumerable<IfcSpace> GetAllSpaces(IfcBuilding ifcBuilding)
+        private IEnumerable<IIfcSpace> GetAllSpaces(IIfcBuilding ifcBuilding)
         {
-            var spaces = new HashSet<IfcSpace>();
-            foreach (var space in ifcBuilding.GetSpaces().ToList())
+            var spaces = new HashSet<IIfcSpace>();
+            foreach (var space in ifcBuilding.Spaces.ToList())
                 spaces.Add(space);
-            foreach (var storey in ifcBuilding.GetBuildingStoreys().ToList())
+            foreach (var storey in ifcBuilding.BuildingStoreys.ToList())
             {
-                foreach (var storeySpace in storey.GetSpaces().ToList())
+                foreach (var storeySpace in storey.Spaces.ToList())
                 {
                     spaces.Add(storeySpace);
-                    foreach (var spaceSpace in storeySpace.GetSpaces().ToList())
+                    foreach (var spaceSpace in storeySpace.Spaces.ToList())
                         spaces.Add(spaceSpace); //get sub spaces
                 }
             }
             return spaces;
+        }
+
+        public override Facility CreateTargetObject()
+        {
+            return new Facility();
         }
     }
 }

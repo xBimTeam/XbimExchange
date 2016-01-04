@@ -1,7 +1,7 @@
 ﻿using System.Linq;
 using System.Xml.Serialization;
 using Newtonsoft.Json;
-using Xbim.Ifc2x3.ActorResource;
+using Xbim.Ifc4.Interfaces;
 
 namespace Xbim.COBieLite
 {
@@ -15,12 +15,12 @@ namespace Xbim.COBieLite
         /// </summary>
         /// <param name="actor"></param>
         /// <param name="helper"></param>
-        public ContactType(IfcActorSelect actor, CoBieLiteHelper helper)
+        public ContactType(IIfcActorSelect actor, CoBieLiteHelper helper)
             : this()
         {
-            var personAndOrganization = actor as IfcPersonAndOrganization;
-            var person = actor as IfcPerson;
-            var organisation = actor as IfcOrganization;
+            var personAndOrganization = actor as IIfcPersonAndOrganization;
+            var person = actor as IIfcPerson;
+            var organisation = actor as IIfcOrganization;
             if (personAndOrganization != null)
             {
                 ConvertOrganisation(personAndOrganization.TheOrganization, helper);
@@ -40,13 +40,13 @@ namespace Xbim.COBieLite
           
         }
 
-        private void ConvertOrganisation(IfcOrganization ifcOrganization, CoBieLiteHelper helper)
+        private void ConvertOrganisation(IIfcOrganization ifcOrganization, CoBieLiteHelper helper)
         {
             if (ifcOrganization.Addresses != null)
             {
-                var telecom = ifcOrganization.Addresses.OfType<IfcTelecomAddress>();
-                var postal = ifcOrganization.Addresses.OfType<IfcPostalAddress>();
-                var ifcTelecomAddresses = telecom as IfcTelecomAddress[] ?? telecom.ToArray();
+                var telecom = ifcOrganization.Addresses.OfType<IIfcTelecomAddress>();
+                var postal = ifcOrganization.Addresses.OfType<IIfcPostalAddress>();
+                var ifcTelecomAddresses = telecom as IIfcTelecomAddress[] ?? telecom.ToArray();
                 if (ifcTelecomAddresses.Any())
                 {
                     var emailAddresses = string.Join(";",ifcTelecomAddresses.SelectMany(t => t.ElectronicMailAddresses));
@@ -61,7 +61,7 @@ namespace Xbim.COBieLite
 
                 }
 
-                var ifcPostalAddresses = postal as IfcPostalAddress[] ?? postal.ToArray();
+                var ifcPostalAddresses = postal as IIfcPostalAddress[] ?? postal.ToArray();
                 if (ifcPostalAddresses.Any())
                 {
                     var deptNames = string.Join(";",ifcPostalAddresses.Where(p=>p.InternalLocation.HasValue).SelectMany(p => p.InternalLocation.ToString()));
@@ -98,16 +98,16 @@ namespace Xbim.COBieLite
           
         }
 
-        private void ConvertPerson(IfcPerson ifcPerson, CoBieLiteHelper helper)
+        private void ConvertPerson(IIfcPerson ifcPerson, CoBieLiteHelper helper)
         {
             ContactFamilyName = ifcPerson.FamilyName;
             ContactGivenName = ifcPerson.GivenName;
            
             if (ifcPerson.Addresses != null)
             {
-                var telecom = ifcPerson.Addresses.OfType<IfcTelecomAddress>();
-                var postal = ifcPerson.Addresses.OfType<IfcPostalAddress>();
-                var ifcTelecomAddresses = telecom as IfcTelecomAddress[] ?? telecom.ToArray();
+                var telecom = ifcPerson.Addresses.OfType<IIfcTelecomAddress>();
+                var postal = ifcPerson.Addresses.OfType<IIfcPostalAddress>();
+                var ifcTelecomAddresses = telecom as IIfcTelecomAddress[] ?? telecom.ToArray();
                 if (ifcTelecomAddresses.Any())
                 {
                     var emailAddresses = string.Join(";", ifcTelecomAddresses.Where(t => t.ElectronicMailAddresses!=null).SelectMany(t => t.ElectronicMailAddresses));
@@ -122,7 +122,7 @@ namespace Xbim.COBieLite
                         ContactURL = string.Join(";", url, ContactURL ?? ""); ;
                 }
 
-                var ifcPostalAddresses = postal as IfcPostalAddress[] ?? postal.ToArray();
+                var ifcPostalAddresses = postal as IIfcPostalAddress[] ?? postal.ToArray();
                 if (ifcPostalAddresses.Any())
                 {
                     var deptNames = string.Join(";", ifcPostalAddresses.Where(p => p.InternalLocation.HasValue).SelectMany(p => p.InternalLocation.ToString()));

@@ -32,5 +32,10 @@ namespace XbimExchanger.DPoWToCOBieLiteUK
 
             return target;
         }
+
+        public override TTargetType CreateTargetObject()
+        {
+            return new TTargetType();
+        }
     }
 }

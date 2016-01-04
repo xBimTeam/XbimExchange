@@ -1,14 +1,15 @@
 ﻿using System.Linq;
 using System.Xml.Serialization;
 using Newtonsoft.Json;
-using Xbim.Ifc2x3.ProductExtension;
+using Xbim.Ifc4.Interfaces;
+
 
 namespace Xbim.COBieLite
 {
     public partial class SystemType: ICOBieObject
     {
       
-        public SystemType(IfcSystem ifcSystem, CoBieLiteHelper helper)
+        public SystemType(IIfcSystem ifcSystem, CoBieLiteHelper helper)
             : this()
         {
             externalEntityName = helper.ExternalEntityName(ifcSystem);

@@ -1,4 +1,5 @@
-﻿using Xbim.Ifc2x3.Kernel;
+﻿
+using Xbim.Ifc4.Interfaces;
 
 namespace Xbim.COBieLite
 {
@@ -11,7 +12,7 @@ namespace Xbim.COBieLite
         {
             
         }
-        public ProjectType(IfcProject ifcProject, CoBieLiteHelper helper)
+        public ProjectType(IIfcProject ifcProject, CoBieLiteHelper helper)
             : this()
         {
 

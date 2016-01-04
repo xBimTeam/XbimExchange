@@ -1,14 +1,15 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using Xbim.COBieLiteUK;
-using Xbim.Ifc2x3.ProductExtension;
-using Xbim.IO;
+using Xbim.Ifc;
+using Xbim.Ifc4.Interfaces;
+
 
 namespace XbimExchanger.IfcToCOBieLiteUK
 {
-    class MappingIfcZoneToZone : XbimMappings<XbimModel, List<Facility>, string, IfcZone, Zone>
+    class MappingIfcZoneToZone : XbimMappings<IfcStore, List<Facility>, string, IIfcZone, Zone>
     {
-        protected override Zone Mapping(IfcZone ifcZone, Zone target)
+        protected override Zone Mapping(IIfcZone ifcZone, Zone target)
         {
             var helper = ((IfcToCOBieLiteUkExchanger)Exchanger).Helper;
             target.ExternalEntity = helper.ExternalEntityName(ifcZone);
@@ -31,7 +32,7 @@ namespace XbimExchanger.IfcToCOBieLiteUK
 
             //get spaces in zones
             var spaces = helper.GetSpaces(ifcZone);
-            var ifcSpaces = spaces as IList<IfcSpace> ?? spaces.ToList();
+            var ifcSpaces = spaces as IList<IIfcSpace> ?? spaces.ToList();
             if (ifcSpaces.Any())
             {
                 target.Spaces = new List<SpaceKey>();
@@ -45,6 +46,11 @@ namespace XbimExchanger.IfcToCOBieLiteUK
             //Space Issues
             
             return target;
+        }
+
+        public override Zone CreateTargetObject()
+        {
+            return new Zone();
         }
     }
 }

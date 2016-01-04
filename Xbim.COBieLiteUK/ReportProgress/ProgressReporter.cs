@@ -1,4 +1,5 @@
 ﻿using System.Diagnostics;
+using Xbim.Common;
 
 namespace Xbim.COBieLiteUK
 {

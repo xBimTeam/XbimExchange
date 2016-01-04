@@ -2,18 +2,10 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using Xbim.Ifc2x3.UtilityResource;
-using Xbim.Ifc2x3.MeasureResource;
-using Xbim.Ifc2x3.Kernel;
-using Xbim.Ifc2x3.GeometryResource;
-using Xbim.Ifc2x3.ActorResource;
-using Xbim.Ifc2x3.ProductExtension;
-using Xbim.Ifc2x3.ExternalReferenceResource;
-using Xbim.Ifc2x3.PropertyResource;
-using Xbim.Ifc2x3.Extensions;
-using Xbim.Ifc2x3.ConstructionMgmtDomain;
-using Xbim.Ifc2x3.IO;
+
 using Xbim.IO.Esent;
+using Xbim.Ifc;
+using Xbim.Ifc4.Interfaces;
 
 namespace Xbim.COBie.Serialisers.XbimSerialiser
 {
@@ -33,14 +25,14 @@ namespace Xbim.COBie.Serialisers.XbimSerialiser
         /// <summary>
         /// Model from COBieXBimContext object
         /// </summary>
-        public XbimModel Model
+        public IfcStore Model
         {
             get { return XBimContext.Model; }
         } 
         /// <summary>
         /// World coordinate system from COBieXBimContext object
         /// </summary>
-        public IfcAxis2Placement3D WCS
+        public IIfcAxis2Placement3D WCS
         {
             get { return XBimContext.WCS; }
         }
@@ -56,7 +48,7 @@ namespace Xbim.COBie.Serialisers.XbimSerialiser
         /// <summary>
         /// Contacts from COBieXBimContext object
         /// </summary>
-        public Dictionary<string, IfcPersonAndOrganization> Contacts
+        public Dictionary<string, IIfcPersonAndOrganization> Contacts
         {
             get { return XBimContext.Contacts; }
         }
@@ -100,9 +92,9 @@ namespace Xbim.COBie.Serialisers.XbimSerialiser
         /// </summary>
         /// <param name="ifcRoot">Object to add the owner history</param>
         /// <param name="externalSystem">Application used to modify/create</param>
-        /// <param name="createdBy">IfcPersonAndOrganization object</param>
+        /// <param name="createdBy">IIfcPersonAndOrganization object</param>
         /// <param name="createdOn">Date the object was created on</param>
-        protected void SetNewOwnerHistory(IfcRoot ifcRoot, string externalSystem, IfcPersonAndOrganization createdBy, string createdOn)
+        protected void SetNewOwnerHistory(IIfcRoot ifcRoot, string externalSystem, IIfcPersonAndOrganization createdBy, string createdOn)
         { 
             ifcRoot.OwnerHistory = CreateOwnerHistory(null,  externalSystem, createdBy, createdOn);
         }
@@ -112,18 +104,18 @@ namespace Xbim.COBie.Serialisers.XbimSerialiser
         /// </summary>
         /// <param name="ifcRoot">Object to add the owner history</param>
         /// <param name="externalSystem">Application used to modify/create</param>
-        /// <param name="createdBy">IfcPersonAndOrganization object</param>
+        /// <param name="createdBy">IIfcPersonAndOrganization object</param>
         /// <param name="createdOn">Date the object was created on</param>
-        protected void SetOwnerHistory(IfcRoot ifcRoot, string externalSystem, IfcPersonAndOrganization createdBy, string createdOn)
+        protected void SetOwnerHistory(IIfcRoot ifcRoot, string externalSystem, IIfcPersonAndOrganization createdBy, string createdOn)
         {
-            IfcTimeStamp? stamp = null;
+            IIfcTimeStamp? stamp = null;
             if (ValidateString(createdOn))
             {
                 DateTime dateTime;
                 if (DateTime.TryParse(createdOn, out dateTime))
-                    stamp = IfcTimeStamp.ToTimeStamp(dateTime);
+                    stamp = IIfcTimeStamp.ToTimeStamp(dateTime);
             }
-            var ifcOwnerHistory = Model.Instances.OfType<IfcOwnerHistory>().Where(oh => (oh.CreationDate == stamp) &&
+            var ifcOwnerHistory = Model.Instances.OfType<IIfcOwnerHistory>().Where(oh => (oh.CreationDate == stamp) &&
                                                                            (oh.OwningUser == createdBy) &&
                                                                            (((oh.OwningApplication != null) && (oh.OwningApplication.ApplicationFullName.ToString().ToLower() == externalSystem.ToLower()) )||
                                                                             ((oh.LastModifyingApplication != null) && (oh.LastModifyingApplication.ApplicationFullName.ToString().ToLower() == externalSystem.ToLower()))
@@ -139,12 +131,12 @@ namespace Xbim.COBie.Serialisers.XbimSerialiser
         /// </summary>
         /// <param name="ifcRoot">Object to add the owner history</param>
         /// <param name="externalSystem">Application used to modify/create</param>
-        /// <param name="createdBy">IfcPersonAndOrganization object</param>
+        /// <param name="createdBy">IIfcPersonAndOrganization object</param>
         /// <param name="createdOn">Date the object was created on</param>
-        protected IfcOwnerHistory CreateOwnerHistory(IfcRoot ifcRoot, string externalSystem, IfcPersonAndOrganization createdBy, string createdOn)
+        protected IIfcOwnerHistory CreateOwnerHistory(IIfcRoot ifcRoot, string externalSystem, IIfcPersonAndOrganization createdBy, string createdOn)
         {
-            IfcApplication ifcApplication = null;
-            IfcOrganization ifcOrganization = null;
+            IIfcApplication ifcApplication = null;
+            IIfcOrganization ifcOrganization = null;
                 
             if (ValidateString(externalSystem))
             {
@@ -157,53 +149,53 @@ namespace Xbim.COBie.Serialisers.XbimSerialiser
 
                 //create an organization for the external system
                 var orgName = externalSystem.Split(' ').FirstOrDefault();
-                ifcOrganization = Model.Instances.OfType<IfcOrganization>().Where(o => o.Name == orgName).FirstOrDefault();
+                ifcOrganization = Model.Instances.OfType<IIfcOrganization>().Where(o => o.Name == orgName).FirstOrDefault();
                 if (ifcOrganization == null)
                 {
-                    ifcOrganization = Model.Instances.New<IfcOrganization>();
+                    ifcOrganization = Model.Instances.New<IIfcOrganization>();
                     if (ValidateString(orgName))
                         ifcOrganization.Name = orgName;
                     else
                         ifcOrganization.Name = "Unknown"; //is not an optional field so fill with unknown value
                 }
-                ifcApplication = Model.Instances.OfType<IfcApplication>().Where(app => app.ApplicationFullName == externalSystem).FirstOrDefault();
+                ifcApplication = Model.Instances.OfType<IIfcApplication>().Where(app => app.ApplicationFullName == externalSystem).FirstOrDefault();
                 if (ifcApplication == null)
-                    ifcApplication = Model.Instances.New<IfcApplication>(app =>
+                    ifcApplication = Model.Instances.New<IIfcApplication>(app =>
                     {
                         app.ApplicationFullName = externalSystem;
                         app.ApplicationDeveloper = ifcOrganization;
-                        app.Version = new IfcLabel("");
-                        app.ApplicationIdentifier = new IfcIdentifier(applicationIdentifier);
+                        app.Version = new IIfcLabel("");
+                        app.ApplicationIdentifier = new IIfcIdentifier(applicationIdentifier);
                     });
 
             }
             else
             { //Owner history OwningApplication is not an optional field so fill with unknown value
-                ifcOrganization = Model.Instances.OfType<IfcOrganization>().Where(o => o.Name == "").FirstOrDefault();
+                ifcOrganization = Model.Instances.OfType<IIfcOrganization>().Where(o => o.Name == "").FirstOrDefault();
                 if (ifcOrganization == null)
                 {
-                    ifcOrganization = Model.Instances.New<IfcOrganization>();
+                    ifcOrganization = Model.Instances.New<IIfcOrganization>();
                     ifcOrganization.Name = "Unknown"; //is not an optional field so fill with unknown value
                         
                 }
-                ifcApplication = Model.Instances.OfType<IfcApplication>().Where(app => app.ApplicationFullName == "").FirstOrDefault();
+                ifcApplication = Model.Instances.OfType<IIfcApplication>().Where(app => app.ApplicationFullName == "").FirstOrDefault();
                 if (ifcApplication == null)
-                    ifcApplication = Model.Instances.New<IfcApplication>(app =>
+                    ifcApplication = Model.Instances.New<IIfcApplication>(app =>
                     {
                         app.ApplicationFullName = ""; //required field for all properties
                         app.ApplicationDeveloper = ifcOrganization;
-                        app.Version = new IfcLabel("");
-                        app.ApplicationIdentifier = new IfcIdentifier("");
+                        app.Version = new IIfcLabel("");
+                        app.ApplicationIdentifier = new IIfcIdentifier("");
                     });
             }
 
-            IfcTimeStamp stamp = new IfcTimeStamp();
+            IIfcTimeStamp stamp = new IIfcTimeStamp();
             if (ValidateString(createdOn))
             {
                 DateTime dateTime;// = new DateTime(0, DateTimeKind.Utc);
                 if (DateTime.TryParse(createdOn, out dateTime))
                 {
-                    stamp = IfcTimeStamp.ToTimeStamp(dateTime);
+                    stamp = IIfcTimeStamp.ToTimeStamp(dateTime);
                 }
                 else
                 {
@@ -214,7 +206,7 @@ namespace Xbim.COBie.Serialisers.XbimSerialiser
                         var date = createdOn.Substring(0, idx);
                         if (DateTime.TryParse(date, out dateTime))
                         {
-                            stamp = IfcTimeStamp.ToTimeStamp(dateTime);
+                            stamp = IIfcTimeStamp.ToTimeStamp(dateTime);
                         }
                     }
                 }
@@ -230,30 +222,30 @@ namespace Xbim.COBie.Serialisers.XbimSerialiser
                 ifcRoot.OwnerHistory.OwningUser = createdBy;
                 ifcRoot.OwnerHistory.OwningApplication = ifcApplication;
                 ifcRoot.OwnerHistory.CreationDate = stamp;
-                ifcRoot.OwnerHistory.ChangeAction = IfcChangeActionEnum.MODIFIED;
+                ifcRoot.OwnerHistory.ChangeAction = IIfcChangeActionEnum.MODIFIED;
                 return ifcRoot.OwnerHistory;
             }
             else
-                return Model.Instances.New<IfcOwnerHistory>(oh =>
+                return Model.Instances.New<IIfcOwnerHistory>(oh =>
                                                 {
                                                     oh.OwningUser = createdBy;
                                                     oh.OwningApplication = ifcApplication;
                                                     oh.LastModifyingApplication = ifcApplication;
                                                     oh.CreationDate = stamp;
-                                                    oh.ChangeAction = IfcChangeActionEnum.NOCHANGE;
+                                                    oh.ChangeAction = IIfcChangeActionEnum.NOCHANGE;
                                                 });
 
             
         }
 
         /// <summary>
-        /// Set the user history to a IfcRoot object
+        /// Set the user history to a IIfcRoot object
         /// </summary>
         /// <param name="ifcRoot">Object to set owner history</param>
         /// <param name="extSystem">External system string</param>
         /// <param name="createdBy">Email address of creator</param>
         /// <param name="createdOn">Created on date as string</param>
-        protected void SetUserHistory(IfcRoot ifcRoot, string extSystem, string createdBy, string createdOn)
+        protected void SetUserHistory(IIfcRoot ifcRoot, string extSystem, string createdBy, string createdOn)
         {
             if ((ValidateString(createdBy)) && (Contacts.ContainsKey(createdBy)))
                 SetNewOwnerHistory(ifcRoot, extSystem, Contacts[createdBy], createdOn);
@@ -265,21 +257,21 @@ namespace Xbim.COBie.Serialisers.XbimSerialiser
 
 
         /// <summary>
-        /// Set the IfcPersonAndOrganization from using email only
+        /// Set the IIfcPersonAndOrganization from using email only
         /// </summary>
         /// <param name="email">email</param>
-        protected IfcPersonAndOrganization SetEmailUser(string email)
+        protected IIfcPersonAndOrganization SetEmailUser(string email)
         {
             if (!Contacts.ContainsKey(email)) //should filter on merge also unless Contacts is reset
             {
-                var ifcPerson = Model.Instances.New<IfcPerson>();
-                var ifcOrganization = Model.Instances.New<IfcOrganization>();
-                var ifcPersonAndOrganization = Model.Instances.New<IfcPersonAndOrganization>();
+                var ifcPerson = Model.Instances.New<IIfcPerson>();
+                var ifcOrganization = Model.Instances.New<IIfcOrganization>();
+                var ifcPersonAndOrganization = Model.Instances.New<IIfcPersonAndOrganization>();
             
                 Contacts.Add(email, ifcPersonAndOrganization); //build a list to reference for History objects
 
                 //add email
-                var ifcTelecomAddress = Model.Instances.New<IfcTelecomAddress>();
+                var ifcTelecomAddress = Model.Instances.New<IIfcTelecomAddress>();
                 if (ValidateString(email))
                 {
                     ifcTelecomAddress.ElectronicMailAddresses.Add(email); //add to existing collection
@@ -287,7 +279,7 @@ namespace Xbim.COBie.Serialisers.XbimSerialiser
                 //add Company
                 ifcOrganization.Name = "Unknown"; //is not an optional field so fill with unknown value
 
-                var ifcPostalAddress = Model.Instances.New<IfcPostalAddress>();
+                var ifcPostalAddress = Model.Instances.New<IIfcPostalAddress>();
                 //add Telecom Address
                 ifcPerson.Addresses.Add(ifcTelecomAddress);//add to existing collection
                 // Add blank postal address
@@ -313,25 +305,25 @@ namespace Xbim.COBie.Serialisers.XbimSerialiser
         }
 
         /// <summary>
-        /// Get the IfcBuilding Object
+        /// Get the IIfcBuilding Object
         /// </summary>
-        /// <returns>IfcBuilding Object</returns>
-        protected IfcBuilding GetBuilding()
+        /// <returns>IIfcBuilding Object</returns>
+        protected IIfcBuilding GetBuilding()
         {
-            var ifcBuildings = Model.Instances.OfType<IfcBuilding>();
+            var ifcBuildings = Model.Instances.OfType<IIfcBuilding>();
             if ((ifcBuildings.Count() > 1) || (ifcBuildings.Count() == 0))
-                throw new Exception(string.Format("COBieXBimSerialiser: Expecting one IfcBuilding, Found {0}", ifcBuildings.Count().ToString()));
+                throw new Exception(string.Format("COBieXBimSerialiser: Expecting one IIfcBuilding, Found {0}", ifcBuildings.Count().ToString()));
             return ifcBuildings.FirstOrDefault();
         }
         /// <summary>
-        /// Get the IfcSite Object
+        /// Get the IIfcSite Object
         /// </summary>
-        /// <returns>IfcSite Object</returns>
-        protected IfcSite GetSite()
+        /// <returns>IIfcSite Object</returns>
+        protected IIfcSite GetSite()
         {
-            var ifcSites = Model.Instances.OfType<IfcSite>();
+            var ifcSites = Model.Instances.OfType<IIfcSite>();
             if ((ifcSites.Count() > 1) || (ifcSites.Count() == 0))
-                throw new Exception(string.Format("COBieXBimSerialiser: Expecting one IfcSite, Found {0}", ifcSites.Count().ToString()));
+                throw new Exception(string.Format("COBieXBimSerialiser: Expecting one IIfcSite, Found {0}", ifcSites.Count().ToString()));
             return ifcSites.FirstOrDefault();
         }
         /// <summary>
@@ -348,20 +340,20 @@ namespace Xbim.COBie.Serialisers.XbimSerialiser
                 return null;
         }
 
-        protected IfcBuildingStorey GetBuildingStory (string name)
+        protected IIfcBuildingStorey GetBuildingStory (string name)
         {
-            var ifcBuildingStoreys = Model.Instances.OfType<IfcBuildingStorey>().Where(bs => bs.Name == name);
+            var ifcBuildingStoreys = Model.Instances.OfType<IIfcBuildingStorey>().Where(bs => bs.Name == name);
             if ((ifcBuildingStoreys.Count() > 1) || (ifcBuildingStoreys.Count() == 0))
-                throw new Exception(string.Format("COBieXBimSerialiser: Expecting one IfcBuildingStorey with name of {1}, Found {0}", ifcBuildingStoreys.Count().ToString(), name));
+                throw new Exception(string.Format("COBieXBimSerialiser: Expecting one IIfcBuildingStorey with name of {1}, Found {0}", ifcBuildingStoreys.Count().ToString(), name));
             return ifcBuildingStoreys.FirstOrDefault();
         }
 
         /// <summary>
-        /// Add Category via the IfcRelAssociatesClassification object
+        /// Add Category via the IIfcRelAssociatesClassification object
         /// </summary>
-        /// <param name="category">Category for this IfcRoot Object</param>
-        /// <param name="ifcRoot">IfcRoot derived object to all category to</param>
-        protected void AddCategory(string category, IfcRoot ifcRoot)
+        /// <param name="category">Category for this IIfcRoot Object</param>
+        /// <param name="ifcRoot">IIfcRoot derived object to all category to</param>
+        protected void AddCategory(string category, IIfcRoot ifcRoot)
         {
             if (ValidateString(category))
             {
@@ -378,21 +370,21 @@ namespace Xbim.COBie.Serialisers.XbimSerialiser
                     name = category.Trim();
 
             
-                //check to see if we have a IfcRelAssociatesClassification associated with this category
-                var ifcRelAssociatesClassification = Model.Instances.OfType<IfcRelAssociatesClassification>()
+                //check to see if we have a IIfcRelAssociatesClassification associated with this category
+                var ifcRelAssociatesClassification = Model.Instances.OfType<IIfcRelAssociatesClassification>()
                                     .Where(rac => rac.RelatingClassification != null 
-                                        && (rac.RelatingClassification is IfcClassificationReference)
-                                        && (   ((((IfcClassificationReference)rac.RelatingClassification).ItemReference.ToString().ToLower() == itemReference.ToLower())
-                                            &&  (((IfcClassificationReference)rac.RelatingClassification).Name.ToString().ToLower() == name.ToLower())
+                                        && (rac.RelatingClassification is IIfcClassificationReference)
+                                        && (   ((((IIfcClassificationReference)rac.RelatingClassification).ItemReference.ToString().ToLower() == itemReference.ToLower())
+                                            &&  (((IIfcClassificationReference)rac.RelatingClassification).Name.ToString().ToLower() == name.ToLower())
                                                )
-                                            || (((IfcClassificationReference)rac.RelatingClassification).Location.ToString().ToLower() == category.ToLower())
+                                            || (((IIfcClassificationReference)rac.RelatingClassification).Location.ToString().ToLower() == category.ToLower())
                                             )
                                         )
                                     .FirstOrDefault();
                 if (ifcRelAssociatesClassification == null)
                 {
-                    //check we have a IfcClassificationReference holding the category
-                    var ifcClassificationReference = Model.Instances.OfType<IfcClassificationReference>()
+                    //check we have a IIfcClassificationReference holding the category
+                    var ifcClassificationReference = Model.Instances.OfType<IIfcClassificationReference>()
                                     .Where(cr =>(  (cr.ItemReference.ToString().ToLower() == itemReference.ToLower())
                                                 && (cr.Name.ToString().ToLower() == name.ToLower())
                                                 )
@@ -401,33 +393,33 @@ namespace Xbim.COBie.Serialisers.XbimSerialiser
                                     .FirstOrDefault();
 
                     if (ifcClassificationReference == null) //create if required
-                        ifcClassificationReference = Model.Instances.New<IfcClassificationReference>(ifcCR => { ifcCR.ItemReference = itemReference; ifcCR.Name = name; ifcCR.Location = category; });
-                    //create new IfcRelAssociatesClassification holding a IfcClassificationReference with Location set to the category value
-                    ifcRelAssociatesClassification = Model.Instances.New<IfcRelAssociatesClassification>(ifcRAC => { ifcRAC.RelatingClassification = ifcClassificationReference; ifcRAC.RelatedObjects.Add(ifcRoot); });
+                        ifcClassificationReference = Model.Instances.New<IIfcClassificationReference>(ifcCR => { ifcCR.ItemReference = itemReference; ifcCR.Name = name; ifcCR.Location = category; });
+                    //create new IIfcRelAssociatesClassification holding a IIfcClassificationReference with Location set to the category value
+                    ifcRelAssociatesClassification = Model.Instances.New<IIfcRelAssociatesClassification>(ifcRAC => { ifcRAC.RelatingClassification = ifcClassificationReference; ifcRAC.RelatedObjects.Add(ifcRoot); });
                 }
                 else
                 {
-                    //we have a IfcRelAssociatesClassification so just add this IfcRoot object to the RelatedObjects collection
+                    //we have a IIfcRelAssociatesClassification so just add this IIfcRoot object to the RelatedObjects collection
                     ifcRelAssociatesClassification.RelatedObjects.Add(ifcRoot);
                 }
             }
         }
 
         /// <summary>
-        /// Add GlobalId to the IfcRoot Object
+        /// Add GlobalId to the IIfcRoot Object
         /// </summary>
         /// <param name="extId">string representing the global Id</param>
-        /// <param name="ifcRoot">IfcRoot derived object to add GlobalId too</param>
-        protected void AddGlobalId(string extId, IfcRoot ifcRoot)
+        /// <param name="ifcRoot">IIfcRoot derived object to add GlobalId too</param>
+        protected void AddGlobalId(string extId, IIfcRoot ifcRoot)
         {
             if (ValidateString(extId))
             {
-                var id = new IfcGloballyUniqueId(extId);
+                var id = new IIfcGloballyUniqueId(extId);
                 ifcRoot.GlobalId = id;
             }
             else //if null passed then create a new Guid
             {
-                ifcRoot.GlobalId = new IfcGloballyUniqueId(Guid.NewGuid());
+                ifcRoot.GlobalId = new IIfcGloballyUniqueId(Guid.NewGuid());
             }
         }
 
@@ -440,9 +432,9 @@ namespace Xbim.COBie.Serialisers.XbimSerialiser
         {
 
             Guid guid;
-            var isGuid = IfcGloballyUniqueId.TryConvertFromBase64(extId, out guid);
+            var isGuid = IIfcGloballyUniqueId.TryConvertFromBase64(extId, out guid);
             if (!isGuid) return false;
-            var guidStr = IfcGloballyUniqueId.ConvertToBase64(guid);
+            var guidStr = IIfcGloballyUniqueId.ConvertToBase64(guid);
             if (extId != guidStr) return false;
             else return true;
         }
@@ -453,7 +445,7 @@ namespace Xbim.COBie.Serialisers.XbimSerialiser
         /// <param name="obj">Object holding the property</param>
         /// <param name="pSetName">Property set name</param>
         /// <param name="pSetDescription">Property set description</param>
-        private static void SetPropertySetDescription(IfcObject obj, string pSetName, string pSetDescription)
+        private static void SetPropertySetDescription(IIfcObject obj, string pSetName, string pSetDescription)
         {
             if (!string.IsNullOrEmpty(pSetDescription))
             {
@@ -471,10 +463,10 @@ namespace Xbim.COBie.Serialisers.XbimSerialiser
         /// <param name="pSetDescription">Property set description or null to leave unaltered</param>
         /// <param name="propertyName">Property single value name</param>
         /// <param name="propertyDescription">Property single value description or null to not set</param>
-        /// <param name="value">IfcValue select type to set on property single value</param>
-        protected IfcPropertySingleValue AddPropertySingleValue(IfcObject ifcObject, string pSetName, string pSetDescription, string propertyName, string propertyDescription, IfcValue value)
+        /// <param name="value">IIfcValue select type to set on property single value</param>
+        protected IIfcPropertySingleValue AddPropertySingleValue(IIfcObject ifcObject, string pSetName, string pSetDescription, string propertyName, string propertyDescription, IIfcValue value)
         {
-            if (string.IsNullOrEmpty(propertyName)) //required value on IfcPropertySingleValue
+            if (string.IsNullOrEmpty(propertyName)) //required value on IIfcPropertySingleValue
                 if ((value != null) && (!string.IsNullOrEmpty(value.ToString())))
                     propertyName = value.ToString();
                 else
@@ -492,18 +484,18 @@ namespace Xbim.COBie.Serialisers.XbimSerialiser
         /// <summary>
         /// Add a property set or use existing if it exists
         /// </summary>
-        /// <param name="ifcObject">IfcObject to add property set too</param>
+        /// <param name="ifcObject">IIfcObject to add property set too</param>
         /// <param name="pSetName">name of the property set</param>
-        protected IfcPropertySet AddPropertySet(IfcObject ifcObject, string pSetName, string pSetDescription)
+        protected IIfcPropertySet AddPropertySet(IIfcObject ifcObject, string pSetName, string pSetDescription)
         {
             var ifcPropertySet = ifcObject.GetPropertySet(pSetName);
             if (ifcPropertySet == null)
             {
-                ifcPropertySet = Model.Instances.New<IfcPropertySet>();
+                ifcPropertySet = Model.Instances.New<IIfcPropertySet>();
                 ifcPropertySet.Name = pSetName;
                 ifcPropertySet.Description = pSetDescription;
                 //set relationship
-                var ifcRelDefinesByProperties = Model.Instances.New<IfcRelDefinesByProperties>();
+                var ifcRelDefinesByProperties = Model.Instances.New<IIfcRelDefinesByProperties>();
                 ifcRelDefinesByProperties.RelatingPropertyDefinition = ifcPropertySet;
                 ifcRelDefinesByProperties.RelatedObjects.Add(ifcObject);
             }
@@ -513,14 +505,14 @@ namespace Xbim.COBie.Serialisers.XbimSerialiser
         /// <summary>
         /// Add a property set or use existing if it exists
         /// </summary>
-        /// <param name="ifcObject">IfcObject to add property set too</param>
+        /// <param name="ifcObject">IIfcObject to add property set too</param>
         /// <param name="pSetName">name of the property set</param>
-        protected IfcPropertySet AddPropertySet(IfcTypeObject ifcObject, string pSetName, string pSetDescription)
+        protected IIfcPropertySet AddPropertySet(IIfcTypeObject ifcObject, string pSetName, string pSetDescription)
         {
             var ifcPropertySet = ifcObject.GetPropertySet(pSetName);
             if (ifcPropertySet == null)
             {
-                ifcPropertySet = Model.Instances.New<IfcPropertySet>();
+                ifcPropertySet = Model.Instances.New<IIfcPropertySet>();
                 ifcPropertySet.Name = pSetName;
                 ifcPropertySet.Description = pSetDescription;
                 //add to type object property set list
@@ -531,17 +523,17 @@ namespace Xbim.COBie.Serialisers.XbimSerialiser
         /// <summary>
         /// Add a property single value or use existing if it exists
         /// </summary>
-        /// <param name="ifcPropertySet">IfcPropertySet object</param>
+        /// <param name="ifcPropertySet">IIfcPropertySet object</param>
         /// <param name="propertyName">Single Value Property Name</param>
         /// <param name="propertyDescription">Single Value Property Description</param>
-        /// <param name="value">IfcValue object</param>
-        protected IfcPropertySingleValue AddPropertySingleValue(IfcPropertySet ifcPropertySet, string propertyName, string propertyDescription, IfcValue value, IfcUnit unit)
+        /// <param name="value">IIfcValue object</param>
+        protected IIfcPropertySingleValue AddPropertySingleValue(IIfcPropertySet ifcPropertySet, string propertyName, string propertyDescription, IIfcValue value, IIfcUnit unit)
         {
             //see if we have this property single value, if so overwrite the value
-            var ifcPropertySingleValue = ifcPropertySet.HasProperties.Where<IfcPropertySingleValue>(p => p.Name == propertyName).FirstOrDefault();
+            var ifcPropertySingleValue = ifcPropertySet.HasProperties.Where<IIfcPropertySingleValue>(p => p.Name == propertyName).FirstOrDefault();
             if (ifcPropertySingleValue == null)
             {
-                if (string.IsNullOrEmpty(propertyName))//required value on IfcPropertySingleValue
+                if (string.IsNullOrEmpty(propertyName))//required value on IIfcPropertySingleValue
                 {
                     if ((value != null) && (!string.IsNullOrEmpty(value.ToString())))
                         propertyName = value.ToString();
@@ -549,7 +541,7 @@ namespace Xbim.COBie.Serialisers.XbimSerialiser
                         propertyName = "";
                     
                 }
-                ifcPropertySingleValue = Model.Instances.New<IfcPropertySingleValue>(psv => { psv.Name = propertyName; psv.Description = propertyDescription;  });
+                ifcPropertySingleValue = Model.Instances.New<IIfcPropertySingleValue>(psv => { psv.Name = propertyName; psv.Description = propertyDescription;  });
             }
             ifcPropertySingleValue.NominalValue = value;
             ifcPropertySingleValue.Unit = unit;
@@ -561,16 +553,16 @@ namespace Xbim.COBie.Serialisers.XbimSerialiser
         /// <summary>
         /// Add a new Property Enumerated Value or use existing
         /// </summary>
-        /// <param name="ifcPropertySet">IfcPropertySet object</param>
+        /// <param name="ifcPropertySet">IIfcPropertySet object</param>
         /// <param name="propertyName">Property Enumerated Value Name</param>
         /// <param name="propertyDescription">Property Enumerated Value Description</param>
         /// <param name="values">Property Enumerated Value list of values</param>
         /// <param name="enumValues">Property Enumerated Value possible enumeration values</param>
         /// <param name="unit">Unit for the enumValues values</param>
         /// <returns></returns>
-        protected IfcPropertyEnumeratedValue AddPropertyEnumeratedValue(IfcPropertySet ifcPropertySet, string propertyName, string propertyDescription, IfcValue[] values, IfcValue[] enumValues, IfcUnit unit)
+        protected IIfcPropertyEnumeratedValue AddPropertyEnumeratedValue(IIfcPropertySet ifcPropertySet, string propertyName, string propertyDescription, IIfcValue[] values, IIfcValue[] enumValues, IIfcUnit unit)
         {
-            var ifcPropertyEnumeratedValue = ifcPropertySet.HasProperties.Where<IfcPropertyEnumeratedValue>(p => p.Name == propertyName).FirstOrDefault();
+            var ifcPropertyEnumeratedValue = ifcPropertySet.HasProperties.Where<IIfcPropertyEnumeratedValue>(p => p.Name == propertyName).FirstOrDefault();
 
             if (ifcPropertyEnumeratedValue != null)
             {
@@ -579,8 +571,8 @@ namespace Xbim.COBie.Serialisers.XbimSerialiser
             }
             else
             {
-                ifcPropertyEnumeratedValue = Model.Instances.New<IfcPropertyEnumeratedValue>();
-                ifcPropertyEnumeratedValue.EnumerationReference = Model.Instances.New<IfcPropertyEnumeration>();
+                ifcPropertyEnumeratedValue = Model.Instances.New<IIfcPropertyEnumeratedValue>();
+                ifcPropertyEnumeratedValue.EnumerationReference = Model.Instances.New<IIfcPropertyEnumeration>();
                 ifcPropertyEnumeratedValue.EnumerationReference.Name = "";
             }
             //fill values
@@ -622,10 +614,10 @@ namespace Xbim.COBie.Serialisers.XbimSerialiser
         /// <param name="values">delimited string of paired values(xxx:xxx)(xxx:xxx)....(xxx:xxx)</param>
         /// <param name="expression">string</param>
         /// <param name="unit">delimited string of paired unit values xxx:xxx</param>
-        /// <returns>IfcPropertyTableValue</returns>
-        protected IfcPropertyTableValue AddPropertyTableValue(IfcPropertySet ifcPropertySet, string propertyName, string propertyDescription, string values, string expression, string unit)
+        /// <returns>IIfcPropertyTableValue</returns>
+        protected IIfcPropertyTableValue AddPropertyTableValue(IIfcPropertySet ifcPropertySet, string propertyName, string propertyDescription, string values, string expression, string unit)
         {
-            var ifcPropertyTableValue = ifcPropertySet.HasProperties.Where<IfcPropertyTableValue>(p => p.Name == propertyName).FirstOrDefault();
+            var ifcPropertyTableValue = ifcPropertySet.HasProperties.Where<IIfcPropertyTableValue>(p => p.Name == propertyName).FirstOrDefault();
 
             if (ifcPropertyTableValue != null)
             {
@@ -634,7 +626,7 @@ namespace Xbim.COBie.Serialisers.XbimSerialiser
             }
             else
             {
-                ifcPropertyTableValue = Model.Instances.New<IfcPropertyTableValue>();
+                ifcPropertyTableValue = Model.Instances.New<IIfcPropertyTableValue>();
             }
 
             //fill values
@@ -665,8 +657,8 @@ namespace Xbim.COBie.Serialisers.XbimSerialiser
             if (ValidateString(unit))
             {
                 var strValues = unit.Split(':');
-                var definingUnit = GetIfcUnit(strValues.First());
-                var definedUnit = GetIfcUnit(strValues.Last());
+                var definingUnit = GetIIfcUnit(strValues.First());
+                var definedUnit = GetIIfcUnit(strValues.Last());
 
                 if (definingUnit != null)
                     ifcPropertyTableValue.DefiningUnit = definingUnit;
@@ -682,40 +674,40 @@ namespace Xbim.COBie.Serialisers.XbimSerialiser
         }
 
         /// <summary>
-        /// create a IfcValue array from a delimited string, either "," or ":" delimited
+        /// create a IIfcValue array from a delimited string, either "," or ":" delimited
         /// </summary>
         /// <param name="value">string</param>
-        /// <returns>IfcValue[]</returns>
-        public IfcValue[] GetValueArray(string value)
+        /// <returns>IIfcValue[]</returns>
+        public IIfcValue[] GetValueArray(string value)
         {
             var splitKey = GetSplitChar(value);
             double number;
-            IfcValue[] ifcValues;
+            IIfcValue[] ifcValues;
             var strValues = value.Split(splitKey);
-            ifcValues = new IfcValue[strValues.Length];
+            ifcValues = new IIfcValue[strValues.Length];
             for (var i = 0; i < strValues.Length; i++)
             {
                 var str = strValues[i].Trim();//.Replace(" ", ""); //enumeration so remove spaces, now assume user entered correctly
                 if (double.TryParse(str, out number))
-                    ifcValues[i] = new IfcReal((double)number);
+                    ifcValues[i] = new IIfcReal((double)number);
                 else
-                    ifcValues[i] = new IfcLabel(str);
+                    ifcValues[i] = new IIfcLabel(str);
             }
             return ifcValues;
         }
 
         /// <summary>
-        /// Convert a string into an IfcUnit
+        /// Convert a string into an IIfcUnit
         /// </summary>
         /// <param name="unit">unit</param>
-        /// <returns>IfcUnit or null on fail</returns>
-        protected IfcUnit GetIfcUnit(string unit)
+        /// <returns>IIfcUnit or null on fail</returns>
+        protected IIfcUnit GetIIfcUnit(string unit)
         {
-            IfcUnit ifcUnit = null;
+            IIfcUnit ifcUnit = null;
             if (ValidateString(unit))
             {
                 ifcUnit = GetDurationUnit(unit); //see if time unit
-                //see if we can convert to a IfcSIUnit
+                //see if we can convert to a IIfcSIUnit
                 if (ifcUnit == null)
                     ifcUnit = GetSIUnit(unit);
                 //OK set as a user defined
@@ -758,14 +750,14 @@ namespace Xbim.COBie.Serialisers.XbimSerialiser
         /// <summary>
         /// Set or change a Property Set description value
         /// </summary>
-        /// <param name="obj">IfcTypeObject holding the property</param>
+        /// <param name="obj">IIfcTypeObject holding the property</param>
         /// <param name="pSetName">Property set name</param>
         /// <param name="pSetDescription">Property set description</param>
-        private void SetPropertySetDescription(IfcTypeObject obj, string pSetName, string pSetDescription)
+        private void SetPropertySetDescription(IIfcTypeObject obj, string pSetName, string pSetDescription)
         {
             if (!string.IsNullOrEmpty(pSetDescription))
             {
-                var ifcPropertySet = obj.HasPropertySets.OfType<IfcPropertySet>().Where(r => r.Name == pSetName).FirstOrDefault();
+                var ifcPropertySet = obj.HasPropertySets.OfType<IIfcPropertySet>().Where(r => r.Name == pSetName).FirstOrDefault();
                 if (ifcPropertySet != null)
                     ifcPropertySet.Description = pSetDescription;
             }
@@ -774,15 +766,15 @@ namespace Xbim.COBie.Serialisers.XbimSerialiser
         /// <summary>
         /// Add a property single value
         /// </summary>
-        /// <param name="IfcTypeObject">Object to add property too</param>
+        /// <param name="IIfcTypeObject">Object to add property too</param>
         /// <param name="pSetName">Property set name to add property single value too</param>
         /// <param name="pSetDescription">Property set description or null to leave unaltered</param>
         /// <param name="propertyName">Property single value name</param>
         /// <param name="propertyDescription">Property single value description or null to not set</param>
-        /// <param name="value">IfcValue select type to set on property single value</param>
-        protected IfcPropertySingleValue AddPropertySingleValue(IfcTypeObject ifcObject, string pSetName, string pSetDescription, string propertyName, string propertyDescription, IfcValue value)
+        /// <param name="value">IIfcValue select type to set on property single value</param>
+        protected IIfcPropertySingleValue AddPropertySingleValue(IIfcTypeObject ifcObject, string pSetName, string pSetDescription, string propertyName, string propertyDescription, IIfcValue value)
         {
-            if (string.IsNullOrEmpty(propertyName))//required value on IfcPropertySingleValue
+            if (string.IsNullOrEmpty(propertyName))//required value on IIfcPropertySingleValue
             {
                 if ((value != null) && (!string.IsNullOrEmpty(value.ToString())))
                     propertyName = value.ToString();
@@ -803,21 +795,21 @@ namespace Xbim.COBie.Serialisers.XbimSerialiser
         /// Get the Duration unit, default year on no match
         /// </summary>
         /// <param name="requiredUnit">string of year, month or week</param>
-        protected IfcConversionBasedUnit GetDurationUnit(string requiredUnit)
+        protected IIfcConversionBasedUnit GetDurationUnit(string requiredUnit)
         {
             switch (requiredUnit.ToLower())
             {
                 case "year":
-                    return XBimContext.IfcConversionBasedUnitYear;
+                    return XBimContext.IIfcConversionBasedUnitYear;
                     
                 case "month":
-                    return XBimContext.IfcConversionBasedUnitMonth;
+                    return XBimContext.IIfcConversionBasedUnitMonth;
                    
                 case "week":
-                    return XBimContext.IfcConversionBasedUnitWeek;
+                    return XBimContext.IIfcConversionBasedUnitWeek;
 
                 case "minute":
-                    return XBimContext.IfcConversionBasedUnitMinute;
+                    return XBimContext.IIfcConversionBasedUnitMinute;
 
                 default:
                     return null;
@@ -825,13 +817,13 @@ namespace Xbim.COBie.Serialisers.XbimSerialiser
         }
 
         /// <summary>
-        /// Create a user defined unit via IfcContextDependentUnit
+        /// Create a user defined unit via IIfcContextDependentUnit
         /// </summary>
         /// <param name="unitName"></param>
         /// <returns></returns>
-        protected IfcContextDependentUnit SetContextDependentUnit(string unitName)
+        protected IIfcContextDependentUnit SetContextDependentUnit(string unitName)
         {
-            return Model.Instances.New<IfcContextDependentUnit>(cdu => 
+            return Model.Instances.New<IIfcContextDependentUnit>(cdu => 
             {
                 cdu.Name = unitName;
                 cdu.UnitType = IfcUnitEnum.USERDEFINED;
@@ -839,22 +831,22 @@ namespace Xbim.COBie.Serialisers.XbimSerialiser
             });
         }
 
-        protected IfcSIUnit GetSIUnit(string value)
+        protected IIfcSIUnit GetSIUnit(string value)
         {
             IfcSIUnitName? returnUnit;
             IfcSIPrefix? returnPrefix;
-            IfcSIUnit ifcSIUnit = null;
+            IIfcSIUnit ifcSIUnit = null;
 
             if (GetUnitEnumerations(value, out returnUnit, out returnPrefix))
             {
-                IEnumerable<IfcSIUnit> ifcSIUnits;
+                IEnumerable<IIfcSIUnit> ifcSIUnits;
                 if (returnPrefix != null)
                 {
-                    ifcSIUnits = Model.Instances.Where<IfcSIUnit>(siu => (siu.Name == (IfcSIUnitName)returnUnit) && (siu.Prefix == (IfcSIPrefix)returnPrefix));
+                    ifcSIUnits = Model.Instances.Where<IIfcSIUnit>(siu => (siu.Name == (IfcSIUnitName)returnUnit) && (siu.Prefix == (IfcSIPrefix)returnPrefix));
                 }
                 else
                 {
-                    ifcSIUnits = Model.Instances.Where<IfcSIUnit>(siu => siu.Name == (IfcSIUnitName)returnUnit && siu.Prefix == null);
+                    ifcSIUnits = Model.Instances.Where<IIfcSIUnit>(siu => siu.Name == (IfcSIUnitName)returnUnit && siu.Prefix == null);
                 }
                 
                 if (ifcSIUnits.Any())
@@ -864,7 +856,7 @@ namespace Xbim.COBie.Serialisers.XbimSerialiser
                 else
                 {
                     var IfcUnitEnum = MappingUnitType((IfcSIUnitName)returnUnit); //get the unit type for the IfcSIUnitName
-                    ifcSIUnit = Model.Instances.New<IfcSIUnit>(si =>
+                    ifcSIUnit = Model.Instances.New<IIfcSIUnit>(si =>
                                             {
                                                 si.UnitType = IfcUnitEnum;
                                                 si.Name = (IfcSIUnitName)returnUnit;
@@ -1043,11 +1035,11 @@ namespace Xbim.COBie.Serialisers.XbimSerialiser
         
 
         /// <summary>
-        /// Determined the sheet the IfcRoot will have come from using the object type
+        /// Determined the sheet the IIfcRoot will have come from using the object type
         /// </summary>
-        /// <param name="ifcItem">object which inherits from IfcRoot </param>
+        /// <param name="ifcItem">object which inherits from IIfcRoot </param>
         /// <returns>string holding sheet name</returns>
-        public IfcRoot GetRootObject(string sheetName, string rowName)
+        public IIfcRoot GetRootObject(string sheetName, string rowName)
         {
             //ensure we have worksheet name format 
             sheetName = sheetName.ToLower().Trim();
@@ -1057,48 +1049,48 @@ namespace Xbim.COBie.Serialisers.XbimSerialiser
             switch (sheetName)
             {
                 case Constants.WORKSHEET_TYPE:
-                    var ifcTypeObject = Model.Instances.Where<IfcTypeObject>(obj => obj.Name.ToString().ToLower().Trim() == rowName).FirstOrDefault();
+                    var ifcTypeObject = Model.Instances.Where<IIfcTypeObject>(obj => obj.Name.ToString().ToLower().Trim() == rowName).FirstOrDefault();
                     //if no Type Object create one to maintain relationship
                     if (ifcTypeObject == null)
                     {
-                        ifcTypeObject = Model.Instances.New<IfcBuildingElementProxyType>();
+                        ifcTypeObject = Model.Instances.New<IIfcBuildingElementProxyType>();
                         ifcTypeObject.Name = objName;
                     }
                     return ifcTypeObject;
                 case Constants.WORKSHEET_COMPONENT:
-                    var ifcElement = Model.Instances.Where<IfcElement>(obj => obj.Name.ToString().ToLower().Trim() == rowName).FirstOrDefault();
+                    var ifcElement = Model.Instances.Where<IIfcElement>(obj => obj.Name.ToString().ToLower().Trim() == rowName).FirstOrDefault();
                     //if no Element Object create one to maintain relationship
                     if (ifcElement == null)
                     {
-                        ifcElement = Model.Instances.New<IfcVirtualElement>();
+                        ifcElement = Model.Instances.New<IIfcVirtualElement>();
                         ifcElement.Name = objName;
                     }
                     return ifcElement;
                 case Constants.WORKSHEET_JOB:
-                    return Model.Instances.Where<IfcProcess>(obj => obj.Name.ToString().ToLower().Trim() == rowName).FirstOrDefault();
+                    return Model.Instances.Where<IIfcProcess>(obj => obj.Name.ToString().ToLower().Trim() == rowName).FirstOrDefault();
                 case Constants.WORKSHEET_ASSEMBLY:
-                    return Model.Instances.Where<IfcRelDecomposes>(obj => obj.Name.ToString().ToLower().Trim() == rowName).FirstOrDefault();
+                    return Model.Instances.Where<IIfcRelDecomposes>(obj => obj.Name.ToString().ToLower().Trim() == rowName).FirstOrDefault();
                 case Constants.WORKSHEET_CONNECTION:
-                    return Model.Instances.Where<IfcRelConnectsElements>(obj => obj.Name.ToString().ToLower().Trim() == rowName).FirstOrDefault();
+                    return Model.Instances.Where<IIfcRelConnectsElements>(obj => obj.Name.ToString().ToLower().Trim() == rowName).FirstOrDefault();
                 case Constants.WORKSHEET_FACILITY:
-                    IfcRoot ifcRoot = Model.Instances.Where<IfcSite>(obj => obj.Name.ToString().ToLower().Trim() == rowName).FirstOrDefault();
+                    IIfcRoot ifcRoot = Model.Instances.Where<IIfcSite>(obj => obj.Name.ToString().ToLower().Trim() == rowName).FirstOrDefault();
                     if (ifcRoot == null)
-                        ifcRoot = Model.Instances.Where<IfcBuilding>(obj => obj.Name.ToString().ToLower().Trim() == rowName).FirstOrDefault();
+                        ifcRoot = Model.Instances.Where<IIfcBuilding>(obj => obj.Name.ToString().ToLower().Trim() == rowName).FirstOrDefault();
                     if (ifcRoot == null)
-                        ifcRoot = Model.Instances.Where<IfcProject>(obj => obj.Name.ToString().ToLower().Trim() == rowName).FirstOrDefault();
+                        ifcRoot = Model.Instances.Where<IIfcProject>(obj => obj.Name.ToString().ToLower().Trim() == rowName).FirstOrDefault();
 	                return ifcRoot;
                 case Constants.WORKSHEET_FLOOR:
-                    return Model.Instances.Where<IfcBuildingStorey>(to => to.Name.ToString().ToLower().Trim() == rowName).FirstOrDefault();
+                    return Model.Instances.Where<IIfcBuildingStorey>(to => to.Name.ToString().ToLower().Trim() == rowName).FirstOrDefault();
                 case Constants.WORKSHEET_RESOURCE:
-                    return Model.Instances.Where<IfcConstructionEquipmentResource>(obj => obj.Name.ToString().ToLower().Trim() == rowName).FirstOrDefault();
+                    return Model.Instances.Where<IIfcConstructionEquipmentResource>(obj => obj.Name.ToString().ToLower().Trim() == rowName).FirstOrDefault();
                 case Constants.WORKSHEET_SPACE:
-                    return Model.Instances.Where<IfcSpace>(obj => obj.Name.ToString().ToLower().Trim() == rowName).FirstOrDefault();
+                    return Model.Instances.Where<IIfcSpace>(obj => obj.Name.ToString().ToLower().Trim() == rowName).FirstOrDefault();
                 case Constants.WORKSHEET_SPARE:
-                    return Model.Instances.Where<IfcConstructionProductResource>(obj => obj.Name.ToString().ToLower().Trim() == rowName).FirstOrDefault();
+                    return Model.Instances.Where<IIfcConstructionProductResource>(obj => obj.Name.ToString().ToLower().Trim() == rowName).FirstOrDefault();
                 case Constants.WORKSHEET_SYSTEM:
-                    return Model.Instances.Where<IfcGroup>(obj => obj.Name.ToString().ToLower().Trim() == rowName).FirstOrDefault();
+                    return Model.Instances.Where<IIfcGroup>(obj => obj.Name.ToString().ToLower().Trim() == rowName).FirstOrDefault();
                 case Constants.WORKSHEET_ZONE:
-                    return Model.Instances.Where<IfcZone>(obj => obj.Name.ToString().ToLower().Trim() == rowName).FirstOrDefault();
+                    return Model.Instances.Where<IIfcZone>(obj => obj.Name.ToString().ToLower().Trim() == rowName).FirstOrDefault();
                 default:
                     return null;
                     
@@ -1109,13 +1101,13 @@ namespace Xbim.COBie.Serialisers.XbimSerialiser
         /// Get the ActorSelect fro the given email
         /// </summary>
         /// <param name="email">string</param>
-        /// <returns>IfcActorSelect object</returns>
-        public IfcActorSelect GetActorSelect(string email)
+        /// <returns>IIfcActorSelect object</returns>
+        public IIfcActorSelect GetActorSelect(string email)
         {
             //srl the following fixes errors in the logic  and are more performant
-            var ifcActorSelect = (Model.Instances.OfType<IfcPersonAndOrganization>().FirstOrDefault<IfcActorSelect>(a => a.HasEmail(email)) ??
-                                  Model.Instances.OfType<IfcOrganization>().FirstOrDefault<IfcActorSelect>(a => a.HasEmail(email))) ??
-                                 Model.Instances.OfType<IfcPerson>().FirstOrDefault<IfcActorSelect>(a => a.HasEmail(email));
+            var ifcActorSelect = (Model.Instances.OfType<IIfcPersonAndOrganization>().FirstOrDefault<IIfcActorSelect>(a => a.HasEmail(email)) ??
+                                  Model.Instances.OfType<IIfcOrganization>().FirstOrDefault<IIfcActorSelect>(a => a.HasEmail(email))) ??
+                                 Model.Instances.OfType<IIfcPerson>().FirstOrDefault<IIfcActorSelect>(a => a.HasEmail(email));
             return ifcActorSelect;
         }
 
@@ -1244,12 +1236,12 @@ namespace Xbim.COBie.Serialisers.XbimSerialiser
         }
 
         /// <summary>
-        /// Check that a IfcRoot object name exists in the model on a merge
+        /// Check that a IIfcRoot object name exists in the model on a merge
         /// </summary>
-        /// <typeparam name="T">object derived from IfcRoot </typeparam>
+        /// <typeparam name="T">object derived from IIfcRoot </typeparam>
         /// <param name="name">string name to compare with name property of objects in model</param>
         /// <returns>bool</returns>
-        protected bool CheckIfExistOnMerge<T>(string name) where T : IfcRoot
+        protected bool CheckIfExistOnMerge<T>(string name) where T : IIfcRoot
         {
             if (XBimContext.IsMerge)
             {
@@ -1270,12 +1262,12 @@ namespace Xbim.COBie.Serialisers.XbimSerialiser
         }
 
         /// <summary>
-        /// Check that a IfcRoot object name exists in the model on a merge
+        /// Check that a IIfcRoot object name exists in the model on a merge
         /// </summary>
-        /// <typeparam name="T">object derived from IfcRoot </typeparam>
+        /// <typeparam name="T">object derived from IIfcRoot </typeparam>
         /// <param name="name">string name to compare with name property of objects in model</param>
         /// <returns>the object</returns>
-        protected IEnumerable<T> CheckIfObjExistOnMerge<T>(string name) where T : IfcRoot
+        protected IEnumerable<T> CheckIfObjExistOnMerge<T>(string name) where T : IIfcRoot
         {
             if (XBimContext.IsMerge)
             {

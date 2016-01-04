@@ -1,8 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
+using Xbim.Ifc;
 using Xbim.Ifc2x3.MeasureResource;
-using Xbim.IO;
+
 
 namespace XbimExchanger.IfcHelpers
 {
@@ -343,18 +344,17 @@ namespace XbimExchanger.IfcHelpers
         /// <param name="units"></param>
         /// <param name="model"></param>
         /// <returns></returns>
-        public IfcUnit IfcUnit(Dictionary<string, IfcUnit> units, XbimModel model)
+        public IfcUnit IfcUnit(Dictionary<string, IfcUnit> units, IfcStore model)
         {
             if (SiUnitName == null) return null;
             IfcUnit unit;
             var key = SiPrefix.HasValue? SiPrefix.Value.ToString()  :"";
             key += SiUnitName.Value;
-            if (units.TryGetValue(key, out unit)) return unit;
+            if (units.TryGetValue(key, out unit)) return unit;         
             var siUnit = model.Instances.New<IfcSIUnit>();
             siUnit.Name = SiUnitName.Value;
             siUnit.Prefix = SiPrefix;
-            siUnit.UnitType = UnitName;
-            siUnit.Dimensions = IfcDimensionalExponents.DimensionsForSiUnit(SiUnitName.Value);
+            siUnit.UnitType = UnitName;           
             units.Add(key,siUnit);
             return siUnit;
         }

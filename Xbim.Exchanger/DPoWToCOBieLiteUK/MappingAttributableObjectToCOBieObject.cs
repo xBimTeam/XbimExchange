@@ -22,6 +22,11 @@ namespace XbimExchanger.DPoWToCOBieLiteUK
             return target;
         }
 
-        
+
+
+        public override TTo CreateTargetObject()
+        {
+            return new TTo();
+        }
     }
 }

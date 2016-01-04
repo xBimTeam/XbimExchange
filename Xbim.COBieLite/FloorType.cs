@@ -3,17 +3,18 @@ using System.Linq;
 using System.Xml.Serialization;
 using Newtonsoft.Json;
 using Xbim.COBieLite.CollectionTypes;
-using Xbim.Ifc2x3.ProductExtension;
+using Xbim.Ifc.Extensions;
+using Xbim.Ifc4.Interfaces;
 
 namespace Xbim.COBieLite
 {
     public partial class FloorType: ICOBieObject
     {
         //[System.Xml.Serialization.XmlIgnoreAttribute()]
-        //private IfcBuildingStorey _ifcBuildingStorey;
+        //private IIfcBuildingStorey _ifcBuildingStorey;
 
    
-        public FloorType(IfcBuildingStorey ifcBuildingStorey, CoBieLiteHelper helper)
+        public FloorType(IIfcBuildingStorey ifcBuildingStorey, CoBieLiteHelper helper)
             : this()
         {
          //   _ifcBuildingStorey = ifcBuildingStorey;
@@ -47,8 +48,8 @@ namespace Xbim.COBieLite
             //    };
             //}
            
-            var spaces = ifcBuildingStorey.GetSpaces();
-            var ifcSpaces = spaces as IList<IfcSpace> ?? spaces.ToList();
+            var spaces = ifcBuildingStorey.Spaces;
+            var ifcSpaces = spaces as IList<IIfcSpace> ?? spaces.ToList();
             if (ifcSpaces.Any())
             {
                 Spaces = new SpaceCollectionType {Space = new List<SpaceType>(ifcSpaces.Count)};

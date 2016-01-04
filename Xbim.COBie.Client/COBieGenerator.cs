@@ -8,13 +8,12 @@ using Xbim.ModelGeometry.Scene;
 using System.Diagnostics;
 using System.IO;
 using Xbim.Common;
-using Xbim.Ifc2x3.Kernel;
+using Xbim.IIfc2x3.Kernel;
 using Xbim.COBie.Contracts;
 using Xbim.COBie.Serialisers;
 using Xbim.COBie.Rows;
 using Xbim.COBie.Federate;
-using Xbim.Ifc2x3.IO;
-using Xbim.IO.Esent;
+
 
 namespace Xbim.COBie.Client
 {
@@ -529,7 +528,7 @@ namespace Xbim.COBie.Client
         {
             //now convert the geometry
             var model = context.Model;
-            var total = (int)model.Instances.CountOf<IfcProduct>();
+            var total = (int)model.Instances.CountOf<IIfcProduct>();
             ReportProgressDelegate progDelegate = delegate(int percentProgress, object userState)
             {
                 context.UpdateStatus("Creating Geometry File", total, (total * percentProgress / 100));

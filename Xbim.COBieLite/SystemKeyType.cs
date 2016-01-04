@@ -1,5 +1,5 @@
-﻿using Xbim.Ifc2x3.ProductExtension;
-
+﻿
+using Xbim.Ifc4.Interfaces;
 namespace Xbim.COBieLite
 {
     public partial class SystemKeyType
@@ -9,7 +9,7 @@ namespace Xbim.COBieLite
             
         }
 
-        public SystemKeyType(IfcSystem ifcSystem, CoBieLiteHelper helper)
+        public SystemKeyType(IIfcSystem ifcSystem, CoBieLiteHelper helper)
         {
             SystemCategory = helper.GetClassification(ifcSystem);
             SystemName = ifcSystem.Name;

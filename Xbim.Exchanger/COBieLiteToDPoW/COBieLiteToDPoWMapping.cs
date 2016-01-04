@@ -3,8 +3,14 @@ using Xbim.DPoW;
 
 namespace XbimExchanger.COBieLiteToDPoW
 {
-    abstract class COBieLiteToDPoWMapping<TSource, TTarget>: XbimMappings<FacilityType, PlanOfWork, string, TSource, TTarget> where TTarget: new()
+    abstract class COBieLiteToDPoWMapping<TSource, TTarget>: XbimMappings<FacilityType, PlanOfWork, string, TSource, TTarget> where TTarget:new()
     {
-       
+
+        public override TTarget CreateTargetObject()
+        {
+            return new TTarget();
+        }
+
+      
     }
 }

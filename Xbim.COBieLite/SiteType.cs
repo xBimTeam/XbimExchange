@@ -1,4 +1,4 @@
-﻿using Xbim.Ifc2x3.ProductExtension;
+﻿using Xbim.Ifc4.Interfaces;
 
 namespace Xbim.COBieLite
 {
@@ -11,7 +11,7 @@ namespace Xbim.COBieLite
         {
             
         }
-        public SiteType(IfcSite ifcSite, CoBieLiteHelper helper)
+        public SiteType(IIfcSite ifcSite, CoBieLiteHelper helper)
             : this()
         {
           //  _ifcSite = ifcSite;

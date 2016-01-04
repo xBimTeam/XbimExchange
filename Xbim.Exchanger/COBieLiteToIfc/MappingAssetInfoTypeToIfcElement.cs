@@ -6,7 +6,7 @@ using Xbim.Ifc2x3.ProductExtension;
 
 namespace XbimExchanger.COBieLiteToIfc
 {
-    class MappingAssetInfoTypeToIfcElement<TToObject> : CoBieLiteIfcMappings<string, AssetInfoType, TToObject> where TToObject : IfcElement, new()
+    class MappingAssetInfoTypeToIfcElement<TToObject> : CoBieLiteIfcMappings<string, AssetInfoType, TToObject> where TToObject : IfcElement
     {
 
         protected override TToObject Mapping(AssetInfoType assetInfoType, TToObject ifcElement)

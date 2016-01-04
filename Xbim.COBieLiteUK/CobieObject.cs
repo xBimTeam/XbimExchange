@@ -18,6 +18,7 @@ using NPOI.SS.Util;
 using Xbim.FilterHelper;
 //using XbimExchanger.FilterHelper;
 using Xbim.COBieLiteUK.Net40PortHelpers;
+using System.Diagnostics;
 
 namespace Xbim.COBieLiteUK
 {

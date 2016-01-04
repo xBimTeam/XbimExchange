@@ -34,17 +34,11 @@ namespace XbimExchanger.COBieLiteUkToIfc
             //add addresses into IfcPerson object
             //add Telecom Address
             IfcTelecomAddress ifcTelecomAddress = SetTelecomAddress(contact);
-            if (ifcPerson.Addresses == null)
-                ifcPerson.SetTelecomAddresss(ifcTelecomAddress);//create the AddressCollection and set to Addresses field
-            else
-                ifcPerson.Addresses.Add(ifcTelecomAddress);//add to existing collection
+            ifcPerson.Addresses.Add(ifcTelecomAddress);//add to existing collection
             
             // Add postal address
             IfcPostalAddress ifcPostalAddress = SetAddress(contact);
-            if (ifcPerson.Addresses == null)
-                ifcPerson.SetPostalAddresss(ifcPostalAddress);//create the AddressCollection and set to Addresses field
-            else
-                ifcPerson.Addresses.Add(ifcPostalAddress);//add to existing collection
+            ifcPerson.Addresses.Add(ifcPostalAddress);//add to existing collection
 
             //add the person and the organization objects 
             ifcPersonAndOrganization.ThePerson = ifcPerson;
@@ -54,13 +48,19 @@ namespace XbimExchanger.COBieLiteUkToIfc
 
         private IfcPostalAddress SetAddress(Contact contact)
         {
-            IfcPostalAddress ifcPostalAddress = Exchanger.TargetRepository.Instances.New<IfcPostalAddress>();            
+            IfcPostalAddress ifcPostalAddress = Exchanger.TargetRepository.Instances.New<IfcPostalAddress>();
             //add Department
             if (Exchanger.StringHasValue(contact.Department))
                 ifcPostalAddress.InternalLocation = contact.Department;
             //add Street
             if (Exchanger.StringHasValue(contact.Street))
-                ifcPostalAddress.SetAddressLines(contact.Street.Split(new char[] { ',', ':' }));
+            {
+                foreach (var line in contact.Street.Split(new char[] { ',', ':' }))
+                {
+                    ifcPostalAddress.AddressLines.Add(line);
+                }
+            }
+
             //add PostalBox
             if (Exchanger.StringHasValue(contact.PostalBox))
                 ifcPostalAddress.PostalBox = contact.PostalBox;
@@ -86,19 +86,13 @@ namespace XbimExchanger.COBieLiteUkToIfc
             //add email
             if (Exchanger.StringHasValue(contact.Email))
             {
-                if (ifcTelecomAddress.ElectronicMailAddresses == null)
-                    ifcTelecomAddress.SetElectronicMailAddress(contact.Email); //create the LabelCollection and set to ElectronicMailAddresses field
-                else
                     ifcTelecomAddress.ElectronicMailAddresses.Add(contact.Email); //add to existing collection
             }
 
             //add Phone
             if (Exchanger.StringHasValue(contact.Phone))
             {
-                if (ifcTelecomAddress.TelephoneNumbers == null)
-                    ifcTelecomAddress.SetTelephoneNumbers(contact.Phone);//create the LabelCollection and set to TelephoneNumbers field
-                else
-                    ifcTelecomAddress.TelephoneNumbers.Add(contact.Phone);//add to existing collection
+               ifcTelecomAddress.TelephoneNumbers.Add(contact.Phone);//add to existing collection
             }
             return ifcTelecomAddress;
         }
@@ -124,25 +118,11 @@ namespace XbimExchanger.COBieLiteUkToIfc
                     ifcActorRole.Description = item.Description;
                     if (ifcPerson != null)
                     {
-                        if (ifcPerson.Roles == null)
-                        {
-                            ifcPerson.SetRoles(ifcActorRole);//create the ActorRoleCollection and set to Roles field
-                        }
-                        else
-                        {
-                            ifcPerson.Roles.Add(ifcActorRole);//add to existing collection
-                        }
+                       ifcPerson.Roles.Add(ifcActorRole);//add to existing collection                     
                     }
                     if (ifcOrganization != null)
                     {
-                       if (ifcOrganization.Roles == null)
-                        {
-                            ifcOrganization.SetRoles(ifcActorRole);//create the ActorRoleCollection and set to Roles field
-                        }
-                        else
-                        {
-                            ifcOrganization.Roles.Add(ifcActorRole);//add to existing collection
-                        }
+                        ifcOrganization.Roles.Add(ifcActorRole);//add to existing collection                        
                     }
                     //if (ifcPersonAndOrganization != null)
                     //{
