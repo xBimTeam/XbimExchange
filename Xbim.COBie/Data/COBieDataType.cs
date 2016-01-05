@@ -750,7 +750,7 @@ namespace Xbim.COBie.Data
         /// <returns>List of IfcPropertySingleValue which are contained in AttNames</returns>
         private IEnumerable<IfcPropertySingleValue> GetTypeObjRelAttributes(IfcTypeObject typeObj, List<string> attNames)
         {
-            IEnumerable<IfcPropertySingleValue> properties = Enumerable.Empty<IfcPropertySingleValue>();
+            var properties = Enumerable.Empty<IIfcPropertySingleValue>();
             // can hold zero or 1 ObjectTypeOf (IfcRelDefinesByType- holds list of objects of this type in RelatedObjects property) so test return
             var typeInstanceRel = typeObj.ObjectTypeOf.FirstOrDefault(); 
             if (typeInstanceRel != null)
@@ -759,12 +759,12 @@ namespace Xbim.COBie.Data
                 foreach (var pset in typeInstanceRel.RelatedObjects.First().PropertySets) 
                 {
                     //has to have 1 or more object that are of this type, so get first and see what we get
-                    properties = properties.Concat(pset.HasProperties.Where<IIfcPropertySingleValue>(p => attNames.Contains(p.Name.ToString())));
+                    properties = properties.Concat(pset.HasProperties.OfType<IIfcPropertySingleValue>().Where(p => attNames.Contains(p.Name.ToString())));
                 }
             }
 
 
-            return properties;
+            return properties.Cast<IfcPropertySingleValue>();
         }
 
         
