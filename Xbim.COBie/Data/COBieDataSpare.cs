@@ -5,6 +5,7 @@ using Xbim.Ifc2x3.ConstructionMgmtDomain;
 using Xbim.Ifc2x3.Kernel;
 using Xbim.Ifc2x3.PropertyResource;
 using Xbim.COBie.Serialisers.XbimSerialiser;
+using Xbim.Ifc2x3.Interfaces;
 
 namespace Xbim.COBie.Data
 {
@@ -78,17 +79,16 @@ namespace Xbim.COBie.Data
                     spare.Description = (ifcConstructionProductResource == null) ? "" : ifcConstructionProductResource.Description.ToString();
 
                 //get information from Pset_Spare_COBie property set 
-                IfcPropertySingleValue ifcPropertySingleValue = null;
-                IfcPropertySet ifcPropertySet =  ifcConstructionProductResource.GetPropertySet("Pset_Spare_COBie");
+                var ifcPropertySet =  ifcConstructionProductResource.GetPropertySet("Pset_Spare_COBie");
                 if (ifcPropertySet != null)
                 {
-                    ifcPropertySingleValue = ifcPropertySet.HasProperties.Where<IfcPropertySingleValue>(p => p.Name == "Suppliers").FirstOrDefault();
+                    var ifcPropertySingleValue = ifcPropertySet.HasProperties.OfType<IIfcPropertySingleValue>().FirstOrDefault(p => p.Name == "Suppliers");
                     spare.Suppliers = ((ifcPropertySingleValue != null) && (!string.IsNullOrEmpty(ifcPropertySingleValue.NominalValue.ToString()))) ? ifcPropertySingleValue.NominalValue.ToString() : DEFAULT_STRING;
 
-                    ifcPropertySingleValue = ifcPropertySet.HasProperties.Where<IfcPropertySingleValue>(p => p.Name == "SetNumber").FirstOrDefault();
+                    ifcPropertySingleValue = ifcPropertySet.HasProperties.OfType<IIfcPropertySingleValue>().FirstOrDefault(p => p.Name == "SetNumber");
                     spare.SetNumber = ((ifcPropertySingleValue != null) && (!string.IsNullOrEmpty(ifcPropertySingleValue.NominalValue.ToString()))) ? ifcPropertySingleValue.NominalValue.ToString() : DEFAULT_STRING; ;
 
-                    ifcPropertySingleValue = ifcPropertySet.HasProperties.Where<IfcPropertySingleValue>(p => p.Name == "PartNumber").FirstOrDefault();
+                    ifcPropertySingleValue = ifcPropertySet.HasProperties.OfType<IIfcPropertySingleValue>().FirstOrDefault(p => p.Name == "PartNumber");
                     spare.PartNumber = ((ifcPropertySingleValue != null) && (!string.IsNullOrEmpty(ifcPropertySingleValue.NominalValue.ToString()))) ? ifcPropertySingleValue.NominalValue.ToString() : DEFAULT_STRING; ;
                 }
                 else

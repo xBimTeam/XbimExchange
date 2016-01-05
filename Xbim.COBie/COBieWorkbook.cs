@@ -1,10 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using Xbim.IO;
 using Xbim.COBie.Contracts;
-using Xbim.Ifc;
-using System.Diagnostics;
 
 namespace Xbim.COBie
 {
@@ -36,24 +35,22 @@ namespace Xbim.COBie
             }
         }
 
-
-        ///  <summary>
-        ///  Runs validation rules on each sheet and updates the Errors collection
-        ///  on each sheet.
-        ///  </summary>
-        /// <param name="errorRowIdx">excel sheet = ErrorRowIndexBase.RowTwo, datasets = ErrorRowIndexBase.RowOne </param>
-        /// <param name="validationTemplate"></param>
-        /// <param name="progressCallback"></param>
-        public void Validate( ErrorRowIndexBase errorRowIdx, ICOBieValidationTemplate validationTemplate = null, Action<int> progressCallback = null) //default for excel row index's on error rows
+        
+        /// <summary>
+        /// Runs validation rules on each sheet and updates the Errors collection
+        /// on each sheet.
+        /// </summary>
+        ///<param name="errorRowIdx">excel sheet = ErrorRowIndexBase.RowTwo, datasets = ErrorRowIndexBase.RowOne </param>
+        public void Validate( ErrorRowIndexBase errorRowIdx, ICOBieValidationTemplate ValidationTemplate = null, Action<int> progressCallback = null) //default for excel row index's on error rows
         {
             // Enumerates the sheets and validates each
             foreach (var sheet in this)
             {
                 if (sheet.SheetName != Constants.WORKSHEET_PICKLISTS) //skip validation on pick list
                 {
-                    if (validationTemplate != null)
+                    if (ValidationTemplate != null)
                     {
-                        sheet.Validate(this, errorRowIdx, validationTemplate.Sheet[sheet.SheetName]);
+                        sheet.Validate(this, errorRowIdx, ValidationTemplate.Sheet[sheet.SheetName]);
                     }
                     else { 
                         sheet.Validate(this, errorRowIdx, null); 
@@ -75,7 +72,7 @@ namespace Xbim.COBie
         /// </summary>
         /// <param name="model"></param>
         /// <param name="fileRoles">bit fields enumeration to hold all the roles in one place using bitwise AND, OR, EXCLUSIVE OR</param>
-        public void ValidateRoles(IfcStore model, COBieMergeRoles fileRoles) 
+        public void ValidateRoles(XbimModel model, COBieMergeRoles fileRoles) 
         {
 #if DEBUG
             Stopwatch timer = new Stopwatch();
@@ -97,7 +94,7 @@ namespace Xbim.COBie
                     foreach (var item in sheet.RemovedRows)
                     {
                         string sheetName = "Component";
-                        var colName = item.ParentSheet.Columns.Where(c => c.Value.ColumnName == "Name").Select(c => c.Value).FirstOrDefault();
+                        COBieColumn colName = item.ParentSheet.Columns.Where(c => c.Value.ColumnName == "Name").Select(c => c.Value).FirstOrDefault();
                         var name = item[colName.ColumnOrder].CellValue;
                         nameList.Add(name);
                         keyList.Add(sheetName + name);

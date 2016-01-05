@@ -4,6 +4,7 @@ using System.Linq;
 using Xbim.COBie.Rows;
 using Xbim.Ifc2x3.ProductExtension;
 using Xbim.Ifc2x3.SharedBldgServiceElements;
+using Xbim.IO.Esent;
 
 namespace Xbim.COBie.Serialisers.XbimSerialiser
 {

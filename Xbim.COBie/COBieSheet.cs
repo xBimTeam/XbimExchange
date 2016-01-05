@@ -3,9 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using Xbim.COBie.Resources;
+using Xbim.IO;
+using Xbim.Ifc2x3.ProductExtension;
+using Xbim.Ifc2x3.Kernel;
 using Xbim.COBie.Contracts;
-using Xbim.Ifc;
-using Xbim.Ifc4.Interfaces;
 
 namespace Xbim.COBie
 {
@@ -259,7 +260,7 @@ namespace Xbim.COBie
         /// </summary>
         /// <param name="model">model the cobie file was generated from</param>
         /// <param name="fileRoles">the file roles</param>
-        public List<string> ValidateComponentMerge(IfcStore model, COBieMergeRoles fileRoles) 
+        public List<string> ValidateComponentMerge(XbimModel model, COBieMergeRoles fileRoles) 
         {
             List<string> typeObjectGlobalId = new List<string>();
             List<string> typeObjectGlobalIdKeep = new List<string>();
@@ -269,7 +270,7 @@ namespace Xbim.COBie
                 COBieColumn colExtObj = Columns.Where(c => c.Value.ColumnName == "ExtObject").Select(c => c.Value).FirstOrDefault();
                 COBieColumn colExtId = Columns.Where(c => c.Value.ColumnName == "ExtIdentifier").Select(c => c.Value).FirstOrDefault();
                 
-                List<IIfcElement> elements = model.Instances.OfType<IIfcElement>().ToList(); //get all IIfcElements, 
+                List<IfcElement> elements = model.InstancesLocal.OfType<IfcElement>().ToList(); //get all IfcElements, 
                 
                 List<T> RemainRows = new List<T>();
                 if (colExtObj != null)
@@ -286,16 +287,16 @@ namespace Xbim.COBie
                             COBieCell cellExtId = row[colExtId.ColumnOrder];
                             string extId = cellExtId.CellValue;
 
-                            IIfcElement ifcElement = elements.Where(ie => ie.GlobalId.ToString() == extId).FirstOrDefault();
-                            if (ifcElement != null)
+                            IfcElement IfcElement = elements.Where(ie => ie.GlobalId.ToString() == extId).FirstOrDefault();
+                            if (IfcElement != null)
                             {
                                 //we need to remove the ObjectType from the type sheet
-                                IIfcRelDefinesByType elementDefinesByType = ifcElement.IsDefinedBy.OfType<IIfcRelDefinesByType>().FirstOrDefault(); //should be only one
-                                IIfcTypeObject elementType = null;
+                                IfcRelDefinesByType elementDefinesByType = IfcElement.IsDefinedBy.OfType<IfcRelDefinesByType>().FirstOrDefault(); //should be only one
+                                IfcTypeObject elementType = null;
                                 if (elementDefinesByType != null)
                                     elementType = elementDefinesByType.RelatingType;
 
-                                if (mergeHelper.Merge(ifcElement, fileRoles))
+                                if (mergeHelper.Merge(IfcElement, fileRoles))
                                 {
                                     RemainRows.Add((T)row);
                                     if ((elementType != null) && (!typeObjectGlobalIdKeep.Contains(elementType.GlobalId)))
@@ -309,7 +310,7 @@ namespace Xbim.COBie
                                 }
                             }
                             else
-                                RemainRows.Add((T)row); //cannot evaluate IIfcType so keep
+                                RemainRows.Add((T)row); //cannot evaluate IfcType so keep
                         }
                     }
                     Rows = RemainRows;

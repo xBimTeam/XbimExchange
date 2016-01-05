@@ -6,6 +6,9 @@ using Xbim.Ifc2x3.Kernel;
 using Xbim.Ifc2x3.ProductExtension;
 using Xbim.Ifc2x3.Extensions;
 using System.Reflection;
+using Xbim.Common;
+using Xbim.Common.Metadata;
+using Xbim.IO.Esent;
 
 namespace Xbim.COBie.Serialisers.XbimSerialiser
 {
@@ -113,22 +116,22 @@ namespace Xbim.COBie.Serialisers.XbimSerialiser
         /// Create an instance of an group object via a string name
         /// </summary>
         /// <param name="groupTypeName">String holding object type name we want to create</param>
-        /// <param name="model">Model object</param>
         /// <returns></returns>
         public IfcSystem GetGroupInstance(string groupTypeName)
         {
             groupTypeName = groupTypeName.Trim().ToUpper();
-            IfcType ifcType;
+            ExpressType ifcType;
             IfcSystem ifcSystem = null;
-            if ((IfcMetaData.TryGetIfcType(groupTypeName, out ifcType)) &&
+            if ((Model.Metadata.TryGetExpressType(groupTypeName, out ifcType)) &&
                 (typeof(IfcSystem).IsAssignableFrom(ifcType.Type)) //check it is a system class name
                 )
             {
-                MethodInfo method = typeof(IXbimInstanceCollection).GetMethod("New", Type.EmptyTypes);
+                MethodInfo method = typeof(IEntityCollection).GetMethod("New", Type.EmptyTypes);
                 MethodInfo generic = method.MakeGenericMethod(ifcType.Type);
                 var eleObj = generic.Invoke(Model.Instances, null);
-                if (eleObj is IfcSystem)
-                    ifcSystem = (IfcSystem)eleObj;
+                var obj = eleObj as IfcSystem;
+                if (obj != null)
+                    ifcSystem = obj;
             }
 
 

@@ -6,7 +6,7 @@ namespace Xbim.COBieLiteUK
 {
     public partial class Assembly 
     {
-        internal protected override List<CobieObject> MergeDuplicates(List<CobieObject> objects, TextWriter log)
+        protected internal override List<CobieObject> MergeDuplicates(List<CobieObject> objects, TextWriter log)
         {
             var candidates = objects.OfType<Assembly>().ToList();
             if (!candidates.Any()) return new List<CobieObject>();

@@ -1,7 +1,9 @@
 ﻿using System.Collections.Generic;
 using Xbim.Common;
-using Xbim.Ifc;
-using Xbim.Ifc4.Interfaces;
+using Xbim.Ifc2x3.ActorResource;
+using Xbim.Ifc2x3.GeometryResource;
+using Xbim.Ifc2x3.IO;
+using Xbim.Ifc2x3.MeasureResource;
 
 namespace Xbim.COBie.Serialisers.XbimSerialiser
 {
@@ -9,8 +11,8 @@ namespace Xbim.COBie.Serialisers.XbimSerialiser
     {
 
         #region Fields
-        private IIfcSIUnit _secondUnit;
-        private IIfcDimensionalExponents _dimensionalExponents;
+        private IfcSIUnit _secondUnit;
+        private IfcDimensionalExponents _dimensionalExponents;
 
         private ReportProgressDelegate _progress = null;
         public event ReportProgressDelegate ProgressStatus;
@@ -21,7 +23,7 @@ namespace Xbim.COBie.Serialisers.XbimSerialiser
         /// <summary>
         /// Model to add COBie data too
         /// </summary>
-        public IfcStore Model { get; set; }
+        public XbimModel Model { get; set; }
 
         /// <summary>
         /// Flag for merging
@@ -36,13 +38,13 @@ namespace Xbim.COBie.Serialisers.XbimSerialiser
         /// <summary>
         /// Contacts dictionary keyed on email address
         /// </summary>
-        public Dictionary<string, IIfcPersonAndOrganization> Contacts { get; private set; }
+        public Dictionary<string, IfcPersonAndOrganization> Contacts { get; private set; }
         
-        private IIfcConversionBasedUnit _ifcConversionBasedUnitYear;
+        private IfcConversionBasedUnit _ifcConversionBasedUnitYear;
         /// <summary>
         /// Year Unit
         /// </summary>
-        public IIfcConversionBasedUnit IIfcConversionBasedUnitYear
+        public IfcConversionBasedUnit IfcConversionBasedUnitYear
         {
             get
             {
@@ -53,7 +55,7 @@ namespace Xbim.COBie.Serialisers.XbimSerialiser
             
         }
 
-        public IIfcDimensionalExponents DimensionalExponentSingleUnit
+        public IfcDimensionalExponents DimensionalExponentSingleUnit
         {
             get
             {
@@ -63,11 +65,11 @@ namespace Xbim.COBie.Serialisers.XbimSerialiser
             }
         }
 
-        private IIfcConversionBasedUnit _ifcConversionBasedUnitMonth;
+        private IfcConversionBasedUnit _ifcConversionBasedUnitMonth;
         /// <summary>
         /// Month Unit
         /// </summary>
-        public IIfcConversionBasedUnit IIfcConversionBasedUnitMonth
+        public IfcConversionBasedUnit IfcConversionBasedUnitMonth
         {
             get
             {
@@ -78,11 +80,11 @@ namespace Xbim.COBie.Serialisers.XbimSerialiser
 
         }
 
-        private IIfcConversionBasedUnit _ifcConversionBasedUnitWeek;
+        private IfcConversionBasedUnit _ifcConversionBasedUnitWeek;
         /// <summary>
         /// Month Unit
         /// </summary>
-        public IIfcConversionBasedUnit IIfcConversionBasedUnitWeek
+        public IfcConversionBasedUnit IfcConversionBasedUnitWeek
         {
             get
             {
@@ -93,11 +95,11 @@ namespace Xbim.COBie.Serialisers.XbimSerialiser
 
         }
 
-        private IIfcConversionBasedUnit _ifcConversionBasedUnitMinute;
+        private IfcConversionBasedUnit _ifcConversionBasedUnitMinute;
         /// <summary>
         /// Month Unit
         /// </summary>
-        public IIfcConversionBasedUnit IIfcConversionBasedUnitMinute
+        public IfcConversionBasedUnit IfcConversionBasedUnitMinute
         {
             get
             {
@@ -111,7 +113,7 @@ namespace Xbim.COBie.Serialisers.XbimSerialiser
         /// <summary>
         /// World Coordinates System for the Model
         /// </summary>
-        public IIfcAxis2Placement3D WCS { get;  set; }
+        public IfcAxis2Placement3D WCS { get;  set; }
 
 
         #endregion
@@ -122,14 +124,14 @@ namespace Xbim.COBie.Serialisers.XbimSerialiser
         /// </summary>
         /// <param name="model">Model to add COBie data too</param>
         /// <param name="workBook">Work Book With COBie data </param>
-        public COBieXBimContext (IfcStore model)
+        public COBieXBimContext (XbimModel model)
         {
             Model = model;
-            Contacts = new Dictionary<string, IIfcPersonAndOrganization>();
+            Contacts = new Dictionary<string, IfcPersonAndOrganization>();
             
         }
 
-        public COBieXBimContext(IfcStore model, ReportProgressDelegate progressHandler = null)
+        public COBieXBimContext(XbimModel model, ReportProgressDelegate progressHandler = null)
             : this(model) 
         {
             if (progressHandler != null)
@@ -158,14 +160,14 @@ namespace Xbim.COBie.Serialisers.XbimSerialiser
         {
             SetSecondUnit();
             
-            IIfcMeasureWithUnit yearMeasure = Model.Instances.New<IIfcMeasureWithUnit>(mwu =>
+            IfcMeasureWithUnit yearMeasure = Model.Instances.New<IfcMeasureWithUnit>(mwu =>
             {
-                mwu.ValueComponent = new Xbim.Ifc4.MeasureResource.IfcReal(3.1536E7);
+                mwu.ValueComponent = new IfcReal(3.1536E7);
                 mwu.UnitComponent = _secondUnit;
             });
-            IIfcConversionBasedUnit yearConBaseUnit = Model.Instances.New<IIfcConversionBasedUnit>(s =>
+            IfcConversionBasedUnit yearConBaseUnit = Model.Instances.New<IfcConversionBasedUnit>(s =>
             {
-                s.UnitType = IIfcUnitEnum.TIMEUNIT;
+                s.UnitType = IfcUnitEnum.TIMEUNIT;
                 s.Name = "Year";
                 s.Dimensions = _dimensionalExponents;
                 s.ConversionFactor = yearMeasure;
@@ -181,14 +183,14 @@ namespace Xbim.COBie.Serialisers.XbimSerialiser
         {
             SetSecondUnit();
 
-            IIfcMeasureWithUnit monthMeasure = Model.Instances.New<IIfcMeasureWithUnit>(mwu =>
+            IfcMeasureWithUnit monthMeasure = Model.Instances.New<IfcMeasureWithUnit>(mwu =>
             {
-                mwu.ValueComponent = new IIfcReal(3.1536E7 / 12); //not accurate month but take average
+                mwu.ValueComponent = new IfcReal(3.1536E7 / 12); //not accurate month but take average
                 mwu.UnitComponent = _secondUnit;
             });
-            IIfcConversionBasedUnit monthConBaseUnit = Model.Instances.New<IIfcConversionBasedUnit>(s =>
+            IfcConversionBasedUnit monthConBaseUnit = Model.Instances.New<IfcConversionBasedUnit>(s =>
             {
-                s.UnitType = IIfcUnitEnum.TIMEUNIT;
+                s.UnitType = IfcUnitEnum.TIMEUNIT;
                 s.Name = "Month";
                 s.Dimensions = _dimensionalExponents;
                 s.ConversionFactor = monthMeasure;
@@ -206,14 +208,14 @@ namespace Xbim.COBie.Serialisers.XbimSerialiser
         {
             SetSecondUnit();
 
-            IIfcMeasureWithUnit weekMeasure = Model.Instances.New<IIfcMeasureWithUnit>(mwu =>
+            IfcMeasureWithUnit weekMeasure = Model.Instances.New<IfcMeasureWithUnit>(mwu =>
             {
-                mwu.ValueComponent = new IIfcReal(3.1536E7 / 52); //not accurate week but take average
+                mwu.ValueComponent = new IfcReal(3.1536E7 / 52); //not accurate week but take average
                 mwu.UnitComponent = _secondUnit;
             });
-            IIfcConversionBasedUnit weekConBaseUnit = Model.Instances.New<IIfcConversionBasedUnit>(s =>
+            IfcConversionBasedUnit weekConBaseUnit = Model.Instances.New<IfcConversionBasedUnit>(s =>
             {
-                s.UnitType = IIfcUnitEnum.TIMEUNIT;
+                s.UnitType = IfcUnitEnum.TIMEUNIT;
                 s.Name = "Month";
                 s.Dimensions = _dimensionalExponents;
                 s.ConversionFactor = weekMeasure;
@@ -230,14 +232,14 @@ namespace Xbim.COBie.Serialisers.XbimSerialiser
         {
             SetSecondUnit();
 
-            IIfcMeasureWithUnit minuteMeasure = Model.Instances.New<IIfcMeasureWithUnit>(mwu =>
+            IfcMeasureWithUnit minuteMeasure = Model.Instances.New<IfcMeasureWithUnit>(mwu =>
             {
-                mwu.ValueComponent = new IIfcReal(60); //not accurate week but take average
+                mwu.ValueComponent = new IfcReal(60); //not accurate week but take average
                 mwu.UnitComponent = _secondUnit;
             });
-            IIfcConversionBasedUnit minuteConBaseUnit = Model.Instances.New<IIfcConversionBasedUnit>(s =>
+            IfcConversionBasedUnit minuteConBaseUnit = Model.Instances.New<IfcConversionBasedUnit>(s =>
             {
-                s.UnitType = IIfcUnitEnum.TIMEUNIT;
+                s.UnitType = IfcUnitEnum.TIMEUNIT;
                 s.Name = "Minute";
                 s.Dimensions = _dimensionalExponents;
                 s.ConversionFactor = minuteMeasure;
@@ -254,17 +256,17 @@ namespace Xbim.COBie.Serialisers.XbimSerialiser
         {
             if (_secondUnit == null)
             {
-                _secondUnit = Model.Instances.New<IIfcSIUnit>(si =>
+                _secondUnit = Model.Instances.New<IfcSIUnit>(si =>
                 {
-                    si.UnitType = IIfcUnitEnum.TIMEUNIT;
+                    si.UnitType = IfcUnitEnum.TIMEUNIT;
                     si.Prefix = null;
-                    si.Name = IIfcSIUnitName.SECOND;
+                    si.Name = IfcSIUnitName.SECOND;
                 });
             }
 
             if (_dimensionalExponents == null)
             {
-                _dimensionalExponents = Model.Instances.New<IIfcDimensionalExponents>(de =>
+                _dimensionalExponents = Model.Instances.New<IfcDimensionalExponents>(de =>
                 {
                     de.LengthExponent = 1;
                     de.MassExponent = 1;
