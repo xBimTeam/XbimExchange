@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using Xbim.CobieExpress;
 using Xbim.COBieLiteUK;
 using Xbim.Ifc;
 using Xbim.Ifc4.Interfaces;
@@ -21,10 +22,10 @@ namespace XbimExchanger.IfcToCOBieExpress
                 target.Description = ifcSpatialElement.Description;
             target.CreatedBy = helper.GetCreatedBy(ifcSpatialElement);
             target.CreatedOn = helper.GetCreatedOn(ifcSpatialElement);
-            target.RoomTag = helper.GetCoBieAttribute<StringAttributeValue>("SpaceSignageName", ifcSpatialElement).Value;
-            target.UsableHeight = helper.GetCoBieAttribute<DecimalAttributeValue>("SpaceUsableHeightValue", ifcSpatialElement).Value;
-            target.GrossArea = helper.GetCoBieAttribute<DecimalAttributeValue>("SpaceGrossAreaValue", ifcSpatialElement).Value;
-            target.NetArea = helper.GetCoBieAttribute<DecimalAttributeValue>("SpaceNetAreaValue", ifcSpatialElement).Value;
+            target.RoomTag = helper.GetCoBieAttribute<StringValue>("SpaceSignageName", ifcSpatialElement);
+            target.UsableHeight = helper.GetCoBieAttribute<FloatValue>("SpaceUsableHeightValue", ifcSpatialElement);
+            target.GrossArea = helper.GetCoBieAttribute<FloatValue>("SpaceGrossAreaValue", ifcSpatialElement);
+            target.NetArea = helper.GetCoBieAttribute<FloatValue>("SpaceNetAreaValue", ifcSpatialElement);
 
             //Attributes
             target.Attributes = helper.GetAttributes(ifcSpatialElement);

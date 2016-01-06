@@ -310,9 +310,9 @@ namespace XbimExchanger.IfcToCOBieExpress
             return spaces;
         }
 
-        public override Facility CreateTargetObject()
+        public override CobieFacility CreateTargetObject()
         {
-            return new Facility();
+            return Exchanger.TargetRepository.Instances.New<CobieFacility>();
         }
     }
 }

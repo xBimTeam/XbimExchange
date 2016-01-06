@@ -60,11 +60,31 @@ namespace XbimExchanger
         /// <returns></returns>
         public TTargetObject GetOrCreateTargetObject(TSourceKey key)
         {
-            if (typeof(TSourceKey).IsValueType || !Object.Equals(null, key))
+            if (typeof (TSourceKey).IsValueType || !Equals(null, key))
+            {
                 return Results.GetOrAdd(key, CreateTargetObject());
+            }
             return CreateTargetObject();
         }
 
+        /// <summary>
+        /// Gets the object with the specified key or creates one if it does not exist 
+        /// </summary>
+        /// <param name="key">Key to be used to search for exsting object</param>
+        /// <param name="result">Existing or created object</param>
+        /// <returns>True if new object is created, False if existing object is returned as a result</returns>
+        public bool GetOrCreateTargetObject(TSourceKey key, out TTargetObject result)
+        {
+            if (typeof(TSourceKey).IsValueType || !Equals(null, key))
+            {
+                if (Results.TryGetValue(key, out result))
+                    return false;
+                Results.TryAdd(key, CreateTargetObject());
+                return true;
+            }
+            result = CreateTargetObject();
+            return true;
+        }
 
         /// <summary>
         /// Adds a mapping between the two object all mapped properties are mapped over by the Mapping function
@@ -74,7 +94,7 @@ namespace XbimExchanger
         /// <returns>Returns the object which has been added to the mapping</returns>
         public TTargetObject AddMapping(TSourceObject source, TTargetObject target)
         {
-            TTargetObject res = Mapping(source, target); 
+            var res = Mapping(source, target); 
             return res;
         }
 

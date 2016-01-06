@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Xbim.CobieExpress;
 using Xbim.COBieLiteUK;
 using Xbim.Ifc4.Interfaces;
 
@@ -118,7 +119,7 @@ namespace XbimExchanger.IfcToCOBieExpress
                     if (_helper.AssetAsignments.TryGetValue(_ifcTypeObject, out ifcAsset))
                     {
                         string portability =
-                            _helper.GetCoBieAttribute<StringAttributeValue>("AssetTypeAccountingCategory", ifcAsset).Value;
+                            _helper.GetCoBieAttribute<StringValue>("AssetTypeAccountingCategory", ifcAsset);
                         if (Enum.TryParse(portability, true, out accCategoryEnum))
                             return accCategoryEnum;
                     }

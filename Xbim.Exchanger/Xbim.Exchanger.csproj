@@ -80,35 +80,35 @@
     <Reference Include="System.Xml" />
     <Reference Include="Xbim.CobieExpress, Version=3.2.0.0, Culture=neutral, PublicKeyToken=11e3655e576ec5a9, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\Xbim.Essentials.4.0.0-V070\lib\net40\Xbim.CobieExpress.dll</HintPath>
+      <HintPath>..\packages\Xbim.Essentials.4.0.0-V077\lib\net40\Xbim.CobieExpress.dll</HintPath>
     </Reference>
     <Reference Include="Xbim.Common, Version=3.2.0.0, Culture=neutral, PublicKeyToken=11e3655e576ec5a9, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\Xbim.Essentials.4.0.0-V070\lib\net40\Xbim.Common.dll</HintPath>
+      <HintPath>..\packages\Xbim.Essentials.4.0.0-V077\lib\net40\Xbim.Common.dll</HintPath>
     </Reference>
     <Reference Include="Xbim.Ifc, Version=3.2.0.0, Culture=neutral, PublicKeyToken=11e3655e576ec5a9, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\Xbim.Essentials.4.0.0-V070\lib\net40\Xbim.Ifc.dll</HintPath>
+      <HintPath>..\packages\Xbim.Essentials.4.0.0-V077\lib\net40\Xbim.Ifc.dll</HintPath>
     </Reference>
     <Reference Include="Xbim.Ifc.Extensions, Version=3.2.0.0, Culture=neutral, PublicKeyToken=11e3655e576ec5a9, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\Xbim.Essentials.4.0.0-V070\lib\net40\Xbim.Ifc.Extensions.dll</HintPath>
+      <HintPath>..\packages\Xbim.Essentials.4.0.0-V077\lib\net40\Xbim.Ifc.Extensions.dll</HintPath>
     </Reference>
     <Reference Include="Xbim.Ifc2x3, Version=3.2.0.0, Culture=neutral, PublicKeyToken=11e3655e576ec5a9, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\Xbim.Essentials.4.0.0-V070\lib\net40\Xbim.Ifc2x3.dll</HintPath>
+      <HintPath>..\packages\Xbim.Essentials.4.0.0-V077\lib\net40\Xbim.Ifc2x3.dll</HintPath>
     </Reference>
     <Reference Include="Xbim.Ifc2x3.IO, Version=3.2.0.0, Culture=neutral, PublicKeyToken=11e3655e576ec5a9, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\Xbim.Essentials.4.0.0-V070\lib\net40\Xbim.Ifc2x3.IO.dll</HintPath>
+      <HintPath>..\packages\Xbim.Essentials.4.0.0-V077\lib\net40\Xbim.Ifc2x3.IO.dll</HintPath>
     </Reference>
     <Reference Include="Xbim.Ifc4, Version=3.2.0.0, Culture=neutral, PublicKeyToken=11e3655e576ec5a9, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\Xbim.Essentials.4.0.0-V070\lib\net40\Xbim.Ifc4.dll</HintPath>
+      <HintPath>..\packages\Xbim.Essentials.4.0.0-V077\lib\net40\Xbim.Ifc4.dll</HintPath>
     </Reference>
     <Reference Include="Xbim.IO, Version=3.2.0.0, Culture=neutral, PublicKeyToken=11e3655e576ec5a9, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\Xbim.Essentials.4.0.0-V070\lib\net40\Xbim.IO.dll</HintPath>
+      <HintPath>..\packages\Xbim.Essentials.4.0.0-V077\lib\net40\Xbim.IO.dll</HintPath>
     </Reference>
     <Reference Include="Xbim.Properties, Version=3.1.0.0, Culture=neutral, PublicKeyToken=11e3655e576ec5a9, processorArchitecture=MSIL">
       <HintPath>..\packages\Xbim.PropertySets.3.1.10\lib\net40\Xbim.Properties.dll</HintPath>
@@ -116,7 +116,7 @@
     </Reference>
     <Reference Include="Xbim.Tessellator, Version=3.2.0.0, Culture=neutral, PublicKeyToken=11e3655e576ec5a9, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\Xbim.Essentials.4.0.0-V070\lib\net40\Xbim.Tessellator.dll</HintPath>
+      <HintPath>..\packages\Xbim.Essentials.4.0.0-V077\lib\net40\Xbim.Tessellator.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
@@ -180,6 +180,8 @@
     <Compile Include="DPoWToCOBieLite\MappingPlanOfWorkToFacilityType.cs" />
     <Compile Include="DPoWToCOBieLite\MappingRoleToContact.cs" />
     <Compile Include="DPoWToCOBieLite\MappingSpaceTypeToSpaceType.cs" />
+    <Compile Include="IfcToCOBieExpress\MappingStringToExternalSystem.cs" />
+    <Compile Include="IfcToCOBieExpress\MappingStringToExternalObject.cs" />
     <Compile Include="IfcHelpers\IfcMappings.cs" />
     <Compile Include="IfcHelpers\IfcPropertySetDefinitionExtensions.cs" />
     <Compile Include="IfcHelpers\IfcUnitComparer.cs" />
@@ -194,8 +196,10 @@
     <Compile Include="IfcToCOBieExpress\ContactConverter.cs" />
     <Compile Include="IfcToCOBieExpress\EqCompare\IfcRelAssignsToGroupRelatedGroupObjCompare.cs" />
     <Compile Include="IfcToCOBieExpress\IfcToCoBieExpressExchanger.cs" />
+    <Compile Include="IfcToCOBieExpress\MappingIfcClassificationReferenceToCategory.cs" />
     <Compile Include="IfcToCOBieExpress\MappingIfcActorToContact.cs" />
     <Compile Include="IfcToCOBieExpress\MappingIfcBuildingToFacility.cs" />
+    <Compile Include="IfcToCOBieExpress\MappingIfcClassificationToCobieClassification.cs" />
     <Compile Include="IfcToCOBieExpress\MappingIfcConstructionProductResourceToSpare.cs" />
     <Compile Include="IfcToCOBieExpress\MappingIfcDocumentSelectToDocument.cs" />
     <Compile Include="IfcToCOBieExpress\MappingIfcElementToAsset.cs" />

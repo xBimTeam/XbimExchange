@@ -2,13 +2,14 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using Xbim.COBieLiteUK;
+using Xbim.CobieExpress;
+using Xbim.Common;
 using Xbim.Ifc;
 using Xbim.Ifc4.Interfaces;
 
 namespace XbimExchanger.IfcToCOBieExpress
 {
-    internal class MappingIfcDocumentSelectToDocument : XbimMappings<IfcStore, List<Facility>, string, IIfcDocumentSelect, Document> 
+    internal class MappingIfcDocumentSelectToDocument : XbimMappings<IfcStore, IModel, string, IIfcDocumentSelect, CobieDocument> 
     {
 
         /// <summary>
@@ -36,7 +37,7 @@ namespace XbimExchanger.IfcToCOBieExpress
         /// <param name="source"></param>
         /// <param name="target"></param>
         /// <returns></returns>
-        protected override Document Mapping(IIfcDocumentSelect source, Document target)
+        protected override CobieDocument Mapping(IIfcDocumentSelect source, CobieDocument target)
         {
             throw new NotImplementedException(); //see MappingMulti method
         }
@@ -46,16 +47,17 @@ namespace XbimExchanger.IfcToCOBieExpress
         /// </summary>
         /// <param name="ifcDocumentSelect"></param>
         /// <returns></returns>
-        public List<Document> MappingMulti(IIfcDocumentSelect ifcDocumentSelect)
+        public List<CobieDocument> MappingMulti(IIfcDocumentSelect ifcDocumentSelect)
         {
             if (UsedNames == null) UsedNames = new List<string>();
 
-            List<Document> docList = new List<Document>();
+            var docList = new List<CobieDocument>();
             if (Helper == null) Helper = ((IfcToCoBieExpressExchanger)Exchanger).Helper;
             //process IfcDocumentReference first
-            if (ifcDocumentSelect is IIfcDocumentReference)
+            var documentReference = ifcDocumentSelect as IIfcDocumentReference;
+            if (documentReference != null)
             {
-                var ifcDocumentReference = ifcDocumentSelect as IIfcDocumentReference;
+                var ifcDocumentReference = documentReference;
                 if (ifcDocumentReference.ReferencedDocument != null)
                 {
                     docList.Add(ConvertToDocument(ifcDocumentReference, ifcDocumentReference.ReferencedDocument));//ReferenceToDocument is a SET [0:1]
@@ -64,8 +66,8 @@ namespace XbimExchanger.IfcToCOBieExpress
             }
             //must be IfcDocumentInformation
             var ifcDocumentInformation = ifcDocumentSelect as IIfcDocumentInformation;
-
-            foreach (IIfcDocumentReference ifcDocumentReference in ifcDocumentInformation.HasDocumentReferences)
+            if(ifcDocumentInformation != null)
+            foreach (var ifcDocumentReference in ifcDocumentInformation.HasDocumentReferences)
             {
                 docList.Add(ConvertToDocument(ifcDocumentReference, ifcDocumentInformation));
             }
@@ -80,7 +82,7 @@ namespace XbimExchanger.IfcToCOBieExpress
             }
             else //no docs to link too, then just add to the root document list
             {
-                docList.Concat(childDocList);
+                docList = docList.Concat(childDocList).ToList();
             }
 
             return docList;
@@ -91,15 +93,15 @@ namespace XbimExchanger.IfcToCOBieExpress
         /// </summary>
         /// <param name="ifcDocumentInformation">IfcDocumentInformation</param>
         /// <returns>List of Document</returns>
-        private List<Document> GetChildDocs(IIfcDocumentInformation ifcDocumentInformation)
+        private List<CobieDocument> GetChildDocs(IIfcDocumentInformation ifcDocumentInformation)
         {
-           
 
-            List<Document> childDocList = new List<Document>();
+
+            List<CobieDocument> childDocList = new List<CobieDocument>();
             var ChildRels = ifcDocumentInformation.IsPointer.FirstOrDefault();//SET[0:1] gets the relationship when ifcDocumentInformation is the RelatingDocument (parent) document
             if (ChildRels != null && ChildRels.RelatedDocuments != null)
             {
-                foreach (IIfcDocumentInformation item in ChildRels.RelatedDocuments)
+                foreach (var item in ChildRels.RelatedDocuments)
                 {
                     if (ChainInstMap == null) //set ChainInstMap, used to avoid infinite loop
                         ChainInstMap = new HashSet<IIfcDocumentInformation>();
@@ -113,17 +115,17 @@ namespace XbimExchanger.IfcToCOBieExpress
             return childDocList;
         }
 
-        
+
         /// <summary>
         /// Convert a IfcDocumentReference to Document
         /// </summary>
         /// <param name="ifcDocumentReference">Document Reference Object</param>
-        /// <param name="document">Document Object</param>
+        /// <param name="ifcDocumentInformation"></param>
         /// <returns>Document</returns>
-        private Document ConvertToDocument(IIfcDocumentReference ifcDocumentReference, IIfcDocumentInformation ifcDocumentInformation)
+        private CobieDocument ConvertToDocument(IIfcDocumentReference ifcDocumentReference, IIfcDocumentInformation ifcDocumentInformation)
         {
            
-            string name = GetName(ifcDocumentInformation) ?? GetName(ifcDocumentReference);
+            var name = GetName(ifcDocumentInformation) ?? GetName(ifcDocumentReference);
             //fail to get from IfcDocumentReference, so try assign a default
             if (string.IsNullOrEmpty(name))
             {
@@ -132,22 +134,27 @@ namespace XbimExchanger.IfcToCOBieExpress
             //check for duplicates, if found add a (#) => "DocName(1)", if none return name unchanged
             name = Helper.GetNextName(name, UsedNames); 
 
-            var document = new Document();
-            document.Name= name;
-            document.CreatedBy = ifcDocumentInformation != null ?  GetCreatedBy(ifcDocumentInformation) : null;
-            document.CreatedOn = ifcDocumentInformation != null ? GetCreatedOn(ifcDocumentInformation) : null;
-
-            document.Categories = (ifcDocumentInformation != null) && (!string.IsNullOrEmpty(ifcDocumentInformation.Purpose)) ? new List<Category>(new[] { new Category { Code = ifcDocumentInformation.Purpose } }) : null;
-
-            document.ApprovalBy = (ifcDocumentInformation != null) && (!string.IsNullOrEmpty(ifcDocumentInformation.IntendedUse)) ? ifcDocumentInformation.IntendedUse : null; //once fixed
             
-            document.Stage = (ifcDocumentInformation != null) && (!string.IsNullOrEmpty(ifcDocumentInformation.Scope)) ? ifcDocumentInformation.Scope : null;
+            var document = CreateTargetObject();
+            document.Name= name;
+            document.Created = ifcDocumentInformation != null ?  GetCreatedInfo(ifcDocumentInformation) : null;
+            document.DocumentType = (ifcDocumentInformation != null) && !string.IsNullOrEmpty(ifcDocumentInformation.Purpose) ?
+                Helper.GetPickValue<CobieDocumentType>(ifcDocumentInformation.Purpose) : 
+                null;
+
+            document.ApprovalType = (ifcDocumentInformation != null) && (!string.IsNullOrEmpty(ifcDocumentInformation.IntendedUse)) ?
+                Helper.GetPickValue<CobieApprovalType>(ifcDocumentInformation.IntendedUse) : 
+                null; //once fixed
+            
+            document.Stage = (ifcDocumentInformation != null) && (!string.IsNullOrEmpty(ifcDocumentInformation.Scope)) ? 
+                Helper.GetPickValue<CobieStageType>(ifcDocumentInformation.Scope) : 
+                null;
 
             document.Directory = GetFileDirectory(ifcDocumentReference);
             document.File = GetFileName(ifcDocumentReference);
             
             document.ExternalSystem = null;
-            document.ExternalEntity = ifcDocumentReference.GetType().Name;
+            document.ExternalObject = Helper.GetExternalObject(ifcDocumentReference);
             document.ExternalId = null;
 
             document.Description = (ifcDocumentInformation != null) && (!string.IsNullOrEmpty(ifcDocumentInformation.Description)) ? ifcDocumentInformation.Description.ToString() : null;
@@ -158,36 +165,11 @@ namespace XbimExchanger.IfcToCOBieExpress
         }
 
         /// <summary>
-        /// Get createdOn 
-        /// </summary>
-        /// <param name="ifcDocumentInformation"></param>
-        /// <returns></returns>
-        private DateTime? GetCreatedOn(IIfcDocumentInformation ifcDocumentInformation)
-        {
-            if (ifcDocumentInformation.CreationTime != null)
-            {
-                var created = ifcDocumentInformation.CreationTime ?? ifcDocumentInformation.LastRevisionTime;
-                if (created.HasValue)
-                {
-                    return DateTime.Parse(created);
-                }
-                
-            } 
-            
-            if (Helper.DocumentOwnerLookup.ContainsKey(ifcDocumentInformation))
-            {
-                return Helper.GetCreatedOn(Helper.DocumentOwnerLookup[ifcDocumentInformation]);
-            }
-
-            return DateTime.Now;
-        }
-
-        /// <summary>
         /// Get created by
         /// </summary>
         /// <param name="ifcDocumentInformation"></param>
         /// <returns></returns>
-        private ContactKey GetCreatedBy(IIfcDocumentInformation ifcDocumentInformation)
+        private CobieCreatedInfo GetCreatedInfo(IIfcDocumentInformation ifcDocumentInformation)
         {
             if (ifcDocumentInformation.DocumentOwner != null)
             {
@@ -197,7 +179,7 @@ namespace XbimExchanger.IfcToCOBieExpress
             //get owner from the IfcRelAssociatesDocument object
             if (Helper.DocumentOwnerLookup.ContainsKey(ifcDocumentInformation))
             {
-                return Helper.GetCreatedBy(Helper.DocumentOwnerLookup[ifcDocumentInformation]);
+                return Helper.GetCreatedInfo(Helper.DocumentOwnerLookup[ifcDocumentInformation]);
             }
             return null;
         }
@@ -210,7 +192,7 @@ namespace XbimExchanger.IfcToCOBieExpress
         /// </summary>
         /// <param name="ifcDocumentReference">Document Reference Object</param>
         /// <returns>string or null</returns>
-        private string GetName(IIfcDocumentReference ifcDocumentReference)
+        private static string GetName(IIfcExternalReference ifcDocumentReference)
         {
             if (ifcDocumentReference == null)
                 return null;
@@ -223,9 +205,9 @@ namespace XbimExchanger.IfcToCOBieExpress
             {
                 return Path.GetFileNameWithoutExtension(ifcDocumentReference.Location);
             }
-            //we ignore  ItemReference, "which refers to a system interpretable position within the document" from http://www.buildingsmart-tech.org/ifc/IFC2x3/TC1/html/ifcexternalreferenceresource/lexical/ifcdocumentreference.htm
-
             
+            //we ignore  ItemReference, "which refers to a system interpretable position within the document" 
+            //from http://www.buildingsmart-tech.org/ifc/IFC2x3/TC1/html/ifcexternalreferenceresource/lexical/ifcdocumentreference.htm
             return null;
         }
 
@@ -234,17 +216,14 @@ namespace XbimExchanger.IfcToCOBieExpress
         /// </summary>
         /// <param name="ifcDocumentInformation">Document Information Object</param>
         /// <returns>string or null</returns>
-        private string GetName(IIfcDocumentInformation ifcDocumentInformation)
+        private static string GetName(IIfcDocumentInformation ifcDocumentInformation)
         {
             if (ifcDocumentInformation == null)
                 return null;
             
-            if (!string.IsNullOrEmpty(ifcDocumentInformation.Name))
-            {
-                return ifcDocumentInformation.Name;
-            }
-
-            return null;
+            return !string.IsNullOrEmpty(ifcDocumentInformation.Name) ? 
+                ifcDocumentInformation.Name : 
+                null;
         }
 
         /// <summary>
@@ -252,7 +231,7 @@ namespace XbimExchanger.IfcToCOBieExpress
         /// </summary>
         /// <param name="ifcDocumentReference">Document Reference Object</param>
         /// <returns>string</returns>
-        private string GetFileDirectory(IIfcDocumentReference ifcDocumentReference)
+        private static string GetFileDirectory(IIfcExternalReference ifcDocumentReference)
         {
             if (ifcDocumentReference == null)
                 return null;
@@ -268,7 +247,7 @@ namespace XbimExchanger.IfcToCOBieExpress
         /// </summary>
         /// <param name="ifcDocumentReference">Document Reference Object</param>
         /// <returns>string</returns>
-        private string GetFileName(IIfcDocumentReference ifcDocumentReference)
+        private static string GetFileName(IIfcDocumentReference ifcDocumentReference)
         {
             if (ifcDocumentReference == null)
                 return null;
@@ -292,9 +271,9 @@ namespace XbimExchanger.IfcToCOBieExpress
         }
 
 
-        public override Document CreateTargetObject()
+        public override CobieDocument CreateTargetObject()
         {
-            return new Document();
+            return Exchanger.TargetRepository.Instances.New<CobieDocument>();
         }
     }
 }

@@ -1,12 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Xbim.CobieExpress;
 using Xbim.Common;
-using Xbim.COBieLiteUK;
 using Xbim.Ifc4.DateTimeResource;
 using Xbim.Ifc4.Interfaces;
 using Xbim.Ifc4.MeasureResource;
-using Attribute = Xbim.COBieLiteUK.Attribute;
 
 namespace XbimExchanger.IfcToCOBieExpress
 {
@@ -273,9 +272,9 @@ namespace XbimExchanger.IfcToCOBieExpress
                     result.Unit = ((IIfcUnit)ifcPropertyEnumeratedValue.EnumerationReference).FullName;
                 if (ifcPropertyEnumeratedValue.EnumerationValues.Count()==1)
                     SetCoBieAttributeValue(result, ifcPropertyEnumeratedValue.EnumerationValues.FirstOrDefault());
-                else if (result is StringAttributeValue) //if it is a string we can add all the  values in a list
+                else if (result is StringValue) //if it is a string we can add all the  values in a list
                 {
-                    var stringValueType = result as StringAttributeValue;
+                    var stringValueType = (StringValue) result;
                     foreach (var enumValue in ifcPropertyEnumeratedValue.EnumerationValues)
                     {
                         stringValueType.Value += enumValue + ";";
@@ -290,7 +289,7 @@ namespace XbimExchanger.IfcToCOBieExpress
             }
             else if (ifcPropertyBoundedValue != null)
             {
-                if (result is StringAttributeValue) //if it is a string we can add  the bounded values in a statement
+                if (result is StringValue) //if it is a string we can add  the bounded values in a statement
                 {
                     if (ifcPropertyBoundedValue.Unit != null)
                         result.Unit = ((IIfcUnit)ifcPropertyBoundedValue).FullName;
@@ -534,7 +533,7 @@ namespace XbimExchanger.IfcToCOBieExpress
         /// </summary>
         /// <param name="ifcProperty"></param>
         /// <returns></returns>
-        static public Attribute ConvertToAttributeType(IIfcProperty ifcProperty)
+        public static CobieAttribute ConvertToAttributeType(IIfcProperty ifcProperty)
         {
             
              var attributeType = new Attribute

@@ -38,7 +38,7 @@ namespace XbimExchanger.IfcToCOBieExpress
             List<IIfcElement> allAssetsofThisType;
             helper.DefiningTypeObjectMap.TryGetValue(proxyIfcTypeObject, out allAssetsofThisType);
 
-            target.Warranty = new Warranty { GuarantorLabor = new ContactKey { Email = helper.XbimCreatedBy.Email } };
+            target.Warranty = new Warranty { GuarantorLabor = new ContactKey { Email = helper.XbimContact.Email } };
             target.Warranty.GuarantorParts = target.Warranty.GuarantorLabor;
             if (ifcTypeObject != null)
             {
@@ -55,7 +55,7 @@ namespace XbimExchanger.IfcToCOBieExpress
                         }
                     }
                 }
-                target.Manufacturer = helper.GetOrCreateContactKey(manuf);
+                target.Manufacturer = helper.GetOrCreateContact(manuf);
 
                 target.ModelNumber = helper.GetCoBieProperty("AssetTypeModelNumber", ifcTypeObject);
                 target.ModelReference = helper.GetCoBieProperty("AssetTypeModelReference", ifcTypeObject);
@@ -100,10 +100,10 @@ namespace XbimExchanger.IfcToCOBieExpress
                     target.Warranty.DurationUnit = unit;
                 var laborContact = helper.GetCoBieProperty("AssetTypeWarrantyGuarantorLabor", ifcTypeObject);
                 if (!string.IsNullOrWhiteSpace(laborContact))
-                    target.Warranty.GuarantorLabor = helper.GetOrCreateContactKey(laborContact);
+                    target.Warranty.GuarantorLabor = helper.GetOrCreateContact(laborContact);
                 var partsContact = helper.GetCoBieProperty("AssetTypeWarrantyGuarantorParts", ifcTypeObject);
                 if (!string.IsNullOrWhiteSpace(partsContact))
-                    target.Warranty.GuarantorParts = helper.GetOrCreateContactKey(partsContact);
+                    target.Warranty.GuarantorParts = helper.GetOrCreateContact(partsContact);
                 //Attributes
                 target.Attributes = helper.GetAttributes(ifcTypeObject);
 

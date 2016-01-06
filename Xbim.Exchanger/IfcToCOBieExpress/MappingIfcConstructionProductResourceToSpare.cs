@@ -1,12 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using Xbim.Common;
 using Xbim.COBieLiteUK;
 using Xbim.Ifc;
 using Xbim.Ifc4.Interfaces;
 
 namespace XbimExchanger.IfcToCOBieExpress
 {
-    internal class MappingIfcConstructionProductResourceToSpare : XbimMappings<IfcStore, List<Facility>, string, IIfcConstructionProductResource, Spare>
+    internal class MappingIfcConstructionProductResourceToSpare : XbimMappings<IfcStore, IModel, string, IIfcConstructionProductResource, Spare>
     {
         /// <summary>
         /// Helper
@@ -84,7 +85,7 @@ namespace XbimExchanger.IfcToCOBieExpress
                 var emailList = emailDelimited.Split(new[] { ':', ';', '/', '\\' }, StringSplitOptions.RemoveEmptyEntries);
                 foreach (string email in emailList)
                 {
-                    var newEmail = Helper.GetOrCreateContactKey(email);
+                    var newEmail = Helper.GetOrCreateContact(email);
                     if ((newEmail != null) && !suppliers.Contains(newEmail))
                     {
                         suppliers.Add(newEmail);
