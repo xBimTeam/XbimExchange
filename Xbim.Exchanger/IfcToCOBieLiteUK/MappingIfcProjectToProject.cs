@@ -1,12 +1,12 @@
 ﻿using System.Collections.Generic;
+using Xbim.Common;
 using Xbim.COBieLiteUK;
-using Xbim.Ifc;
 using Xbim.Ifc4.Interfaces;
 
 
 namespace XbimExchanger.IfcToCOBieLiteUK
 {
-    class MappingIfcProjectToProject : XbimMappings<IfcStore, List<Facility>, string, IIfcProject, Project>
+    class MappingIfcProjectToProject : XbimMappings<IModel, List<Facility>, string, IIfcProject, Project>
     {
         protected override Project Mapping(IIfcProject source, Project target)
         {

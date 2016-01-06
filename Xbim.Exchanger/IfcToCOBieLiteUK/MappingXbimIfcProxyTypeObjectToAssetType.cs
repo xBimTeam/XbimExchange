@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Xbim.Common;
 using Xbim.COBieLiteUK;
-using Xbim.Ifc;
 using Xbim.Ifc4.Interfaces;
 
 namespace XbimExchanger.IfcToCOBieLiteUK
@@ -11,7 +11,7 @@ namespace XbimExchanger.IfcToCOBieLiteUK
     /// Maps a list of IfcTypeObject that are all the same
     /// </summary>
     internal class MappingXbimIfcProxyTypeObjectToAssetType :
-        XbimMappings<IfcStore, List<Facility>, string, XbimIfcProxyTypeObject, AssetType>
+        XbimMappings<IModel, List<Facility>, string, XbimIfcProxyTypeObject, AssetType>
     {
         public bool HasCategory
         {

@@ -154,7 +154,7 @@ namespace Xbim.Client
         /// <param name="prjName">Project name</param>
         private void CreateFedFile(FileInfo file, string author, string organisation, string prjName)
         {
-            using (FederatedModel fedModel = new FederatedModel(file, author, organisation, prjName))
+            using (var fedModel = new FederatedModel(file, author, organisation, prjName))
             {
                 foreach (var item in FileRoles)
                 {

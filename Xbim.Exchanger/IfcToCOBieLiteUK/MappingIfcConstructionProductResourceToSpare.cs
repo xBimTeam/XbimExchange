@@ -1,14 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
+using Xbim.Common;
 using Xbim.COBieLiteUK;
-using Xbim.Ifc;
 using Xbim.Ifc4.Interfaces;
 
 
 
 namespace XbimExchanger.IfcToCOBieLiteUK
 {
-    internal class MappingIfcConstructionProductResourceToSpare : XbimMappings<IfcStore, List<Facility>, string, IIfcConstructionProductResource, Spare>
+    internal class MappingIfcConstructionProductResourceToSpare : XbimMappings<IModel, List<Facility>, string, IIfcConstructionProductResource, Spare>
     {
         /// <summary>
         /// Helper

@@ -1,14 +1,13 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using Xbim.Common;
 using Xbim.COBieLiteUK;
-using Xbim.Ifc;
-
 using Xbim.Ifc4.Interfaces;
 using netSystem = System;
 
 namespace XbimExchanger.IfcToCOBieLiteUK 
 {
-    class MappingIfcBuildingToFacility : XbimMappings<IfcStore, List<Facility>, string, IIfcBuilding,Facility> 
+    class MappingIfcBuildingToFacility : XbimMappings<IModel, List<Facility>, string, IIfcBuilding,Facility> 
     {
         protected override Facility Mapping(IIfcBuilding ifcBuilding, Facility facility)
         {

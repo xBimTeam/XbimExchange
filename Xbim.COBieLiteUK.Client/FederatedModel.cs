@@ -163,31 +163,32 @@ namespace Xbim.Client
             
             if (!file.Exists)
                 throw new FileNotFoundException("Cannot find reference model file", file.FullName);
-
+           
             //add model to list of referenced models
-            IfcIdentifier docId = _fedModel.AddModelReference(file.FullName, organizationName, IfcRoleEnum.USERDEFINED).Identifier;
-            //TODO resolve federated models
-            //using (var txn = _fedModel.BeginTransaction())
-            //{
-            //    IfcDocumentInformation addDocId = _fedModel.ReferencedModels.Where(item => item.DocumentInformation.DocumentId == docId).Select(item => item.DocumentInformation).FirstOrDefault();
-            //    IfcOrganization org = addDocId.DocumentOwner as IfcOrganization;
-            //    if (org != null)
-            //    {
-            //        org.Roles.Clear();
-            //        //Add Roles
-            //        foreach (var item in GetActorRoles(roles))
-            //        {
-            //            org.AddRole(item);
-            //        }
-            //    }
-            //    //add display name if required
-            //    if (displayName != null)
-            //    {
-            //        addDocId.Description = displayName;
-                   
-            //    }
-            //    txn.Commit();
-            //}
+            var refDoc = _fedModel.AddModelReference(file.FullName, organizationName, IfcRoleEnum.USERDEFINED);
+
+            using (var txn = _fedModel.BeginTransaction())
+            {
+
+                var addDocId = refDoc.DocumentInformation;
+                IfcOrganization org = addDocId.DocumentOwner as IfcOrganization;
+                if (org != null)
+                {
+                    org.Roles.Clear();
+                    //Add Roles
+                    foreach (var item in GetActorRoles(roles))
+                    {
+                        org.AddRole(item);
+                    }
+                }
+                //add display name if required
+                if (displayName != null)
+                {
+                    addDocId.Description = displayName;
+
+                }
+                txn.Commit();
+            }
         }
 
         /// <summary>

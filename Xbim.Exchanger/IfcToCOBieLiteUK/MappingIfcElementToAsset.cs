@@ -1,14 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Xbim.Common;
 using Xbim.COBieLiteUK;
-using Xbim.Ifc;
-
 using Xbim.Ifc4.Interfaces;
 
 namespace XbimExchanger.IfcToCOBieLiteUK
 {
-    class MappingIfcElementToAsset : XbimMappings<IfcStore, List<Facility>, string, IIfcElement, Asset>
+    class MappingIfcElementToAsset : XbimMappings<IModel, List<Facility>, string, IIfcElement, Asset>
     {
         protected override Asset Mapping(IIfcElement ifcElement, Asset target)
         {

@@ -10,7 +10,6 @@ using Xbim.Common.Logging;
 using Xbim.FilterHelper;
 using Xbim.Ifc;
 using Xbim.Ifc4.Interfaces;
-using Xbim.IO;
 using XbimExchanger.IfcToCOBieLiteUK.EqCompare;
 using Attribute = Xbim.COBieLiteUK.Attribute;
 using SystemAssembly = System.Reflection.Assembly;
@@ -81,7 +80,7 @@ namespace XbimExchanger.IfcToCOBieLiteUK
         public ProgressReporter ReportProgress
         { get; set; }
 
-        private readonly IfcStore _model;
+        private readonly IModel _model;
         private readonly string _creatingApplication;
 
         #region Model measurement units
@@ -217,7 +216,7 @@ namespace XbimExchanger.IfcToCOBieLiteUK
         /// </summary>
         /// <param name="model"></param>
         /// <param name="configurationFile"></param>
-        public CoBieLiteUkHelper(IfcStore model, ProgressReporter reportProgress, OutPutFilters filter = null, string configurationFile = null, EntityIdentifierMode extId = EntityIdentifierMode.IfcEntityLabels, SystemExtractionMode sysMode = SystemExtractionMode.System | SystemExtractionMode.Types)
+        public CoBieLiteUkHelper(IModel model, ProgressReporter reportProgress, OutPutFilters filter = null, string configurationFile = null, EntityIdentifierMode extId = EntityIdentifierMode.IfcEntityLabels, SystemExtractionMode sysMode = SystemExtractionMode.System | SystemExtractionMode.Types)
         {
             //set props
             _configFileName = configurationFile;
@@ -987,7 +986,7 @@ namespace XbimExchanger.IfcToCOBieLiteUK
         /// <summary>
         /// 
         /// </summary>
-        public IfcStore Model
+        public IModel Model
         {
             get { return _model; }
         }

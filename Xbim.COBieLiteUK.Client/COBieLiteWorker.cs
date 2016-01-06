@@ -323,81 +323,81 @@ namespace Xbim.Client
         private List<Facility> GenerateFedFacility(Params parameters)
         {
             var facilities = new List<Facility>();
-        //    try
-        //    {
-        //        using (var fedModel = new FederatedModel(new FileInfo(parameters.ModelFile)))
-        //        {
-        //            facilities = ProcessFederatedModel(fedModel, parameters);
-        //        }
-        //    }
-        //    catch (ArgumentException ex) //bad paths etc..
-        //    {
-        //        Worker.ReportProgress(0, ex.Message);
-        //    }
-        //    catch (XbimException ex) //not federated
-        //    {
-        //        Worker.ReportProgress(0, ex.Message);
-        //    }
-        //    return facilities;
-        //}
+            try
+            {
+                using (var fedModel = new FederatedModel(new FileInfo(parameters.ModelFile)))
+                {
+                    facilities = ProcessFederatedModel(fedModel, parameters);
+                }
+            }
+            catch (ArgumentException ex) //bad paths etc..
+            {
+                Worker.ReportProgress(0, ex.Message);
+            }
+            catch (XbimException ex) //not federated
+            {
+                Worker.ReportProgress(0, ex.Message);
+            }
+            return facilities;
+        }
 
-        //private List<Facility> ProcessFederatedModel(FederatedModel fedModel, Params parameters)
-        //{
-        //    //TODO fix federated models
-        //    var facilities = new List<Facility>();
-        //    if (fedModel.Model.IsFederation)
-        //    {
-        //        var fedFilters = parameters.Filter.SetFedModelFilter(fedModel.RefModelRoles);
-        //        var rolesFacilities = new Dictionary<RoleFilter, List<Facility>>();
-        //        foreach (var filter in fedFilters)
-        //        {
-        //            var ifcToCoBieLiteUkExchanger = new IfcToCOBieLiteUkExchanger(filter.Key, new List<Facility>(), Worker.ReportProgress, filter.Value, parameters.ConfigFile, parameters.ExtId, parameters.SysMode);
-        //            ifcToCoBieLiteUkExchanger.ReportProgress.Progress = Worker.ReportProgress;
-        //            var rolesFacility = ifcToCoBieLiteUkExchanger.Convert();
+        private List<Facility> ProcessFederatedModel(FederatedModel fedModel, Params parameters)
+        {
+            
+            var facilities = new List<Facility>();
+            if (fedModel.Model.IsFederation)
+            {
+                var fedFilters = parameters.Filter.SetFedModelFilter(fedModel.RefModelRoles);
+                var rolesFacilities = new Dictionary<RoleFilter, List<Facility>>();
+                foreach (var filter in fedFilters)
+                {
+                    var ifcToCoBieLiteUkExchanger = new IfcToCOBieLiteUkExchanger(filter.Key.Model, new List<Facility>(), Worker.ReportProgress, filter.Value, parameters.ConfigFile, parameters.ExtId, parameters.SysMode);
+                    ifcToCoBieLiteUkExchanger.ReportProgress.Progress = Worker.ReportProgress;
+                    var rolesFacility = ifcToCoBieLiteUkExchanger.Convert();
 
-        //            //facilities.AddRange(rolesFacility);
-        //            if (rolesFacilities.ContainsKey(filter.Value.AppliedRoles))
-        //            {
-        //                rolesFacilities[filter.Value.AppliedRoles].AddRange(rolesFacility);
-        //            }
-        //            else
-        //            {
-        //                rolesFacilities.Add(filter.Value.AppliedRoles, rolesFacility);
-        //            }
-        //        }
-        //        var fedFacilities =
-        //            rolesFacilities.OrderByDescending(d => d.Key.HasFlag(RoleFilter.Architectural))
-        //                .SelectMany(p => p.Value)
-        //                .ToList();
-        //        if (!fedFacilities.Any())
-        //            return facilities;
-        //        var baseFacility = fedFacilities.First();
-        //        fedFacilities.RemoveAt(0);
-        //        if (parameters.Log)
-        //        {
-        //            var logfile = Path.ChangeExtension(parameters.ModelFile, "merge.log");
-        //            using (var sw = new StreamWriter(logfile))
-        //            {
-        //                sw.AutoFlush = true;
-        //                foreach (var mergeFacility in fedFacilities)
-        //                {
-        //                    baseFacility.Merge(mergeFacility, sw);
-        //                }
-        //            }
-        //        }
-        //        else
-        //        {
-        //            foreach (var mergeFacility in fedFacilities)
-        //            {
-        //                baseFacility.Merge(mergeFacility);
-        //            }
-        //        }
-        //        facilities.Add(baseFacility);
-        //    }
-        //    else
-        //    {
-        //        throw new XbimException(string.Format("Model is not Federated: {0}", fedModel.FileNameXbimf));
-        //    }
+                    //facilities.AddRange(rolesFacility);
+                    if (rolesFacilities.ContainsKey(filter.Value.AppliedRoles))
+                    {
+                        rolesFacilities[filter.Value.AppliedRoles].AddRange(rolesFacility);
+                    }
+                    else
+                    {
+                        rolesFacilities.Add(filter.Value.AppliedRoles, rolesFacility);
+                    }
+                }
+                var fedFacilities =
+                    rolesFacilities.OrderByDescending(d => d.Key.HasFlag(RoleFilter.Architectural))
+                        .SelectMany(p => p.Value)
+                        .ToList();
+                if (!fedFacilities.Any())
+                    return facilities;
+                var baseFacility = fedFacilities.First();
+                fedFacilities.RemoveAt(0);
+                if (parameters.Log)
+                {
+                    var logfile = Path.ChangeExtension(parameters.ModelFile, "merge.log");
+                    using (var sw = new StreamWriter(logfile))
+                    {
+                        sw.AutoFlush = true;
+                        foreach (var mergeFacility in fedFacilities)
+                        {
+                            baseFacility.Merge(mergeFacility, sw);
+                        }
+                    }
+                }
+                else
+                {
+                    foreach (var mergeFacility in fedFacilities)
+                    {
+                        baseFacility.Merge(mergeFacility);
+                    }
+                }
+                facilities.Add(baseFacility);
+            }
+            else
+            {
+                throw new XbimException(string.Format("Model is not Federated: {0}", fedModel.FileNameXbimf));
+            }
             return facilities;
         }
     }
