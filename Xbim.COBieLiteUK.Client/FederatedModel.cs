@@ -3,11 +3,16 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Windows.Forms;
+using Xbim.Common.Federation;
+using Xbim.Common.Step21;
 using Xbim.FilterHelper;
+using Xbim.Ifc;
 using Xbim.Ifc2x3.ActorResource;
 using Xbim.Ifc2x3.ExternalReferenceResource;
+using Xbim.Ifc2x3.IO;
 using Xbim.Ifc2x3.MeasureResource;
-using Xbim.IO;
+
+using Xbim.IO.Esent;
 
 namespace Xbim.Client
 {
@@ -70,11 +75,11 @@ namespace Xbim.Client
         /// <summary>
         /// Refrenced files and roles
         /// </summary>
-        public Dictionary<XbimModel, RoleFilter> RefModelRoles
+        public Dictionary<IReferencedModel, RoleFilter> RefModelRoles
         {
             get
             {
-                return _fedModel != null ? GetFileRoles() : new Dictionary<XbimModel, RoleFilter>();
+                return _fedModel != null ? GetFileRoles() : new Dictionary<IReferencedModel, RoleFilter>();
             }
         } 
         #endregion
@@ -120,7 +125,7 @@ namespace Xbim.Client
             using (var txn = _fedModel.BeginTransaction())
             {
                 _fedModel.IfcProject.Name = (prjName != null) ? prjName : string.Empty;
-                _fedModel.Header = new IfcFileHeader(IfcFileHeader.HeaderCreationMode.InitWithXbimDefaults);
+                _fedModel.Header = new StepFileHeader(StepFileHeader.HeaderCreationMode.InitWithXbimDefaults);
                 txn.Commit();
             }
         }
@@ -160,61 +165,56 @@ namespace Xbim.Client
                 throw new FileNotFoundException("Cannot find reference model file", file.FullName);
 
             //add model to list of referenced models
-            IfcIdentifier docId = _fedModel.AddModelReference(file.FullName, organizationName, IfcRole.UserDefined).Identifier;
-            
-            using (var txn = _fedModel.BeginTransaction())
-            {
-                IfcDocumentInformation addDocId = _fedModel.ReferencedModels.Where(item => item.DocumentInformation.DocumentId == docId).Select(item => item.DocumentInformation).FirstOrDefault();
-                IfcOrganization org = addDocId.DocumentOwner as IfcOrganization;
-                if (org != null)
-                {
-                    org.Roles.Clear();
-                    //Add Roles
-                    foreach (var item in GetActorRoles(roles))
-                    {
-                        org.AddRole(item);
-                    }
-                }
-                //add display name if required
-                if (displayName != null)
-                {
-                    addDocId.Description = displayName;
+            IfcIdentifier docId = _fedModel.AddModelReference(file.FullName, organizationName, IfcRoleEnum.USERDEFINED).Identifier;
+            //TODO resolve federated models
+            //using (var txn = _fedModel.BeginTransaction())
+            //{
+            //    IfcDocumentInformation addDocId = _fedModel.ReferencedModels.Where(item => item.DocumentInformation.DocumentId == docId).Select(item => item.DocumentInformation).FirstOrDefault();
+            //    IfcOrganization org = addDocId.DocumentOwner as IfcOrganization;
+            //    if (org != null)
+            //    {
+            //        org.Roles.Clear();
+            //        //Add Roles
+            //        foreach (var item in GetActorRoles(roles))
+            //        {
+            //            org.AddRole(item);
+            //        }
+            //    }
+            //    //add display name if required
+            //    if (displayName != null)
+            //    {
+            //        addDocId.Description = displayName;
                    
-                }
-                txn.Commit();
-            }
+            //    }
+            //    txn.Commit();
+            //}
         }
 
         /// <summary>
         /// Get the file to roles information
         /// </summary>
         /// <returns>Dictionary or FileInfo to RoleFilter</returns>
-        private Dictionary<XbimModel, RoleFilter> GetFileRoles()
+        private Dictionary<IReferencedModel, RoleFilter> GetFileRoles()
         {
-            Dictionary<XbimModel, RoleFilter> modelRoles = new Dictionary<XbimModel, RoleFilter>();
+            Dictionary<IReferencedModel, RoleFilter> modelRoles = new Dictionary<IReferencedModel, RoleFilter>();
             foreach (var refModel in _fedModel.ReferencedModels)
             {
-                IfcDocumentInformation doc = refModel.DocumentInformation;
-                IfcOrganization owner = doc.DocumentOwner as IfcOrganization;
-                if ((owner != null) && (owner.Roles != null))
+                var docRole = MapActorRole(refModel.Role);
+                try
                 {
-                    RoleFilter docRoles = GetRoleFilters(owner.Roles.ToList());
-                    try
+                    FileInfo file = new FileInfo(refModel.Name);
+                    if (file.Exists)
                     {
-                        FileInfo file = new FileInfo(refModel.Model.DatabaseName);
-                        if (file.Exists)
-                        {
-                            modelRoles[refModel.Model] = docRoles;
-                        }
-                        else
-                        {
-                            MessageBox.Show("File path does not exist: {0}", doc.Name);
-                        }
+                        modelRoles[refModel] = docRole;
                     }
-                    catch (System.ArgumentException )
+                    else
                     {
-                        MessageBox.Show("File path is incorrect: {0}", doc.Name);
+                        MessageBox.Show("File path does not exist: {0}", refModel.Name);
                     }
+                }
+                catch (System.ArgumentException)
+                {
+                    MessageBox.Show("File path is incorrect: {0}", refModel.Name);
                 }
             }
             return modelRoles;
@@ -276,27 +276,27 @@ namespace Xbim.Client
             List<IfcActorRole> actorRoles = new List<IfcActorRole>();
             if (role.HasFlag(RoleFilter.Architectural))
             {
-                actorRoles.Add(RoleMap.ContainsKey(RoleFilter.Architectural) ? RoleMap[RoleFilter.Architectural] : MapRole(RoleFilter.Architectural, IfcRole.Architect));
+                actorRoles.Add(RoleMap.ContainsKey(RoleFilter.Architectural) ? RoleMap[RoleFilter.Architectural] : MapRole(RoleFilter.Architectural, IfcRoleEnum.ARCHITECT));
             }
             if (role.HasFlag(RoleFilter.Mechanical))
             {
-                actorRoles.Add(RoleMap.ContainsKey(RoleFilter.Mechanical) ? RoleMap[RoleFilter.Mechanical] : MapRole(RoleFilter.Mechanical, IfcRole.MechanicalEngineer));
+                actorRoles.Add(RoleMap.ContainsKey(RoleFilter.Mechanical) ? RoleMap[RoleFilter.Mechanical] : MapRole(RoleFilter.Mechanical, IfcRoleEnum.MECHANICALENGINEER));
             }
             if (role.HasFlag(RoleFilter.Electrical))
             {
-                actorRoles.Add(RoleMap.ContainsKey(RoleFilter.Electrical) ? RoleMap[RoleFilter.Electrical] : MapRole(RoleFilter.Electrical, IfcRole.ElectricalEngineer));
+                actorRoles.Add(RoleMap.ContainsKey(RoleFilter.Electrical) ? RoleMap[RoleFilter.Electrical] : MapRole(RoleFilter.Electrical, IfcRoleEnum.ELECTRICALENGINEER));
             }
             if (role.HasFlag(RoleFilter.Plumbing))
             {
-                actorRoles.Add(RoleMap.ContainsKey(RoleFilter.Plumbing) ? RoleMap[RoleFilter.Plumbing] : MapRole(RoleFilter.Plumbing, IfcRole.UserDefined));
+                actorRoles.Add(RoleMap.ContainsKey(RoleFilter.Plumbing) ? RoleMap[RoleFilter.Plumbing] : MapRole(RoleFilter.Plumbing, IfcRoleEnum.USERDEFINED));
             }
             if (role.HasFlag(RoleFilter.FireProtection))
             {
-                actorRoles.Add(RoleMap.ContainsKey(RoleFilter.FireProtection) ? RoleMap[RoleFilter.FireProtection] : MapRole(RoleFilter.FireProtection, IfcRole.UserDefined));
+                actorRoles.Add(RoleMap.ContainsKey(RoleFilter.FireProtection) ? RoleMap[RoleFilter.FireProtection] : MapRole(RoleFilter.FireProtection, IfcRoleEnum.USERDEFINED));
             }
             if (role.HasFlag(RoleFilter.Unknown))
             {
-                actorRoles.Add(RoleMap.ContainsKey(RoleFilter.Unknown) ? RoleMap[RoleFilter.Unknown] : MapRole(RoleFilter.Unknown, IfcRole.UserDefined));
+                actorRoles.Add(RoleMap.ContainsKey(RoleFilter.Unknown) ? RoleMap[RoleFilter.Unknown] : MapRole(RoleFilter.Unknown, IfcRoleEnum.USERDEFINED));
             }
             return actorRoles;
         }
@@ -307,14 +307,14 @@ namespace Xbim.Client
         /// <param name="role">RoleFilter</param>
         /// <param name="ifcRole">IfcRole</param>
         /// <returns></returns>
-        private IIfcActorRole MapRole(RoleFilter role, IIfcRole ifcRole)
+        private IfcActorRole MapRole(RoleFilter role, IfcRoleEnum ifcRole)
         {
             if (_fedModel.IsTransacting)
             {
                 IfcActorRole actorRole = _fedModel.Instances.New<IfcActorRole>();
-                if (ifcRole == IfcRole.UserDefined)
+                if (ifcRole == IfcRoleEnum.USERDEFINED)
                 {
-                    actorRole.Role = IfcRole.UserDefined;
+                    actorRole.Role = IfcRoleEnum.USERDEFINED;
                     actorRole.UserDefinedRole = role.ToString();
                 }
                 else
@@ -331,67 +331,26 @@ namespace Xbim.Client
             }
         }
 
-        /// <summary>
-        /// Convert a list of IfcActorRole to set correct flags on the returned RoleFilter 
-        /// </summary>
-        /// <param name="actorRoles">list of IfcActorRole</param>
-        /// <returns>RoleFilter</returns>
-        public static RoleFilter GetRoleFilters(List<IfcActorRole> actorRoles)
-        {
-            RoleFilter roles = RoleFilter.Unknown; //reset to unknown
+       
 
-            //set selected roles
-            int idx = 0;
-            foreach (var item in actorRoles)
-            {
-                RoleFilter role = MapActorRole(item);
-                if (!roles.HasFlag(role))
-                {
-                    roles |= role; //add flag to RoleFilter
-                    //remove the inital RoleFilter.Unknown,  set in declaration unless found role is unknown
-                    if ((idx == 0) && (role != RoleFilter.Unknown))
-                    {
-                        roles &= ~RoleFilter.Unknown;
-                    }
-                    idx++;
-                }
-            }
-            return roles;
-        }
 
-        /// <summary>
-        /// Map IfcActroRole to RoleFilter, if no match the RoleFilter.Unknown returned
-        /// </summary>
-        /// <param name="actorRole">IfcActorRole</param>
-        /// <returns>RoleFilter</returns>
-        private static RoleFilter MapActorRole(IfcActorRole actorRole)
+        private static RoleFilter MapActorRole(string roleName)
         {
-            var role = actorRole.Role;
-            var userDefined = actorRole.UserDefinedRole;
-            if (role == IfcRole.UserDefined)
+            IfcRoleEnum role;
+            if (Enum.TryParse(roleName, true, out role))
             {
-                RoleFilter filterRole;
-                if (Enum.TryParse(userDefined, out filterRole))
-                {
-                    return filterRole;
-                }
-            }
-            else
-            {
-                if (role == IfcRole.Architect)
+                if (role == IfcRoleEnum.ARCHITECT)
                     return RoleFilter.Architectural;
-                if (role == IfcRole.MechanicalEngineer)
+                if (role == IfcRoleEnum.MECHANICALENGINEER)
                     return RoleFilter.Mechanical;
-                if (role == IfcRole.ElectricalEngineer)
+                if (role == IfcRoleEnum.ELECTRICALENGINEER)
                     return RoleFilter.Electrical;
             }
-            //Unhandled IfcRole
-            //IfcRole.Supplier IfcRole.Manufacturer IfcRole.Contractor IfcRole.Subcontractor IfcRole.StructuralEngineer
-            //IfcRole.CostEngineer IfcRole.Client IfcRole.BuildingOwner IfcRole.BuildingOperator IfcRole.ProjectManager
-            //IfcRole.FacilitiesManager IfcRole.CivilEngineer IfcRole.ComissioningEngineer IfcRole.Engineer IfcRole.Consultant
-            //IfcRole.ConstructionManager IfcRole.FieldConstructionManager  IfcRole.Owner IfcRole.Reseller
             return RoleFilter.Unknown;
+
         }
+
+       
         #endregion
     }
 }

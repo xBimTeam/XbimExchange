@@ -2,8 +2,10 @@
 using System.IO;
 using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Xbim.Common.Step21;
 using Xbim.COBieLite;
 using Xbim.DPoW;
+using Xbim.Ifc;
 using Xbim.Ifc2x3.Kernel;
 using Xbim.IO;
 using XbimExchanger.COBieLiteToIfc;
@@ -65,18 +67,23 @@ namespace Tests
                 var outputCobieXml = Path.Combine(dir, stage.Name + ".DPoW.xml");
                 facility.WriteJson(outputCobieJson);
                 facility.WriteXml(outputCobieXml);
-
-                using (var model = XbimModel.CreateTemporaryModel())
+                var credentials = new XbimEditorCredentials()
                 {
-                    model.Initialise("Xbim Tester", "XbimTeam", "Xbim.Exchanger", "Xbim Development Team", "3.0");
-                    model.ReloadModelFactors();
+                    ApplicationDevelopersName = "XbimTeam",
+                    ApplicationFullName = "Xbim.Exchanger",
+                    EditorsOrganisationName = "Xbim Development Team",
+                    EditorsFamilyName = "Xbim Tester",
+                    ApplicationVersion = "3.0"
+                };
+                using (var model = IfcStore.Create(credentials, IfcSchemaVersion.Ifc2X3, XbimStoreType.InMemoryModel))
+                {                                    
                     using (var txn = model.BeginTransaction("Convert from COBieLite"))
                     {
                         var c2Ifc = new CoBieLiteToIfcExchanger(facility, model);
                         c2Ifc.Convert();
                         txn.Commit();
                     }
-                    model.SaveAs(outputIfc, XbimStorageType.IFC);
+                    model.SaveAs(outputIfc, IfcStorageType.Ifc);
 
                     if (facility.AssetTypes != null)
                         Assert.AreEqual(facility.AssetTypes.Count(), model.Instances.OfType<IfcTypeObject>().Count());

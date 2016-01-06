@@ -3,10 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using Xbim.COBie.Resources;
-using Xbim.IO;
+
 using Xbim.Ifc2x3.ProductExtension;
 using Xbim.Ifc2x3.Kernel;
 using Xbim.COBie.Contracts;
+using Xbim.Ifc2x3.IO;
 
 namespace Xbim.COBie
 {

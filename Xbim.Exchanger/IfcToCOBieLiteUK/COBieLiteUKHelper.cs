@@ -1817,12 +1817,7 @@ namespace XbimExchanger.IfcToCOBieLiteUK
                     }
                 }
                 var dateTime = ifcRoot.OwnerHistory.LastModifiedDate ?? ifcRoot.OwnerHistory.CreationDate;
-                if (dateTime != null)
-                {
-                    return DateTime.Parse(dateTime.ToString());
-                }
-                
-               
+                return dateTime.ToDateTime();
             }
             return DateTime.Now;
         }

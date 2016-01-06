@@ -236,7 +236,7 @@ namespace Xbim.COBie.Serialisers.XbimSerialiser
                         
             if (CurrentObject is IfcObject)
             {
-                ifcPropertySet = (CurrentObject as IfcObject).GetPropertySet(pSetName);
+                ifcPropertySet = (CurrentObject as IfcObject).GetPropertySet(pSetName) as IfcPropertySet;
                 if (ifcPropertySet == null)
                 {
                     ifcPropertySet = AddPropertySet((IfcObject)CurrentObject, pSetName, "");

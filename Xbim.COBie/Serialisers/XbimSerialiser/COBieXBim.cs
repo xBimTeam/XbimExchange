@@ -438,13 +438,17 @@ namespace Xbim.COBie.Serialisers.XbimSerialiser
         /// <returns>bool</returns>
         public static bool ValidGlobalId(string extId)
         {
-
-            Guid guid;
-            var isGuid = IfcGloballyUniqueId.TryConvertFromBase64(extId, out guid);
-            if (!isGuid) return false;
-            var guidStr = IfcGloballyUniqueId.ConvertToBase64(guid);
-            if (extId != guidStr) return false;
-            else return true;
+            try
+            {
+                Guid guid = IfcGloballyUniqueId.ConvertFromBase64(extId);
+                var guidStr = IfcGloballyUniqueId.ConvertToBase64(guid);
+                return extId == guidStr;
+            }
+            catch (Exception)
+            {
+                return false;
+            }
+            
         }
 
         /// <summary>
@@ -494,6 +498,7 @@ namespace Xbim.COBie.Serialisers.XbimSerialiser
         /// </summary>
         /// <param name="ifcObject">IfcObject to add property set too</param>
         /// <param name="pSetName">name of the property set</param>
+        /// <param name="pSetDescription"></param>
         protected IfcPropertySet AddPropertySet(IfcObject ifcObject, string pSetName, string pSetDescription)
         {
             var ifcPropertySet = ifcObject.GetPropertySet(pSetName);

@@ -212,8 +212,7 @@ namespace Xbim.COBie.Serialisers.XbimSerialiser
                     //then swaps the original OwnerHistoryAddObject back in the dispose, so set any properties within the using statement
                     using (COBieXBimEditScope context = new COBieXBimEditScope(Model, ifcSpace.OwnerHistory))
                     {
-                        IfcProduct placementRelToIfcProduct = ifcSpace.SpatialStructuralElementParent as IfcProduct;
-
+                        var placementRelToIfcProduct = ifcSpace.GetContainingStructuralElement();
                         AddExtrudedRectangle(row, rowNext, ifcSpace, placementRelToIfcProduct);
                     }
                 }

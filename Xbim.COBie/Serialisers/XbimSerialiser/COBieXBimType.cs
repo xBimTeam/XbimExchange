@@ -250,7 +250,7 @@ namespace Xbim.COBie.Serialisers.XbimSerialiser
             IfcTypeObject ifcTypeObject = null;
             if (model.Metadata.TryGetExpressType(typeName, out ifcType))
             {
-                var method = typeof(IXbimInstanceCollection).GetMethod("New", Type.EmptyTypes);
+                var method = typeof(IEntityCollection).GetMethod("New", Type.EmptyTypes);
                 var generic = method.MakeGenericMethod(ifcType.Type);
                 var newObj = generic.Invoke(model.Instances, null);
                 if (newObj is IfcTypeObject)

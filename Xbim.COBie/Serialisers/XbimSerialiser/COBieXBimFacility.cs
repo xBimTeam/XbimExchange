@@ -231,7 +231,8 @@ namespace Xbim.COBie.Serialisers.XbimSerialiser
             IfcUnitAssignment ifcUnitAssignment = GetProjectUnitAssignment();
             if (GetUnitEnumerations(value, out returnUnit, out returnPrefix))
             {
-                ifcUnitAssignment.SetOrChangeSIUnit(unitType, (IfcSIUnitName)returnUnit, returnPrefix);
+                if (returnUnit != null)
+                    ifcUnitAssignment.SetOrChangeSiUnit(unitType, (IfcSIUnitName)returnUnit.Value, returnPrefix);
             }
             else
             {

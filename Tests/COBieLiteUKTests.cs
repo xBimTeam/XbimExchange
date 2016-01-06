@@ -10,6 +10,7 @@ using Xbim.IO;
 using XbimExchanger.IfcToCOBieLiteUK;
 using Attribute = Xbim.COBieLiteUK.Attribute;
 using Xbim.FilterHelper;
+using Xbim.Ifc;
 
 
 namespace Tests
@@ -771,12 +772,13 @@ namespace Tests
         [DeploymentItem("ValidationFiles\\Lakeside_Restaurant.ifc")]
         public void IfcToCoBieLiteUkTest()
         {
-            using (var m = new XbimModel())
+            const string ifcTestFile = @"Lakeside_Restaurant.ifc";
+            using (var m = IfcStore.Open(ifcTestFile))
             {
-                const string ifcTestFile = @"Lakeside_Restaurant.ifc";
+                
                 var xbimTestFile = Path.ChangeExtension(ifcTestFile, "xbim");
                 var jsonFile = Path.ChangeExtension(ifcTestFile, "json");
-                m.CreateFrom(ifcTestFile, xbimTestFile, null, true, true);
+               
                 var facilities = new List<Facility>();
 
                 OutPutFilters rolefilters = new OutPutFilters();
