@@ -144,7 +144,7 @@ namespace Xbim.Client
             creds.EditorsFamilyName = fvi.CompanyName;
             creds.ApplicationFullName = fvi.ProductName;
             creds.ApplicationVersion = fvi.ProductVersion;
-            using (var ifcModel = IfcStore.Open(xbimFile,creds))
+            using (var ifcModel = IfcStore.Open(xbimFile,creds,true))
             {
                
                 using (var txn = ifcModel.BeginTransaction("Convert from COBieLiteUK"))
@@ -300,12 +300,8 @@ namespace Xbim.Client
             var facilities = new List<Facility>();
             var assembly = System.Reflection.Assembly.GetExecutingAssembly();
             var fvi = FileVersionInfo.GetVersionInfo(assembly.Location);
-            var creds = new XbimEditorCredentials();
-            creds.EditorsOrganisationName = fvi.CompanyName;
-            creds.EditorsFamilyName = fvi.CompanyName;
-            creds.ApplicationFullName = fvi.ProductName;
-            creds.ApplicationVersion = fvi.ProductVersion;
-            using (var model = IfcStore.Open(parameters.ModelFile,creds))
+            
+            using (var model = IfcStore.Open(parameters.ModelFile))
             {
                 
                 var ifcToCoBieLiteUkExchanger = new IfcToCOBieLiteUkExchanger(model, facilities, Worker.ReportProgress,

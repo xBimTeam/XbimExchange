@@ -364,12 +364,8 @@ namespace Xbim.Client
             var xbimFile = Path.ChangeExtension(filename, "xbim");
             _worker.ReportProgress(0, string.Format("Creating {0}", Path.GetFileName(xbimFile)));
              var fvi = FileVersionInfo.GetVersionInfo(assembly.Location);
-            var creds = new XbimEditorCredentials();
-            creds.EditorsOrganisationName = fvi.CompanyName;
-            creds.EditorsFamilyName = fvi.CompanyName;
-            creds.ApplicationFullName = fvi.ProductName;
-            creds.ApplicationVersion = fvi.ProductVersion;
-            using (var model = IfcStore.Open(filename,creds))
+
+            using (var model = IfcStore.Open(filename))
             {
                 model.SaveAs(xbimFile,IfcStorageType.Xbim );
                 model.Close();

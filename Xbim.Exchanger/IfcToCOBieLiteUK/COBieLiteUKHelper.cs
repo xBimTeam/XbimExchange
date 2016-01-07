@@ -8,7 +8,6 @@ using Xbim.COBieLiteUK;
 using Xbim.Common;
 using Xbim.Common.Logging;
 using Xbim.FilterHelper;
-using Xbim.Ifc;
 using Xbim.Ifc4.Interfaces;
 using XbimExchanger.IfcToCOBieLiteUK.EqCompare;
 using Attribute = Xbim.COBieLiteUK.Attribute;
