@@ -1,13 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
+using Xbim.CobieExpress;
 using Xbim.Common;
-using Xbim.COBieLiteUK;
 using Xbim.Ifc;
 using Xbim.Ifc4.Interfaces;
 
 namespace XbimExchanger.IfcToCOBieExpress
 {
-    internal class MappingIfcConstructionProductResourceToSpare : XbimMappings<IfcStore, IModel, string, IIfcConstructionProductResource, Spare>
+    internal class MappingIfcConstructionProductResourceToSpare : XbimMappings<IfcStore, IModel, int, IIfcConstructionProductResource, CobieSpare>
     {
         /// <summary>
         /// Helper
@@ -29,7 +30,7 @@ namespace XbimExchanger.IfcToCOBieExpress
         /// <param name="source">IfcConstructionProductResource to convert</param>
         /// <param name="target">Empty Spare Object</param>
         /// <returns>Filled Spare Object</returns>
-        protected override Spare Mapping(IIfcConstructionProductResource source, Spare target)
+        protected override CobieSpare Mapping(IIfcConstructionProductResource source, CobieSpare target)
         {
             if (Helper == null) Helper = ((IfcToCoBieExpressExchanger)Exchanger).Helper;
             if (UsedNames == null) UsedNames = new List<string>();
@@ -38,17 +39,17 @@ namespace XbimExchanger.IfcToCOBieExpress
             //check for duplicates, if found add a (#) => "Name(1)", if none return name unchanged
             name = Helper.GetNextName(name, UsedNames);
             target.Name = name;
-            target.CreatedBy = Helper.GetCreatedBy(source);
-            target.CreatedOn = Helper.GetCreatedOn(source);
+            target.Created = Helper.GetCreatedInfo(source);
 
-            target.Categories = Helper.GetCategories(source, true);
-            //Type name is parent holding the spare list
+            var spareTypeCategory = Helper.GetCategories(source).FirstOrDefault();
+            if (spareTypeCategory != null)
+                target.SpareType = Helper.GetPickValue<CobieSpareType>(spareTypeCategory.Value);
             
-            target.Suppliers = GetSuppliers(source);
-            target.ExternalEntity = Helper.ExternalEntityName(source);
+            target.Suppliers.AddRange(GetSuppliers(source));
+            target.ExternalObject = Helper.GetExternalObject(source);
             target.ExternalId = Helper.ExternalEntityIdentity(source);
             target.AltExternalId = source.GlobalId;
-            target.ExternalSystem = Helper.ExternalSystemName(source);
+            target.ExternalSystem = Helper.GetExternalSystem(source);
 
             target.Description = GetDescription(source);
             target.SetNumber = GetSetNumber(source);
@@ -61,10 +62,10 @@ namespace XbimExchanger.IfcToCOBieExpress
         /// </summary>
         /// <param name="source">IfcConstructionProductResource object</param>
         /// <returns>List of suppliers ContactKeys</returns>
-        private List<ContactKey> GetSuppliers(IIfcConstructionProductResource source)
+        private List<CobieContact> GetSuppliers(IIfcConstructionProductResource source)
         {
-            List<ContactKey> suppliers = new List<ContactKey>();
-            string emailDelimited = string.Empty;
+            var suppliers = new List<CobieContact>();
+            var emailDelimited = string.Empty;
 
             //check IfcTypeObject
             var emails = Helper.GetCoBieProperty("SpareSuppliers", ParentObject);
@@ -80,17 +81,15 @@ namespace XbimExchanger.IfcToCOBieExpress
                 emailDelimited += emailsResource;
             }
             //Build list
-            if (!string.IsNullOrEmpty(emailDelimited))
+            if (string.IsNullOrEmpty(emailDelimited)) return suppliers;
+            var emailList = emailDelimited.Split(new[] { ':', ';', '/', '\\' }, StringSplitOptions.RemoveEmptyEntries);
+            foreach (var email in emailList)
             {
-                var emailList = emailDelimited.Split(new[] { ':', ';', '/', '\\' }, StringSplitOptions.RemoveEmptyEntries);
-                foreach (string email in emailList)
+                var contact = Helper.GetOrCreateContact(email);
+                if ((contact != null) && !suppliers.Contains(contact))
                 {
-                    var newEmail = Helper.GetOrCreateContact(email);
-                    if ((newEmail != null) && !suppliers.Contains(newEmail))
-                    {
-                        suppliers.Add(newEmail);
-                    }
-                } 
+                    suppliers.Add(contact);
+                }
             }
             return suppliers;
         }
@@ -173,11 +172,9 @@ namespace XbimExchanger.IfcToCOBieExpress
 
         }
 
-
-
-        public override Spare CreateTargetObject()
+        public override CobieSpare CreateTargetObject()
         {
-            return new Spare();
+            return Exchanger.TargetRepository.Instances.New<CobieSpare>();
         }
     }
 }

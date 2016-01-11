@@ -1,55 +1,59 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using Xbim.COBieLiteUK;
-using Xbim.Ifc;
+using Xbim.CobieExpress;
 using Xbim.Ifc4.Interfaces;
 
 namespace XbimExchanger.IfcToCOBieExpress
 {
-    class MappingIfcZoneToZone : XbimMappings<IfcStore, List<Facility>, string, IIfcZone, Zone>
+    internal class MappingIfcZoneToZone : MappingIfcObjectToAsset<IIfcZone, CobieZone>
     {
-        protected override Zone Mapping(IIfcZone ifcZone, Zone target)
+        private MappingStringToCategory _stringToCategory;
+        private MappingIfcSpatialElementToSpace _elementToSpace;
+
+        public MappingStringToCategory StringToCategory
         {
-            var helper = ((IfcToCoBieExpressExchanger)Exchanger).Helper;
-            target.ExternalEntity = helper.ExternalEntityName(ifcZone);
-            target.ExternalId = helper.ExternalEntityIdentity(ifcZone);
-            target.AltExternalId = ifcZone.GlobalId;
-            target.ExternalSystem = helper.ExternalSystemName(ifcZone);
-            target.Description = ifcZone.Description;
-            target.Categories = helper.GetCategories(ifcZone);
-            if (target.Categories==COBieExpressHelper.UnknownCategory)
-             if(!string.IsNullOrWhiteSpace(ifcZone.ObjectType) )
-                 target.Categories = new List<Category>(new [] {new Category{Code=ifcZone.ObjectType}} );
-            target.CreatedBy = helper.GetCreatedBy(ifcZone);
-            target.CreatedOn = helper.GetCreatedOn(ifcZone);
-            target.Name = ifcZone.Name;
-            //Attributes
-            target.Attributes = helper.GetAttributes(ifcZone);
-            //Documents
-            var docsMappings = Exchanger.GetOrCreateMappings<MappingIfcDocumentSelectToDocument>();
-            helper.AddDocuments(docsMappings, target, ifcZone);
+            get { return _stringToCategory ?? (_stringToCategory = Exchanger.GetOrCreateMappings<MappingStringToCategory>()); }
+        }
+
+        public MappingIfcSpatialElementToSpace ElementToSpace
+        {
+            get { return _elementToSpace ?? (_elementToSpace = Exchanger.GetOrCreateMappings<MappingIfcSpatialElementToSpace>()); }
+        }
+
+        protected override CobieZone Mapping(IIfcZone ifcZone, CobieZone target)
+        {
+            base.Mapping(ifcZone, target);
+
+            if (!target.Categories.Any() || target.Categories.Contains(COBieExpressHelper.UnknownCategory))
+                if (!string.IsNullOrWhiteSpace(ifcZone.ObjectType))
+                {
+                    target.Categories.Clear();
+                    var category =  StringToCategory.GetOrCreate(ifcZone.ObjectType);
+                    target.Categories.Add(category);
+                }
 
             //get spaces in zones
-            var spaces = helper.GetSpaces(ifcZone);
+            var spaces = Helper.GetSpaces(ifcZone);
             var ifcSpaces = spaces as IList<IIfcSpace> ?? spaces.ToList();
             if (ifcSpaces.Any())
             {
-                target.Spaces = new List<SpaceKey>();
                 foreach (var space in ifcSpaces)
                 {
-                    var spaceKey = new SpaceKey { Name = space.Name };
-                    target.Spaces.Add(spaceKey);
+                    CobieSpace cSpace;
+                    if (ElementToSpace.GetOrCreateTargetObject(space.EntityLabel, out cSpace))
+                        ElementToSpace.AddMapping(space, cSpace);
+                    target.Spaces.Add(cSpace);
                 }
             }
-            //TODO:
-            //Space Issues
+
+            //TODO: Space Issues
             
             return target;
         }
 
-        public override Zone CreateTargetObject()
+        public override CobieZone CreateTargetObject()
         {
-            return new Zone();
+            return Exchanger.TargetRepository.Instances.New<CobieZone>();
         }
     }
 }

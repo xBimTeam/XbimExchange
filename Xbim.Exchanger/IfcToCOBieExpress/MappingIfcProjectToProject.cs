@@ -1,16 +1,16 @@
-﻿using System.Collections.Generic;
-using Xbim.COBieLiteUK;
+﻿using Xbim.CobieExpress;
+using Xbim.Common;
 using Xbim.Ifc;
 using Xbim.Ifc4.Interfaces;
 
 namespace XbimExchanger.IfcToCOBieExpress
 {
-    class MappingIfcProjectToProject : XbimMappings<IfcStore, List<Facility>, string, IIfcProject, Project>
+    internal class MappingIfcProjectToProject : XbimMappings<IfcStore, IModel, int, IIfcProject, CobieProject>
     {
-        protected override Project Mapping(IIfcProject source, Project target)
+        protected override CobieProject Mapping(IIfcProject source, CobieProject target)
         {
             var helper = ((IfcToCoBieExpressExchanger)Exchanger).Helper;
-            target.ExternalEntity = helper.ExternalEntityName(source);
+            target.ExternalObject = helper.GetExternalObject(source);
             target.ExternalId = helper.ExternalEntityIdentity(source);
             target.AltExternalId = source.GlobalId;
             target.Name = source.Name;
@@ -18,9 +18,9 @@ namespace XbimExchanger.IfcToCOBieExpress
             return target;
         }
 
-        public override Project CreateTargetObject()
+        public override CobieProject CreateTargetObject()
         {
-            return new Project();
+            return Exchanger.TargetRepository.Instances.New<CobieProject>();
         }
     }
 }

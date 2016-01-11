@@ -178,21 +178,28 @@ namespace XbimExchanger.IfcToCOBieExpress
         #endregion
 
         private readonly string _configFileName;
-        private Dictionary<IIfcActorSelect, CobieContact> _createdByKeys;
+        private readonly Dictionary<IIfcActorSelect, CobieContact> _contacts = new Dictionary<IIfcActorSelect, CobieContact>();
         private Dictionary<IIfcActorSelect, IIfcActor> _actors;
         private readonly CobieContact _xbimCreatedBy;
         private readonly CobieExternalSystem _externalSystemXbim;
         private readonly DateTime _now;
-        private readonly List<CobieCreatedInfo> _createdInfoCache = new List<CobieCreatedInfo>(); 
+        private readonly List<CobieCreatedInfo> _createdInfoCache = new List<CobieCreatedInfo>();
+        private CobieZone _xbimDefaultZone;
 
         private readonly MappingIfcClassificationReferenceToCategory _categoryMapping;
         private readonly MappingStringToExternalObject _externalObjectMapping;
         private readonly MappingStringToExternalSystem _externalSystemMapping;
         private readonly MappingIfcActorToContact _contactMapping;
+        private readonly MappingIfcDocumentSelectToDocument _documentMapping;
 
         /// <summary>
         /// Creates a default contact and adds it to the SundryContacts
         /// </summary>
+
+        public CobieExternalSystem XbimSystem
+        {
+            get { return _externalSystemXbim; }
+        }
 
         public CobieContact XbimContact
         {
@@ -260,6 +267,7 @@ namespace XbimExchanger.IfcToCOBieExpress
             _externalObjectMapping = exchanger.GetOrCreateMappings<MappingStringToExternalObject>();
             _externalSystemMapping = exchanger.GetOrCreateMappings<MappingStringToExternalSystem>();
             _contactMapping = exchanger.GetOrCreateMappings<MappingIfcActorToContact>();
+            _documentMapping = exchanger.GetOrCreateMappings<MappingIfcDocumentSelectToDocument>();
 
             _externalSystemXbim = _externalSystemMapping.GetOrCreateTargetObject("xBIM Toolkit");
             _externalSystemXbim.Name = "xBIM Toolkit";
@@ -321,23 +329,28 @@ namespace XbimExchanger.IfcToCOBieExpress
             }
             //finally convert to correct types in Dictionary
             return resourceToObjs.ToDictionary(r => r.Key as IIfcConstructionProductResource, r => r.Value.ConvertAll(x => (IIfcRoot)x));
-        } 
+        }
+
 
 
         /// <summary>
         /// Add document to List of Documents
         /// </summary>
-        /// <param name="docsMappings">Mapping object</param>
         /// <param name="target">Target object holding the document list - CobieObject</param>
         /// <param name="ifcRoot">Object holding the documents</param>
-        internal void AddDocuments(MappingIfcDocumentSelectToDocument docsMappings, CobieAsset target, IIfcDefinitionSelect ifcRoot)
+        internal void AddDocuments(CobieAsset target, IIfcDefinitionSelect ifcRoot)
         {
             if (ifcRoot == null) 
                 return;
             var documents = GetDocuments(ifcRoot);
 
-            foreach (var document in documents.Select(docsMappings.MappingMulti).SelectMany(docs => docs))
-                target.Documents.Add(document);
+            foreach (var document in documents)
+            {
+                List<CobieDocument> cDocs;
+                if (_documentMapping.GetOrCreateTargetObject(document.EntityLabel, out cDocs))
+                    _documentMapping.AddMapping(document, cDocs);
+                target.Documents.AddRange(cDocs);
+            }
         }
 
         /// <summary>
@@ -617,7 +630,7 @@ namespace XbimExchanger.IfcToCOBieExpress
             foreach (var group in grouping)
             {
                 //filter on in assembly, and ifcElement if filtered in ProductFilter even if the ifcTypeObject is not filtered (passed filter in relDefinesByType assignment above)
-                var allObjects = group.SelectMany(o => o).OfType<IIfcElement>().Where(e => !assemblyParts.Contains(e) && !Filter.ObjFilter(e, false)).ToList();  
+                var allObjects = group.SelectMany(o => o.ToList()).OfType<IIfcElement>().Where(e => !assemblyParts.Contains(e) && !Filter.ObjFilter(e, false)).ToList();  
                 _definingTypeObjectMap.Add(group.Key,allObjects);
                 ReportProgress.IncrementAndUpdate();
             }
@@ -1010,11 +1023,14 @@ namespace XbimExchanger.IfcToCOBieExpress
         /// </summary>
         public Dictionary<IIfcZone, HashSet<IIfcSpace>> ZoneSpaces { get; private set; }
 
-        public List<IIfcActorSelect> Contacts { get; private set; }
-
         public Dictionary<string, CobieContact> SundryContacts { get; private set; }
 
         public SystemExtractionMode SystemMode { get; internal set; }
+
+        public Dictionary<IIfcActorSelect, CobieContact> Contacts
+        {
+            get { return _contacts; }
+        }
 
         private void GetUnits()
         {
@@ -1361,12 +1377,12 @@ namespace XbimExchanger.IfcToCOBieExpress
                 {
                     newAttribute.Created = GetCreatedInfo(pSetDef);
                     newAttribute.ExternalId = ExternalEntityIdentity(pSetDef);
-                    newAttribute.ExternalSystem = ExternalSystemName(pSetDef);
+                    newAttribute.ExternalSystem = GetExternalSystem(pSetDef);
                 }
                 else
                 {
                     newAttribute.Created = GetCreatedInfo();
-                    newAttribute.ExternalSystem = ExternalSystemName();
+                    newAttribute.ExternalSystem = GetExternalSystem();
                 }
 
                 newAttribute.ExternalObject = GetCobiePset(pSetName);
@@ -1409,7 +1425,7 @@ namespace XbimExchanger.IfcToCOBieExpress
             {
                 a.Created = GetCreatedInfo(ifcObjectDefinition);
                 a.ExternalId = ExternalEntityIdentity(ifcObjectDefinition);
-                a.ExternalSystem = ExternalSystemName(ifcObjectDefinition);
+                a.ExternalSystem = GetExternalSystem(ifcObjectDefinition);
                 a.Name = attributeName;
             });
             newAttribute.Set(attributeValue);
@@ -1450,7 +1466,7 @@ namespace XbimExchanger.IfcToCOBieExpress
             return ifcObject.GetType().Name;
         }
 
-        internal CobieExternalSystem ExternalSystemName(IIfcRoot ifcObject = null, bool usePropFirst = false)
+        internal CobieExternalSystem GetExternalSystem(IIfcRoot ifcObject = null, bool usePropFirst = false)
         {
             if (ExternalReferenceMode == ExternalReferenceMode.IgnoreSystem ||
                 ExternalReferenceMode == ExternalReferenceMode.IgnoreSystemAndEntityName)
@@ -1575,12 +1591,6 @@ namespace XbimExchanger.IfcToCOBieExpress
             var orgs = _model.Instances.OfType<IIfcOrganization>().Where(p => !orgAlreadyIn.Contains(p) && p.Addresses != null); //lets only see ones with any address info
             actors = new HashSet<IIfcActorSelect>(actors.Union(orgs)); //union will exclude duplicates
 
-            var personsAlreadyIn = actors.Where(a => a is IIfcPerson);
-            personsAlreadyIn = personsAlreadyIn.Union(actors.OfType<IIfcPersonAndOrganization>().Select(po => po.ThePerson));//union will exclude duplicates
-            var persons = new HashSet<IIfcActorSelect>(_model.Instances.OfType<IIfcPerson>().Where(p => !personsAlreadyIn.Contains(p)));
-
-            Contacts = actors.Concat(persons).ToList();
-
             _actors = new Dictionary<IIfcActorSelect, IIfcActor>();
             //set progress report
             ReportProgress.NextStage(ifcActors.Count + actors.OfType<IIfcPersonAndOrganization>().Count(), 5);
@@ -1591,7 +1601,6 @@ namespace XbimExchanger.IfcToCOBieExpress
                 ReportProgress.IncrementAndUpdate();
             }
 
-            _createdByKeys = new Dictionary<IIfcActorSelect, CobieContact>();
             //sort out createdByKeys, these will always be IIfcPersonAndOrganization which are held in IfcOwnerHistory fields
             foreach (var actor in actors.OfType<IIfcPersonAndOrganization>())
             {
@@ -1599,9 +1608,10 @@ namespace XbimExchanger.IfcToCOBieExpress
                 CobieContact contact;
                 if (_contactMapping.GetOrCreateTargetObject(email, out contact))
                 {
+                    contact = _contactMapping.AddMapping(actor, contact);
                     contact.Email = email;
                 }
-                _createdByKeys.Add(actor, contact);
+                _contacts.Add(actor, contact);
                 ReportProgress.IncrementAndUpdate();
             }
             SundryContacts = new Dictionary<string, CobieContact>();
@@ -1629,7 +1639,7 @@ namespace XbimExchanger.IfcToCOBieExpress
             }
             
             //get a default that will be unique
-            var email = string.Format("unknown{0}@undefined.email", ((IPersistEntity)personOrg).EntityLabel);
+            var email = string.Format("unknown{0}@undefined.email", personOrg.EntityLabel);
             if ((organisation != null) && (organisation.Addresses != null))
             {
                 var telecom = organisation.Addresses.OfType<IIfcTelecomAddress>().FirstOrDefault(a=>a.ElectronicMailAddresses.Any(e=>!string.IsNullOrWhiteSpace(e)));
@@ -1667,10 +1677,9 @@ namespace XbimExchanger.IfcToCOBieExpress
         public IEnumerable<IIfcObjectDefinition> GetSystemAssignments(IIfcSystem ifcSystem)
         {
             IEnumerable<IIfcObjectDefinition> assignments;
-            if (SystemAssignment.TryGetValue(ifcSystem, out assignments))
-                return assignments;
-            return Enumerable.Empty<IIfcObjectDefinition>();
-            
+            return SystemAssignment.TryGetValue(ifcSystem, out assignments) ? 
+                assignments : 
+                Enumerable.Empty<IIfcObjectDefinition>();
         }
 
 
@@ -1682,10 +1691,9 @@ namespace XbimExchanger.IfcToCOBieExpress
         public IEnumerable<IIfcObjectDefinition> GetSystemAssignments(IIfcPropertySet ifcPropertySet)
         {
             IEnumerable<IIfcObjectDefinition> assignments;
-            if (SystemViaPropAssignment.TryGetValue(ifcPropertySet, out assignments))
-                return assignments;
-            return Enumerable.Empty<IIfcObjectDefinition>();
-
+            return SystemViaPropAssignment.TryGetValue(ifcPropertySet, out assignments) ? 
+                assignments : 
+                Enumerable.Empty<IIfcObjectDefinition>();
         }
         /// <summary>
         /// Returns a list of spaces the element is in
@@ -1746,18 +1754,22 @@ namespace XbimExchanger.IfcToCOBieExpress
                 var email = GetCoBieProperty("CommonCreatedBy", (IIfcObjectDefinition) ifcRoot);
                 if (string.IsNullOrEmpty(email)) return XbimContact;
 
-                if (_contactMapping.GetOrCreateTargetObject(email, out contact))
-                    contact.Email = email;
+                if (!_contactMapping.GetOrCreateTargetObject(email, out contact)) 
+                    return contact;
+
+                contact.Email = email;
+                contact.Created = GetCreatedInfo(XbimContact, _now);
+                contact.Category = UnknownRole;
                 return contact;
             }
             if (ifcRoot.OwnerHistory.LastModifyingUser != null)
             {
-                if (_createdByKeys.TryGetValue(ifcRoot.OwnerHistory.LastModifyingUser, out contact))
+                if (_contacts.TryGetValue(ifcRoot.OwnerHistory.LastModifyingUser, out contact))
                     return contact;
             }
             else if (ifcRoot.OwnerHistory.OwningUser != null)
             {
-                if (_createdByKeys.TryGetValue(ifcRoot.OwnerHistory.OwningUser, out contact))
+                if (_contacts.TryGetValue(ifcRoot.OwnerHistory.OwningUser, out contact))
                     return contact;
             }
             return XbimContact;
@@ -1838,7 +1850,7 @@ namespace XbimExchanger.IfcToCOBieExpress
                 return GetCreatedBy(actor);
 
             CobieContact key;
-            return _createdByKeys.TryGetValue(actorSelect, out key) ? 
+            return _contacts.TryGetValue(actorSelect, out key) ? 
                 key : 
                 XbimContact;
         }
@@ -1851,16 +1863,18 @@ namespace XbimExchanger.IfcToCOBieExpress
                 _now;
         }
 
-        
 
-        internal CobieZone CreateXbimDefaultZone()
+        internal CobieZone XbimDefaultZone
         {
-            return Target.Instances.New<CobieZone>(z =>
+            get
             {
-                z.Name = "Default Zone";
-                z.Created = GetCreatedInfo(XbimContact, _now);
-                z.Category.Add(UnknownCategory);
-            });
+                return _xbimDefaultZone ?? (_xbimDefaultZone = Target.Instances.New<CobieZone>(z =>
+                {
+                    z.Name = "Default Zone";
+                    z.Created = GetCreatedInfo(XbimContact, _now);
+                    z.Categories.Add(UnknownCategory);
+                }));
+            }
         }
 
         internal CobieSystem CreateUndefinedSystem()
@@ -1869,7 +1883,7 @@ namespace XbimExchanger.IfcToCOBieExpress
             {
                 s.Name = "Default System";
                 s.Created = GetCreatedInfo(XbimContact, _now);
-                s.Category.Add(UnknownCategory);
+                s.Categories.Add(UnknownCategory);
             });
         }
 
@@ -1882,7 +1896,7 @@ namespace XbimExchanger.IfcToCOBieExpress
 
             CobieContact contact;
             var actorContactKey =
-                _createdByKeys.Values.FirstOrDefault(c => string.Compare(c.Email, email, StringComparison.OrdinalIgnoreCase) == 0);
+                _contacts.Values.FirstOrDefault(c => string.Compare(c.Email, email, StringComparison.OrdinalIgnoreCase) == 0);
             if (actorContactKey != null)
                 return actorContactKey;
             if (SundryContacts.TryGetValue(email, out contact)) 
@@ -1899,7 +1913,8 @@ namespace XbimExchanger.IfcToCOBieExpress
         }
 
 
-        private readonly Dictionary<Type, List<CobiePickValue>> _pickCache = new Dictionary<Type, List<CobiePickValue>>(); 
+        private readonly Dictionary<Type, List<CobiePickValue>> _pickCache = new Dictionary<Type, List<CobiePickValue>>();
+
         internal TPickType GetPickValue<TPickType>(string value) where TPickType : CobiePickValue, IInstantiableEntity
         {
             var type = typeof (TPickType);

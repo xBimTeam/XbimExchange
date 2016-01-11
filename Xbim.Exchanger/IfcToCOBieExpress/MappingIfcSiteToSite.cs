@@ -1,16 +1,16 @@
-﻿using System.Collections.Generic;
-using Xbim.COBieLiteUK;
+﻿using Xbim.CobieExpress;
+using Xbim.Common;
 using Xbim.Ifc;
 using Xbim.Ifc4.Interfaces;
 
 namespace XbimExchanger.IfcToCOBieExpress
 {
-    class MappingIfcSiteToSite : XbimMappings<IfcStore, List<Facility>, string, IIfcSite, Site>
+    internal class MappingIfcSiteToSite : XbimMappings<IfcStore, IModel, int, IIfcSite, CobieSite>
     {
-        protected override Site Mapping(IIfcSite ifcSite, Site site)
+        protected override CobieSite Mapping(IIfcSite ifcSite, CobieSite site)
         {
             var helper = ((IfcToCoBieExpressExchanger)Exchanger).Helper;
-            site.ExternalEntity = helper.ExternalEntityName(ifcSite);
+            site.ExternalObject = helper.GetExternalObject(ifcSite);
             site.ExternalId = helper.ExternalEntityIdentity(ifcSite);
             site.AltExternalId = ifcSite.GlobalId;
             site.Name = ifcSite.LongName;
@@ -18,9 +18,9 @@ namespace XbimExchanger.IfcToCOBieExpress
             return site;
         }
 
-        public override Site CreateTargetObject()
+        public override CobieSite CreateTargetObject()
         {
-            return new Site();
+            return Exchanger.TargetRepository.Instances.New<CobieSite>();
         }
     }
 }

@@ -36,7 +36,7 @@ namespace XbimExchanger.IfcToCOBieExpress
             }
             target.ExternalEntity = helper.ExternalEntityName(pSet);
             target.ExternalId = helper.ExternalEntityIdentity(pSet);
-            target.ExternalSystem = helper.ExternalSystemName(pSet);
+            target.ExternalSystem = helper.GetExternalSystem(pSet);
             target.Name = string.IsNullOrEmpty(name) ? "Unknown" : name;
             target.Description = string.IsNullOrEmpty(pSet.Description) ? name : pSet.Description.ToString();
             target.CreatedBy = helper.GetCreatedBy(pSet);

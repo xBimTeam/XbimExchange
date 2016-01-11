@@ -1,8 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using Xbim.CobieExpress;
-using Xbim.COBieLiteUK;
 using Xbim.Ifc4.Interfaces;
 
 namespace XbimExchanger.IfcToCOBieExpress
@@ -46,9 +44,9 @@ namespace XbimExchanger.IfcToCOBieExpress
         {
             get
             {
-                if(_ifcTypeObject!=null) 
-                    return _helper.ExternalEntityName(_ifcTypeObject);
-                return "IfcTypeObject";
+                return _ifcTypeObject!=null ? 
+                    _helper.ExternalEntityName(_ifcTypeObject) : 
+                    "IfcTypeObject";
             }
         }
         /// <summary>
@@ -58,22 +56,22 @@ namespace XbimExchanger.IfcToCOBieExpress
         {
             get
             {
-                if(_ifcTypeObject!=null) 
-                    return _helper.ExternalEntityIdentity(_ifcTypeObject);
-                return null;
+                return _ifcTypeObject!=null ? 
+                    _helper.ExternalEntityIdentity(_ifcTypeObject) : 
+                    null;
             }
         }
 
         /// <summary>
         /// Returns the external name of the IfcTypeObject, if this is a generated type returns xBIM
         /// </summary>
-        public string ExternalSystemName 
+        public CobieExternalSystem ExternalSystem
         {
             get
             {
-                if(_ifcTypeObject!=null) 
-                    return _helper.ExternalSystemName(_ifcTypeObject);
-                return "xBIM";
+                return _ifcTypeObject!=null ? 
+                    _helper.GetExternalSystem(_ifcTypeObject) : 
+                    _helper.XbimSystem;
             }
         }
         /// <summary>
@@ -90,53 +88,48 @@ namespace XbimExchanger.IfcToCOBieExpress
         /// <summary>
         /// Returns the categories for the type null if no Ifc Type exists
         /// </summary>
-        public List<Category> Categories 
+        public List<CobieCategory> Categories 
         {
             get
             {
-                if(_ifcTypeObject!=null) 
-                    return  _helper.GetCategories(_ifcTypeObject);
-                return COBieExpressHelper.UnknownCategory;
+                return _ifcTypeObject!=null ? 
+                    _helper.GetCategories(_ifcTypeObject) : 
+                    new List<CobieCategory> { COBieExpressHelper.UnknownCategory };
             }
         }
         /// <summary>
         /// Returns the Accounting category, undefined if no type exists
         /// </summary>
-        public AssetPortability AccountingCategory
+        public CobieAssetType AccountingCategory
         {
             get
             {
                 if (_ifcTypeObject != null)
                 {
                     var accCategoryString = _helper.GetCoBieProperty("AssetTypeAccountingCategory", _ifcTypeObject);
-                    AssetPortability accCategoryEnum;
-                    if (Enum.TryParse(accCategoryString, true, out accCategoryEnum))
-                        return accCategoryEnum;
-                    COBieExpressHelper.Logger.WarnFormat(
-                        "AssetTypeAccountingCategory: An illegal value of [{0}] has been passed for the category of #{1}={2}.",
-                        accCategoryString, _ifcTypeObject.EntityLabel, _ifcTypeObject.GetType().Name);
+                    if (!string.IsNullOrWhiteSpace(accCategoryString))
+                        return _helper.GetPickValue<CobieAssetType>(accCategoryString);
+
                     IIfcAsset ifcAsset;
                     if (_helper.AssetAsignments.TryGetValue(_ifcTypeObject, out ifcAsset))
                     {
                         string portability =
                             _helper.GetCoBieAttribute<StringValue>("AssetTypeAccountingCategory", ifcAsset);
-                        if (Enum.TryParse(portability, true, out accCategoryEnum))
-                            return accCategoryEnum;
+                        if (!string.IsNullOrWhiteSpace(portability))
+                            return _helper.GetPickValue<CobieAssetType>(portability);
                     }
                     //Not technically correct, but if all ifcElements all have the same AssetTypeAccountingCategory value , we can safely assume that the type is going to be the same
                     accCategoryString = GetObjPropByAssoc("AssetTypeAccountingCategory", _ifcTypeObject);
-                    if (accCategoryString != null)
-                    {
-                        if (Enum.TryParse(accCategoryString, true, out accCategoryEnum))
-                        return accCategoryEnum;
-                    }
+                    if (!string.IsNullOrWhiteSpace(accCategoryString))
+                        return _helper.GetPickValue<CobieAssetType>(accCategoryString);
+                    
                     //Responsibility matrix, 'SpreadSheet Schema' tab, cell S81
                     if (_ifcTypeObject is IIfcFurnitureType) 
                     {
-                        return AssetPortability.Moveable;
+                        return _helper.GetPickValue<CobieAssetType>("Moveable");
                     }
                 }
-                return AssetPortability.notdefined;
+                return _helper.GetPickValue<CobieAssetType>("notdefined");
             }
         }
 
@@ -149,24 +142,21 @@ namespace XbimExchanger.IfcToCOBieExpress
         /// <returns>property value</returns>
         private string GetObjPropByAssoc(string valueName, IIfcTypeObject ifcTypeObject)
         {
-            string accCategoryString = string.Empty;
-            var ObjDefByType = _helper.DefiningTypeObjectMap.Where(pair => (pair.Key.IfcTypeObject != null) && (pair.Key.IfcTypeObject == ifcTypeObject)).SelectMany(p => p.Value);
+            var accCategoryString = string.Empty;
+            var objDefByType = _helper.DefiningTypeObjectMap.Where(pair => (pair.Key.IfcTypeObject != null) && Equals(pair.Key.IfcTypeObject, ifcTypeObject)).SelectMany(p => p.Value);
             var assetTypes = new List<string>();
-            foreach (var item in ObjDefByType)
+            foreach (var item in objDefByType)
             {
                 accCategoryString = _helper.GetCoBieProperty(valueName, item);
-                assetTypes.Add(accCategoryString != null ? accCategoryString : string.Empty);
+                assetTypes.Add(accCategoryString ?? string.Empty);
             }
             //assume every ifcElement hast to have the value and be set to the same value
-            if (assetTypes.Count > 0)
-            {
-                var fat = assetTypes.First();
-                if (assetTypes.All(at => at == fat))
-                {
-                    return accCategoryString;
-                }
-            }
-            return null;
+            if (assetTypes.Count <= 0) return null;
+
+            var fat = assetTypes.First();
+            return assetTypes.All(at => at == fat) ? 
+                accCategoryString : 
+                null;
         }
 
         /// <summary>
@@ -176,9 +166,9 @@ namespace XbimExchanger.IfcToCOBieExpress
         {
             get
             {
-                if (_ifcTypeObject != null)
-                    return _ifcTypeObject.Description;
-                return null;
+                return _ifcTypeObject != null ? 
+                    _ifcTypeObject.Description : 
+                    null;
             }
         }
         /// <summary>
@@ -190,11 +180,10 @@ namespace XbimExchanger.IfcToCOBieExpress
         /// Returns the entity label , -1 if this is a generated type </summary>
         public int EntityLabel
         {
-            get
-            {
-                if (_ifcTypeObject != null)
-                    return _ifcTypeObject.EntityLabel; 
-                return -1;
+            get { 
+                return _ifcTypeObject != null ? 
+                _ifcTypeObject.EntityLabel : 
+                -1; 
             }
         }
 
@@ -205,22 +194,15 @@ namespace XbimExchanger.IfcToCOBieExpress
         {
             get
             {
-                if (_ifcTypeObject != null)
-                    return _ifcTypeObject.GetType().Name;
-                return null;
+                return _ifcTypeObject != null ? 
+                    _ifcTypeObject.GetType().Name : 
+                    null;
             }
         }
 
-        internal ContactKey GetCreatedBy()
+        internal CobieCreatedInfo GetCreatedInfo()
         {       
-           return _helper.GetCreatedBy(_ifcTypeObject);
-        }
-
-        internal DateTime? GetCreatedOn()
-        {
-            if (_ifcTypeObject != null)
-                return _helper.GetCreatedOn(_ifcTypeObject);
-            return DateTime.Now;
+           return _helper.GetCreatedInfo(_ifcTypeObject);
         }
     }
 }

@@ -1,53 +1,41 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using Xbim.COBieLiteUK;
-using Xbim.Ifc;
+﻿using System.Linq;
+using Xbim.CobieExpress;
 using Xbim.Ifc4.Interfaces;
 
 namespace XbimExchanger.IfcToCOBieExpress
 {
-    class MappingIfcSystemToSystem : XbimMappings<IfcStore, List<Facility>, string, IIfcSystem, Xbim.COBieLiteUK.System>
+    internal class MappingIfcSystemToSystem : MappingIfcObjectToAsset<IIfcSystem, CobieSystem>
     {
-        protected override Xbim.COBieLiteUK.System Mapping(IIfcSystem ifcSystem, Xbim.COBieLiteUK.System target)
+        private MappingIfcElementToComponent _elementMapping;
+
+        public MappingIfcElementToComponent ElementMapping
         {
-            var helper = ((IfcToCoBieExpressExchanger)Exchanger).Helper;
-            target.ExternalEntity = helper.ExternalEntityName(ifcSystem);
-            target.ExternalId = helper.ExternalEntityIdentity(ifcSystem);
-            target.AltExternalId = ifcSystem.GlobalId;
-            target.ExternalSystem = helper.ExternalSystemName(ifcSystem);
-            target.Name = ifcSystem.Name;
-            target.Description = ifcSystem.Description;
-            target.CreatedBy = helper.GetCreatedBy(ifcSystem);
-            target.CreatedOn = helper.GetCreatedOn(ifcSystem);
-            target.Categories = helper.GetCategories(ifcSystem);
+            get { return _elementMapping ?? (_elementMapping = Exchanger.GetOrCreateMappings<MappingIfcElementToComponent>()); }
+        }
+
+        protected override CobieSystem Mapping(IIfcSystem ifcSystem, CobieSystem target)
+        {
+            base.Mapping(ifcSystem, target);
+
             //Add Assets
-            var systemAssignments = helper.GetSystemAssignments(ifcSystem);
-            var ifcObjectDefinitions = systemAssignments as IList<IIfcObjectDefinition> ?? systemAssignments.ToList();
-            if (ifcObjectDefinitions.Any())
+            var systemAssignments = Helper.GetSystemAssignments(ifcSystem);
+            var elements = systemAssignments.OfType<IIfcElement>();
+            foreach (var element in elements)
             {
-                target.Components = new List<AssetKey>();
-                foreach (var ifcObjectDefinition in ifcObjectDefinitions)
-                {
-                    var assetKey = new AssetKey { Name = ifcObjectDefinition.Name };
-                    target.Components.Add(assetKey);
-                }
+                CobieComponent component;
+                if (ElementMapping.GetOrCreateTargetObject(element.EntityLabel, out component))
+                    ElementMapping.AddMapping(element, component);
+                target.Components.Add(component);
             }
 
-            //Attributes
-            target.Attributes = helper.GetAttributes(ifcSystem);
+            //TODO: System Issues
 
-            //Documents
-            var docsMappings = Exchanger.GetOrCreateMappings<MappingIfcDocumentSelectToDocument>();
-            helper.AddDocuments(docsMappings, target, ifcSystem);
-
-            //TODO:
-            //System Issues
             return target;
         }
 
-        public override Xbim.COBieLiteUK.System CreateTargetObject()
+        public override CobieSystem CreateTargetObject()
         {
-            return new Xbim.COBieLiteUK.System();
+            return Exchanger.TargetRepository.Instances.New<CobieSystem>();
         }
     }
 }

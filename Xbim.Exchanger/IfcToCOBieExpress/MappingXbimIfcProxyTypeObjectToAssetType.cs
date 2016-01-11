@@ -1,7 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using Xbim.COBieLiteUK;
+using Xbim.CobieExpress;
+using Xbim.Common;
 using Xbim.Ifc;
 using Xbim.Ifc4.Interfaces;
 
@@ -11,7 +11,7 @@ namespace XbimExchanger.IfcToCOBieExpress
     /// Maps a list of IfcTypeObject that are all the same
     /// </summary>
     internal class MappingXbimIfcProxyTypeObjectToAssetType :
-        XbimMappings<IfcStore, List<Facility>, string, XbimIfcProxyTypeObject, AssetType>
+        XbimMappings<IfcStore, IModel, string, XbimIfcProxyTypeObject, CobieType>
     {
         public bool HasCategory
         {
@@ -19,26 +19,25 @@ namespace XbimExchanger.IfcToCOBieExpress
             private set;
         }
 
-        protected override AssetType Mapping(XbimIfcProxyTypeObject proxyIfcTypeObject, AssetType target)
+        protected override CobieType Mapping(XbimIfcProxyTypeObject proxyIfcTypeObject, CobieType target)
         {
 
             var helper = ((IfcToCoBieExpressExchanger)Exchanger).Helper;
-            target.ExternalEntity = proxyIfcTypeObject.ExternalEntity;
+            target.ExternalObject = helper.GetExternalObject(proxyIfcTypeObject.ExternalEntity);
             target.ExternalId = proxyIfcTypeObject.ExternalId;
-            target.ExternalSystem = proxyIfcTypeObject.ExternalSystemName;
+            target.ExternalSystem = proxyIfcTypeObject.ExternalSystem;
             target.Name = proxyIfcTypeObject.Name;
-            target.Categories = proxyIfcTypeObject.Categories;
+            target.Categories.AddRange(proxyIfcTypeObject.Categories);
             var cat = target.Categories.FirstOrDefault();
-            HasCategory = ((cat != null) && ((cat.Code != "unknown") || target.Categories.Count > 1)); //assume if more than 1 we have a category
-            target.AssetTypeEnum = proxyIfcTypeObject.AccountingCategory;
-            target.CreatedBy = proxyIfcTypeObject.GetCreatedBy();
-            target.CreatedOn = proxyIfcTypeObject.GetCreatedOn();
+            HasCategory = ((cat != null) && ((cat.Value != "unknown") || target.Categories.Count > 1)); //assume if more than 1 we have a category
+            target.AssetType = proxyIfcTypeObject.AccountingCategory;
+            target.Created = proxyIfcTypeObject.GetCreatedInfo();
             target.Description = proxyIfcTypeObject.Description;
             var ifcTypeObject = proxyIfcTypeObject.IfcTypeObject;
             List<IIfcElement> allAssetsofThisType;
             helper.DefiningTypeObjectMap.TryGetValue(proxyIfcTypeObject, out allAssetsofThisType);
 
-            target.Warranty = new Warranty { GuarantorLabor = new ContactKey { Email = helper.XbimContact.Email } };
+            target.Warranty = Exchanger.TargetRepository.Instances.New<CobieWarranty>();
             target.Warranty.GuarantorParts = target.Warranty.GuarantorLabor;
             if (ifcTypeObject != null)
             {
@@ -59,45 +58,31 @@ namespace XbimExchanger.IfcToCOBieExpress
 
                 target.ModelNumber = helper.GetCoBieProperty("AssetTypeModelNumber", ifcTypeObject);
                 target.ModelReference = helper.GetCoBieProperty("AssetTypeModelReference", ifcTypeObject);
-                target.ReplacementCost =
-                    helper.GetCoBieAttribute<DecimalAttributeValue>("AssetTypeReplacementCostValue",
-                        ifcTypeObject).Value;
-                target.ExpectedLife =
-                    helper.GetCoBieAttribute<IntegerAttributeValue>("AssetTypeExpectedLifeValue", ifcTypeObject)
-                        .Value;
-                target.NominalLength =
-                    helper.GetCoBieAttribute<DecimalAttributeValue>("AssetTypeNominalLength", ifcTypeObject).Value;
-                target.NominalWidth =
-                    helper.GetCoBieAttribute<DecimalAttributeValue>("AssetTypeNominalWidth", ifcTypeObject).Value;
-                target.NominalHeight =
-                    helper.GetCoBieAttribute<DecimalAttributeValue>("AssetTypeNominalHeight", ifcTypeObject).Value;
-                target.AccessibilityPerformance = helper.GetCoBieProperty("AssetTypeAccessibilityText",
-                    ifcTypeObject);
+                target.ReplacementCost = helper.GetCoBieAttribute<FloatValue>("AssetTypeReplacementCostValue", ifcTypeObject);
+                target.ExpectedLife = helper.GetCoBieAttribute<IntegerValue>("AssetTypeExpectedLifeValue", ifcTypeObject);
+                target.NominalLength = helper.GetCoBieAttribute<FloatValue>("AssetTypeNominalLength", ifcTypeObject);
+                target.NominalWidth = helper.GetCoBieAttribute<FloatValue>("AssetTypeNominalWidth", ifcTypeObject);
+                target.NominalHeight = helper.GetCoBieAttribute<FloatValue>("AssetTypeNominalHeight", ifcTypeObject);
+                target.AccessibilityPerformance = helper.GetCoBieProperty("AssetTypeAccessibilityText", ifcTypeObject);
                 target.Color = helper.GetCoBieProperty("AssetTypeColorCode", ifcTypeObject);
                 target.Constituents = helper.GetCoBieProperty("AssetTypeConstituentsDescription", ifcTypeObject);
-                DurationUnit unit;
-                if (Enum.TryParse(helper.GetCoBieProperty("AssetTypeDurationUnit", ifcTypeObject), true,
-                    out unit))
-                    target.DurationUnit = unit;
+                var durationUnit = helper.GetCoBieProperty("AssetTypeDurationUnit", ifcTypeObject);
+                if (!string.IsNullOrWhiteSpace(durationUnit)) target.DurationUnit = helper.GetPickValue<CobieDurationUnit>(durationUnit);
                 target.Features = helper.GetCoBieProperty("AssetTypeFeaturesDescription", ifcTypeObject);
                 target.Grade = helper.GetCoBieProperty("AssetTypeGradeDescription", ifcTypeObject);
                 target.Material = helper.GetCoBieProperty("AssetTypeMaterialDescription", ifcTypeObject);
                 target.Shape = helper.GetCoBieProperty("AssetTypeShapeDescription", ifcTypeObject);
                 target.Size = helper.GetCoBieProperty("AssetTypeSizeDescription", ifcTypeObject);
-                target.SustainabilityPerformance =
-                    helper.GetCoBieProperty("AssetTypeSustainabilityPerformanceDescription", ifcTypeObject);
+                target.SustainabilityPerformance = helper.GetCoBieProperty("AssetTypeSustainabilityPerformanceDescription", ifcTypeObject);
                 target.CodePerformance = helper.GetCoBieProperty("AssetTypeCodePerformance", ifcTypeObject);
                 target.Finish = helper.GetCoBieProperty("AssetTypeFinishDescription", ifcTypeObject);
 
-
                 target.Warranty.Description = helper.GetCoBieProperty("AssetTypeWarrantyDescription", ifcTypeObject);
-                target.Warranty.DurationLabor = helper.GetCoBieAttribute<DecimalAttributeValue>("AssetTypeWarrantyDurationLabor", ifcTypeObject).Value;
-                target.Warranty.DurationParts = helper.GetCoBieAttribute<DecimalAttributeValue>("AssetTypeWarrantyDurationParts", ifcTypeObject).Value;
+                target.Warranty.DurationLabor = helper.GetCoBieAttribute<FloatValue>("AssetTypeWarrantyDurationLabor", ifcTypeObject);
+                target.Warranty.DurationParts = helper.GetCoBieAttribute<FloatValue>("AssetTypeWarrantyDurationParts", ifcTypeObject);
 
-
-                if (Enum.TryParse(helper.GetCoBieProperty("AssetTypeWarrantyDurationUnit", ifcTypeObject), true,
-                    out unit))
-                    target.Warranty.DurationUnit = unit;
+                var warrantyDurationUnit = helper.GetCoBieProperty("AssetTypeWarrantyDurationUnit", ifcTypeObject);
+                if (!string.IsNullOrWhiteSpace(warrantyDurationUnit)) target.Warranty.DurationUnit = helper.GetPickValue<CobieDurationUnit>(warrantyDurationUnit);
                 var laborContact = helper.GetCoBieProperty("AssetTypeWarrantyGuarantorLabor", ifcTypeObject);
                 if (!string.IsNullOrWhiteSpace(laborContact))
                     target.Warranty.GuarantorLabor = helper.GetOrCreateContact(laborContact);
@@ -105,11 +90,10 @@ namespace XbimExchanger.IfcToCOBieExpress
                 if (!string.IsNullOrWhiteSpace(partsContact))
                     target.Warranty.GuarantorParts = helper.GetOrCreateContact(partsContact);
                 //Attributes
-                target.Attributes = helper.GetAttributes(ifcTypeObject);
+                target.Attributes.AddRange(helper.GetAttributes(ifcTypeObject));
 
                 //Documents
-                var docsMappings = Exchanger.GetOrCreateMappings<MappingIfcDocumentSelectToDocument>();
-                helper.AddDocuments(docsMappings, target, ifcTypeObject);
+                helper.AddDocuments(target, ifcTypeObject);
 
                 //Spare
                 var spareMapping = Exchanger.GetOrCreateMappings<MappingIfcConstructionProductResourceToSpare>();
@@ -118,45 +102,46 @@ namespace XbimExchanger.IfcToCOBieExpress
                 {
                     foreach (var item in helper.SpareLookup[ifcTypeObject])
                     {
-                        if (target.Spares == null)
-                            target.Spares = new List<Spare>();
-                        target.Spares.Add(spareMapping.AddMapping(item, new Spare()));
-
+                        CobieSpare spare;
+                        if (!spareMapping.GetOrCreateTargetObject(item.EntityLabel, out spare)) continue;
+                        spareMapping.AddMapping(item, spare);
+                        spare.Type = target;
                     }
                 }
             }
             //The Assets
 
-            var assetMappings = Exchanger.GetOrCreateMappings<MappingIfcElementToAsset>();
-            if (allAssetsofThisType != null && allAssetsofThisType.Any())
-            {
-                target.Assets = new List<Asset>();
-
-                foreach (IIfcElement element in allAssetsofThisType)
+            var assetMappings = Exchanger.GetOrCreateMappings<MappingIfcElementToComponent>();
+            if (allAssetsofThisType == null || !allAssetsofThisType.Any()) 
+                return target;
+            
+                foreach (var element in allAssetsofThisType)
                 {
-                    var asset = new Asset();
-                    asset = assetMappings.AddMapping(element, asset);
+                    CobieComponent component;
+                    if(assetMappings.GetOrCreateTargetObject(element.EntityLabel, out component))
+                        component = assetMappings.AddMapping(element, component);
+
                     //pass categories over from Asset to AssetType, if none set
                     if (!HasCategory)
                     {
-                        var assetcat = asset.Categories.FirstOrDefault();
-                        if ((assetcat != null) && (assetcat.Code != "unknown"))
+                        var assetcat = component.Categories.FirstOrDefault();
+                        if ((assetcat != null) && (assetcat.Value != "unknown"))
                         {
-                            target.Categories = asset.Categories;
+                            target.Categories.Clear();
+                            target.Categories.AddRange(component.Categories);
                             HasCategory = true;
                         }
                     }
-                    target.Assets.Add(asset);
+                    component.Type = target;
                 }
-            }
 
             return target;
         }
 
 
-        public override AssetType CreateTargetObject()
+        public override CobieType CreateTargetObject()
         {
-            return new AssetType();
+            return Exchanger.TargetRepository.Instances.New<CobieType>();
         }
     }
 }

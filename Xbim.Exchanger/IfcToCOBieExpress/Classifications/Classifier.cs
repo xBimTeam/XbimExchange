@@ -1,17 +1,17 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
-using Xbim.COBieLiteUK;
+using Xbim.CobieExpress;
 using XbimExchanger.IfcToCOBieExpress.Classifications.Components;
 
 namespace XbimExchanger.IfcToCOBieExpress.Classifications
 {
-    static public class FacilityClassifierExtensions
+    public static class FacilityClassifierExtensions
     {
         /// <summary>
         /// This is the constructor for the Classifier Class
         /// </summary>
-        static public void Classify(this Facility facility)
+        public static void Classify(this CobieFacility facility)
         {
             AddClassificationsToAssets(facility);
         }
@@ -24,75 +24,69 @@ namespace XbimExchanger.IfcToCOBieExpress.Classifications
         /// values that match the Regular Expression as a category
         /// of assets which conforms with the Schema.
         /// </summary>
-        static private void AddClassificationsToAssets(Facility facility)
+        private static void AddClassificationsToAssets(CobieFacility facility)
         {
             var dataReader = new ClassificationMappingReader();//DataReader Object which will create and populate the mappings table.
             //Get Each AssetType
-            foreach (AssetType at in facility.AssetTypes)
+            foreach (CobieType at in facility.AssetTypes)
             {
                 //Get Each Asset
-                foreach (Asset a in at.Assets)
+                foreach (var a in at.Components)
                 {
-                    //Create a new Category for the Asset
-                    a.Categories = new List<Category>();
-
                     //Get Each Property
                     foreach (var attr in a.Attributes)
                     {
-                        if (attr.Value.GetStringValue() != null && a.Categories.Count == 0)
+                        if (attr.Value.GetStringValue() == null || a.Categories.Count != 0) continue;
+                        //Get the Inferred Classifications
+
+                        var inferredClassifications = FindInferredClassifications(attr.Value.GetStringValue(), dataReader);
+
+                        foreach (var ic in inferredClassifications)
                         {
-                            //Get the Inferred Classifications
+                            var uniclassMatch = false;
+                            var nbsMatch = false;
+                            var nrmMatch = false;
 
-                            var inferredClassifications = FindInferredClassifications(attr.Value.GetStringValue(), dataReader);
-
-                            foreach (var ic in inferredClassifications)
+                            foreach (var cat in a.Categories)
                             {
-                                bool UniclassMatch = false;
-                                bool NbsMatch = false;
-                                bool NrmMatch = false;
-
-                                foreach (var cat in a.Categories)
+                                if (ic.UniclassCode != null && cat.Code == ic.UniclassCode)
                                 {
-                                    if (ic.UniclassCode != null && cat.Code == ic.UniclassCode)
-                                    {
-                                        UniclassMatch = true;
-                                    }
-                                    if (ic.NbsCode != null && cat.Code == ic.NbsCode)
-                                    {
-                                        NbsMatch = true;
-                                    }
-                                    if (ic.NrmCode != null && cat.Code == ic.NrmCode)
-                                    {
-                                        NrmMatch = true;
-                                    }
+                                    uniclassMatch = true;
                                 }
-                                //Add the Classifications as categories if they exist.
-                                if (ic.UniclassCode != null && !UniclassMatch)
+                                if (ic.NbsCode != null && cat.Code == ic.NbsCode)
                                 {
-                                    var uniClass = new Xbim.COBieLiteUK.Category();
-                                    uniClass.Classification = "Uniclass 2015 Reference (Inferred)";
-                                    uniClass.Code = ic.UniclassCode;
-                                    uniClass.Description = ic.UniclassDescription;
-                                    a.Categories.Add(uniClass);
+                                    nbsMatch = true;
                                 }
-                                if (ic.NbsCode != null && !NbsMatch)
+                                if (ic.NrmCode != null && cat.Code == ic.NrmCode)
                                 {
-                                    Xbim.COBieLiteUK.Category Nbs = new Xbim.COBieLiteUK.Category();
-                                    Nbs.Classification = "NBS Reference (Inferred)";
-                                    Nbs.Code = ic.NbsCode;
-                                    Nbs.Description = ic.NbsDescription;
-                                    a.Categories.Add(Nbs);
-                                }
-                                if (ic.NrmCode != null && !NrmMatch)
-                                {
-                                    Xbim.COBieLiteUK.Category Nrm = new Xbim.COBieLiteUK.Category();
-                                    Nrm.Classification = "NRM Reference (Inferred)";
-                                    Nrm.Code = ic.NrmCode;
-                                    Nrm.Description = ic.NrmDescription;
-                                    a.Categories.Add(Nrm);
+                                    nrmMatch = true;
                                 }
                             }
-
+                            //Add the Classifications as categories if they exist.
+                            if (ic.UniclassCode != null && !uniclassMatch)
+                            {
+                                var uniClass = new CobieCategory();
+                                uniClass.Classification = "Uniclass 2015 Reference (Inferred)";
+                                uniClass.Code = ic.UniclassCode;
+                                uniClass.Description = ic.UniclassDescription;
+                                a.Categories.Add(uniClass);
+                            }
+                            if (ic.NbsCode != null && !nbsMatch)
+                            {
+                                var nbs = new CobieCategory();
+                                nbs.Classification = "NBS Reference (Inferred)";
+                                nbs.Code = ic.NbsCode;
+                                nbs.Description = ic.NbsDescription;
+                                a.Categories.Add(nbs);
+                            }
+                            if (ic.NrmCode != null && !nrmMatch)
+                            {
+                                var nrm = new CobieCategory();
+                                nrm.Classification = "NRM Reference (Inferred)";
+                                nrm.Code = ic.NrmCode;
+                                nrm.Description = ic.NrmDescription;
+                                a.Categories.Add(nrm);
+                            }
                         }
                     }
                 }
@@ -105,8 +99,9 @@ namespace XbimExchanger.IfcToCOBieExpress.Classifications
         /// Uniclass, NBS or NRM.
         /// </summary>
         /// <param name="property">A string value of the assets property</param>
+        /// <param name="dataReader"></param>
         /// <returns>An InferredClassification which contains the classification mappings</returns>
-        static private IEnumerable<InferredClassification> FindInferredClassifications(string property, ClassificationMappingReader dataReader)
+        private static IEnumerable<InferredClassification> FindInferredClassifications(string property, ClassificationMappingReader dataReader)
         {
             //Check to see if the property is a valid classification            
             Pointer match = null;
@@ -126,10 +121,9 @@ namespace XbimExchanger.IfcToCOBieExpress.Classifications
                 }
             }
             //Get Mappings that match the InferredClassification
-            if (match != null)
-                return dataReader.GetInferredMapping(match);
-            else
-                return Enumerable.Empty<InferredClassification>();
+            return match != null ? 
+                dataReader.GetInferredMapping(match) : 
+                Enumerable.Empty<InferredClassification>();
         }
 
 

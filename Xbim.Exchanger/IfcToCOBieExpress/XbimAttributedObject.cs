@@ -275,11 +275,8 @@ namespace XbimExchanger.IfcToCOBieExpress
                 else if (result is StringValue) //if it is a string we can add all the  values in a list
                 {
                     var stringValueType = (StringValue) result;
-                    foreach (var enumValue in ifcPropertyEnumeratedValue.EnumerationValues)
-                    {
-                        stringValueType.Value += enumValue + ";";
-                    }
-                    stringValueType.Value = stringValueType.Value.TrimEnd(new[] { ';', ' ' });
+                    stringValueType = ifcPropertyEnumeratedValue.EnumerationValues.Aggregate(stringValueType, (current, enumValue) => (StringValue) (current + (enumValue + ";")));
+                    stringValueType = stringValueType.Value.TrimEnd(new[] { ';', ' ' });
                 }
                 else
                 {

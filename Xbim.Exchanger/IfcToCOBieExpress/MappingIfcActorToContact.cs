@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Xbim.CobieExpress;
 using Xbim.Common;
@@ -23,9 +24,17 @@ namespace XbimExchanger.IfcToCOBieExpress
 
     internal class MappingIfcActorToContact : XbimMappings<IfcStore, IModel, string, IIfcActorSelect, CobieContact>
     {
+        private COBieExpressHelper _helper;
+
+        public COBieExpressHelper Helper
+        {
+            get { return _helper ?? (_helper = ((IfcToCoBieExpressExchanger)Exchanger).Helper); }
+        }
+
+
         protected override CobieContact Mapping(IIfcActorSelect actor, CobieContact target)
         {
-            var helper = ((IfcToCoBieExpressExchanger)Exchanger).Helper;
+            
             var personAndOrganization = actor as IIfcPersonAndOrganization;
             var person = actor as IIfcPerson;
             var organisation = actor as IIfcOrganization;
@@ -42,9 +51,9 @@ namespace XbimExchanger.IfcToCOBieExpress
 
             if (string.IsNullOrWhiteSpace(target.Email))
             {
-               target.Email = string.Format("unknown{0}@undefined.email", ((IPersistEntity)actor).EntityLabel);
+               target.Email = string.Format("unknown{0}@undefined.email", actor.EntityLabel);
             }
-            target.Created = helper.GetCreatedInfo(actor, true);
+            target.Created = Helper.GetCreatedInfo(actor, true);
             if (target.Category == null)
                 target.Category = COBieExpressHelper.UnknownRole;
             
@@ -93,6 +102,9 @@ namespace XbimExchanger.IfcToCOBieExpress
                 }
             }
 
+            if (string.IsNullOrWhiteSpace(target.Email))
+                target.Email = string.Format("unknown{0}@undefined.email", ifcOrganization.EntityLabel);
+
             target.Company = ifcOrganization.Name;
 
 
@@ -105,7 +117,7 @@ namespace XbimExchanger.IfcToCOBieExpress
 
             if (ifcPerson.Addresses != null)
             {
-                var telecom = ifcPerson.Addresses.OfType<IIfcTelecomAddress>().FirstOrDefault();
+                var telecom = ifcPerson.Addresses.OfType<IIfcTelecomAddress>().FirstOrDefault(a => a.ElectronicMailAddresses.Any(e => !string.IsNullOrWhiteSpace(e)));
                 var postal = ifcPerson.Addresses.OfType<IIfcPostalAddress>().FirstOrDefault();
                 
                 if (telecom!=null)
@@ -148,18 +160,14 @@ namespace XbimExchanger.IfcToCOBieExpress
                         target.PostalCode = postal.PostalCode;
                 }
             }
-            if (ifcPerson.Roles != null)
-            {
-                var roles = ifcPerson.Roles.ToList();
-                if (roles.Any())
-                {
-                    target.Categories = new List<Category>(roles.Count());
-                    foreach (var role in roles)
-                        target.Categories.Add(new Category { Classification = "Role", Code = role.Role.ToString(), Description = role.Description });
-                }
 
-            }
+            if (string.IsNullOrWhiteSpace(target.Email))
+                target.Email = string.Format("unknown{0}@undefined.email", ifcPerson.EntityLabel);
 
+            if (ifcPerson.Roles == null) return;
+            var role = ifcPerson.Roles.FirstOrDefault();
+            if (role == null) return;
+            target.Category = Helper.GetPickValue<CobieRole>(Enum.GetName(typeof(IfcRoleEnum), role.Role));
         }
 
         public override CobieContact CreateTargetObject()
