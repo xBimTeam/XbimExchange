@@ -180,7 +180,7 @@ namespace XbimExchanger.IfcToCOBieExpress
         private readonly string _configFileName;
         private readonly Dictionary<IIfcActorSelect, CobieContact> _contacts = new Dictionary<IIfcActorSelect, CobieContact>();
         private Dictionary<IIfcActorSelect, IIfcActor> _actors;
-        private readonly CobieContact _xbimCreatedBy;
+        private CobieContact _xbimContact;
         private readonly CobieExternalSystem _externalSystemXbim;
         private readonly DateTime _now;
         private readonly List<CobieCreatedInfo> _createdInfoCache = new List<CobieCreatedInfo>();
@@ -206,9 +206,19 @@ namespace XbimExchanger.IfcToCOBieExpress
         {
             get
             {
-                if (!SundryContacts.ContainsKey(_xbimCreatedBy.Email))
-                    SundryContacts.Add(_xbimCreatedBy.Email, _xbimCreatedBy);
-                return _xbimCreatedBy;
+                if (_xbimContact == null)
+                {
+                    _xbimContact = Target.Instances.New<CobieContact>(c =>
+                    {
+                        c.Email = "unknown@OpenBIM.org";
+                        c.GivenName = "XbimTeam";
+                        c.Category = UnknownRole;
+                        c.Created = GetCreatedInfo(c, _now);
+                    });
+                }
+                if (!SundryContacts.ContainsKey(_xbimContact.Email))
+                    SundryContacts.Add(_xbimContact.Email, _xbimContact);
+                return _xbimContact;
             }
         }
 
@@ -223,10 +233,16 @@ namespace XbimExchanger.IfcToCOBieExpress
         /// <param name="sysMode"></param>
         public COBieExpressHelper(IfcToCoBieExpressExchanger exchanger, Xbim.COBieLiteUK.ProgressReporter reportProgress, OutPutFilters filter = null, string configurationFile = null, EntityIdentifierMode extId = EntityIdentifierMode.IfcEntityLabels, SystemExtractionMode sysMode = SystemExtractionMode.System | SystemExtractionMode.Types)
         {
+            _categoryMapping = exchanger.GetOrCreateMappings<MappingIfcClassificationReferenceToCategory>();
+            _externalObjectMapping = exchanger.GetOrCreateMappings<MappingStringToExternalObject>();
+            _externalSystemMapping = exchanger.GetOrCreateMappings<MappingStringToExternalSystem>();
+            _contactMapping = exchanger.GetOrCreateMappings<MappingIfcActorToContact>();
+            _documentMapping = exchanger.GetOrCreateMappings<MappingIfcDocumentSelectToDocument>();
+            _now = DateTime.Now;
+
             //set props
             _configFileName = configurationFile;
-            Filter = filter 
-                ?? new OutPutFilters();
+            Filter = filter  ?? new OutPutFilters();
             _model = exchanger.SourceRepository;
             Target = exchanger.TargetRepository;
             Exchanger = exchanger;
@@ -236,6 +252,17 @@ namespace XbimExchanger.IfcToCOBieExpress
             //pass the exchanger progress reporter over to helper
             ReportProgress = reportProgress; 
 
+            //create default and undefined objects
+            UnknownRole = Target.Instances.New<CobieRole>(r => r.Value = "unknown");
+            UnknownCategory = Target.Instances.New<CobieCategory>(r => r.Value = "unknown");
+
+            
+            _externalSystemXbim = _externalSystemMapping.GetOrCreateTargetObject("xBIM Toolkit");
+            _externalSystemXbim.Name = "xBIM Toolkit";
+        }
+
+        public void Init()
+        {
             //init
             ReportProgress.Reset(1, 1, "Creating Facility - Extracting Objects");
             LoadCobieMaps(); //1%
@@ -250,32 +277,6 @@ namespace XbimExchanger.IfcToCOBieExpress
             GetPropertySets();//33%
             GetSystems();//38%
             GetSpaceAssetLookup();//40%
-
-            UnknownRole = Target.Instances.New<CobieRole>(r => r.Value = "unknown");
-            UnknownCategory = Target.Instances.New<CobieCategory>(r => r.Value = "unknown");
-
-            _xbimCreatedBy = Target.Instances.New<CobieContact>(c =>
-            {
-                c.Email = "unknown@OpenBIM.org";
-                c.GivenName = "XbimTeam";
-                c.Category = UnknownRole;
-                c.Created = Target.Instances.New<CobieCreatedInfo>(ci => ci.CreatedOn = DateTime.Now);
-            });
-            _xbimCreatedBy.Created.CreatedBy = _xbimCreatedBy;
-            _now = DateTime.Now;
-
-            _categoryMapping = exchanger.GetOrCreateMappings<MappingIfcClassificationReferenceToCategory>();
-            _externalObjectMapping = exchanger.GetOrCreateMappings<MappingStringToExternalObject>();
-            _externalSystemMapping = exchanger.GetOrCreateMappings<MappingStringToExternalSystem>();
-            _contactMapping = exchanger.GetOrCreateMappings<MappingIfcActorToContact>();
-            _documentMapping = exchanger.GetOrCreateMappings<MappingIfcDocumentSelectToDocument>();
-
-            _externalSystemXbim = _externalSystemMapping.GetOrCreateTargetObject("xBIM Toolkit");
-            _externalSystemXbim.Name = "xBIM Toolkit";
-
-            var creatingApp = Model.Header.CreatingApplication;
-            var externalSystem = _externalSystemMapping.GetOrCreateTargetObject(creatingApp);
-            externalSystem.Name = creatingApp;
         }
 
         /// <summary>
@@ -1354,11 +1355,13 @@ namespace XbimExchanger.IfcToCOBieExpress
         {
             var uniqueAttributes = new Dictionary<string, CobieAttribute>();
             XbimAttributedObject attributedObject;
-            if (!_attributedObjects.TryGetValue(ifcObjectDefinition, out attributedObject)) return null;
+            if (!_attributedObjects.TryGetValue(ifcObjectDefinition, out attributedObject)) 
+                return new List<CobieAttribute>();
 
             var properties = attributedObject.Properties;
             var keyValuePairs = properties.ToArray();
-            if (keyValuePairs.Length <= 0) return null;
+            if (keyValuePairs.Length <= 0)
+                return new List<CobieAttribute>();
 
             var attributeCollection = new List<CobieAttribute>(keyValuePairs.Length);
             foreach (var kvp in keyValuePairs)
@@ -1575,7 +1578,9 @@ namespace XbimExchanger.IfcToCOBieExpress
         /// <returns></returns>
         public void GetContacts()
         {
-            
+
+            SundryContacts = new Dictionary<string, CobieContact>();
+
             //get any actors and select their
             var ifcActors = _model.Instances.OfType<IIfcActor>().ToList();
             var actors = new HashSet<IIfcActorSelect>(ifcActors.Select(a => a.TheActor)); //unique actors
@@ -1610,7 +1615,6 @@ namespace XbimExchanger.IfcToCOBieExpress
                 _contacts.Add(actor, contact);
                 ReportProgress.IncrementAndUpdate();
             }
-            SundryContacts = new Dictionary<string, CobieContact>();
         }
 
         public string EmailAddressOf(IIfcActorSelect personOrg)

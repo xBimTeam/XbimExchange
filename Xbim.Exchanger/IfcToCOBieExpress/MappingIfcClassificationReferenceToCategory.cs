@@ -8,11 +8,11 @@ namespace XbimExchanger.IfcToCOBieExpress
 {
     internal class MappingIfcClassificationReferenceToCategory: XbimMappings<IfcStore, IModel, string, IIfcClassificationReference, CobieCategory>
     {
-        private readonly MappingIfcClassificationToCobieClassification _classificationMapping;
+        private MappingIfcClassificationToCobieClassification _classificationMapping;
 
-        public MappingIfcClassificationReferenceToCategory()
+        private MappingIfcClassificationToCobieClassification ClassificationMapping
         {
-            _classificationMapping = Exchanger.GetOrCreateMappings<MappingIfcClassificationToCobieClassification>();
+            get { return _classificationMapping ?? (_classificationMapping = Exchanger.GetOrCreateMappings<MappingIfcClassificationToCobieClassification>()); }
         }
 
         public override CobieCategory CreateTargetObject()
@@ -44,8 +44,8 @@ namespace XbimExchanger.IfcToCOBieExpress
             if (ifcClassification == null) return target;
 
             CobieClassification cls;
-            if (_classificationMapping.GetOrCreateTargetObject(ifcClassification.Name, out cls))
-                _classificationMapping.AddMapping(ifcClassification, cls);
+            if (ClassificationMapping.GetOrCreateTargetObject(ifcClassification.Name, out cls))
+                ClassificationMapping.AddMapping(ifcClassification, cls);
             target.Classification = cls;
             return target;
         }

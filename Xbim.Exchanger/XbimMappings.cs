@@ -61,7 +61,14 @@ namespace XbimExchanger
         {
             if (typeof (TSourceKey).IsValueType || !Equals(null, key))
             {
-                return Results.GetOrAdd(key, CreateTargetObject());
+                TTargetObject result;
+                if (Results.TryGetValue(key, out result))
+                    return result;
+                result = CreateTargetObject();
+                Results.TryAdd(key, result);
+                return result;
+                //we can't use this function because it has side effects
+                //return Results.GetOrAdd(key, CreateTargetObject());
             }
             return CreateTargetObject();
         }
@@ -78,7 +85,7 @@ namespace XbimExchanger
             {
                 if (Results.TryGetValue(key, out result))
                     return false;
-                Results.TryAdd(key, CreateTargetObject());
+                Results.TryAdd(key, result = CreateTargetObject());
                 return true;
             }
             result = CreateTargetObject();

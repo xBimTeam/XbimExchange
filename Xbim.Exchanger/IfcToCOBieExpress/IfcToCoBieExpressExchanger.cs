@@ -21,6 +21,8 @@ namespace XbimExchanger.IfcToCOBieExpress
         {
             ReportProgress.Progress = reportProgress; //set reporter
             Helper = new COBieExpressHelper(this, ReportProgress, filter, configFile, extId, sysMode);
+            Helper.Init();
+
             _classify = classify;
         }
 

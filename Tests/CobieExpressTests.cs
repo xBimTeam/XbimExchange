@@ -17,8 +17,19 @@ namespace Tests
             var ifc = IfcStore.Open("Duplex_MEP_20110907.ifc");
             var cobie = new MemoryModel(new EntityFactory());
 
-            var exchanger = new IfcToCoBieExpressExchanger(ifc, cobie);
-            exchanger.Convert();
+            //var currentLabel = -1;
+            //cobie.EntityNew += entity =>
+            //{
+            //    currentLabel = entity.EntityLabel;
+            //};
+
+            using (var txn = cobie.BeginTransaction("Duplex conversion"))
+            {
+                var exchanger = new IfcToCoBieExpressExchanger(ifc, cobie);
+                exchanger.Convert();
+                txn.Commit();
+            }
+            
 
             cobie.SaveAsStep21(File.Create("..\\..\\Duplex_MEP.cobie"));
         }

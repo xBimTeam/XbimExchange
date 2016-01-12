@@ -31,7 +31,6 @@ namespace XbimExchanger.IfcToCOBieExpress
             get { return _helper ?? (_helper = ((IfcToCoBieExpressExchanger)Exchanger).Helper); }
         }
 
-
         protected override CobieContact Mapping(IIfcActorSelect actor, CobieContact target)
         {
             

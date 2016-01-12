@@ -41,7 +41,7 @@ namespace XbimExchanger.IfcToCOBieExpress
                 {
                      CobieSite site;
                     if(siteMapping.GetOrCreateTargetObject(ifcSite.EntityLabel, out site))
-                        siteMapping.AddMapping(ifcSite, facility.Site);
+                        siteMapping.AddMapping(ifcSite, site);
                     
                     if(ifcSite.RefLatitude.HasValue && ifcSite.RefLongitude.HasValue)
                     {
