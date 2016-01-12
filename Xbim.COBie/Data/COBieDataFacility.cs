@@ -74,9 +74,9 @@ namespace Xbim.COBie.Data
 
                 facility.Name = (string.IsNullOrEmpty(name)) ? "The Facility Name Here" : name;
 
-                IfcValue createBy = ifcBuilding.GetPropertySingleNominalValue("Other", "COBieCreatedBy");//support for COBie Toolkit for Autodesk Revit
+                var createBy = ifcBuilding.GetPropertySingleNominalValue("Other", "COBieCreatedBy");//support for COBie Toolkit for Autodesk Revit
                 facility.CreatedBy = ((createBy != null) && ValidateString(createBy.ToString())) ? createBy.ToString() : GetTelecomEmailAddress(ifcBuilding.OwnerHistory);
-                IfcValue createdOn = ifcBuilding.GetPropertySingleNominalValue("Other", "COBieCreatedOn");//support for COBie Toolkit for Autodesk Revit
+                var createdOn = ifcBuilding.GetPropertySingleNominalValue("Other", "COBieCreatedOn");//support for COBie Toolkit for Autodesk Revit
                 facility.CreatedOn = ((createdOn != null) && ValidateString(createdOn.ToString())) ? createdOn.ToString() : GetCreatedOnDateAsFmtString(ifcBuilding.OwnerHistory);
 
                 facility.Category = GetCategory(ifcBuilding);
@@ -89,9 +89,9 @@ namespace Xbim.COBie.Data
                 facility.VolumeUnits = Context.WorkBookUnits.VolumeUnit;
                 facility.CurrencyUnit = Context.WorkBookUnits.MoneyUnit;
 
-                string AreaMeasurement = (ifcElementQuantityAreas == null) ? DEFAULT_STRING : ifcElementQuantityAreas.MethodOfMeasurement.ToString();
+                string areaMeasurement = (ifcElementQuantityAreas == null) ? DEFAULT_STRING : ifcElementQuantityAreas.MethodOfMeasurement.ToString();
 
-                facility.AreaMeasurement = ((AreaMeasurement == DEFAULT_STRING) || (AreaMeasurement.ToLower().Contains("bim area"))) ? AreaMeasurement : AreaMeasurement + " BIM Area";
+                facility.AreaMeasurement = ((areaMeasurement == DEFAULT_STRING) || (areaMeasurement.ToLower().Contains("bim area"))) ? areaMeasurement : areaMeasurement + " BIM Area";
                 facility.ExternalSystem = GetExternalSystem(ifcBuilding);
 
                 facility.ExternalProjectObject = "IfcProject";

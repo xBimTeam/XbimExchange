@@ -1,7 +1,10 @@
 ﻿using System;
 using System.IO;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Xbim.Common.Geometry;
+using Xbim.Common.Step21;
 using Xbim.COBieLite;
+using Xbim.Ifc;
 using Xbim.Ifc2x3.MeasureResource;
 using Xbim.IO;
 using Xbim.ModelGeometry.Scene;
@@ -37,14 +40,13 @@ namespace Tests
                     using (var binaryWriter = new BinaryWriter(wexBimFile))
                     {
 
-                        using (var model = new XbimModel())
+                        using (var model = IfcStore.Open(ifcFileFullName))
                         {
                             try
-                            {
-                                model.CreateFrom(ifcFileFullName, xbimFile, null, true);
+                            {                               
                                 var geomContext = new Xbim3DModelContext(model);
                                 geomContext.CreateContext(XbimGeometryType.PolyhedronBinary);
-                                geomContext.Write(binaryWriter);
+                                model.SaveAsWexBim(binaryWriter);
                             }
                             finally
                             {
@@ -68,10 +70,18 @@ namespace Tests
         public void ConvertCobieLiteToIfc()
         {
             var facility = FacilityType.ReadJson("COBieLite.json");
-            using (var model = XbimModel.CreateTemporaryModel())
+
+            var credentials = new XbimEditorCredentials()
             {
-                model.Initialise("Xbim Tester", "XbimTeam", "Xbim.Exchanger", "Xbim Development Team", "3.0");
-                model.ReloadModelFactors();
+                ApplicationDevelopersName = "XbimTeam",
+                ApplicationFullName = "Xbim.Exchanger",
+                EditorsOrganisationName = "Xbim Development Team",
+                EditorsFamilyName = "Xbim Tester",
+                ApplicationVersion = "3.0"
+            };
+            using (var model = IfcStore.Create(credentials, IfcSchemaVersion.Ifc2X3, XbimStoreType.InMemoryModel))
+            {                                    
+               
                 using (var txn = model.BeginTransaction("Convert from COBieLite"))
                 {
                     var exchanger = new CoBieLiteToIfcExchanger(facility, model);
@@ -79,7 +89,7 @@ namespace Tests
                     txn.Commit();
                     //var err = model.Validate(model.Instances, Console.Out);
                 }
-                model.SaveAs(@"ConvertedFromCOBieLite.ifc", XbimStorageType.IFC);
+                model.SaveAs(@"ConvertedFromCOBieLite.ifc", IfcStorageType.Ifc);
             }
         }
 

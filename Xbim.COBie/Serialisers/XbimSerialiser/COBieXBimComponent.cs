@@ -120,7 +120,7 @@ namespace Xbim.COBie.Serialisers.XbimSerialiser
                     {
                         var ifcTypeObject = IfcTypeObjects.Where(to => to.Name.ToString().ToLower() == row.TypeName.ToLower()).FirstOrDefault();
                         if (ifcTypeObject != null)
-                            ifcElement.SetDefiningType(ifcTypeObject, Model);
+                            ifcElement.AddDefiningType(ifcTypeObject);
                         else
                             ifcElement.ObjectType = row.TypeName; //no type so save type name in IfcLable property of IfcObject
                     }

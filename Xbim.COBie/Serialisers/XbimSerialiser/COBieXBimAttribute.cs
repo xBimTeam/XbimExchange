@@ -7,6 +7,7 @@ using Xbim.Ifc2x3.ProductExtension;
 using Xbim.Ifc2x3.MeasureResource;
 using Xbim.Ifc2x3.ExternalReferenceResource;
 using Xbim.Ifc2x3.ConstructionMgmtDomain;
+using Xbim.IO.Esent;
 
 namespace Xbim.COBie.Serialisers.XbimSerialiser
 {
@@ -235,7 +236,7 @@ namespace Xbim.COBie.Serialisers.XbimSerialiser
                         
             if (CurrentObject is IfcObject)
             {
-                ifcPropertySet = (CurrentObject as IfcObject).GetPropertySet(pSetName);
+                ifcPropertySet = (CurrentObject as IfcObject).GetPropertySet(pSetName) as IfcPropertySet;
                 if (ifcPropertySet == null)
                 {
                     ifcPropertySet = AddPropertySet((IfcObject)CurrentObject, pSetName, "");

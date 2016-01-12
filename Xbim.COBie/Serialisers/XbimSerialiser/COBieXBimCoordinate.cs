@@ -1,19 +1,19 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Xbim.Common.Geometry;
+using Xbim.COBie.Data;
 using Xbim.COBie.Rows;
+using Xbim.Ifc2x3.Extensions;
 using Xbim.Ifc2x3.GeometricConstraintResource;
-using Xbim.Ifc2x3.RepresentationResource;
+using Xbim.Ifc2x3.GeometricModelResource;
 using Xbim.Ifc2x3.GeometryResource;
 using Xbim.Ifc2x3.Kernel;
 using Xbim.Ifc2x3.ProductExtension;
-using Xbim.Ifc2x3.Extensions;
-using Xbim.COBie.Data;
 using Xbim.Ifc2x3.ProfileResource;
-using Xbim.Ifc2x3.GeometricModelResource;
+using Xbim.Ifc2x3.RepresentationResource;
 using Xbim.Ifc2x3.UtilityResource;
-using Xbim.Common.Geometry;
-
+using Xbim.IO.Esent;
 
 namespace Xbim.COBie.Serialisers.XbimSerialiser
 {
@@ -90,7 +90,6 @@ namespace Xbim.COBie.Serialisers.XbimSerialiser
 //#if DEBUG
 //                                Console.WriteLine("{0} : {1} == {2} : {3} ", row.SheetName, row.RowName, rowNext.SheetName, rowNext.RowName);
 //#endif                           
-                                continue;
                             }
                             else
                             {
@@ -139,7 +138,7 @@ namespace Xbim.COBie.Serialisers.XbimSerialiser
 
             if (ifcBuildingStorey != null)
             {
-                IfcProduct placementRelToIfcProduct = ifcBuildingStorey.SpatialStructuralElementParent as IfcProduct;
+                var placementRelToIfcProduct = ifcBuildingStorey.GetContainingStructuralElement();
                 IfcLocalPlacement objectPlacement = CalcObjectPlacement(row, placementRelToIfcProduct);
                 if (objectPlacement != null)
                 {
@@ -180,7 +179,7 @@ namespace Xbim.COBie.Serialisers.XbimSerialiser
                     //then swaps the original OwnerHistoryAddObject back in the dispose, so set any properties within the using statement
                     using (COBieXBimEditScope context = new COBieXBimEditScope(Model, ifcBuildingStorey.OwnerHistory))
                     {
-                        IfcProduct placementRelToIfcProduct = ifcBuildingStorey.SpatialStructuralElementParent as IfcProduct;
+                        var placementRelToIfcProduct = ifcBuildingStorey.GetContainingStructuralElement();
                         AddExtrudedRectangle(row, rowNext, ifcBuildingStorey, placementRelToIfcProduct);
                     }
                 }
@@ -213,8 +212,7 @@ namespace Xbim.COBie.Serialisers.XbimSerialiser
                     //then swaps the original OwnerHistoryAddObject back in the dispose, so set any properties within the using statement
                     using (COBieXBimEditScope context = new COBieXBimEditScope(Model, ifcSpace.OwnerHistory))
                     {
-                        IfcProduct placementRelToIfcProduct = ifcSpace.SpatialStructuralElementParent as IfcProduct;
-
+                        var placementRelToIfcProduct = ifcSpace.GetContainingStructuralElement();
                         AddExtrudedRectangle(row, rowNext, ifcSpace, placementRelToIfcProduct);
                     }
                 }
@@ -257,7 +255,7 @@ namespace Xbim.COBie.Serialisers.XbimSerialiser
                             (ifcRelContainedInSpatialStructure.RelatingStructure != null)
                             )
                         {
-                            placementRelToIfcProduct = ifcRelContainedInSpatialStructure.RelatingStructure as IfcProduct;
+                            placementRelToIfcProduct = ifcRelContainedInSpatialStructure.RelatingStructure;
                             AddExtrudedRectangle(row, rowNext, ifcElement, placementRelToIfcProduct);
                         }
                         else
@@ -341,9 +339,12 @@ namespace Xbim.COBie.Serialisers.XbimSerialiser
                             IfcAxis2Placement3D ifcAxis2Placement3DPosition = Model.Instances.New<IfcAxis2Placement3D>(a2p3D => { a2p3D.Location = IfcCartesianPointPosition; a2p3D.Axis = IfcDirectionAxis; a2p3D.RefDirection = IfcDirectionRefDir; });
                             IfcDirection IfcDirectionExtDir = Model.Instances.New<IfcDirection>(d => { d.X = 0.0; d.Y = 0; d.Z = 1.0; }); //default to Z direction
                             IfcExtrudedAreaSolid ifcExtrudedAreaSolid = Model.Instances.New<IfcExtrudedAreaSolid>(eas => { eas.SweptArea = ifcRectangleProfileDef; eas.Position = ifcAxis2Placement3DPosition; eas.ExtrudedDirection = IfcDirectionExtDir; eas.Depth = bBox.SizeZ; });
-
+                            var project = Model.Instances.OfType<IfcProject>().FirstOrDefault();
                             //Create IfcShapeRepresentation
-                            IfcShapeRepresentation ifcShapeRepresentation = Model.Instances.New<IfcShapeRepresentation>(sr => { sr.ContextOfItems = Model.IfcProject.ModelContext(); sr.RepresentationIdentifier = "Body"; sr.RepresentationType = "SweptSolid"; });
+                            IfcShapeRepresentation ifcShapeRepresentation = Model.Instances.New<IfcShapeRepresentation>(sr =>
+                            {
+                                sr.ContextOfItems = project.ModelContext; 
+                                sr.RepresentationIdentifier = "Body"; sr.RepresentationType = "SweptSolid"; });
                             ifcShapeRepresentation.Items.Add(ifcExtrudedAreaSolid);
 
                             //create IfcProductDefinitionShape
@@ -461,11 +462,8 @@ namespace Xbim.COBie.Serialisers.XbimSerialiser
                 point = new XbimPoint3D(x, y, z);
                 return true;
             }
-            else
-            {
-                point = new XbimPoint3D();
-                return false;
-            }
+            point = new XbimPoint3D();
+            return false;
         }
 
         /// <summary>
@@ -475,8 +473,8 @@ namespace Xbim.COBie.Serialisers.XbimSerialiser
         /// <param name="objPlacement">IfcObjectPlacement object</param>
         /// <returns>Matrix3D</returns>
 		protected XbimMatrix3D ConvertMatrix3D(IfcObjectPlacement objPlacement)
-		{
-			if(objPlacement is IfcLocalPlacement)
+        {
+            if(objPlacement is IfcLocalPlacement)
 			{
 				IfcLocalPlacement locPlacement = (IfcLocalPlacement)objPlacement;
 				if (locPlacement.RelativePlacement is IfcAxis2Placement3D)
@@ -498,21 +496,13 @@ namespace Xbim.COBie.Serialisers.XbimSerialiser
 					{
                         return XbimMatrix3D.Multiply(ucsTowcs, ConvertMatrix3D(locPlacement.PlacementRelTo));
 					}
-					else
-						return ucsTowcs;
-
+				    return ucsTowcs;
 				}
-				else //must be 2D
-				{
-                    throw new NotImplementedException("Support for Placements other than 3D not implemented");
-				}
-
+			    throw new NotImplementedException("Support for Placements other than 3D not implemented");
 			}
-			else //probably a Grid
-			{
-                throw new NotImplementedException("Support for Placements other than Local not implemented");
-			}
+            throw new NotImplementedException("Support for Placements other than Local not implemented");
         }
+
         #endregion
     }
 }

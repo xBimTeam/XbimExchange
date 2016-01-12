@@ -1,11 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 using Xbim.FilterHelper;
+using Xbim.Ifc;
 using Xbim.IO;
 
 namespace Xbim.Client
@@ -81,7 +83,7 @@ namespace Xbim.Client
                                 txtAuthor.Text = fedModel.Author;
                                 txtOrg.Text = fedModel.Organisation;
                                 txtPrj.Text = fedModel.ProjectName;
-                                FileRoles = fedModel.RefModelRoles.ToDictionary(m => new FileInfo(m.Key.DatabaseName), m => m.Value);
+                                FileRoles = fedModel.RefModelRoles.ToDictionary(m => new FileInfo(m.Key.Name), m => m.Value);
                                 RefModels = new BindingList<FileInfo>(FileRoles.Keys.ToList());
                                 this.Text += " : " + file.Name;
                                 FileName = filename;
@@ -152,7 +154,7 @@ namespace Xbim.Client
         /// <param name="prjName">Project name</param>
         private void CreateFedFile(FileInfo file, string author, string organisation, string prjName)
         {
-            using (FederatedModel fedModel = new FederatedModel(file, author, organisation, prjName))
+            using (var fedModel = new FederatedModel(file, author, organisation, prjName))
             {
                 foreach (var item in FileRoles)
                 {
@@ -358,11 +360,15 @@ namespace Xbim.Client
         private void CreateXBimFile(object sender, DoWorkEventArgs e)
         {
             string filename = e.Argument as string;
+            var assembly = System.Reflection.Assembly.GetExecutingAssembly();
             var xbimFile = Path.ChangeExtension(filename, "xbim");
             _worker.ReportProgress(0, string.Format("Creating {0}", Path.GetFileName(xbimFile)));
-            using (var model = new XbimModel())
+             var fvi = FileVersionInfo.GetVersionInfo(assembly.Location);
+
+            using (var model = IfcStore.Open(filename))
             {
-                model.CreateFrom(filename, xbimFile, _worker.ReportProgress, true, true);
+                model.SaveAs(xbimFile,IfcStorageType.Xbim );
+                model.Close();
             }
         }
 

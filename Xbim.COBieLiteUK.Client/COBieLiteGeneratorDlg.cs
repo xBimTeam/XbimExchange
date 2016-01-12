@@ -394,7 +394,7 @@ namespace Xbim.Client
                 {
                     if (fedModel.Model.IsFederation)
                     {
-                        MapRefModelsRoles = fedModel.RefModelRoles.ToDictionary(m => new FileInfo(m.Key.DatabaseName),
+                        MapRefModelsRoles = fedModel.RefModelRoles.ToDictionary(m => new FileInfo(m.Key.Name),
                             m => m.Value);
                     }
                     else

@@ -6,6 +6,7 @@ using Xbim.Ifc2x3.Kernel;
 using Xbim.Ifc2x3.MaterialResource;
 using Xbim.Ifc2x3.UtilityResource;
 using Xbim.COBie.Serialisers.XbimSerialiser;
+using Xbim.Ifc2x3.MeasureResource;
 
 namespace Xbim.COBie.Data
 {
@@ -92,7 +93,7 @@ namespace Xbim.COBie.Data
             foreach (IfcMaterialLayerSet ifcMaterialLayerSet in ifcMaterialLayerSets)
             {
                 COBieAssemblyRow assembly = new COBieAssemblyRow(assemblies);
-                if (string.IsNullOrEmpty(ifcMaterialLayerSet.Name))
+                if (string.IsNullOrEmpty(ifcMaterialLayerSet.LayerSetName))
                 {
                     assembly.Name = "Material Layer Set " + setNamePostFix;
                     setNamePostFix++;
@@ -118,7 +119,7 @@ namespace Xbim.COBie.Data
 
                 assembly.SheetName = Constants.WORKSHEET_TYPE; //any material objects should be in the TYPE sheet
                 assembly.Description = GetMaterialSetDescription(ifcMaterialLayerSet.MaterialLayers.ToList());
-                assembly.ParentName = (!string.IsNullOrEmpty(ifcMaterialLayerSet.Name)) ? ifcMaterialLayerSet.Name : DEFAULT_STRING;
+                assembly.ParentName = (!string.IsNullOrEmpty(ifcMaterialLayerSet.LayerSetName)) ? ifcMaterialLayerSet.LayerSetName : new IfcLabel(DEFAULT_STRING);
                 assembly.AssemblyType = "Layer";
                 assembly.ExtObject = ifcMaterialLayerSet.GetType().Name;              
 

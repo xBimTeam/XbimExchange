@@ -1,12 +1,21 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Xbim.Ifc2x3.UtilityResource;
+using Xbim.Ifc2x3.MeasureResource;
+using Xbim.Ifc2x3.ActorResource;
+using Xbim.Ifc2x3.PropertyResource;
+using Xbim.Ifc2x3.Kernel;
+using Xbim.Ifc2x3.ExternalReferenceResource;
+using Xbim.Ifc2x3.ProductExtension;
 using System.Globalization;
 using Xbim.Common;
 using Xbim.COBie.Resources;
-using Xbim.Ifc;
-using Xbim.Ifc4.Interfaces;
-using Xbim.Ifc4.MeasureResource;
+using Xbim.Ifc2x3.ApprovalResource;
+using Xbim.Ifc2x3.ConstructionMgmtDomain;
+using Xbim.Ifc2x3.IO;
+using Xbim.Ifc2x3.MaterialResource;
+
 
 namespace Xbim.COBie.Data
 {
@@ -37,7 +46,7 @@ namespace Xbim.COBie.Data
             UnknownCount = 1;
         }
 
-        protected IfcStore Model
+        protected XbimModel Model
         {
             get
             {
@@ -65,14 +74,14 @@ namespace Xbim.COBie.Data
         /// </summary>
         /// <param name="rootEntity">Entity to extract the Create On date</param>
         /// <returns></returns>
-        protected string GetCreatedOnDateAsFmtString(IIfcOwnerHistory ownerHistory, bool requiresTime = true)
+        protected string GetCreatedOnDateAsFmtString(IfcOwnerHistory ownerHistory, bool requiresTime = true)
         {
             var date = GetCreatedOnDate(ownerHistory);
             //return default date of now
             return date ?? (requiresTime ? Context.RunDateTime : Context.RunDate); //if we don't have a date then use the context date or datetime
         }
 
-        public static string GetCreatedOnDate(IIfcOwnerHistory ownerHistory)
+        public static string GetCreatedOnDate(IfcOwnerHistory ownerHistory)
         {
             if (ownerHistory != null)
             {
@@ -83,9 +92,9 @@ namespace Xbim.COBie.Data
 
                     //We have a day light saving problem with the comparison with other COBie Export Programs. if we convert to local time we get a match
                     //but if the time stamp is Coordinated Universal Time (UTC), then daylight time should be ignored. see http://msdn.microsoft.com/en-us/library/bb546099.aspx
-                    //IIfcTimeStamp.ToDateTime(CreatedOnTStamp).ToLocalTime()...; //test to see if corrects 1 hour difference, and yes it did, but should we?
+                    //IfcTimeStamp.ToDateTime(CreatedOnTStamp).ToLocalTime()...; //test to see if corrects 1 hour difference, and yes it did, but should we?
 
-                    return IfcTimeStamp.ToDateTime().ToString(Constants.DATETIME_FORMAT);
+                    return IfcTimeStamp.ToDateTime(createdOnTStamp).ToString(Constants.DATETIME_FORMAT);
                     
                 }
             }
@@ -98,7 +107,7 @@ namespace Xbim.COBie.Data
         /// </summary>
         /// <param name="item"></param>
         /// <returns></returns>
-        public string GetExternalSystem(IIfcOwnerHistory ifcOwnerHistory)
+        public string GetExternalSystem(IfcOwnerHistory ifcOwnerHistory)
         {
             var appName = "";
 
@@ -120,37 +129,37 @@ namespace Xbim.COBie.Data
         /// </summary>
         /// <param name="item"></param>
         /// <returns></returns>
-        public string GetExternalSystem(IIfcRoot item)
+        public string GetExternalSystem(IfcRoot item)
         {
             return GetExternalSystem(item.OwnerHistory);
         }
 
         //fields for GetMaterialOwnerHistory function
-        private List<IIfcRelAssociatesMaterial> _ifcRelAssociatesMaterials;
-        private List<IIfcMaterialLayerSetUsage> _ifcMaterialLayerSetUsages;
+        private List<IfcRelAssociatesMaterial> _ifcRelAssociatesMaterials;
+        private List<IfcMaterialLayerSetUsage> _ifcMaterialLayerSetUsages;
 
         /// <summary>
-        /// Get the IIfcRelAssociatesMaterial object from the passed IIfcMaterialLayerSet 
+        /// Get the IfcRelAssociatesMaterial object from the passed IfcMaterialLayerSet 
         /// </summary>
-        /// <param name="ifcMaterialLayerSet">IIfcMaterialLayerSet object</param>
-        /// <returns>IIfcOwnerHistory object or null if none found</returns>
-        protected IIfcOwnerHistory GetMaterialOwnerHistory(IIfcMaterialLayerSet ifcMaterialLayerSet)
+        /// <param name="ifcMaterialLayerSet">IfcMaterialLayerSet object</param>
+        /// <returns>IfcOwnerHistory object or null if none found</returns>
+        protected IfcOwnerHistory GetMaterialOwnerHistory(IfcMaterialLayerSet ifcMaterialLayerSet)
         {
 
             if (_ifcRelAssociatesMaterials == null)
             {
-                _ifcRelAssociatesMaterials = Model.Instances.OfType<IIfcRelAssociatesMaterial>().ToList();
-                _ifcMaterialLayerSetUsages = Model.Instances.OfType<IIfcMaterialLayerSetUsage>().ToList();
+                _ifcRelAssociatesMaterials = Model.Instances.OfType<IfcRelAssociatesMaterial>().ToList();
+                _ifcMaterialLayerSetUsages = Model.Instances.OfType<IfcMaterialLayerSetUsage>().ToList();
             }
 
             var ifcMaterialLayerSetUsage = _ifcMaterialLayerSetUsages.FirstOrDefault(mlsu => mlsu.ForLayerSet == ifcMaterialLayerSet);
             
-            IIfcRelAssociatesMaterial ifcRelAssociatesMaterial = null;
+            IfcRelAssociatesMaterial ifcRelAssociatesMaterial = null;
             if (ifcMaterialLayerSetUsage != null)
-                ifcRelAssociatesMaterial = _ifcRelAssociatesMaterials.FirstOrDefault(ram => (ram.RelatingMaterial is IIfcMaterialLayerSetUsage) && ((IIfcMaterialLayerSetUsage) ram.RelatingMaterial == ifcMaterialLayerSetUsage));
+                ifcRelAssociatesMaterial = _ifcRelAssociatesMaterials.FirstOrDefault(ram => (ram.RelatingMaterial is IfcMaterialLayerSetUsage) && ((IfcMaterialLayerSetUsage) ram.RelatingMaterial == ifcMaterialLayerSetUsage));
                 
             if (ifcRelAssociatesMaterial == null)
-                ifcRelAssociatesMaterial = _ifcRelAssociatesMaterials.FirstOrDefault(ram => (ram.RelatingMaterial is IIfcMaterialLayerSet) && ((IIfcMaterialLayerSet) ram.RelatingMaterial == ifcMaterialLayerSet));
+                ifcRelAssociatesMaterial = _ifcRelAssociatesMaterials.FirstOrDefault(ram => (ram.RelatingMaterial is IfcMaterialLayerSet) && ((IfcMaterialLayerSet) ram.RelatingMaterial == ifcMaterialLayerSet));
 
             if (ifcRelAssociatesMaterial == null)
                 ifcRelAssociatesMaterial = _ifcRelAssociatesMaterials.FirstOrDefault(ram => ifcMaterialLayerSet.MaterialLayers.Contains(ram.RelatingMaterial));
@@ -162,11 +171,11 @@ namespace Xbim.COBie.Data
         }
 
         /// <summary>
-        /// Extract the email address lists for the owner of the IIfcOwnerHistory passed
+        /// Extract the email address lists for the owner of the IfcOwnerHistory passed
         /// </summary>
         /// <param name="ifcOwnerHistory">Entity to extract the email addresses for</param>
         /// <returns>string of comma delimited addresses</returns>
-        protected string GetTelecomTelephoneNumber(IIfcPersonAndOrganization ifcPersonAndOrganization)
+        protected string GetTelecomTelephoneNumber(IfcPersonAndOrganization ifcPersonAndOrganization)
         {
             var telephoneNo = "";
             var ifcOrganization = ifcPersonAndOrganization.TheOrganization;
@@ -175,7 +184,7 @@ namespace Xbim.COBie.Data
             if (ifcPerson.Addresses != null)
             {
                 telephoneNo = ifcPerson.Addresses
-                    .OfType<IIfcTelecomAddress>()
+                    .OfType<IfcTelecomAddress>()
                     .Select(address => address.TelephoneNumbers)
                     .Where(item => item != null)
                     .SelectMany(em => em)
@@ -186,7 +195,7 @@ namespace Xbim.COBie.Data
                     if (ifcOrganization.Addresses != null)
                     {
                         telephoneNo = ifcOrganization
-                            .Addresses.OfType<IIfcTelecomAddress>()
+                            .Addresses.OfType<IfcTelecomAddress>()
                             .Select(address => address.TelephoneNumbers)
                             .Where(item => item != null)
                             .SelectMany(em => em)
@@ -213,11 +222,11 @@ namespace Xbim.COBie.Data
 
 
         /// <summary>
-        /// Extract the email address lists for the owner of the IIfcOwnerHistory passed
+        /// Extract the email address lists for the owner of the IfcOwnerHistory passed
         /// </summary>
         /// <param name="ifcOwnerHistory">Entity to extract the email addresses for</param>
         /// <returns>string of comma delimited addresses</returns>
-        protected string GetTelecomEmailAddress(IIfcOwnerHistory ifcOwnerHistory)
+        protected string GetTelecomEmailAddress(IfcOwnerHistory ifcOwnerHistory)
         {
             if ((ifcOwnerHistory != null) &&
                 (ifcOwnerHistory.OwningUser != null) &&
@@ -244,11 +253,11 @@ namespace Xbim.COBie.Data
                 return Constants.DEFAULT_EMAIL;
         }
         /// <summary>
-        /// Extract the email address lists for the owner of the IIfcOwnerHistory passed
+        /// Extract the email address lists for the owner of the IfcOwnerHistory passed
         /// </summary>
         /// <param name="ifcOwnerHistory">Entity to extract the email addresses for</param>
         /// <returns>string of comma delimited addresses</returns>
-        protected string GetTelecomEmailAddress(IIfcPersonAndOrganization ifcPersonAndOrganization)
+        protected string GetTelecomEmailAddress(IfcPersonAndOrganization ifcPersonAndOrganization)
         {
             if (ifcPersonAndOrganization != null)
             {
@@ -272,19 +281,19 @@ namespace Xbim.COBie.Data
 
 
         /// <summary>
-        /// Get email address from IIfcPerson 
+        /// Get email address from IfcPerson 
         /// </summary>
         /// <param name="ifcOrganization"></param>
         /// <param name="ifcPerson"></param>
         /// <returns></returns>
-        public static string GetEmail( IIfcOrganization ifcOrganization, IIfcPerson ifcPerson)
+        public static string GetEmail( IfcOrganization ifcOrganization, IfcPerson ifcPerson)
         {
             var email = "";
-            var emails = Enumerable.Empty<IIfcLabel>();
+            var emails = Enumerable.Empty<IfcLabel>();
             if ((ifcPerson != null) && (ifcPerson.Addresses != null))
             {
                 emails = ifcPerson
-                    .Addresses.OfType<IIfcTelecomAddress>()
+                    .Addresses.OfType<IfcTelecomAddress>()
                     .Select(address => address.ElectronicMailAddresses)
                     .Where(item => item != null).SelectMany(em => em)
                     .Where(em => !string.IsNullOrEmpty(em))
@@ -295,7 +304,7 @@ namespace Xbim.COBie.Data
             {
                 if ((ifcOrganization != null) && (ifcOrganization.Addresses != null))
                 {
-                    emails = ifcOrganization.Addresses.OfType<IIfcTelecomAddress>().Select(address => address.ElectronicMailAddresses).Where(item => item != null).SelectMany(em => em).Where(em => !string.IsNullOrEmpty(em));
+                    emails = ifcOrganization.Addresses.OfType<IfcTelecomAddress>().Select(address => address.ElectronicMailAddresses).Where(item => item != null).SelectMany(em => em).Where(em => !string.IsNullOrEmpty(em));
                 }
             }
 
@@ -382,17 +391,17 @@ namespace Xbim.COBie.Data
         }
 
         /// <summary>
-        /// Get the category from the IIfcRelAssociatesClassification / IIfcClassificationReference objects
+        /// Get the category from the IfcRelAssociatesClassification / IfcClassificationReference objects
         /// </summary>
-        /// <param name="obj">IIfcObjectDefinition object</param>
+        /// <param name="obj">IfcObjectDefinition object</param>
         /// <returns></returns>
-        public string GetCategoryClassification(IIfcObjectDefinition obj)
+        public string GetCategoryClassification(IfcObjectDefinition obj)
         {
             //Try by relationship first
-            var ifcRAC = obj.HasAssociations.OfType<IIfcRelAssociatesClassification>().FirstOrDefault();
-            IIfcClassificationReference ifcCR = null;
+            var ifcRAC = obj.HasAssociations.OfType<IfcRelAssociatesClassification>().FirstOrDefault();
+            IfcClassificationReference ifcCR = null;
             if (ifcRAC != null)
-                ifcCR = ifcRAC.RelatingClassification as IIfcClassificationReference;
+                ifcCR = ifcRAC.RelatingClassification as IfcClassificationReference;
 
             if (ifcCR != null)
             {
@@ -455,7 +464,7 @@ namespace Xbim.COBie.Data
         /// </summary>
         /// <param name="obj">Object to try and extract method from</param>
         /// <returns></returns>
-        public string GetCategory(IIfcObject obj)
+        public string GetCategory(IfcObject obj)
         {
             var categoryRef = GetCategoryClassification(obj);
             if (!string.IsNullOrEmpty(categoryRef))
@@ -483,16 +492,16 @@ namespace Xbim.COBie.Data
         /// </summary>
         /// <param name="ifcUnit">ifcUnit object to get unit name from</param>
         /// <returns>string holding unit name</returns>
-        public static string GetUnitName(IIfcUnit ifcUnit)
+        public static string GetUnitName(IfcUnit ifcUnit)
         {
             var value = "";
             var sqText = "";
 
-            var unit = ifcUnit as IIfcSIUnit;
+            var unit = ifcUnit as IfcSIUnit;
             if (unit != null)
             {
                 var prefixUnit = (unit.Prefix != null) ? unit.Prefix.ToString() : "";
-                value = unit.Name.ToString();                                             //see IIfcSIUnitName
+                value = unit.Name.ToString();                                             //see IfcSIUnitName
 
                 if (!string.IsNullOrEmpty(value))
                 {
@@ -507,10 +516,10 @@ namespace Xbim.COBie.Data
                 }
 
             }
-            else if (ifcUnit is IIfcConversionBasedUnit)
+            else if (ifcUnit is IfcConversionBasedUnit)
             {
-                var IIfcConversionBasedUnit = ifcUnit as IIfcConversionBasedUnit;
-                value = (IIfcConversionBasedUnit.Name != null) ? IIfcConversionBasedUnit.Name.ToString() : "";
+                var IfcConversionBasedUnit = ifcUnit as IfcConversionBasedUnit;
+                value = (IfcConversionBasedUnit.Name != null) ? IfcConversionBasedUnit.Name.ToString() : "";
 
                 if (!string.IsNullOrEmpty(value))
                 {
@@ -522,23 +531,23 @@ namespace Xbim.COBie.Data
                     }
                 }
             }
-            else if (ifcUnit is IIfcContextDependentUnit)
+            else if (ifcUnit is IfcContextDependentUnit)
             {
-                var ifcContextDependentUnit = ifcUnit as IIfcContextDependentUnit;
+                var ifcContextDependentUnit = ifcUnit as IfcContextDependentUnit;
                 value = ifcContextDependentUnit.Name;
                 if (string.IsNullOrEmpty(value)) //fall back to UnitType enumeration
                     value = ifcContextDependentUnit.UnitType.ToString();
             }
-            else if (ifcUnit is IIfcDerivedUnit)
+            else if (ifcUnit is IfcDerivedUnit)
             {
-                var ifcDerivedUnit = ifcUnit as IIfcDerivedUnit;
+                var ifcDerivedUnit = ifcUnit as IfcDerivedUnit;
                 value = ifcDerivedUnit.UnitType.ToString();
                 if ((string.IsNullOrEmpty(value)) && (ifcDerivedUnit.UserDefinedType != null)) //fall back to user defined
                     value = ifcDerivedUnit.UserDefinedType;
             }
-            else if (ifcUnit is IIfcMonetaryUnit)
+            else if (ifcUnit is IfcMonetaryUnit)
             {
-                value = GetMonetaryUnitName(ifcUnit as IIfcMonetaryUnit);
+                value = GetMonetaryUnitName(ifcUnit as IfcMonetaryUnit);
                 return (string.IsNullOrEmpty(value)) ? DEFAULT_STRING : value; //don't want to lower case so return here
             }
             value = (string.IsNullOrEmpty(value)) ? DEFAULT_STRING : value.ToLower();
@@ -560,9 +569,9 @@ namespace Xbim.COBie.Data
         /// <summary>
         /// Get Monetary Unit
         /// </summary>
-        /// <param name="ifcMonetaryUnit">IIfcMonetaryUnit object</param>
+        /// <param name="ifcMonetaryUnit">IfcMonetaryUnit object</param>
         /// <returns>string holding the Monetary Unit</returns>
-        private static string GetMonetaryUnitName(IIfcMonetaryUnit ifcMonetaryUnit)
+        private static string GetMonetaryUnitName(IfcMonetaryUnit ifcMonetaryUnit)
         {
             var value = CultureInfo.GetCultures(CultureTypes.SpecificCultures)
                .Where(c => new RegionInfo(c.LCID).ISOCurrencySymbol == ifcMonetaryUnit.Currency.ToString())
@@ -587,34 +596,34 @@ namespace Xbim.COBie.Data
         }
 
         /// <summary>
-        /// Determined the sheet the IIfcRoot will have come from using the object type
+        /// Determined the sheet the IfcRoot will have come from using the object type
         /// </summary>
-        /// <param name="ifcItem">object which inherits from IIfcRoot </param>
+        /// <param name="ifcItem">object which inherits from IfcRoot </param>
         /// <returns>string holding sheet name</returns>
         public string GetSheetByObjectType(Type ifcItem)
         {
             
             var value = DEFAULT_STRING;
-            if (ifcItem.IsSubclassOf(typeof(IIfcTypeObject))) value = Constants.WORKSHEET_TYPE;
-            else if (ifcItem == typeof(IIfcTypeObject)) value = Constants.WORKSHEET_TYPE;
-            else if (ifcItem.IsSubclassOf(typeof(IIfcElement))) value = Constants.WORKSHEET_COMPONENT;
-            else if (ifcItem.IsSubclassOf(typeof(IIfcProcess))) value = Constants.WORKSHEET_JOB;
-            else if (ifcItem.IsSubclassOf(typeof(IIfcRelDecomposes))) value = Constants.WORKSHEET_ASSEMBLY;
-            else if (ifcItem.IsSubclassOf(typeof(IIfcRelConnects))) value = Constants.WORKSHEET_CONNECTION;
-            else if (ifcItem == typeof(IIfcDocumentInformation)) value = Constants.WORKSHEET_DOCUMENT;
-            else if (ifcItem == typeof(IIfcOrganization)) value = Constants.WORKSHEET_CONTACT;
-            else if (ifcItem == typeof(IIfcPerson)) value = Constants.WORKSHEET_CONTACT;
-            else if (ifcItem == typeof(IIfcPersonAndOrganization)) value = Constants.WORKSHEET_CONTACT;
-            else if (ifcItem == typeof(IIfcSite)) value = Constants.WORKSHEET_FACILITY;
-            else if (ifcItem == typeof(IIfcBuilding)) value = Constants.WORKSHEET_FACILITY;
-            else if (ifcItem == typeof(IIfcProject)) value = Constants.WORKSHEET_FACILITY;
-            else if (ifcItem == typeof(IIfcBuildingStorey)) value = Constants.WORKSHEET_FLOOR;
-            else if (ifcItem == typeof(IIfcApproval)) value = Constants.WORKSHEET_ISSUE;
-            else if (ifcItem == typeof(IIfcConstructionEquipmentResource)) value = Constants.WORKSHEET_RESOURCE;
-            else if (ifcItem == typeof(IIfcSpace)) value = Constants.WORKSHEET_SPACE;
-            else if (ifcItem == typeof(IIfcConstructionProductResource)) value = Constants.WORKSHEET_SPARE;
-            else if (ifcItem == typeof(IIfcSystem)) value = Constants.WORKSHEET_SYSTEM;
-            else if (ifcItem == typeof(IIfcZone)) value = Constants.WORKSHEET_ZONE;
+            if (ifcItem.IsSubclassOf(typeof(IfcTypeObject))) value = Constants.WORKSHEET_TYPE;
+            else if (ifcItem == typeof(IfcTypeObject)) value = Constants.WORKSHEET_TYPE;
+            else if (ifcItem.IsSubclassOf(typeof(IfcElement))) value = Constants.WORKSHEET_COMPONENT;
+            else if (ifcItem.IsSubclassOf(typeof(IfcProcess))) value = Constants.WORKSHEET_JOB;
+            else if (ifcItem.IsSubclassOf(typeof(IfcRelDecomposes))) value = Constants.WORKSHEET_ASSEMBLY;
+            else if (ifcItem.IsSubclassOf(typeof(IfcRelConnects))) value = Constants.WORKSHEET_CONNECTION;
+            else if (ifcItem == typeof(IfcDocumentInformation)) value = Constants.WORKSHEET_DOCUMENT;
+            else if (ifcItem == typeof(IfcOrganization)) value = Constants.WORKSHEET_CONTACT;
+            else if (ifcItem == typeof(IfcPerson)) value = Constants.WORKSHEET_CONTACT;
+            else if (ifcItem == typeof(IfcPersonAndOrganization)) value = Constants.WORKSHEET_CONTACT;
+            else if (ifcItem == typeof(IfcSite)) value = Constants.WORKSHEET_FACILITY;
+            else if (ifcItem == typeof(IfcBuilding)) value = Constants.WORKSHEET_FACILITY;
+            else if (ifcItem == typeof(IfcProject)) value = Constants.WORKSHEET_FACILITY;
+            else if (ifcItem == typeof(IfcBuildingStorey)) value = Constants.WORKSHEET_FLOOR;
+            else if (ifcItem == typeof(IfcApproval)) value = Constants.WORKSHEET_ISSUE;
+            else if (ifcItem == typeof(IfcConstructionEquipmentResource)) value = Constants.WORKSHEET_RESOURCE;
+            else if (ifcItem == typeof(IfcSpace)) value = Constants.WORKSHEET_SPACE;
+            else if (ifcItem == typeof(IfcConstructionProductResource)) value = Constants.WORKSHEET_SPARE;
+            else if (ifcItem == typeof(IfcSystem)) value = Constants.WORKSHEET_SYSTEM;
+            else if (ifcItem == typeof(IfcZone)) value = Constants.WORKSHEET_ZONE;
             //Impact and attributes are off property sets so not here for now
             //more sheets as tests date becomes available
             return value;
@@ -622,20 +631,20 @@ namespace Xbim.COBie.Data
 
         
         /// <summary>
-        /// Get the associated Type for a IIfcObject, so a Door can be of type "Door Type A"
+        /// Get the associated Type for a IfcObject, so a Door can be of type "Door Type A"
         /// </summary>
-        /// <param name="obj">IIfcObject to get associated type information from</param>
+        /// <param name="obj">IfcObject to get associated type information from</param>
         /// <returns>string holding the type information</returns>
-        protected string GetTypeName(IIfcObject obj)
+        protected string GetTypeName(IfcObject obj)
         {
             var value = "";
-            var elType = obj.IsDefinedBy.OfType<IIfcRelDefinesByType>().FirstOrDefault();
+            var elType = obj.IsDefinedBy.OfType<IfcRelDefinesByType>().FirstOrDefault();
             if ((elType != null) && (elType.RelatingType.Name != null))
                 value = elType.RelatingType.Name.ToString();
             if ((string.IsNullOrEmpty(value)) && (obj.ObjectType != null))
                 value = obj.ObjectType.ToString();
             return (string.IsNullOrEmpty(value)) ?  DEFAULT_STRING : value;
-            //var elType = obj.IsDefinedBy.OfType<IIfcRelDefinesByType>().FirstOrDefault();
+            //var elType = obj.IsDefinedBy.OfType<IfcRelDefinesByType>().FirstOrDefault();
             //return (elType != null) ? elType.RelatingType.Name.ToString() : DEFAULT_STRING;
         }
 
@@ -687,14 +696,14 @@ namespace Xbim.COBie.Data
             var areaUnit = "";
             var volumeUnit = "";
             var moneyUnit = "";
-            foreach (var ifcUnitAssignment in model.Instances.OfType<IIfcUnitAssignment>()) //loop all IIfcUnitAssignment
+            foreach (var ifcUnitAssignment in model.Instances.OfType<IfcUnitAssignment>()) //loop all IfcUnitAssignment
             {
                 foreach (var ifcUnit in ifcUnitAssignment.Units) //loop the UnitSet
                 {
-                    var ifcNamedUnit = ifcUnit as IIfcNamedUnit;
+                    var ifcNamedUnit = ifcUnit as IfcNamedUnit;
                     if (ifcNamedUnit != null)
                     {
-                        if ((ifcNamedUnit.UnitType == IIfcUnitEnum.LENGTHUNIT) && string.IsNullOrEmpty(linearUnit)) //we want length units until we have value
+                        if ((ifcNamedUnit.UnitType == IfcUnitEnum.LENGTHUNIT) && string.IsNullOrEmpty(linearUnit)) //we want length units until we have value
                         {
                             linearUnit = GetUnitName(ifcUnit);
                             if ( ( !((linearUnit.Contains("feet")) || (linearUnit.Contains("foot"))) )
@@ -704,7 +713,7 @@ namespace Xbim.COBie.Data
                         }
 
 
-                        if ((ifcNamedUnit.UnitType == IIfcUnitEnum.AREAUNIT) && string.IsNullOrEmpty(areaUnit)) //we want area units until we have value
+                        if ((ifcNamedUnit.UnitType == IfcUnitEnum.AREAUNIT) && string.IsNullOrEmpty(areaUnit)) //we want area units until we have value
                         {
                             areaUnit = GetUnitName(ifcUnit);
                             if ( ( !((areaUnit.Contains("feet")) || (areaUnit.Contains("foot")) ) )
@@ -715,7 +724,7 @@ namespace Xbim.COBie.Data
                         }
 
 
-                        if ((ifcNamedUnit.UnitType == IIfcUnitEnum.VOLUMEUNIT) && string.IsNullOrEmpty(volumeUnit)) //we want volume units until we have value
+                        if ((ifcNamedUnit.UnitType == IfcUnitEnum.VOLUMEUNIT) && string.IsNullOrEmpty(volumeUnit)) //we want volume units until we have value
                         {
                             volumeUnit = GetUnitName(ifcUnit);
                             if ( ( !((volumeUnit.Contains("feet")) || (volumeUnit.Contains("foot"))) )
@@ -725,7 +734,7 @@ namespace Xbim.COBie.Data
                         }
                     }
                     //get the money unit
-                    if ((ifcUnit is IIfcMonetaryUnit) && string.IsNullOrEmpty(moneyUnit))
+                    if ((ifcUnit is IfcMonetaryUnit) && string.IsNullOrEmpty(moneyUnit))
                     {
                         moneyUnit = GetUnitName(ifcUnit);
                         if (moneyUnit.Last() != 's')
@@ -752,11 +761,11 @@ namespace Xbim.COBie.Data
         }
 
         /// <summary>
-        /// Get the EnumerationValues from a IIfcPropertyEnumeratedValue property
+        /// Get the EnumerationValues from a IfcPropertyEnumeratedValue property
         /// </summary>
-        /// <param name="ifcValues">IEnumerable of IIfcValue</param>
+        /// <param name="ifcValues">IEnumerable of IfcValue</param>
         /// <returns>delimited string of values</returns>
-        public static string GetEnumerationValues(IEnumerable<IIfcValue> ifcValues)
+        public static string GetEnumerationValues(IEnumerable<IfcValue> ifcValues)
         {
             var EnumValues = new List<string>();
             foreach (var item in ifcValues)
@@ -767,15 +776,15 @@ namespace Xbim.COBie.Data
         }
 
         /// <summary>
-        /// Get the IIfcPropertySingleValue value and unit associated with the value
+        /// Get the IfcPropertySingleValue value and unit associated with the value
         /// </summary>
-        /// <param name="propertyList">List of IIfcSimpleProperty</param>
+        /// <param name="propertyList">List of IfcSimpleProperty</param>
         /// <param name="name">property name we want to extract</param>
         /// <returns></returns>
-        public Interval GetPropertyValue(List<IIfcSimpleProperty> propertyList, string name)
+        public Interval GetPropertyValue(List<IfcSimpleProperty> propertyList, string name)
         {
             var result = new Interval() { Value = DEFAULT_STRING, Unit = DEFAULT_STRING };
-            var ifcPSValue = propertyList.OfType<IIfcPropertySingleValue>().Where(psv => psv.Name == name).FirstOrDefault();
+            var ifcPSValue = propertyList.OfType<IfcPropertySingleValue>().Where(psv => psv.Name == name).FirstOrDefault();
             if (ifcPSValue != null)
             {
                 result.Value = (!string.IsNullOrEmpty(ifcPSValue.NominalValue.ToString())) ? ifcPSValue.NominalValue.Value.ToString() : DEFAULT_STRING;
@@ -785,15 +794,15 @@ namespace Xbim.COBie.Data
         }
 
         /// <summary>
-        /// Get the IIfcPropertyEnumeratedValue value and unit associated with the value
+        /// Get the IfcPropertyEnumeratedValue value and unit associated with the value
         /// </summary>
-        /// <param name="propertyList">List of IIfcSimpleProperty</param>
+        /// <param name="propertyList">List of IfcSimpleProperty</param>
         /// <param name="name">property name we want to extract</param>
         /// <returns></returns>
-        public Interval GetPropertyEnumValue(List<IIfcSimpleProperty> propertyList, string name)
+        public Interval GetPropertyEnumValue(List<IfcSimpleProperty> propertyList, string name)
         {
             var result = new Interval() { Value = DEFAULT_STRING, Unit = DEFAULT_STRING };
-            var ifcPEValue = propertyList.OfType<IIfcPropertyEnumeratedValue>().Where(psv => psv.Name == name).FirstOrDefault();
+            var ifcPEValue = propertyList.OfType<IfcPropertyEnumeratedValue>().Where(psv => psv.Name == name).FirstOrDefault();
             if (ifcPEValue != null)
             {
                 if (ifcPEValue.EnumerationValues != null)
@@ -832,7 +841,7 @@ namespace Xbim.COBie.Data
 
     #region IComparer Classes
     /// <summary>
-    /// ICompare class for IIfcLabels, used to order by 
+    /// ICompare class for IfcLabels, used to order by 
     /// </summary>
     public class CompareIfcLabel : IComparer<IfcLabel?>
     {

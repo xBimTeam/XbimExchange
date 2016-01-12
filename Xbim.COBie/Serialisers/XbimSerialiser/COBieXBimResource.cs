@@ -1,6 +1,7 @@
 ﻿using System;
 using Xbim.COBie.Rows;
 using Xbim.Ifc2x3.ConstructionMgmtDomain;
+using Xbim.IO.Esent;
 
 namespace Xbim.COBie.Serialisers.XbimSerialiser
 {

@@ -4,6 +4,8 @@ using System.Linq;
 using Xbim.COBie.Rows;
 using Xbim.Ifc2x3.Kernel;
 using Xbim.Ifc2x3.MeasureResource;
+using Xbim.Ifc4.Interfaces;
+using Xbim.IO.Esent;
 
 
 namespace Xbim.COBie.Serialisers.XbimSerialiser
@@ -99,7 +101,7 @@ namespace Xbim.COBie.Serialisers.XbimSerialiser
                 {
                     if (XBimContext.IsMerge)
                     {
-                        ifcPropertySet = ifcProduct.GetPropertySet(pSetName);
+                        ifcPropertySet = ifcProduct.GetPropertySet(pSetName) as IfcPropertySet;
                         if (ifcPropertySet != null)//Property set Pset_EnvironmentalImpactValues already set so assume exists so skip
                         {
 #if DEBUG

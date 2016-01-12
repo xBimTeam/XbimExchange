@@ -57,31 +57,40 @@
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
     <Reference Include="Xbim.CobieExpress">
-      <HintPath>..\packages\Xbim.Essentials.4.0.0-V089\lib\net40\Xbim.CobieExpress.dll</HintPath>
+      <HintPath>..\packages\Xbim.Essentials.4.0.0-V080\lib\net40\Xbim.CobieExpress.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="Xbim.Common">
-      <HintPath>..\packages\Xbim.Essentials.4.0.0-V089\lib\net40\Xbim.Common.dll</HintPath>
+      <HintPath>..\packages\Xbim.Essentials.4.0.0-V080\lib\net40\Xbim.Common.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="Xbim.Ifc">
-      <HintPath>..\packages\Xbim.Essentials.4.0.0-V089\lib\net40\Xbim.Ifc.dll</HintPath>
+      <HintPath>..\packages\Xbim.Essentials.4.0.0-V080\lib\net40\Xbim.Ifc.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="Xbim.Ifc.Extensions">
-      <HintPath>..\packages\Xbim.Essentials.4.0.0-V089\lib\net40\Xbim.Ifc.Extensions.dll</HintPath>
+      <HintPath>..\packages\Xbim.Essentials.4.0.0-V080\lib\net40\Xbim.Ifc.Extensions.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="Xbim.Ifc2x3">
-      <HintPath>..\packages\Xbim.Essentials.4.0.0-V089\lib\net40\Xbim.Ifc2x3.dll</HintPath>
+      <HintPath>..\packages\Xbim.Essentials.4.0.0-V080\lib\net40\Xbim.Ifc2x3.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="Xbim.Ifc2x3.IO">
-      <HintPath>..\packages\Xbim.Essentials.4.0.0-V089\lib\net40\Xbim.Ifc2x3.IO.dll</HintPath>
+      <HintPath>..\packages\Xbim.Essentials.4.0.0-V080\lib\net40\Xbim.Ifc2x3.IO.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="Xbim.Ifc4">
-      <HintPath>..\packages\Xbim.Essentials.4.0.0-V089\lib\net40\Xbim.Ifc4.dll</HintPath>
+      <HintPath>..\packages\Xbim.Essentials.4.0.0-V080\lib\net40\Xbim.Ifc4.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="Xbim.IO">
-      <HintPath>..\packages\Xbim.Essentials.4.0.0-V089\lib\net40\Xbim.IO.dll</HintPath>
+      <HintPath>..\packages\Xbim.Essentials.4.0.0-V080\lib\net40\Xbim.IO.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="Xbim.Tessellator">
-      <HintPath>..\packages\Xbim.Essentials.4.0.0-V089\lib\net40\Xbim.Tessellator.dll</HintPath>
+      <HintPath>..\packages\Xbim.Essentials.4.0.0-V080\lib\net40\Xbim.Tessellator.dll</HintPath>
+      <Private>True</Private>
     </Reference>
   </ItemGroup>
   <ItemGroup>

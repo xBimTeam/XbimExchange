@@ -6,7 +6,9 @@ using System.IO;
 using System.Linq;
 using Xbim.COBieLiteUK;
 using Xbim.Common.Exceptions;
+using Xbim.Common.Step21;
 using Xbim.FilterHelper;
+using Xbim.Ifc;
 using Xbim.IO;
 using XbimExchanger.COBieLiteUkToIfc;
 using XbimExchanger.IfcToCOBieLiteUK;
@@ -135,14 +137,16 @@ namespace Xbim.Client
             }
             var xbimFile = Path.ChangeExtension(ifcName, "xbim");
             Worker.ReportProgress(0, string.Format("Creating file: {0}", xbimFile));
-            facility.ReportProgress.Progress = Worker.ReportProgress;
-            using (var ifcModel = XbimModel.CreateModel(xbimFile))
+            facility.ReportProgress.Progress = Worker.ReportProgress;var creds = new XbimEditorCredentials();
+            var assembly = System.Reflection.Assembly.GetExecutingAssembly();
+            var fvi = FileVersionInfo.GetVersionInfo(assembly.Location); 
+            creds.EditorsOrganisationName = fvi.CompanyName;
+            creds.EditorsFamilyName = fvi.CompanyName;
+            creds.ApplicationFullName = fvi.ProductName;
+            creds.ApplicationVersion = fvi.ProductVersion;
+            using (var ifcModel = IfcStore.Open(xbimFile,creds,true))
             {
-                var assembly = System.Reflection.Assembly.GetExecutingAssembly();
-                var fvi = FileVersionInfo.GetVersionInfo(assembly.Location);
-                ifcModel.Initialise(fvi.CompanyName, fvi.CompanyName, fvi.ProductName, fvi.CompanyName,
-                    fvi.ProductVersion);
-                ifcModel.ReloadModelFactors();
+               
                 using (var txn = ifcModel.BeginTransaction("Convert from COBieLiteUK"))
                 {
                     var coBieLiteUkToIfcExchanger = new CoBieLiteUkToIfcExchanger(facility, ifcModel);
@@ -150,7 +154,7 @@ namespace Xbim.Client
                     txn.Commit();
                 }
                 Worker.ReportProgress(0, string.Format("Creating file: {0}", ifcName));
-                ifcModel.SaveAs(ifcName, XbimStorageType.IFC);
+                ifcModel.SaveAs(ifcName, IfcStorageType.Ifc);
                 ifcModel.Close();
             }
 
@@ -294,17 +298,12 @@ namespace Xbim.Client
         private List<Facility> GenerateFileFacility(Params parameters, string fileExt)
         {
             var facilities = new List<Facility>();
-            using (var model = new XbimModel())
+            var assembly = System.Reflection.Assembly.GetExecutingAssembly();
+            var fvi = FileVersionInfo.GetVersionInfo(assembly.Location);
+            
+            using (var model = IfcStore.Open(parameters.ModelFile))
             {
-                if (fileExt.Equals(".xbim", StringComparison.OrdinalIgnoreCase))
-                {
-                    model.Open(parameters.ModelFile, XbimExtensions.XbimDBAccess.Read, Worker.ReportProgress);
-                }
-                else
-                {
-                    var xbimFile = Path.ChangeExtension(parameters.ModelFile, "xbim");
-                    model.CreateFrom(parameters.ModelFile, xbimFile, Worker.ReportProgress, true, true);
-                }
+                
                 var ifcToCoBieLiteUkExchanger = new IfcToCOBieLiteUkExchanger(model, facilities, Worker.ReportProgress,
                     parameters.Filter, parameters.ConfigFile, parameters.ExtId, parameters.SysMode);
                 facilities = ifcToCoBieLiteUkExchanger.Convert();
@@ -340,6 +339,7 @@ namespace Xbim.Client
 
         private List<Facility> ProcessFederatedModel(FederatedModel fedModel, Params parameters)
         {
+            
             var facilities = new List<Facility>();
             if (fedModel.Model.IsFederation)
             {
@@ -347,7 +347,7 @@ namespace Xbim.Client
                 var rolesFacilities = new Dictionary<RoleFilter, List<Facility>>();
                 foreach (var filter in fedFilters)
                 {
-                    var ifcToCoBieLiteUkExchanger = new IfcToCOBieLiteUkExchanger(filter.Key, new List<Facility>(), Worker.ReportProgress, filter.Value, parameters.ConfigFile, parameters.ExtId, parameters.SysMode);
+                    var ifcToCoBieLiteUkExchanger = new IfcToCOBieLiteUkExchanger(filter.Key.Model, new List<Facility>(), Worker.ReportProgress, filter.Value, parameters.ConfigFile, parameters.ExtId, parameters.SysMode);
                     ifcToCoBieLiteUkExchanger.ReportProgress.Progress = Worker.ReportProgress;
                     var rolesFacility = ifcToCoBieLiteUkExchanger.Convert();
 

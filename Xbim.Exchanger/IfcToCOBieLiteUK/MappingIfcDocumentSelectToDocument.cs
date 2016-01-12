@@ -2,14 +2,13 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using Xbim.Common;
 using Xbim.COBieLiteUK;
-using Xbim.Ifc;
 using Xbim.Ifc4.Interfaces;
-using Xbim.IO;
 
 namespace XbimExchanger.IfcToCOBieLiteUK
 {
-    internal class MappingIfcDocumentSelectToDocument : XbimMappings<IfcStore, List<Facility>, string, IIfcDocumentSelect, Document> 
+    internal class MappingIfcDocumentSelectToDocument : XbimMappings<IModel, List<Facility>, string, IIfcDocumentSelect, Document> 
     {
 
         /// <summary>

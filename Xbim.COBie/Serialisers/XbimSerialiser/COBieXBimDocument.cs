@@ -6,6 +6,8 @@ using Xbim.Ifc2x3.Kernel;
 using Xbim.Ifc2x3.ExternalReferenceResource;
 using Xbim.Ifc2x3.ProductExtension;
 using Xbim.Ifc2x3.ConstructionMgmtDomain;
+using Xbim.Ifc2x3.MeasureResource;
+using Xbim.IO.Esent;
 
 namespace Xbim.COBie.Serialisers.XbimSerialiser
 {
@@ -175,16 +177,17 @@ namespace Xbim.COBie.Serialisers.XbimSerialiser
                 //create the Document References
                 if (strNameValues.Count > 0)
                 {
-                    IfcDocumentReference[] ifcDocumentReferences = new IfcDocumentReference[strNameValues.Count];
                     int i = 0;
-                    foreach (string name in strNameValues)
+                    foreach (var name in strNameValues)
                     {
-                        ifcDocumentReferences[i] = Model.Instances.New<IfcDocumentReference>(dr => { dr.Name = name; });
+                        var docref = Model.Instances.New<IfcDocumentReference>();
+                        docref.Name=new IfcLabel(name); 
                         if (strLocationValues != null)
-                            ifcDocumentReferences[i].Location = strLocationValues[i];
+                            docref.Location = strLocationValues[i];
+                        ifcDocumentInformation.DocumentReferences.Add(docref);
                         i++;
                     }
-                    ifcDocumentInformation.SetDocumentReferences(true, ifcDocumentReferences);
+                  
                 }
 
             }
@@ -194,7 +197,6 @@ namespace Xbim.COBie.Serialisers.XbimSerialiser
         /// Add the object the document relates too
         /// </summary>
         /// <param name="row">COBieDocumentRow holding row data</param>
-        /// <param name="ifcRelAssociatesDocument">IfcRelAssociatesDocument object to hold relationship</param>
         private IfcRoot GetObjectRelationship(COBieDocumentRow row)
         {
             IfcRoot ifcRoot = null;

@@ -1,13 +1,12 @@
 ﻿using System.Collections.Generic;
+using Xbim.Common;
 using Xbim.COBieLiteUK;
-using Xbim.Ifc;
-
 using Xbim.Ifc4.Interfaces;
 
 
 namespace XbimExchanger.IfcToCOBieLiteUK
 {
-    class MappingIfcSiteToSite : XbimMappings<IfcStore, List<Facility>, string, IIfcSite, Site>
+    class MappingIfcSiteToSite : XbimMappings<IModel, List<Facility>, string, IIfcSite, Site>
     {
         protected override Site Mapping(IIfcSite ifcSite, Site site)
         {

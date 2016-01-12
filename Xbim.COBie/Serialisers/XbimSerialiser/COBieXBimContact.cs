@@ -1,6 +1,7 @@
 ﻿using System;
 using Xbim.Ifc2x3.ActorResource;
 using Xbim.COBie.Rows;
+using Xbim.IO.Esent;
 
 namespace Xbim.COBie.Serialisers.XbimSerialiser
 {
@@ -73,10 +74,7 @@ namespace Xbim.COBie.Serialisers.XbimSerialiser
                 IfcTelecomAddress ifcTelecomAddress = Model.Instances.New<IfcTelecomAddress>();
                 if (ValidateString(row.Email))
                 {
-                    if (ifcTelecomAddress.ElectronicMailAddresses == null)
-                        ifcTelecomAddress.SetElectronicMailAddress(row.Email); //create the LabelCollection and set to ElectronicMailAddresses field
-                    else
-                        ifcTelecomAddress.ElectronicMailAddresses.Add(row.Email); //add to existing collection
+                    ifcTelecomAddress.ElectronicMailAddresses.Add(row.Email); //add to existing collection
                 }
 
                 //IfcPersonAndOrganization has no OwnerHistory so our COBie is extracting this from IfcProject so do nothing here
@@ -86,10 +84,7 @@ namespace Xbim.COBie.Serialisers.XbimSerialiser
                 {
                     IfcActorRole ifcActorRole = Model.Instances.New<IfcActorRole>();
                     ifcActorRole.RoleString = row.Category;
-                    if (ifcPerson.Roles == null)
-                        ifcPerson.SetRoles(ifcActorRole);//create the ActorRoleCollection and set to Roles field
-                    else
-                        ifcPerson.Roles.Add(ifcActorRole);//add to existing collection
+                    ifcPerson.Roles.Add(ifcActorRole); //add to existing collection
                 }
                 //add Company
                 if (ValidateString(row.Company))
@@ -103,10 +98,7 @@ namespace Xbim.COBie.Serialisers.XbimSerialiser
                 //add Phone
                 if (ValidateString(row.Phone))
                 {
-                    if (ifcTelecomAddress.TelephoneNumbers == null)
-                        ifcTelecomAddress.SetTelephoneNumbers(row.Phone);//create the LabelCollection and set to TelephoneNumbers field
-                    else
-                        ifcTelecomAddress.TelephoneNumbers.Add(row.Phone);//add to existing collection
+                    ifcTelecomAddress.TelephoneNumbers.Add(row.Phone); //add to existing collection
                 }
 
                 //External System, as no history object we have to allow this to default to DEFAUL_STRING, so do nothing here
@@ -124,8 +116,13 @@ namespace Xbim.COBie.Serialisers.XbimSerialiser
                 //add Family Name
                 if (ValidateString(row.FamilyName)) ifcPerson.FamilyName = row.FamilyName;
                 //add Street
-                if (ValidateString(row.Street)) ifcPostalAddress.SetAddressLines(row.Street.Split(','));
-                //add PostalBox
+                if (ValidateString(row.Street))
+                {
+                    ifcPostalAddress.AddressLines.Clear();
+                    foreach (var line in row.Street.Split(','))ifcPostalAddress.AddressLines.Add(line);                  
+                }
+            
+            //add PostalBox
                 if (ValidateString(row.PostalBox)) ifcPostalAddress.PostalBox = row.PostalBox;
                 //add Town
                 if (ValidateString(row.Town)) ifcPostalAddress.Town = row.Town;
@@ -138,15 +135,11 @@ namespace Xbim.COBie.Serialisers.XbimSerialiser
 
                 //add addresses into IfcPerson object
                 //add Telecom Address
-                if (ifcPerson.Addresses == null)
-                    ifcPerson.SetTelecomAddresss(ifcTelecomAddress);//create the AddressCollection and set to Addresses field
-                else
-                    ifcPerson.Addresses.Add(ifcTelecomAddress);//add to existing collection
+
+                ifcPerson.Addresses.Add(ifcTelecomAddress);//add to existing collection
                 // Add postal address
-                if (ifcPerson.Addresses == null)
-                    ifcPerson.SetPostalAddresss(ifcPostalAddress);//create the AddressCollection and set to Addresses field
-                else
-                    ifcPerson.Addresses.Add(ifcPostalAddress);//add to existing collection
+
+                ifcPerson.Addresses.Add(ifcPostalAddress);//add to existing collection
 
                 //add the person and the organization objects 
                 ifcPersonAndOrganization.ThePerson = ifcPerson;

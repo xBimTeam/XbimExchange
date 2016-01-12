@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using Xbim.COBie.Rows;
 using System.Linq;
+using Xbim.Common.Metadata;
 using Xbim.COBie.Contracts;
 using Xbim.COBie.Serialisers;
 using Xbim.Ifc2x3.ProductExtension;
@@ -168,8 +169,8 @@ namespace Xbim.COBie
                         (!string.IsNullOrEmpty(colvalue.CellValue))
                         )
                     {
-                        IfcType ifcType;
-                        if (IfcMetaData.TryGetIfcType(colvalue.CellValue.Trim().ToUpper(), out ifcType))
+                        ExpressType ifcType;
+                        if (Context.Model.Metadata.TryGetExpressType(colvalue.CellValue.Trim().ToUpper(), out ifcType))
                             classTypes.Remove(ifcType.Type);
                     }
                 }

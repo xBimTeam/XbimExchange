@@ -1,13 +1,13 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using Xbim.Common;
 using Xbim.COBieLiteUK;
-using Xbim.Ifc;
 using Xbim.Ifc4.Interfaces;
 
 
 namespace XbimExchanger.IfcToCOBieLiteUK
 {
-    class MappingIfcZoneToZone : XbimMappings<IfcStore, List<Facility>, string, IIfcZone, Zone>
+    class MappingIfcZoneToZone : XbimMappings<IModel, List<Facility>, string, IIfcZone, Zone>
     {
         protected override Zone Mapping(IIfcZone ifcZone, Zone target)
         {

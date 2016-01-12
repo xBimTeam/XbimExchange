@@ -435,6 +435,7 @@ namespace Xbim.COBieLite
         private void GetUnits()
         {
             var ifcProject = Model.Instances.FirstOrDefault<IIfcProject>();
+            if (ifcProject == null) return;
             foreach (var unit in ifcProject.UnitsInContext.Units)
             {
                 var namedUnit = unit as IIfcNamedUnit;
@@ -942,7 +943,7 @@ namespace Xbim.COBieLite
 
             var persons = new HashSet<IIfcActorSelect>(_model.Instances.OfType<IIfcPerson>().Where(p => !personsAlreadyIn.Contains(p)));
             actors = new HashSet<IIfcActorSelect>(actors.Concat(persons));
-            return actors;
+           return actors;
         }
 
         public void WriteIIfc(TextWriter textWriter, FacilityType facilityType)

@@ -5,6 +5,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Xbim.CobieLiteUK.Validation;
 using Xbim.CobieLiteUK.Validation.Reporting;
 using Xbim.COBieLiteUK;
+using Xbim.Ifc;
 using Xbim.IO;
 using XbimExchanger.IfcToCOBieLiteUK;
 
@@ -55,10 +56,8 @@ namespace Tests
             Facility sub = null;
 
             //create validation file from IFC
-            using (var m = new XbimModel())
-            {
-                var xbimTestFile = Path.ChangeExtension(ifcTestFile, "xbim");
-                m.CreateFrom(ifcTestFile, xbimTestFile, null, true, true);
+            using (var m = IfcStore.Open(ifcTestFile))
+            {               
                 var facilities = new List<Facility>();
                 var ifcToCoBieLiteUkExchanger = new IfcToCOBieLiteUkExchanger(m, facilities);
                 facilities = ifcToCoBieLiteUkExchanger.Convert();

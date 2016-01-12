@@ -95,14 +95,13 @@ namespace Xbim.COBie.Data
                     
                     coordinate.RowName = coordinate.Name;
 
-                IfcCartesianPoint ifcCartesianPointLower;
-                IfcCartesianPoint ifcCartesianPointUpper;
+                XbimPoint3D? ifcCartesianPointLower;
+                XbimPoint3D? ifcCartesianPointUpper;
                 var transBox = new TransformedBoundingBox();
                     if (ifcProduct is IfcBuildingStorey)
                     {
                     XbimMatrix3D worldMatrix = ifcProduct.ObjectPlacement.ToMatrix3D();
-                    ifcCartesianPointLower = new IfcCartesianPoint(worldMatrix.OffsetX, worldMatrix.OffsetY,
-                        worldMatrix.OffsetZ);
+                    ifcCartesianPointLower = new XbimPoint3D(worldMatrix.OffsetX, worldMatrix.OffsetY,worldMatrix.OffsetZ);
                     //get the offset from the world coordinates system 0,0,0 point, i.e. origin point of this object in world space
                         coordinate.SheetName = "Floor";
                         coordinate.Category = "point";
@@ -130,14 +129,14 @@ namespace Xbim.COBie.Data
                     XbimMatrix3D m = globalTransform* transform;
                     transBox = new TransformedBoundingBox(boundBox, m);
                     //set points
-                    ifcCartesianPointLower = new IfcCartesianPoint(transBox.MinPt);
-                    ifcCartesianPointUpper = new IfcCartesianPoint(transBox.MaxPt);
+                    ifcCartesianPointLower = transBox.MinPt;
+                    ifcCartesianPointUpper = transBox.MaxPt;
 
                     }
 
-                coordinate.CoordinateXAxis = string.Format("{0}", (double)ifcCartesianPointLower[0]);
-                coordinate.CoordinateYAxis = string.Format("{0}", (double)ifcCartesianPointLower[1]);
-                coordinate.CoordinateZAxis = string.Format("{0}", (double)ifcCartesianPointLower[2]);
+                coordinate.CoordinateXAxis = string.Format("{0}", (double)ifcCartesianPointLower.Value.X);
+                coordinate.CoordinateYAxis = string.Format("{0}", (double)ifcCartesianPointLower.Value.Y);
+                coordinate.CoordinateZAxis = string.Format("{0}", (double)ifcCartesianPointLower.Value.Z);
                     coordinate.ExtSystem = GetExternalSystem(ifcProduct);
                     coordinate.ExtObject = ifcProduct.GetType().Name;
                     if (!string.IsNullOrEmpty(ifcProduct.GlobalId))
@@ -151,7 +150,7 @@ namespace Xbim.COBie.Data
 
 
                     coordinates.AddRow(coordinate);
-                    if (ifcCartesianPointUpper != null) //we need a second row for upper point
+                    if (ifcCartesianPointUpper.HasValue) //we need a second row for upper point
                     {
                     var coordinateUpper = new COBieCoordinateRow(coordinates);
                         coordinateUpper.Name = coordinate.Name;
@@ -160,9 +159,9 @@ namespace Xbim.COBie.Data
                         coordinateUpper.RowName = coordinate.RowName;
                         coordinateUpper.SheetName = coordinate.SheetName;
                         coordinateUpper.Category = "box-upperright";
-                        coordinateUpper.CoordinateXAxis = string.Format("{0}", (double)ifcCartesianPointUpper[0]);
-                        coordinateUpper.CoordinateYAxis = string.Format("{0}", (double)ifcCartesianPointUpper[1]);
-                        coordinateUpper.CoordinateZAxis = string.Format("{0}", (double)ifcCartesianPointUpper[2]);
+                        coordinateUpper.CoordinateXAxis = string.Format("{0}", (double)ifcCartesianPointUpper.Value.X);
+                        coordinateUpper.CoordinateYAxis = string.Format("{0}", (double)ifcCartesianPointUpper.Value.Y);
+                        coordinateUpper.CoordinateZAxis = string.Format("{0}", (double)ifcCartesianPointUpper.Value.Z);
                         coordinateUpper.ExtSystem = coordinate.ExtSystem;
                         coordinateUpper.ExtObject = coordinate.ExtObject;
                         coordinateUpper.ExtIdentifier = coordinate.ExtIdentifier;

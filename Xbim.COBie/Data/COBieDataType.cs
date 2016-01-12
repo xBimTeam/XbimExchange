@@ -1,4 +1,7 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Diagnostics;
+using System.Globalization;
 using System.Linq;
 using System.Reflection;
 using Xbim.COBie.Rows;
@@ -8,6 +11,8 @@ using Xbim.Ifc2x3.PropertyResource;
 using Xbim.Ifc2x3.SharedFacilitiesElements;
 using Xbim.Ifc2x3.UtilityResource;
 using Xbim.Ifc2x3.MaterialResource;
+using Xbim.Ifc4.Interfaces;
+
 
 namespace Xbim.COBie.Data
 {
@@ -155,7 +160,7 @@ namespace Xbim.COBie.Data
                 }
                 //add materialLayerSet name to rows
                 COBieTypeRow matSetRow = new COBieTypeRow(types);
-                matSetRow.Name = (string.IsNullOrEmpty(ifcMaterialLayerSet.Name)) ? DEFAULT_STRING : ifcMaterialLayerSet.Name;
+                matSetRow.Name = (string.IsNullOrEmpty(ifcMaterialLayerSet.LayerSetName)) ? DEFAULT_STRING : ifcMaterialLayerSet.LayerSetName.ToString();
                 matSetRow.CreatedBy = createdBy;
                 matSetRow.CreatedOn = createdOn;
                 matSetRow.ExtSystem = extSystem;
@@ -172,7 +177,7 @@ namespace Xbim.COBie.Data
                     {
                         string name = ifcMaterialLayer.Material.Name.ToString().Trim();
                         double thickness = ifcMaterialLayer.LayerThickness;
-                        string keyName = name + " (" + thickness.ToString() + ")";
+                        string keyName = name + " (" + thickness.ToString(CultureInfo.InvariantCulture) + ")";
                         if (!rowHolderLayerChildNames.Contains(keyName.ToLower())) //check we do not already have it
                         {
                             COBieTypeRow matRow = new COBieTypeRow(types);
@@ -745,21 +750,21 @@ namespace Xbim.COBie.Data
         /// <returns>List of IfcPropertySingleValue which are contained in AttNames</returns>
         private IEnumerable<IfcPropertySingleValue> GetTypeObjRelAttributes(IfcTypeObject typeObj, List<string> attNames)
         {
-            IEnumerable<IfcPropertySingleValue> properties = Enumerable.Empty<IfcPropertySingleValue>();
+            var properties = Enumerable.Empty<IIfcPropertySingleValue>();
             // can hold zero or 1 ObjectTypeOf (IfcRelDefinesByType- holds list of objects of this type in RelatedObjects property) so test return
             var typeInstanceRel = typeObj.ObjectTypeOf.FirstOrDefault(); 
             if (typeInstanceRel != null)
             {
                 // TODO: Check usage of GetAllProperties - duplicates Properties from Type?
-                foreach (IfcPropertySet pset in typeInstanceRel.RelatedObjects.First().GetAllPropertySets()) 
+                foreach (var pset in typeInstanceRel.RelatedObjects.First().PropertySets) 
                 {
                     //has to have 1 or more object that are of this type, so get first and see what we get
-                    properties = properties.Concat(pset.HasProperties.Where<IfcPropertySingleValue>(p => attNames.Contains(p.Name.ToString())));
+                    properties = properties.Concat(pset.HasProperties.OfType<IIfcPropertySingleValue>().Where(p => attNames.Contains(p.Name.ToString())));
                 }
             }
 
 
-            return properties;
+            return properties.Cast<IfcPropertySingleValue>();
         }
 
         

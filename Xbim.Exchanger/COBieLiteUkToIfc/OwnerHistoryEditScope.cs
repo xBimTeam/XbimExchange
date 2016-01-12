@@ -23,12 +23,8 @@ namespace XbimExchanger.COBieLiteUkToIfc
         public OwnerHistoryEditScope(IfcStore model, IfcOwnerHistory owner)
         {
             Model = model;
-
-            Model.EntityNew += model_EntityNew;
             _owner = owner;
-
-            //ifcOwnerHistory = Model.OwnerHistoryAddObject;
-            //Model.OwnerHistoryAddObject = owner;
+            Model.EntityNew += model_EntityNew;
 
         }
 

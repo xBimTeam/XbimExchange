@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using Xbim.Common;
 using Xbim.COBieLite;
 using Xbim.Ifc2x3.Kernel;
 using Xbim.Ifc2x3.MeasureResource;
@@ -43,9 +44,11 @@ namespace XbimExchanger.COBieLiteToIfc
 
             //COBie does nor require a project but Ifc does
 
-            if (ifcProject != null)
-            {
-                #region Project
+            if (ifcProject == null)
+               ifcProject= Exchanger.TargetRepository.Instances.New<IfcProject>();
+     
+
+            #region Project
                 var projectMapping = Exchanger.GetOrCreateMappings<MappingProjectTypeToIfcProject>();
                 projectMapping.AddMapping(facility.ProjectAssignment, ifcProject);
                 InitialiseUnits(ifcProject);
@@ -109,7 +112,7 @@ namespace XbimExchanger.COBieLiteToIfc
                 CreateSpaceProxies();
 
                 #endregion
-            }
+            
             return ifcBuilding;
         }
 
@@ -123,6 +126,7 @@ namespace XbimExchanger.COBieLiteToIfc
 
         private void InitialiseUnits(IfcProject ifcProject)
         {      
+            ifcProject.Initialize(ProjectUnits.SIUnitsUK);
             //Area
             var areaUnit = ifcProject.UnitsInContext.AreaUnit as IfcSIUnit; //they always are as we are initialising to this
             if (areaUnit!=null && Exchanger.DefaultAreaUnit.HasValue)

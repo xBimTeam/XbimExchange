@@ -1,10 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using Xbim.Ifc2x3.ExternalReferenceResource;
 using Xbim.COBie.Data;
-
+using Xbim.Ifc2x3.ActorResource;
+using Xbim.Ifc2x3.IO;
 using Xbim.Common;
-using Xbim.Ifc;
-using Xbim.Ifc4.Interfaces;
+using Xbim.Ifc4.ElectricalDomain;
 
 namespace Xbim.COBie
 {
@@ -25,7 +26,7 @@ namespace Xbim.COBie
         /// <summary>
         /// Map models to roles for federated models
         /// </summary>
-        public Dictionary<IfcStore, COBieMergeRoles> MapMergeRoles { get; private set; } 
+        public Dictionary<XbimModel, COBieMergeRoles> MapMergeRoles { get; private set; } 
  
         private  GlobalUnits _workBookUnits;
         /// <summary>
@@ -49,8 +50,8 @@ namespace Xbim.COBie
            
         }
         /// <summary>
-        /// if set to true and no IIfcZones or no IIfcSpace property names of "ZoneName", we will list 
-        /// any IIfcSpace property names "Department" in the Zone sheet
+        /// if set to true and no IfcZones or no IfcSpace property names of "ZoneName", we will list 
+        /// any IfcSpace property names "Department" in the Zone sheet
         /// </summary>
         public bool DepartmentsUsedAsZones { get; set; } //indicate if we have taken departments as Zones
 
@@ -72,8 +73,8 @@ namespace Xbim.COBie
             RunDateManuallySet = false;
             EMails = new Dictionary<long, string>();
             Model = null;
-            //if no IIfcZones or no IIfcSpace property names of "ZoneName" then if DepartmentsUsedAsZones is true we will list 
-            //any IIfcSpace property names "Department" in the Zone sheet and remove the "Department" property from the attribute sheet
+            //if no IfcZones or no IfcSpace property names of "ZoneName" then if DepartmentsUsedAsZones is true we will list 
+            //any IfcSpace property names "Department" in the Zone sheet and remove the "Department" property from the attribute sheet
             DepartmentsUsedAsZones = false;
 
             Exclude = new FilterValues();
@@ -82,7 +83,7 @@ namespace Xbim.COBie
 
             //set the row index to report error rows on
             ErrorRowStartIndex = ErrorRowIndexBase.RowTwo; //default for excel sheet
-            MapMergeRoles = new Dictionary<IfcStore, COBieMergeRoles>();
+            MapMergeRoles = new Dictionary<XbimModel, COBieMergeRoles>();
 
         }
 
@@ -96,25 +97,28 @@ namespace Xbim.COBie
         /// <summary>
         /// Get merge roles for federated models, used to work out Model Merge Precedence Rules
         /// </summary>
-        private Dictionary<IfcStore, COBieMergeRoles> LinkRoleToModel()
+        private Dictionary<XbimModel, COBieMergeRoles> LinkRoleToModel()
         {
             var mapMergeRoles = MapRolesForMerge();//assign merge role to a IfcRoleEnum value
-            var mapModelToMergeRoles = new Dictionary<IfcStore, COBieMergeRoles>();
+            var mapModelToMergeRoles = new Dictionary<XbimModel, COBieMergeRoles>();
             
             //mapModelToMergeRoles.Add(Model, COBieMergeRoles.Unknown); //assume that it is just the holder model(xBIMf) (as xbim is creating holding file .xbimf) for and all the models are in the Model.RefencedModels property
             
             //now get the referenced models
             foreach (var refModel in Model.ReferencedModels)
             {
-                IIfcDocumentInformation doc = refModel.DocumentInformation;
-                var owner = doc.DocumentOwner as IIfcOrganization;
-                if ((owner != null) && (owner.Roles != null))
+               // IfcDocumentInformation doc = refModel.DocumentInformation;
+              //  var owner = doc.DocumentOwner as IfcOrganization;
+              //  if ((owner != null) && (owner.Roles != null))
                 {
                     var mergeRoles = COBieMergeRoles.Unknown;
                     
-                    foreach (var role in owner.Roles)
+                   // foreach (var role in owner.Roles)
                     {
-                        var roleitem = role.Role;
+
+                        IfcRoleEnum roleitem;
+                        if( !Enum.TryParse(refModel.Role,true,out  roleitem))
+                            roleitem = IfcRoleEnum.USERDEFINED;
 
                         if (mapMergeRoles[roleitem] != COBieMergeRoles.Unknown)
                         {
@@ -124,7 +128,7 @@ namespace Xbim.COBie
                                 mergeRoles = mergeRoles ^ COBieMergeRoles.Unknown;
                         }
                     }
-                    mapModelToMergeRoles.Add(refModel.Model, mergeRoles);
+                    mapModelToMergeRoles.Add((XbimModel)refModel.Model, mergeRoles);
                 }
             }
             return mapModelToMergeRoles;
@@ -196,9 +200,9 @@ namespace Xbim.COBie
         /// Gets the model defined in this context to generate COBie data from
         /// </summary>
         
-        private IfcStore _model;
+        private XbimModel _model;
 
-        public IfcStore Model
+        public XbimModel Model
         {
             get { return _model; }
             set { 

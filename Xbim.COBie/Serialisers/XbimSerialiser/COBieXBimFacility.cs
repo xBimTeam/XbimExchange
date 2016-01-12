@@ -1,12 +1,14 @@
 ﻿using System;
 using System.Globalization;
 using System.Linq;
+using Xbim.Common;
 using Xbim.COBie.Rows;
 using Xbim.Ifc2x3.GeometricConstraintResource;
 using Xbim.Ifc2x3.Kernel;
 using Xbim.Ifc2x3.MeasureResource;
 using Xbim.Ifc2x3.ProductExtension;
 using Xbim.Ifc2x3.QuantityResource;
+using Xbim.IO.Esent;
 
 namespace Xbim.COBie.Serialisers.XbimSerialiser
 {
@@ -229,7 +231,8 @@ namespace Xbim.COBie.Serialisers.XbimSerialiser
             IfcUnitAssignment ifcUnitAssignment = GetProjectUnitAssignment();
             if (GetUnitEnumerations(value, out returnUnit, out returnPrefix))
             {
-                ifcUnitAssignment.SetOrChangeSIUnit(unitType, (IfcSIUnitName)returnUnit, returnPrefix);
+                if (returnUnit != null)
+                    ifcUnitAssignment.SetOrChangeSiUnit(unitType, (IfcSIUnitName)returnUnit.Value, returnPrefix);
             }
             else
             {

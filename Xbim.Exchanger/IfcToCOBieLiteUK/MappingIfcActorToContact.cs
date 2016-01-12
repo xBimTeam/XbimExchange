@@ -2,7 +2,6 @@
 using System.Linq;
 using Xbim.COBieLiteUK;
 using Xbim.Common;
-using Xbim.Ifc;
 using Xbim.Ifc4.Interfaces;
 
 
@@ -20,7 +19,7 @@ namespace XbimExchanger.IfcToCOBieLiteUK
             return obj.Email.GetHashCode();
         }
     }
-    class MappingIfcActorToContact : XbimMappings<IfcStore, List<Facility>, string, IIfcActorSelect, Contact>
+    class MappingIfcActorToContact : XbimMappings<IModel, List<Facility>, string, IIfcActorSelect, Contact>
     {
         protected override Contact Mapping(IIfcActorSelect actor, Contact target)
         {

@@ -3,6 +3,7 @@ using Xbim.Ifc2x3.Extensions;
 using Xbim.COBie.Rows;
 using Xbim.Ifc2x3.ProductExtension;
 using Xbim.Ifc2x3.MeasureResource;
+using Xbim.IO.Esent;
 
 namespace Xbim.COBie.Serialisers.XbimSerialiser
 {

@@ -7,6 +7,7 @@ using Xbim.Ifc2x3.MeasureResource;
 using Xbim.Ifc2x3.PropertyResource;
 using Xbim.Ifc2x3.ConstructionMgmtDomain;
 using Xbim.Ifc2x3.ProcessExtension;
+using Xbim.IO.Esent;
 
 
 namespace Xbim.COBie.Serialisers.XbimSerialiser

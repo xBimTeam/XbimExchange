@@ -1,12 +1,12 @@
 ﻿using System.Collections.Generic;
+using Xbim.Common;
 using Xbim.COBieLiteUK;
-using Xbim.Ifc;
 using Xbim.Ifc4.Interfaces;
 
 
 namespace XbimExchanger.IfcToCOBieLiteUK
 {
-    class MappingIfcSpatialStructureElementToSpace : XbimMappings<IfcStore, List<Facility>, string, IIfcSpatialStructureElement, Space>
+    class MappingIfcSpatialStructureElementToSpace : XbimMappings<IModel, List<Facility>, string, IIfcSpatialStructureElement, Space>
     {
         protected override Space Mapping(IIfcSpatialStructureElement ifcSpatialElement, Space target)
         {
