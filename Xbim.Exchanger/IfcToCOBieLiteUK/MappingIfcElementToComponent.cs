@@ -8,7 +8,7 @@ using Xbim.Ifc4.Interfaces;
 
 namespace XbimExchanger.IfcToCOBieLiteUK
 {
-    class MappingIfcElementToAsset : XbimMappings<IfcStore, List<Facility>, string, IIfcElement, Asset>
+    internal class MappingIfcElementToAsset : XbimMappings<IfcStore, List<Facility>, string, IIfcElement, Asset>
     {
         protected override Asset Mapping(IIfcElement ifcElement, Asset target)
         {

@@ -1,57 +1,59 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using Xbim.COBieLiteUK;
+using Xbim.CobieExpress;
+using Xbim.Common;
 using Xbim.Ifc;
 using Xbim.Ifc4.Interfaces;
 
 namespace XbimExchanger.IfcToCOBieExpress
 {
-    public class MappingSystemViaIfcPropertyToSystem : XbimMappings<IfcStore, List<Facility>, string, IIfcPropertySet, Xbim.COBieLiteUK.System>
+    internal class MappingSystemViaIfcPropertyToSystem : XbimMappings<IfcStore, IModel, int, IIfcPropertySet, CobieSystem>
     {
-        protected override Xbim.COBieLiteUK.System Mapping(IIfcPropertySet pSet, Xbim.COBieLiteUK.System target)
+        private MappingIfcElementToComponent _elementToComponent;
+
+        protected MappingIfcElementToComponent ElementToComponent
+        {
+            get { return _elementToComponent ?? (_elementToComponent = Exchanger.GetOrCreateMappings<MappingIfcElementToComponent>()); }
+        }
+
+        protected override CobieSystem Mapping(IIfcPropertySet pSet, CobieSystem target)
         {
             var helper = ((IfcToCoBieExpressExchanger)Exchanger).Helper;
 
             //Add Assets
             var systemAssignments = helper.GetSystemAssignments(pSet);
 
-            var ifcObjectDefinitions = systemAssignments as IList<IIfcObjectDefinition> ?? systemAssignments.ToList();
-            string name = string.Empty;
-            if (ifcObjectDefinitions.Any())
+            var elements = systemAssignments.OfType<IIfcElement>().ToList();
+            var name = string.Empty;
+            if (elements.Any())
             {
-                name = GetSystemName(helper, ifcObjectDefinitions);
+                name = GetSystemName(helper, elements);
 
-                target.Components = new List<AssetKey>();
-                foreach (var ifcObjectDefinition in ifcObjectDefinitions)
+                foreach (var element in elements)
                 {
-
-                    var assetKey = new AssetKey { Name = ifcObjectDefinition.Name };
-                    if (!target.Components.Contains(assetKey))
-                    {
-                        target.Components.Add(assetKey);
-                    }
-                    
+                    CobieComponent component;
+                    if (ElementToComponent.GetOrCreateTargetObject(element.EntityLabel, out component))
+                        ElementToComponent.AddMapping(element, component);
+                    if (!target.Components.Contains(component))
+                        target.Components.Add(component);
                 }
             }
-            target.ExternalEntity = helper.ExternalEntityName(pSet);
+
+            target.ExternalObject = helper.GetExternalObject(pSet);
             target.ExternalId = helper.ExternalEntityIdentity(pSet);
             target.ExternalSystem = helper.GetExternalSystem(pSet);
-            target.Name = string.IsNullOrEmpty(name) ? "Unknown" : name;
+            target.Name = string.IsNullOrEmpty(name) ? "Unknown" + pSet.EntityLabel : name;
             target.Description = string.IsNullOrEmpty(pSet.Description) ? name : pSet.Description.ToString();
-            target.CreatedBy = helper.GetCreatedBy(pSet);
-            target.CreatedOn = helper.GetCreatedOn(pSet);
-            target.Categories = helper.GetCategories(pSet);
+            target.Created = helper.GetCreatedInfo(pSet);
+            target.Categories.AddRange(helper.GetCategories(pSet));
 
             //Attributes, no attributes from PSet as Pset is the attributes, assume that component attributes are extracted by each component anyway
             //target.Attributes = helper.GetAttributes(pSet);
 
             //Documents
-            var docsMappings = Exchanger.GetOrCreateMappings<MappingIfcDocumentSelectToDocument>();
-            helper.AddDocuments(docsMappings, target, pSet);
+            helper.AddDocuments(target, pSet);
 
-            //TODO:
-            //System Issues
+            //TODO: System Issues
            
             return target;
         }
@@ -61,55 +63,59 @@ namespace XbimExchanger.IfcToCOBieExpress
         /// Get system name from a IfcObjectDefinition
         /// </summary>
         /// <param name="helper">CoBieLiteUkHelper</param>
-        /// <param name="ifcObject">IfcObjectDefinition</param>
+        /// <param name="ifcObjects"></param>
         /// <returns></returns>
-        private static string GetSystemName(COBieExpressHelper helper, IList<IIfcObjectDefinition> ifcObjects )
-        {   string name = string.Empty;
+        private static string GetSystemName(COBieExpressHelper helper, IEnumerable<IIfcObjectDefinition> ifcObjects )
+        {   var name = string.Empty;
             var propMaps = helper.GetPropMap("SystemMaps").ToList();
-            if (propMaps.Count() > 0)
-            {
-                propMaps = propMaps.Concat(propMaps.ConvertAll(s => s.Split(new Char[] { '.' })[0] + ".System Classification")).ToList();
-                var propNameOrder = propMaps.Select(s => s.Split(new Char[] { '.' })[1]).Distinct().ToList();
+            if (!propMaps.Any()) return name;
+
+            propMaps = propMaps.Concat(propMaps.ConvertAll(s => s.Split('.')[0] + ".System Classification")).ToList();
+            var propNameOrder = propMaps.Select(s => s.Split('.')[1]).Distinct().ToList();
                     
-                foreach (var obj in ifcObjects)
+            foreach (var atts in ifcObjects.Select(helper.GetAttributesObj))
+            {
+                if (atts != null)
                 {
-                    var atts = helper.GetAttributesObj(obj);
-                    if (atts != null)
+                    //get propery values as system name
+                    var values = atts.Properties
+                        .Where(prop => propMaps.Contains(prop.Key))
+                        .Select(prop => prop.Value)
+                        .OfType<IIfcPropertySingleValue>()
+                        .Where(propSv => propSv.NominalValue != null && !string.IsNullOrEmpty(propSv.NominalValue.ToString()))
+                        .Select(propSv => propSv.Name.ToString() + ":" + propSv.NominalValue.ToString())
+                        .Distinct()
+                        .OrderBy(s => propNameOrder.IndexOf(s.Split(':')[0]));
+                    if (values.Any())
                     {
-                        //get propery values as system name
-                        var value = atts.Properties.Where(prop => propMaps.Contains(prop.Key)) //properties which match mappings
-                                                   .Select(prop => prop.Value).OfType<IIfcPropertySingleValue>()
-                                                   .Where(propSV => propSV.NominalValue != null && !string.IsNullOrEmpty(propSV.NominalValue.ToString())) //has a value
-                                                   .Select(propSV => propSV.Name.ToString() + ":" + propSV.NominalValue.ToString())
-                                                   .Distinct().OrderBy(s => propNameOrder.IndexOf(s.Split(new Char[] { ':' })[0]));
-                        if (value.Any())
+                        name = values.First();//string.Join(":", value);
+                    }
+                    else //no name so try proprty names
+                    {
+                        //Try and get the property names as system name
+                        values = atts.Properties
+                            .Where(prop => propMaps.Contains(prop.Key))
+                            .Select(prop => prop.Value)
+                            .OfType<IIfcPropertySingleValue>()
+                            .Where(propSv => propSv.Name != null && !string.IsNullOrEmpty(propSv.Name.ToString()))
+                            .Select(prop => prop.Name.ToString())
+                            .Distinct()
+                            .OrderBy(s => propNameOrder.IndexOf(s));
+                        if (values.Any())
                         {
-                            name = value.First();//string.Join(":", value);
-                        }
-                        else //no name so try proprty names
-                        {
-                            //Try and get the property names as system name
-                            value = atts.Properties.Where(prop => propMaps.Contains(prop.Key)) //properties which match mappings
-                                                   .Select(prop => prop.Value).OfType<IIfcPropertySingleValue>()
-                                                   .Where(propSV => propSV.Name != null && !string.IsNullOrEmpty(propSV.Name.ToString()))
-                                                   .Select(prop => prop.Name.ToString())
-                                                   .Distinct().OrderBy(s => propNameOrder.IndexOf(s));
-                            if (value.Any())
-                            {
-                                name = string.Join(":", value);
-                            }
+                            name = string.Join(":", values);
                         }
                     }
-                    if (!string.IsNullOrEmpty(name)) break; //exit loop if name can be constructed
                 }
+                if (!string.IsNullOrEmpty(name)) break; //exit loop if name can be constructed
             }
             return name;
         }
 
 
-        public override Xbim.COBieLiteUK.System CreateTargetObject()
+        public override CobieSystem CreateTargetObject()
         {
-            return new Xbim.COBieLiteUK.System();
+            return Exchanger.TargetRepository.Instances.New<CobieSystem>();
         }
     }
 }

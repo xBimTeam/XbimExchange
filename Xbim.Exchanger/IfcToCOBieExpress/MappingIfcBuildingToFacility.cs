@@ -1,9 +1,8 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Xbim.CobieExpress;
-using Xbim.COBieLiteUK;
 using Xbim.Ifc4.Interfaces;
-using netSystem = System;
 
 namespace XbimExchanger.IfcToCOBieExpress 
 {
@@ -143,12 +142,15 @@ namespace XbimExchanger.IfcToCOBieExpress
             if (helper.SystemMode.HasFlag(SystemExtractionMode.System) && helper.SystemAssignment.Any())
             {
                 var systemMappings = Exchanger.GetOrCreateMappings<MappingIfcSystemToSystem>();
-                Exchanger.ReportProgress.NextStage(helper.SystemAssignment.Keys.Count(), 95); //finish progress at 95% 
+                Exchanger.ReportProgress.NextStage(helper.SystemAssignment.Keys.Count, 95); //finish progress at 95% 
                 foreach (var ifcSystem in helper.SystemAssignment.Keys)
                 {
-                    var system = new Xbim.COBieLiteUK.System();
-                    system = systemMappings.AddMapping(ifcSystem, system);
-                    facility.Systems.Add(system);
+                    CobieSystem system;
+                    if (systemMappings.GetOrCreateTargetObject(ifcSystem.EntityLabel, out system))
+                    {
+                        system = systemMappings.AddMapping(ifcSystem, system);
+                        system.Facility = facility;
+                    }
                     Exchanger.ReportProgress.IncrementAndUpdate();
                 }
             }
@@ -157,20 +159,26 @@ namespace XbimExchanger.IfcToCOBieExpress
             if (helper.SystemMode.HasFlag(SystemExtractionMode.PropertyMaps) && helper.SystemViaPropAssignment.Any())
             {
                 var systemMappings = Exchanger.GetOrCreateMappings<MappingSystemViaIfcPropertyToSystem>();
-                Exchanger.ReportProgress.NextStage(helper.SystemAssignment.Keys.Count(), 96); //finish progress at 95% 
+                Exchanger.ReportProgress.NextStage(helper.SystemAssignment.Keys.Count, 96); //finish progress at 95% 
                 foreach (var ifcPropSet in helper.SystemViaPropAssignment.Keys)
                 {
-                    var system = new Xbim.COBieLiteUK.System();
-                    system = systemMappings.AddMapping(ifcPropSet, system);
-                    var init = facility.Systems.Where(sys => sys.Name.Equals(system.Name, netSystem.StringComparison.CurrentCultureIgnoreCase)).FirstOrDefault();
-                    if (init != null)
+                    CobieSystem system;
+                    if(systemMappings.GetOrCreateTargetObject(ifcPropSet.EntityLabel, out system))
+                        system = systemMappings.AddMapping(ifcPropSet, system);
+
+                    var duplicity = facility.Systems.FirstOrDefault(sys => sys.Name.Equals(system.Name, StringComparison.InvariantCultureIgnoreCase));
+                    if (duplicity != null)
                     {
-                        var idx = facility.Systems.IndexOf(init);
-                        facility.Systems[idx].Components = facility.Systems[idx].Components.Concat(system.Components).Distinct(new AssetKeyCompare()).ToList();
+                        //move components to the original system
+                        var components = duplicity.Components.ToList().Concat(system.Components).Distinct();
+                        duplicity.Components.Clear();
+                        duplicity.Components.AddRange(components);
+                        system.Components.Clear();
                     }
                     else
                     {
-                        facility.Systems.Add(system);
+                        //only assign system to facility if it is unique
+                        system.Facility = facility;
                     }
                     Exchanger.ReportProgress.IncrementAndUpdate();
                 }
@@ -185,7 +193,7 @@ namespace XbimExchanger.IfcToCOBieExpress
             var spaces = Exchanger.TargetRepository.Instances.OfType<CobieSpace>().ToList();
             var zones = Exchanger.TargetRepository.Instances.OfType<CobieZone>().ToList() ?? new List<CobieZone>();
             var unAllocatedSpaces = spaces.Where(space => !zones.Any(z => z.Spaces != null && z.Spaces.Select(s => s.Name).Contains(space.Name))).ToList();
-            Exchanger.ReportProgress.NextStage(unAllocatedSpaces.Count(), 98); //finish progress at 98% 
+            Exchanger.ReportProgress.NextStage(unAllocatedSpaces.Count, 98); //finish progress at 98% 
             if (unAllocatedSpaces.Any())
             {
                 var defaultZone = helper.XbimDefaultZone;
@@ -199,47 +207,25 @@ namespace XbimExchanger.IfcToCOBieExpress
             //assign all assets that are not in a system to the default
             if (helper.SystemMode.HasFlag(SystemExtractionMode.Types))
             {
-                var assetTypes = facility.Get<AssetType>().ToList();
-                var systemsWritten = facility.Get<Xbim.COBieLiteUK.System>();
-                var assetsAssignedToSystem = new HashSet<string>(systemsWritten.SelectMany(s => s.Components).Select(a => a.Name));
-                var systems = facility.Systems ?? new List<Xbim.COBieLiteUK.System>();
-                var defaultSystem = helper.CreateUndefinedSystem();
-                Exchanger.ReportProgress.NextStage(assetTypes.Count(), 100); //finish progress at 100% 
+                var types = Exchanger.TargetRepository.Instances.OfType<CobieType>().ToList();
+                var systemsWritten = Exchanger.TargetRepository.Instances.OfType<CobieSystem>().ToList();
+                var componentsAssignedToSystem = new HashSet<string>(systemsWritten.SelectMany(s => s.Components).Select(a => a.Name));
+                Exchanger.ReportProgress.NextStage(types.Count); //finish progress at 100% 
                 //go over all unasigned assets
-                foreach (var assetType in assetTypes)
+                foreach (var type in types)
                 {
-                    Xbim.COBieLiteUK.System assetTypeSystem = null;
-                    foreach (var asset in assetType.Assets.Where(a => !assetsAssignedToSystem.Contains(a.Name)))
+                    var components = type.Components.Where(a => !componentsAssignedToSystem.Contains(a.Name)).ToList();
+                    if (components.Any())
                     {
-                        if (assetTypeSystem == null)
-                        {
-                            assetTypeSystem = helper.CreateUndefinedSystem();
-                            assetTypeSystem.Name = string.Format("Type System {0} ", assetType.Name);
-
-                        }
-                        assetTypeSystem.Components.Add(new AssetKey { Name = asset.Name });
+                        var typeSystem = helper.XbimDefaultSystem;
+                        typeSystem.Name = string.Format("Type System {0} ", type.Name);
+                        typeSystem.Components.AddRange(components);
+                        typeSystem.Facility = facility;
                     }
-
-                    //add to tle list only if it is not null
-                    if (assetTypeSystem == null)
-                        continue;
-                    if (facility.Systems == null)
-                        facility.Systems = new List<Xbim.COBieLiteUK.System>();
-                    facility.Systems.Add(assetTypeSystem);
                     Exchanger.ReportProgress.IncrementAndUpdate();
                 } 
             }
            
-
-            //write out contacts created in the process
-            if (helper.SundryContacts.Any())
-            {
-                 if(facility.Contacts==null) facility.Contacts = new List<Contact>();
-                facility.Contacts.AddRange(helper.SundryContacts.Values);
-            }
-            
-            helper.SundryContacts.Clear(); //clear ready for processing next facility
-
             Exchanger.ReportProgress.Finalise(500); //finish with 500 millisecond delay
             
             return facility;

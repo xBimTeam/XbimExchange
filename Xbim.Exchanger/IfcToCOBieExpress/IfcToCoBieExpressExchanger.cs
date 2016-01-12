@@ -31,14 +31,15 @@ namespace XbimExchanger.IfcToCOBieExpress
         public override IModel Convert()
         {
             var mapping = GetOrCreateMappings<MappingIfcBuildingToFacility>();
+            var classifier = new Classifier(this);
             var buildings = SourceRepository.Instances.OfType<IIfcBuilding>().ToList();
             var facilities = new List<CobieFacility>(buildings.Count);
-            foreach (var ifcBuilding in buildings)
+            foreach (var building in buildings)
             {
                 var facility = TargetRepository.Instances.New<CobieFacility>();
-                facility = mapping.AddMapping(ifcBuilding, facility);
-                if(_classify)       
-                    facility.Classify();
+                facility = mapping.AddMapping(building, facility);
+                if(_classify)
+                    classifier.Classify(facility);
                 facilities.Add(facility);
             }
             return TargetRepository;

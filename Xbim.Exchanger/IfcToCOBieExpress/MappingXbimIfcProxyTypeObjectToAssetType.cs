@@ -56,13 +56,14 @@ namespace XbimExchanger.IfcToCOBieExpress
                 }
                 target.Manufacturer = helper.GetOrCreateContact(manuf);
 
+                helper.TrySetSimpleValue<double?>("AssetTypeReplacementCostValue", ifcTypeObject, v => target.ReplacementCost = v);
+                helper.TrySetSimpleValue<double?>("AssetTypeExpectedLifeValue", ifcTypeObject, v => target.ExpectedLife = v);
+                helper.TrySetSimpleValue<double>("AssetTypeNominalLength", ifcTypeObject, v => target.NominalLength = v);
+                helper.TrySetSimpleValue<double>("AssetTypeNominalWidth", ifcTypeObject, v => target.NominalWidth = v);
+                helper.TrySetSimpleValue<double>("AssetTypeNominalHeight", ifcTypeObject, v => target.NominalHeight = v);
+                
                 target.ModelNumber = helper.GetCoBieProperty("AssetTypeModelNumber", ifcTypeObject);
                 target.ModelReference = helper.GetCoBieProperty("AssetTypeModelReference", ifcTypeObject);
-                target.ReplacementCost = helper.GetCoBieAttribute<FloatValue>("AssetTypeReplacementCostValue", ifcTypeObject);
-                target.ExpectedLife = helper.GetCoBieAttribute<IntegerValue>("AssetTypeExpectedLifeValue", ifcTypeObject);
-                target.NominalLength = helper.GetCoBieAttribute<FloatValue>("AssetTypeNominalLength", ifcTypeObject);
-                target.NominalWidth = helper.GetCoBieAttribute<FloatValue>("AssetTypeNominalWidth", ifcTypeObject);
-                target.NominalHeight = helper.GetCoBieAttribute<FloatValue>("AssetTypeNominalHeight", ifcTypeObject);
                 target.AccessibilityPerformance = helper.GetCoBieProperty("AssetTypeAccessibilityText", ifcTypeObject);
                 target.Color = helper.GetCoBieProperty("AssetTypeColorCode", ifcTypeObject);
                 target.Constituents = helper.GetCoBieProperty("AssetTypeConstituentsDescription", ifcTypeObject);
@@ -78,8 +79,8 @@ namespace XbimExchanger.IfcToCOBieExpress
                 target.Finish = helper.GetCoBieProperty("AssetTypeFinishDescription", ifcTypeObject);
 
                 target.Warranty.Description = helper.GetCoBieProperty("AssetTypeWarrantyDescription", ifcTypeObject);
-                target.Warranty.DurationLabor = helper.GetCoBieAttribute<FloatValue>("AssetTypeWarrantyDurationLabor", ifcTypeObject);
-                target.Warranty.DurationParts = helper.GetCoBieAttribute<FloatValue>("AssetTypeWarrantyDurationParts", ifcTypeObject);
+                helper.TrySetSimpleValue<double>("AssetTypeWarrantyDurationLabor", ifcTypeObject, v => target.Warranty.DurationLabor = v);
+                helper.TrySetSimpleValue<double>("AssetTypeWarrantyDurationParts", ifcTypeObject, v => target.Warranty.DurationParts = v);
 
                 var warrantyDurationUnit = helper.GetCoBieProperty("AssetTypeWarrantyDurationUnit", ifcTypeObject);
                 if (!string.IsNullOrWhiteSpace(warrantyDurationUnit)) target.Warranty.DurationUnit = helper.GetPickValue<CobieDurationUnit>(warrantyDurationUnit);

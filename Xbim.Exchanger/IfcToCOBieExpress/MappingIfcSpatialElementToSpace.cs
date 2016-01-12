@@ -1,38 +1,23 @@
 ﻿using Xbim.CobieExpress;
-using Xbim.Common;
-using Xbim.Ifc;
 using Xbim.Ifc4.Interfaces;
 
 namespace XbimExchanger.IfcToCOBieExpress
 {
-    internal class MappingIfcSpatialElementToSpace : XbimMappings<IfcStore, IModel, int, IIfcSpatialElement, CobieSpace>
+    internal class MappingIfcSpatialElementToSpace : MappingIfcObjectToAsset<IIfcSpatialElement, CobieSpace>
     {
         protected override CobieSpace Mapping(IIfcSpatialElement ifcSpatialElement, CobieSpace target)
         {
-            var helper = ((IfcToCoBieExpressExchanger)Exchanger).Helper;
-            target.ExternalObject = helper.GetExternalObject(ifcSpatialElement);
-            target.ExternalId = helper.ExternalEntityIdentity(ifcSpatialElement);
-            target.AltExternalId = ifcSpatialElement.GlobalId;
-            target.ExternalSystem = helper.GetExternalSystem(ifcSpatialElement);
-            target.Name = ifcSpatialElement.Name;
-            target.Categories.AddRange(helper.GetCategories(ifcSpatialElement));
-            target.Description = ifcSpatialElement.LongName;
+            base.Mapping(ifcSpatialElement, target);
+
             if(string.IsNullOrWhiteSpace(target.Description))
                 target.Description = ifcSpatialElement.Description;
-            target.Created = helper.GetCreatedInfo(ifcSpatialElement);
-            //Attributes
-            target.Attributes.AddRange(helper.GetAttributes(ifcSpatialElement));
 
             //use some of the attributes to fill in properties
-            target.RoomTag = helper.GetCoBieAttribute<StringValue>("SpaceSignageName", ifcSpatialElement);
-            target.UsableHeight = helper.GetCoBieAttribute<FloatValue>("SpaceUsableHeightValue", ifcSpatialElement);
-            target.GrossArea = helper.GetCoBieAttribute<FloatValue>("SpaceGrossAreaValue", ifcSpatialElement);
-            target.NetArea = helper.GetCoBieAttribute<FloatValue>("SpaceNetAreaValue", ifcSpatialElement);
+            Helper.TrySetSimpleValue<string>("SpaceSignageName", ifcSpatialElement, s => target.RoomTag = s);
+            Helper.TrySetSimpleValue<double?>("SpaceUsableHeightValue", ifcSpatialElement, f => target.UsableHeight = f);
+            Helper.TrySetSimpleValue<double?>("SpaceGrossAreaValue", ifcSpatialElement, f => target.GrossArea = f);
+            Helper.TrySetSimpleValue<double?>("SpaceNetAreaValue", ifcSpatialElement, f => target.NetArea = f);
 
-            //Documents
-            var docsMappings = Exchanger.GetOrCreateMappings<MappingIfcDocumentSelectToDocument>();
-            helper.AddDocuments(docsMappings, target, ifcSpatialElement);
-            
             //TODO: Space Issues
             
             return target;

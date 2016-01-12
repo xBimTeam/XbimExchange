@@ -2,16 +2,34 @@
 using System.Linq;
 using System.Text.RegularExpressions;
 using Xbim.CobieExpress;
+using Xbim.Common;
+using Xbim.Ifc;
 using XbimExchanger.IfcToCOBieExpress.Classifications.Components;
 
 namespace XbimExchanger.IfcToCOBieExpress.Classifications
 {
-    public static class FacilityClassifierExtensions
+    internal class Classifier
     {
+
+        private readonly MappingIfcClassificationReferenceToCategory _classificationReferenceToCategory;
+        private readonly MappingIfcClassificationToCobieClassification _classificationToClassification;
+
+        private const string Uniclass2015Name = "Uniclass 2015 Reference (Inferred)";
+        private const string NBSReferenceName = "NBS Reference (Inferred)";
+        private const string NRMReferenceName = "NRM Reference (Inferred)";
+
+        public Classifier(XbimExchanger<IfcStore, IModel> exchanger)
+        {
+            _classificationReferenceToCategory =
+                exchanger.GetOrCreateMappings<MappingIfcClassificationReferenceToCategory>();
+            _classificationToClassification =
+                exchanger.GetOrCreateMappings<MappingIfcClassificationToCobieClassification>();
+        }
+
         /// <summary>
         /// This is the constructor for the Classifier Class
         /// </summary>
-        public static void Classify(this CobieFacility facility)
+        public void Classify(CobieFacility facility)
         {
             AddClassificationsToAssets(facility);
         }
@@ -24,22 +42,22 @@ namespace XbimExchanger.IfcToCOBieExpress.Classifications
         /// values that match the Regular Expression as a category
         /// of assets which conforms with the Schema.
         /// </summary>
-        private static void AddClassificationsToAssets(CobieFacility facility)
+        private void AddClassificationsToAssets(CobieFacility facility)
         {
             var dataReader = new ClassificationMappingReader();//DataReader Object which will create and populate the mappings table.
             //Get Each AssetType
-            foreach (CobieType at in facility.AssetTypes)
+            foreach (var type in facility.Model.Instances.OfType<CobieType>())
             {
                 //Get Each Asset
-                foreach (var a in at.Components)
+                foreach (var component in type.Components)
                 {
                     //Get Each Property
-                    foreach (var attr in a.Attributes)
+                    foreach (var attribute in component.Attributes)
                     {
-                        if (attr.Value.GetStringValue() == null || a.Categories.Count != 0) continue;
+                        if (attribute.Value == null || component.Categories.Count != 0) continue;
                         //Get the Inferred Classifications
 
-                        var inferredClassifications = FindInferredClassifications(attr.Value.GetStringValue(), dataReader);
+                        var inferredClassifications = FindInferredClassifications(attribute.Value.ToString(), dataReader);
 
                         foreach (var ic in inferredClassifications)
                         {
@@ -47,17 +65,17 @@ namespace XbimExchanger.IfcToCOBieExpress.Classifications
                             var nbsMatch = false;
                             var nrmMatch = false;
 
-                            foreach (var cat in a.Categories)
+                            foreach (var cat in component.Categories)
                             {
-                                if (ic.UniclassCode != null && cat.Code == ic.UniclassCode)
+                                if (ic.UniclassCode != null && cat.Value == ic.UniclassCode)
                                 {
                                     uniclassMatch = true;
                                 }
-                                if (ic.NbsCode != null && cat.Code == ic.NbsCode)
+                                if (ic.NbsCode != null && cat.Value == ic.NbsCode)
                                 {
                                     nbsMatch = true;
                                 }
-                                if (ic.NrmCode != null && cat.Code == ic.NrmCode)
+                                if (ic.NrmCode != null && cat.Value == ic.NrmCode)
                                 {
                                     nrmMatch = true;
                                 }
@@ -65,32 +83,45 @@ namespace XbimExchanger.IfcToCOBieExpress.Classifications
                             //Add the Classifications as categories if they exist.
                             if (ic.UniclassCode != null && !uniclassMatch)
                             {
-                                var uniClass = new CobieCategory();
-                                uniClass.Classification = "Uniclass 2015 Reference (Inferred)";
-                                uniClass.Code = ic.UniclassCode;
-                                uniClass.Description = ic.UniclassDescription;
-                                a.Categories.Add(uniClass);
+                                var uniClass = GetCategory(ic.UniclassCode, ic.UniclassDescription);
+                                uniClass.Classification = GetClassification(Uniclass2015Name);
+                                component.Categories.Add(uniClass);
                             }
                             if (ic.NbsCode != null && !nbsMatch)
                             {
-                                var nbs = new CobieCategory();
-                                nbs.Classification = "NBS Reference (Inferred)";
-                                nbs.Code = ic.NbsCode;
-                                nbs.Description = ic.NbsDescription;
-                                a.Categories.Add(nbs);
+                                var nbs = GetCategory(ic.NbsCode, ic.NbsDescription);
+                                nbs.Classification = GetClassification(NBSReferenceName);
+                                component.Categories.Add(nbs);
                             }
                             if (ic.NrmCode != null && !nrmMatch)
                             {
-                                var nrm = new CobieCategory();
-                                nrm.Classification = "NRM Reference (Inferred)";
-                                nrm.Code = ic.NrmCode;
-                                nrm.Description = ic.NrmDescription;
-                                a.Categories.Add(nrm);
+                                var nrm = GetCategory(ic.NrmCode, ic.NrmDescription);
+                                nrm.Classification = GetClassification(NRMReferenceName);
+                                component.Categories.Add(nrm);
                             }
                         }
                     }
                 }
             }
+        }
+
+        private CobieClassification GetClassification(string name)
+        {
+            CobieClassification classification;
+            if (_classificationToClassification.GetOrCreateTargetObject(name, out classification))
+                classification.Name = name;
+            return classification;
+        }
+
+        private CobieCategory GetCategory(string code, string description)
+        {
+            CobieCategory category;
+            if (_classificationReferenceToCategory.GetOrCreateTargetObject(code, out category))
+            {
+                category.Value = code;
+                category.Description = description;
+            }
+            return category;
         }
 
         /// <summary>

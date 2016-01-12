@@ -185,6 +185,7 @@ namespace XbimExchanger.IfcToCOBieExpress
         private readonly DateTime _now;
         private readonly List<CobieCreatedInfo> _createdInfoCache = new List<CobieCreatedInfo>();
         private CobieZone _xbimDefaultZone;
+        private CobieSystem _xbimDefaultSystem;
 
         private readonly MappingIfcClassificationReferenceToCategory _categoryMapping;
         private readonly MappingStringToExternalObject _externalObjectMapping;
@@ -554,29 +555,27 @@ namespace XbimExchanger.IfcToCOBieExpress
 
             //Use PropertySet Property with names matching config values on section name = SystemPropertyMaps with key=SystemMaps
             SystemViaPropAssignment = new Dictionary<IIfcPropertySet, IEnumerable<IIfcObjectDefinition>>();
-            if (SystemMode.HasFlag(SystemExtractionMode.PropertyMaps))
-            {
-                var props = GetPropMap("SystemMaps");
-                ReportProgress.NextStage(props.Length, 35);
-                foreach (var propertyName in props)
-                {
-                    var propmap = propertyName.Split(new[] { '.' }, StringSplitOptions.RemoveEmptyEntries);
-                    if (propmap.Length == 2)
-                    {
-                        var sets = Model.Instances.OfType<IIfcPropertySet>()
-                            .Where(ps => ps.Name != null && propmap[0].Equals(ps.Name, StringComparison.OrdinalIgnoreCase)
-                                    && ps.DefinesOccurrence.Any()
-                                    && ps.HasProperties.OfType<IIfcPropertySingleValue>().Any(psv => psv.Name == propmap[1])
-                                    && !SystemViaPropAssignment.ContainsKey(ps)
-                                    )
-                            .SelectMany(ps => ps.DefinesOccurrence)
-                            .Where(dbp => dbp.RelatedObjects.Any(e => _objectToTypeObjectMap.Keys.Contains(e))) //only none filtered objects
-                            .ToDictionary(dbp => dbp.RelatingPropertyDefinition as IIfcPropertySet, dbp => dbp.RelatedObjects.AsEnumerable());
+            if (!SystemMode.HasFlag(SystemExtractionMode.PropertyMaps)) return;
 
-                        SystemViaPropAssignment = SystemViaPropAssignment.Concat(sets).ToDictionary(p => p.Key, p => p.Value);
-                    }
-                    ReportProgress.IncrementAndUpdate();
-                } 
+            var props = GetPropMap("SystemMaps");
+            ReportProgress.NextStage(props.Length, 35);
+            foreach (var propmap in props.Select(propertyName => propertyName.Split(new[] { '.' }, StringSplitOptions.RemoveEmptyEntries)))
+            {
+                if (propmap.Length == 2)
+                {
+                    var sets = Model.Instances.OfType<IIfcPropertySet>()
+                        .Where(ps => ps.Name != null && propmap[0].Equals(ps.Name, StringComparison.OrdinalIgnoreCase)
+                                     && ps.DefinesOccurrence.Any()
+                                     && ps.HasProperties.OfType<IIfcPropertySingleValue>().Any(psv => psv.Name == propmap[1])
+                                     && !SystemViaPropAssignment.ContainsKey(ps)
+                        )
+                        .SelectMany(ps => ps.DefinesOccurrence)
+                        .Where(dbp => dbp.RelatedObjects.Any(e => _objectToTypeObjectMap.Keys.Contains(e))) //only none filtered objects
+                        .ToDictionary(dbp => dbp.RelatingPropertyDefinition as IIfcPropertySet, dbp => dbp.RelatedObjects.AsEnumerable());
+
+                    SystemViaPropAssignment = SystemViaPropAssignment.Concat(sets).ToDictionary(p => p.Key, p => p.Value);
+                }
+                ReportProgress.IncrementAndUpdate();
             }
         }
 
@@ -837,7 +836,7 @@ namespace XbimExchanger.IfcToCOBieExpress
                     XbimAttributedObject attributedObject;
                     if (!_attributedObjects.TryGetValue(ifcObject, out attributedObject))
                     {
-                        attributedObject = new XbimAttributedObject(ifcObject);
+                        attributedObject = new XbimAttributedObject(ifcObject, Target);
                         _attributedObjects.Add(ifcObject, attributedObject);
                     }
                     attributedObject.AddPropertySetDefinition(relProp.RelatingPropertyDefinition);  
@@ -852,7 +851,7 @@ namespace XbimExchanger.IfcToCOBieExpress
                 XbimAttributedObject attributedObject;
                 if (!_attributedObjects.TryGetValue(typeObject.IfcTypeObject, out attributedObject))
                     {
-                        attributedObject = new XbimAttributedObject(typeObject.IfcTypeObject);
+                        attributedObject = new XbimAttributedObject(typeObject.IfcTypeObject, Target);
                         _attributedObjects.Add(typeObject.IfcTypeObject, attributedObject);
                     }
                 if (typeObject.IfcTypeObject.HasPropertySets != null)
@@ -1154,7 +1153,7 @@ namespace XbimExchanger.IfcToCOBieExpress
         private List<CobieCategory> ConvertToCategories(string code, string desc)
         {
             CobieCategory category;
-            if (!_categoryMapping.GetOrCreateTargetObject(code ?? desc ?? "", out category))
+            if (!_categoryMapping.GetOrCreateTargetObject(code ?? desc ?? "unknown", out category))
                 return new List<CobieCategory> {category};
 
             if (!string.IsNullOrEmpty(code))
@@ -1260,33 +1259,30 @@ namespace XbimExchanger.IfcToCOBieExpress
 
         #endregion
 
-
-
-
         /// <summary>
         /// 
         /// </summary>
         /// <param name="valueName"></param>
         /// <param name="ifcObjectDefinition"></param>
-        /// <typeparam name="TCoBieValueBaseType"></typeparam>
+        /// <param name="setter"></param>
+        /// <typeparam name="TSimpleType"></typeparam>
         /// <returns></returns>
         /// <exception cref="ArgumentException"></exception>
-        public TCoBieValueBaseType GetCoBieAttribute<TCoBieValueBaseType>(string valueName, IIfcObjectDefinition ifcObjectDefinition)
-            where TCoBieValueBaseType : AttributeValue, new()
+        public void TrySetSimpleValue<TSimpleType>(string valueName, IIfcObjectDefinition ifcObjectDefinition, Action<TSimpleType> setter)
         {
             XbimAttributedObject attributedObject;
-            var result = new TCoBieValueBaseType();
-            if (!_attributedObjects.TryGetValue(ifcObjectDefinition, out attributedObject)) return result;
+            var result = default(TSimpleType);
+            if (!_attributedObjects.TryGetValue(ifcObjectDefinition, out attributedObject)) 
+                return;
+            
             string[] propertyNames;
             if (_cobieFieldMap.TryGetValue(valueName, out propertyNames))
             {
-                if (propertyNames.Any(propertyName => attributedObject.GetAttributeValue(propertyName, ref result)))
-                    return result;
+                if (propertyNames.Any(propertyName => attributedObject.TryGetAttributeValue(propertyName, out result)))
+                    setter(result);
             }
             else
                 throw new ArgumentException("Illegal COBie Attribute name:", valueName);
-            
-            return result;
         }
 
         /// <summary>
@@ -1370,7 +1366,7 @@ namespace XbimExchanger.IfcToCOBieExpress
                 var property = kvp.Value;
                 var splitName = kvp.Key.Split('.');
                 var pSetName = splitName[0];
-                var newAttribute = XbimAttributedObject.ConvertToAttributeType(property);
+                var newAttribute = attributedObject.ConvertToAttributeType(property);
                 var pSetDef = attributedObject.GetPropertySetDefinition(pSetName);
                         
                 if (pSetDef != null)
@@ -1877,14 +1873,18 @@ namespace XbimExchanger.IfcToCOBieExpress
             }
         }
 
-        internal CobieSystem CreateUndefinedSystem()
+        internal CobieSystem XbimDefaultSystem
         {
-            return Target.Instances.New<CobieSystem>(s =>
+            get
             {
-                s.Name = "Default System";
-                s.Created = GetCreatedInfo(XbimContact, _now);
-                s.Categories.Add(UnknownCategory);
-            });
+                return _xbimDefaultSystem ?? (_xbimDefaultSystem = Target.Instances.New<CobieSystem>(s =>
+                {
+                    s.Name = "Default System";
+                    s.Created = GetCreatedInfo(XbimContact, _now);
+                    s.Categories.Add(UnknownCategory);
+                }));    
+            }
+            
         }
 
         internal CobieContact GetOrCreateContact(string email)

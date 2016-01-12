@@ -113,8 +113,8 @@ namespace XbimExchanger.IfcToCOBieExpress
                     IIfcAsset ifcAsset;
                     if (_helper.AssetAsignments.TryGetValue(_ifcTypeObject, out ifcAsset))
                     {
-                        string portability =
-                            _helper.GetCoBieAttribute<StringValue>("AssetTypeAccountingCategory", ifcAsset);
+                        string portability = null;
+                        _helper.TrySetSimpleValue<string>("AssetTypeAccountingCategory", ifcAsset, v => portability = v);
                         if (!string.IsNullOrWhiteSpace(portability))
                             return _helper.GetPickValue<CobieAssetType>(portability);
                     }

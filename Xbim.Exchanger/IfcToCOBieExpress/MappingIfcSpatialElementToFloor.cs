@@ -1,13 +1,11 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using Xbim.CobieExpress;
-using Xbim.Common;
-using Xbim.Ifc;
 using Xbim.Ifc4.Interfaces;
 
 namespace XbimExchanger.IfcToCOBieExpress
 {
-    internal class MappingIfcSpatialElementToFloor : XbimMappings<IfcStore, IModel, int, IIfcSpatialElement, CobieFloor>
+    internal class MappingIfcSpatialElementToFloor : MappingIfcObjectToAsset<IIfcSpatialElement, CobieFloor>
     {
         private MappingStringToCategory _stringToCategory;
         private MappingIfcSpatialElementToSpace _spatialStructureToSpace;
@@ -28,17 +26,8 @@ namespace XbimExchanger.IfcToCOBieExpress
 
         protected override CobieFloor Mapping(IIfcSpatialElement ifcSpatialStructureElement, CobieFloor target)
         {
-            var helper = ((IfcToCoBieExpressExchanger)Exchanger).Helper;
-            target.ExternalObject = helper.GetExternalObject(ifcSpatialStructureElement);
-            target.ExternalId = helper.ExternalEntityIdentity(ifcSpatialStructureElement);
-            target.AltExternalId = ifcSpatialStructureElement.GlobalId;
-            target.ExternalSystem = helper.GetExternalSystem(ifcSpatialStructureElement);
-            target.Name = ifcSpatialStructureElement.Name;
+            base.Mapping(ifcSpatialStructureElement, target);
 
-            //Attributes
-            foreach (var attr in helper.GetAttributes(ifcSpatialStructureElement))
-                target.Attributes.Add(attr);
-            
             IEnumerable<IIfcSpatialElement> spaces = null;
             var site = ifcSpatialStructureElement as IIfcSite;
             var building = ifcSpatialStructureElement as IIfcBuilding;
@@ -77,16 +66,7 @@ namespace XbimExchanger.IfcToCOBieExpress
                 spaces = spaceElement.Spaces;
             }
 
-            target.Description = ifcSpatialStructureElement.Description;
-            target.Created = helper.GetCreatedInfo(ifcSpatialStructureElement);
-            //set the fall backs
-
-           
-            target.Height = helper.GetCoBieAttribute<FloatValue>("FloorHeightValue", ifcSpatialStructureElement);
-
-            //Documents
-            var docsMappings = Exchanger.GetOrCreateMappings<MappingIfcDocumentSelectToDocument>();
-            helper.AddDocuments(docsMappings, target, ifcSpatialStructureElement as IIfcBuildingStorey);
+            Helper.TrySetSimpleValue<float>("FloorHeightValue", ifcSpatialStructureElement, f => target.Height = f);
 
             //Add spaces
             var ifcSpatialStructureElements = spaces != null ? spaces.ToList() : new List<IIfcSpatialElement>();
@@ -100,9 +80,6 @@ namespace XbimExchanger.IfcToCOBieExpress
                 space = SpatialStructureToSpace.AddMapping(element, space);
                 space.Floor = target;
             }
-
-            //Attributes
-            target.Attributes.AddRange(helper.GetAttributes(ifcSpatialStructureElement));
 
             //TODO: Floor Issues
 
