@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using Xbim.CobieExpress;
 using Xbim.Ifc4.Interfaces;
 
@@ -25,10 +26,10 @@ namespace XbimExchanger.IfcToCOBieExpress
             {
                  target.Description = Helper.GetCoBieProperty("AssetSerialNumber", ifcElement);
             }
-            target.InstallationDate = Helper.GetCoBieProperty<DateTimeValue>("AssetInstallationDate", ifcElement);
+            target.InstallationDate = Helper.GetSimpleValue<DateTime>("AssetInstallationDate", ifcElement);
             target.SerialNumber = Helper.GetCoBieProperty("AssetSerialNumber", ifcElement);
             target.TagNumber = Helper.GetCoBieProperty("AssetTagNumber", ifcElement);
-            target.WarrantyStartDate = Helper.GetCoBieProperty<DateTimeValue>("AssetWarrantyStartDate", ifcElement);
+            target.WarrantyStartDate = Helper.GetSimpleValue<DateTime>("AssetWarrantyStartDate", ifcElement);
 
 
             //System Assignments

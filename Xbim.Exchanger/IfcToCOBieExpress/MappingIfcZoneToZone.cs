@@ -24,7 +24,7 @@ namespace XbimExchanger.IfcToCOBieExpress
         {
             base.Mapping(ifcZone, target);
 
-            if (!target.Categories.Any() || target.Categories.Contains(COBieExpressHelper.UnknownCategory))
+            if (!target.Categories.Any() || target.Categories.Contains(Helper.UnknownCategory))
                 if (!string.IsNullOrWhiteSpace(ifcZone.ObjectType))
                 {
                     target.Categories.Clear();

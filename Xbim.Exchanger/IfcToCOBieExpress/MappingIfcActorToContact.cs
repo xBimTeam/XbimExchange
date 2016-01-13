@@ -54,7 +54,7 @@ namespace XbimExchanger.IfcToCOBieExpress
             }
             target.Created = Helper.GetCreatedInfo(actor, true);
             if (target.Category == null)
-                target.Category = COBieExpressHelper.UnknownRole;
+                target.Category = Helper.UnknownRole;
             
             ////Attributes
             //AttributeType[] ifcAttributes = helper.GetAttributes(actor);

@@ -94,7 +94,7 @@ namespace XbimExchanger.IfcToCOBieExpress
             {
                 return _ifcTypeObject!=null ? 
                     _helper.GetCategories(_ifcTypeObject) : 
-                    new List<CobieCategory> { COBieExpressHelper.UnknownCategory };
+                    new List<CobieCategory> { _helper.UnknownCategory };
             }
         }
         /// <summary>

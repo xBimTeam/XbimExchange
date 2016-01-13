@@ -115,9 +115,9 @@ namespace XbimExchanger.IfcToCOBieExpress
         public IIfcPropertySetDefinition GetPropertySetDefinition(string pSetName)
         {
             IIfcPropertySetDefinition pSetDef;
-            if (_propertySets.TryGetValue(pSetName, out pSetDef))
-                return pSetDef;
-            return null;
+            return _propertySets.TryGetValue(pSetName, out pSetDef) ? 
+                pSetDef : 
+                null;
         }
 
         /// <summary>
@@ -131,13 +131,11 @@ namespace XbimExchanger.IfcToCOBieExpress
         {
             IIfcProperty ifcProperty;
             val = default(TValue);
-            if (_properties.TryGetValue(propertyName, out ifcProperty))
-            {
-                val = ConvertToSimpleType<TValue>(ifcProperty);
-                return true;
-            }
-            return false;
+            if (!_properties.TryGetValue(propertyName, out ifcProperty)) 
+                return false;
 
+            val = ConvertToSimpleType<TValue>(ifcProperty);
+            return true;
         }
 
         /// <summary>
@@ -150,13 +148,11 @@ namespace XbimExchanger.IfcToCOBieExpress
         {
             IIfcProperty ifcProperty;
             val = null;
-            if (_properties.TryGetValue(propertyName, out ifcProperty))
-            {
-                val = ConvertToString(ifcProperty);
-                return true;
-            }
-            return false;
-
+            if (!_properties.TryGetValue(propertyName, out ifcProperty)) 
+                return false;
+            
+            val = ConvertToString(ifcProperty);
+            return true;
         }
 
         private string ConvertToString(IIfcPropertySingleValue ifcProperty)

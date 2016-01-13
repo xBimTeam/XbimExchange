@@ -172,16 +172,23 @@ namespace XbimExchanger.IfcToCOBieExpress
 
         #region Unknown pick values
 
-        public static CobieRole UnknownRole;
-        public static CobieCategory UnknownCategory;
+        private CobieRole _unknownRole;
+        public CobieRole UnknownRole
+        {
+            get { return _unknownRole ?? (_unknownRole = GetPickValue<CobieRole>("unknown")); }
+        }
+
+        private CobieCategory _unknownCategory;
+        public CobieCategory UnknownCategory 
+        {
+            get { return _unknownCategory ?? (_unknownCategory = GetPickValue<CobieCategory>("unknown")); }
+        }
 
         #endregion
 
         private readonly string _configFileName;
         private readonly Dictionary<IIfcActorSelect, CobieContact> _contacts = new Dictionary<IIfcActorSelect, CobieContact>();
         private Dictionary<IIfcActorSelect, IIfcActor> _actors;
-        private CobieContact _xbimContact;
-        private readonly CobieExternalSystem _externalSystemXbim;
         private readonly DateTime _now;
         private readonly List<CobieCreatedInfo> _createdInfoCache = new List<CobieCreatedInfo>();
         private CobieZone _xbimDefaultZone;
@@ -193,15 +200,25 @@ namespace XbimExchanger.IfcToCOBieExpress
         private readonly MappingIfcActorToContact _contactMapping;
         private readonly MappingIfcDocumentSelectToDocument _documentMapping;
 
+
+        private CobieExternalSystem _externalSystemXbim;
+        public CobieExternalSystem XbimSystem
+        {
+            get
+            {
+                if (_externalSystemXbim != null)
+                    return _externalSystemXbim;
+
+                _externalSystemXbim = _externalSystemMapping.GetOrCreateTargetObject("xBIM Toolkit");
+                _externalSystemXbim.Name = "xBIM Toolkit";
+                return _externalSystemXbim ;
+            }
+        }
+
         /// <summary>
         /// Creates a default contact and adds it to the SundryContacts
         /// </summary>
-
-        public CobieExternalSystem XbimSystem
-        {
-            get { return _externalSystemXbim; }
-        }
-
+        private CobieContact _xbimContact;
         public CobieContact XbimContact
         {
             get
@@ -251,14 +268,6 @@ namespace XbimExchanger.IfcToCOBieExpress
             _creatingApplication = _model.Header.CreatingApplication;
             //pass the exchanger progress reporter over to helper
             ReportProgress = reportProgress; 
-
-            //create default and undefined objects
-            UnknownRole = Target.Instances.New<CobieRole>(r => r.Value = "unknown");
-            UnknownCategory = Target.Instances.New<CobieCategory>(r => r.Value = "unknown");
-
-            
-            _externalSystemXbim = _externalSystemMapping.GetOrCreateTargetObject("xBIM Toolkit");
-            _externalSystemXbim.Name = "xBIM Toolkit";
         }
 
         public void Init()
@@ -1294,7 +1303,7 @@ namespace XbimExchanger.IfcToCOBieExpress
         /// <typeparam name="TValue"></typeparam>
         /// <returns></returns>
         /// <exception cref="ArgumentException"></exception>
-        public TValue? GetCoBieProperty<TValue>(string valueName, IIfcObject ifcObject) where TValue:struct
+        public TValue? GetSimpleValue<TValue>(string valueName, IIfcObject ifcObject) where TValue:struct
         {
             XbimAttributedObject attributedObject;
             if (_attributedObjects.TryGetValue(ifcObject, out attributedObject))
@@ -1480,7 +1489,7 @@ namespace XbimExchanger.IfcToCOBieExpress
                     return result;
                 }
             }
-            return _externalSystemXbim; 
+            return XbimSystem; 
         }
 
 
