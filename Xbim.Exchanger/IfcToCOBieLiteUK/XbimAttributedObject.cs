@@ -265,12 +265,12 @@ namespace XbimExchanger.IfcToCOBieLiteUK
             {
                 SetCoBieAttributeValue(result, ifcPropertySingleValue.NominalValue);
                 if(ifcPropertySingleValue.Unit!=null)
-                    result.Unit = ((IIfcUnit)ifcPropertySingleValue).FullName;
+                    result.Unit = ifcPropertySingleValue.Unit.FullName;
             }
             else if (ifcPropertyEnumeratedValue != null)
             {
                 if (ifcPropertyEnumeratedValue.EnumerationReference != null)
-                    result.Unit = ((IIfcUnit)ifcPropertyEnumeratedValue.EnumerationReference).FullName;
+                    result.Unit = ifcPropertyEnumeratedValue.EnumerationReference.Unit.FullName;
                 if (ifcPropertyEnumeratedValue.EnumerationValues.Count()==1)
                     SetCoBieAttributeValue(result, ifcPropertyEnumeratedValue.EnumerationValues.FirstOrDefault());
                 else if (result is StringAttributeValue) //if it is a string we can add all the  values in a list
@@ -293,7 +293,7 @@ namespace XbimExchanger.IfcToCOBieLiteUK
                 if (result is StringAttributeValue) //if it is a string we can add  the bounded values in a statement
                 {
                     if (ifcPropertyBoundedValue.Unit != null)
-                        result.Unit = ((IIfcUnit)ifcPropertyBoundedValue).FullName;
+                        result.Unit = ifcPropertyBoundedValue.Unit.FullName;
                     var stringValueType = result as StringAttributeValue;
                     stringValueType.Value = ifcPropertyBoundedValue.LowerBoundValue + " to " +
                                                   ifcPropertyBoundedValue.UpperBoundValue;
@@ -315,7 +315,7 @@ namespace XbimExchanger.IfcToCOBieLiteUK
             else if (ifcPropertyListValue != null)
             {
                 if (ifcPropertyListValue.Unit!=null)
-                    result.Unit = ((IIfcUnit)ifcPropertyListValue).FullName;
+                    result.Unit = ifcPropertyListValue.Unit.FullName;
                 if (ifcPropertyListValue.ListValues.Count() == 1)
                     SetCoBieAttributeValue(result, ifcPropertyListValue.ListValues.FirstOrDefault());
                 else if (result is StringAttributeValue) //if it is a string we can add all the  values in a list
