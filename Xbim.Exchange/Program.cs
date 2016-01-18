@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
+using System.Xml;
 using Xbim.CobieExpress;
 using Xbim.CobieLiteUK.Validation;
 using Xbim.CobieLiteUK.Validation.Reporting;
@@ -58,6 +59,7 @@ namespace Xbim.Exchange
                 //now do COBieExpress
                 var cobie = new MemoryModel(new EntityFactory());
                 var cobieExpressFile = Path.ChangeExtension(fileName, ".cobie");
+                var cobieExpressXmlFile = Path.ChangeExtension(fileName, ".cobieXml");
                 var cobieExpressZipFile = Path.ChangeExtension(fileName, ".cobieZip");
                 var w = new Stopwatch();
                 using (var txn = cobie.BeginTransaction("IFC data in"))
@@ -70,6 +72,9 @@ namespace Xbim.Exchange
                 }
                 Console.WriteLine("COBieExpress model created in {0}ms", w.ElapsedMilliseconds);
                 cobie.SaveAsStep21(File.Create(cobieExpressFile));
+                cobie.SaveAsStep21Zip(File.Create(cobieExpressZipFile));
+                cobie.SaveAsXml(File.Create(cobieExpressXmlFile), new XmlWriterSettings{Indent = true, IndentChars = "\t"});
+
 
                 //now do the DPoW files
                 var fileNameWithoutExtension = Path.GetFileNameWithoutExtension(fileName);

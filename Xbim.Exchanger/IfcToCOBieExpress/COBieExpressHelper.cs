@@ -1372,52 +1372,50 @@ namespace XbimExchanger.IfcToCOBieExpress
             if (keyValuePairs.Length <= 0)
                 return new List<CobieAttribute>();
 
-            var attributeCollection = new List<CobieAttribute>(keyValuePairs.Length);
             foreach (var kvp in keyValuePairs)
             {
                 var property = kvp.Value;
                 var splitName = kvp.Key.Split('.');
                 var pSetName = splitName[0];
-                var newAttribute = attributedObject.ConvertToAttributeType(property);
+                var attribute = attributedObject.ConvertToAttributeType(property);
                 var pSetDef = attributedObject.GetPropertySetDefinition(pSetName);
+                attribute.ExternalObject = GetCobiePset(pSetName);
                         
                 if (pSetDef != null)
                 {
-                    newAttribute.Created = GetCreatedInfo(pSetDef);
-                    newAttribute.ExternalId = ExternalEntityIdentity(pSetDef);
-                    newAttribute.ExternalSystem = GetExternalSystem(pSetDef);
+                    attribute.Created = GetCreatedInfo(pSetDef);
+                    attribute.ExternalId = ExternalEntityIdentity(pSetDef);
+                    attribute.ExternalSystem = GetExternalSystem(pSetDef);
                 }
                 else
                 {
-                    newAttribute.Created = GetCreatedInfo();
-                    newAttribute.ExternalSystem = GetExternalSystem();
+                    attribute.Created = GetCreatedInfo();
+                    attribute.ExternalSystem = GetExternalSystem();
                 }
 
-                newAttribute.ExternalObject = GetCobiePset(pSetName);
                 CobieAttribute existingAttribute;
-                if (uniqueAttributes.TryGetValue(newAttribute.Name, out existingAttribute))
+                if (uniqueAttributes.TryGetValue(attribute.Name, out existingAttribute))
                     //it is a duplicate so append the pset name
                 {
-                            
-                    var keyName = string.Format("{0}.{1}", existingAttribute.Name, pSetName);
-                    if(!uniqueAttributes.ContainsKey(keyName))
+                    var existPsetName = existingAttribute.PropertySet != null
+                        ? existingAttribute.PropertySet.Name
+                        : "unknown";
+                    var key = string.Format("{1}.{0}", existingAttribute.Name, existPsetName);
+                    if(!uniqueAttributes.ContainsKey(key))
                     {
                         uniqueAttributes.Remove(existingAttribute.Name);
-                        existingAttribute.Name = keyName;
-                        uniqueAttributes.Add(keyName, existingAttribute); //update existing key
+                        existingAttribute.Name = key;
+                        uniqueAttributes.Add(key, existingAttribute); //update existing key
                     }
-                    newAttribute.Name = string.Format("{0}.{1}", newAttribute.Name, pSetName);
-                    if (!uniqueAttributes.ContainsKey(newAttribute.Name))
-                    {
-                        uniqueAttributes.Add(newAttribute.Name, newAttribute); //update existing key
-                    }
+                    attribute.Name = string.Format("{1}.{0}", attribute.Name, pSetName);
+                    if (!uniqueAttributes.ContainsKey(attribute.Name))
+                        uniqueAttributes.Add(attribute.Name, attribute); //add new key
                 }
                 else
-                    uniqueAttributes.Add(newAttribute.Name, newAttribute);
+                    uniqueAttributes.Add(attribute.Name, attribute); //add new key
             }
                    
-            attributeCollection.AddRange(uniqueAttributes.Values);
-            return attributeCollection;
+            return uniqueAttributes.Values.ToList();
         }
 
         /// <summary>
