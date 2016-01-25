@@ -32,11 +32,6 @@ namespace XbimExchanger.IfcToCOBieExpress
                 var ifcSite = ifcProject.Sites.FirstOrDefault();
                 var siteMapping = Exchanger.GetOrCreateMappings<MappingIfcSiteToSite>();
 
-                //Facility Attributes
-                foreach (var attr in helper.GetAttributes(ifcBuilding))
-                    facility.Attributes.Add(attr);
-
-                
                 if (ifcSite != null)
                 {
                      CobieSite site;

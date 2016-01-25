@@ -11,7 +11,7 @@ namespace Xbim.FilterHelper
         /// <summary>
         /// current section names in config file
         /// </summary>
-        private string[] _sectionKeys = new string[] { "SpacePropertyMaps", "FloorPropertyMaps", "AssetPropertyMaps", "AssetTypePropertyMaps", "SystemPropertyMaps", "CommonPropertyMaps", "SparePropertyMaps" };
+        private readonly string[] _sectionKeys = { "SpacePropertyMaps", "FloorPropertyMaps", "AssetPropertyMaps", "AssetTypePropertyMaps", "SystemPropertyMaps", "CommonPropertyMaps", "SparePropertyMaps" };
 
 
         /// <summary>
@@ -83,15 +83,12 @@ namespace Xbim.FilterHelper
                 try
                 {
                     var configMap = new ExeConfigurationFileMap { ExeConfigFilename = ConfigFile.FullName };
-                    Configuration config = ConfigurationManager.OpenMappedExeConfiguration(configMap, ConfigurationUserLevel.None);
-                    foreach (string sectionKey in _sectionKeys)
+                    var config = ConfigurationManager.OpenMappedExeConfiguration(configMap, ConfigurationUserLevel.None);
+                    foreach (var sectionKey in _sectionKeys)
                     {
                         var proxy = GetStorageList(sectionKey); //swap to correct path list
-                        ConfigurationSection section = config.GetSection(sectionKey);
-                        foreach (KeyValueConfigurationElement keyVal in ((AppSettingsSection)section).Settings)
-                        {
-                            proxy.Add(new AttributePaths(keyVal.Key, keyVal.Value));
-                        }
+                        var section = config.GetSection(sectionKey);
+                        proxy.AddRange(from KeyValueConfigurationElement keyVal in ((AppSettingsSection) section).Settings select new AttributePaths(keyVal.Key, keyVal.Value));
                     }
                     
                 }
@@ -109,27 +106,19 @@ namespace Xbim.FilterHelper
         public void Save()
         {
             //save any changes back to the config file
-            try
+            var configMap = new ExeConfigurationFileMap { ExeConfigFilename = ConfigFile.FullName };
+            var config = ConfigurationManager.OpenMappedExeConfiguration(configMap, ConfigurationUserLevel.None);
+            foreach (var sectionKey in _sectionKeys)
             {
-                var configMap = new ExeConfigurationFileMap { ExeConfigFilename = ConfigFile.FullName };
-                Configuration config = ConfigurationManager.OpenMappedExeConfiguration(configMap, ConfigurationUserLevel.None);
-                foreach (string sectionKey in _sectionKeys)
+                var proxy = GetStorageList(sectionKey); //swap to correct path list
+                var section = (AppSettingsSection)config.GetSection(sectionKey);
+                foreach (var item in proxy)
                 {
-                    var proxy = GetStorageList(sectionKey); //swap to correct path list
-                    AppSettingsSection section = (AppSettingsSection)config.GetSection(sectionKey);
-                    foreach (AttributePaths item in proxy)
-                    {
-                        section.Settings[item.Key].Value = item.Value;
-                    }
+                    section.Settings[item.Key].Value = item.Value;
                 }
-                //save back to file
-                config.Save(ConfigurationSaveMode.Modified);
             }
-            catch (Exception)
-            {
-                
-                throw;
-            }
+            //save back to file
+            config.Save(ConfigurationSaveMode.Modified);
         }
 
         /// <summary>
@@ -166,19 +155,8 @@ namespace Xbim.FilterHelper
         /// <returns>Dictionary </returns>
         public Dictionary<string, string[]> GetDictOfProperties()
         {
-            var value = new Dictionary<String, String[]>();
-            foreach (string sectionKey in _sectionKeys)
-            {
-                foreach (AttributePaths item in GetStorageList(sectionKey))
-                {
-                    value.Add(item.Key, item.PSetPaths);
-                } 
-            }
-            return value;
+            return _sectionKeys.SelectMany(GetStorageList).ToDictionary(item => item.Key, item => item.PSetPaths);
         }
-
-
-
     }
 
     //----------------------------------------------------------------------------------------------------------------------------------------------------------

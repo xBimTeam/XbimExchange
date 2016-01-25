@@ -77,33 +77,31 @@ namespace Xbim.FilterHelper
         public PropertyFilter(ConfigurationSection section) : this()
         {
             //initialize fields
-            if (section != null)
+            if (section == null) return;
+
+            foreach (KeyValueConfigurationElement keyVal in ((AppSettingsSection)section).Settings)
             {
-                foreach (KeyValueConfigurationElement keyVal in ((AppSettingsSection)section).Settings)
+                if (string.IsNullOrEmpty(keyVal.Value)) continue;
+
+                switch (keyVal.Key.ToUpper())
                 {
-                    if (!string.IsNullOrEmpty(keyVal.Value))
-                    {
-                        switch (keyVal.Key.ToUpper())
-                        {
-                            case "EQUALTO":
-                                EqualTo.AddRange(keyVal.Value.Split(new[] { ';' }, StringSplitOptions.RemoveEmptyEntries).ToList().ConvertAll(s => s.ToUpper()));
-                                break;
-                            case "STARTWITH":
-                                StartWith.AddRange(keyVal.Value.Split(new[] { ';' }, StringSplitOptions.RemoveEmptyEntries).ToList().ConvertAll(s => s.ToUpper()));
-                                break;
-                            case "CONTAIN":
-                                Contain.AddRange(keyVal.Value.Split(new[] { ';' }, StringSplitOptions.RemoveEmptyEntries).ToList().ConvertAll(s => s.ToUpper()));
-                                break;
-                            case "PROPERTYSETSEQUALTO":
-                                PropertySetsEqualTo.AddRange(keyVal.Value.Split(new[] { ';' }, StringSplitOptions.RemoveEmptyEntries).ToList().ConvertAll(s => s.ToUpper()));
-                                break;
-                            default:
+                    case "EQUALTO":
+                        EqualTo.AddRange(keyVal.Value.Split(new[] { ';' }, StringSplitOptions.RemoveEmptyEntries).ToList().ConvertAll(s => s.ToUpper()));
+                        break;
+                    case "STARTWITH":
+                        StartWith.AddRange(keyVal.Value.Split(new[] { ';' }, StringSplitOptions.RemoveEmptyEntries).ToList().ConvertAll(s => s.ToUpper()));
+                        break;
+                    case "CONTAIN":
+                        Contain.AddRange(keyVal.Value.Split(new[] { ';' }, StringSplitOptions.RemoveEmptyEntries).ToList().ConvertAll(s => s.ToUpper()));
+                        break;
+                    case "PROPERTYSETSEQUALTO":
+                        PropertySetsEqualTo.AddRange(keyVal.Value.Split(new[] { ';' }, StringSplitOptions.RemoveEmptyEntries).ToList().ConvertAll(s => s.ToUpper()));
+                        break;
+                    default:
 #if DEBUG
-                                Debug.WriteLine(string.Format("Invalid Key - {0}", keyVal.Key.ToUpper()));
+                        Debug.WriteLine(string.Format("Invalid Key - {0}", keyVal.Key.ToUpper()));
 #endif
-                                break;
-                        }
-                    }
+                        break;
                 }
             }
         }
@@ -125,10 +123,9 @@ namespace Xbim.FilterHelper
         public bool NameFilter (string testStr)
         {
             testStr = testStr.ToUpper();
-            return ((EqualTo.Where(a => testStr.Equals(a)).Count() > 0) ||
-                    (StartWith.Where(a => testStr.StartsWith(a)).Count() > 0) ||
-                    (Contain.Where(a => testStr.Contains(a)).Count() > 0)
-                   );
+            return EqualTo.Any(a => testStr.Equals(a)) ||
+                   StartWith.Any(a => testStr.StartsWith(a)) ||
+                   (Contain.Count(a => testStr.Contains(a)) > 0);
         }
 
         /// <summary>
@@ -139,7 +136,7 @@ namespace Xbim.FilterHelper
         public bool PSetNameFilter(string testStr)
         {
             testStr = testStr.ToUpper();
-            return (PropertySetsEqualTo.Where(a => testStr.Equals(a)).Count() > 0);
+            return PropertySetsEqualTo.Any(a => testStr.Equals(a));
         }
 
 
