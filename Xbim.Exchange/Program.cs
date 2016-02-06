@@ -1,6 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
+using System.Xml;
+using Xbim.CobieExpress;
 using Xbim.CobieLiteUK.Validation;
 using Xbim.CobieLiteUK.Validation.Reporting;
 using Xbim.Common.Geometry;
@@ -8,16 +11,17 @@ using Xbim.Common.Step21;
 using Xbim.COBieLiteUK;
 using Xbim.Ifc;
 using Xbim.IO;
-using Xbim.IO.Esent;
+using Xbim.IO.Memory;
 using Xbim.ModelGeometry.Scene;
 using XbimExchanger.COBieLiteUkToIfc;
+using XbimExchanger.IfcToCOBieExpress;
 using XbimExchanger.IfcToCOBieLiteUK;
 
 
 
 namespace Xbim.Exchange
 {
-    class Program
+    internal class Program
     {
         static void Main(string[] args)
         {
@@ -32,8 +36,12 @@ namespace Xbim.Exchange
            
             using (var model = GetModel(fileName))
             {
-                if (model != null)
+                if (model == null)
                 {
+                    Console.WriteLine("No model to process. Press any key to exit");
+                    Console.Read();
+                    return;
+                }
                    
                     var context = new Xbim3DModelContext(model);
                     context.CreateContext();
@@ -48,6 +56,26 @@ namespace Xbim.Exchange
                         }
                         wexBiMfile.Close();
                     }
+                //now do COBieExpress
+                var cobie = new MemoryModel(new EntityFactory());
+                var cobieExpressFile = Path.ChangeExtension(fileName, ".cobie");
+                var cobieExpressXmlFile = Path.ChangeExtension(fileName, ".cobieXml");
+                var cobieExpressZipFile = Path.ChangeExtension(fileName, ".cobieZip");
+                var w = new Stopwatch();
+                using (var txn = cobie.BeginTransaction("IFC data in"))
+                {
+                    var exchanger = new IfcToCoBieExpressExchanger(model, cobie);
+                    w.Start();
+                    exchanger.Convert();
+                    w.Stop();
+                    txn.Commit();
+                }
+                Console.WriteLine("COBieExpress model created in {0}ms", w.ElapsedMilliseconds);
+                cobie.SaveAsStep21(File.Create(cobieExpressFile));
+                cobie.SaveAsStep21Zip(File.Create(cobieExpressZipFile));
+                cobie.SaveAsXml(File.Create(cobieExpressXmlFile), new XmlWriterSettings{Indent = true, IndentChars = "\t"});
+
+
                     //now do the DPoW files
                     var fileNameWithoutExtension = Path.GetFileNameWithoutExtension(fileName);
                     var fileDirectoryName = Path.GetDirectoryName(fileName);
@@ -92,7 +120,7 @@ namespace Xbim.Exchange
                             stream.Close();
                         }
 
-                        facility.ValidateUK2012(Console.Out,true);
+                    facility.ValidateUK2012(Console.Out, true);
                         string cobieValidatedFile = Path.ChangeExtension(dPoWFile, "Validated.Xlsx");
                         facility.WriteCobie(cobieValidatedFile, out error);
                         dPoWFile = Path.ChangeExtension(dPoWFile, "xbim");
@@ -105,7 +133,9 @@ namespace Xbim.Exchange
                             ApplicationVersion = "3.0"
                         };
                         Console.WriteLine("Creating " + dPoWFile);
-                        using (var ifcModel = IfcStore.Create(credentials,IfcSchemaVersion.Ifc2X3,XbimStoreType.EsentDatabase))
+                    using (
+                        var ifcModel = IfcStore.Create(credentials, IfcSchemaVersion.Ifc2X3,
+                            XbimStoreType.EsentDatabase))
                         {                          
                             using (var txn = ifcModel.BeginTransaction("Convert from COBieLiteUK"))
                             {
@@ -122,7 +152,6 @@ namespace Xbim.Exchange
                     }
                     model.Close();
                 }
-            }
             Console.WriteLine("Press any key to exit");
             Console.Read();
         }
@@ -143,10 +172,10 @@ namespace Xbim.Exchange
                     fileName = Path.ChangeExtension(fileName, "ifcxml");
             }
 
-            if (File.Exists(fileName))
-            {
+            if (!File.Exists(fileName)) return null;
+
                 extension = Path.GetExtension(fileName);
-                if (String.Compare(extension, ".xbim", StringComparison.OrdinalIgnoreCase) == 0) //just open xbim
+            if (string.Compare(extension, ".xbim", StringComparison.OrdinalIgnoreCase) == 0) //just open xbim
                 {
 
                     try
@@ -179,7 +208,6 @@ namespace Xbim.Exchange
                     }
 
                 }
-            }
             return openModel;
         }
     }

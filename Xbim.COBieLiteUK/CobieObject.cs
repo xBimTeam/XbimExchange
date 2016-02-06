@@ -513,29 +513,26 @@ namespace Xbim.COBieLiteUK
         /// <returns>bool true = exclude</returns>
         private bool Filter(OutPutFilters assetfilters, CobieObject parent)
         {
-            if (assetfilters != null)
+            if (assetfilters == null) return false;
+
+            var attribute = this as Attribute;
+            if (attribute == null) return false;
+            var objAtt = attribute;
+            if (assetfilters.PSetNameFilterOnSheetName(objAtt.PropertySetName, parent))
             {
-                if (this is Attribute)
-                {
-                    var objAtt = (Attribute)this;
-                    if (assetfilters.PSetNameFilterOnSheetName(objAtt.PropertySetName, parent))
-                    {
 #if SHOWEXCLUDES
-                        Debug.WriteLine(string.Format(@"Filtering out: PropertySet ""{1}"" with name ""{0}""", this.Name, objAtt.PropertySetName));
+                Debug.WriteLine(string.Format(@"Filtering out: PropertySet ""{1}"" with name ""{0}""", attribute.Name, objAtt.PropertySetName));
 #endif
-                        return true;
-                    }
-                    if (assetfilters.NameFilterOnParent(this.Name, parent))
-                    {
+                return true;
+            }
+
+            if (!assetfilters.NameFilterOnParent(attribute.Name, parent)) return false;
 #if SHOWEXCLUDES
-                        Debug.WriteLine(string.Format(@"Filtering out: PropertySet ""{1}"", containing property name ""{0}""", this.Name, objAtt.PropertySetName));
+            Debug.WriteLine(string.Format(@"Filtering out: PropertySet ""{1}"", containing property name ""{0}""", attribute.Name, objAtt.PropertySetName));
 #endif
 
-                        return true;
-                    }
-                    return false;
-                }
-                //moved to front end for ifcTypeObjects and ifcElements
+            return true;
+            //moved to front end for ifcTypeObjects and ifcElements
 //                else
 //                {
 //                    if (assetfilters.ObjFilter(this, parent))
@@ -546,8 +543,6 @@ namespace Xbim.COBieLiteUK
 //                        return true;
 //                    }
 //                }
-            }
-            return false;
         }
 
         private void FixHeaderForWriting(IRow row, List<MappingAttribute> mappings)
@@ -672,7 +667,7 @@ namespace Xbim.COBieLiteUK
         }
 
 
-        private static Dictionary<string, PropertyInfo> _propertyInfoCache = new Dictionary<string, PropertyInfo>();
+        private static readonly Dictionary<string, PropertyInfo> PropertyInfoCache = new Dictionary<string, PropertyInfo>();
 
         protected internal CobieValue GetCobieProperty(MappingAttribute mapping, TextWriter log)
         {
@@ -686,13 +681,13 @@ namespace Xbim.COBieLiteUK
                 var part = parts[i];
                 var propKey = String.Format("{0}.{1}", type.Name, part);
                 PropertyInfo propInfo;
-                if (!_propertyInfoCache.TryGetValue(propKey, out propInfo))
+                if (!PropertyInfoCache.TryGetValue(propKey, out propInfo))
                 {
                     propInfo = type.GetProperty(part) ?? type.GetProperty(part,
                         BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.GetProperty);
                     if (propInfo == null)
                         throw new Exception(String.Format("Member {0} is not defined in {1}", part, type.Name));
-                    _propertyInfoCache.Add(propKey, propInfo);
+                    PropertyInfoCache.Add(propKey, propInfo);
                 }
 
                 var value = propInfo.GetValue(instance);
