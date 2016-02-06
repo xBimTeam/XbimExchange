@@ -7,6 +7,7 @@ using System.Linq;
 using Xbim.COBieLiteUK;
 using Xbim.Common.Exceptions;
 using Xbim.Common.Step21;
+using Xbim.COBieLiteUK.Client;
 using Xbim.FilterHelper;
 using Xbim.Ifc;
 using Xbim.IO;
@@ -392,7 +393,7 @@ namespace Xbim.Client
             }
             else
             {
-                throw new XbimException(string.Format("Model is not Federated: {0}", fedModel.FileNameXbimf));
+                throw new XbimException("Model is not Federated:");
             }
             return facilities;
         }

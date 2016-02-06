@@ -1,7 +1,6 @@
 ﻿using System;
 using System.IO;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Xbim.Common.Geometry;
 using Xbim.Common.Step21;
 using Xbim.COBieLite;
 using Xbim.Ifc;
@@ -45,7 +44,7 @@ namespace Tests
                             try
                             {                               
                                 var geomContext = new Xbim3DModelContext(model);
-                                geomContext.CreateContext(XbimGeometryType.PolyhedronBinary);
+                                geomContext.CreateContext();
                                 model.SaveAsWexBim(binaryWriter);
                             }
                             finally

@@ -40,7 +40,7 @@ namespace Xbim.COBieLite
             : this()
         {
             //   _ifcBuilding = ifcBuilding;
-            var model = ifcBuilding.ModelOf;
+            var model = ifcBuilding.Model;
             externalEntityName = helper.ExternalEntityName(ifcBuilding);
             externalID = helper.ExternalEntityIdentity(ifcBuilding);
             externalSystemName = helper.ExternalSystemName(ifcBuilding);

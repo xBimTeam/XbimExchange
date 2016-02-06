@@ -36,7 +36,7 @@ namespace Xbim.Exchange
                 {
                    
                     var context = new Xbim3DModelContext(model);
-                    context.CreateContext(geomStorageType: XbimGeometryType.PolyhedronBinary);
+                    context.CreateContext();
                     var wexBimFilename = Path.ChangeExtension(fileName, "wexBIM");
                     using (var wexBiMfile = new FileStream(wexBimFilename, FileMode.Create, FileAccess.Write))
                     {

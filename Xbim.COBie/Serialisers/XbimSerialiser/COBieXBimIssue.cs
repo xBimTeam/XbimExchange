@@ -170,7 +170,7 @@ namespace Xbim.COBie.Serialisers.XbimSerialiser
                 if (ValidateString(row.Name)) //we have a primary key to check
                 {
                     var testName = row.Name.ToLower().Trim();
-                    var testObj = Model.Instances.Where<IfcApproval>(bs => bs.Name.ToString().ToLower().Trim() == testName).FirstOrDefault();
+                    var testObj = Model.FederatedInstances.Where<IfcApproval>(bs => bs.Name.ToString().ToLower().Trim() == testName).FirstOrDefault();
                     if (testObj != null)
                     {
 #if DEBUG
@@ -206,7 +206,7 @@ namespace Xbim.COBie.Serialisers.XbimSerialiser
                 if (ifcActorSelect != null)
                 {
                     //see if the relation ship exists, if so no need to create
-                    var IfcActorSelectTest = Model.Instances.OfType<IfcApprovalActorRelationship>()
+                    var IfcActorSelectTest = Model.FederatedInstances.OfType<IfcApprovalActorRelationship>()
                                                         .Where(aar => aar.Approval == ifcApproval)
                                                         .Select(aar => aar.Actor).OfType<IfcActorSelect>()
                                                         .Where(po => po == ifcActorSelect)
@@ -231,7 +231,7 @@ namespace Xbim.COBie.Serialisers.XbimSerialiser
             IfcTask ifcTask = null;
 
             if (IfcTasks == null)
-                IfcTasks = Model.Instances.OfType<IfcTask>();
+                IfcTasks = Model.FederatedInstances.OfType<IfcTask>();
 
             name = name.ToLower().Trim();
             ifcTask = IfcTasks.Where(t => t.Name.ToString().ToLower().Trim() == name).FirstOrDefault();

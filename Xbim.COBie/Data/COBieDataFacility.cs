@@ -36,11 +36,11 @@ namespace Xbim.COBie.Data
             COBieSheet<COBieFacilityRow> facilities = new COBieSheet<COBieFacilityRow>(Constants.WORKSHEET_FACILITY);
 
             IfcProject ifcProject = Model.IfcProject as IfcProject;
-            IfcSite ifcSite = Model.Instances.OfType<IfcSite>().FirstOrDefault();
-            IfcBuilding ifcBuilding = Model.Instances.OfType<IfcBuilding>().FirstOrDefault();
+            IfcSite ifcSite = Model.FederatedInstances.OfType<IfcSite>().FirstOrDefault();
+            IfcBuilding ifcBuilding = Model.FederatedInstances.OfType<IfcBuilding>().FirstOrDefault();
 
             //get Element Quantity holding area values as used for AreaMeasurement below
-            IfcElementQuantity ifcElementQuantityAreas = Model.Instances.OfType<IfcElementQuantity>().Where(eq => eq.Quantities.OfType<IfcQuantityArea>().Count() > 0).FirstOrDefault();
+            IfcElementQuantity ifcElementQuantityAreas = Model.FederatedInstances.OfType<IfcElementQuantity>().Where(eq => eq.Quantities.OfType<IfcQuantityArea>().Count() > 0).FirstOrDefault();
            
             List<IfcObject> ifcObjectList = new List<IfcObject>();
             if (ifcProject != null) ifcObjectList.Add(ifcProject);

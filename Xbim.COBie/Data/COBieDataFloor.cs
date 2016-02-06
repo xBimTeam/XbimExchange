@@ -35,14 +35,14 @@ namespace Xbim.COBie.Data
             COBieSheet<COBieFloorRow> floors = new COBieSheet<COBieFloorRow>(Constants.WORKSHEET_FLOOR);
 
             // get all IfcBuildingStory objects from IFC file
-            IEnumerable<IfcBuildingStorey> buildingStories = Model.Instances.OfType<IfcBuildingStorey>();
+            IEnumerable<IfcBuildingStorey> buildingStories = Model.FederatedInstances.OfType<IfcBuildingStorey>();
 
             COBieDataPropertySetValues allPropertyValues = new COBieDataPropertySetValues(); //properties helper class
             COBieDataAttributeBuilder attributeBuilder = new COBieDataAttributeBuilder(Context, allPropertyValues);
             attributeBuilder.InitialiseAttributes(ref _attributes);
             
             
-            //IfcClassification ifcClassification = Model.Instances.OfType<IfcClassification>().FirstOrDefault();
+            //IfcClassification ifcClassification = Model.FederatedInstances.OfType<IfcClassification>().FirstOrDefault();
             //list of attributes to exclude form attribute sheet
             
             //set up filters on COBieDataPropertySetValues for the SetAttributes only

@@ -6,6 +6,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
+using Xbim.COBieLiteUK.Client;
 using Xbim.FilterHelper;
 using Xbim.Ifc;
 using Xbim.IO;
@@ -85,14 +86,14 @@ namespace Xbim.Client
                                 txtPrj.Text = fedModel.ProjectName;
                                 FileRoles = fedModel.RefModelRoles.ToDictionary(m => new FileInfo(m.Key.Name), m => m.Value);
                                 RefModels = new BindingList<FileInfo>(FileRoles.Keys.ToList());
-                                this.Text += " : " + file.Name;
+                                Text += " : " + file.Name;
                                 FileName = filename;
                                 rolesList.Enabled = true;
                             }
                         }
                     }
                 }
-                catch (System.ArgumentException Ex) //bad paths etc..
+                catch (ArgumentException Ex) //bad paths etc..
                 {
                     toolStripLabel.Text = Ex.Message;
                 }
@@ -133,10 +134,10 @@ namespace Xbim.Client
                 //create or overwrite file
                 if (!string.IsNullOrEmpty(FileName))
                 {
-                    CreateFedFile(new FileInfo(FileName), author, org, prj);
+                    CreateFedFile(author, org, prj);
                     
-                    this.DialogResult = DialogResult.OK;
-                    this.Close();
+                    DialogResult = DialogResult.OK;
+                    Close();
                 }
             }
             else
@@ -152,15 +153,17 @@ namespace Xbim.Client
         /// <param name="author">Authors name</param>
         /// <param name="organisation">Organisation name</param>
         /// <param name="prjName">Project name</param>
-        private void CreateFedFile(FileInfo file, string author, string organisation, string prjName)
+        private void CreateFedFile(string author, string organisation, string prjName)
         {
-            using (var fedModel = new FederatedModel(file, author, organisation, prjName))
+            using (var fedModel = new FederatedModel(author, organisation, prjName))
             {
                 foreach (var item in FileRoles)
                 {
                     fedModel.AddRefModel(item.Key, organisation, item.Value);
                 }
+                fedModel.Model.SaveAs(FileName);
             }
+            
         }
 
         /// <summary>
@@ -180,7 +183,7 @@ namespace Xbim.Client
             dlg.CheckFileExists = true;
 
             // Show open file dialog box 
-            if (dlg.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+            if (dlg.ShowDialog() == DialogResult.OK)
             {
                 var xbimFile = Path.ChangeExtension(dlg.FileName, "xbim");
                 FileInfo file = new FileInfo(xbimFile);

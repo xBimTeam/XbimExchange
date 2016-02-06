@@ -53,13 +53,13 @@ namespace Xbim.COBie.Data
                 //Create new sheet
                 
                 //Get buildings and spaces
-            var ifcBuildingStoreys = Model.Instances.OfType<IfcBuildingStorey>();
-            var ifcSpaces = Model.Instances.OfType<IfcSpace>().OrderBy(ifcSpace => ifcSpace.Name, new CompareIfcLabel());
+            var ifcBuildingStoreys = Model.FederatedInstances.OfType<IfcBuildingStorey>();
+            var ifcSpaces = Model.FederatedInstances.OfType<IfcSpace>().OrderBy(ifcSpace => ifcSpace.Name, new CompareIfcLabel());
             var ifcProducts = ifcBuildingStoreys.Union<IfcProduct>(ifcSpaces); //add spaces
 
                 //get component products as shown in Component sheet
-            var relAggregates = Model.Instances.OfType<IfcRelAggregates>();
-            var relSpatial = Model.Instances.OfType<IfcRelContainedInSpatialStructure>();
+            var relAggregates = Model.FederatedInstances.OfType<IfcRelAggregates>();
+            var relSpatial = Model.FederatedInstances.OfType<IfcRelContainedInSpatialStructure>();
             var ifcElements = ((from x in relAggregates
                                                         from y in x.RelatedObjects
                                                         where !Context.Exclude.ObjectType.Component.Contains(y.GetType())

@@ -8,6 +8,7 @@ using System.Text;
 using System.Windows.Forms;
 using Xbim.Common.Exceptions;
 using Xbim.COBieLiteUK;
+using Xbim.COBieLiteUK.Client;
 using Xbim.FilterHelper;
 using XbimExchanger.IfcToCOBieLiteUK;
 using Assembly = System.Reflection.Assembly;
@@ -399,7 +400,7 @@ namespace Xbim.Client
                     }
                     else
                     {
-                        throw new XbimException(string.Format("Model is not Federated: {0}", fedModel.FileNameXbimf));
+                        throw new XbimException(string.Format("Model is not Federated: {0}", txtPath.Text));
                     }
                 }
             }

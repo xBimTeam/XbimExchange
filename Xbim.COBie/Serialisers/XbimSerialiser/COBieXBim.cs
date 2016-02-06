@@ -123,7 +123,7 @@ namespace Xbim.COBie.Serialisers.XbimSerialiser
                 if (DateTime.TryParse(createdOn, out dateTime))
                     stamp = IfcTimeStamp.ToTimeStamp(dateTime);
             }
-            var ifcOwnerHistory = Model.Instances.OfType<IfcOwnerHistory>().Where(oh => (oh.CreationDate == stamp) &&
+            var ifcOwnerHistory = Model.FederatedInstances.OfType<IfcOwnerHistory>().Where(oh => (oh.CreationDate == stamp) &&
                                                                            (oh.OwningUser == createdBy) &&
                                                                            (((oh.OwningApplication != null) && (oh.OwningApplication.ApplicationFullName.ToString().ToLower() == externalSystem.ToLower()) )||
                                                                             ((oh.LastModifyingApplication != null) && (oh.LastModifyingApplication.ApplicationFullName.ToString().ToLower() == externalSystem.ToLower()))
@@ -157,7 +157,7 @@ namespace Xbim.COBie.Serialisers.XbimSerialiser
 
                 //create an organization for the external system
                 var orgName = externalSystem.Split(' ').FirstOrDefault();
-                ifcOrganization = Model.Instances.OfType<IfcOrganization>().Where(o => o.Name == orgName).FirstOrDefault();
+                ifcOrganization = Model.FederatedInstances.OfType<IfcOrganization>().Where(o => o.Name == orgName).FirstOrDefault();
                 if (ifcOrganization == null)
                 {
                     ifcOrganization = Model.Instances.New<IfcOrganization>();
@@ -166,7 +166,7 @@ namespace Xbim.COBie.Serialisers.XbimSerialiser
                     else
                         ifcOrganization.Name = "Unknown"; //is not an optional field so fill with unknown value
                 }
-                ifcApplication = Model.Instances.OfType<IfcApplication>().Where(app => app.ApplicationFullName == externalSystem).FirstOrDefault();
+                ifcApplication = Model.FederatedInstances.OfType<IfcApplication>().Where(app => app.ApplicationFullName == externalSystem).FirstOrDefault();
                 if (ifcApplication == null)
                     ifcApplication = Model.Instances.New<IfcApplication>(app =>
                     {
@@ -179,14 +179,14 @@ namespace Xbim.COBie.Serialisers.XbimSerialiser
             }
             else
             { //Owner history OwningApplication is not an optional field so fill with unknown value
-                ifcOrganization = Model.Instances.OfType<IfcOrganization>().Where(o => o.Name == "").FirstOrDefault();
+                ifcOrganization = Model.FederatedInstances.OfType<IfcOrganization>().Where(o => o.Name == "").FirstOrDefault();
                 if (ifcOrganization == null)
                 {
                     ifcOrganization = Model.Instances.New<IfcOrganization>();
                     ifcOrganization.Name = "Unknown"; //is not an optional field so fill with unknown value
                         
                 }
-                ifcApplication = Model.Instances.OfType<IfcApplication>().Where(app => app.ApplicationFullName == "").FirstOrDefault();
+                ifcApplication = Model.FederatedInstances.OfType<IfcApplication>().Where(app => app.ApplicationFullName == "").FirstOrDefault();
                 if (ifcApplication == null)
                     ifcApplication = Model.Instances.New<IfcApplication>(app =>
                     {
@@ -318,7 +318,7 @@ namespace Xbim.COBie.Serialisers.XbimSerialiser
         /// <returns>IfcBuilding Object</returns>
         protected IfcBuilding GetBuilding()
         {
-            var ifcBuildings = Model.Instances.OfType<IfcBuilding>();
+            var ifcBuildings = Model.FederatedInstances.OfType<IfcBuilding>();
             if ((ifcBuildings.Count() > 1) || (ifcBuildings.Count() == 0))
                 throw new Exception(string.Format("COBieXBimSerialiser: Expecting one IfcBuilding, Found {0}", ifcBuildings.Count().ToString()));
             return ifcBuildings.FirstOrDefault();
@@ -329,7 +329,7 @@ namespace Xbim.COBie.Serialisers.XbimSerialiser
         /// <returns>IfcSite Object</returns>
         protected IfcSite GetSite()
         {
-            var ifcSites = Model.Instances.OfType<IfcSite>();
+            var ifcSites = Model.FederatedInstances.OfType<IfcSite>();
             if ((ifcSites.Count() > 1) || (ifcSites.Count() == 0))
                 throw new Exception(string.Format("COBieXBimSerialiser: Expecting one IfcSite, Found {0}", ifcSites.Count().ToString()));
             return ifcSites.FirstOrDefault();
@@ -350,7 +350,7 @@ namespace Xbim.COBie.Serialisers.XbimSerialiser
 
         protected IfcBuildingStorey GetBuildingStory (string name)
         {
-            var ifcBuildingStoreys = Model.Instances.OfType<IfcBuildingStorey>().Where(bs => bs.Name == name);
+            var ifcBuildingStoreys = Model.FederatedInstances.OfType<IfcBuildingStorey>().Where(bs => bs.Name == name);
             if ((ifcBuildingStoreys.Count() > 1) || (ifcBuildingStoreys.Count() == 0))
                 throw new Exception(string.Format("COBieXBimSerialiser: Expecting one IfcBuildingStorey with name of {1}, Found {0}", ifcBuildingStoreys.Count().ToString(), name));
             return ifcBuildingStoreys.FirstOrDefault();
@@ -379,7 +379,7 @@ namespace Xbim.COBie.Serialisers.XbimSerialiser
 
             
                 //check to see if we have a IfcRelAssociatesClassification associated with this category
-                var ifcRelAssociatesClassification = Model.Instances.OfType<IfcRelAssociatesClassification>()
+                var ifcRelAssociatesClassification = Model.FederatedInstances.OfType<IfcRelAssociatesClassification>()
                                     .Where(rac => rac.RelatingClassification != null 
                                         && (rac.RelatingClassification is IfcClassificationReference)
                                         && (   ((((IfcClassificationReference)rac.RelatingClassification).ItemReference.ToString().ToLower() == itemReference.ToLower())
@@ -392,7 +392,7 @@ namespace Xbim.COBie.Serialisers.XbimSerialiser
                 if (ifcRelAssociatesClassification == null)
                 {
                     //check we have a IfcClassificationReference holding the category
-                    var ifcClassificationReference = Model.Instances.OfType<IfcClassificationReference>()
+                    var ifcClassificationReference = Model.FederatedInstances.OfType<IfcClassificationReference>()
                                     .Where(cr =>(  (cr.ItemReference.ToString().ToLower() == itemReference.ToLower())
                                                 && (cr.Name.ToString().ToLower() == name.ToLower())
                                                 )
@@ -855,11 +855,11 @@ namespace Xbim.COBie.Serialisers.XbimSerialiser
                 IEnumerable<IfcSIUnit> ifcSIUnits;
                 if (returnPrefix != null)
                 {
-                    ifcSIUnits = Model.Instances.Where<IfcSIUnit>(siu => (siu.Name == (IfcSIUnitName)returnUnit) && (siu.Prefix == (IfcSIPrefix)returnPrefix));
+                    ifcSIUnits = Model.FederatedInstances.Where<IfcSIUnit>(siu => (siu.Name == (IfcSIUnitName)returnUnit) && (siu.Prefix == (IfcSIPrefix)returnPrefix));
                 }
                 else
                 {
-                    ifcSIUnits = Model.Instances.Where<IfcSIUnit>(siu => siu.Name == (IfcSIUnitName)returnUnit && siu.Prefix == null);
+                    ifcSIUnits = Model.FederatedInstances.Where<IfcSIUnit>(siu => siu.Name == (IfcSIUnitName)returnUnit && siu.Prefix == null);
                 }
                 
                 if (ifcSIUnits.Any())
@@ -1062,7 +1062,7 @@ namespace Xbim.COBie.Serialisers.XbimSerialiser
             switch (sheetName)
             {
                 case Constants.WORKSHEET_TYPE:
-                    var ifcTypeObject = Model.Instances.Where<IfcTypeObject>(obj => obj.Name.ToString().ToLower().Trim() == rowName).FirstOrDefault();
+                    var ifcTypeObject = Model.FederatedInstances.Where<IfcTypeObject>(obj => obj.Name.ToString().ToLower().Trim() == rowName).FirstOrDefault();
                     //if no Type Object create one to maintain relationship
                     if (ifcTypeObject == null)
                     {
@@ -1071,7 +1071,7 @@ namespace Xbim.COBie.Serialisers.XbimSerialiser
                     }
                     return ifcTypeObject;
                 case Constants.WORKSHEET_COMPONENT:
-                    var ifcElement = Model.Instances.Where<IfcElement>(obj => obj.Name.ToString().ToLower().Trim() == rowName).FirstOrDefault();
+                    var ifcElement = Model.FederatedInstances.Where<IfcElement>(obj => obj.Name.ToString().ToLower().Trim() == rowName).FirstOrDefault();
                     //if no Element Object create one to maintain relationship
                     if (ifcElement == null)
                     {
@@ -1080,30 +1080,30 @@ namespace Xbim.COBie.Serialisers.XbimSerialiser
                     }
                     return ifcElement;
                 case Constants.WORKSHEET_JOB:
-                    return Model.Instances.Where<IfcProcess>(obj => obj.Name.ToString().ToLower().Trim() == rowName).FirstOrDefault();
+                    return Model.FederatedInstances.Where<IfcProcess>(obj => obj.Name.ToString().ToLower().Trim() == rowName).FirstOrDefault();
                 case Constants.WORKSHEET_ASSEMBLY:
-                    return Model.Instances.Where<IfcRelDecomposes>(obj => obj.Name.ToString().ToLower().Trim() == rowName).FirstOrDefault();
+                    return Model.FederatedInstances.Where<IfcRelDecomposes>(obj => obj.Name.ToString().ToLower().Trim() == rowName).FirstOrDefault();
                 case Constants.WORKSHEET_CONNECTION:
-                    return Model.Instances.Where<IfcRelConnectsElements>(obj => obj.Name.ToString().ToLower().Trim() == rowName).FirstOrDefault();
+                    return Model.FederatedInstances.Where<IfcRelConnectsElements>(obj => obj.Name.ToString().ToLower().Trim() == rowName).FirstOrDefault();
                 case Constants.WORKSHEET_FACILITY:
-                    IfcRoot ifcRoot = Model.Instances.Where<IfcSite>(obj => obj.Name.ToString().ToLower().Trim() == rowName).FirstOrDefault();
+                    IfcRoot ifcRoot = Model.FederatedInstances.Where<IfcSite>(obj => obj.Name.ToString().ToLower().Trim() == rowName).FirstOrDefault();
                     if (ifcRoot == null)
-                        ifcRoot = Model.Instances.Where<IfcBuilding>(obj => obj.Name.ToString().ToLower().Trim() == rowName).FirstOrDefault();
+                        ifcRoot = Model.FederatedInstances.Where<IfcBuilding>(obj => obj.Name.ToString().ToLower().Trim() == rowName).FirstOrDefault();
                     if (ifcRoot == null)
-                        ifcRoot = Model.Instances.Where<IfcProject>(obj => obj.Name.ToString().ToLower().Trim() == rowName).FirstOrDefault();
+                        ifcRoot = Model.FederatedInstances.Where<IfcProject>(obj => obj.Name.ToString().ToLower().Trim() == rowName).FirstOrDefault();
 	                return ifcRoot;
                 case Constants.WORKSHEET_FLOOR:
-                    return Model.Instances.Where<IfcBuildingStorey>(to => to.Name.ToString().ToLower().Trim() == rowName).FirstOrDefault();
+                    return Model.FederatedInstances.Where<IfcBuildingStorey>(to => to.Name.ToString().ToLower().Trim() == rowName).FirstOrDefault();
                 case Constants.WORKSHEET_RESOURCE:
-                    return Model.Instances.Where<IfcConstructionEquipmentResource>(obj => obj.Name.ToString().ToLower().Trim() == rowName).FirstOrDefault();
+                    return Model.FederatedInstances.Where<IfcConstructionEquipmentResource>(obj => obj.Name.ToString().ToLower().Trim() == rowName).FirstOrDefault();
                 case Constants.WORKSHEET_SPACE:
-                    return Model.Instances.Where<IfcSpace>(obj => obj.Name.ToString().ToLower().Trim() == rowName).FirstOrDefault();
+                    return Model.FederatedInstances.Where<IfcSpace>(obj => obj.Name.ToString().ToLower().Trim() == rowName).FirstOrDefault();
                 case Constants.WORKSHEET_SPARE:
-                    return Model.Instances.Where<IfcConstructionProductResource>(obj => obj.Name.ToString().ToLower().Trim() == rowName).FirstOrDefault();
+                    return Model.FederatedInstances.Where<IfcConstructionProductResource>(obj => obj.Name.ToString().ToLower().Trim() == rowName).FirstOrDefault();
                 case Constants.WORKSHEET_SYSTEM:
-                    return Model.Instances.Where<IfcGroup>(obj => obj.Name.ToString().ToLower().Trim() == rowName).FirstOrDefault();
+                    return Model.FederatedInstances.Where<IfcGroup>(obj => obj.Name.ToString().ToLower().Trim() == rowName).FirstOrDefault();
                 case Constants.WORKSHEET_ZONE:
-                    return Model.Instances.Where<IfcZone>(obj => obj.Name.ToString().ToLower().Trim() == rowName).FirstOrDefault();
+                    return Model.FederatedInstances.Where<IfcZone>(obj => obj.Name.ToString().ToLower().Trim() == rowName).FirstOrDefault();
                 default:
                     return null;
                     
@@ -1118,9 +1118,9 @@ namespace Xbim.COBie.Serialisers.XbimSerialiser
         public IfcActorSelect GetActorSelect(string email)
         {
             //srl the following fixes errors in the logic  and are more performant
-            var ifcActorSelect = (Model.Instances.OfType<IfcPersonAndOrganization>().FirstOrDefault<IfcActorSelect>(a => a.HasEmail(email)) ??
-                                  Model.Instances.OfType<IfcOrganization>().FirstOrDefault<IfcActorSelect>(a => a.HasEmail(email))) ??
-                                 Model.Instances.OfType<IfcPerson>().FirstOrDefault<IfcActorSelect>(a => a.HasEmail(email));
+            var ifcActorSelect = (Model.FederatedInstances.OfType<IfcPersonAndOrganization>().FirstOrDefault<IfcActorSelect>(a => a.HasEmail(email)) ??
+                                  Model.FederatedInstances.OfType<IfcOrganization>().FirstOrDefault<IfcActorSelect>(a => a.HasEmail(email))) ??
+                                 Model.FederatedInstances.OfType<IfcPerson>().FirstOrDefault<IfcActorSelect>(a => a.HasEmail(email));
             return ifcActorSelect;
         }
 
@@ -1261,7 +1261,7 @@ namespace Xbim.COBie.Serialisers.XbimSerialiser
                 if (ValidateString(name)) //we have a primary key to check
                 {
                     var testName = name.ToLower().Trim();
-                    var testObj = Model.Instances.Where<T>(bs => bs.Name.ToString().ToLower().Trim() == testName).FirstOrDefault();
+                    var testObj = Model.FederatedInstances.Where<T>(bs => bs.Name.ToString().ToLower().Trim() == testName).FirstOrDefault();
                     if (testObj != null)
                     {
 #if DEBUG
@@ -1287,7 +1287,7 @@ namespace Xbim.COBie.Serialisers.XbimSerialiser
                 if (ValidateString(name)) //we have a primary key to check
                 {
                     var testName = name.ToLower().Trim();
-                    var testObjs = Model.Instances.Where<T>(bs => bs.Name.ToString().ToLower().Trim() == testName);
+                    var testObjs = Model.FederatedInstances.Where<T>(bs => bs.Name.ToString().ToLower().Trim() == testName);
                     return testObjs;
                 }
             }

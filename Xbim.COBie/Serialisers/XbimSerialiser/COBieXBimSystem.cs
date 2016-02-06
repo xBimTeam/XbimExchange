@@ -88,7 +88,7 @@ namespace Xbim.COBie.Serialisers.XbimSerialiser
             if (CheckIfExistOnMerge<IfcSystem>(row.Name))
             {
                 string testName = row.Name.ToLower().Trim();
-                IfcSystemObj = Model.Instances.Where<IfcSystem>(bs => bs.Name.ToString().ToLower().Trim() == testName).FirstOrDefault();
+                IfcSystemObj = Model.FederatedInstances.Where<IfcSystem>(bs => bs.Name.ToString().ToLower().Trim() == testName).FirstOrDefault();
                 return;//we have it so no need to create
             }
 
@@ -155,7 +155,7 @@ namespace Xbim.COBie.Serialisers.XbimSerialiser
                 //check to see is the component name is a single component
                 List<string> compNames = new List<string>();
                 string testCompName = componentNames.ToLower().Trim();
-                IfcProduct ifcProduct = Model.Instances.OfType<IfcProduct>().Where(p => p.Name.ToString().ToLower().Trim() == testCompName).FirstOrDefault();
+                IfcProduct ifcProduct = Model.FederatedInstances.OfType<IfcProduct>().Where(p => p.Name.ToString().ToLower().Trim() == testCompName).FirstOrDefault();
                 if (ifcProduct != null)
                     compNames.Add(componentNames);
                 else
@@ -167,7 +167,7 @@ namespace Xbim.COBie.Serialisers.XbimSerialiser
                     if (ValidateString(componentName))
                     {
                         string compName = componentName.ToLower().Trim();
-                        ifcProduct = Model.Instances.OfType<IfcProduct>().Where(p => p.Name.ToString().ToLower().Trim() == compName).FirstOrDefault();
+                        ifcProduct = Model.FederatedInstances.OfType<IfcProduct>().Where(p => p.Name.ToString().ToLower().Trim() == compName).FirstOrDefault();
                         if (ifcProduct != null)
                             ifcProductList.Add(ifcProduct);
                     }

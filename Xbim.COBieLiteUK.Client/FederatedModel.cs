@@ -8,30 +8,23 @@ using Xbim.Common.Step21;
 using Xbim.FilterHelper;
 using Xbim.Ifc;
 using Xbim.Ifc2x3.ActorResource;
-using Xbim.Ifc2x3.ExternalReferenceResource;
-using Xbim.Ifc2x3.IO;
-using Xbim.Ifc2x3.MeasureResource;
+using Xbim.Ifc4.Interfaces;
+using IfcRoleEnum = Xbim.Ifc2x3.ActorResource.IfcRoleEnum;
 
-using Xbim.IO.Esent;
-
-namespace Xbim.Client
+namespace Xbim.COBieLiteUK.Client
 {
     public class FederatedModel : IDisposable
     {
         #region Properties
-        private XbimModel _fedModel = null;
+        private IfcStore _fedModel;
 
         // <summary>
         /// Return the federated XBim Model
-        /// </summary>
-        public XbimModel Model
+        /// 
+        public IfcStore Model
         { get { return _fedModel; } }
 
-        /// <summary>
-        /// XBimF File name
-        /// </summary>
-        public FileInfo FileNameXbimf
-        { get; set; }
+        
         /// <summary>
         /// Mapping of RoleFilter to ActorRole
         /// </summary>
@@ -46,7 +39,8 @@ namespace Xbim.Client
         {
             get
             {
-                return _fedModel != null ? _fedModel.IfcProject.Name.ToString() : string.Empty;
+                var project = Model.ReferencingModel.Instances.OfType<IIfcProject>().FirstOrDefault();
+                return project!=null?project.Name.ToString():string.Empty;
             }
         }
 
@@ -57,7 +51,8 @@ namespace Xbim.Client
         {
             get
             {
-                return _fedModel != null ? _fedModel.IfcProject.OwnerHistory.OwningUser.ThePerson.FamilyName.ToString() : string.Empty;
+                var project = Model.ReferencingModel.Instances.OfType<IIfcProject>().FirstOrDefault();
+                return project != null ? project.OwnerHistory.OwningUser.ThePerson.FamilyName.ToString() : string.Empty;        
             }
         }
 
@@ -68,7 +63,8 @@ namespace Xbim.Client
         {
             get
             {
-                return _fedModel != null ? _fedModel.IfcProject.OwnerHistory.OwningUser.TheOrganization.Name.ToString() : string.Empty;
+                var project = Model.ReferencingModel.Instances.OfType<IIfcProject>().FirstOrDefault();
+                return project != null ? project.OwnerHistory.OwningUser.TheOrganization.Name.ToString() : string.Empty;                
             }
         }
 
@@ -89,43 +85,45 @@ namespace Xbim.Client
         /// </summary>
         /// <param name="file"></param>
         public FederatedModel(FileInfo file)
-        {
-            FileNameXbimf = file;
+        {          
             Open(file);
         }
 
         /// <summary>
         /// Constructor
         /// </summary>
-        /// <param name="file">FileInfo for the xbimf file</param>
         /// <param name="author">Author name</param>
         /// <param name="organisation">Orgsnisation Name</param>
         /// <param name="prjName">Project Name</param>
-        public FederatedModel(FileInfo file, string author, string organisation, string prjName = null)
+        public FederatedModel(string author, string organisation, string prjName = null)
         {
-            FileNameXbimf = file;
-            Create(file, author, organisation, prjName);            
+           
+            Create(author, organisation, prjName);            
         }
 
         /// <summary>
         /// Creat the federated file
         /// </summary>
-        /// <param name="file">FileInfo for the xbimf file</param>
         /// <param name="author">Author name</param>
         /// <param name="organisation">Orgsnisation Name</param>
         /// <param name="prjName">Project Name</param>
-        public void Create(FileInfo file, string author, string organisation, string prjName = null)
-        {
-            FileNameXbimf = file;
-            //_fedModel = XbimModel.CreateTemporaryModel();
-            _fedModel = XbimModel.CreateModel(file.FullName, XbimDBAccess.ReadWrite);
-
-            _fedModel.Initialise(author, organisation, "xBIM", "xBIM Team", ""); //"" is version, but none to grab as yet
-
+        /// <param name="ifcVersion">Ifc schema version</param>
+        /// <param name="storage">Type of xbim file store</param>
+        public void Create(string author, string organisation, string prjName = null, IfcSchemaVersion ifcVersion=IfcSchemaVersion.Ifc2X3,XbimStoreType storage=XbimStoreType.InMemoryModel )
+        {         
+            var creds = new XbimEditorCredentials
+            {
+                ApplicationIdentifier = "xBIM",
+                ApplicationDevelopersName = "xBIM Team",
+                EditorsFamilyName = author,
+                EditorsOrganisationName = organisation,
+                ApplicationVersion = "1.0"
+            };
+            _fedModel = IfcStore.Create(creds, ifcVersion, storage); //create in memory
             using (var txn = _fedModel.BeginTransaction())
             {
-                _fedModel.IfcProject.Name = (prjName != null) ? prjName : string.Empty;
-                _fedModel.Header = new StepFileHeader(StepFileHeader.HeaderCreationMode.InitWithXbimDefaults);
+                var project = _fedModel.Instances.New<Ifc2x3.Kernel.IfcProject>();
+                project.Name = prjName ?? "Undefined";
                 txn.Commit();
             }
         }
@@ -144,11 +142,25 @@ namespace Xbim.Client
 
             if (file.Exists)
             {
-                _fedModel = new XbimModel();
-                return _fedModel.Open(file.FullName, XbimDBAccess.ReadWrite);
+                var creds = new XbimEditorCredentials
+                {
+                    ApplicationIdentifier = "xBIM",
+                    ApplicationDevelopersName = "xBIM Team",
+                    EditorsFamilyName = "undefined",
+                    EditorsOrganisationName = "undefined",
+                    ApplicationVersion = "1.0"
+                };
+                try
+                {
+                    _fedModel = IfcStore.Open(file.FullName, creds, 0);
+                    return true;
+                }
+                catch (Exception)
+                {
+                    //just return false;
+                }                
             }
-            else
-                return false;
+            return false;
         }
 
         /// <summary>
@@ -156,39 +168,17 @@ namespace Xbim.Client
         /// </summary>
         /// <param name="file">FileInfo for the xbimf file</param>
         /// <param name="organizationName">Organisation Name</param>
-        /// <param name="role">RoleFilter</param>
+        /// <param name="roles"></param>
         /// <param name="displayName"></param>
         public void AddRefModel(FileInfo file, string organizationName, RoleFilter roles = RoleFilter.Unknown, string displayName = null)
         {
             
             if (!file.Exists)
                 throw new FileNotFoundException("Cannot find reference model file", file.FullName);
-           
+            var actorRoles = GetActorRoles(roles);
+            var roleString = string.Join(",", actorRoles.Select(r => r.RoleString));
             //add model to list of referenced models
-            var refDoc = _fedModel.AddModelReference(file.FullName, organizationName, IfcRoleEnum.USERDEFINED);
-
-            using (var txn = _fedModel.BeginTransaction())
-            {
-
-                var addDocId = refDoc.DocumentInformation;
-                IfcOrganization org = addDocId.DocumentOwner as IfcOrganization;
-                if (org != null)
-                {
-                    org.Roles.Clear();
-                    //Add Roles
-                    foreach (var item in GetActorRoles(roles))
-                    {
-                        org.AddRole(item);
-                    }
-                }
-                //add display name if required
-                if (displayName != null)
-                {
-                    addDocId.Description = displayName;
-
-                }
-                txn.Commit();
-            }
+            _fedModel.AddModelReference(file.FullName, organizationName, roleString);
         }
 
         /// <summary>
@@ -213,7 +203,7 @@ namespace Xbim.Client
                         MessageBox.Show("File path does not exist: {0}", refModel.Name);
                     }
                 }
-                catch (System.ArgumentException)
+                catch (ArgumentException)
                 {
                     MessageBox.Show("File path is incorrect: {0}", refModel.Name);
                 }
@@ -227,29 +217,10 @@ namespace Xbim.Client
         public void Dispose()
         {
             if (_fedModel != null)
-            {
-                //TODO:  hate this work around to avoid header Object set to null in XBimModel Close method, but small file so time hit limited
-                //Check with steve as to why header set to null 
-
-                //save the xbim model back to a temp ifc
-                //string tempFile = Path.GetTempFileName();
-                //tempFile = Path.ChangeExtension(tempFile, ".ifc");
-                //_fedModel.SaveAs(tempFile, XbimExtensions.Interfaces.XbimStorageType.IFC);
-
+            {             
                 //dispose of fed xbim databse
                 _fedModel.Close(); //will close referenced models as well
-                _fedModel.Dispose(); //might not need this, as close method can call dispose 
                 _fedModel = null;
-
-                //create new xbimf database from temp file ifc
-                //using (var model = new XbimModel())
-                //{
-                //    model.CreateFrom(tempFile, FileNameXbimf.FullName, null, true, true);
-                //}
-                //if (File.Exists(tempFile))
-                //{
-                //    File.Delete(tempFile);
-                //}
 
             }
         }
@@ -259,7 +230,7 @@ namespace Xbim.Client
         /// </summary>
         public void Close()
         {
-            this.Dispose();
+            Dispose();
         }
 
 
@@ -310,7 +281,7 @@ namespace Xbim.Client
         /// <returns></returns>
         private IfcActorRole MapRole(RoleFilter role, IfcRoleEnum ifcRole)
         {
-            if (_fedModel.IsTransacting)
+            if (_fedModel.CurrentTransaction!=null)
             {
                 IfcActorRole actorRole = _fedModel.Instances.New<IfcActorRole>();
                 if (ifcRole == IfcRoleEnum.USERDEFINED)

@@ -36,12 +36,12 @@ namespace Xbim.COBie.Data
             var jobs = new COBieSheet<COBieJobRow>(Constants.WORKSHEET_JOB);
 
             // get all IfcTask objects from IFC file
-            var ifcTasks = Model.Instances.OfType<IfcTask>();
+            var ifcTasks = Model.FederatedInstances.OfType<IfcTask>();
 
             var allPropertyValues = new COBieDataPropertySetValues(); //properties helper class
             
-            //IfcTypeObject typObj = Model.Instances.OfType<IfcTypeObject>().FirstOrDefault();
-            var cer = Model.Instances.OfType<IfcConstructionEquipmentResource>().FirstOrDefault();
+            //IfcTypeObject typObj = Model.FederatedInstances.OfType<IfcTypeObject>().FirstOrDefault();
+            var cer = Model.FederatedInstances.OfType<IfcConstructionEquipmentResource>().FirstOrDefault();
 
             ProgressIndicator.Initialise("Creating Jobs", ifcTasks.Count());
 

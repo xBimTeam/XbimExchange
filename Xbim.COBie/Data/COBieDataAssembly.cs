@@ -35,8 +35,8 @@ namespace Xbim.COBie.Data
             COBieSheet<COBieAssemblyRow> assemblies = new COBieSheet<COBieAssemblyRow>(Constants.WORKSHEET_ASSEMBLY);
 
             // get ifcRelAggregates objects from IFC file what are not in the excludedTypes type list
-            IEnumerable<IfcRelAggregates> ifcRelAggregates = Model.Instances.OfType<IfcRelAggregates>();
-            IEnumerable<IfcRelNests> ifcRelNests = Model.Instances.OfType<IfcRelNests>(); 
+            IEnumerable<IfcRelAggregates> ifcRelAggregates = Model.FederatedInstances.OfType<IfcRelAggregates>();
+            IEnumerable<IfcRelNests> ifcRelNests = Model.FederatedInstances.OfType<IfcRelNests>(); 
             
 
             IEnumerable<IfcRelDecomposes> relAll = (from ra in ifcRelAggregates
@@ -88,7 +88,7 @@ namespace Xbim.COBie.Data
             }
 
             //--------------Loop all IfcMaterialLayerSet-----------------------------
-            IEnumerable<IfcMaterialLayerSet> ifcMaterialLayerSets = Model.Instances.OfType<IfcMaterialLayerSet>();
+            IEnumerable<IfcMaterialLayerSet> ifcMaterialLayerSets = Model.FederatedInstances.OfType<IfcMaterialLayerSet>();
             char setNamePostFix = 'A';       
             foreach (IfcMaterialLayerSet ifcMaterialLayerSet in ifcMaterialLayerSets)
             {

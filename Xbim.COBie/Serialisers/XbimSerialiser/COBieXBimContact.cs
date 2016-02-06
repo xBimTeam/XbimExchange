@@ -55,7 +55,7 @@ namespace Xbim.COBie.Serialisers.XbimSerialiser
             //{
             //    model.Instances.Add(thisContact);
             //}
-            //IEnumerable<IfcPersonAndOrganization> ifcPersonAndOrganizations = Model.Instances.OfType<IfcPersonAndOrganization>();
+            //IEnumerable<IfcPersonAndOrganization> ifcPersonAndOrganizations = Model.FederatedInstances.OfType<IfcPersonAndOrganization>();
             //string xxx = ifcPersonAndOrganizations.First().ThePerson.GivenName;
         }
 

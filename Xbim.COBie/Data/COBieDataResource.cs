@@ -32,7 +32,7 @@ namespace Xbim.COBie.Data
             COBieSheet<COBieResourceRow> resources = new COBieSheet<COBieResourceRow>(Constants.WORKSHEET_RESOURCE);
 
             // get all IfcConstructionEquipmentResource objects from IFC file
-            IEnumerable<IfcConstructionEquipmentResource> ifcCer = Model.Instances.OfType<IfcConstructionEquipmentResource>();
+            IEnumerable<IfcConstructionEquipmentResource> ifcCer = Model.FederatedInstances.OfType<IfcConstructionEquipmentResource>();
 
             ProgressIndicator.Initialise("Creating Resources", ifcCer.Count());
 

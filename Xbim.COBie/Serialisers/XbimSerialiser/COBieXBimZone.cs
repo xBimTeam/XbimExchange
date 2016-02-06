@@ -129,7 +129,7 @@ namespace Xbim.COBie.Serialisers.XbimSerialiser
                 }
                 else
                 {
-                    space = Model.Instances.OfType<IfcSpace>().Where(sp => sp.Name.ToString().ToLower() == spaceName).FirstOrDefault();
+                    space = Model.FederatedInstances.OfType<IfcSpace>().Where(sp => sp.Name.ToString().ToLower() == spaceName).FirstOrDefault();
                     if (space != null)
                         Spaces.Add(spaceName, space);
                 }

@@ -130,7 +130,7 @@ namespace Xbim.COBieLite
         private void GetSystems()
         {
             _systemAssignment = 
-                _model.Instances.OfType<IIfcRelAssignsToGroup>().Where(r => r.RelatingGroup is IIfcSystem)
+                _model.FederatedInstances.OfType<IIfcRelAssignsToGroup>().Where(r => r.RelatingGroup is IIfcSystem)
                 .ToDictionary(k => (IIfcSystem)k.RelatingGroup, v => v.RelatedObjects.Cast<IIfcObjectDefinition>());
             _systemLookup = new Dictionary<IIfcObjectDefinition, List<IIfcSystem>>();
             foreach (var systemAssignment in SystemAssignment)
@@ -149,7 +149,7 @@ namespace Xbim.COBieLite
         }
         private void GetTypeMaps()
         {
-            _definingTypeObjectMap = _model.Instances.OfType<IIfcRelDefinesByType>().ToDictionary(k => k.RelatingType, kv => kv.RelatedObjects.OfType<IIfcElement>().ToList());
+            _definingTypeObjectMap = _model.FederatedInstances.OfType<IIfcRelDefinesByType>().ToDictionary(k => k.RelatingType, kv => kv.RelatedObjects.OfType<IIfcElement>().ToList());
             _objectToTypeObjectMap = new Dictionary<IIfcObject, IIfcTypeObject>();
             foreach (var typeObjectToObjects in _definingTypeObjectMap)
             {
@@ -161,7 +161,7 @@ namespace Xbim.COBieLite
 
             //Get asset assignments
 
-            var assetRels = _model.Instances.OfType<IIfcRelAssignsToGroup>()
+            var assetRels = _model.FederatedInstances.OfType<IIfcRelAssignsToGroup>()
                 .Where(r => r.RelatingGroup is IIfcAsset &&
                             r.RelatedObjects.Any(
                                 o => o is IIfcTypeObject && _definingTypeObjectMap.ContainsKey((IIfcTypeObject) o)));
@@ -177,7 +177,7 @@ namespace Xbim.COBieLite
             ////var existingAssets =  _classifiedObjects.Keys.OfType<IIfcElement>()
             ////    .Concat(_objectToTypeObjectMap.Keys.OfType<IIfcElement>()).Distinct();
             //////retrieve all the IIfcElements from the model and exclude them if they are already classified or are a member of an IIfcType
-            ////var unCategorizedAssets = _model.Instances.OfType<IIfcElement>().Except(existingAssets);
+            ////var unCategorizedAssets = _model.FederatedInstances.OfType<IIfcElement>().Except(existingAssets);
             //////convert to a Lookup with the key the type of the IIfcElement and the value a list of IIfcElements
             //////if the object has a classification we use this to distinguish types
             ////_elementTypeToElementObjectMap = (Lookup<string,IIfcElement>) unCategorizedAssets.ToLookup
@@ -270,7 +270,7 @@ namespace Xbim.COBieLite
         private void GetPropertySets()
         {
             _attributedObjects = new Dictionary<IIfcObjectDefinition, XbimAttributedObject>();
-            var relProps = _model.Instances.OfType<IIfcRelDefinesByProperties>().ToList();
+            var relProps = _model.FederatedInstances.OfType<IIfcRelDefinesByProperties>().ToList();
             foreach (var relProp in relProps)
             {
                 foreach (var ifcObject in relProp.RelatedObjects)
@@ -309,7 +309,7 @@ namespace Xbim.COBieLite
 
         private void GetSpacesAndZones()
         {
-            _spatialDecomposition = _model.Instances.OfType<IIfcRelAggregates>().Where(r=>r.RelatingObject is IIfcSpatialStructureElement)
+            _spatialDecomposition = _model.FederatedInstances.OfType<IIfcRelAggregates>().Where(r=>r.RelatingObject is IIfcSpatialStructureElement)
                 .ToDictionary(ifcRelAggregate => (IIfcSpatialStructureElement) ifcRelAggregate.RelatingObject, ifcRelAggregate => ifcRelAggregate.RelatedObjects.OfType<IIfcSpatialStructureElement>().ToList());
 
             //get the relationship between spaces and storeys
@@ -324,7 +324,7 @@ namespace Xbim.COBieLite
 
             }
 
-            var relZones = _model.Instances.OfType<IIfcRelAssignsToGroup>().Where(r=>r.RelatingGroup is IIfcZone).ToList();
+            var relZones = _model.FederatedInstances.OfType<IIfcRelAssignsToGroup>().Where(r=>r.RelatingGroup is IIfcZone).ToList();
             _zoneSpaces = new Dictionary<IIfcZone, HashSet<IIfcSpace>>();
             _spaceZones = new Dictionary<IIfcSpace, HashSet<IIfcZone>>();
             foreach (var relZone in relZones)
@@ -864,7 +864,7 @@ namespace Xbim.COBieLite
             //get all elements that are contained in any spatial structure of this building
             _spaceAssetLookup = new Dictionary<IIfcElement, List<IIfcSpace>>(); 
            
-            var ifcRelContainedInSpaces = _model.Instances.OfType<IIfcRelContainedInSpatialStructure>().Where(r=>r.RelatingStructure is IIfcSpace).ToList();
+            var ifcRelContainedInSpaces = _model.FederatedInstances.OfType<IIfcRelContainedInSpatialStructure>().Where(r=>r.RelatingStructure is IIfcSpace).ToList();
             foreach (var ifcRelContainedInSpace in ifcRelContainedInSpaces)
             {
                 foreach (var element in ifcRelContainedInSpace.RelatedElements.OfType<IIfcElement>())
@@ -884,7 +884,7 @@ namespace Xbim.COBieLite
             //get all the spatial structural elements which may contain assets
             DecomposeSpatialStructure(ifcBuilding, spatialStructureOfBuilding);
             //get all elements that are contained in the spatial structure of this building
-            var elementsInBuilding = _model.Instances.OfType<IIfcRelContainedInSpatialStructure>()
+            var elementsInBuilding = _model.FederatedInstances.OfType<IIfcRelContainedInSpatialStructure>()
                 .Where(r => spatialStructureOfBuilding.Contains(r.RelatingStructure))
                 .SelectMany(s=>s.RelatedElements.OfType<IIfcElement>()).Distinct();
 
@@ -936,12 +936,12 @@ namespace Xbim.COBieLite
         public IEnumerable<IIfcActorSelect> GetContacts()
         {
             //get any actors and select their
-            var actors = new HashSet<IIfcActorSelect>(_model.Instances.OfType<IIfcActor>().Select(a=>a.TheActor)); //unique actors
-            var personOrgs =  new HashSet<IIfcActorSelect>(_model.Instances.OfType<IIfcPersonAndOrganization>().Where(p => !actors.Contains(p)));
+            var actors = new HashSet<IIfcActorSelect>(_model.FederatedInstances.OfType<IIfcActor>().Select(a=>a.TheActor)); //unique actors
+            var personOrgs =  new HashSet<IIfcActorSelect>(_model.FederatedInstances.OfType<IIfcPersonAndOrganization>().Where(p => !actors.Contains(p)));
             actors = new HashSet<IIfcActorSelect>(actors.Concat(personOrgs));
             var personsAlreadyIn = new HashSet<IIfcActorSelect>(actors.Where(a => a is IIfcPerson));
 
-            var persons = new HashSet<IIfcActorSelect>(_model.Instances.OfType<IIfcPerson>().Where(p => !personsAlreadyIn.Contains(p)));
+            var persons = new HashSet<IIfcActorSelect>(_model.FederatedInstances.OfType<IIfcPerson>().Where(p => !personsAlreadyIn.Contains(p)));
             actors = new HashSet<IIfcActorSelect>(actors.Concat(persons));
            return actors;
         }
