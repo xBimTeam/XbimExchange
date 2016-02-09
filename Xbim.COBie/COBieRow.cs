@@ -118,7 +118,16 @@ namespace Xbim.COBie
         /// </summary>
         public string RowHashValue
         {
-            get { return GenerateRowHash(); }
+            get { return GenerateRowHash(false); }
+        }
+
+        /// <summary>
+        /// Row hash value without tolower-ing the Ext*Indentifier fields
+        /// (ExtIdentifiers are case sensitive)
+        /// </summary>
+        public string RowHashValueV2
+        {
+            get { return GenerateRowHash(true); }
         }
 
         /// <summary>
@@ -153,27 +162,33 @@ namespace Xbim.COBie
         /// Return the concatenation of the row values
         /// </summary>
         /// <returns>string value of all rows added together</returns>
-        private string ConcatRowValues()
+        private string ConcatRowValues(bool keepIdentifierCase)
         {
+            List<string> identifierColumns = new List<string>() { "ExtIdentifier", "ExternalSiteIdentifier", "ExternalFacilityIdentifier", "ExternalProjectIdentifier" };
+
             string value = "";
             StringBuilder stringBld = new StringBuilder();
             for (int i = 0; i < RowCount; i++)
             {
                 value = this[i].CellValue;
                 if (string.IsNullOrEmpty(value)) value = "";
+                if ((keepIdentifierCase == false) || !identifierColumns.Contains(this[i].COBieColumn.ColumnName))
+                {
+                    value = value.ToLower();
+                }
                 stringBld.Append(value);
             }
-            return stringBld.ToString().ToLower();
+            return stringBld.ToString();
         }
 
         /// <summary>
         /// Generate the Hash code for the row values
         /// </summary>
         /// <returns></returns>
-        private string GenerateRowHash()
+        private string GenerateRowHash(bool keepIdentifierCase)
         {
             string value = "";
-            string rowValue = ConcatRowValues(); //get the row cell values concatenated together
+            string rowValue = ConcatRowValues(keepIdentifierCase); //get the row cell values concatenated together
             using (MD5 md5hash = MD5.Create())
             {
                 value = GetRowHash(md5hash, rowValue);
