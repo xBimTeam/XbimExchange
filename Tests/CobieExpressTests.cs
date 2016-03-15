@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Diagnostics;
 using System.IO;
+using System.Xml;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Xbim.CobieExpress;
 using Xbim.Ifc;
@@ -16,7 +17,9 @@ namespace Tests
         [DeploymentItem("TestFiles")]
         public void ConvertIfcToCoBieExpress()
         {
-            const string input = @"c:\Users\mxfm2\Desktop\COBieExpressTests\LakesideRestaurant.ifc";
+            //
+            //const string input = @"c:\Users\mxfm2\Desktop\COBieExpressTests\LakesideRestaurant.ifc";
+            const string input = @"c:\CODE\XbimGit\XbimExchange\Xbim.COBie.Client\2012-03-23-Duplex-Design.ifc";
             //const string input = @"Duplex_MEP_20110907.ifc";
             var inputInfo = new FileInfo(input);
             var ifc = IfcStore.Open(input);
@@ -33,11 +36,18 @@ namespace Tests
                 txn.Commit();
             }
             const string output = "..\\..\\converted.cobie";
+            const string outputXml = "..\\..\\converted.xml";
             using (var outFile = File.Create(output))
             {
                 cobie.SaveAsStep21(outFile);
                 outFile.Close();
             }
+            using (var outXml = File.Create(outputXml))
+            {
+                cobie.SaveAsXml(outXml, new XmlWriterSettings { IndentChars = "  ", Indent = true });
+                outXml.Close();
+            }
+
             var outputInfo = new FileInfo(output);
 
             Console.WriteLine("Time to convert {0:N}MB file ({2} entities): {1}ms", inputInfo.Length/1e6f, w.ElapsedMilliseconds, inputCount);

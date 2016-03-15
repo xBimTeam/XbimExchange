@@ -395,26 +395,28 @@ namespace Xbim.COBie.Data
         /// <returns>Point3D (note: if return point == pt point then point inside box</returns>
         internal XbimPoint3D ClosetPointOnBoundingBox(XbimPoint3D pt, XbimRect3D boundBox)
         {
-            XbimPoint3D retPt = new XbimPoint3D();
-            XbimPoint3D MinPt = new XbimPoint3D(boundBox.X, boundBox.Y, boundBox.Z);
-            XbimPoint3D MaxPt = new XbimPoint3D(boundBox.X + boundBox.SizeX, boundBox.Y + boundBox.SizeY, boundBox.Z + boundBox.SizeZ);
+            var x = pt.X;
+            var y = pt.Y;
+            var z = pt.Z;
+            var MinPt = new XbimPoint3D(boundBox.X, boundBox.Y, boundBox.Z);
+            var MaxPt = new XbimPoint3D(boundBox.X + boundBox.SizeX, boundBox.Y + boundBox.SizeY, boundBox.Z + boundBox.SizeZ);
             
             if ( pt.X < MinPt.X ) 
-                retPt.X = MinPt.X;
+                x = MinPt.X;
             else if ( pt.X > MaxPt.X) 
-                retPt.X = MaxPt.X;
+                x = MaxPt.X;
 
             if (pt.Y < MinPt.Y)
-                retPt.Y = MinPt.Y;
+                y = MinPt.Y;
             else if (pt.Y > MaxPt.Y)
-                retPt.Y = MaxPt.Y; 
+                y = MaxPt.Y; 
             
             if (pt.Z < MinPt.Z)
-                retPt.Z = MinPt.Z;
+                z = MinPt.Z;
             else if (pt.Z > MaxPt.Z)
-                retPt.Z = MaxPt.Z;
+                z = MaxPt.Z;
 
-            return retPt;
+            return new XbimPoint3D(x,y,z);
         }
 
         /// <summary>

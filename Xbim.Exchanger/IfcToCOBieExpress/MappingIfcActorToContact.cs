@@ -84,7 +84,7 @@ namespace XbimExchanger.IfcToCOBieExpress
                 {
 
                     target.Department = postal.InternalLocation;
-                    target.Street = postal.AddressLines != null ? postal.AddressLines.ToString() : null;
+                    target.Street = postal.AddressLines != null && postal.AddressLines.Any()? string.Join(", ", postal.AddressLines) : null;
                     target.PostalBox = postal.PostalBox;
                     target.Town = postal.Town;
                     target.StateRegion = postal.Region;
@@ -142,12 +142,7 @@ namespace XbimExchanger.IfcToCOBieExpress
                 {
                     var deptName = postal.InternalLocation;
                     if (deptName.HasValue) target.Department = deptName;
-                    if (postal.AddressLines != null)
-                    {
-                        var streetNames = postal.AddressLines.ToString();
-                        if (!string.IsNullOrWhiteSpace(streetNames))
-                            target.Street = streetNames;
-                    }
+                    target.Street = postal.AddressLines != null && postal.AddressLines.Any() ? string.Join(", ", postal.AddressLines) : null;
                    
                     if (!string.IsNullOrWhiteSpace(postal.PostalBox))
                         target.PostalBox = postal.PostalBox;
@@ -166,7 +161,8 @@ namespace XbimExchanger.IfcToCOBieExpress
             if (ifcPerson.Roles == null) return;
             var role = ifcPerson.Roles.FirstOrDefault();
             if (role == null) return;
-            target.Category = Helper.GetPickValue<CobieRole>(Enum.GetName(typeof(IfcRoleEnum), role.Role));
+            var catString = role.UserDefinedRole ?? Enum.GetName(typeof (IfcRoleEnum), role.Role);
+            target.Category = Helper.GetPickValue<CobieRole>(catString);
         }
 
         public override CobieContact CreateTargetObject()

@@ -184,7 +184,7 @@ namespace Xbim.Client
                 //add display name if required
                 if (displayName != null)
                 {
-                    addDocId.Description = displayName;
+                    //addDocId.Description = displayName;
 
                 }
                 txn.Commit();

@@ -191,8 +191,6 @@ namespace XbimExchanger.IfcToCOBieExpress
         private Dictionary<IIfcActorSelect, IIfcActor> _actors;
         private readonly DateTime _now;
         private readonly List<CobieCreatedInfo> _createdInfoCache = new List<CobieCreatedInfo>();
-        private CobieZone _xbimDefaultZone;
-        private CobieSystem _xbimDefaultSystem;
 
         private readonly MappingIfcClassificationReferenceToCategory _categoryMapping;
         private readonly MappingStringToExternalObject _externalObjectMapping;
@@ -1477,17 +1475,34 @@ namespace XbimExchanger.IfcToCOBieExpress
             if (ExternalReferenceMode == ExternalReferenceMode.IgnoreSystem ||
                 ExternalReferenceMode == ExternalReferenceMode.IgnoreSystemAndEntityName)
                 return null;
+            CobieExternalSystem result;
             if (usePropFirst && ifcObject is IIfcObjectDefinition)//support for COBie Toolkit for Autodesk Revit(had this in on old code, not sure if still relevant. this note date 8/10/2015)
             {
                 var extSystem = GetCoBieProperty("CommonExtSystem", (IIfcObjectDefinition) ifcObject);
                 if (!string.IsNullOrEmpty(extSystem))
                 {
-                    var result = _externalSystemMapping.GetOrCreateTargetObject(extSystem);
-                    result.Name = extSystem;
+                    if (_externalSystemMapping.GetOrCreateTargetObject(extSystem, out result))
+                        result.Name = extSystem;
                     return result;
                 }
             }
-            return XbimSystem; 
+
+            //use owner history
+            if (ifcObject != null && ifcObject.OwnerHistory != null && ifcObject.OwnerHistory.OwningApplication != null)
+            {
+
+                string appName = ifcObject.OwnerHistory.OwningApplication.ApplicationFullName;
+                if (string.IsNullOrWhiteSpace(appName))
+                    appName = ifcObject.OwnerHistory.OwningApplication.ApplicationIdentifier;
+                if (!string.IsNullOrEmpty(appName))
+                {
+                    if (_externalSystemMapping.GetOrCreateTargetObject(appName, out result))
+                        result.Name = appName;
+                    return result;
+                }
+            }
+
+            return ifcObject != null ? null : XbimSystem;
         }
 
 
@@ -1868,34 +1883,6 @@ namespace XbimExchanger.IfcToCOBieExpress
             return _actors.TryGetValue(actorSelect, out actor) ? 
                 GetCreatedOn(actor) : 
                 _now;
-        }
-
-
-        internal CobieZone XbimDefaultZone
-        {
-            get
-            {
-                return _xbimDefaultZone ?? (_xbimDefaultZone = Target.Instances.New<CobieZone>(z =>
-                {
-                    z.Name = "Default Zone";
-                    z.Created = GetCreatedInfo(XbimContact, _now);
-                    z.Categories.Add(UnknownCategory);
-                }));
-            }
-        }
-
-        internal CobieSystem XbimDefaultSystem
-        {
-            get
-            {
-                return _xbimDefaultSystem ?? (_xbimDefaultSystem = Target.Instances.New<CobieSystem>(s =>
-                {
-                    s.Name = "Default System";
-                    s.Created = GetCreatedInfo(XbimContact, _now);
-                    s.Categories.Add(UnknownCategory);
-                }));    
-            }
-            
         }
 
         internal CobieContact GetOrCreateContact(string email)

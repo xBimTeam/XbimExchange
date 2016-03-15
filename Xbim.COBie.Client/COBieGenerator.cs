@@ -141,7 +141,7 @@ namespace Xbim.COBie.Client
                 else if (Path.GetExtension(parameters.ModelFile).ToLower() == ".xls")
                 {
                     if (ValidateChkBox.Checked)
-                        ValidateXLSfile(parameters);
+                        ValidateXlSfile(parameters);
                     else
                         GenerateIFCFile(parameters);
                 }
@@ -188,14 +188,16 @@ namespace Xbim.COBie.Client
                     Model = model,
                     Exclude = UserFilters
                 };
-                foreach (var ModelRoles in context.MapMergeRoles)
+                foreach (var modelRoles in context.MapMergeRoles)
                 {
-                    var refModel = ModelRoles.Key;
-                    var roles = ModelRoles.Value;
+                    var refModel = modelRoles.Key;
+                    var roles = modelRoles.Value;
 
-                    var refContext = new COBieContext(_worker.ReportProgress);
-                    refContext.TemplateFileName = parameters.TemplateFile;
-                    refContext.Model = refModel;
+                    var refContext = new COBieContext(_worker.ReportProgress)
+                    {
+                        TemplateFileName = parameters.TemplateFile,
+                        Model = refModel
+                    };
                     refContext.MapMergeRoles[refModel] = roles;
                     refContext.Exclude = UserFilters;
 
@@ -222,7 +224,8 @@ namespace Xbim.COBie.Client
         /// Create XLS file from ifc/xbim files
         /// </summary>
         /// <param name="parameters">Params</param>
-        private void GenerateFederatedCOBieFile(Params parameters, ICOBieValidationTemplate ValidationTemplate = null)
+        /// <param name="validationTemplate"></param>
+        private void GenerateFederatedCOBieFile(Params parameters, ICOBieValidationTemplate validationTemplate = null)
         {
             var outputFile = Path.ChangeExtension(parameters.ModelFile, ".xls");
             var timer = new Stopwatch();
@@ -236,7 +239,7 @@ namespace Xbim.COBie.Client
             var serialiser = new COBieXLSXSerialiser(outputFile, parameters.TemplateFile);
             serialiser.Excludes = UserFilters;
             serialiser.IsXlsx = parameters.IsXLSX;
-            serialiser.Serialise(fedWorkBook, ValidationTemplate);
+            serialiser.Serialise(fedWorkBook, validationTemplate);
 
             LogBackground(String.Format("Export Complete: {0}", outputFile));
 
@@ -326,18 +329,19 @@ namespace Xbim.COBie.Client
         /// Validate XLS file for COBie errors, also will swap templates if required
         /// </summary>
         /// <param name="parameters">Params</param>
+        /// <param name="validationTemplate"></param>
         /// <returns>Created file name</returns>
-        private void ValidateXLSfile(Params parameters, ICOBieValidationTemplate ValidationTemplate = null)
+        private void ValidateXlSfile(Params parameters, ICOBieValidationTemplate validationTemplate = null)
         {
 
             //read xls file
             LogBackground(String.Format("Reading {0}....", parameters.ModelFile));
             var deSerialiser = new COBieXLSDeserialiser(parameters.ModelFile);
-            var Workbook = deSerialiser.Deserialise();
+            var workbook = deSerialiser.Deserialise();
 
             //extract pick list from the template sheet and swap into workbook (US / UK)
             LogBackground("Swapping PickList from template...");
-            COBieSheet<COBiePickListsRow> CobiePickLists = null;
+            COBieSheet<COBiePickListsRow> cobiePickLists = null;
             if ((!string.IsNullOrEmpty(parameters.TemplateFile)) &&
                 File.Exists(parameters.TemplateFile)
                 )
@@ -345,13 +349,13 @@ namespace Xbim.COBie.Client
                 //extract the pick list sheet from template
                 var deSerialiserPickList = new COBieXLSDeserialiser(parameters.TemplateFile, Constants.WORKSHEET_PICKLISTS);
                 var wbookPickList = deSerialiserPickList.Deserialise();
-                if (wbookPickList.Count > 0) CobiePickLists = (COBieSheet<COBiePickListsRow>)wbookPickList.FirstOrDefault();
+                if (wbookPickList.Count > 0) cobiePickLists = (COBieSheet<COBiePickListsRow>)wbookPickList.FirstOrDefault();
                 //check the workbook last sheet is a pick list
-                if (Workbook.LastOrDefault() is COBieSheet<COBiePickListsRow>)
+                if (workbook.LastOrDefault() is COBieSheet<COBiePickListsRow>)
                 {
                     //remove original pick list and replace with templates
-                    Workbook.RemoveAt(Workbook.Count - 1);
-                    Workbook.Add(CobiePickLists);
+                    workbook.RemoveAt(workbook.Count - 1);
+                    workbook.Add(cobiePickLists);
                 }
                 else
                 {
@@ -365,9 +369,9 @@ namespace Xbim.COBie.Client
             context.Exclude = UserFilters;
 
             //Validate
-            progress.Initialise("Validating Workbooks", Workbook.Count, 0);
+            progress.Initialise("Validating Workbooks", workbook.Count, 0);
             progress.ReportMessage("Building Indices...");
-            foreach (var item in Workbook)
+            foreach (var item in workbook)
             {
                 item.BuildIndices();
             }
@@ -376,7 +380,7 @@ namespace Xbim.COBie.Client
             // Validate the workbook
             progress.ReportMessage("Starting Validation...");
 
-            Workbook.Validate(ErrorRowIndexBase.RowTwo, null, (lastProcessedSheetIndex) =>
+            workbook.Validate(ErrorRowIndexBase.RowTwo, null, (lastProcessedSheetIndex) =>
             {
                 // When each sheet has been processed, increment the progress bar
                 progress.IncrementAndUpdate();
@@ -389,7 +393,7 @@ namespace Xbim.COBie.Client
             var serialiser = new COBieXLSXSerialiser(parameters.ModelFile, parameters.TemplateFile);
             serialiser.Excludes = UserFilters;
             serialiser.IsXlsx = parameters.IsXLSX;
-            serialiser.Serialise(Workbook, ValidationTemplate);
+            serialiser.Serialise(workbook, validationTemplate);
 
             LogBackground(String.Format("Export Complete: {0}", parameters.ModelFile));
 

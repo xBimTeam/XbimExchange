@@ -65,8 +65,7 @@ namespace XbimExchanger.IfcToCOBieExpress
                 if (ifcSite != null)
                     cobieFloors.Add(ifcSite);
                 Exchanger.ReportProgress.IncrementAndUpdate();
-                if (ifcBuilding != null)
-                    cobieFloors.Add(ifcBuilding);
+                cobieFloors.Add(ifcBuilding);
                 Exchanger.ReportProgress.IncrementAndUpdate();
                 Exchanger.ReportProgress.NextStage(cobieFloors.Count, 50); //finish progress at 50% 
                 var floorMappings = Exchanger.GetOrCreateMappings<MappingIfcSpatialElementToFloor>();
@@ -184,42 +183,42 @@ namespace XbimExchanger.IfcToCOBieExpress
             Exchanger.ReportProgress.NextStage(helper.Contacts.Count, 97); //finish progress at 97% 
             
 
-            //assign all unallocated spaces to a zone
-            var spaces = Exchanger.TargetRepository.Instances.OfType<CobieSpace>().ToList();
-            var zones = Exchanger.TargetRepository.Instances.OfType<CobieZone>().ToList() ?? new List<CobieZone>();
-            var unAllocatedSpaces = spaces.Where(space => !zones.Any(z => z.Spaces != null && z.Spaces.Select(s => s.Name).Contains(space.Name))).ToList();
-            Exchanger.ReportProgress.NextStage(unAllocatedSpaces.Count, 98); //finish progress at 98% 
-            if (unAllocatedSpaces.Any())
-            {
-                var defaultZone = helper.XbimDefaultZone;
-                foreach (var space in unAllocatedSpaces)
-                {
-                    defaultZone.Spaces.Add(space);
-                    Exchanger.ReportProgress.IncrementAndUpdate();
-                }
-            }
+            ////assign all unallocated spaces to a zone
+            //var spaces = Exchanger.TargetRepository.Instances.OfType<CobieSpace>().ToList();
+            //var zones = Exchanger.TargetRepository.Instances.OfType<CobieZone>().ToList() ?? new List<CobieZone>();
+            //var unAllocatedSpaces = spaces.Where(space => !zones.Any(z => z.Spaces != null && z.Spaces.Select(s => s.Name).Contains(space.Name))).ToList();
+            //Exchanger.ReportProgress.NextStage(unAllocatedSpaces.Count, 98); //finish progress at 98% 
+            //if (unAllocatedSpaces.Any())
+            //{
+            //    var defaultZone = helper.XbimDefaultZone;
+            //    foreach (var space in unAllocatedSpaces)
+            //    {
+            //        defaultZone.Spaces.Add(space);
+            //        Exchanger.ReportProgress.IncrementAndUpdate();
+            //    }
+            //}
 
-            //assign all assets that are not in a system to the default
-            if (helper.SystemMode.HasFlag(SystemExtractionMode.Types))
-            {
-                var types = Exchanger.TargetRepository.Instances.OfType<CobieType>().ToList();
-                var systemsWritten = Exchanger.TargetRepository.Instances.OfType<CobieSystem>().ToList();
-                var componentsAssignedToSystem = new HashSet<string>(systemsWritten.SelectMany(s => s.Components).Select(a => a.Name));
-                Exchanger.ReportProgress.NextStage(types.Count); //finish progress at 100% 
-                //go over all unasigned assets
-                foreach (var type in types)
-                {
-                    var components = type.Components.Where(a => !componentsAssignedToSystem.Contains(a.Name)).ToList();
-                    if (components.Any())
-                    {
-                        var typeSystem = helper.XbimDefaultSystem;
-                        typeSystem.Name = string.Format("Type System {0} ", type.Name);
-                        typeSystem.Components.AddRange(components);
-                        typeSystem.Facility = facility;
-                    }
-                    Exchanger.ReportProgress.IncrementAndUpdate();
-                } 
-            }
+            ////assign all assets that are not in a system to the default
+            //if (helper.SystemMode.HasFlag(SystemExtractionMode.Types))
+            //{
+            //    var types = Exchanger.TargetRepository.Instances.OfType<CobieType>().ToList();
+            //    var systemsWritten = Exchanger.TargetRepository.Instances.OfType<CobieSystem>().ToList();
+            //    var componentsAssignedToSystem = new HashSet<string>(systemsWritten.SelectMany(s => s.Components).Select(a => a.Name));
+            //    Exchanger.ReportProgress.NextStage(types.Count); //finish progress at 100% 
+            //    //go over all unasigned assets
+            //    foreach (var type in types)
+            //    {
+            //        var components = type.Components.Where(a => !componentsAssignedToSystem.Contains(a.Name)).ToList();
+            //        if (components.Any())
+            //        {
+            //            var typeSystem = helper.XbimDefaultSystem;
+            //            typeSystem.Name = string.Format("Type System {0} ", type.Name);
+            //            typeSystem.Components.AddRange(components);
+            //            typeSystem.Facility = facility;
+            //        }
+            //        Exchanger.ReportProgress.IncrementAndUpdate();
+            //    } 
+            //}
            
             Exchanger.ReportProgress.Finalise(500); //finish with 500 millisecond delay
             
