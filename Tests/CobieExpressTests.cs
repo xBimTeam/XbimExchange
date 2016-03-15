@@ -18,8 +18,8 @@ namespace Tests
         public void ConvertIfcToCoBieExpress()
         {
             //
-            //const string input = @"c:\Users\mxfm2\Desktop\COBieExpressTests\LakesideRestaurant.ifc";
-            const string input = @"c:\CODE\XbimGit\XbimExchange\Xbim.COBie.Client\2012-03-23-Duplex-Design.ifc";
+            const string input = @"c:\Users\mxfm2\Desktop\COBieExpressTests\LakesideRestaurant.ifc";
+            //const string input = @"c:\CODE\XbimGit\XbimExchange\Xbim.COBie.Client\2012-03-23-Duplex-Design.ifc";
             //const string input = @"Duplex_MEP_20110907.ifc";
             var inputInfo = new FileInfo(input);
             var ifc = IfcStore.Open(input);
