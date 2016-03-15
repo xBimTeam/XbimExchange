@@ -53,7 +53,7 @@ namespace Xbim.COBie.Data
             COBieSheet<COBieTypeRow> types = new COBieSheet<COBieTypeRow>(Constants.WORKSHEET_TYPE);
             
             //group the types by name as we need to filter duplicate items in for each loop
-            IEnumerable<IfcTypeObject> ifcTypeObjects = Model.Instances.OfType<IfcTypeObject>()
+            IEnumerable<IfcTypeObject> ifcTypeObjects = Model.FederatedInstances.OfType<IfcTypeObject>()
                 .Select(type => type)
                 .Where(type => !Context.Exclude.ObjectType.Types.Contains(type.GetType()))
                 .GroupBy(type => type.Name).SelectMany(g => g);//.Distinct()
@@ -134,7 +134,7 @@ namespace Xbim.COBie.Data
             ProgressIndicator.Finalise();
             //--------------Loop all IfcMaterialLayerSet-----------------------------
             ProgressIndicator.ReportMessage("Starting MaterialLayerSets...");
-            IEnumerable<IfcMaterialLayerSet> ifcMaterialLayerSets = Model.Instances.OfType<IfcMaterialLayerSet>();
+            IEnumerable<IfcMaterialLayerSet> ifcMaterialLayerSets = Model.FederatedInstances.OfType<IfcMaterialLayerSet>();
             ChildNamesList rowHolderChildNames = new ChildNamesList();
             ChildNamesList rowHolderLayerChildNames = new ChildNamesList();
             
@@ -207,7 +207,7 @@ namespace Xbim.COBie.Data
             //--------Loop Materials in case they are not in a layer Set-----
             ProgressIndicator.ReportMessage("Starting Materials...");
             
-            IEnumerable<IfcMaterial> ifcMaterials = Model.Instances.OfType<IfcMaterial>();
+            IEnumerable<IfcMaterial> ifcMaterials = Model.FederatedInstances.OfType<IfcMaterial>();
             ProgressIndicator.Initialise("Creating Materials", ifcMaterials.Count());
             foreach (IfcMaterial ifcMaterial in ifcMaterials)
             {

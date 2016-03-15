@@ -33,14 +33,14 @@ namespace Xbim.COBie.Data
             //create new sheet
             COBieSheet<COBieIssueRow> issues = new COBieSheet<COBieIssueRow>(Constants.WORKSHEET_ISSUE);
             
-            //IEnumerable<IfcPropertySet> ifcProperties = Model.Instances.OfType<IfcPropertySet>().Where(ps => ps.Name.ToString() == "Pset_Risk");
+            //IEnumerable<IfcPropertySet> ifcProperties = Model.FederatedInstances.OfType<IfcPropertySet>().Where(ps => ps.Name.ToString() == "Pset_Risk");
             
 
             // get all IfcApproval objects from IFC file
-            IEnumerable<IfcApproval> ifcApprovals = Model.Instances.OfType<IfcApproval>();
+            IEnumerable<IfcApproval> ifcApprovals = Model.FederatedInstances.OfType<IfcApproval>();
             ProgressIndicator.Initialise("Creating Issues", ifcApprovals.Count());
 
-            List<IfcRelAssociatesApproval> ifcRelAssociatesApprovals = Model.Instances.OfType<IfcRelAssociatesApproval>().ToList();
+            List<IfcRelAssociatesApproval> ifcRelAssociatesApprovals = Model.FederatedInstances.OfType<IfcRelAssociatesApproval>().ToList();
 
             foreach (IfcApproval ifcApproval in ifcApprovals)
             {
@@ -136,7 +136,7 @@ namespace Xbim.COBie.Data
             List<IfcRoot> ifcRootObjs = new List<IfcRoot>();
             if (ifcRelAssociatesApprovals == null)
             {
-                ifcRelAssociatesApprovals = Model.Instances.OfType<IfcRelAssociatesApproval>().ToList();
+                ifcRelAssociatesApprovals = Model.FederatedInstances.OfType<IfcRelAssociatesApproval>().ToList();
             }
             IEnumerable<IfcRoot> IfcRoots = ifcRelAssociatesApprovals.Where(ral => ral.RelatingApproval.EntityLabel == ifcApproval.EntityLabel)
                                             .SelectMany(ral => ral.RelatedObjects).OfType<IfcRoot>();
@@ -159,7 +159,7 @@ namespace Xbim.COBie.Data
             string eMail = DEFAULT_STRING;
             if (ifcApprovalActorRelationships == null)
             {
-                ifcApprovalActorRelationships = Model.Instances.OfType<IfcApprovalActorRelationship>().ToList();
+                ifcApprovalActorRelationships = Model.FederatedInstances.OfType<IfcApprovalActorRelationship>().ToList();
             }
             IfcPersonAndOrganization IfcPersonAndOrganization = ifcApprovalActorRelationships
                                                        .Where(aar => aar.Approval.EntityLabel == ifcApproval.EntityLabel)

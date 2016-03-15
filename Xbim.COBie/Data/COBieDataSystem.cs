@@ -39,16 +39,16 @@ namespace Xbim.COBie.Data
             COBieSheet<COBieSystemRow> systems = new COBieSheet<COBieSystemRow>(Constants.WORKSHEET_SYSTEM);
 
             // get all IfcSystem, IfcGroup and IfcElectricalCircuit objects from IFC file
-            IEnumerable<IfcGroup> ifcGroups = Model.Instances.OfType<IfcGroup>().Where(ifcg => ifcg is IfcSystem); //get anything that is IfcSystem or derived from it eg IfcElectricalCircuit
-            //IEnumerable<IfcSystem> ifcSystems = Model.Instances.OfType<IfcSystem>();
-            //IEnumerable<IfcElectricalCircuit> ifcElectricalCircuits = Model.Instances.OfType<IfcElectricalCircuit>();
+            IEnumerable<IfcGroup> ifcGroups = Model.FederatedInstances.OfType<IfcGroup>().Where(ifcg => ifcg is IfcSystem); //get anything that is IfcSystem or derived from it eg IfcElectricalCircuit
+            //IEnumerable<IfcSystem> ifcSystems = Model.FederatedInstances.OfType<IfcSystem>();
+            //IEnumerable<IfcElectricalCircuit> ifcElectricalCircuits = Model.FederatedInstances.OfType<IfcElectricalCircuit>();
             //ifcGroups = ifcGroups.Union(ifcSystems);
             //ifcGroups = ifcGroups.Union(ifcElectricalCircuits);
 
             //Alternative method of extraction
             List<string> PropertyNames = new List<string> { "Circuit Number", "System Name" };
 
-            IEnumerable<IfcPropertySet> ifcPropertySets = from ps in Model.Instances.OfType<IfcPropertySet>()
+            IEnumerable<IfcPropertySet> ifcPropertySets = from ps in Model.FederatedInstances.OfType<IfcPropertySet>()
                                                           from psv in ps.HasProperties.OfType<IfcPropertySingleValue>()
                                                           where PropertyNames.Contains(psv.Name)
                                                           select ps;

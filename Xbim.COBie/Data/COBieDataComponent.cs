@@ -58,8 +58,8 @@ namespace Xbim.COBie.Data
          
             
 
-            IEnumerable<IfcRelAggregates> relAggregates = Model.Instances.OfType<IfcRelAggregates>();
-            IEnumerable<IfcRelContainedInSpatialStructure> relSpatial = Model.Instances.OfType<IfcRelContainedInSpatialStructure>();
+            IEnumerable<IfcRelAggregates> relAggregates = Model.FederatedInstances.OfType<IfcRelAggregates>();
+            IEnumerable<IfcRelContainedInSpatialStructure> relSpatial = Model.FederatedInstances.OfType<IfcRelContainedInSpatialStructure>();
 
             IEnumerable<IfcObject> ifcElements = ((from x in relAggregates
                                             from y in x.RelatedObjects
@@ -137,7 +137,7 @@ namespace Xbim.COBie.Data
             ProgressIndicator.Finalise();
 #if DEBUG
             timer.Stop();
-            Console.WriteLine(String.Format("Time to generate Component data = {0} seconds", timer.Elapsed.TotalSeconds.ToString("F3")));
+            Console.WriteLine("Time to generate Component data = {0} seconds", timer.Elapsed.TotalSeconds.ToString("F3"));
 #endif
            
             
@@ -193,7 +193,7 @@ namespace Xbim.COBie.Data
             //check for the element as a containing item of a space
             if (ifcRelSpaceBoundarys == null)
             {
-                ifcRelSpaceBoundarys = Model.Instances.OfType<IfcRelSpaceBoundary>().Where(rsb => (rsb.RelatedBuildingElement != null)).ToList();
+                ifcRelSpaceBoundarys = Model.FederatedInstances.OfType<IfcRelSpaceBoundary>().Where(rsb => (rsb.RelatedBuildingElement != null)).ToList();
             }
             IEnumerable<IfcSpace> ifcSpaces = ifcRelSpaceBoundarys.Where(rsb => rsb.RelatedBuildingElement == el).Select(rsb => rsb.RelatingSpace);
             foreach (IfcSpace item in ifcSpaces)
@@ -232,7 +232,7 @@ namespace Xbim.COBie.Data
             {
                 if (ifcSpaces == null)
                 {
-                    ifcSpaces = Model.Instances.OfType<IfcSpace>().ToList();
+                    ifcSpaces = Model.FederatedInstances.OfType<IfcSpace>().ToList();
                 }
 
                 //get Geometry for spaces 
@@ -395,28 +395,28 @@ namespace Xbim.COBie.Data
         /// <returns>Point3D (note: if return point == pt point then point inside box</returns>
         internal XbimPoint3D ClosetPointOnBoundingBox(XbimPoint3D pt, XbimRect3D boundBox)
         {
-            var x = pt.X;
-            var y = pt.Y;
-            var z = pt.Z;
-            var MinPt = new XbimPoint3D(boundBox.X, boundBox.Y, boundBox.Z);
-            var MaxPt = new XbimPoint3D(boundBox.X + boundBox.SizeX, boundBox.Y + boundBox.SizeY, boundBox.Z + boundBox.SizeZ);
             
-            if ( pt.X < MinPt.X ) 
-                x = MinPt.X;
-            else if ( pt.X > MaxPt.X) 
-                x = MaxPt.X;
+            var minPt = new XbimPoint3D(boundBox.X, boundBox.Y, boundBox.Z);
+            var maxPt = new XbimPoint3D(boundBox.X + boundBox.SizeX, boundBox.Y + boundBox.SizeY, boundBox.Z + boundBox.SizeZ);
+            double x=0;
+            double y=0;
+            double z=0;
+            if ( pt.X < minPt.X ) 
+                x = minPt.X;
+            else if ( pt.X > maxPt.X) 
+                x = maxPt.X;
 
-            if (pt.Y < MinPt.Y)
-                y = MinPt.Y;
-            else if (pt.Y > MaxPt.Y)
-                y = MaxPt.Y; 
+            if (pt.Y < minPt.Y)
+                y = minPt.Y;
+            else if (pt.Y > maxPt.Y)
+                y = maxPt.Y; 
             
-            if (pt.Z < MinPt.Z)
-                z = MinPt.Z;
-            else if (pt.Z > MaxPt.Z)
-                z = MaxPt.Z;
-
-            return new XbimPoint3D(x,y,z);
+            if (pt.Z < minPt.Z)
+                z = minPt.Z;
+            else if (pt.Z > maxPt.Z)
+                z = maxPt.Z;
+            XbimPoint3D retPt = new XbimPoint3D(x, y, z);
+            return retPt;
         }
 
         /// <summary>

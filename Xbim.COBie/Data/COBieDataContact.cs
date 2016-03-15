@@ -33,8 +33,8 @@ namespace Xbim.COBie.Data
 
             //create new sheet
             var contacts = new COBieSheet<COBieContactRow>(Constants.WORKSHEET_CONTACT);
-            var cobieContacts = Model.Instances.OfType<IfcPropertySingleValue>().Where(psv => psv.Name == "COBieCreatedBy" || psv.Name == "COBieTypeCreatedBy").GroupBy(psv => psv.NominalValue).Select(g => g.First().NominalValue.ToString());
-            var ifcPersonAndOrganizations = Model.Instances.OfType<IfcPersonAndOrganization>();
+            var cobieContacts = Model.FederatedInstances.OfType<IfcPropertySingleValue>().Where(psv => psv.Name == "COBieCreatedBy" || psv.Name == "COBieTypeCreatedBy").GroupBy(psv => psv.NominalValue).Select(g => g.First().NominalValue.ToString());
+            var ifcPersonAndOrganizations = Model.FederatedInstances.OfType<IfcPersonAndOrganization>();
             ProgressIndicator.Initialise("Creating Contacts", ifcPersonAndOrganizations.Count() + cobieContacts.Count());
 
             List<IfcOrganizationRelationship> ifcOrganizationRelationships = null;
@@ -91,7 +91,7 @@ namespace Xbim.COBie.Data
                 {
                     if (ifcOrganizationRelationships == null)
                     {
-                        ifcOrganizationRelationships = Model.Instances.OfType<IfcOrganizationRelationship>().ToList();
+                        ifcOrganizationRelationships = Model.FederatedInstances.OfType<IfcOrganizationRelationship>().ToList();
                     }
                     var ifcRelOrganization = ifcOrganizationRelationships
                                                         .Where(Or => Or.RelatingOrganization.EntityLabel == ifcOrganization.EntityLabel && Or.RelatedOrganizations.Last() != null)

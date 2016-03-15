@@ -34,7 +34,7 @@ namespace Xbim.COBie.Serialisers.XbimSerialiser
                 try
                 {
                     int count = 1;
-                    IfcTypeObjects = Model.Instances.OfType<IfcTypeObject>();
+                    IfcTypeObjects = Model.FederatedInstances.OfType<IfcTypeObject>();
 
                     ProgressIndicator.ReportMessage("Starting Spares...");
                     ProgressIndicator.Initialise("Creating Spares", cOBieSheet.RowCount);
@@ -116,7 +116,7 @@ namespace Xbim.COBie.Serialisers.XbimSerialiser
         public void SetRelAssignsToResource(IfcResource resourceObj, IEnumerable<IfcTypeObject> typeObjs)
         {
             //find any existing relationships to this type
-            IfcRelAssignsToResource processRel = Model.Instances.Where<IfcRelAssignsToResource>(rd => rd.RelatingResource == resourceObj).FirstOrDefault();
+            IfcRelAssignsToResource processRel = Model.FederatedInstances.Where<IfcRelAssignsToResource>(rd => rd.RelatingResource == resourceObj).FirstOrDefault();
             if (processRel == null) //none defined create the relationship
             {
                 processRel = Model.Instances.New<IfcRelAssignsToResource>();

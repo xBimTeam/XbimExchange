@@ -42,9 +42,9 @@ namespace Xbim.COBie.Serialisers.XbimSerialiser
                 try
                 {
                     var count = 1;
-                    IfcTypeObjects = Model.Instances.OfType<IfcTypeObject>();
-                    IfcSpaces = Model.Instances.OfType<IfcSpace>();
-                    IfcBuildingStoreys = Model.Instances.OfType<IfcBuildingStorey>();
+                    IfcTypeObjects = Model.FederatedInstances.OfType<IfcTypeObject>();
+                    IfcSpaces = Model.FederatedInstances.OfType<IfcSpace>();
+                    IfcBuildingStoreys = Model.FederatedInstances.OfType<IfcBuildingStorey>();
                     ProgressIndicator.ReportMessage("Starting Components...");
                     ProgressIndicator.Initialise("Creating Components", cOBieSheet.RowCount);
                     for (var i = 0; i < cOBieSheet.RowCount; i++)

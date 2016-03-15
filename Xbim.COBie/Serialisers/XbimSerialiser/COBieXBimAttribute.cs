@@ -80,37 +80,37 @@ namespace Xbim.COBie.Serialisers.XbimSerialiser
                 {
                     case "facility":
                         //set list if first time
-                        if (IfcBuildings == null) IfcBuildings = Model.Instances.OfType<IfcBuilding>();
+                        if (IfcBuildings == null) IfcBuildings = Model.FederatedInstances.OfType<IfcBuilding>();
                         if (!((CurrentObject is IfcBuilding) && (CurrentObject.Name == row.RowName)))
                             CurrentObject = IfcBuildings.Where(b => b.Name.ToString().ToLower() == row.RowName.ToLower()).FirstOrDefault();
                         break;
                     case "floor":
-                        if (IfcBuildingStoreys == null) IfcBuildingStoreys = Model.Instances.OfType<IfcBuildingStorey>();
+                        if (IfcBuildingStoreys == null) IfcBuildingStoreys = Model.FederatedInstances.OfType<IfcBuildingStorey>();
                         if (!((CurrentObject is IfcBuildingStorey) && (CurrentObject.Name == row.RowName)))
                             CurrentObject = IfcBuildingStoreys.Where(b => b.Name.ToString().ToLower() == row.RowName.ToLower()).FirstOrDefault();
                         break;
                     case "space":
-                        if (IfcSpaces == null) IfcSpaces = Model.Instances.OfType<IfcSpace>();
+                        if (IfcSpaces == null) IfcSpaces = Model.FederatedInstances.OfType<IfcSpace>();
                         if (!((CurrentObject is IfcSpace) && (CurrentObject.Name == row.RowName)))
                             CurrentObject = IfcSpaces.Where(b => b.Name.ToString().ToLower() == row.RowName.ToLower()).FirstOrDefault();
                         break;
                     case "type":
-                        if (IfcTypeObjects == null) IfcTypeObjects = Model.Instances.OfType<IfcTypeObject>();
+                        if (IfcTypeObjects == null) IfcTypeObjects = Model.FederatedInstances.OfType<IfcTypeObject>();
                         if (!((CurrentObject is IfcTypeObject) && (CurrentObject.Name == row.RowName)))
                             CurrentObject = IfcTypeObjects.Where(b => b.Name.ToString().ToLower() == row.RowName.ToLower()).FirstOrDefault();
                         break;
                     case "spare":
-                        if (IfcConstructionProductResources == null) IfcConstructionProductResources = Model.Instances.OfType<IfcConstructionProductResource>();
+                        if (IfcConstructionProductResources == null) IfcConstructionProductResources = Model.FederatedInstances.OfType<IfcConstructionProductResource>();
                         if (!((CurrentObject is IfcConstructionProductResource) && (CurrentObject.Name == row.RowName)))
                             CurrentObject = IfcConstructionProductResources.Where(b => b.Name.ToString().ToLower() == row.RowName.ToLower()).FirstOrDefault();
                         break;
                     case "component":
-                        if (IfcElements == null) IfcElements = Model.Instances.OfType<IfcElement>();
+                        if (IfcElements == null) IfcElements = Model.FederatedInstances.OfType<IfcElement>();
                         if (!((CurrentObject is IfcElement) && (CurrentObject.Name == row.RowName)))
                             CurrentObject = IfcElements.Where(b => b.Name.ToString().ToLower() == row.RowName.ToLower()).FirstOrDefault();
                         break;
                     case "zone":
-                        if (IfcZones == null) IfcZones = Model.Instances.OfType<IfcZone>();
+                        if (IfcZones == null) IfcZones = Model.FederatedInstances.OfType<IfcZone>();
                         if (!((CurrentObject is IfcZone) && (CurrentObject.Name == row.RowName)))
                             CurrentObject = IfcZones.Where(b => b.Name.ToString().ToLower() == row.RowName.ToLower()).FirstOrDefault();
                         break;
@@ -265,7 +265,7 @@ namespace Xbim.COBie.Serialisers.XbimSerialiser
         /// <param name="category">string, category Name</param>
         private void SetCategory(IfcRoot ifcRoot, string category)
         {
-            IfcRelAssociatesClassification ifcRelAssociatesClassification = Model.Instances.Where<IfcRelAssociatesClassification>(r => (r.RelatingClassification is IfcClassificationReference) && ((IfcClassificationReference)r.RelatingClassification).Name.ToString().ToLower() == category.ToLower()).FirstOrDefault();
+            IfcRelAssociatesClassification ifcRelAssociatesClassification = Model.FederatedInstances.Where<IfcRelAssociatesClassification>(r => (r.RelatingClassification is IfcClassificationReference) && ((IfcClassificationReference)r.RelatingClassification).Name.ToString().ToLower() == category.ToLower()).FirstOrDefault();
             //create if none found
             if (ifcRelAssociatesClassification == null)
             {

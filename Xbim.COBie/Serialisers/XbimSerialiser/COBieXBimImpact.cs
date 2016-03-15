@@ -73,7 +73,7 @@ namespace Xbim.COBie.Serialisers.XbimSerialiser
             if (row.SheetName.ToLower().Trim() == "type")
             {
                 if (IfcTypeObjects == null)
-                            IfcTypeObjects = Model.Instances.OfType<IfcTypeObject>();
+                            IfcTypeObjects = Model.FederatedInstances.OfType<IfcTypeObject>();
                 IfcTypeObject ifcTypeObject = IfcTypeObjects.Where(to => to.Name.ToString().ToLower() == row.RowName.ToLower()).FirstOrDefault();
                 if (ifcTypeObject != null)
                 {
@@ -95,7 +95,7 @@ namespace Xbim.COBie.Serialisers.XbimSerialiser
             else
             {
                 if (IfcProducts == null)
-                    IfcProducts = Model.Instances.OfType<IfcProduct>();
+                    IfcProducts = Model.FederatedInstances.OfType<IfcProduct>();
                 IfcProduct ifcProduct = IfcProducts.Where(to => to.Name.ToString().ToLower() == row.RowName.ToLower()).FirstOrDefault();
                 if (ifcProduct != null)
                 {

@@ -148,8 +148,8 @@ namespace Xbim.COBie.Data
 
             if (_ifcRelAssociatesMaterials == null)
             {
-                _ifcRelAssociatesMaterials = Model.Instances.OfType<IfcRelAssociatesMaterial>().ToList();
-                _ifcMaterialLayerSetUsages = Model.Instances.OfType<IfcMaterialLayerSetUsage>().ToList();
+                _ifcRelAssociatesMaterials = Model.FederatedInstances.OfType<IfcRelAssociatesMaterial>().ToList();
+                _ifcMaterialLayerSetUsages = Model.FederatedInstances.OfType<IfcMaterialLayerSetUsage>().ToList();
             }
 
             var ifcMaterialLayerSetUsage = _ifcMaterialLayerSetUsages.FirstOrDefault(mlsu => mlsu.ForLayerSet == ifcMaterialLayerSet);

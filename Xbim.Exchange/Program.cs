@@ -42,20 +42,20 @@ namespace Xbim.Exchange
                     Console.Read();
                     return;
                 }
-
-                var context = new Xbim3DModelContext(model);
-                context.CreateContext(XbimGeometryType.PolyhedronBinary);
-                var wexBimFilename = Path.ChangeExtension(fileName, "wexBIM");
-                using (var wexBiMfile = new FileStream(wexBimFilename, FileMode.Create, FileAccess.Write))
-                {
-                    using (var wexBimBinaryWriter = new BinaryWriter(wexBiMfile))
+                   
+                    var context = new Xbim3DModelContext(model);
+                    context.CreateContext();
+                    var wexBimFilename = Path.ChangeExtension(fileName, "wexBIM");
+                    using (var wexBiMfile = new FileStream(wexBimFilename, FileMode.Create, FileAccess.Write))
                     {
-                        Console.WriteLine("Creating " + wexBimFilename);
-                        model.SaveAsWexBim(wexBimBinaryWriter);
-                        wexBimBinaryWriter.Close();
+                        using (var wexBimBinaryWriter = new BinaryWriter(wexBiMfile))
+                        {
+                            Console.WriteLine("Creating " + wexBimFilename);
+                            model.SaveAsWexBim(wexBimBinaryWriter);
+                            wexBimBinaryWriter.Close();
+                        }
+                        wexBiMfile.Close();
                     }
-                    wexBiMfile.Close();
-                }
                 //now do COBieExpress
                 var cobie = new MemoryModel(new EntityFactory());
                 var cobieExpressFile = Path.ChangeExtension(fileName, ".cobie");
@@ -76,82 +76,82 @@ namespace Xbim.Exchange
                 cobie.SaveAsXml(File.Create(cobieExpressXmlFile), new XmlWriterSettings{Indent = true, IndentChars = "\t"});
 
 
-                //now do the DPoW files
-                var fileNameWithoutExtension = Path.GetFileNameWithoutExtension(fileName);
-                var fileDirectoryName = Path.GetDirectoryName(fileName);
-                var facilities = new List<Facility>();
-                var ifcToCoBieLiteUkExchanger = new IfcToCOBieLiteUkExchanger(model, facilities);
-                facilities = ifcToCoBieLiteUkExchanger.Convert();
+                    //now do the DPoW files
+                    var fileNameWithoutExtension = Path.GetFileNameWithoutExtension(fileName);
+                    var fileDirectoryName = Path.GetDirectoryName(fileName);
+                    var facilities = new List<Facility>();
+                    var ifcToCoBieLiteUkExchanger = new IfcToCOBieLiteUkExchanger(model, facilities);
+                    facilities = ifcToCoBieLiteUkExchanger.Convert();
+                    
+                    var facilityNumber = 0;
 
-                var facilityNumber = 0;
-
-                foreach (var facility in facilities)
-                {
-                    var dpow = "DPoW";
-                    if (facilities.Count > 1)
-                        dpow += ++facilityNumber;
-                    // ReSharper disable AssignNullToNotNullAttribute
-                    var dPoWFile = Path.Combine(fileDirectoryName, fileNameWithoutExtension + "_" + dpow);
-                    // ReSharper restore AssignNullToNotNullAttribute
-                    dPoWFile = Path.ChangeExtension(dPoWFile, "json");
-                    Console.WriteLine("Creating " + dPoWFile);
-
-                    facility.WriteJson(dPoWFile);
-                    string cobieFile = Path.ChangeExtension(dPoWFile, "Xlsx");
-                    Console.WriteLine("Creating " + cobieFile);
-                    string error;
-                    facility.WriteCobie(cobieFile, out error);
-                    if (!string.IsNullOrWhiteSpace(error))
-                        Console.WriteLine("COBie Errors: " + error);
-
-                    dPoWFile = Path.ChangeExtension(dPoWFile, "xml");
-                    Console.WriteLine("Creating " + dPoWFile);
-                    // facility.WriteXml(dPoWFile);
-                    var req = Facility.ReadJson(@"..\..\Tests\ValidationFiles\Lakeside_Restaurant-stage6-COBie.json");
-                    var validator = new FacilityValidator();
-                    var result = validator.Validate(req, facility);
-                    var verificationResults = Path.ChangeExtension(dPoWFile, "verified.xlsx");
-                    Console.WriteLine("Creating " + verificationResults);
-                    //create report
-                    using (var stream = File.Create(verificationResults))
+                    foreach (var facility in facilities)
                     {
-                        var report = new ExcelValidationReport();
-                        report.Create(result, stream, ExcelValidationReport.SpreadSheetFormat.Xlsx);
-                        stream.Close();
-                    }
+                        var dpow = "DPoW";
+                        if (facilities.Count > 1) 
+                            dpow += ++facilityNumber;
+                        // ReSharper disable AssignNullToNotNullAttribute
+                        var dPoWFile = Path.Combine(fileDirectoryName, fileNameWithoutExtension + "_" + dpow);
+                        // ReSharper restore AssignNullToNotNullAttribute
+                        dPoWFile = Path.ChangeExtension(dPoWFile, "json");
+                        Console.WriteLine("Creating " + dPoWFile);
+
+                        facility.WriteJson(dPoWFile);
+                        string cobieFile = Path.ChangeExtension(dPoWFile, "Xlsx");
+                        Console.WriteLine("Creating " + cobieFile);
+                        string error;
+                        facility.WriteCobie(cobieFile, out error);
+                        if (!string.IsNullOrWhiteSpace(error))
+                            Console.WriteLine("COBie Errors: " + error);
+
+                        dPoWFile = Path.ChangeExtension(dPoWFile, "xml");
+                        Console.WriteLine("Creating " + dPoWFile);
+                       // facility.WriteXml(dPoWFile);
+                        var req = Facility.ReadJson(@"..\..\Tests\ValidationFiles\Lakeside_Restaurant-stage6-COBie.json");
+                        var validator = new FacilityValidator();
+                        var result = validator.Validate(req, facility);
+                        var verificationResults = Path.ChangeExtension(dPoWFile, "verified.xlsx");
+                        Console.WriteLine("Creating " + verificationResults);
+                        //create report
+                        using (var stream = File.Create(verificationResults))
+                        {
+                            var report = new ExcelValidationReport();
+                            report.Create(result, stream, ExcelValidationReport.SpreadSheetFormat.Xlsx);
+                            stream.Close();
+                        }
 
                     facility.ValidateUK2012(Console.Out, true);
-                    string cobieValidatedFile = Path.ChangeExtension(dPoWFile, "Validated.Xlsx");
-                    facility.WriteCobie(cobieValidatedFile, out error);
-                    dPoWFile = Path.ChangeExtension(dPoWFile, "xbim");
-                    var credentials = new XbimEditorCredentials()
-                    {
-                        ApplicationDevelopersName = "XbimTeam",
-                        ApplicationFullName = "Xbim.Exchanger",
-                        EditorsOrganisationName = "Xbim Development Team",
-                        EditorsFamilyName = "Xbim Tester",
-                        ApplicationVersion = "3.0"
-                    };
-                    Console.WriteLine("Creating " + dPoWFile);
+                        string cobieValidatedFile = Path.ChangeExtension(dPoWFile, "Validated.Xlsx");
+                        facility.WriteCobie(cobieValidatedFile, out error);
+                        dPoWFile = Path.ChangeExtension(dPoWFile, "xbim");
+                        var credentials = new XbimEditorCredentials()
+                        {
+                            ApplicationDevelopersName = "XbimTeam",
+                            ApplicationFullName = "Xbim.Exchanger",
+                            EditorsOrganisationName = "Xbim Development Team",
+                            EditorsFamilyName = "Xbim Tester",
+                            ApplicationVersion = "3.0"
+                        };
+                        Console.WriteLine("Creating " + dPoWFile);
                     using (
                         var ifcModel = IfcStore.Create(credentials, IfcSchemaVersion.Ifc2X3,
                             XbimStoreType.EsentDatabase))
-                    {
-                        using (var txn = ifcModel.BeginTransaction("Convert from COBieLiteUK"))
-                        {
-                            var coBieLiteUkToIIfcExchanger = new CoBieLiteUkToIfcExchanger(facility, ifcModel);
-                            coBieLiteUkToIIfcExchanger.Convert();
-                            txn.Commit();
-                            //var err = model.Validate(model.Instances, Console.Out);
+                        {                          
+                            using (var txn = ifcModel.BeginTransaction("Convert from COBieLiteUK"))
+                            {
+                                var coBieLiteUkToIIfcExchanger = new CoBieLiteUkToIfcExchanger(facility, ifcModel);
+                                coBieLiteUkToIIfcExchanger.Convert();
+                                txn.Commit();
+                                //var err = model.Validate(model.Instances, Console.Out);
+                            }
+                            dPoWFile = Path.ChangeExtension(dPoWFile, "ifc");
+                            Console.WriteLine("Creating " + dPoWFile);
+                            ifcModel.SaveAs(dPoWFile, IfcStorageType.Ifc);
+                            ifcModel.Close();
                         }
-                        dPoWFile = Path.ChangeExtension(dPoWFile, "ifc");
-                        Console.WriteLine("Creating " + dPoWFile);
-                        ifcModel.SaveAs(dPoWFile, IfcStorageType.Ifc);
-                        ifcModel.Close();
                     }
+                    model.Close();
                 }
-                model.Close();
-            }
             Console.WriteLine("Press any key to exit");
             Console.Read();
         }
@@ -174,40 +174,40 @@ namespace Xbim.Exchange
 
             if (!File.Exists(fileName)) return null;
 
-            extension = Path.GetExtension(fileName);
+                extension = Path.GetExtension(fileName);
             if (string.Compare(extension, ".xbim", StringComparison.OrdinalIgnoreCase) == 0) //just open xbim
-            {
-
-                try
                 {
+
+                    try
+                    {
                         
-                    Console.WriteLine("Opening " + fileName);
-                    var model = IfcStore.Open(fileName);
-                    //delete any geometry
-                    openModel = model;
-                }
-                catch (Exception e)
-                {
-                    Console.WriteLine("Unable to open model {0}, {1}", fileName, e.Message);
-                    Console.WriteLine("Unable to open model {0}, {1}", fileName, e.Message);
-                }
+                        Console.WriteLine("Opening " + fileName);
+                        var model = IfcStore.Open(fileName);
+                        //delete any geometry
+                        openModel = model;
+                    }
+                    catch (Exception e)
+                    {
+                        Console.WriteLine("Unable to open model {0}, {1}", fileName, e.Message);
+                        Console.WriteLine("Unable to open model {0}, {1}", fileName, e.Message);
+                    }
 
-            }
-            else //we need to create the xBIM file
-            {
+                }
+                else //we need to create the xBIM file
+                {
                    
-                try
-                {
-                    Console.WriteLine("Creating " + Path.GetFileNameWithoutExtension(fileName));
-                    openModel = IfcStore.Open(fileName);
-                }
-                catch (Exception e)
-                {
-                    Console.WriteLine("Unable to open model {0}, {1}", fileName, e.Message);
-                    Console.WriteLine("Unable to open model {0}, {1}", fileName, e.Message);
-                }
+                    try
+                    {
+                        Console.WriteLine("Creating " + Path.GetFileNameWithoutExtension(fileName));
+                        openModel = IfcStore.Open(fileName);
+                    }
+                    catch (Exception e)
+                    {
+                        Console.WriteLine("Unable to open model {0}, {1}", fileName, e.Message);
+                        Console.WriteLine("Unable to open model {0}, {1}", fileName, e.Message);
+                    }
 
-            }
+                }
             return openModel;
         }
     }

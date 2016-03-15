@@ -7,7 +7,6 @@ using Xbim.COBie.Resources;
 using Xbim.Ifc2x3.ProductExtension;
 using Xbim.Ifc2x3.Kernel;
 using Xbim.COBie.Contracts;
-using Xbim.Ifc;
 using Xbim.Ifc2x3.IO;
 
 namespace Xbim.COBie
@@ -272,7 +271,7 @@ namespace Xbim.COBie
                 COBieColumn colExtObj = Columns.Where(c => c.Value.ColumnName == "ExtObject").Select(c => c.Value).FirstOrDefault();
                 COBieColumn colExtId = Columns.Where(c => c.Value.ColumnName == "ExtIdentifier").Select(c => c.Value).FirstOrDefault();
                 
-                List<IfcElement> elements = model.Instances.OfType<IfcElement>().ToList(); //get all IfcElements, 
+                List<IfcElement> elements = model.FederatedInstances.OfType<IfcElement>().ToList(); //get all IfcElements, 
                 
                 List<T> RemainRows = new List<T>();
                 if (colExtObj != null)

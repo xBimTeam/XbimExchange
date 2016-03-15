@@ -76,7 +76,7 @@ namespace Xbim.COBie.Serialisers.XbimSerialiser
                     )
                 {
                     var name = GetMaterialName(row.Name);
-                    ifcMaterial = Model.Instances.Where<IfcMaterial>(m => m.Name.ToString().ToLower() == name.ToLower()).FirstOrDefault();
+                    ifcMaterial = Model.FederatedInstances.Where<IfcMaterial>(m => m.Name.ToString().ToLower() == name.ToLower()).FirstOrDefault();
                     if (ifcMaterial == null)
                         ifcMaterial = Model.Instances.New<IfcMaterial>(m => { m.Name = name; });
                 }
@@ -88,7 +88,7 @@ namespace Xbim.COBie.Serialisers.XbimSerialiser
                         (!double.TryParse(row.NominalWidth, out matThick))
                         )
                         matThick = 0.0;
-                    ifcMaterialLayer = Model.Instances.Where<IfcMaterialLayer>(ml => ml.Material == ifcMaterial && ml.LayerThickness == matThick).FirstOrDefault();
+                    ifcMaterialLayer = Model.FederatedInstances.Where<IfcMaterialLayer>(ml => ml.Material == ifcMaterial && ml.LayerThickness == matThick).FirstOrDefault();
                     if (ifcMaterialLayer == null) 
                         ifcMaterialLayer = Model.Instances.New<IfcMaterialLayer>(ml => { ml.Material = ifcMaterial; ml.LayerThickness = matThick; });
                 } 

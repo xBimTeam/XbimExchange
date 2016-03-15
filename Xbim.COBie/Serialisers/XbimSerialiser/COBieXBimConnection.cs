@@ -33,7 +33,7 @@ namespace Xbim.COBie.Serialisers.XbimSerialiser
                 try
                 {
                     int count = 1;
-                    IfcElements = Model.Instances.OfType<IfcElement>();
+                    IfcElements = Model.FederatedInstances.OfType<IfcElement>();
                     
                     ProgressIndicator.ReportMessage("Starting Connections...");
                     ProgressIndicator.Initialise("Creating Connections", cOBieSheet.RowCount);
