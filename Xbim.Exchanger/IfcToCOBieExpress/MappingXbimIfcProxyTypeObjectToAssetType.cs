@@ -37,8 +37,7 @@ namespace XbimExchanger.IfcToCOBieExpress
             List<IIfcElement> allAssetsofThisType;
             helper.DefiningTypeObjectMap.TryGetValue(proxyIfcTypeObject, out allAssetsofThisType);
 
-            target.Warranty = Exchanger.TargetRepository.Instances.New<CobieWarranty>();
-            target.Warranty.GuarantorParts = target.Warranty.GuarantorLabor;
+            target.WarrantyGuarantorParts = target.WarrantyGuarantorLabor;
             if (ifcTypeObject != null)
             {
                 string manuf = helper.GetCoBieProperty("AssetTypeManufacturer", ifcTypeObject);
@@ -78,18 +77,18 @@ namespace XbimExchanger.IfcToCOBieExpress
                 target.CodePerformance = helper.GetCoBieProperty("AssetTypeCodePerformance", ifcTypeObject);
                 target.Finish = helper.GetCoBieProperty("AssetTypeFinishDescription", ifcTypeObject);
 
-                target.Warranty.Description = helper.GetCoBieProperty("AssetTypeWarrantyDescription", ifcTypeObject);
-                helper.TrySetSimpleValue<double>("AssetTypeWarrantyDurationLabor", ifcTypeObject, v => target.Warranty.DurationLabor = v);
-                helper.TrySetSimpleValue<double>("AssetTypeWarrantyDurationParts", ifcTypeObject, v => target.Warranty.DurationParts = v);
+                target.WarrantyDescription = helper.GetCoBieProperty("AssetTypeWarrantyDescription", ifcTypeObject);
+                helper.TrySetSimpleValue<double>("AssetTypeWarrantyDurationLabor", ifcTypeObject, v => target.WarrantyDurationLabor = v);
+                helper.TrySetSimpleValue<double>("AssetTypeWarrantyDurationParts", ifcTypeObject, v => target.WarrantyDurationParts = v);
 
                 var warrantyDurationUnit = helper.GetCoBieProperty("AssetTypeWarrantyDurationUnit", ifcTypeObject);
-                if (!string.IsNullOrWhiteSpace(warrantyDurationUnit)) target.Warranty.DurationUnit = helper.GetPickValue<CobieDurationUnit>(warrantyDurationUnit);
+                if (!string.IsNullOrWhiteSpace(warrantyDurationUnit)) target.WarrantyDurationUnit = helper.GetPickValue<CobieDurationUnit>(warrantyDurationUnit);
                 var laborContact = helper.GetCoBieProperty("AssetTypeWarrantyGuarantorLabor", ifcTypeObject);
                 if (!string.IsNullOrWhiteSpace(laborContact))
-                    target.Warranty.GuarantorLabor = helper.GetOrCreateContact(laborContact);
+                    target.WarrantyGuarantorLabor = helper.GetOrCreateContact(laborContact);
                 var partsContact = helper.GetCoBieProperty("AssetTypeWarrantyGuarantorParts", ifcTypeObject);
                 if (!string.IsNullOrWhiteSpace(partsContact))
-                    target.Warranty.GuarantorParts = helper.GetOrCreateContact(partsContact);
+                    target.WarrantyGuarantorParts = helper.GetOrCreateContact(partsContact);
                 //Attributes
                 target.Attributes.AddRange(helper.GetAttributes(ifcTypeObject));
 
