@@ -19,10 +19,8 @@ namespace Xbim.COBieLite
             else
             {
                 _model = model;
-                
             }
             return  WriteFacility(facility);
-           
         }
 
         private bool WriteFacility(FacilityType facility)

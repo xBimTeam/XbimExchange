@@ -27,7 +27,9 @@ namespace Xbim.Client
                 string removeStr = "PropertyMaps";
                 TabPage page = new System.Windows.Forms.TabPage(item.Substring(0, item.Length - removeStr.Length ));
                 page.Name = item;
-                page.Controls.Add(new PropertyMapTab(GetPaths(item)));
+                var propTab = new PropertyMapTab(GetPaths(item));
+                page.Controls.Add(propTab);
+                propTab.Dock = DockStyle.Fill;
                 tabControl.TabPages.Add(page);
             }
         }

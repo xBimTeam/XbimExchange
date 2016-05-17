@@ -97,7 +97,6 @@ namespace Xbim.COBieLiteUK.Client
         /// <param name="prjName">Project Name</param>
         public FederatedModel(string author, string organisation, string prjName = null)
         {
-           
             Create(author, organisation, prjName);            
         }
 
@@ -212,7 +211,7 @@ namespace Xbim.COBieLiteUK.Client
         }
 
         /// <summary>
-        /// Dispose method, close host model, and run through referencedModel list in the XBimModel itself and close all referenced models
+        /// Dispose method, close host model, and run through referencedModel list in the IfcStore model itself and close all referenced models
         /// </summary>
         public void Dispose()
         {
