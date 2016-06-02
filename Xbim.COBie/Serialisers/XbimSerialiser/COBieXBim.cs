@@ -427,7 +427,7 @@ namespace Xbim.COBie.Serialisers.XbimSerialiser
             }
             else //if null passed then create a new Guid
             {
-                ifcRoot.GlobalId = new IfcGloballyUniqueId(Guid.NewGuid());
+                ifcRoot.GlobalId = new IfcGloballyUniqueId(Guid.NewGuid().ToString());
             }
         }
 
