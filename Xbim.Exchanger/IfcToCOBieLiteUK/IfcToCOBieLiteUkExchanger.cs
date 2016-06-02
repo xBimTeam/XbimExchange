@@ -2,7 +2,6 @@
 using System.Linq;
 using Xbim.COBieLiteUK;
 using Xbim.FilterHelper;
-using Xbim.Exchanger.IfcToCOBieLiteUK.Classifications;
 using Xbim.Common;
 using Xbim.Ifc4.Interfaces;
 
@@ -10,17 +9,15 @@ namespace XbimExchanger.IfcToCOBieLiteUK
 {
     public class IfcToCOBieLiteUkExchanger : XbimExchanger<IModel, List<Facility>>
     {
-        private readonly bool _classify;
         internal CoBieLiteUkHelper Helper ;
         /// <summary>
         /// Instantiates a new IIfcToCOBieLiteUkExchanger class.
         /// </summary>
-        public IfcToCOBieLiteUkExchanger(IModel source, List<Facility> target, ReportProgressDelegate reportProgress = null, OutPutFilters filter = null, string configFile = null, EntityIdentifierMode extId = EntityIdentifierMode.IfcEntityLabels, SystemExtractionMode sysMode = SystemExtractionMode.System | SystemExtractionMode.Types, bool classify = false) 
+        public IfcToCOBieLiteUkExchanger(IModel source, List<Facility> target, ReportProgressDelegate reportProgress = null, OutPutFilters filter = null, string configFile = null, EntityIdentifierMode extId = EntityIdentifierMode.IfcEntityLabels, SystemExtractionMode sysMode = SystemExtractionMode.System | SystemExtractionMode.Types) 
             : base(source, target)
         {
             ReportProgress.Progress = reportProgress; //set reporter
             Helper = new CoBieLiteUkHelper(source, ReportProgress, filter, configFile, extId, sysMode);
-            this._classify = classify;
         }
 
         /// <summary>
@@ -36,8 +33,6 @@ namespace XbimExchanger.IfcToCOBieLiteUK
             {
                 var facility = new Facility();
                 facility = mapping.AddMapping(ifcBuilding, facility);
-                if(_classify)       
-                    facility.Classify();
                 facilities.Add(facility);
             }
             return facilities;

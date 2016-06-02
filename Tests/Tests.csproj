@@ -65,7 +65,6 @@
     <Compile Include="ConvertCobieLiteUKToValidationReportTests.cs" />
     <Compile Include="FacilityMergeTest.cs" />
     <Compile Include="COBieDocumentTests.cs" />
-    <Compile Include="ClassificationMappingReaderTests.cs" />
     <Compile Include="ValidationMockUp.cs" />
   </ItemGroup>
   <ItemGroup>

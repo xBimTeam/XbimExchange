@@ -222,13 +222,7 @@
     <Compile Include="IfcToCOBieExpress\MappingXbimIfcProxyTypeObjectToAssetType.cs" />
     <Compile Include="IfcToCOBieExpress\XbimAttributedObject.cs" />
     <Compile Include="IfcToCOBieExpress\XbimIfcProxyTypeObject.cs" />
-    <Compile Include="IfcToCOBieLiteUK\Classifications\Classifier.cs" />
-    <Compile Include="IfcToCOBieLiteUK\Classifications\ClassificationMappingReader.cs" />
     <Compile Include="IfcToCOBieLiteUK\COBieLiteUKHelper.cs" />
-    <Compile Include="IfcToCOBieLiteUK\Classifications\Components\ClassificationSystem.cs" />
-    <Compile Include="IfcToCOBieLiteUK\Classifications\Components\InferredClassification.cs" />
-    <Compile Include="IfcToCOBieLiteUK\Classifications\Components\Pointer.cs" />
-    <Compile Include="IfcToCOBieLiteUK\Classifications\Components\RegexPatterns.cs" />
     <Compile Include="IfcToCOBieLiteUK\ContactConverter.cs" />
     <Compile Include="IfcToCOBieLiteUK\EqCompare\IfcRelAssignsToGroupRelatedGroupObjCompare.cs" />
     <Compile Include="IfcToCOBieLiteUK\IfcToCOBieLiteUkExchanger.cs" />
@@ -278,15 +272,6 @@
     <EmbeddedResource Include="IfcToCOBieExpress\COBieAttributes.config">
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <None Include="IfcToCOBieLiteUK\Classifications\DataFiles\Uniclass2015_Ac_v0_1.csv">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="IfcToCOBieLiteUK\Classifications\DataFiles\Uniclass2015_Pr_v1_1.csv">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="IfcToCOBieLiteUK\Classifications\DataFiles\Uniclass2015_Ss_v1_1.csv">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
     <None Include="packages.config">
       <SubType>Designer</SubType>
     </None>
