@@ -1,11 +1,12 @@
-﻿namespace Xbim.Client
+﻿
+namespace Xbim.COBieLiteUK.Client
 {
     partial class RolesList
     {
         /// <summary> 
         /// Required designer variable.
         /// </summary>
-        private System.ComponentModel.IContainer components = null;
+        private global::System.ComponentModel.IContainer components = null;
 
         /// <summary> 
         /// Clean up any resources being used.
@@ -28,32 +29,32 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.chkBoxList = new System.Windows.Forms.CheckedListBox();
+            this.chkBoxList = new global::System.Windows.Forms.CheckedListBox();
             this.SuspendLayout();
             // 
             // chkBoxList
             // 
             this.chkBoxList.CheckOnClick = true;
-            this.chkBoxList.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.chkBoxList.Dock = global::System.Windows.Forms.DockStyle.Fill;
             this.chkBoxList.FormattingEnabled = true;
-            this.chkBoxList.Location = new System.Drawing.Point(0, 0);
+            this.chkBoxList.Location = new global::System.Drawing.Point(0, 0);
             this.chkBoxList.Name = "chkBoxList";
-            this.chkBoxList.Size = new System.Drawing.Size(295, 253);
+            this.chkBoxList.Size = new global::System.Drawing.Size(295, 253);
             this.chkBoxList.TabIndex = 0;
             // 
             // RolesList
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
-            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.AutoScaleDimensions = new global::System.Drawing.SizeF(6F, 13F);
+            this.AutoScaleMode = global::System.Windows.Forms.AutoScaleMode.Font;
             this.Controls.Add(this.chkBoxList);
             this.Name = "RolesList";
-            this.Size = new System.Drawing.Size(295, 253);
+            this.Size = new global::System.Drawing.Size(295, 253);
             this.ResumeLayout(false);
 
         }
 
         #endregion
 
-        private System.Windows.Forms.CheckedListBox chkBoxList;
+        private global::System.Windows.Forms.CheckedListBox chkBoxList;
     }
 }

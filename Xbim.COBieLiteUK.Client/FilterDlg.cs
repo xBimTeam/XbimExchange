@@ -2,9 +2,10 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Windows.Forms;
+using Xbim.Client;
 using Xbim.FilterHelper;
 
-namespace Xbim.Client
+namespace Xbim.COBieLiteUK.Client
 {
     public partial class FilterDlg : Form
     {
@@ -35,7 +36,7 @@ namespace Xbim.Client
                     foreach (var item in FedFilters)
                     {
                         var modelName = Path.GetFileName(item.Key.Name) + " : " + item.Value.AppliedRoles.ToString("F");
-                        TabPage page = new System.Windows.Forms.TabPage(modelName);
+                        TabPage page = new global::System.Windows.Forms.TabPage(modelName);
                         page.Controls.Add(new FilterTab(item.Value, true));
                         tabControl.TabPages.Add(page);
                     }
@@ -43,7 +44,7 @@ namespace Xbim.Client
                 else
                 {
                     Text = "Model Filters";
-                    TabPage page = new System.Windows.Forms.TabPage(Roles.ToString("F"));
+                    TabPage page = new global::System.Windows.Forms.TabPage(Roles.ToString("F"));
                     page.Controls.Add(new FilterTab(RolesFilters, true));
                     tabControl.TabPages.Add(page);
                     
@@ -57,7 +58,7 @@ namespace Xbim.Client
                 Text = "Role Filters";
                 foreach (RoleFilter role in Enum.GetValues(typeof(RoleFilter)))
                 {
-                    TabPage page = new System.Windows.Forms.TabPage(role.ToString());
+                    TabPage page = new global::System.Windows.Forms.TabPage(role.ToString());
                     page.Name = role.ToString();
                     page.Controls.Add(new FilterTab(RolesFilters.GetRoleFilter(role)));
                     tabControl.TabPages.Add(page);

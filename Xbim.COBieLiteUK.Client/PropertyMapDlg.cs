@@ -4,7 +4,7 @@ using System.IO;
 using System.Windows.Forms;
 using Xbim.FilterHelper;
 
-namespace Xbim.Client
+namespace Xbim.COBieLiteUK.Client
 {
     public partial class PropertyMapDlg : Form
     {
@@ -25,7 +25,7 @@ namespace Xbim.Client
             foreach (string item in PropertyMaps.SectionKeys)
             {
                 string removeStr = "PropertyMaps";
-                TabPage page = new System.Windows.Forms.TabPage(item.Substring(0, item.Length - removeStr.Length ));
+                TabPage page = new global::System.Windows.Forms.TabPage(item.Substring(0, item.Length - removeStr.Length ));
                 page.Name = item;
                 var propTab = new PropertyMapTab(GetPaths(item));
                 page.Controls.Add(propTab);

@@ -7,15 +7,10 @@ using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 using Xbim.Common.Exceptions;
-using Xbim.COBieLiteUK;
-using Xbim.COBieLiteUK.Client;
 using Xbim.FilterHelper;
 using XbimExchanger.IfcToCOBieLiteUK;
-using Assembly = System.Reflection.Assembly;
 
-
-// ReSharper disable once CheckNamespace
-namespace Xbim.Client
+namespace Xbim.COBieLiteUK.Client
 {
     // ReSharper disable once InconsistentNaming
     public partial class COBieLiteGeneratorDlg : Form
@@ -76,7 +71,7 @@ namespace Xbim.Client
         /// </summary>
         public void CreateDefaultAppConfig(FileInfo configFile)
         {
-            var asss = Assembly.GetAssembly(typeof (IfcToCOBieLiteUkExchanger));
+            var asss = global::System.Reflection.Assembly.GetAssembly(typeof (IfcToCOBieLiteUkExchanger));
 
             using (var input = asss.GetManifestResourceStream("XbimExchanger.IfcToCOBieLiteUK.COBieAttributes.config"))
             using (var output = configFile.Create())

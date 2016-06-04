@@ -6,12 +6,11 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
-using Xbim.COBieLiteUK.Client;
 using Xbim.FilterHelper;
 using Xbim.Ifc;
 using Xbim.IO;
 
-namespace Xbim.Client
+namespace Xbim.COBieLiteUK.Client
 {
     public partial class Federate : Form
     {
@@ -363,7 +362,7 @@ namespace Xbim.Client
         private void CreateXBimFile(object sender, DoWorkEventArgs e)
         {
             string filename = e.Argument as string;
-            var assembly = System.Reflection.Assembly.GetExecutingAssembly();
+            var assembly = global::System.Reflection.Assembly.GetExecutingAssembly();
             var xbimFile = Path.ChangeExtension(filename, "xbim");
             _worker.ReportProgress(0, string.Format("Creating {0}", Path.GetFileName(xbimFile)));
              var fvi = FileVersionInfo.GetVersionInfo(assembly.Location);

@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Windows.Forms;
 
-namespace Xbim.Client
+namespace Xbim.COBieLiteUK.Client
 {
     static class Program
     {

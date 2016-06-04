@@ -5,7 +5,7 @@ using System.Linq;
 using System.Windows.Forms;
 using Xbim.FilterHelper;
 
-namespace Xbim.Client
+namespace Xbim.COBieLiteUK.Client
 {
     public partial class PropertyMapTab : UserControl
     {

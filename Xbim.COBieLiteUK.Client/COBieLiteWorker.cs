@@ -4,18 +4,14 @@ using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
-using Xbim.COBieLiteUK;
-using Xbim.Common.Exceptions;
-using Xbim.Common.Step21;
-using Xbim.COBieLiteUK.Client;
+using Xbim.Client;
 using Xbim.FilterHelper;
 using Xbim.Ifc;
 using Xbim.IO;
 using XbimExchanger.COBieLiteUkToIfc;
 using XbimExchanger.IfcToCOBieLiteUK;
 
-// ReSharper disable once CheckNamespace
-namespace Xbim.Client
+namespace Xbim.COBieLiteUK.Client
 {
     // ReSharper disable once InconsistentNaming
     public class COBieLiteWorker : ICOBieLiteWorker
@@ -139,7 +135,7 @@ namespace Xbim.Client
             var xbimFile = Path.ChangeExtension(ifcName, "xbim");
             Worker.ReportProgress(0, string.Format("Creating file: {0}", xbimFile));
             facility.ReportProgress.Progress = Worker.ReportProgress;var creds = new XbimEditorCredentials();
-            var assembly = System.Reflection.Assembly.GetExecutingAssembly();
+            var assembly = global::System.Reflection.Assembly.GetExecutingAssembly();
             var fvi = FileVersionInfo.GetVersionInfo(assembly.Location); 
             creds.EditorsOrganisationName = fvi.CompanyName;
             creds.EditorsFamilyName = fvi.CompanyName;
@@ -297,7 +293,7 @@ namespace Xbim.Client
         private List<Facility> GenerateFileFacility(Params parameters, string fileExt)
         {
             var facilities = new List<Facility>();
-            var assembly = System.Reflection.Assembly.GetExecutingAssembly();
+            var assembly = global::System.Reflection.Assembly.GetExecutingAssembly();
             var fvi = FileVersionInfo.GetVersionInfo(assembly.Location);
             
             using (var model = IfcStore.Open(parameters.ModelFile))
