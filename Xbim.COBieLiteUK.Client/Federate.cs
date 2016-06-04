@@ -118,8 +118,8 @@ namespace Xbim.Client
                 {
                     SaveFileDialog dlg = new SaveFileDialog();
 
-                    dlg.Filter = "Xbim Federated Files|*.xbimf";
-                    dlg.Title = "Save Federated file";
+                    dlg.Filter = "Xbim files|*.xbim";
+                    dlg.Title = "Save federated file";
 
                     dlg.CheckFileExists = false;
                     dlg.CheckPathExists = true;

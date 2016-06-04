@@ -13,6 +13,63 @@ using IfcRoleEnum = Xbim.Ifc2x3.ActorResource.IfcRoleEnum;
 
 namespace Xbim.COBieLiteUK.Client
 {
+    public static class FederatedModelExtensions
+    {
+        /// <summary>
+        /// Get the file to roles information
+        /// </summary>
+        /// <returns>Dictionary or FileInfo to RoleFilter</returns>
+        public static Dictionary<IReferencedModel, RoleFilter> GetFileRoles(this IfcStore model)
+        {
+            var modelRoles = new Dictionary<IReferencedModel, RoleFilter>();
+            foreach (var refModel in model.ReferencedModels)
+            {
+                var docRole = MapActorRole(refModel.Role);
+                try
+                {
+                    var file = new FileInfo(refModel.Name);
+                    if (file.Exists)
+                    {
+                        // if was bare assignment before, I can't see how it might ever have worked.
+                        if (modelRoles.ContainsKey(refModel))
+                            modelRoles[refModel] = docRole;
+                        else
+                            modelRoles.Add(refModel, docRole);
+                    }
+                    else
+                    {
+                        MessageBox.Show("File path does not exist: {0}", refModel.Name);
+                    }
+                }
+                catch (ArgumentException)
+                {
+                    MessageBox.Show("File path is incorrect: {0}", refModel.Name);
+                }
+            }
+            return modelRoles;
+        }
+
+        private static RoleFilter MapActorRole(string roleName)
+        {
+            IfcRoleEnum role;
+            if (!Enum.TryParse(roleName, true, out role)) 
+                return RoleFilter.Unknown;
+            // ReSharper disable once SwitchStatementMissingSomeCases
+            switch (role)
+            {
+                case IfcRoleEnum.ARCHITECT:
+                    return RoleFilter.Architectural;
+                case IfcRoleEnum.MECHANICALENGINEER:
+                    return RoleFilter.Mechanical;
+                case IfcRoleEnum.ELECTRICALENGINEER:
+                    return RoleFilter.Electrical;
+                default:
+                    return RoleFilter.Unknown;
+            }
+        }
+    }
+
+
     public class FederatedModel : IDisposable
     {
         #region Properties
@@ -75,7 +132,7 @@ namespace Xbim.COBieLiteUK.Client
         {
             get
             {
-                return _fedModel != null ? GetFileRoles() : new Dictionary<IReferencedModel, RoleFilter>();
+                return _fedModel != null ? _fedModel.GetFileRoles() : new Dictionary<IReferencedModel, RoleFilter>();
             }
         } 
         #endregion
@@ -181,36 +238,6 @@ namespace Xbim.COBieLiteUK.Client
         }
 
         /// <summary>
-        /// Get the file to roles information
-        /// </summary>
-        /// <returns>Dictionary or FileInfo to RoleFilter</returns>
-        private Dictionary<IReferencedModel, RoleFilter> GetFileRoles()
-        {
-            Dictionary<IReferencedModel, RoleFilter> modelRoles = new Dictionary<IReferencedModel, RoleFilter>();
-            foreach (var refModel in _fedModel.ReferencedModels)
-            {
-                var docRole = MapActorRole(refModel.Role);
-                try
-                {
-                    FileInfo file = new FileInfo(refModel.Name);
-                    if (file.Exists)
-                    {
-                        modelRoles[refModel] = docRole;
-                    }
-                    else
-                    {
-                        MessageBox.Show("File path does not exist: {0}", refModel.Name);
-                    }
-                }
-                catch (ArgumentException)
-                {
-                    MessageBox.Show("File path is incorrect: {0}", refModel.Name);
-                }
-            }
-            return modelRoles;
-        }
-
-        /// <summary>
         /// Dispose method, close host model, and run through referencedModel list in the IfcStore model itself and close all referenced models
         /// </summary>
         public void Dispose()
@@ -243,32 +270,54 @@ namespace Xbim.COBieLiteUK.Client
         private List<IfcActorRole> GetActorRoles(RoleFilter role)
         {
             if (RoleMap == null) RoleMap = new Dictionary<RoleFilter, IfcActorRole>();
-            
-            List<IfcActorRole> actorRoles = new List<IfcActorRole>();
-            if (role.HasFlag(RoleFilter.Architectural))
+            var actorRoles = new List<IfcActorRole>();
+            using (var tx = Model.BeginTransaction("RoleSettings"))
             {
-                actorRoles.Add(RoleMap.ContainsKey(RoleFilter.Architectural) ? RoleMap[RoleFilter.Architectural] : MapRole(RoleFilter.Architectural, IfcRoleEnum.ARCHITECT));
+                if (role.HasFlag(RoleFilter.Architectural))
+                {
+                    actorRoles.Add(
+                        RoleMap.ContainsKey(RoleFilter.Architectural)
+                        ? RoleMap[RoleFilter.Architectural]
+                        : MapRole(RoleFilter.Architectural, IfcRoleEnum.ARCHITECT));
+                }
+                if (role.HasFlag(RoleFilter.Mechanical))
+                {
+                    actorRoles.Add(
+                        RoleMap.ContainsKey(RoleFilter.Mechanical)
+                        ? RoleMap[RoleFilter.Mechanical]
+                        : MapRole(RoleFilter.Mechanical, IfcRoleEnum.MECHANICALENGINEER));
+                }
+                if (role.HasFlag(RoleFilter.Electrical))
+                {
+                    actorRoles.Add(
+                        RoleMap.ContainsKey(RoleFilter.Electrical)
+                        ? RoleMap[RoleFilter.Electrical]
+                        : MapRole(RoleFilter.Electrical, IfcRoleEnum.ELECTRICALENGINEER));
+                }
+                if (role.HasFlag(RoleFilter.Plumbing))
+                {
+                    actorRoles.Add(
+                        RoleMap.ContainsKey(RoleFilter.Plumbing)
+                        ? RoleMap[RoleFilter.Plumbing]
+                        : MapRole(RoleFilter.Plumbing, IfcRoleEnum.USERDEFINED));
+                }
+                if (role.HasFlag(RoleFilter.FireProtection))
+                {
+                    actorRoles.Add(
+                        RoleMap.ContainsKey(RoleFilter.FireProtection)
+                        ? RoleMap[RoleFilter.FireProtection]
+                        : MapRole(RoleFilter.FireProtection, IfcRoleEnum.USERDEFINED));
+                }
+                if (role.HasFlag(RoleFilter.Unknown))
+                {
+                    actorRoles.Add(
+                        RoleMap.ContainsKey(RoleFilter.Unknown)
+                        ? RoleMap[RoleFilter.Unknown]
+                        : MapRole(RoleFilter.Unknown, IfcRoleEnum.USERDEFINED));
+                }    
+                tx.Commit();
             }
-            if (role.HasFlag(RoleFilter.Mechanical))
-            {
-                actorRoles.Add(RoleMap.ContainsKey(RoleFilter.Mechanical) ? RoleMap[RoleFilter.Mechanical] : MapRole(RoleFilter.Mechanical, IfcRoleEnum.MECHANICALENGINEER));
-            }
-            if (role.HasFlag(RoleFilter.Electrical))
-            {
-                actorRoles.Add(RoleMap.ContainsKey(RoleFilter.Electrical) ? RoleMap[RoleFilter.Electrical] : MapRole(RoleFilter.Electrical, IfcRoleEnum.ELECTRICALENGINEER));
-            }
-            if (role.HasFlag(RoleFilter.Plumbing))
-            {
-                actorRoles.Add(RoleMap.ContainsKey(RoleFilter.Plumbing) ? RoleMap[RoleFilter.Plumbing] : MapRole(RoleFilter.Plumbing, IfcRoleEnum.USERDEFINED));
-            }
-            if (role.HasFlag(RoleFilter.FireProtection))
-            {
-                actorRoles.Add(RoleMap.ContainsKey(RoleFilter.FireProtection) ? RoleMap[RoleFilter.FireProtection] : MapRole(RoleFilter.FireProtection, IfcRoleEnum.USERDEFINED));
-            }
-            if (role.HasFlag(RoleFilter.Unknown))
-            {
-                actorRoles.Add(RoleMap.ContainsKey(RoleFilter.Unknown) ? RoleMap[RoleFilter.Unknown] : MapRole(RoleFilter.Unknown, IfcRoleEnum.USERDEFINED));
-            }
+
             return actorRoles;
         }
 
@@ -301,27 +350,7 @@ namespace Xbim.COBieLiteUK.Client
                 throw new InvalidOperationException("MapRole: No transaction currently in model");
             }
         }
-
-       
-
-
-        private static RoleFilter MapActorRole(string roleName)
-        {
-            IfcRoleEnum role;
-            if (Enum.TryParse(roleName, true, out role))
-            {
-                if (role == IfcRoleEnum.ARCHITECT)
-                    return RoleFilter.Architectural;
-                if (role == IfcRoleEnum.MECHANICALENGINEER)
-                    return RoleFilter.Mechanical;
-                if (role == IfcRoleEnum.ELECTRICALENGINEER)
-                    return RoleFilter.Electrical;
-            }
-            return RoleFilter.Unknown;
-
-        }
-
-       
+   
         #endregion
     }
 }
