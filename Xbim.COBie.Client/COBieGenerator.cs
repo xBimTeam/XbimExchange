@@ -14,8 +14,6 @@ using Xbim.COBie.Serialisers;
 using Xbim.COBie.Rows;
 using Xbim.COBie.Federate;
 using Xbim.Ifc;
-using Xbim.Ifc2x3.IO;
-using Xbim.IO.Esent;
 
 
 namespace Xbim.COBie.Client

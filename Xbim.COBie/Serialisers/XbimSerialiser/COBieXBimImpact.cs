@@ -4,7 +4,6 @@ using System.Linq;
 using Xbim.COBie.Rows;
 using Xbim.Ifc2x3.Kernel;
 using Xbim.Ifc2x3.MeasureResource;
-using Xbim.Ifc4.Interfaces;
 using Xbim.IO.Esent;
 
 

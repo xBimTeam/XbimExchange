@@ -3,7 +3,6 @@ using System.Linq;
 using Xbim.COBie.Rows;
 using Xbim.Ifc2x3.ConstructionMgmtDomain;
 using Xbim.Ifc2x3.Kernel;
-using Xbim.Ifc2x3.PropertyResource;
 using Xbim.COBie.Serialisers.XbimSerialiser;
 using Xbim.Ifc2x3.Interfaces;
 

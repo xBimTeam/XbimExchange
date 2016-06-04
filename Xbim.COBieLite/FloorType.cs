@@ -3,7 +3,6 @@ using System.Linq;
 using System.Xml.Serialization;
 using Newtonsoft.Json;
 using Xbim.COBieLite.CollectionTypes;
-using Xbim.Ifc.Extensions;
 using Xbim.Ifc4.Interfaces;
 
 namespace Xbim.COBieLite

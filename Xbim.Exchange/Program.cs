@@ -6,7 +6,6 @@ using System.Xml;
 using Xbim.CobieExpress;
 using Xbim.CobieLiteUK.Validation;
 using Xbim.CobieLiteUK.Validation.Reporting;
-using Xbim.Common.Geometry;
 using Xbim.Common.Step21;
 using Xbim.COBieLiteUK;
 using Xbim.Ifc;

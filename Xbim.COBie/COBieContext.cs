@@ -1,12 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using Xbim.Ifc2x3.ExternalReferenceResource;
 using Xbim.COBie.Data;
 using Xbim.Ifc2x3.ActorResource;
 using Xbim.Ifc2x3.IO;
 using Xbim.Common;
 using Xbim.Ifc;
-using Xbim.Ifc4.ElectricalDomain;
 
 namespace Xbim.COBie
 {

@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Windows.Forms;
-using Xbim.Client;
 using Xbim.FilterHelper;
 
 namespace Xbim.COBieLiteUK.Client

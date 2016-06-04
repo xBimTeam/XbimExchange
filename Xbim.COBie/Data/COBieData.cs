@@ -14,7 +14,6 @@ using Xbim.COBie.Resources;
 using Xbim.Ifc;
 using Xbim.Ifc2x3.ApprovalResource;
 using Xbim.Ifc2x3.ConstructionMgmtDomain;
-using Xbim.Ifc2x3.IO;
 using Xbim.Ifc2x3.MaterialResource;
 using Xbim.Ifc4.Interfaces;
 using IfcUnitEnum = Xbim.Ifc2x3.MeasureResource.IfcUnitEnum;

@@ -4,7 +4,6 @@ using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
-using Xbim.Client;
 using Xbim.FilterHelper;
 using Xbim.Ifc;
 using Xbim.IO;

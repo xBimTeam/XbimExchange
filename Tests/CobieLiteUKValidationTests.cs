@@ -1,12 +1,10 @@
 ﻿using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Xbim.CobieLiteUK.Validation;
 using Xbim.CobieLiteUK.Validation.Reporting;
 using Xbim.COBieLiteUK;
 using Xbim.Ifc;
-using Xbim.IO;
 using XbimExchanger.IfcToCOBieLiteUK;
 
 namespace Tests

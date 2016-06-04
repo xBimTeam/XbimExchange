@@ -2,10 +2,8 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
-using Xbim.Common;
 using Xbim.COBie.Contracts;
 using Xbim.Ifc;
-using Xbim.Ifc2x3.IO;
 
 namespace Xbim.COBie
 {

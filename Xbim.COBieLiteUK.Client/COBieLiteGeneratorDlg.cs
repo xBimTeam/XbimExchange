@@ -193,7 +193,6 @@ namespace Xbim.COBieLiteUK.Client
         {
             if (chkBoxFlipFilter.Checked)
             {
-
                 // ReSharper disable LocalizableElement
                 var result = MessageBox.Show(
                     "Flip Filter is ticked, this will show only excluded items, Do you want to continue",
@@ -204,8 +203,6 @@ namespace Xbim.COBieLiteUK.Client
                 }
             }
             btnGenerate.Enabled = false;
-
-
 
             if (_cobieWorker == null)
             {

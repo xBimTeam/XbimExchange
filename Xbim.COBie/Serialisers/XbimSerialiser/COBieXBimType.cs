@@ -3,12 +3,9 @@ using System.Linq;
 using Xbim.COBie.Rows;
 using Xbim.Ifc2x3.Kernel;
 using Xbim.Ifc2x3.MeasureResource;
-using Xbim.Ifc2x3.PropertyResource;
-using System.Reflection;
 using Xbim.Common;
 using Xbim.Common.Metadata;
 using Xbim.Ifc2x3.MaterialResource;
-using Xbim.IO.Esent;
 
 namespace Xbim.COBie.Serialisers.XbimSerialiser
 {

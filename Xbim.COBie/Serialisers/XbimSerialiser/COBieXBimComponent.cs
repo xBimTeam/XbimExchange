@@ -3,13 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using Xbim.COBie.Rows;
 using Xbim.Ifc2x3.Kernel;
-using System.Reflection;
 using Xbim.Common;
 using Xbim.Common.Metadata;
 using Xbim.Ifc2x3.ProductExtension;
 using Xbim.Ifc2x3.MeasureResource;
 using Xbim.Ifc2x3.Extensions;
-using Xbim.IO.Esent;
 
 namespace Xbim.COBie.Serialisers.XbimSerialiser
 {
