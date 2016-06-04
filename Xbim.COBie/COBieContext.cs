@@ -5,6 +5,7 @@ using Xbim.COBie.Data;
 using Xbim.Ifc2x3.ActorResource;
 using Xbim.Ifc2x3.IO;
 using Xbim.Common;
+using Xbim.Ifc;
 using Xbim.Ifc4.ElectricalDomain;
 
 namespace Xbim.COBie
@@ -26,7 +27,7 @@ namespace Xbim.COBie
         /// <summary>
         /// Map models to roles for federated models
         /// </summary>
-        public Dictionary<XbimModel, COBieMergeRoles> MapMergeRoles { get; private set; } 
+        public Dictionary<IModel, COBieMergeRoles> MapMergeRoles { get; private set; } 
  
         private  GlobalUnits _workBookUnits;
         /// <summary>
@@ -83,7 +84,7 @@ namespace Xbim.COBie
 
             //set the row index to report error rows on
             ErrorRowStartIndex = ErrorRowIndexBase.RowTwo; //default for excel sheet
-            MapMergeRoles = new Dictionary<XbimModel, COBieMergeRoles>();
+            MapMergeRoles = new Dictionary<IModel, COBieMergeRoles>();
 
         }
 
@@ -97,10 +98,10 @@ namespace Xbim.COBie
         /// <summary>
         /// Get merge roles for federated models, used to work out Model Merge Precedence Rules
         /// </summary>
-        private Dictionary<XbimModel, COBieMergeRoles> LinkRoleToModel()
+        private Dictionary<IModel, COBieMergeRoles> LinkRoleToModel()
         {
             var mapMergeRoles = MapRolesForMerge();//assign merge role to a IfcRoleEnum value
-            var mapModelToMergeRoles = new Dictionary<XbimModel, COBieMergeRoles>();
+            var mapModelToMergeRoles = new Dictionary<IModel, COBieMergeRoles>();
             
             //mapModelToMergeRoles.Add(Model, COBieMergeRoles.Unknown); //assume that it is just the holder model(xBIMf) (as xbim is creating holding file .xbimf) for and all the models are in the Model.RefencedModels property
             
@@ -200,9 +201,9 @@ namespace Xbim.COBie
         /// Gets the model defined in this context to generate COBie data from
         /// </summary>
         
-        private XbimModel _model;
+        private IfcStore _model;
 
-        public XbimModel Model
+        public IfcStore Model
         {
             get { return _model; }
             set { 

@@ -227,89 +227,108 @@ namespace Xbim.COBie.Data
         /// <returns>Space name</returns>
         internal string GetSpaceHoldingElement(IfcElement el)
         {
-            //see if we have space information, if not fill information list
-            if (SpaceBoundingBoxInfo.Count == 0)
-            {
-                if (ifcSpaces == null)
-                {
-                    ifcSpaces = Model.FederatedInstances.OfType<IfcSpace>().ToList();
-                }
-
-                //get Geometry for spaces 
-             SpaceBoundingBoxInfo = Model.GetGeometryData(XbimGeometryType.BoundingBox)
-                .Where(bb => bb.IfcTypeId == Model.Metadata.ExpressTypeId(typeof(IfcSpace)))
-                .Select(bb => new SpaceInfo
-                {
-                    Rectangle = XbimRect3D.FromArray(bb.ShapeData),
-                    Matrix = XbimMatrix3D.FromArray(bb.DataArray2),
-                    Name = ifcSpaces.Where(sp => (sp.EntityLabel == bb.IfcProductLabel)).Select(sp => sp.Name.ToString()).FirstOrDefault()
-                }).ToList();
-            }
-
-            
             string spaceName = string.Empty;
-            //only if we have any space information
-            if (SpaceBoundingBoxInfo.Any())
+            int ifcSpacesId = Model.Metadata.ExpressTypeId(typeof(IfcSpace));
+            
+            using (var geomStore = Model.GeometryStore)
             {
-                //find the IfcElement Bounding Box and To WCS Matrix
-                XbimGeometryData elGeoData = Model.GetGeometryData(el, XbimGeometryType.BoundingBox).FirstOrDefault();
-                //check to see if we have any geometry within the file
-                if (elGeoData == null)
-                    return string.Empty; //No geometry
-
-                XbimRect3D elBoundBox = XbimRect3D.FromArray(elGeoData.ShapeData);
-                XbimMatrix3D elWorldMatrix = XbimMatrix3D.FromArray(elGeoData.DataArray2);
-                //Get object space top and bottom points of the bounding box
-                List<XbimPoint3D> elBoxPts = new List<XbimPoint3D>();
-                elBoxPts.Add(new XbimPoint3D(elBoundBox.X, elBoundBox.Y, elBoundBox.Z));
-                elBoxPts.Add(new XbimPoint3D(elBoundBox.X + elBoundBox.SizeX, elBoundBox.Y + elBoundBox.SizeY, elBoundBox.Z + elBoundBox.SizeZ));
-                elBoxPts.Add(elBoundBox.Centroid());
-
-                //convert points of the bounding box to WCS
-                IEnumerable<XbimPoint3D> elBoxPtsWCS = elBoxPts.Select(pt => elWorldMatrix.Transform(pt));
-                //see if we hit any spaces
-                spaceName = GetSpaceFromPoints(elBoxPtsWCS);
-                //if we failed to get space on min points then use the remaining corner points
-                if (string.IsNullOrEmpty(spaceName))
+                using (var geomReader = geomStore.BeginRead())
                 {
-                    XbimPoint3D elMinPt = elBoxPts[0];
-                    XbimPoint3D elMaxPt = elBoxPts[1];
-                    //elBoxPts.Clear(); //already tested points in list so clear them
+                    // see if we have space information, if not fill information list
+                    // if SpaceBoundingBoxInfo is not populated then prepare it
+                    if (!SpaceBoundingBoxInfo.Any())
+                    {
+                        EnsureSpaceList();
+                        SpaceBoundingBoxInfo =
+                            geomReader.ShapeInstances.Where(x => x.IfcTypeId == ifcSpacesId).Select(bb =>
+                                new SpaceInfo()
+                                {
+                                    Rectangle = bb.BoundingBox,
+                                    Matrix = bb.Transformation,
+                                    Name =
+                                        ifcSpaces.Where(sp => (sp.EntityLabel == bb.IfcProductLabel))
+                                            .Select(sp => sp.Name.ToString())
+                                            .FirstOrDefault()
+                                }
+                                ).ToList();
+                    }
 
-                    //Extra testing on remaining corner points on the top and bottom plains
-                    elBoxPts.Add(new XbimPoint3D(elMaxPt.X, elMaxPt.Y, elMinPt.Z));
-                    elBoxPts.Add(new XbimPoint3D(elMaxPt.X, elMinPt.Y, elMinPt.Z));
-                    elBoxPts.Add(new XbimPoint3D(elMinPt.X, elMaxPt.Y, elMinPt.Z));
-                    elBoxPts.Add(new XbimPoint3D((elMaxPt.X - elMinPt.X) / 2.0, (elMaxPt.Y - elMinPt.Y) / 2.0, elMinPt.Z)); //centre face point
+                    //only if we have any space information
+                    if (SpaceBoundingBoxInfo.Any())
+                    {
+                        var t1 = geomReader.ShapeInstancesOfEntity(el).FirstOrDefault();
+                        if (t1 == null)
+                            return string.Empty;
+                        var t2 = t1.BoundingBox;
 
-                    elBoxPts.Add(new XbimPoint3D(elMinPt.X, elMinPt.Y, elMaxPt.Z));
-                    elBoxPts.Add(new XbimPoint3D(elMaxPt.X, elMinPt.Y, elMaxPt.Z));
-                    elBoxPts.Add(new XbimPoint3D(elMinPt.X, elMaxPt.Y, elMaxPt.Z));
-                    elBoxPts.Add(new XbimPoint3D((elMaxPt.X - elMinPt.X) / 2.0, (elMaxPt.Y - elMinPt.Y) / 2.0, elMaxPt.Z)); //centre face point
-                    //convert points of the bounding box to WCS
-                    elBoxPtsWCS = elBoxPts.Select(pt => elWorldMatrix.Transform(pt));
-                    //see if we hit any spaces
-                    spaceName = GetSpaceFromPoints(elBoxPtsWCS);
-                }
-                if (string.IsNullOrEmpty(spaceName))
-                {
-                    //Get tolerance size from element, 1% of smallest side size
-                    double tol = elBoundBox.SizeX * 0.001;
-                    if ((elBoundBox.SizeY * 0.001) < tol)
-                        tol = elBoundBox.SizeY * 0.001;
-                    if ((elBoundBox.SizeZ * 0.001) < tol)
-                        tol = elBoundBox.SizeZ * 0.001;
-                    if ((tol == 0.0) && //if tol 0.0
-                        ((Context.WorkBookUnits.LengthUnit.Equals("meters", StringComparison.OrdinalIgnoreCase)) ||
-                         (Context.WorkBookUnits.LengthUnit.Equals("metres", StringComparison.OrdinalIgnoreCase))
-                        )
-                       )
-                        tol = 0.001;
 
-                    spaceName = GetSpaceFromClosestPoints(elBoxPtsWCS, tol);
+
+                        var elBoundBox = t1.BoundingBox;
+                        var elWorldMatrix = t1.Transformation;
+                        //Get object space top and bottom points of the bounding box
+                        var elBoxPts = new List<XbimPoint3D>
+                        {
+                            new XbimPoint3D(elBoundBox.X, elBoundBox.Y, elBoundBox.Z),
+                            new XbimPoint3D(elBoundBox.X + elBoundBox.SizeX, elBoundBox.Y + elBoundBox.SizeY,
+                                elBoundBox.Z + elBoundBox.SizeZ),
+                            elBoundBox.Centroid()
+                        };
+
+                        //convert points of the bounding box to WCS
+                        IEnumerable<XbimPoint3D> elBoxPtsWCS = elBoxPts.Select(pt => elWorldMatrix.Transform(pt));
+                        //see if we hit any spaces
+                        spaceName = GetSpaceFromPoints(elBoxPtsWCS);
+                        //if we failed to get space on min points then use the remaining corner points
+                        if (string.IsNullOrEmpty(spaceName))
+                        {
+                            XbimPoint3D elMinPt = elBoxPts[0];
+                            XbimPoint3D elMaxPt = elBoxPts[1];
+                            //elBoxPts.Clear(); //already tested points in list so clear them
+
+                            //Extra testing on remaining corner points on the top and bottom plains
+                            elBoxPts.Add(new XbimPoint3D(elMaxPt.X, elMaxPt.Y, elMinPt.Z));
+                            elBoxPts.Add(new XbimPoint3D(elMaxPt.X, elMinPt.Y, elMinPt.Z));
+                            elBoxPts.Add(new XbimPoint3D(elMinPt.X, elMaxPt.Y, elMinPt.Z));
+                            elBoxPts.Add(new XbimPoint3D((elMaxPt.X - elMinPt.X) / 2.0, (elMaxPt.Y - elMinPt.Y) / 2.0, elMinPt.Z)); //centre face point
+
+                            elBoxPts.Add(new XbimPoint3D(elMinPt.X, elMinPt.Y, elMaxPt.Z));
+                            elBoxPts.Add(new XbimPoint3D(elMaxPt.X, elMinPt.Y, elMaxPt.Z));
+                            elBoxPts.Add(new XbimPoint3D(elMinPt.X, elMaxPt.Y, elMaxPt.Z));
+                            elBoxPts.Add(new XbimPoint3D((elMaxPt.X - elMinPt.X) / 2.0, (elMaxPt.Y - elMinPt.Y) / 2.0, elMaxPt.Z)); //centre face point
+                            //convert points of the bounding box to WCS
+                            elBoxPtsWCS = elBoxPts.Select(pt => elWorldMatrix.Transform(pt));
+                            //see if we hit any spaces
+                            spaceName = GetSpaceFromPoints(elBoxPtsWCS);
+                        }
+                        if (string.IsNullOrEmpty(spaceName))
+                        {
+                            //Get tolerance size from element, 1% of smallest side size
+                            double tol = elBoundBox.SizeX * 0.001;
+                            if ((elBoundBox.SizeY * 0.001) < tol)
+                                tol = elBoundBox.SizeY * 0.001;
+                            if ((elBoundBox.SizeZ * 0.001) < tol)
+                                tol = elBoundBox.SizeZ * 0.001;
+                            if ((tol == 0.0) && //if tol 0.0
+                                ((Context.WorkBookUnits.LengthUnit.Equals("meters", StringComparison.OrdinalIgnoreCase)) ||
+                                 (Context.WorkBookUnits.LengthUnit.Equals("metres", StringComparison.OrdinalIgnoreCase))
+                                )
+                               )
+                                tol = 0.001;
+
+                            spaceName = GetSpaceFromClosestPoints(elBoxPtsWCS, tol);
+                        }
+                    }
                 }
             }
             return spaceName;
+        }
+
+        private void EnsureSpaceList()
+        {
+            if (ifcSpaces == null)
+            {
+                ifcSpaces = Model.FederatedInstances.OfType<IfcSpace>().ToList();
+            }
         }
 
         /// <summary>

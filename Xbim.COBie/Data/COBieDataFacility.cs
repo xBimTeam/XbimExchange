@@ -33,21 +33,24 @@ namespace Xbim.COBie.Data
             ProgressIndicator.ReportMessage("Starting Facilities...");
 
             //Create new sheet
-            COBieSheet<COBieFacilityRow> facilities = new COBieSheet<COBieFacilityRow>(Constants.WORKSHEET_FACILITY);
+            var facilities = new COBieSheet<COBieFacilityRow>(Constants.WORKSHEET_FACILITY);
 
-            IfcProject ifcProject = Model.IfcProject as IfcProject;
-            IfcSite ifcSite = Model.FederatedInstances.OfType<IfcSite>().FirstOrDefault();
-            IfcBuilding ifcBuilding = Model.FederatedInstances.OfType<IfcBuilding>().FirstOrDefault();
+            var ifcProject = Model.FederatedInstances.OfType<IfcProject>().FirstOrDefault();
+            var ifcSite = Model.FederatedInstances.OfType<IfcSite>().FirstOrDefault();
+            var ifcBuilding = Model.FederatedInstances.OfType<IfcBuilding>().FirstOrDefault();
 
             //get Element Quantity holding area values as used for AreaMeasurement below
-            IfcElementQuantity ifcElementQuantityAreas = Model.FederatedInstances.OfType<IfcElementQuantity>().Where(eq => eq.Quantities.OfType<IfcQuantityArea>().Count() > 0).FirstOrDefault();
+            var ifcElementQuantityAreas = Model.FederatedInstances.OfType<IfcElementQuantity>().FirstOrDefault(eq => eq.Quantities.OfType<IfcQuantityArea>().Any());
            
-            List<IfcObject> ifcObjectList = new List<IfcObject>();
-            if (ifcProject != null) ifcObjectList.Add(ifcProject);
-            if (ifcSite != null) ifcObjectList.Add(ifcSite);
-            if (ifcBuilding != null)  ifcObjectList.Add(ifcBuilding);
+            var ifcObjectList = new List<IfcObject>();
+            if (ifcProject != null) 
+                ifcObjectList.Add(ifcProject);
+            if (ifcSite != null) 
+                ifcObjectList.Add(ifcSite);
+            if (ifcBuilding != null)  
+                ifcObjectList.Add(ifcBuilding);
 
-            IEnumerable<IfcObject> ifcObjects = ifcObjectList.AsEnumerable();
+            var ifcObjects = ifcObjectList.AsEnumerable();
             if (ifcObjects.Any())
             {
                 COBieDataPropertySetValues allPropertyValues = new COBieDataPropertySetValues(); //properties helper class
@@ -106,13 +109,13 @@ namespace Xbim.COBie.Data
                 facility.Description = GetFacilityDescription(ifcBuilding);
                 facility.ProjectDescription = GetFacilityProjectDescription(ifcProject);
                 facility.SiteDescription = GetFacilitySiteDescription(ifcSite);
-                facility.Phase = (string.IsNullOrEmpty(Model.IfcProject.Phase.ToString())) ? DEFAULT_STRING : Model.IfcProject.Phase.ToString();
+                facility.Phase = (string.IsNullOrEmpty(ifcProject.Phase.ToString())) ? DEFAULT_STRING : ifcProject.Phase.ToString();
 
                 facilities.AddRow(facility);
 
 
                 //fill in the attribute information
-                foreach (IfcObject ifcObject in ifcObjects)
+                foreach (var ifcObject in ifcObjects)
                 {
                     attributeBuilder.RowParameters["Name"] = facility.Name;
                     attributeBuilder.RowParameters["CreatedBy"] = facility.CreatedBy;

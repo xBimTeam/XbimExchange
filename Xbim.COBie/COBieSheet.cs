@@ -2,11 +2,13 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using Xbim.Common;
 using Xbim.COBie.Resources;
 
 using Xbim.Ifc2x3.ProductExtension;
 using Xbim.Ifc2x3.Kernel;
 using Xbim.COBie.Contracts;
+using Xbim.Ifc;
 using Xbim.Ifc2x3.IO;
 
 namespace Xbim.COBie
@@ -261,7 +263,7 @@ namespace Xbim.COBie
         /// </summary>
         /// <param name="model">model the cobie file was generated from</param>
         /// <param name="fileRoles">the file roles</param>
-        public List<string> ValidateComponentMerge(XbimModel model, COBieMergeRoles fileRoles) 
+        public List<string> ValidateComponentMerge(IfcStore model, COBieMergeRoles fileRoles) 
         {
             List<string> typeObjectGlobalId = new List<string>();
             List<string> typeObjectGlobalIdKeep = new List<string>();

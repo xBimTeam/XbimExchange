@@ -13,6 +13,7 @@ using Xbim.COBie.Contracts;
 using Xbim.COBie.Serialisers;
 using Xbim.COBie.Rows;
 using Xbim.COBie.Federate;
+using Xbim.Ifc;
 using Xbim.Ifc2x3.IO;
 using Xbim.IO.Esent;
 
@@ -63,7 +64,7 @@ namespace Xbim.COBie.Client
 
         public COBieMergeRoles Roles { get; private set; }
 
-        public XbimModel Model { get; set; }
+        public IfcStore Model { get; set; }
 
         public FilterValues UserFilters { get; set; }
 
@@ -176,9 +177,8 @@ namespace Xbim.COBie.Client
             var workbooks = new List<COBieWorkbook>();
 
             LogBackground(String.Format("Loading federated model {0}...", xbimFile));
-            using (var model = new XbimModel())
+            using (var model = IfcStore.Open(xbimFile))
             {
-                model.Open(xbimFile, XbimDBAccess.ReadWrite);
                 Model = model; //used to check we close file on Close event
 
                 // Build context on the XBimF model to link roles
@@ -196,7 +196,7 @@ namespace Xbim.COBie.Client
                     var refContext = new COBieContext(_worker.ReportProgress)
                     {
                         TemplateFileName = parameters.TemplateFile,
-                        Model = refModel
+                        Model = (IfcStore)refModel
                     };
                     refContext.MapMergeRoles[refModel] = roles;
                     refContext.Exclude = UserFilters;
@@ -282,27 +282,10 @@ namespace Xbim.COBie.Client
         /// <returns>COBieBuilder</returns>
         private COBieBuilder GenerateCOBieWorkBook(Params parameters)
         {
-            var xbimFile = string.Empty;
-            var fileExt = Path.GetExtension(parameters.ModelFile);
             COBieBuilder builder = null;
             LogBackground(String.Format("Loading model {0}...", Path.GetFileName(parameters.ModelFile)));
-            using (var model = new XbimModel())
+            using (var model = IfcStore.Open(parameters.ModelFile))
             {
-                if ((fileExt.Equals(".xbim", StringComparison.OrdinalIgnoreCase)) ||
-                    (fileExt.Equals(".xbimf", StringComparison.OrdinalIgnoreCase))
-                   )
-                {
-                    xbimFile = parameters.ModelFile;
-                    model.Open(xbimFile, XbimDBAccess.ReadWrite);
-                    //model.CacheStart();
-                }
-                else //ifc file
-                {
-                    xbimFile = Path.ChangeExtension(parameters.ModelFile, "xBIM");
-                    model.CreateFrom(parameters.ModelFile, xbimFile, _worker.ReportProgress, true, false);
-                }
-                //model.Open(xbimFile, XbimDBAccess.ReadWrite);
-
 
                 // Build context
                 var context = new COBieContext(_worker.ReportProgress);
@@ -316,7 +299,6 @@ namespace Xbim.COBie.Client
                 {
                     GenerateGeometry(context);
                 }
-
 
                 // Create COBieReader
                 LogBackground("Generating COBie data...");

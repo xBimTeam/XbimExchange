@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using Xbim.COBie.Rows;
 using Xbim.Ifc2x3.ApprovalResource;
@@ -6,6 +7,7 @@ using Xbim.Ifc2x3.Kernel;
 using Xbim.Ifc2x3.ControlExtension;
 using Xbim.Ifc2x3.PropertyResource;
 using Xbim.Ifc2x3.ActorResource;
+using Xbim.Ifc4.Interfaces;
 
 namespace Xbim.COBie.Data
 {
@@ -29,9 +31,11 @@ namespace Xbim.COBie.Data
         public override COBieSheet<COBieIssueRow> Fill()
         {
             ProgressIndicator.ReportMessage("Starting Issues...");
+            var ifcProject = Model.Instances.FirstOrDefault<IIfcProject>();
+            Debug.Assert(ifcProject != null);
 
             //create new sheet
-            COBieSheet<COBieIssueRow> issues = new COBieSheet<COBieIssueRow>(Constants.WORKSHEET_ISSUE);
+            var issues = new COBieSheet<COBieIssueRow>(Constants.WORKSHEET_ISSUE);
             
             //IEnumerable<IfcPropertySet> ifcProperties = Model.FederatedInstances.OfType<IfcPropertySet>().Where(ps => ps.Name.ToString() == "Pset_Risk");
             
@@ -69,8 +73,8 @@ namespace Xbim.COBie.Data
                 else
                 {
                     //if property set is null use project defaults
-                    issue.CreatedBy = GetTelecomEmailAddress(Model.IfcProject.OwnerHistory);
-                    issue.CreatedOn = GetCreatedOnDateAsFmtString(Model.IfcProject.OwnerHistory);
+                    issue.CreatedBy = GetTelecomEmailAddress(ifcProject.OwnerHistory);
+                    issue.CreatedOn = GetCreatedOnDateAsFmtString(ifcProject.OwnerHistory);
                 }
                 Interval propValues = GetPropertyEnumValue(propertyList, "RiskType");
                 issue.Type = propValues.Value;

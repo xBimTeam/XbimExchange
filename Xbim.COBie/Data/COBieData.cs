@@ -11,10 +11,13 @@ using Xbim.Ifc2x3.ProductExtension;
 using System.Globalization;
 using Xbim.Common;
 using Xbim.COBie.Resources;
+using Xbim.Ifc;
 using Xbim.Ifc2x3.ApprovalResource;
 using Xbim.Ifc2x3.ConstructionMgmtDomain;
 using Xbim.Ifc2x3.IO;
 using Xbim.Ifc2x3.MaterialResource;
+using Xbim.Ifc4.Interfaces;
+using IfcUnitEnum = Xbim.Ifc2x3.MeasureResource.IfcUnitEnum;
 
 
 namespace Xbim.COBie.Data
@@ -46,7 +49,7 @@ namespace Xbim.COBie.Data
             UnknownCount = 1;
         }
 
-        protected XbimModel Model
+        protected IfcStore Model
         {
             get
             {
@@ -74,14 +77,14 @@ namespace Xbim.COBie.Data
         /// </summary>
         /// <param name="rootEntity">Entity to extract the Create On date</param>
         /// <returns></returns>
-        protected string GetCreatedOnDateAsFmtString(IfcOwnerHistory ownerHistory, bool requiresTime = true)
+        protected string GetCreatedOnDateAsFmtString(IIfcOwnerHistory ownerHistory, bool requiresTime = true)
         {
             var date = GetCreatedOnDate(ownerHistory);
             //return default date of now
             return date ?? (requiresTime ? Context.RunDateTime : Context.RunDate); //if we don't have a date then use the context date or datetime
         }
 
-        public static string GetCreatedOnDate(IfcOwnerHistory ownerHistory)
+        public static string GetCreatedOnDate(IIfcOwnerHistory ownerHistory)
         {
             if (ownerHistory != null)
             {
@@ -107,7 +110,7 @@ namespace Xbim.COBie.Data
         /// </summary>
         /// <param name="item"></param>
         /// <returns></returns>
-        public string GetExternalSystem(IfcOwnerHistory ifcOwnerHistory)
+        public string GetExternalSystem(IIfcOwnerHistory ifcOwnerHistory)
         {
             var appName = "";
 
@@ -226,7 +229,7 @@ namespace Xbim.COBie.Data
         /// </summary>
         /// <param name="ifcOwnerHistory">Entity to extract the email addresses for</param>
         /// <returns>string of comma delimited addresses</returns>
-        protected string GetTelecomEmailAddress(IfcOwnerHistory ifcOwnerHistory)
+        protected string GetTelecomEmailAddress(IIfcOwnerHistory ifcOwnerHistory)
         {
             if ((ifcOwnerHistory != null) &&
                 (ifcOwnerHistory.OwningUser != null) &&
@@ -286,7 +289,7 @@ namespace Xbim.COBie.Data
         /// <param name="ifcOrganization"></param>
         /// <param name="ifcPerson"></param>
         /// <returns></returns>
-        public static string GetEmail( IfcOrganization ifcOrganization, IfcPerson ifcPerson)
+        public static string GetEmail(IIfcOrganization ifcOrganization, IIfcPerson ifcPerson)
         {
             var email = "";
             var emails = Enumerable.Empty<IfcLabel>();

@@ -49,6 +49,9 @@ namespace Xbim.COBie.Data
 #endif            
             ProgressIndicator.ReportMessage("Starting Types...");
 
+            var ifcProject = Model.Instances.FirstOrDefault<IIfcProject>();
+            Debug.Assert(ifcProject != null);
+
             // Create new Sheet
             COBieSheet<COBieTypeRow> types = new COBieSheet<COBieTypeRow>(Constants.WORKSHEET_TYPE);
             
@@ -154,9 +157,9 @@ namespace Xbim.COBie.Data
                 }
                 else //default to the project as we failed to find a IfcRoot object to extract it from
                 {
-                    createdBy = GetTelecomEmailAddress(Model.IfcProject.OwnerHistory);
-                    createdOn = GetCreatedOnDateAsFmtString(Model.IfcProject.OwnerHistory);
-                    extSystem = GetExternalSystem(Model.IfcProject.OwnerHistory);
+                    createdBy = GetTelecomEmailAddress(ifcProject.OwnerHistory);
+                    createdOn = GetCreatedOnDateAsFmtString(ifcProject.OwnerHistory);
+                    extSystem = GetExternalSystem(ifcProject.OwnerHistory);
                 }
                 //add materialLayerSet name to rows
                 COBieTypeRow matSetRow = new COBieTypeRow(types);

@@ -1,8 +1,10 @@
 ﻿using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using Xbim.COBie.Rows;
 using Xbim.Ifc2x3.ActorResource;
 using Xbim.Ifc2x3.PropertyResource;
+using Xbim.Ifc4.Interfaces;
 
 namespace Xbim.COBie.Data
 {
@@ -29,6 +31,8 @@ namespace Xbim.COBie.Data
         {
             ProgressIndicator.ReportMessage("Starting Contacts...");
 
+
+
             ClearEMails(); //clear the email dictionary for a new file conversion
 
             //create new sheet
@@ -36,6 +40,9 @@ namespace Xbim.COBie.Data
             var cobieContacts = Model.FederatedInstances.OfType<IfcPropertySingleValue>().Where(psv => psv.Name == "COBieCreatedBy" || psv.Name == "COBieTypeCreatedBy").GroupBy(psv => psv.NominalValue).Select(g => g.First().NominalValue.ToString());
             var ifcPersonAndOrganizations = Model.FederatedInstances.OfType<IfcPersonAndOrganization>();
             ProgressIndicator.Initialise("Creating Contacts", ifcPersonAndOrganizations.Count() + cobieContacts.Count());
+
+            var ifcProject = Model.Instances.FirstOrDefault<IIfcProject>();
+            Debug.Assert(ifcProject!=null);
 
             List<IfcOrganizationRelationship> ifcOrganizationRelationships = null;
 
@@ -57,8 +64,8 @@ namespace Xbim.COBie.Data
                 contact.Email = email;
 
                 //lets default the creator to that user who created the project for now, no direct link to OwnerHistory on IfcPersonAndOrganization, IfcPerson or IfcOrganization
-                contact.CreatedBy = GetTelecomEmailAddress(Model.IfcProject.OwnerHistory);
-                contact.CreatedOn = GetCreatedOnDateAsFmtString(Model.IfcProject.OwnerHistory);
+                contact.CreatedBy = GetTelecomEmailAddress(ifcProject.OwnerHistory);
+                contact.CreatedOn = GetCreatedOnDateAsFmtString(ifcProject.OwnerHistory);
                 
                 IfcActorRole ifcActorRole = null;
                 if (ifcPerson.Roles != null)
@@ -122,8 +129,8 @@ namespace Xbim.COBie.Data
                 contact.Email = email;
 
                 //lets default the creator to that user who created the project for now, no direct link to OwnerHistory on IfcPersonAndOrganization, IfcPerson or IfcOrganization
-                contact.CreatedBy = GetTelecomEmailAddress(Model.IfcProject.OwnerHistory);
-                contact.CreatedOn = GetCreatedOnDateAsFmtString(Model.IfcProject.OwnerHistory);
+                contact.CreatedBy = GetTelecomEmailAddress(ifcProject.OwnerHistory);
+                contact.CreatedOn = GetCreatedOnDateAsFmtString(ifcProject.OwnerHistory);
                 contact.Category = DEFAULT_STRING;
                 contact.Company = DEFAULT_STRING;
                 contact.Phone = DEFAULT_STRING;

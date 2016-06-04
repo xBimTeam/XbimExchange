@@ -2,8 +2,9 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
-
+using Xbim.Common;
 using Xbim.COBie.Contracts;
+using Xbim.Ifc;
 using Xbim.Ifc2x3.IO;
 
 namespace Xbim.COBie
@@ -73,7 +74,7 @@ namespace Xbim.COBie
         /// </summary>
         /// <param name="model"></param>
         /// <param name="fileRoles">bit fields enumeration to hold all the roles in one place using bitwise AND, OR, EXCLUSIVE OR</param>
-        public void ValidateRoles(XbimModel model, COBieMergeRoles fileRoles) 
+        public void ValidateRoles(IfcStore model, COBieMergeRoles fileRoles) 
         {
 #if DEBUG
             Stopwatch timer = new Stopwatch();

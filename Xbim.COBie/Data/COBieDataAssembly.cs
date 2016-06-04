@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using Xbim.COBie.Rows;
@@ -7,6 +8,7 @@ using Xbim.Ifc2x3.MaterialResource;
 using Xbim.Ifc2x3.UtilityResource;
 using Xbim.COBie.Serialisers.XbimSerialiser;
 using Xbim.Ifc2x3.MeasureResource;
+using Xbim.Ifc4.Interfaces;
 
 namespace Xbim.COBie.Data
 {
@@ -32,6 +34,10 @@ namespace Xbim.COBie.Data
         {
             ProgressIndicator.ReportMessage("Starting Assemblies...");
             //Create new sheet
+
+            var ifcProject = Model.Instances.FirstOrDefault<IIfcProject>();
+            Debug.Assert(ifcProject != null);
+
             COBieSheet<COBieAssemblyRow> assemblies = new COBieSheet<COBieAssemblyRow>(Constants.WORKSHEET_ASSEMBLY);
 
             // get ifcRelAggregates objects from IFC file what are not in the excludedTypes type list
@@ -112,9 +118,9 @@ namespace Xbim.COBie.Data
                 }
                 else //default to the project as we failed to find a IfcRoot object to extract it from
                 {
-                    assembly.CreatedBy = GetTelecomEmailAddress(Model.IfcProject.OwnerHistory);
-                    assembly.CreatedOn = GetCreatedOnDateAsFmtString(Model.IfcProject.OwnerHistory);
-                    assembly.ExtSystem = GetExternalSystem(Model.IfcProject.OwnerHistory);
+                    assembly.CreatedBy = GetTelecomEmailAddress(ifcProject.OwnerHistory);
+                    assembly.CreatedOn = GetCreatedOnDateAsFmtString(ifcProject.OwnerHistory);
+                    assembly.ExtSystem = GetExternalSystem(ifcProject.OwnerHistory);
                 }
 
                 assembly.SheetName = Constants.WORKSHEET_TYPE; //any material objects should be in the TYPE sheet
