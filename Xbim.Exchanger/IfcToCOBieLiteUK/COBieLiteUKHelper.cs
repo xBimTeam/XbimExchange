@@ -1057,6 +1057,8 @@ namespace XbimExchanger.IfcToCOBieLiteUK
         private void GetUnits()
         {
             var ifcProject = Model.Instances.FirstOrDefault<IIfcProject>();
+            if (ifcProject.UnitsInContext == null)
+                return;
             foreach (var unit in ifcProject.UnitsInContext.Units)
             {
                 if (unit is IIfcNamedUnit)
