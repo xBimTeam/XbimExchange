@@ -4,7 +4,7 @@ namespace Xbim.COBieLiteUK.Client
 {
     public interface ICOBieLiteWorker
     {
-        void Run(Params args);
+        void Run(CobieConversionParams args);
 
         BackgroundWorker Worker
         { get; }

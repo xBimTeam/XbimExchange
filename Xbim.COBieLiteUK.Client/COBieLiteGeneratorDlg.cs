@@ -221,24 +221,23 @@ namespace Xbim.COBieLiteUK.Client
             }
 
             //set parameters
-            var args = new Params
+            var conversionSettings = new CobieConversionParams
             {
-                ModelFile = txtPath.Text,
                 TemplateFile = txtTemplate.Text,
                 Roles = filterRoles,
                 ExportType = excelType,
                 FlipFilter = chkBoxFlipFilter.Checked,
                 OpenExcel = chkBoxOpenFile.Checked,
                 FilterOff = chkBoxNoFilter.Checked,
-                ExtId =
-                    chkBoxIds.Checked ? EntityIdentifierMode.IfcEntityLabels : EntityIdentifierMode.GloballyUniqueIds,
+                ExtId = chkBoxIds.Checked ? EntityIdentifierMode.IfcEntityLabels : EntityIdentifierMode.GloballyUniqueIds,
                 SysMode = SetSystemMode(),
                 Filter = chkBoxNoFilter.Checked ? new OutPutFilters() : _assetfilters,
                 ConfigFile = ConfigFile.FullName,
                 Log = chkBoxLog.Checked
             };
+            conversionSettings.GetFacilities(txtPath.Text);
             //run worker
-            _cobieWorker.Run(args);
+            _cobieWorker.Run(conversionSettings);
 
         }
 

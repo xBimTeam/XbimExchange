@@ -135,6 +135,7 @@
       <DependentUpon>FilterTab.cs</DependentUpon>
     </Compile>
     <Compile Include="ICOBieLiteWorker.cs" />
+    <Compile Include="CobieConversionParams.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="PropertyMapDlg.cs">

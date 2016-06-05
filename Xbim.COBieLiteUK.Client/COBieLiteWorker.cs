@@ -1,14 +1,11 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
-using Xbim.FilterHelper;
 using Xbim.Ifc;
 using Xbim.IO;
 using XbimExchanger.COBieLiteUkToIfc;
-using XbimExchanger.IfcToCOBieLiteUK;
 
 namespace Xbim.COBieLiteUK.Client
 {
@@ -31,7 +28,7 @@ namespace Xbim.COBieLiteUK.Client
         /// Run the worker
         /// </summary>
         /// <param name="args"></param>
-        public void Run(Params args)
+        public void Run(CobieConversionParams args)
         {
             Worker.RunWorkerAsync(args);
         }
@@ -43,14 +40,21 @@ namespace Xbim.COBieLiteUK.Client
         /// <param name="e"></param>
         private void CobieLiteUkWorker(object sender, DoWorkEventArgs e)
         {
-            var parameters = e.Argument as Params;
+            var parameters = e.Argument as CobieConversionParams;
             if (parameters == null)
                 return;
-            if (string.IsNullOrEmpty(parameters.ModelFile) || !File.Exists(parameters.ModelFile))
+            if (string.IsNullOrEmpty(parameters.OutputFileName))
             {
-                Worker.ReportProgress(0, string.Format("File doesn't exist: {0}.", parameters.ModelFile));
+                Worker.ReportProgress(0, "No output fine name specified in exporter.");
                 return;
             }
+            if (parameters.Facilities == null || !parameters.Facilities.Any())
+            {
+                Worker.ReportProgress(0, "No facilities provided to exporter.");
+                return;
+            }
+
+            
             e.Result = GenerateFile(parameters); //returns the excel file name
         }
 
@@ -58,7 +62,7 @@ namespace Xbim.COBieLiteUK.Client
         /// Create XLS file from ifc/xbim files
         /// </summary>
         /// <param name="parameters">Params</param>
-        private string GenerateFile(Params parameters)
+        private string GenerateFile(CobieConversionParams parameters)
         {
             var fileName = string.Empty;
             var exportType = parameters.ExportType.ToString();
@@ -66,20 +70,20 @@ namespace Xbim.COBieLiteUK.Client
             var timer = new Stopwatch();
             timer.Start();
 
-            var facilities = GenerateFacility(parameters);
             timer.Stop();
             Worker.ReportProgress(0,
                 string.Format("Time to generate COBieLite data = {0} seconds", timer.Elapsed.TotalSeconds.ToString("F3")));
             timer.Reset();
             timer.Start();
             var index = 1;
-            var path = Path.GetDirectoryName(parameters.ModelFile);
+            var path = Path.GetDirectoryName(parameters.OutputFileName);
             Debug.Assert(path != null);
-            foreach (var facilityType in facilities)
+            foreach (var facilityType in parameters.Facilities)
             {
-                fileName = Path.GetFileNameWithoutExtension(parameters.ModelFile) + ((facilities.Count == 1)
-                    ? ""
-                    : "(" + index + ")");
+                fileName = Path.GetFileNameWithoutExtension(
+                    parameters.OutputFileName) + 
+                    (parameters.Facilities.Count == 1 ? "" : "(" + index + ")"
+                    );
 
                 fileName = Path.Combine(path, fileName);
                 if (parameters.Log)
@@ -153,7 +157,6 @@ namespace Xbim.COBieLiteUK.Client
                 ifcModel.SaveAs(ifcName, IfcStorageType.Ifc);
                 ifcModel.Close();
             }
-
             return ifcName;
         }
 
@@ -164,7 +167,7 @@ namespace Xbim.COBieLiteUK.Client
         /// <param name="fileName">Root file name</param>
         /// <param name="facility">Facility</param>
         /// <returns>file name</returns>
-        private string CreateExcelFile(Params parameters, string fileName, Facility facility)
+        private string CreateExcelFile(CobieConversionParams parameters, string fileName, Facility facility)
         {
             var excelType = (ExcelTypeEnum) Enum.Parse(typeof (ExcelTypeEnum), parameters.ExportType.ToString(), true);
             var excelName = Path.ChangeExtension(fileName, excelType == ExcelTypeEnum.XLS ? ".xls" : ".xlsx");
@@ -207,182 +210,6 @@ namespace Xbim.COBieLiteUK.Client
             facility.ReportProgress.Progress = Worker.ReportProgress;
             facility.WriteXml(xmlName, true);
             return xmlName;
-        }
-
-        /// <summary>
-        /// Generate the Facilities held within the Model
-        /// </summary>
-        /// <param name="parameters">Params</param>
-        /// <returns>List of Facilities</returns>
-        private List<Facility> GenerateFacility(Params parameters)
-        {
-            var fileExt = Path.GetExtension(parameters.ModelFile);
-            if (fileExt == null)
-                return Enumerable.Empty<Facility>().ToList();
-
-            switch (fileExt.ToLowerInvariant())
-            {
-                case ".xls":
-                case ".xlsx":
-                    return GeneratelExcelFacility(parameters);
-                case ".json":
-                    return GeneratelJsonFacility(parameters);
-                case ".xml":
-                    return GeneratelXmlFacility(parameters);
-                default:
-                    return GenerateFileFacility(parameters, fileExt);
-            }
-        }
-
-        /// <summary>
-        /// Get the facility from the COBie Excel sheets
-        /// </summary>
-        /// <param name="parameters"></param>
-        /// <returns></returns>
-        private List<Facility> GeneratelExcelFacility(Params parameters)
-        {
-            var facilities = new List<Facility>();
-            string msg;
-            var facility = Facility.ReadCobie(parameters.ModelFile, out msg, parameters.TemplateFile);
-            if (facility != null)
-            {
-                facilities.Add(facility);
-            }
-            return facilities;
-        }
-
-        /// <summary>
-        /// Get the facility from the COBie Excel sheets
-        /// </summary>
-        /// <param name="parameters"></param>
-        /// <returns></returns>
-        private List<Facility> GeneratelJsonFacility(Params parameters)
-        {
-            var facilities = new List<Facility>();
-            var facility = Facility.ReadJson(parameters.ModelFile);
-            if (facility != null)
-            {
-                facilities.Add(facility);
-            }
-            return facilities;
-        }
-
-        /// <summary>
-        /// Get the facility from the COBie Excel sheets
-        /// </summary>
-        /// <param name="parameters"></param>
-        /// <returns></returns>
-        private List<Facility> GeneratelXmlFacility(Params parameters)
-        {
-            var facilities = new List<Facility>();
-            var facility = Facility.ReadXml(parameters.ModelFile);
-            if (facility != null)
-            {
-                facilities.Add(facility);
-            }
-            return facilities;
-        }
-
-        /// <summary>
-        /// Generate Facilities for a xbim or ifc type file
-        /// </summary>
-        /// <param name="parameters"></param>
-        /// <param name="fileExt"></param>
-        /// <returns></returns>
-        private List<Facility> GenerateFileFacility(Params parameters, string fileExt)
-        {
-            var facilities = new List<Facility>();
-            var assembly = global::System.Reflection.Assembly.GetExecutingAssembly();
-            var fvi = FileVersionInfo.GetVersionInfo(assembly.Location);
-            
-            using (var model = IfcStore.Open(parameters.ModelFile))
-            {
-                if (model.IsFederation == false)
-                {
-                    var ifcToCoBieLiteUkExchanger = new IfcToCOBieLiteUkExchanger(
-                        model,
-                        facilities,
-                        Worker.ReportProgress,
-                        parameters.Filter,
-                        parameters.ConfigFile,
-                        parameters.ExtId,
-                        parameters.SysMode
-                        );
-                    facilities = ifcToCoBieLiteUkExchanger.Convert();
-                }
-                else
-                {
-                    var roles = model.GetFileRoles();
-                    var fedFilters = parameters.Filter.SetFedModelFilter(roles);
-                    var rolesFacilities = new Dictionary<RoleFilter, List<Facility>>();
-                    foreach (var filter in fedFilters)
-                    {
-                        var ifcToCoBieLiteUkExchanger = new IfcToCOBieLiteUkExchanger(filter.Key.Model,
-                            new List<Facility>(), Worker.ReportProgress, filter.Value, parameters.ConfigFile,
-                            parameters.ExtId, parameters.SysMode);
-                        ifcToCoBieLiteUkExchanger.ReportProgress.Progress = Worker.ReportProgress;
-                        var rolesFacility = ifcToCoBieLiteUkExchanger.Convert();
-
-                        //facilities.AddRange(rolesFacility);
-                        if (rolesFacilities.ContainsKey(filter.Value.AppliedRoles))
-                        {
-                            rolesFacilities[filter.Value.AppliedRoles].AddRange(rolesFacility);
-                        }
-                        else
-                        {
-                            rolesFacilities.Add(filter.Value.AppliedRoles, rolesFacility);
-                        }
-                    }
-                    var fedFacilities =
-                        rolesFacilities.OrderByDescending(d => d.Key.HasFlag(RoleFilter.Architectural))
-                            .SelectMany(p => p.Value)
-                            .ToList();
-                    if (!fedFacilities.Any())
-                        return facilities;
-                    var baseFacility = fedFacilities.First();
-                    fedFacilities.RemoveAt(0);
-                    if (parameters.Log)
-                    {
-                        var logfile = Path.ChangeExtension(parameters.ModelFile, "merge.log");
-                        using (var sw = new StreamWriter(logfile))
-                        {
-                            sw.AutoFlush = true;
-                            foreach (var mergeFacility in fedFacilities)
-                            {
-                                baseFacility.Merge(mergeFacility, sw);
-                            }
-                        }
-                    }
-                    else
-                    {
-                        foreach (var mergeFacility in fedFacilities)
-                        {
-                            baseFacility.Merge(mergeFacility);
-                        }
-                    }
-                    facilities.Add(baseFacility);
-                }
-            }
-            return facilities;
-        }
-    }
-
-    /// <summary>
-    /// Params Class, holds parameters for worker to access
-    /// </summary>
-    public class Params
-    {
-        public string ModelFile { get; set; }
-        public string TemplateFile { get; set; }
-        public ExportTypeEnum ExportType { get; set; }
-        public bool FlipFilter { get; set; }
-        public bool OpenExcel { get; set; }
-        public RoleFilter Roles { get; set; }
-        public bool FilterOff { get; set; }
-        public EntityIdentifierMode ExtId { get; set; }
-        public SystemExtractionMode SysMode { get; set; }
-        public OutPutFilters Filter { get; set; }
-        public string ConfigFile { get; set; }
-        public bool Log { get; set; }
+        } 
     }
 }
