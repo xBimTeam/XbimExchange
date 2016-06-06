@@ -30,7 +30,7 @@ namespace Xbim.COBieLiteUK.Client
         public string ConfigFile { get; set; }
         public bool Log { get; set; }
 
-        public void GetFacilities(string sourceFile, ICOBieLiteConverter worker)
+        public void GetFacilities(string sourceFile, ICobieLiteConverter worker)
         {
             if (string.IsNullOrEmpty(sourceFile) || !File.Exists(sourceFile))
             {

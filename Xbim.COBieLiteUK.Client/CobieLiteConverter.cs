@@ -9,12 +9,11 @@ using XbimExchanger.COBieLiteUkToIfc;
 
 namespace Xbim.COBieLiteUK.Client
 {
-    // ReSharper disable once InconsistentNaming
-    public class COBieLiteConverter : ICOBieLiteConverter
+    public class CobieLiteConverter : ICobieLiteConverter
     {
         public BackgroundWorker Worker { get; set; }
 
-        public COBieLiteConverter()
+        public CobieLiteConverter()
         {
             Worker = new BackgroundWorker
             {

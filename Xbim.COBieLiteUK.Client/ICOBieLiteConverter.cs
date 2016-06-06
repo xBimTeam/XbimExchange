@@ -2,7 +2,7 @@
 
 namespace Xbim.COBieLiteUK.Client
 {
-    public interface ICOBieLiteConverter
+    public interface ICobieLiteConverter
     {
         void Run(CobieConversionParams args);
 

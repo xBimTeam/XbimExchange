@@ -108,7 +108,7 @@
     <Compile Include="COBieLiteGeneratorDlg.Designer.cs">
       <DependentUpon>COBieLiteGeneratorDlg.cs</DependentUpon>
     </Compile>
-    <Compile Include="COBieLiteWorker.cs" />
+    <Compile Include="CobieLiteConverter.cs" />
     <Compile Include="EditableList.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -134,7 +134,7 @@
     <Compile Include="FilterTab.Designer.cs">
       <DependentUpon>FilterTab.cs</DependentUpon>
     </Compile>
-    <Compile Include="ICOBieLiteWorker.cs" />
+    <Compile Include="ICOBieLiteConverter.cs" />
     <Compile Include="CobieConversionParams.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
