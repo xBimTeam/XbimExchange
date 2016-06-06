@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using log4net;
@@ -29,15 +30,17 @@ namespace Xbim.COBieLiteUK.Client
         public string ConfigFile { get; set; }
         public bool Log { get; set; }
 
-        public void GetFacilities(string sourceFile)
+        public void GetFacilities(string sourceFile, ICOBieLiteConverter worker)
         {
             if (string.IsNullOrEmpty(sourceFile) || !File.Exists(sourceFile))
             {
                 Logger.Error(string.Format("Facilities source not found: {0}.", sourceFile));
                 return;
             }
+            
+            var timer = new Stopwatch();
+            timer.Start();
             var fileExt = Path.GetExtension(sourceFile);
-
             switch (fileExt.ToLowerInvariant())
             {
                 case ".xls":
@@ -54,6 +57,8 @@ namespace Xbim.COBieLiteUK.Client
                     GenerateFacilitiesFromStore(sourceFile);
                     break;
             }
+            timer.Stop();
+            worker.Worker.ReportProgress(0, string.Format("Time to generate COBieLite data = {0} seconds", timer.Elapsed.TotalSeconds.ToString("F3")));
         }
 
         /// <summary>

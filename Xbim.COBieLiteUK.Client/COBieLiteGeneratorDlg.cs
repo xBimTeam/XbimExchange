@@ -18,7 +18,7 @@ namespace Xbim.COBieLiteUK.Client
         /// <summary>
         /// Worker
         /// </summary>
-        private ICOBieLiteWorker _cobieWorker;
+        private ICOBieLiteConverter _cobieWorker;
 
         /// <summary>
         /// Filters for Extracting COBie, Role Filtering
@@ -206,7 +206,7 @@ namespace Xbim.COBieLiteUK.Client
 
             if (_cobieWorker == null)
             {
-                _cobieWorker = new COBieLiteWorker();
+                _cobieWorker = new COBieLiteConverter();
                 _cobieWorker.Worker.ProgressChanged += WorkerProgressChanged;
                 _cobieWorker.Worker.RunWorkerCompleted += WorkerCompleted;
             }

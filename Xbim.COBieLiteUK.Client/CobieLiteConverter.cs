@@ -10,11 +10,11 @@ using XbimExchanger.COBieLiteUkToIfc;
 namespace Xbim.COBieLiteUK.Client
 {
     // ReSharper disable once InconsistentNaming
-    public class COBieLiteWorker : ICOBieLiteWorker
+    public class COBieLiteConverter : ICOBieLiteConverter
     {
         public BackgroundWorker Worker { get; set; }
 
-        public COBieLiteWorker()
+        public COBieLiteConverter()
         {
             Worker = new BackgroundWorker
             {
@@ -53,8 +53,6 @@ namespace Xbim.COBieLiteUK.Client
                 Worker.ReportProgress(0, "No facilities provided to exporter.");
                 return;
             }
-
-            
             e.Result = GenerateFile(parameters); //returns the excel file name
         }
 
@@ -68,12 +66,6 @@ namespace Xbim.COBieLiteUK.Client
             var exportType = parameters.ExportType.ToString();
 
             var timer = new Stopwatch();
-            timer.Start();
-
-            timer.Stop();
-            Worker.ReportProgress(0,
-                string.Format("Time to generate COBieLite data = {0} seconds", timer.Elapsed.TotalSeconds.ToString("F3")));
-            timer.Reset();
             timer.Start();
             var index = 1;
             var path = Path.GetDirectoryName(parameters.OutputFileName);
