@@ -235,7 +235,7 @@ namespace Xbim.COBieLiteUK.Client
                 ConfigFile = ConfigFile.FullName,
                 Log = chkBoxLog.Checked
             };
-            conversionSettings.GetFacilities(txtPath.Text);
+            conversionSettings.GetFacilities(txtPath.Text, _cobieWorker);
             //run worker
             _cobieWorker.Run(conversionSettings);
 
