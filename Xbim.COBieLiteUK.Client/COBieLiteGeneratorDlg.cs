@@ -225,11 +225,9 @@ namespace Xbim.COBieLiteUK.Client
             {
                 Source =  txtPath.Text,
                 TemplateFile = txtTemplate.Text,
-                Roles = filterRoles,
+                // Roles = filterRoles,
                 ExportFormat = excelType,
-                FlipFilter = chkBoxFlipFilter.Checked,
-                OpenExcel = chkBoxOpenFile.Checked,
-                FilterOff = chkBoxNoFilter.Checked,
+                // FilterOff = chkBoxNoFilter.Checked,
                 ExtId = chkBoxIds.Checked ? EntityIdentifierMode.IfcEntityLabels : EntityIdentifierMode.GloballyUniqueIds,
                 SysMode = SetSystemMode(),
                 Filter = chkBoxNoFilter.Checked ? new OutPutFilters() : _assetfilters,
