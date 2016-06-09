@@ -8,6 +8,7 @@ using Xbim.Ifc2x3.ProductExtension;
 using Xbim.Ifc2x3.Extensions;
 using XbimExchanger.IfcHelpers;
 using Xbim.Ifc2x3.ActorResource;
+using XbimExchanger.IfcHelpers.Ifc2x3;
 
 namespace XbimExchanger.COBieLiteUkToIfc
 {

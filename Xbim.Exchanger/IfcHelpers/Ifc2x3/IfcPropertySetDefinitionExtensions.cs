@@ -3,7 +3,7 @@ using Xbim.Ifc2x3.ProductExtension;
 using Xbim.Ifc2x3.PropertyResource;
 using Xbim.Ifc2x3.QuantityResource;
 
-namespace XbimExchanger.IfcHelpers
+namespace XbimExchanger.IfcHelpers.Ifc2x3
 {
     public static class IfcPropertySetDefinitionExtensions
     {
@@ -20,7 +20,5 @@ namespace XbimExchanger.IfcHelpers
             if (quantSet != null) quantSet.Quantities.Add(quantity);
             return quantSet != null;
         }
-
-
     }
 }

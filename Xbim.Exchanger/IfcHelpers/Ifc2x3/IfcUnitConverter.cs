@@ -4,8 +4,7 @@ using System.Text.RegularExpressions;
 using Xbim.Ifc;
 using Xbim.Ifc2x3.MeasureResource;
 
-
-namespace XbimExchanger.IfcHelpers
+namespace XbimExchanger.IfcHelpers.Ifc2x3
 {
     /// <summary>
     /// Helper to convert text descriptions to formal Units

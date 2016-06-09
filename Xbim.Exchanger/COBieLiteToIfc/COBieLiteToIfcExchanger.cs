@@ -18,6 +18,7 @@ using Xbim.Ifc2x3.QuantityResource;
 using Xbim.Ifc2x3.RepresentationResource;
 using XbimExchanger.COBieLiteHelpers;
 using XbimExchanger.IfcHelpers;
+using XbimExchanger.IfcHelpers.Ifc2x3;
 
 namespace XbimExchanger.COBieLiteToIfc
 {

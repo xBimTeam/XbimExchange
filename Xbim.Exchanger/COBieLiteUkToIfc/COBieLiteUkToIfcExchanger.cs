@@ -25,6 +25,7 @@ using Xbim.FilterHelper;
 using Xbim.Ifc2x3.ActorResource;
 using Xbim.Ifc2x3.UtilityResource;
 using Xbim.Ifc;
+using XbimExchanger.IfcHelpers.Ifc2x3;
 
 namespace XbimExchanger.COBieLiteUkToIfc
 {

@@ -9,6 +9,7 @@ using Xbim.IO;
 using Xbim.ModelGeometry.Scene;
 using XbimExchanger.COBieLiteToIfc;
 using XbimExchanger.IfcHelpers;
+using XbimExchanger.IfcHelpers.Ifc2x3;
 
 namespace Tests
 {

@@ -3,9 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Xbim.COBieLiteUK;
 using Xbim.Common;
-using Xbim.Ifc4.DateTimeResource;
 using Xbim.Ifc4.Interfaces;
-using Xbim.Ifc4.MeasureResource;
 using Attribute = Xbim.COBieLiteUK.Attribute;
 
 namespace XbimExchanger.IfcToCOBieLiteUK
@@ -155,15 +153,20 @@ namespace XbimExchanger.IfcToCOBieLiteUK
             return false;
 
         }
-
+        
         private string ConvertToString(IIfcPropertySingleValue ifcProperty)
         {
             IIfcValue ifcValue = ifcProperty.NominalValue;
             if (ifcValue == null) return null;
-            if (ifcValue is IfcTimeStamp)
+            if (ifcValue is Xbim.Ifc4.DateTimeResource.IfcTimeStamp)
             {
-                var timeStamp = (IfcTimeStamp)ifcValue;
+                var timeStamp = (Xbim.Ifc4.DateTimeResource.IfcTimeStamp)ifcValue;
                 return WriteDateTime(timeStamp.ToDateTime());
+            }
+            if (ifcValue is Xbim.Ifc2x3.MeasureResource.IfcTimeStamp)
+            {
+                var timeStamp = (Xbim.Ifc2x3.MeasureResource.IfcTimeStamp)ifcValue;
+                return WriteDateTime(Xbim.Ifc2x3.MeasureResource.IfcTimeStamp.ToDateTime(timeStamp));
             }
             var expressVal = (IExpressValueType)ifcValue ;
             if (expressVal.UnderlyingSystemType == typeof(bool) || expressVal.UnderlyingSystemType == typeof(bool?))
@@ -653,18 +656,19 @@ namespace XbimExchanger.IfcToCOBieLiteUK
         {
             var ifcValue = (IExpressValueType)ifcProperty.NominalValue;
             var value = new TValue();
-            if (ifcValue is IfcMonetaryMeasure)
+            if (ifcValue is Xbim.Ifc4.MeasureResource.IfcMonetaryMeasure || ifcValue is Xbim.Ifc2x3.MeasureResource.IfcMonetaryMeasure)
             {
                  value = (TValue)Convert.ChangeType(ifcValue.Value, typeof(TValue));
             }
-            else if (ifcValue is IfcTimeStamp)
-            {    
-                var timeStamp = (IfcTimeStamp)ifcValue;
+            else if (ifcValue is Xbim.Ifc4.DateTimeResource.IfcTimeStamp)
+            {
+                var timeStamp = (Xbim.Ifc4.DateTimeResource.IfcTimeStamp)ifcValue;
                 value = (TValue)Convert.ChangeType(timeStamp.ToDateTime(), typeof(TValue)); 
             }
-            else if (value is DateTime) //sometimes these are written as strings in the ifc file
+            else if (ifcValue is Xbim.Ifc2x3.MeasureResource.IfcTimeStamp)
             {
-                value = (TValue)Convert.ChangeType(ReadDateTime(ifcValue.Value.ToString()), typeof(TValue));
+                var timeStamp = (Xbim.Ifc2x3.MeasureResource.IfcTimeStamp)ifcValue;
+                value = (TValue)Convert.ChangeType(Xbim.Ifc2x3.MeasureResource.IfcTimeStamp.ToDateTime(timeStamp), typeof(TValue));
             }
             else if (ifcValue.UnderlyingSystemType == typeof(int) || ifcValue.UnderlyingSystemType == typeof(long) || ifcValue.UnderlyingSystemType == typeof(short) || ifcValue.UnderlyingSystemType == typeof(byte))
             {
@@ -719,25 +723,29 @@ namespace XbimExchanger.IfcToCOBieLiteUK
         /// </summary>
         /// <param name="ifcProperty"></param>
         /// <returns></returns>
-        static public AttributeValue GetAttributeValueType(IIfcPropertySingleValue ifcProperty)
+        public static AttributeValue GetAttributeValueType(IIfcPropertySingleValue ifcProperty)
         {
             var ifcValue = (IExpressValueType)ifcProperty.NominalValue;
             
             if (ifcValue == null) 
                 return null;
-            if (ifcValue is IfcMonetaryMeasure)
+            if (ifcValue is Xbim.Ifc4.MeasureResource.IfcMonetaryMeasure || ifcValue is Xbim.Ifc2x3.MeasureResource.IfcMonetaryMeasure)
             {
                 var moneyAttribute = new DecimalAttributeValue {Value= (double) ifcValue.Value};
-                if (ifcProperty.Unit is IfcMonetaryUnit)
-                {
-                    var mu = ifcProperty.Unit as IfcMonetaryUnit;
-                    moneyAttribute.Unit = mu.ToString();
-                }
+                if (!(ifcProperty.Unit is IIfcMonetaryUnit)) 
+                    return null;
+                var mu = (IIfcMonetaryUnit) ifcProperty.Unit;
+                moneyAttribute.Unit = mu.ToString();
             }
-            else if (ifcValue is IfcTimeStamp)
+            else if (ifcValue is Xbim.Ifc4.DateTimeResource.IfcTimeStamp)
             {
-                var timeStamp = (IfcTimeStamp)ifcValue;
+                var timeStamp = (Xbim.Ifc4.DateTimeResource.IfcTimeStamp)ifcValue;
                 return new DateTimeAttributeValue { Value = timeStamp.ToDateTime() };
+            }
+            else if (ifcValue is Xbim.Ifc2x3.MeasureResource.IfcTimeStamp)
+            {
+                var timeStamp = (Xbim.Ifc2x3.MeasureResource.IfcTimeStamp)ifcValue;
+                return new DateTimeAttributeValue { Value = Xbim.Ifc2x3.MeasureResource.IfcTimeStamp.ToDateTime(timeStamp) };
             }
             else if (ifcValue.UnderlyingSystemType == typeof(int) || ifcValue.UnderlyingSystemType == typeof(long) || ifcValue.UnderlyingSystemType == typeof(short) || ifcValue.UnderlyingSystemType == typeof(byte))
             {
@@ -758,11 +766,8 @@ namespace XbimExchanger.IfcToCOBieLiteUK
                     return new BooleanAttributeValue {Value = (bool) ifcValue.Value};
                 }
                return new BooleanAttributeValue();//return an undefined
-            }
-            
+            }    
             return null;
         }
-    }
-
-    
+    }   
 }
