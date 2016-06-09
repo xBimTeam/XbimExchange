@@ -223,9 +223,10 @@ namespace Xbim.COBieLiteUK.Client
             //set parameters
             var conversionSettings = new CobieConversionParams
             {
+                Source =  txtPath.Text,
                 TemplateFile = txtTemplate.Text,
                 Roles = filterRoles,
-                ExportType = excelType,
+                ExportFormat = excelType,
                 FlipFilter = chkBoxFlipFilter.Checked,
                 OpenExcel = chkBoxOpenFile.Checked,
                 FilterOff = chkBoxNoFilter.Checked,
@@ -235,7 +236,7 @@ namespace Xbim.COBieLiteUK.Client
                 ConfigFile = ConfigFile.FullName,
                 Log = chkBoxLog.Checked
             };
-            conversionSettings.GetFacilities(txtPath.Text, _cobieWorker);
+            
             //run worker
             _cobieWorker.Run(conversionSettings);
 
@@ -342,9 +343,9 @@ namespace Xbim.COBieLiteUK.Client
         /// Get Excel Type From Combo
         /// </summary>
         /// <returns>ExcelTypeEnum</returns>
-        private ExportTypeEnum GetExcelType()
+        private ExportFormatEnum GetExcelType()
         {
-            return (ExportTypeEnum) Enum.Parse(typeof (ExportTypeEnum), cmboxFiletype.Text);
+            return (ExportFormatEnum) Enum.Parse(typeof (ExportFormatEnum), cmboxFiletype.Text);
         }
 
 
@@ -613,27 +614,4 @@ namespace Xbim.COBieLiteUK.Client
     }
 
     // ReSharper disable InconsistentNaming
-    public enum ExportTypeEnum
-    {
-        /// <summary>
-        /// Binary excel file
-        /// </summary>
-        XLS,
-        /// <summary>
-        /// Xml excel file
-        /// </summary>
-        XLSX,
-        /// <summary>
-        /// Json format
-        /// </summary>
-        JSON,
-        /// <summary>
-        /// Xml format
-        /// </summary>
-        XML,
-        /// <summary>
-        /// Ifc format
-        /// </summary>
-        IFC
-    }
 }

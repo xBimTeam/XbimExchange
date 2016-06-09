@@ -115,6 +115,7 @@
     <Compile Include="EditableList.Designer.cs">
       <DependentUpon>EditableList.cs</DependentUpon>
     </Compile>
+    <Compile Include="ExportTypeEnum.cs" />
     <Compile Include="Federate.cs">
       <SubType>Form</SubType>
     </Compile>
