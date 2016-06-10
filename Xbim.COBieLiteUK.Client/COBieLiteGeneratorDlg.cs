@@ -9,6 +9,7 @@ using System.Windows.Forms;
 using Xbim.Common.Exceptions;
 using Xbim.FilterHelper;
 using XbimExchanger.IfcToCOBieLiteUK;
+using XbimExchanger.IfcToCOBieLiteUK.Conversion;
 
 namespace Xbim.COBieLiteUK.Client
 {
@@ -172,7 +173,7 @@ namespace Xbim.COBieLiteUK.Client
             {
                 try
                 {
-                    var mode = (SystemExtractionMode) Enum.Parse(typeof (SystemExtractionMode), (string) item);
+                    var mode = (SystemExtractionMode)Enum.Parse(typeof(SystemExtractionMode), item.ToString());    
                     sysMode |= mode;
                 }
                 catch (Exception)
@@ -224,10 +225,9 @@ namespace Xbim.COBieLiteUK.Client
             var conversionSettings = new CobieConversionParams
             {
                 Source =  txtPath.Text,
+                OutputFileName = Path.ChangeExtension(txtPath.Text, "Cobie"),
                 TemplateFile = txtTemplate.Text,
-                // Roles = filterRoles,
                 ExportFormat = excelType,
-                // FilterOff = chkBoxNoFilter.Checked,
                 ExtId = chkBoxIds.Checked ? EntityIdentifierMode.IfcEntityLabels : EntityIdentifierMode.GloballyUniqueIds,
                 SysMode = SetSystemMode(),
                 Filter = chkBoxNoFilter.Checked ? new OutPutFilters() : _assetfilters,

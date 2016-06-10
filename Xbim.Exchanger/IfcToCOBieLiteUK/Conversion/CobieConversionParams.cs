@@ -1,7 +1,6 @@
 ﻿using Xbim.FilterHelper;
-using XbimExchanger.IfcToCOBieLiteUK;
 
-namespace Xbim.COBieLiteUK.Client
+namespace XbimExchanger.IfcToCOBieLiteUK.Conversion
 {
     /// <summary>
     /// Params Class, holds parameters for worker to access

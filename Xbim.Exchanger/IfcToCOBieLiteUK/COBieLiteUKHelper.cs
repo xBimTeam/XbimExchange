@@ -4,6 +4,7 @@ using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
+using log4net;
 using Xbim.COBieLiteUK;
 using Xbim.Common;
 using Xbim.Common.Logging;
@@ -71,8 +72,7 @@ namespace XbimExchanger.IfcToCOBieLiteUK
     /// </summary>
     public class CoBieLiteUkHelper
     {
-
-        internal static readonly ILogger Logger = LoggerFactory.GetLogger();
+        private static readonly ILog Logger = LogManager.GetLogger("XbimExchanger.IfcToCOBieLiteUK.CoBieLiteUkHelper");
         /// <summary>
         /// Object to use to report progress on Exchangers
         /// </summary>

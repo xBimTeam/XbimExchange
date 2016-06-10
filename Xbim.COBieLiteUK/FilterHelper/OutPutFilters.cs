@@ -9,9 +9,6 @@ using Xbim.COBieLiteUK;
 
 using Xbim.Ifc4.Interfaces;
 
-
-
-
 namespace Xbim.FilterHelper
 {
     public class OutPutFilters

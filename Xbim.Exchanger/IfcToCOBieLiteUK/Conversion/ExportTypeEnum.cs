@@ -1,4 +1,4 @@
-namespace Xbim.COBieLiteUK.Client
+namespace XbimExchanger.IfcToCOBieLiteUK.Conversion
 {
     public enum ExportFormatEnum
     {

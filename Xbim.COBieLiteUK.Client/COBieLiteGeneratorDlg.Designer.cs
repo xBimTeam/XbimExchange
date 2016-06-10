@@ -417,7 +417,7 @@ namespace Xbim.COBieLiteUK.Client
             this.Controls.Add(this.btnClear);
             this.Controls.Add(this.btnGenerate);
             this.Controls.Add(this.groupBox1);
-            this.FormBorderStyle = global::System.Windows.Forms.FormBorderStyle.FixedDialog;
+            this.FormBorderStyle = global::System.Windows.Forms.FormBorderStyle.Sizable;
             this.Margin = new global::System.Windows.Forms.Padding(4, 4, 4, 4);
             this.MaximizeBox = false;
             this.MinimizeBox = false;

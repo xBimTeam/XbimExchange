@@ -2,74 +2,18 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Windows.Forms;
 using Xbim.Common.Federation;
 using Xbim.Common.Step21;
 using Xbim.FilterHelper;
 using Xbim.Ifc;
-using Xbim.Ifc2x3.ActorResource;
+using Xbim.Ifc4.ActorResource;
 using Xbim.Ifc4.Interfaces;
-using IfcRoleEnum = Xbim.Ifc2x3.ActorResource.IfcRoleEnum;
+using Xbim.Ifc4.Kernel;
+using XbimExchanger.IfcToCOBieLiteUK.Conversion;
+using IfcRoleEnum = Xbim.Ifc4.Interfaces.IfcRoleEnum;
 
 namespace Xbim.COBieLiteUK.Client
 {
-    public static class FederatedModelExtensions
-    {
-        /// <summary>
-        /// Get the file to roles information
-        /// </summary>
-        /// <returns>Dictionary or FileInfo to RoleFilter</returns>
-        public static Dictionary<IReferencedModel, RoleFilter> GetFileRoles(this IfcStore model)
-        {
-            var modelRoles = new Dictionary<IReferencedModel, RoleFilter>();
-            foreach (var refModel in model.ReferencedModels)
-            {
-                var docRole = MapActorRole(refModel.Role);
-                try
-                {
-                    var file = new FileInfo(refModel.Name);
-                    if (file.Exists)
-                    {
-                        // if was bare assignment before, I can't see how it might ever have worked.
-                        if (modelRoles.ContainsKey(refModel))
-                            modelRoles[refModel] = docRole;
-                        else
-                            modelRoles.Add(refModel, docRole);
-                    }
-                    else
-                    {
-                        MessageBox.Show("File path does not exist: {0}", refModel.Name);
-                    }
-                }
-                catch (ArgumentException)
-                {
-                    MessageBox.Show("File path is incorrect: {0}", refModel.Name);
-                }
-            }
-            return modelRoles;
-        }
-
-        private static RoleFilter MapActorRole(string roleName)
-        {
-            IfcRoleEnum role;
-            if (!Enum.TryParse(roleName, true, out role)) 
-                return RoleFilter.Unknown;
-            // ReSharper disable once SwitchStatementMissingSomeCases
-            switch (role)
-            {
-                case IfcRoleEnum.ARCHITECT:
-                    return RoleFilter.Architectural;
-                case IfcRoleEnum.MECHANICALENGINEER:
-                    return RoleFilter.Mechanical;
-                case IfcRoleEnum.ELECTRICALENGINEER:
-                    return RoleFilter.Electrical;
-                default:
-                    return RoleFilter.Unknown;
-            }
-        }
-    }
-
-
     public class FederatedModel : IDisposable
     {
         #region Properties
@@ -85,7 +29,7 @@ namespace Xbim.COBieLiteUK.Client
         /// <summary>
         /// Mapping of RoleFilter to ActorRole
         /// </summary>
-        public Dictionary<RoleFilter, IfcActorRole> RoleMap
+        public Dictionary<RoleFilter, IIfcActorRole> RoleMap
         { get; set; }
 
 
@@ -121,7 +65,7 @@ namespace Xbim.COBieLiteUK.Client
             get
             {
                 var project = Model.ReferencingModel.Instances.OfType<IIfcProject>().FirstOrDefault();
-                return project != null ? project.OwnerHistory.OwningUser.TheOrganization.Name.ToString() : string.Empty;                
+                return project != null ? project.OwnerHistory.OwningUser.TheOrganization.Name.ToString() : string.Empty;
             }
         }
 
@@ -132,9 +76,12 @@ namespace Xbim.COBieLiteUK.Client
         {
             get
             {
-                return _fedModel != null ? _fedModel.GetFileRoles() : new Dictionary<IReferencedModel, RoleFilter>();
+                return _fedModel != null
+                    ? _fedModel.GetFederatedFileRoles()
+                    : new Dictionary<IReferencedModel, RoleFilter>();
             }
-        } 
+        }
+
         #endregion
 
         /// <summary>
@@ -165,8 +112,10 @@ namespace Xbim.COBieLiteUK.Client
         /// <param name="prjName">Project Name</param>
         /// <param name="ifcVersion">Ifc schema version</param>
         /// <param name="storage">Type of xbim file store</param>
-        public void Create(string author, string organisation, string prjName = null, IfcSchemaVersion ifcVersion=IfcSchemaVersion.Ifc2X3,XbimStoreType storage=XbimStoreType.InMemoryModel )
-        {         
+        public void Create(string author, string organisation, string prjName = null,
+            IfcSchemaVersion ifcVersion = IfcSchemaVersion.Ifc4, XbimStoreType storage = XbimStoreType.InMemoryModel
+            )
+        {
             var creds = new XbimEditorCredentials
             {
                 ApplicationIdentifier = "xBIM",
@@ -178,7 +127,7 @@ namespace Xbim.COBieLiteUK.Client
             _fedModel = IfcStore.Create(creds, ifcVersion, storage); //create in memory
             using (var txn = _fedModel.BeginTransaction())
             {
-                var project = _fedModel.Instances.New<Ifc2x3.Kernel.IfcProject>();
+                var project = _fedModel.Instances.New<IfcProject>();
                 project.Name = prjName ?? "Undefined";
                 txn.Commit();
             }
@@ -195,26 +144,24 @@ namespace Xbim.COBieLiteUK.Client
             {
                 _fedModel.Close();
             }
-
-            if (file.Exists)
+            if (!file.Exists) 
+                return false;
+            var creds = new XbimEditorCredentials
             {
-                var creds = new XbimEditorCredentials
-                {
-                    ApplicationIdentifier = "xBIM",
-                    ApplicationDevelopersName = "xBIM Team",
-                    EditorsFamilyName = "undefined",
-                    EditorsOrganisationName = "undefined",
-                    ApplicationVersion = "1.0"
-                };
-                try
-                {
-                    _fedModel = IfcStore.Open(file.FullName, creds, 0);
-                    return true;
-                }
-                catch (Exception)
-                {
-                    //just return false;
-                }                
+                ApplicationIdentifier = "xBIM",
+                ApplicationDevelopersName = "xBIM Team",
+                EditorsFamilyName = "undefined",
+                EditorsOrganisationName = "undefined",
+                ApplicationVersion = "1.0"
+            };
+            try
+            {
+                _fedModel = IfcStore.Open(file.FullName, creds, 0);
+                return true;
+            }
+            catch (Exception)
+            {
+                //just return false;
             }
             return false;
         }
@@ -242,13 +189,11 @@ namespace Xbim.COBieLiteUK.Client
         /// </summary>
         public void Dispose()
         {
-            if (_fedModel != null)
-            {             
-                //dispose of fed xbim databse
-                _fedModel.Close(); //will close referenced models as well
-                _fedModel = null;
-
-            }
+            if (_fedModel == null) 
+                return;
+            //dispose of fed xbim database
+            _fedModel.Close(); //will close referenced models as well
+            _fedModel = null;
         }
 
         /// <summary>
@@ -267,10 +212,10 @@ namespace Xbim.COBieLiteUK.Client
         /// </summary>
         /// <param name="role">RoleFilter</param>
         /// <returns>List of IfcActorRole</returns>
-        private List<IfcActorRole> GetActorRoles(RoleFilter role)
+        private List<IIfcActorRole> GetActorRoles(RoleFilter role)
         {
-            if (RoleMap == null) RoleMap = new Dictionary<RoleFilter, IfcActorRole>();
-            var actorRoles = new List<IfcActorRole>();
+            if (RoleMap == null) RoleMap = new Dictionary<RoleFilter, IIfcActorRole>();
+            var actorRoles = new List<IIfcActorRole>();
             using (var tx = Model.BeginTransaction("RoleSettings"))
             {
                 if (role.HasFlag(RoleFilter.Architectural))
@@ -327,11 +272,11 @@ namespace Xbim.COBieLiteUK.Client
         /// <param name="role">RoleFilter</param>
         /// <param name="ifcRole">IfcRole</param>
         /// <returns></returns>
-        private IfcActorRole MapRole(RoleFilter role, IfcRoleEnum ifcRole)
+        private IIfcActorRole MapRole(RoleFilter role, IfcRoleEnum ifcRole)
         {
             if (_fedModel.CurrentTransaction!=null)
             {
-                IfcActorRole actorRole = _fedModel.Instances.New<IfcActorRole>();
+                var actorRole = _fedModel.Instances.New<IfcActorRole>();
                 if (ifcRole == IfcRoleEnum.USERDEFINED)
                 {
                     actorRole.Role = IfcRoleEnum.USERDEFINED;

@@ -5,13 +5,13 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using log4net;
+using Xbim.COBieLiteUK;
 using Xbim.FilterHelper;
 using Xbim.Ifc;
 using Xbim.IO;
 using XbimExchanger.COBieLiteUkToIfc;
-using XbimExchanger.IfcToCOBieLiteUK;
 
-namespace Xbim.COBieLiteUK.Client
+namespace XbimExchanger.IfcToCOBieLiteUK.Conversion
 {
     public class CobieLiteConverter : ICobieLiteConverter
     {
@@ -346,7 +346,7 @@ namespace Xbim.COBieLiteUK.Client
             }
             else
             {
-                var roles = model.GetFileRoles();
+                var roles = model.GetFederatedFileRoles();
                 var fedFilters = parameters.Filter.SetFedModelFilter(roles);
                 var rolesFacilities = new Dictionary<RoleFilter, List<Facility>>();
                 foreach (var filter in fedFilters)

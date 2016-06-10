@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel;
 
-namespace Xbim.COBieLiteUK.Client
+namespace XbimExchanger.IfcToCOBieLiteUK.Conversion
 {
     public interface ICobieLiteConverter
     {

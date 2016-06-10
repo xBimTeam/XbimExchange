@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using log4net;
 using Xbim.COBieLiteUK;
 
 using Xbim.Ifc4.Interfaces;
@@ -12,6 +13,8 @@ namespace XbimExchanger.IfcToCOBieLiteUK
     /// </summary>
     public class XbimIfcProxyTypeObject
     {
+        private static readonly ILog Logger = LogManager.GetLogger("XbimExchanger.IfcToCOBieLiteUK.XbimIfcProxyTypeObject");
+
         private readonly IIfcTypeObject _ifcTypeObject;
         private readonly CoBieLiteUkHelper _helper;
         private readonly string _name;
@@ -112,7 +115,7 @@ namespace XbimExchanger.IfcToCOBieLiteUK
                     AssetPortability accCategoryEnum;
                     if (Enum.TryParse(accCategoryString, true, out accCategoryEnum))
                         return accCategoryEnum;
-                    CoBieLiteUkHelper.Logger.WarnFormat(
+                    Logger.WarnFormat(
                         "AssetTypeAccountingCategory: An illegal value of [{0}] has been passed for the category of #{1}={2}.",
                         accCategoryString, _ifcTypeObject.EntityLabel, _ifcTypeObject.GetType().Name);
                     IIfcAsset ifcAsset;
