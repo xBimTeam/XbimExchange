@@ -67,15 +67,16 @@ namespace XbimExchanger.IfcToCOBieLiteUK.Conversion
                 Logger.Error(message);
                 return;
             }
-            e.Result = GenerateFile(parameters); //returns the excel file name
+            e.Result = GenerateFile(parameters); //returns the excel file names in an enumerable
         }
 
         /// <summary>
         /// Create XLS file from ifc/xbim files
         /// </summary>
         /// <param name="parameters">Params</param>
-        private string GenerateFile(CobieConversionParams parameters)
+        private IEnumerable<string> GenerateFile(CobieConversionParams parameters)
         {
+            var ret = new List<string>();
             var fileName = string.Empty;
             var exportType = parameters.ExportFormat.ToString();
 
@@ -120,13 +121,14 @@ namespace XbimExchanger.IfcToCOBieLiteUK.Conversion
                     fileName = CreateIfcFile(fileName, facilityType);
                 }
                 index++;
+                ret.Add(fileName);
             }
             timer.Stop();
             Worker.ReportProgress(0,
                 string.Format("Time to generate = {0} seconds", timer.Elapsed.TotalSeconds.ToString("F3")));
 
             Worker.ReportProgress(0, "Finished COBie Generation");
-            return fileName;
+            return ret;
         }
 
         private string CreateIfcFile(string fileName, Facility facility)

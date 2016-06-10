@@ -73,11 +73,13 @@ namespace Xbim.COBieLiteUK.Client
         public void CreateDefaultAppConfig(FileInfo configFile)
         {
             var asss = global::System.Reflection.Assembly.GetAssembly(typeof (IfcToCOBieLiteUkExchanger));
-
             using (var input = asss.GetManifestResourceStream("XbimExchanger.IfcToCOBieLiteUK.COBieAttributes.config"))
-            using (var output = configFile.Create())
             {
-                if (input != null) input.CopyTo(output);
+                if (input != null) 
+                using (var output = configFile.Create())
+                {
+                    input.CopyTo(output);
+                }
             }
             configFile.Refresh();
         }
@@ -291,9 +293,14 @@ namespace Xbim.COBieLiteUK.Client
                 btnGenerate.Enabled = true;
             }
             //open file if ticked to open excel
-            if (chkBoxOpenFile.Checked && args.Result != null && !string.IsNullOrEmpty(args.Result.ToString()))
+            if (chkBoxOpenFile.Checked && args.Result is IEnumerable<string>)
             {
-                Process.Start(args.Result.ToString());
+                var files = args.Result as IEnumerable<string>;
+                foreach (var file in files)
+                {
+                    if (!string.IsNullOrEmpty(file) && File.Exists(file))
+                        Process.Start(file);
+                }
             }
             ProgressBar.Visible = false;
         }
