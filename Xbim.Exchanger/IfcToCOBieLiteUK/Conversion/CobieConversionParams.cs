@@ -19,6 +19,9 @@ namespace XbimExchanger.IfcToCOBieLiteUK.Conversion
         public SystemExtractionMode SysMode { get; set; }
         public OutPutFilters Filter { get; set; }
         public string ConfigFile { get; set; }
+        /// <summary>
+        /// Produce COBie validation log file
+        /// </summary>
         public bool Log { get; set; }        
     }
 }

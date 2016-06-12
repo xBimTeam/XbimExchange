@@ -77,55 +77,58 @@ namespace XbimExchanger.IfcToCOBieLiteUK.Conversion
         private IEnumerable<string> GenerateFile(CobieConversionParams parameters)
         {
             var ret = new List<string>();
-            var fileName = string.Empty;
-            var exportType = parameters.ExportFormat.ToString();
-
-            var timer = new Stopwatch();
-            timer.Start();
-            var index = 1;
             var path = Path.GetDirectoryName(parameters.OutputFileName);
             Debug.Assert(path != null);
             var facilities = GetFacilities(parameters);
+            
+            var index = 1;
             foreach (var facilityType in facilities)
             {
-                fileName = Path.GetFileNameWithoutExtension(
-                    parameters.OutputFileName) +
-                    (facilities.Count == 1 ? "" : "(" + index + ")"
-                    );
+                var bareFileName = Path.GetFileNameWithoutExtension(parameters.OutputFileName);
+                if (facilities.Count > 1)
+                    bareFileName += "(" + index + ")";
+                Worker.ReportProgress(0, string.Format("Beginning facility '{0}'", bareFileName));
 
-                fileName = Path.Combine(path, fileName);
+                var timer = new Stopwatch();
+                timer.Start();
+
+                var fullFileName = Path.Combine(path, bareFileName);
                 if (parameters.Log)
                 {
-                    var logFile = Path.ChangeExtension(fileName, ".log");
+                    var logFile = Path.ChangeExtension(fullFileName, ".validation.log");
                     Worker.ReportProgress(0, string.Format("Creating validation log file: {0}", logFile));
                     using (var log = File.CreateText(logFile))
                     {
                         facilityType.ValidateUK2012(log, false);
                     }
+
+                    Worker.ReportProgress(0, string.Format("Time to validate: {0} seconds", timer.Elapsed.TotalSeconds.ToString("F3")));
+                    timer.Restart();
                 }
-                if ((exportType.Equals("XLS", StringComparison.OrdinalIgnoreCase)) ||
-                    (exportType.Equals("XLSX", StringComparison.OrdinalIgnoreCase)))
+                switch (parameters.ExportFormat)
                 {
-                    fileName = CreateExcelFile(parameters, fileName, facilityType);
-                }
-                else if (exportType.Equals("JSON", StringComparison.OrdinalIgnoreCase))
-                {
-                    fileName = CreateJsonFile(fileName, facilityType);
-                }
-                else if (exportType.Equals("XML", StringComparison.OrdinalIgnoreCase))
-                {
-                    fileName = CreateXmlFile(fileName, facilityType);
-                }
-                else if (exportType.Equals("IFC", StringComparison.OrdinalIgnoreCase))
-                {
-                    fileName = CreateIfcFile(fileName, facilityType);
+                    case ExportFormatEnum.XLS:
+                    case ExportFormatEnum.XLSX:
+                        fullFileName = CreateExcelFile(fullFileName, parameters, facilityType);
+                        break;
+                    case ExportFormatEnum.JSON:
+                        fullFileName = CreateJsonFile(fullFileName, facilityType);
+                        break;
+                    case ExportFormatEnum.XML:
+                        fullFileName = CreateXmlFile(fullFileName, facilityType);
+                        break;
+                    case ExportFormatEnum.IFC:
+                    default:
+                        fullFileName = CreateIfcFile(fullFileName, facilityType);
+                        break;
                 }
                 index++;
-                ret.Add(fileName);
+                timer.Stop();
+                Worker.ReportProgress(0, string.Format("Time to save: {0} seconds", timer.Elapsed.TotalSeconds.ToString("F3")));
+                ret.Add(fullFileName);
             }
-            timer.Stop();
-            Worker.ReportProgress(0,
-                string.Format("Time to generate = {0} seconds", timer.Elapsed.TotalSeconds.ToString("F3")));
+            
+            
 
             Worker.ReportProgress(0, "Finished COBie Generation");
             return ret;
@@ -172,15 +175,15 @@ namespace XbimExchanger.IfcToCOBieLiteUK.Conversion
         /// <summary>
         /// Generate a Excel File
         /// </summary>
-        /// <param name="parameters">Params</param>
         /// <param name="fileName">Root file name</param>
+        /// <param name="parameters">Params</param>
         /// <param name="facility">Facility</param>
         /// <returns>file name</returns>
-        private string CreateExcelFile(CobieConversionParams parameters, string fileName, Facility facility)
+        private string CreateExcelFile(string fileName, CobieConversionParams parameters, Facility facility)
         {
             var excelType = (ExcelTypeEnum) Enum.Parse(typeof (ExcelTypeEnum), parameters.ExportFormat.ToString(), true);
             var excelName = Path.ChangeExtension(fileName, excelType == ExcelTypeEnum.XLS ? ".xls" : ".xlsx");
-            Worker.ReportProgress(0, string.Format("Creating file: {0}", excelName));
+            // Worker.ReportProgress(0, string.Format("Creating file: {0}", excelName));
             using (var file = File.Create(excelName))
             {
                 facility.ReportProgress.Progress = Worker.ReportProgress;
@@ -260,8 +263,7 @@ namespace XbimExchanger.IfcToCOBieLiteUK.Conversion
             }
 
             timer.Stop();
-            Worker.ReportProgress(0,
-                string.Format("Time to generate COBieLite data = {0} seconds", timer.Elapsed.TotalSeconds.ToString("F3")));
+            Worker.ReportProgress(0, string.Format("Time to generate COBieLite data: {0} seconds", timer.Elapsed.TotalSeconds.ToString("F3")));
             return ret;
         }
 
