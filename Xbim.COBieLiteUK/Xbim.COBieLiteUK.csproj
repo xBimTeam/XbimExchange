@@ -207,6 +207,7 @@
     <Compile Include="Spare.cs" />
     <Compile Include="AttributeValues\StringAttributeValue.cs" />
     <Compile Include="System.cs" />
+    <Compile Include="Templates\Templates.cs" />
     <Compile Include="Zone.cs" />
   </ItemGroup>
   <ItemGroup>

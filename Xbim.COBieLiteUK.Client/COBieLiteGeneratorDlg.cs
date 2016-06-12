@@ -102,11 +102,9 @@ namespace Xbim.COBieLiteUK.Client
                 checkedListSys.SetItemChecked(i, true);
             }
             //set template from resources
-            var templates = typeof (Facility).Assembly.GetManifestResourceNames();
-            templates = templates.Where(x => x.Contains(".Templates.")).ToArray();
-            templates = templates.Select(x => x.Split('.')[3]).Distinct().ToArray();
-            txtTemplate.Items.AddRange(templates.OfType<object>().ToArray());
-            txtTemplate.SelectedIndex = 0;
+            txtTemplate.Items.AddRange(Templates.GetAvalilableTemplateTypes().OfType<object>().ToArray());
+            if (txtTemplate.Items.Count > 0)
+                txtTemplate.SelectedIndex = 0;
             cmboxFiletype.SelectedIndex = 1;
 
             //set up tooltips

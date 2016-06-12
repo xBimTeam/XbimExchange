@@ -538,14 +538,21 @@ namespace Xbim.COBieLiteUK
 
         #region Writing COBie Spreadsheet
 
-        public void WriteCobie(Stream stream, ExcelTypeEnum type, out string message,
-            OutPutFilters assetfilters = null, string version = "UK2012", bool useTemplate = true)
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="stream"></param>
+        /// <param name="type"></param>
+        /// <param name="message"></param>
+        /// <param name="assetfilters"></param>
+        /// <param name="templateVersion">Use a template selected amongst the admissible values returned from the Templates.GetAvalilableTemplateTypes() function</param>
+        /// <param name="useTemplate"></param>
+        public void WriteCobie(Stream stream, ExcelTypeEnum type, out string message, OutPutFilters assetfilters = null, string templateVersion = "UK2012", bool useTemplate = true)
         {
             Stream templateStream = null;
             if (useTemplate)
             {
-                var templateName = version + (type == ExcelTypeEnum.XLS ? ".xls" : ".xlsx");
-                var resourceName = string.Format("{0}.Templates.{1}", GetType().Namespace, templateName);
+                var resourceName = Templates.FullResourceName(templateVersion, type);
                 templateStream = GetType().Assembly.GetManifestResourceStream(resourceName);
                 if (templateStream == null)
                 {
@@ -572,7 +579,7 @@ namespace Xbim.COBieLiteUK
 
             ReportProgress.Reset(GetChildren().Count(), 100, "Creating Excel COBie");
 
-            WriteToCobie(workbook, log, null, new Dictionary<Type, int>(), new List<string>(), new Dictionary<string, int>(), assetfilters, version);
+            WriteToCobie(workbook, log, null, new Dictionary<Type, int>(), new List<string>(), new Dictionary<string, int>(), assetfilters, templateVersion);
 
             watch.Stop();
             Debug.WriteLine("Creating NPOI model: {0}ms", watch.ElapsedMilliseconds);
