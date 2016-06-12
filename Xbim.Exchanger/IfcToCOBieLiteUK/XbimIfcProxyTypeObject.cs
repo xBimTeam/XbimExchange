@@ -115,9 +115,10 @@ namespace XbimExchanger.IfcToCOBieLiteUK
                     AssetPortability accCategoryEnum;
                     if (Enum.TryParse(accCategoryString, true, out accCategoryEnum))
                         return accCategoryEnum;
-                    Logger.WarnFormat(
-                        "AssetTypeAccountingCategory: An illegal value of [{0}] has been passed for the category of #{1}={2}.",
-                        accCategoryString, _ifcTypeObject.EntityLabel, _ifcTypeObject.GetType().Name);
+                    Logger.WarnFormat("AssetTypeAccountingCategory: An illegal value of '{0}' has been passed for the category of Entity #{1} ({2}).",
+                        accCategoryString, 
+                        _ifcTypeObject.EntityLabel, 
+                        _ifcTypeObject.GetType().Name);
                     IIfcAsset ifcAsset;
                     if (_helper.AssetAsignments.TryGetValue(_ifcTypeObject, out ifcAsset))
                     {

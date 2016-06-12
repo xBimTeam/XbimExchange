@@ -713,9 +713,12 @@ namespace XbimExchanger.IfcToCOBieLiteUK
             }
             catch (Exception ex)
             {
-                var message = string.Format("Conversion of '{0}' ({2}) to {1} failed.", ifcValue.Value,
-                    typeof(TValue), ifcValue.Value.GetType());
-                Logger.ErrorFormat(message, ex);
+                var message = string.Format(
+                    "Conversion of '{0}' ({1}) to {2} failed.", 
+                    ifcValue.Value,
+                    ifcValue.Value.GetType(), 
+                    typeof(TValue));
+                Logger.DebugFormat(message);
                 value = new TValue();
                 return false;
             }

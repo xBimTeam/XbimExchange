@@ -1360,7 +1360,7 @@ namespace XbimExchanger.IfcToCOBieLiteUK
                 }
                 else
                 {
-                    throw new ArgumentException("Illegal COBie Attribute name:", valueName);
+                    throw new ArgumentException("Invalid COBie Attribute name:", valueName);
                 }
             }
             return null;
