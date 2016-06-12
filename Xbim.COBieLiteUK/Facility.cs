@@ -7,6 +7,7 @@ using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Xml;
 using System.Xml.Serialization;
+using log4net;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 using NPOI.HSSF.UserModel;
@@ -21,6 +22,8 @@ namespace Xbim.COBieLiteUK
 {
     public partial class Facility
     {
+        private static readonly ILog Log = LogManager.GetLogger("Xbim.COBieLiteUK.Facility");
+
         public Facility()
         {
             Metadata = new Metadata();
@@ -542,10 +545,12 @@ namespace Xbim.COBieLiteUK
             if (useTemplate)
             {
                 var templateName = version + (type == ExcelTypeEnum.XLS ? ".xls" : ".xlsx");
-                templateStream =
-                    GetType()
-                        .Assembly.GetManifestResourceStream(String.Format("{0}.Templates.{1}", GetType().Namespace,
-                            templateName));
+                var resourceName = string.Format("{0}.Templates.{1}", GetType().Namespace, templateName);
+                templateStream = GetType().Assembly.GetManifestResourceStream(resourceName);
+                if (templateStream == null)
+                {
+                    Log.ErrorFormat("Template '{0}' could not be found in assembly streams.", resourceName);
+                }
             }
 
             IWorkbook workbook;
