@@ -9,17 +9,18 @@ namespace Xbim.COBieLiteUK.Client
 {
     public partial class FilterTab : UserControl
     {
-        private OutPutFilters Filter = null;
-        private PropertySetFilters _common, _zone, _type, _space, _floor, _facility, _spare, _component;
+        private readonly OutPutFilters _filter;
+        private readonly PropertySetFilters _common, _zone, _type, _space, _floor, _facility, _spare, _component;
         public bool ReadOnly { get; private set; }
 
         /// <summary>
         /// Constructor
         /// </summary>
         /// <param name="filter">OutPutFilters</param>
+        /// <param name="readOnly"></param>
         public FilterTab(OutPutFilters filter, bool readOnly = false)
         {
-            Filter = filter;
+            _filter = filter;
             ReadOnly = readOnly;
             InitializeComponent();
             listViewDefinedTypes.UpdatedListView += SetPreDefinedTypes;
@@ -36,14 +37,13 @@ namespace Xbim.COBieLiteUK.Client
             _spare = (PropertySetFilters)tabPropertyCtr.TabPages["tabSpare"].Controls["pSetFiltersSpare"];
             _component = (PropertySetFilters)tabPropertyCtr.TabPages["tabComponent"].Controls["pSetFiltersComponent"];
 
-            Init(Filter);
+            Init(_filter);
 
-            if (readOnly)
-            {
-                chkListBoxComp.ItemCheck += new ItemCheckEventHandler(this.chkList_OnItemCheck);
-                chkListBoxType.ItemCheck += new ItemCheckEventHandler(this.chkList_OnItemCheck);
-                chkListBoxAss.ItemCheck += new ItemCheckEventHandler(this.chkList_OnItemCheck); 
-            }
+            if (!readOnly) 
+                return;
+            chkListBoxComp.ItemCheck += chkList_OnItemCheck;
+            chkListBoxType.ItemCheck += chkList_OnItemCheck;
+            chkListBoxAss.ItemCheck += chkList_OnItemCheck;
         }
 
 
@@ -72,19 +72,14 @@ namespace Xbim.COBieLiteUK.Client
         /// </summary>
         /// <param name="listbox">CheckedListBox</param>
         /// <param name="objs">Dictionary of string, bool></param>
-        private void SetUpObjectsList(CheckedListBox listbox, Dictionary<string, bool> objs)
+        private static void SetUpObjectsList(CheckedListBox listbox, Dictionary<string, bool> objs)
         {
-            
-            ((ListBox)listbox).DataSource = objs.Keys.ToList();
-            
-            for (int i = 0; i < listbox.Items.Count; i++)
+            ((ListBox)listbox).DataSource = objs.Keys.ToList();   
+            for (var i = 0; i < listbox.Items.Count; i++)
             {
-                string value = (string)listbox.Items[i];
-
+                var value = (string)listbox.Items[i];
                 listbox.SetItemChecked(i, objs[value]);
-
-            }
-           
+            }           
         }
 
         /// <summary>
@@ -92,20 +87,16 @@ namespace Xbim.COBieLiteUK.Client
         /// </summary>
         private void SetDefault()
         {
-            var name = this.Parent.Name;
+            var name = Parent.Name;
             RoleFilter role;
 
-            if (Enum.TryParse(name, out role))
-            {
-                var defaultFilter  = OutPutFilters.GetDefaults(role);
-                if (defaultFilter != null)
-                {
-                    Filter.Copy(defaultFilter);
-                    Init(Filter);
-                }
-            }
-
-
+            if (!Enum.TryParse(name, out role)) 
+                return;
+            var defaultFilter  = OutPutFilters.GetDefaults(role);
+            if (defaultFilter == null) 
+                return;
+            _filter.Copy(defaultFilter);
+            Init(_filter);
         }
 
         /// <summary>
@@ -128,17 +119,14 @@ namespace Xbim.COBieLiteUK.Client
             listViewDefinedTypes.SetEnabled();
             var selitem = chkListBoxType.Text;
             listViewDefinedTypes.Key = selitem;
-            if (!string.IsNullOrEmpty(selitem) && (Filter.IfcTypeObjectFilter.PreDefinedType.Keys.Contains(selitem)))
+            if (!string.IsNullOrEmpty(selitem) && (_filter.IfcTypeObjectFilter.PreDefinedType.Keys.Contains(selitem)))
             {
-                listViewDefinedTypes.Items = Filter.IfcTypeObjectFilter.PreDefinedType[selitem].ToList();
-                
-
+                listViewDefinedTypes.Items = _filter.IfcTypeObjectFilter.PreDefinedType[selitem].ToList();
             }
             else
             {
                 listViewDefinedTypes.Clear();
-            }
-            
+            }            
         }
 
         /// <summary>
@@ -166,7 +154,7 @@ namespace Xbim.COBieLiteUK.Client
                 Debug.Write(string.Format(" : {0} ", item));
             }
 #endif
-            Filter.IfcTypeObjectFilter.SetPreDefinedType(e.Key, e.Items.ConvertAll(x => x.ToUpper()).ToArray());
+            _filter.IfcTypeObjectFilter.SetPreDefinedType(e.Key, e.Items.ConvertAll(x => x.ToUpper()).ToArray());
 
         }
 
@@ -178,8 +166,7 @@ namespace Xbim.COBieLiteUK.Client
         {
             SaveObjectsLists();
             SavePropertyLists();
-            return Filter;
-
+            return _filter;
         }
 
         /// <summary>
@@ -188,29 +175,25 @@ namespace Xbim.COBieLiteUK.Client
         private void SaveObjectsLists()
         {
             //Note SetPreDefinedType save exit from list box as changes on type selection
-            foreach (CheckedListBox chkBoxList in new List<CheckedListBox>(){chkListBoxComp, chkListBoxType, chkListBoxAss })
+            foreach (var chkBoxList in new List<CheckedListBox>() {chkListBoxComp, chkListBoxType, chkListBoxAss})
             {
-                for (int i = 0; i < chkBoxList.Items.Count; i++)
+                for (var i = 0; i < chkBoxList.Items.Count; i++)
                 {
                     switch (chkBoxList.Name)
                     {
                         case "chkListBoxComp":
-                            Filter.IfcProductFilter.Items[(string)chkBoxList.Items[i]] = chkBoxList.GetItemChecked(i);
+                            _filter.IfcProductFilter.Items[(string) chkBoxList.Items[i]] = chkBoxList.GetItemChecked(i);
                             break;
                         case "chkListBoxType":
-                            Filter.IfcTypeObjectFilter.Items[(string)chkBoxList.Items[i]] = chkBoxList.GetItemChecked(i);
+                            _filter.IfcTypeObjectFilter.Items[(string) chkBoxList.Items[i]] = chkBoxList.GetItemChecked(i);
                             break;
                         case "chkListBoxAss":
-                            Filter.IfcAssemblyFilter.Items[(string)chkBoxList.Items[i]] = chkBoxList.GetItemChecked(i);
-                            break;
-                        default:
+                            _filter.IfcAssemblyFilter.Items[(string) chkBoxList.Items[i]] = chkBoxList.GetItemChecked(i);
                             break;
                     }
-                   
                 }
             }
         }
-
 
         /// <summary>
         /// Save property name exclusions back to filter object
@@ -218,45 +201,45 @@ namespace Xbim.COBieLiteUK.Client
         private void SavePropertyLists()
         {
             //Common
-            Filter.CommonFilter.EqualTo = _common.EqTo;
-            Filter.CommonFilter.StartWith = _common.StartWith;
-            Filter.CommonFilter.Contain = _common.ContainsTxt;
-            Filter.CommonFilter.PropertySetsEqualTo = _common.PSetEqTo;
+            _filter.CommonFilter.EqualTo = _common.EqTo;
+            _filter.CommonFilter.StartWith = _common.StartWith;
+            _filter.CommonFilter.Contain = _common.ContainsTxt;
+            _filter.CommonFilter.PropertySetsEqualTo = _common.PSetEqTo;
             //Zone
-            Filter.ZoneFilter.EqualTo = _zone.EqTo;
-            Filter.ZoneFilter.StartWith = _zone.StartWith;
-            Filter.ZoneFilter.Contain = _zone.ContainsTxt;
-            Filter.ZoneFilter.PropertySetsEqualTo = _zone.PSetEqTo;
+            _filter.ZoneFilter.EqualTo = _zone.EqTo;
+            _filter.ZoneFilter.StartWith = _zone.StartWith;
+            _filter.ZoneFilter.Contain = _zone.ContainsTxt;
+            _filter.ZoneFilter.PropertySetsEqualTo = _zone.PSetEqTo;
             //Type
-            Filter.TypeFilter.EqualTo = _type.EqTo;
-            Filter.TypeFilter.StartWith = _type.StartWith;
-            Filter.TypeFilter.Contain = _type.ContainsTxt;
-            Filter.TypeFilter.PropertySetsEqualTo = _type.PSetEqTo;
+            _filter.TypeFilter.EqualTo = _type.EqTo;
+            _filter.TypeFilter.StartWith = _type.StartWith;
+            _filter.TypeFilter.Contain = _type.ContainsTxt;
+            _filter.TypeFilter.PropertySetsEqualTo = _type.PSetEqTo;
             //Space
-            Filter.SpaceFilter.EqualTo = _space.EqTo;
-            Filter.SpaceFilter.StartWith = _space.StartWith;
-            Filter.SpaceFilter.Contain = _space.ContainsTxt;
-            Filter.SpaceFilter.PropertySetsEqualTo = _space.PSetEqTo;
+            _filter.SpaceFilter.EqualTo = _space.EqTo;
+            _filter.SpaceFilter.StartWith = _space.StartWith;
+            _filter.SpaceFilter.Contain = _space.ContainsTxt;
+            _filter.SpaceFilter.PropertySetsEqualTo = _space.PSetEqTo;
             //Floor
-            Filter.FloorFilter.EqualTo = _floor.EqTo;
-            Filter.FloorFilter.StartWith = _floor.StartWith;
-            Filter.FloorFilter.Contain = _floor.ContainsTxt;
-            Filter.FloorFilter.PropertySetsEqualTo = _floor.PSetEqTo;
+            _filter.FloorFilter.EqualTo = _floor.EqTo;
+            _filter.FloorFilter.StartWith = _floor.StartWith;
+            _filter.FloorFilter.Contain = _floor.ContainsTxt;
+            _filter.FloorFilter.PropertySetsEqualTo = _floor.PSetEqTo;
             //Facility
-            Filter.FacilityFilter.EqualTo = _facility.EqTo;
-            Filter.FacilityFilter.StartWith = _facility.StartWith;
-            Filter.FacilityFilter.Contain = _facility.ContainsTxt;
-            Filter.FacilityFilter.PropertySetsEqualTo = _facility.PSetEqTo;
+            _filter.FacilityFilter.EqualTo = _facility.EqTo;
+            _filter.FacilityFilter.StartWith = _facility.StartWith;
+            _filter.FacilityFilter.Contain = _facility.ContainsTxt;
+            _filter.FacilityFilter.PropertySetsEqualTo = _facility.PSetEqTo;
             //Spare
-            Filter.SpareFilter.EqualTo = _spare.EqTo;
-            Filter.SpareFilter.StartWith = _spare.StartWith;
-            Filter.SpareFilter.Contain = _spare.ContainsTxt;
-            Filter.SpareFilter.PropertySetsEqualTo = _spare.PSetEqTo;
+            _filter.SpareFilter.EqualTo = _spare.EqTo;
+            _filter.SpareFilter.StartWith = _spare.StartWith;
+            _filter.SpareFilter.Contain = _spare.ContainsTxt;
+            _filter.SpareFilter.PropertySetsEqualTo = _spare.PSetEqTo;
             //Component
-            Filter.ComponentFilter.EqualTo = _component.EqTo;
-            Filter.ComponentFilter.StartWith = _component.StartWith;
-            Filter.ComponentFilter.Contain = _component.ContainsTxt;
-            Filter.ComponentFilter.PropertySetsEqualTo = _component.PSetEqTo;
+            _filter.ComponentFilter.EqualTo = _component.EqTo;
+            _filter.ComponentFilter.StartWith = _component.StartWith;
+            _filter.ComponentFilter.Contain = _component.ContainsTxt;
+            _filter.ComponentFilter.PropertySetsEqualTo = _component.PSetEqTo;
         }
 
         /// <summary>
@@ -297,27 +280,18 @@ namespace Xbim.COBieLiteUK.Client
         private static void SetAllTicks(object sender, bool isChecked)
         {
             var menuItem = sender as ToolStripItem;
-            if (menuItem != null)
+            if (menuItem == null) 
+                return;
+            var owner = menuItem.Owner as ContextMenuStrip;
+            if (owner == null) 
+                return;
+            var listbox = owner.SourceControl as CheckedListBox;
+            if (listbox == null) 
+                return;
+            for (var i = 0; i < listbox.Items.Count; i++)
             {
-                var owner = menuItem.Owner as ContextMenuStrip;
-                if (owner != null)
-                {
-                    var listbox = owner.SourceControl as CheckedListBox;
-                    if (listbox != null)
-                    {
-                        for (int i = 0; i < listbox.Items.Count; i++)
-                        {
-                            string value = (string)listbox.Items[i];
-
-                            listbox.SetItemChecked(i, isChecked);
-                        }
-                    }
-                }
+                listbox.SetItemChecked(i, isChecked);
             }
         }
-
-        
-
-        
     }
 }

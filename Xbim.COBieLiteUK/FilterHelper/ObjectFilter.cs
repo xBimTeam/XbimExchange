@@ -11,9 +11,6 @@ namespace Xbim.FilterHelper
     /// </summary>
     public class ObjectFilter
     {
-
-        
-
         #region Properties
         /// <summary>
         /// Keyed list with true or false values, true to include. false to exclude
@@ -146,7 +143,8 @@ namespace Xbim.FilterHelper
         /// <returns>bool, true = exclude</returns>
         public bool ItemsFilter(IIfcObjectDefinition obj)
         {
-            if (ItemsToExclude.Count == 0) return false; //nothing to test against
+            if (ItemsToExclude.Count == 0) 
+                return false; //nothing to test against
 
             var objType = obj.GetType();
             var objString = objType.Name.ToUpper(); //obj.ToString().ToUpper(); //or this might work, obj.IfcType().IfcTypeEnum.ToString();
