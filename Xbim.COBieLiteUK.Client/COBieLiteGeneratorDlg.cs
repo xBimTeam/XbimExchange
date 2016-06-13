@@ -16,6 +16,9 @@ namespace Xbim.COBieLiteUK.Client
     // ReSharper disable once InconsistentNaming
     public partial class COBieLiteGeneratorDlg : Form
     {
+
+        
+
         /// <summary>
         /// Worker
         /// </summary>
@@ -127,7 +130,7 @@ namespace Xbim.COBieLiteUK.Client
             tooltip.SetToolTip(cmboxFiletype, "Select excel file extension to generate");
             tooltip.SetToolTip(btnClassFilter, "Setup Filter");
             tooltip.SetToolTip(btnMergeFilter, "Filter To Apply, based on selected roles");
-            tooltip.SetToolTip(btnPropMaps, "Set PropertySet.PropertyName mappings to COBie Fileds");
+            tooltip.SetToolTip(btnPropMaps, "Set PropertySet.PropertyName mappings to be used for conversion to IFC format.");
             tooltip.SetToolTip(chkBoxIds, "Tick to change GUID IDs to Entity IDs");
             tooltip.SetToolTip(checkedListSys,
                 "Tick to include additional Systems (ifcSystems always included)\nPropertyMaps = PropertySet Mappings, System Tab in \"Property Maps\" dialog\nTypes = Object Types listing associated components (not assigned to system)");
@@ -613,6 +616,10 @@ namespace Xbim.COBieLiteUK.Client
         private void cmboxFiletype_SelectedIndexChanged(object sender, EventArgs e)
         {
             UpdateCheckOpenExcel();
+
+            grpIfcGenerationMaps.Enabled = cmboxFiletype.Text.Equals("IFC", StringComparison.OrdinalIgnoreCase);
+
+
         }
     }
 

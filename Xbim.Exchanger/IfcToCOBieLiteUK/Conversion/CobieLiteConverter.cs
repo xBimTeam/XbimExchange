@@ -5,6 +5,8 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using log4net;
+using Xbim.Common;
+using Xbim.Common.Step21;
 using Xbim.COBieLiteUK;
 using Xbim.FilterHelper;
 using Xbim.Ifc;
@@ -156,9 +158,8 @@ namespace XbimExchanger.IfcToCOBieLiteUK.Conversion
             creds.EditorsFamilyName = fvi.CompanyName;
             creds.ApplicationFullName = fvi.ProductName;
             creds.ApplicationVersion = fvi.ProductVersion;
-            using (var ifcModel = IfcStore.Open(xbimFile,creds,true))
+            using (var ifcModel = IfcStore.Create(IfcSchemaVersion.Ifc2X3, XbimStoreType.InMemoryModel))
             {
-               
                 using (var txn = ifcModel.BeginTransaction("Convert from COBieLiteUK"))
                 {
                     var coBieLiteUkToIfcExchanger = new CoBieLiteUkToIfcExchanger(facility, ifcModel);
@@ -167,7 +168,7 @@ namespace XbimExchanger.IfcToCOBieLiteUK.Conversion
                 }
                 Worker.ReportProgress(0, string.Format("Creating file: {0}", ifcName));
                 ifcModel.SaveAs(ifcName, IfcStorageType.Ifc);
-                ifcModel.Close();
+                ifcModel.Close();               
             }
             return ifcName;
         }

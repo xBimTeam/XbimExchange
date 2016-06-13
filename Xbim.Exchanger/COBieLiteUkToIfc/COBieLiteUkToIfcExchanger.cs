@@ -1,12 +1,17 @@
 ﻿using System;
 using System.IO;
-using Xbim.Ifc2x3.ExternalReferenceResource;
-using SystemConvert = System.Convert;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Globalization;
 using System.Linq;
+using SystemConvert = System.Convert;
+using Assembly = System.Reflection.Assembly;
 using Xbim.COBieLiteUK;
+using Attribute = Xbim.COBieLiteUK.Attribute;
+using Xbim.FilterHelper;
+using XbimExchanger.COBieLiteHelpers;
+using XbimExchanger.IfcHelpers.Ifc2x3;
+using Xbim.Ifc;
 using Xbim.Ifc2x3.GeometricConstraintResource;
 using Xbim.Ifc2x3.GeometricModelResource;
 using Xbim.Ifc2x3.GeometryResource;
@@ -17,15 +22,11 @@ using Xbim.Ifc2x3.ProfileResource;
 using Xbim.Ifc2x3.PropertyResource;
 using Xbim.Ifc2x3.QuantityResource;
 using Xbim.Ifc2x3.RepresentationResource;
-using XbimExchanger.COBieLiteHelpers;
-using XbimExchanger.IfcHelpers;
-using Assembly = System.Reflection.Assembly;
-using Attribute = Xbim.COBieLiteUK.Attribute;
-using Xbim.FilterHelper;
 using Xbim.Ifc2x3.ActorResource;
 using Xbim.Ifc2x3.UtilityResource;
-using Xbim.Ifc;
-using XbimExchanger.IfcHelpers.Ifc2x3;
+using Xbim.Ifc2x3.ExternalReferenceResource;
+
+// todo: the whole conversion to IFC needs to be able to support IFC4; this is not enabled ad the moment.
 
 namespace XbimExchanger.COBieLiteUkToIfc
 {
@@ -97,7 +98,7 @@ namespace XbimExchanger.COBieLiteUkToIfc
                         directory.FullName)
                     );
             }
-            COBiePropertyMapping propertyMaps = new COBiePropertyMapping(new FileInfo(tmpFile));
+            var propertyMaps = new COBiePropertyMapping(new FileInfo(tmpFile));
             var cobieFieldMap = propertyMaps.GetDictOfProperties().Where(d => d.Value.FirstOrDefault() != null).ToDictionary(d => d.Key, d => d.Value.First());
             foreach (var item in cobieFieldMap)
             {
@@ -462,7 +463,6 @@ namespace XbimExchanger.COBieLiteUkToIfc
                     }
                     else //need to use an existing PropertySet definition
                     {
-
                         //simplistic way to decide if this should be a quantity, IFC 4 specifies the name starts with QTO, under 2x3 most vendors have gone for BaseQuantities
                         if (namedProperty.PropertySetName.StartsWith("qto_", true, CultureInfo.InvariantCulture) ||
                             namedProperty.PropertySetName.StartsWith("basequantities", true,
@@ -486,9 +486,6 @@ namespace XbimExchanger.COBieLiteUkToIfc
                 return false;
             }
         }
-
-
-
 
         private void AddProperty(IfcObject ifcObject, IfcValue value, string cobiePropertyName, IfcPropertySet propertySet,
             NamedProperty namedProperty)
@@ -951,13 +948,15 @@ namespace XbimExchanger.COBieLiteUkToIfc
         /// <param name="createdOn">Date the object was created on</param>
         protected void SetOwnerHistory(IfcRoot ifcRoot, string externalSystem, string createdBy, DateTime createdOn)
         {
+            // todo: CB: the stamp variable is never used... this funciton needs further investigation
+            IfcTimeStamp stamp;
             try
             {
-                IfcTimeStamp stamp = IfcTimeStamp.ToTimeStamp(createdOn);
+                stamp = IfcTimeStamp.ToTimeStamp(createdOn);
             }
             catch (OverflowException)
             {
-                IfcTimeStamp stamp = 0; //junk date passed, so set to 0 (1970) see http://www.buildingsmart-tech.org/ifc/IFC2x3/TC1/html/ifcmeasureresource/lexical/ifctimestamp.htm
+                stamp = 0; //junk date passed, so set to 0 (1970) see http://www.buildingsmart-tech.org/ifc/IFC2x3/TC1/html/ifcmeasureresource/lexical/ifctimestamp.htm
             }
             catch(Exception)
             {
@@ -965,21 +964,37 @@ namespace XbimExchanger.COBieLiteUkToIfc
             }
             if (OwnerHistories == null)
             {
-                OwnerHistories = TargetRepository.Instances.OfType<IfcOwnerHistory>().Where(oh => (oh.CreationDate != null)
-                                                                           && (
-                                                                                (oh.OwningUser.ThePerson != null) && (oh.OwningUser.ThePerson.Addresses != null) && oh.OwningUser.ThePerson.Addresses.OfType<IfcTelecomAddress>().Any()
-                                                                              )
-                                                                           && (
-                                                                                ((oh.LastModifyingApplication != null) && (oh.LastModifyingApplication.ApplicationFullName != null) )
-                                                                                || ((oh.LastModifyingApplication == null) && (oh.OwningApplication != null) && (oh.OwningApplication.ApplicationFullName != null))
-                                                                              )
-                                                                           )
-                                                                           .ToDictionary(oh => new OwnerHistoryKey { CreatedBy = oh.OwningUser.ThePerson.Addresses.OfType<IfcTelecomAddress>().First().ElectronicMailAddresses.First(),
-                                                                            CreatedOn = (oh.CreationDate != null) ? IfcTimeStamp.ToDateTime(oh.CreationDate).ToString() : string.Empty,
-                                                                            ExtSystem = (oh.LastModifyingApplication == null) ? oh.OwningApplication.ApplicationFullName : oh.LastModifyingApplication.ApplicationFullName
-                                                                           }, oh => oh );
+                OwnerHistories = TargetRepository.Instances.OfType<IfcOwnerHistory>()
+                    .Where(oh => (oh.CreationDate != null)
+                                 && (
+                                     (oh.OwningUser.ThePerson != null) && (oh.OwningUser.ThePerson.Addresses != null) &&
+                                     oh.OwningUser.ThePerson.Addresses.OfType<IfcTelecomAddress>().Any()
+                                     )
+                                 && (
+                                     ((oh.LastModifyingApplication != null) &&
+                                      (oh.LastModifyingApplication.ApplicationFullName != null))
+                                     ||
+                                     ((oh.LastModifyingApplication == null) && (oh.OwningApplication != null) &&
+                                      (oh.OwningApplication.ApplicationFullName != null))
+                                     )
+                    )
+                    .ToDictionary(oh => new OwnerHistoryKey
+                    {
+                        CreatedBy =
+                            oh.OwningUser.ThePerson.Addresses.OfType<IfcTelecomAddress>()
+                                .First()
+                                .ElectronicMailAddresses.First(),
+                        CreatedOn =
+                            (oh.CreationDate != null)
+                                ? IfcTimeStamp.ToDateTime(oh.CreationDate).ToString()
+                                : string.Empty,
+                        ExtSystem =
+                            (oh.LastModifyingApplication == null)
+                                ? oh.OwningApplication.ApplicationFullName
+                                : oh.LastModifyingApplication.ApplicationFullName
+                    }, oh => oh);
             }
-           
+
             var key = new OwnerHistoryKey { ExtSystem = externalSystem, CreatedBy = createdBy, CreatedOn = (createdOn == null) ? string.Empty : createdOn.ToString() };
             if (OwnerHistories.ContainsKey(key))
             {
@@ -987,7 +1002,7 @@ namespace XbimExchanger.COBieLiteUkToIfc
             }
             else
             {
-               ifcRoot.OwnerHistory = CreateOwnerHistory(externalSystem, SetEmailUser(createdBy), createdOn);
+                ifcRoot.OwnerHistory = CreateOwnerHistory(externalSystem, SetEmailUser(createdBy), createdOn);
                 OwnerHistories.Add(key, ifcRoot.OwnerHistory);
             }
         }

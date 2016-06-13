@@ -1,5 +1,4 @@
-﻿
-namespace Xbim.COBieLiteUK.Client
+﻿namespace Xbim.COBieLiteUK.Client
 {
     partial class COBieLiteGeneratorDlg
     {
@@ -37,7 +36,6 @@ namespace Xbim.COBieLiteUK.Client
             this.label2 = new global::System.Windows.Forms.Label();
             this.btnBrowse = new global::System.Windows.Forms.Button();
             this.label1 = new global::System.Windows.Forms.Label();
-            this.label3 = new global::System.Windows.Forms.Label();
             this.cmboxFiletype = new global::System.Windows.Forms.ComboBox();
             this.btnClear = new global::System.Windows.Forms.Button();
             this.btnGenerate = new global::System.Windows.Forms.Button();
@@ -56,10 +54,16 @@ namespace Xbim.COBieLiteUK.Client
             this.chkBoxIds = new global::System.Windows.Forms.CheckBox();
             this.checkedListSys = new global::System.Windows.Forms.CheckedListBox();
             this.chkBoxLog = new global::System.Windows.Forms.CheckBox();
-            this.rolesList = new RolesList();
+            this.rolesList = new Xbim.COBieLiteUK.Client.RolesList();
+            this.groupBox3 = new global::System.Windows.Forms.GroupBox();
+            this.grpIfcGenerationMaps = new global::System.Windows.Forms.GroupBox();
+            this.groupBox4 = new global::System.Windows.Forms.GroupBox();
             this.groupBox1.SuspendLayout();
             this.statusStrip1.SuspendLayout();
             this.groupBox2.SuspendLayout();
+            this.groupBox3.SuspendLayout();
+            this.grpIfcGenerationMaps.SuspendLayout();
+            this.groupBox4.SuspendLayout();
             this.SuspendLayout();
             // 
             // groupBox1
@@ -73,11 +77,9 @@ namespace Xbim.COBieLiteUK.Client
             this.groupBox1.Controls.Add(this.label2);
             this.groupBox1.Controls.Add(this.btnBrowse);
             this.groupBox1.Controls.Add(this.label1);
-            this.groupBox1.Location = new global::System.Drawing.Point(211, 10);
-            this.groupBox1.Margin = new global::System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.groupBox1.Location = new global::System.Drawing.Point(158, 8);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Padding = new global::System.Windows.Forms.Padding(4, 4, 4, 4);
-            this.groupBox1.Size = new global::System.Drawing.Size(615, 102);
+            this.groupBox1.Size = new global::System.Drawing.Size(530, 83);
             this.groupBox1.TabIndex = 1;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "File Location";
@@ -86,20 +88,18 @@ namespace Xbim.COBieLiteUK.Client
             // 
             this.txtPath.Anchor = ((global::System.Windows.Forms.AnchorStyles)(((global::System.Windows.Forms.AnchorStyles.Top | global::System.Windows.Forms.AnchorStyles.Left) 
             | global::System.Windows.Forms.AnchorStyles.Right)));
-            this.txtPath.Location = new global::System.Drawing.Point(99, 23);
-            this.txtPath.Margin = new global::System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.txtPath.Location = new global::System.Drawing.Point(74, 19);
             this.txtPath.Name = "txtPath";
             this.txtPath.ReadOnly = true;
-            this.txtPath.Size = new global::System.Drawing.Size(328, 22);
+            this.txtPath.Size = new global::System.Drawing.Size(316, 20);
             this.txtPath.TabIndex = 6;
             // 
             // btnFederate
             // 
             this.btnFederate.Anchor = ((global::System.Windows.Forms.AnchorStyles)((global::System.Windows.Forms.AnchorStyles.Top | global::System.Windows.Forms.AnchorStyles.Right)));
-            this.btnFederate.Location = new global::System.Drawing.Point(516, 25);
-            this.btnFederate.Margin = new global::System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.btnFederate.Location = new global::System.Drawing.Point(456, 20);
             this.btnFederate.Name = "btnFederate";
-            this.btnFederate.Size = new global::System.Drawing.Size(83, 28);
+            this.btnFederate.Size = new global::System.Drawing.Size(62, 23);
             this.btnFederate.TabIndex = 5;
             this.btnFederate.Text = "Federate";
             this.btnFederate.UseVisualStyleBackColor = true;
@@ -109,10 +109,9 @@ namespace Xbim.COBieLiteUK.Client
             // 
             this.btnBrowseTemplate.Anchor = ((global::System.Windows.Forms.AnchorStyles)((global::System.Windows.Forms.AnchorStyles.Top | global::System.Windows.Forms.AnchorStyles.Right)));
             this.btnBrowseTemplate.Enabled = false;
-            this.btnBrowseTemplate.Location = new global::System.Drawing.Point(433, 54);
-            this.btnBrowseTemplate.Margin = new global::System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.btnBrowseTemplate.Location = new global::System.Drawing.Point(394, 44);
             this.btnBrowseTemplate.Name = "btnBrowseTemplate";
-            this.btnBrowseTemplate.Size = new global::System.Drawing.Size(165, 28);
+            this.btnBrowseTemplate.Size = new global::System.Drawing.Size(124, 23);
             this.btnBrowseTemplate.TabIndex = 4;
             this.btnBrowseTemplate.Text = "&Browse...";
             this.btnBrowseTemplate.UseVisualStyleBackColor = true;
@@ -124,30 +123,27 @@ namespace Xbim.COBieLiteUK.Client
             | global::System.Windows.Forms.AnchorStyles.Right)));
             this.txtTemplate.DropDownStyle = global::System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.txtTemplate.FormattingEnabled = true;
-            this.txtTemplate.Location = new global::System.Drawing.Point(99, 57);
-            this.txtTemplate.Margin = new global::System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.txtTemplate.Location = new global::System.Drawing.Point(74, 46);
             this.txtTemplate.Name = "txtTemplate";
-            this.txtTemplate.Size = new global::System.Drawing.Size(325, 24);
+            this.txtTemplate.Size = new global::System.Drawing.Size(314, 21);
             this.txtTemplate.TabIndex = 3;
             this.txtTemplate.SelectedIndexChanged += new global::System.EventHandler(this.txtTemplate_SelectedIndexChanged);
             // 
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new global::System.Drawing.Point(16, 60);
-            this.label2.Margin = new global::System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.label2.Location = new global::System.Drawing.Point(12, 49);
             this.label2.Name = "label2";
-            this.label2.Size = new global::System.Drawing.Size(71, 17);
+            this.label2.Size = new global::System.Drawing.Size(54, 13);
             this.label2.TabIndex = 2;
             this.label2.Text = "Template:";
             // 
             // btnBrowse
             // 
             this.btnBrowse.Anchor = ((global::System.Windows.Forms.AnchorStyles)((global::System.Windows.Forms.AnchorStyles.Top | global::System.Windows.Forms.AnchorStyles.Right)));
-            this.btnBrowse.Location = new global::System.Drawing.Point(433, 25);
-            this.btnBrowse.Margin = new global::System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.btnBrowse.Location = new global::System.Drawing.Point(394, 20);
             this.btnBrowse.Name = "btnBrowse";
-            this.btnBrowse.Size = new global::System.Drawing.Size(84, 28);
+            this.btnBrowse.Size = new global::System.Drawing.Size(63, 23);
             this.btnBrowse.TabIndex = 1;
             this.btnBrowse.Text = "&Browse...";
             this.btnBrowse.UseVisualStyleBackColor = true;
@@ -156,23 +152,11 @@ namespace Xbim.COBieLiteUK.Client
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new global::System.Drawing.Point(16, 28);
-            this.label1.Margin = new global::System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.label1.Location = new global::System.Drawing.Point(12, 23);
             this.label1.Name = "label1";
-            this.label1.Size = new global::System.Drawing.Size(73, 17);
+            this.label1.Size = new global::System.Drawing.Size(56, 13);
             this.label1.TabIndex = 0;
             this.label1.Text = "Select file:";
-            // 
-            // label3
-            // 
-            this.label3.Anchor = ((global::System.Windows.Forms.AnchorStyles)((global::System.Windows.Forms.AnchorStyles.Top | global::System.Windows.Forms.AnchorStyles.Right)));
-            this.label3.AutoSize = true;
-            this.label3.Location = new global::System.Drawing.Point(687, 122);
-            this.label3.Margin = new global::System.Windows.Forms.Padding(4, 0, 4, 0);
-            this.label3.Name = "label3";
-            this.label3.Size = new global::System.Drawing.Size(93, 17);
-            this.label3.TabIndex = 30;
-            this.label3.Text = "System Mode";
             // 
             // cmboxFiletype
             // 
@@ -185,20 +169,18 @@ namespace Xbim.COBieLiteUK.Client
             "JSON",
             "XML",
             "IFC"});
-            this.cmboxFiletype.Location = new global::System.Drawing.Point(703, 523);
-            this.cmboxFiletype.Margin = new global::System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.cmboxFiletype.Location = new global::System.Drawing.Point(514, 480);
             this.cmboxFiletype.Name = "cmboxFiletype";
-            this.cmboxFiletype.Size = new global::System.Drawing.Size(99, 24);
+            this.cmboxFiletype.Size = new global::System.Drawing.Size(174, 21);
             this.cmboxFiletype.TabIndex = 18;
             this.cmboxFiletype.SelectedIndexChanged += new global::System.EventHandler(this.cmboxFiletype_SelectedIndexChanged);
             // 
             // btnClear
             // 
-            this.btnClear.Anchor = ((global::System.Windows.Forms.AnchorStyles)((global::System.Windows.Forms.AnchorStyles.Bottom | global::System.Windows.Forms.AnchorStyles.Right)));
-            this.btnClear.Location = new global::System.Drawing.Point(703, 452);
-            this.btnClear.Margin = new global::System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.btnClear.Anchor = ((global::System.Windows.Forms.AnchorStyles)((global::System.Windows.Forms.AnchorStyles.Bottom | global::System.Windows.Forms.AnchorStyles.Left)));
+            this.btnClear.Location = new global::System.Drawing.Point(15, 507);
             this.btnClear.Name = "btnClear";
-            this.btnClear.Size = new global::System.Drawing.Size(100, 28);
+            this.btnClear.Size = new global::System.Drawing.Size(112, 26);
             this.btnClear.TabIndex = 17;
             this.btnClear.Text = "&Clear";
             this.btnClear.UseVisualStyleBackColor = true;
@@ -207,10 +189,9 @@ namespace Xbim.COBieLiteUK.Client
             // btnGenerate
             // 
             this.btnGenerate.Anchor = ((global::System.Windows.Forms.AnchorStyles)((global::System.Windows.Forms.AnchorStyles.Bottom | global::System.Windows.Forms.AnchorStyles.Right)));
-            this.btnGenerate.Location = new global::System.Drawing.Point(703, 487);
-            this.btnGenerate.Margin = new global::System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.btnGenerate.Location = new global::System.Drawing.Point(514, 507);
             this.btnGenerate.Name = "btnGenerate";
-            this.btnGenerate.Size = new global::System.Drawing.Size(100, 28);
+            this.btnGenerate.Size = new global::System.Drawing.Size(174, 26);
             this.btnGenerate.TabIndex = 16;
             this.btnGenerate.Text = "&Generate";
             this.btnGenerate.UseVisualStyleBackColor = true;
@@ -223,10 +204,9 @@ namespace Xbim.COBieLiteUK.Client
             this.ProgressBar,
             this.StatusMsg,
             this.toolStripStatusLabel1});
-            this.statusStrip1.Location = new global::System.Drawing.Point(0, 588);
+            this.statusStrip1.Location = new global::System.Drawing.Point(0, 536);
             this.statusStrip1.Name = "statusStrip1";
-            this.statusStrip1.Padding = new global::System.Windows.Forms.Padding(1, 0, 19, 0);
-            this.statusStrip1.Size = new global::System.Drawing.Size(836, 22);
+            this.statusStrip1.Size = new global::System.Drawing.Size(696, 22);
             this.statusStrip1.TabIndex = 19;
             this.statusStrip1.Text = "statusStrip1";
             // 
@@ -234,13 +214,13 @@ namespace Xbim.COBieLiteUK.Client
             // 
             this.ProgressBar.AutoSize = false;
             this.ProgressBar.Name = "ProgressBar";
-            this.ProgressBar.Size = new global::System.Drawing.Size(200, 20);
+            this.ProgressBar.Size = new global::System.Drawing.Size(150, 16);
             this.ProgressBar.Visible = false;
             // 
             // StatusMsg
             // 
             this.StatusMsg.Name = "StatusMsg";
-            this.StatusMsg.Size = new global::System.Drawing.Size(816, 17);
+            this.StatusMsg.Size = new global::System.Drawing.Size(681, 17);
             this.StatusMsg.Spring = true;
             this.StatusMsg.TextAlign = global::System.Drawing.ContentAlignment.MiddleLeft;
             // 
@@ -254,21 +234,20 @@ namespace Xbim.COBieLiteUK.Client
             this.txtOutput.Anchor = ((global::System.Windows.Forms.AnchorStyles)((((global::System.Windows.Forms.AnchorStyles.Top | global::System.Windows.Forms.AnchorStyles.Bottom) 
             | global::System.Windows.Forms.AnchorStyles.Left) 
             | global::System.Windows.Forms.AnchorStyles.Right)));
-            this.txtOutput.Location = new global::System.Drawing.Point(20, 119);
-            this.txtOutput.Margin = new global::System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.txtOutput.Location = new global::System.Drawing.Point(15, 97);
             this.txtOutput.Name = "txtOutput";
             this.txtOutput.ReadOnly = true;
-            this.txtOutput.Size = new global::System.Drawing.Size(664, 459);
+            this.txtOutput.Size = new global::System.Drawing.Size(493, 404);
             this.txtOutput.TabIndex = 20;
             this.txtOutput.Text = "";
             // 
             // btnClassFilter
             // 
-            this.btnClassFilter.Anchor = ((global::System.Windows.Forms.AnchorStyles)((global::System.Windows.Forms.AnchorStyles.Top | global::System.Windows.Forms.AnchorStyles.Right)));
-            this.btnClassFilter.Location = new global::System.Drawing.Point(8, 76);
-            this.btnClassFilter.Margin = new global::System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.btnClassFilter.Anchor = ((global::System.Windows.Forms.AnchorStyles)(((global::System.Windows.Forms.AnchorStyles.Top | global::System.Windows.Forms.AnchorStyles.Left) 
+            | global::System.Windows.Forms.AnchorStyles.Right)));
+            this.btnClassFilter.Location = new global::System.Drawing.Point(7, 62);
             this.btnClassFilter.Name = "btnClassFilter";
-            this.btnClassFilter.Size = new global::System.Drawing.Size(100, 32);
+            this.btnClassFilter.Size = new global::System.Drawing.Size(148, 26);
             this.btnClassFilter.TabIndex = 21;
             this.btnClassFilter.Text = "Set Filters";
             this.btnClassFilter.UseVisualStyleBackColor = true;
@@ -276,12 +255,12 @@ namespace Xbim.COBieLiteUK.Client
             // 
             // chkBoxFlipFilter
             // 
-            this.chkBoxFlipFilter.Anchor = ((global::System.Windows.Forms.AnchorStyles)((global::System.Windows.Forms.AnchorStyles.Top | global::System.Windows.Forms.AnchorStyles.Right)));
+            this.chkBoxFlipFilter.Anchor = ((global::System.Windows.Forms.AnchorStyles)(((global::System.Windows.Forms.AnchorStyles.Top | global::System.Windows.Forms.AnchorStyles.Left) 
+            | global::System.Windows.Forms.AnchorStyles.Right)));
             this.chkBoxFlipFilter.AutoSize = true;
-            this.chkBoxFlipFilter.Location = new global::System.Drawing.Point(10, 48);
-            this.chkBoxFlipFilter.Margin = new global::System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.chkBoxFlipFilter.Location = new global::System.Drawing.Point(5, 39);
             this.chkBoxFlipFilter.Name = "chkBoxFlipFilter";
-            this.chkBoxFlipFilter.Size = new global::System.Drawing.Size(87, 21);
+            this.chkBoxFlipFilter.Size = new global::System.Drawing.Size(67, 17);
             this.chkBoxFlipFilter.TabIndex = 22;
             this.chkBoxFlipFilter.Text = "Flip Filter";
             this.chkBoxFlipFilter.UseVisualStyleBackColor = true;
@@ -293,21 +272,20 @@ namespace Xbim.COBieLiteUK.Client
             this.chkBoxOpenFile.AutoSize = true;
             this.chkBoxOpenFile.Checked = true;
             this.chkBoxOpenFile.CheckState = global::System.Windows.Forms.CheckState.Checked;
-            this.chkBoxOpenFile.Location = new global::System.Drawing.Point(709, 556);
-            this.chkBoxOpenFile.Margin = new global::System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.chkBoxOpenFile.Location = new global::System.Drawing.Point(427, 513);
             this.chkBoxOpenFile.Name = "chkBoxOpenFile";
-            this.chkBoxOpenFile.Size = new global::System.Drawing.Size(102, 21);
+            this.chkBoxOpenFile.Size = new global::System.Drawing.Size(81, 17);
             this.chkBoxOpenFile.TabIndex = 23;
             this.chkBoxOpenFile.Text = "Open Excel";
             this.chkBoxOpenFile.UseVisualStyleBackColor = true;
             // 
             // btnMergeFilter
             // 
-            this.btnMergeFilter.Anchor = ((global::System.Windows.Forms.AnchorStyles)((global::System.Windows.Forms.AnchorStyles.Top | global::System.Windows.Forms.AnchorStyles.Right)));
-            this.btnMergeFilter.Location = new global::System.Drawing.Point(9, 113);
-            this.btnMergeFilter.Margin = new global::System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.btnMergeFilter.Anchor = ((global::System.Windows.Forms.AnchorStyles)(((global::System.Windows.Forms.AnchorStyles.Top | global::System.Windows.Forms.AnchorStyles.Left) 
+            | global::System.Windows.Forms.AnchorStyles.Right)));
+            this.btnMergeFilter.Location = new global::System.Drawing.Point(7, 92);
             this.btnMergeFilter.Name = "btnMergeFilter";
-            this.btnMergeFilter.Size = new global::System.Drawing.Size(100, 28);
+            this.btnMergeFilter.Size = new global::System.Drawing.Size(148, 26);
             this.btnMergeFilter.TabIndex = 24;
             this.btnMergeFilter.Text = "Applied Filter";
             this.btnMergeFilter.UseVisualStyleBackColor = true;
@@ -315,12 +293,12 @@ namespace Xbim.COBieLiteUK.Client
             // 
             // chkBoxNoFilter
             // 
-            this.chkBoxNoFilter.Anchor = ((global::System.Windows.Forms.AnchorStyles)((global::System.Windows.Forms.AnchorStyles.Top | global::System.Windows.Forms.AnchorStyles.Right)));
+            this.chkBoxNoFilter.Anchor = ((global::System.Windows.Forms.AnchorStyles)(((global::System.Windows.Forms.AnchorStyles.Top | global::System.Windows.Forms.AnchorStyles.Left) 
+            | global::System.Windows.Forms.AnchorStyles.Right)));
             this.chkBoxNoFilter.AutoSize = true;
-            this.chkBoxNoFilter.Location = new global::System.Drawing.Point(11, 22);
-            this.chkBoxNoFilter.Margin = new global::System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.chkBoxNoFilter.Location = new global::System.Drawing.Point(5, 18);
             this.chkBoxNoFilter.Name = "chkBoxNoFilter";
-            this.chkBoxNoFilter.Size = new global::System.Drawing.Size(90, 21);
+            this.chkBoxNoFilter.Size = new global::System.Drawing.Size(70, 17);
             this.chkBoxNoFilter.TabIndex = 25;
             this.chkBoxNoFilter.Text = "No Filters";
             this.chkBoxNoFilter.UseVisualStyleBackColor = true;
@@ -328,16 +306,15 @@ namespace Xbim.COBieLiteUK.Client
             // 
             // groupBox2
             // 
-            this.groupBox2.Anchor = ((global::System.Windows.Forms.AnchorStyles)((global::System.Windows.Forms.AnchorStyles.Top | global::System.Windows.Forms.AnchorStyles.Right)));
+            this.groupBox2.Anchor = ((global::System.Windows.Forms.AnchorStyles)(((global::System.Windows.Forms.AnchorStyles.Top | global::System.Windows.Forms.AnchorStyles.Left) 
+            | global::System.Windows.Forms.AnchorStyles.Right)));
             this.groupBox2.Controls.Add(this.chkBoxNoFilter);
             this.groupBox2.Controls.Add(this.btnClassFilter);
             this.groupBox2.Controls.Add(this.btnMergeFilter);
             this.groupBox2.Controls.Add(this.chkBoxFlipFilter);
-            this.groupBox2.Location = new global::System.Drawing.Point(691, 209);
-            this.groupBox2.Margin = new global::System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.groupBox2.Location = new global::System.Drawing.Point(6, 83);
             this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Padding = new global::System.Windows.Forms.Padding(4, 4, 4, 4);
-            this.groupBox2.Size = new global::System.Drawing.Size(117, 151);
+            this.groupBox2.Size = new global::System.Drawing.Size(162, 126);
             this.groupBox2.TabIndex = 26;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "Filters";
@@ -345,71 +322,105 @@ namespace Xbim.COBieLiteUK.Client
             // btnPropMaps
             // 
             this.btnPropMaps.Anchor = ((global::System.Windows.Forms.AnchorStyles)((global::System.Windows.Forms.AnchorStyles.Top | global::System.Windows.Forms.AnchorStyles.Right)));
-            this.btnPropMaps.Location = new global::System.Drawing.Point(699, 367);
-            this.btnPropMaps.Margin = new global::System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.btnPropMaps.Location = new global::System.Drawing.Point(7, 19);
             this.btnPropMaps.Name = "btnPropMaps";
-            this.btnPropMaps.Size = new global::System.Drawing.Size(100, 28);
+            this.btnPropMaps.Size = new global::System.Drawing.Size(148, 26);
             this.btnPropMaps.TabIndex = 27;
-            this.btnPropMaps.Text = "Mappings";
+            this.btnPropMaps.Text = "Edit";
             this.btnPropMaps.UseVisualStyleBackColor = true;
             this.btnPropMaps.Click += new global::System.EventHandler(this.btnPropMaps_Click);
             // 
             // chkBoxIds
             // 
-            this.chkBoxIds.Anchor = ((global::System.Windows.Forms.AnchorStyles)((global::System.Windows.Forms.AnchorStyles.Top | global::System.Windows.Forms.AnchorStyles.Right)));
+            this.chkBoxIds.Anchor = ((global::System.Windows.Forms.AnchorStyles)(((global::System.Windows.Forms.AnchorStyles.Top | global::System.Windows.Forms.AnchorStyles.Left) 
+            | global::System.Windows.Forms.AnchorStyles.Right)));
             this.chkBoxIds.AutoSize = true;
-            this.chkBoxIds.Location = new global::System.Drawing.Point(703, 399);
-            this.chkBoxIds.Margin = new global::System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.chkBoxIds.Location = new global::System.Drawing.Point(11, 299);
             this.chkBoxIds.Name = "chkBoxIds";
-            this.chkBoxIds.Size = new global::System.Drawing.Size(125, 21);
+            this.chkBoxIds.Size = new global::System.Drawing.Size(121, 17);
             this.chkBoxIds.TabIndex = 28;
-            this.chkBoxIds.Text = "ExId as EntityId";
+            this.chkBoxIds.Text = "Use ExId as EntityId";
             this.chkBoxIds.UseVisualStyleBackColor = true;
             // 
             // checkedListSys
             // 
-            this.checkedListSys.Anchor = ((global::System.Windows.Forms.AnchorStyles)((global::System.Windows.Forms.AnchorStyles.Top | global::System.Windows.Forms.AnchorStyles.Right)));
+            this.checkedListSys.Anchor = ((global::System.Windows.Forms.AnchorStyles)(((global::System.Windows.Forms.AnchorStyles.Top | global::System.Windows.Forms.AnchorStyles.Left) 
+            | global::System.Windows.Forms.AnchorStyles.Right)));
             this.checkedListSys.CheckOnClick = true;
             this.checkedListSys.FormattingEnabled = true;
-            this.checkedListSys.Location = new global::System.Drawing.Point(691, 142);
-            this.checkedListSys.Margin = new global::System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.checkedListSys.Location = new global::System.Drawing.Point(7, 19);
             this.checkedListSys.Name = "checkedListSys";
-            this.checkedListSys.Size = new global::System.Drawing.Size(119, 55);
+            this.checkedListSys.Size = new global::System.Drawing.Size(148, 34);
             this.checkedListSys.TabIndex = 29;
             // 
             // chkBoxLog
             // 
-            this.chkBoxLog.Anchor = ((global::System.Windows.Forms.AnchorStyles)((global::System.Windows.Forms.AnchorStyles.Top | global::System.Windows.Forms.AnchorStyles.Right)));
+            this.chkBoxLog.Anchor = ((global::System.Windows.Forms.AnchorStyles)(((global::System.Windows.Forms.AnchorStyles.Top | global::System.Windows.Forms.AnchorStyles.Left) 
+            | global::System.Windows.Forms.AnchorStyles.Right)));
             this.chkBoxLog.AutoSize = true;
-            this.chkBoxLog.Location = new global::System.Drawing.Point(703, 420);
-            this.chkBoxLog.Margin = new global::System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.chkBoxLog.Location = new global::System.Drawing.Point(11, 278);
             this.chkBoxLog.Name = "chkBoxLog";
-            this.chkBoxLog.Size = new global::System.Drawing.Size(108, 21);
+            this.chkBoxLog.Size = new global::System.Drawing.Size(126, 17);
             this.chkBoxLog.TabIndex = 32;
-            this.chkBoxLog.Text = "Log (debug)";
+            this.chkBoxLog.Text = "Create validation Log";
             this.chkBoxLog.UseVisualStyleBackColor = true;
             // 
             // rolesList
             // 
-            this.rolesList.Location = new global::System.Drawing.Point(20, 10);
-            this.rolesList.Margin = new global::System.Windows.Forms.Padding(5, 5, 5, 5);
+            this.rolesList.Location = new global::System.Drawing.Point(15, 8);
+            this.rolesList.Margin = new global::System.Windows.Forms.Padding(4);
             this.rolesList.Name = "rolesList";
             this.rolesList.Roles = Xbim.FilterHelper.RoleFilter.Unknown;
-            this.rolesList.Size = new global::System.Drawing.Size(183, 102);
+            this.rolesList.Size = new global::System.Drawing.Size(137, 83);
             this.rolesList.TabIndex = 31;
+            // 
+            // groupBox3
+            // 
+            this.groupBox3.Anchor = ((global::System.Windows.Forms.AnchorStyles)((global::System.Windows.Forms.AnchorStyles.Top | global::System.Windows.Forms.AnchorStyles.Right)));
+            this.groupBox3.Controls.Add(this.grpIfcGenerationMaps);
+            this.groupBox3.Controls.Add(this.chkBoxLog);
+            this.groupBox3.Controls.Add(this.chkBoxIds);
+            this.groupBox3.Controls.Add(this.groupBox4);
+            this.groupBox3.Controls.Add(this.groupBox2);
+            this.groupBox3.Location = new global::System.Drawing.Point(514, 97);
+            this.groupBox3.Name = "groupBox3";
+            this.groupBox3.Size = new global::System.Drawing.Size(174, 322);
+            this.groupBox3.TabIndex = 33;
+            this.groupBox3.TabStop = false;
+            this.groupBox3.Text = "Settings";
+            // 
+            // grpIfcGenerationMaps
+            // 
+            this.grpIfcGenerationMaps.Anchor = ((global::System.Windows.Forms.AnchorStyles)(((global::System.Windows.Forms.AnchorStyles.Top | global::System.Windows.Forms.AnchorStyles.Left) 
+            | global::System.Windows.Forms.AnchorStyles.Right)));
+            this.grpIfcGenerationMaps.Controls.Add(this.btnPropMaps);
+            this.grpIfcGenerationMaps.Enabled = false;
+            this.grpIfcGenerationMaps.Location = new global::System.Drawing.Point(6, 215);
+            this.grpIfcGenerationMaps.Name = "grpIfcGenerationMaps";
+            this.grpIfcGenerationMaps.Size = new global::System.Drawing.Size(162, 57);
+            this.grpIfcGenerationMaps.TabIndex = 28;
+            this.grpIfcGenerationMaps.TabStop = false;
+            this.grpIfcGenerationMaps.Text = "Ifc Generation Maps";
+            // 
+            // groupBox4
+            // 
+            this.groupBox4.Anchor = ((global::System.Windows.Forms.AnchorStyles)(((global::System.Windows.Forms.AnchorStyles.Top | global::System.Windows.Forms.AnchorStyles.Left) 
+            | global::System.Windows.Forms.AnchorStyles.Right)));
+            this.groupBox4.Controls.Add(this.checkedListSys);
+            this.groupBox4.Location = new global::System.Drawing.Point(6, 20);
+            this.groupBox4.Name = "groupBox4";
+            this.groupBox4.Size = new global::System.Drawing.Size(162, 57);
+            this.groupBox4.TabIndex = 27;
+            this.groupBox4.TabStop = false;
+            this.groupBox4.Text = "System modes";
             // 
             // COBieLiteGeneratorDlg
             // 
-            this.AutoScaleDimensions = new global::System.Drawing.SizeF(8F, 16F);
+            this.AutoScaleDimensions = new global::System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = global::System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new global::System.Drawing.Size(836, 610);
-            this.Controls.Add(this.chkBoxLog);
+            this.ClientSize = new global::System.Drawing.Size(696, 558);
+            this.Controls.Add(this.groupBox3);
             this.Controls.Add(this.rolesList);
-            this.Controls.Add(this.label3);
-            this.Controls.Add(this.checkedListSys);
-            this.Controls.Add(this.chkBoxIds);
-            this.Controls.Add(this.btnPropMaps);
-            this.Controls.Add(this.groupBox2);
             this.Controls.Add(this.chkBoxOpenFile);
             this.Controls.Add(this.txtOutput);
             this.Controls.Add(this.statusStrip1);
@@ -417,10 +428,9 @@ namespace Xbim.COBieLiteUK.Client
             this.Controls.Add(this.btnClear);
             this.Controls.Add(this.btnGenerate);
             this.Controls.Add(this.groupBox1);
-            this.FormBorderStyle = global::System.Windows.Forms.FormBorderStyle.Sizable;
-            this.Margin = new global::System.Windows.Forms.Padding(4, 4, 4, 4);
             this.MaximizeBox = false;
             this.MinimizeBox = false;
+            this.MinimumSize = new global::System.Drawing.Size(638, 545);
             this.Name = "COBieLiteGeneratorDlg";
             this.Text = "XBim COBieLiteUK Test Harness";
             this.Load += new global::System.EventHandler(this.COBieLiteGenerator_Load);
@@ -430,6 +440,10 @@ namespace Xbim.COBieLiteUK.Client
             this.statusStrip1.PerformLayout();
             this.groupBox2.ResumeLayout(false);
             this.groupBox2.PerformLayout();
+            this.groupBox3.ResumeLayout(false);
+            this.groupBox3.PerformLayout();
+            this.grpIfcGenerationMaps.ResumeLayout(false);
+            this.groupBox4.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -460,11 +474,13 @@ namespace Xbim.COBieLiteUK.Client
         private global::System.Windows.Forms.Button btnPropMaps;
         private global::System.Windows.Forms.CheckBox chkBoxIds;
         private global::System.Windows.Forms.CheckedListBox checkedListSys;
-        private global::System.Windows.Forms.Label label3;
         private RolesList rolesList;
         private global::System.Windows.Forms.Button btnFederate;
         private global::System.Windows.Forms.TextBox txtPath;
         private global::System.Windows.Forms.CheckBox chkBoxLog;
+        private global::System.Windows.Forms.GroupBox groupBox3;
+        private global::System.Windows.Forms.GroupBox grpIfcGenerationMaps;
+        private global::System.Windows.Forms.GroupBox groupBox4;
     }
 }
 
