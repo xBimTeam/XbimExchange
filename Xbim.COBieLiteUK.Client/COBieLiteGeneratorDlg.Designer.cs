@@ -249,7 +249,7 @@
             this.btnClassFilter.Name = "btnClassFilter";
             this.btnClassFilter.Size = new global::System.Drawing.Size(148, 26);
             this.btnClassFilter.TabIndex = 21;
-            this.btnClassFilter.Text = "Set Filters";
+            this.btnClassFilter.Text = "Set Filter Defaults";
             this.btnClassFilter.UseVisualStyleBackColor = true;
             this.btnClassFilter.Click += new global::System.EventHandler(this.btnClassFilter_Click);
             // 

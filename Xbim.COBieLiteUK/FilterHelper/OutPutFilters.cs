@@ -77,8 +77,6 @@ namespace Xbim.FilterHelper
         [XmlIgnore][JsonIgnore]
         private Dictionary<RoleFilter, OutPutFilters> RolesFilterHolder { get; set; }
 
-        
-
         /// <summary>
         /// Nothing set in RolesFilterHolder
         /// </summary>
@@ -638,19 +636,19 @@ namespace Xbim.FilterHelper
         /// <returns>OutPutFilters</returns>
         public static OutPutFilters GetDefaults(RoleFilter role)
         {
-             if ((role & (role - 1)) != 0)
+            if ((role & (role - 1)) != 0)
             {
                 throw new ArgumentException("More than one flag set on role");
             }
-             string filterFile = GetDefaultRoleFile(role);
-             if (!string.IsNullOrEmpty(filterFile))
-             {
-                 return new OutPutFilters(filterFile, role);
-             }
-             return null;
+            string filterFile = GetDefaultRoleFile(role);
+            if (!string.IsNullOrEmpty(filterFile))
+            {
+                return new OutPutFilters(filterFile, role);
+            }
+            return null;
         }
 
-        
+
 
         /// <summary>
         /// Add filter for a role, used by ApplyRoleFilters for none default filters
@@ -675,10 +673,7 @@ namespace Xbim.FilterHelper
         /// <returns></returns>
         private static string GetDefaultRoleFile(RoleFilter role)
         {
-            if ((role & (role - 1)) != 0)
-            {
-                throw new ArgumentException("More than one flag set on role");
-            }
+            // no need to throw an error here, let the receiver manage a problem if the string is empty
             switch (role)
             {
                 case RoleFilter.Unknown:

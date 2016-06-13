@@ -128,10 +128,10 @@ namespace Xbim.COBieLiteUK.Client
             tooltip.SetToolTip(btnFederate, "Create federated file to extract COBie from");
             tooltip.SetToolTip(btnBrowseTemplate, "Select template excel file");
             tooltip.SetToolTip(cmboxFiletype, "Select excel file extension to generate");
-            tooltip.SetToolTip(btnClassFilter, "Setup Filter");
-            tooltip.SetToolTip(btnMergeFilter, "Filter To Apply, based on selected roles");
+            tooltip.SetToolTip(btnClassFilter, "Edit filter configuration for the different role settings");
+            tooltip.SetToolTip(btnMergeFilter, "Filter resulting from the merge of all currently selected roles");
             tooltip.SetToolTip(btnPropMaps, "Set PropertySet.PropertyName mappings to be used for conversion to IFC format.");
-            tooltip.SetToolTip(chkBoxIds, "Tick to change GUID IDs to Entity IDs");
+            tooltip.SetToolTip(chkBoxIds, "Tick to use EntityLabel instead of GUID for identity purposes.");
             tooltip.SetToolTip(checkedListSys,
                 "Tick to include additional Systems (ifcSystems always included)\nPropertyMaps = PropertySet Mappings, System Tab in \"Property Maps\" dialog\nTypes = Object Types listing associated components (not assigned to system)");
         }
