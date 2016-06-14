@@ -8,8 +8,10 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
+using log4net;
+
 namespace Xbim.CobieLiteUk.Client.Properties {
-    using System;
+    using global::System;
     
     
     /// <summary>
