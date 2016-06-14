@@ -1,6 +1,6 @@
-﻿using Xbim.COBieLiteUK;
+﻿using Xbim.CobieLiteUk;
 
-namespace Xbim.CobieLiteUK.Validation.Reporting
+namespace Xbim.CobieLiteUk.Validation.Reporting
 {
     /// <summary>
     /// determines the appearence of information when attention needs to be drawn.

@@ -1,6 +1,6 @@
 ﻿using System;
 using System.IO;
-using FacilityType = Xbim.COBieLiteUK.Facility;
+using FacilityType = Xbim.CobieLiteUk.Facility;
 using Xbim.DPoW;
 
 namespace XbimExchanger.DPoWToCOBieLiteUK

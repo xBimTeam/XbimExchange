@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using Xbim.Common;
-using Xbim.COBieLiteUK;
+using Xbim.CobieLiteUk;
 using Xbim.Ifc4.Interfaces;
 using netSystem = System;
 
@@ -146,7 +146,7 @@ namespace XbimExchanger.IfcToCOBieLiteUK
 
             //Systems
             
-            facility.Systems = new List<Xbim.COBieLiteUK.System>();
+            facility.Systems = new List<Xbim.CobieLiteUk.System>();
 
             if (helper.SystemMode.HasFlag(SystemExtractionMode.System) && helper.SystemAssignment.Any())
             {
@@ -154,7 +154,7 @@ namespace XbimExchanger.IfcToCOBieLiteUK
                 Exchanger.ReportProgress.NextStage(helper.SystemAssignment.Keys.Count(), 95); //finish progress at 95% 
                 foreach (var ifcSystem in helper.SystemAssignment.Keys)
                 {
-                    var system = new Xbim.COBieLiteUK.System();
+                    var system = new Xbim.CobieLiteUk.System();
                     system = systemMappings.AddMapping(ifcSystem, system);
                     facility.Systems.Add(system);
                     Exchanger.ReportProgress.IncrementAndUpdate();
@@ -168,7 +168,7 @@ namespace XbimExchanger.IfcToCOBieLiteUK
                 Exchanger.ReportProgress.NextStage(helper.SystemAssignment.Keys.Count(), 96); //finish progress at 95% 
                 foreach (var ifcPropSet in helper.SystemViaPropAssignment.Keys)
                 {
-                    var system = new Xbim.COBieLiteUK.System();
+                    var system = new Xbim.CobieLiteUk.System();
                     system = systemMappings.AddMapping(ifcPropSet, system);
                     var init = facility.Systems.Where(sys => sys.Name.Equals(system.Name, netSystem.StringComparison.CurrentCultureIgnoreCase)).FirstOrDefault();
                     if (init != null)
@@ -222,15 +222,15 @@ namespace XbimExchanger.IfcToCOBieLiteUK
             if (helper.SystemMode.HasFlag(SystemExtractionMode.Types))
             {
                 var assetTypes = facility.Get<AssetType>().ToList();
-                var systemsWritten = facility.Get<Xbim.COBieLiteUK.System>();
+                var systemsWritten = facility.Get<Xbim.CobieLiteUk.System>();
                 var assetsAssignedToSystem = new HashSet<string>(systemsWritten.SelectMany(s => s.Components).Select(a => a.Name));
-                var systems = facility.Systems ?? new List<Xbim.COBieLiteUK.System>();
+                var systems = facility.Systems ?? new List<Xbim.CobieLiteUk.System>();
                 var defaultSystem = helper.CreateUndefinedSystem();
                 Exchanger.ReportProgress.NextStage(assetTypes.Count(), 100); //finish progress at 100% 
                 //go over all unasigned assets
                 foreach (var assetType in assetTypes)
                 {
-                    Xbim.COBieLiteUK.System assetTypeSystem = null;
+                    Xbim.CobieLiteUk.System assetTypeSystem = null;
                     foreach (var asset in assetType.Assets.Where(a => !assetsAssignedToSystem.Contains(a.Name)))
                     {
                         if (assetTypeSystem == null)
@@ -246,7 +246,7 @@ namespace XbimExchanger.IfcToCOBieLiteUK
                     if (assetTypeSystem == null)
                         continue;
                     if (facility.Systems == null)
-                        facility.Systems = new List<Xbim.COBieLiteUK.System>();
+                        facility.Systems = new List<Xbim.CobieLiteUk.System>();
                     facility.Systems.Add(assetTypeSystem);
                     Exchanger.ReportProgress.IncrementAndUpdate();
                 } 

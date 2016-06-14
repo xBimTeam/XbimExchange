@@ -1,27 +1,27 @@
 ﻿using System.Collections.Generic;
 using System.Windows.Forms;
-using Xbim.FilterHelper;
+using Xbim.CobieLiteUk.FilterHelper;
 
-namespace Xbim.COBieLiteUK.Client
+namespace Xbim.CobieLiteUk.Client
 {
     public partial class PropertySetFilters : UserControl
     {
         /// <summary>
         /// Equal To Property names to match
         /// </summary>
-        public List<string> EqTo { get { return this.listViewEqTo.Items; } }
+        public List<string> EqTo { get { return listViewEqTo.Items; } }
         /// <summary>
         /// Start With Property names to match
         /// </summary>
-        public List<string> StartWith { get { return this.listViewStartWith.Items; } }
+        public List<string> StartWith { get { return listViewStartWith.Items; } }
         /// <summary>
         /// Property names to Contain text
         /// </summary>
-        public List<string> ContainsTxt { get { return this.listViewContains.Items; } }
+        public List<string> ContainsTxt { get { return listViewContains.Items; } }
         /// <summary>
         /// Property Set Names that are equal to
         /// </summary>
-        public List<string> PSetEqTo { get { return this.listViewPSetEqTo.Items; } }
+        public List<string> PSetEqTo { get { return listViewPSetEqTo.Items; } }
 
         public PropertySetFilters()
         {

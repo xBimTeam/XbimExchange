@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 
-namespace Xbim.COBieLiteUK.AdditionalAttributes
+namespace Xbim.CobieLiteUk.AdditionalAttributes
 {
     public abstract class AdditionalAttributes
     {

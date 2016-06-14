@@ -1,8 +1,8 @@
 ﻿using System.Collections.Generic;
-using Xbim.COBieLiteUK;
+using Xbim.CobieLiteUk;
 using Xbim.DPoW;
 using Contact = Xbim.DPoW.Contact;
-using FacilityType = Xbim.COBieLiteUK.Facility;
+using FacilityType = Xbim.CobieLiteUk.Facility;
 
 namespace XbimExchanger.DPoWToCOBieLiteUK
 {

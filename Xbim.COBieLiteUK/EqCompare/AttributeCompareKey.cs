@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace Xbim.COBie.EqCompare
 {
-    public class AttributeCompareKey : CompareEqRule<Xbim.COBieLiteUK.Attribute>, IEqualityComparer<Xbim.COBieLiteUK.Attribute>
+    public class AttributeCompareKey : CompareEqRule<Xbim.CobieLiteUk.Attribute>, IEqualityComparer<Xbim.CobieLiteUk.Attribute>
     {
 
         #region Constructors
@@ -29,7 +29,7 @@ namespace Xbim.COBie.EqCompare
         /// </summary>
         /// <param name="obj"></param>
         /// <returns>Name string</returns>
-        protected override string BuildName(Xbim.COBieLiteUK.Attribute obj)
+        protected override string BuildName(Xbim.CobieLiteUk.Attribute obj)
         {
             return (obj.Name == null) ? string.Empty : obj.Name;
         }
@@ -39,7 +39,7 @@ namespace Xbim.COBie.EqCompare
         /// </summary>
         /// <param name="obj"></param>
         /// <returns>string of key fields concat together</returns>
-        protected override string BuildKey(Xbim.COBieLiteUK.Attribute obj)
+        protected override string BuildKey(Xbim.CobieLiteUk.Attribute obj)
         {
             sb.Clear();
 
@@ -54,7 +54,7 @@ namespace Xbim.COBie.EqCompare
         /// </summary>
         /// <param name="obj"></param>
         /// <returns>string of all fields concat together</returns>
-        protected override string BuildFull(Xbim.COBieLiteUK.Attribute obj)
+        protected override string BuildFull(Xbim.CobieLiteUk.Attribute obj)
         {
             sb.Clear();
 

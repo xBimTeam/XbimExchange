@@ -1,7 +1,7 @@
 ﻿using System;
 
 // ReSharper disable once CheckNamespace
-namespace Xbim.COBieLiteUK
+namespace Xbim.CobieLiteUk
 {
     public interface IEntityKey
     {

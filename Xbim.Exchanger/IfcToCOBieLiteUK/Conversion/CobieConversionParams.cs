@@ -1,4 +1,5 @@
-﻿using Xbim.FilterHelper;
+﻿using Xbim.CobieLiteUk;
+using Xbim.CobieLiteUk.FilterHelper;
 
 namespace XbimExchanger.IfcToCOBieLiteUK.Conversion
 {

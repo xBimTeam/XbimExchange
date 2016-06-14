@@ -3,8 +3,8 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Xbim.COBieLiteUK;
-using Attribute = Xbim.COBieLiteUK.Attribute;
+using Xbim.CobieLiteUk;
+using Attribute = Xbim.CobieLiteUk.Attribute;
 
 
 namespace Tests

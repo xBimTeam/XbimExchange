@@ -6,9 +6,10 @@ using System.Globalization;
 using System.Linq;
 using SystemConvert = System.Convert;
 using Assembly = System.Reflection.Assembly;
-using Xbim.COBieLiteUK;
-using Attribute = Xbim.COBieLiteUK.Attribute;
-using Xbim.FilterHelper;
+using Xbim.CobieLiteUk;
+using Xbim.CobieLiteUk.FilterHelper;
+using Attribute = Xbim.CobieLiteUk.Attribute;
+using Xbim.CobieLiteUk;
 using XbimExchanger.COBieLiteHelpers;
 using XbimExchanger.IfcHelpers.Ifc2x3;
 using Xbim.Ifc;
@@ -98,7 +99,7 @@ namespace XbimExchanger.COBieLiteUkToIfc
                         directory.FullName)
                     );
             }
-            var propertyMaps = new COBiePropertyMapping(new FileInfo(tmpFile));
+            var propertyMaps = new CobiePropertyMapping(new FileInfo(tmpFile));
             var cobieFieldMap = propertyMaps.GetDictOfProperties().Where(d => d.Value.FirstOrDefault() != null).ToDictionary(d => d.Key, d => d.Value.First());
             foreach (var item in cobieFieldMap)
             {

@@ -5,13 +5,14 @@ using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
 using log4net;
-using Xbim.COBieLiteUK;
+using Xbim.CobieLiteUk;
 using Xbim.Common;
 using Xbim.Common.Logging;
-using Xbim.FilterHelper;
+using Xbim.CobieLiteUk.FilterHelper;
+using Xbim.CobieLiteUk;
 using Xbim.Ifc4.Interfaces;
 using XbimExchanger.IfcToCOBieLiteUK.EqCompare;
-using Attribute = Xbim.COBieLiteUK.Attribute;
+using Attribute = Xbim.CobieLiteUk.Attribute;
 using SystemAssembly = System.Reflection.Assembly;
 
 namespace XbimExchanger.IfcToCOBieLiteUK
@@ -798,7 +799,7 @@ namespace XbimExchanger.IfcToCOBieLiteUK
             }
 
             //using COBiePropertyMapping to set properties, might pass this into function, but for now read file passed file name, or default
-            COBiePropertyMapping propertyMaps = new COBiePropertyMapping(new FileInfo(tmpFile));
+            CobiePropertyMapping propertyMaps = new CobiePropertyMapping(new FileInfo(tmpFile));
             _cobieFieldMap = propertyMaps.GetDictOfProperties();
             _cobieProperties = new HashSet<string>(_cobieFieldMap.SelectMany(pair => pair.Value).ToList());
             
@@ -1906,9 +1907,9 @@ namespace XbimExchanger.IfcToCOBieLiteUK
             };
         }
 
-        internal Xbim.COBieLiteUK.System CreateUndefinedSystem()
+        internal Xbim.CobieLiteUk.System CreateUndefinedSystem()
         {
-            return new Xbim.COBieLiteUK.System
+            return new Xbim.CobieLiteUk.System
             {
                 Name = "Default System",
                 CreatedBy = new ContactKey { Email = XbimCreatedBy.Email },

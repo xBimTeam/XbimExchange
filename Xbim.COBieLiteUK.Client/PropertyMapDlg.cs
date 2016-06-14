@@ -2,15 +2,16 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Windows.Forms;
-using Xbim.FilterHelper;
+using Xbim.CobieLiteUk.FilterHelper;
+using Xbim.CobieLiteUk;
 
-namespace Xbim.COBieLiteUK.Client
+namespace Xbim.CobieLiteUk.Client
 {
     public partial class PropertyMapDlg : Form
     {
 
-        public COBiePropertyMapping  PropertyMaps { get; set; }
-        public PropertyMapDlg(COBiePropertyMapping maps)
+        public CobiePropertyMapping  PropertyMaps { get; set; }
+        public PropertyMapDlg(CobiePropertyMapping maps)
         {
             InitializeComponent();
             PropertyMaps = maps;
@@ -116,7 +117,7 @@ namespace Xbim.COBieLiteUK.Client
 
             if (tempConfig.Exists)
             {
-                PropertyMaps = new COBiePropertyMapping(tempConfig);
+                PropertyMaps = new CobiePropertyMapping(tempConfig);
                 PropertyMaps.ConfigFile = filename; //set back to correct file
                 foreach (TabPage item in tabControl.TabPages)
                 {

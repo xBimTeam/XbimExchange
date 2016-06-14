@@ -1,4 +1,6 @@
-﻿namespace Xbim.COBieLiteUK.Client
+﻿using Xbim.CobieLiteUk.FilterHelper;
+
+namespace Xbim.CobieLiteUk.Client
 {
     partial class COBieLiteGeneratorDlg
     {
@@ -54,7 +56,7 @@
             this.chkBoxIds = new global::System.Windows.Forms.CheckBox();
             this.checkedListSys = new global::System.Windows.Forms.CheckedListBox();
             this.chkBoxLog = new global::System.Windows.Forms.CheckBox();
-            this.rolesList = new Xbim.COBieLiteUK.Client.RolesList();
+            this.rolesList = new Xbim.CobieLiteUk.Client.RolesList();
             this.groupBox3 = new global::System.Windows.Forms.GroupBox();
             this.grpIfcGenerationMaps = new global::System.Windows.Forms.GroupBox();
             this.groupBox4 = new global::System.Windows.Forms.GroupBox();
@@ -370,7 +372,7 @@
             this.rolesList.Location = new global::System.Drawing.Point(15, 8);
             this.rolesList.Margin = new global::System.Windows.Forms.Padding(4);
             this.rolesList.Name = "rolesList";
-            this.rolesList.Roles = Xbim.FilterHelper.RoleFilter.Unknown;
+            this.rolesList.Roles = RoleFilter.Unknown;
             this.rolesList.Size = new global::System.Drawing.Size(137, 83);
             this.rolesList.TabIndex = 31;
             // 

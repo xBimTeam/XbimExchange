@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using Xbim.COBieLiteUK;
+using Xbim.CobieLiteUk;
 using AssemblyType = Xbim.DPoW.AssemblyType;
 
 namespace XbimExchanger.DPoWToCOBieLiteUK

@@ -15,12 +15,13 @@ using Newtonsoft.Json;
 using NPOI.SS.UserModel;
 using NPOI.SS.Util;
 //using XbimExchanger.COBieLiteHelpers;
-using Xbim.FilterHelper;
+using Xbim.CobieLiteUk;
 //using XbimExchanger.FilterHelper;
-using Xbim.COBieLiteUK.Net40PortHelpers;
+using Xbim.CobieLiteUk.Net40PortHelpers;
 using System.Diagnostics;
+using Xbim.CobieLiteUk.FilterHelper;
 
-namespace Xbim.COBieLiteUK
+namespace Xbim.CobieLiteUk
 {
     public abstract partial class CobieObject
     {

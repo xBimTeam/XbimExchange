@@ -1,5 +1,5 @@
 ﻿
-namespace Xbim.COBieLiteUK.Client
+namespace Xbim.CobieLiteUk.Client
 {
     partial class RolesList
     {

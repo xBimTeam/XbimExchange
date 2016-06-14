@@ -4,7 +4,7 @@ using System.Configuration;
 using System.Linq;
 using Xbim.Ifc4.Interfaces;
 
-namespace Xbim.FilterHelper
+namespace Xbim.CobieLiteUk.FilterHelper
 {
     /// <summary>
     /// Filter on object type names, used to filter Type and Component COBie Sheets
@@ -224,7 +224,5 @@ namespace Xbim.FilterHelper
         }
 
         #endregion
-
-
     }
 }

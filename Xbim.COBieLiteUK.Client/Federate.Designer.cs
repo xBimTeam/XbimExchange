@@ -1,4 +1,6 @@
-﻿namespace Xbim.COBieLiteUK.Client
+﻿using Xbim.CobieLiteUk.FilterHelper;
+
+namespace Xbim.CobieLiteUk.Client
 {
     partial class Federate
     {
@@ -197,7 +199,7 @@
             this.rolesList.Anchor = ((global::System.Windows.Forms.AnchorStyles)((global::System.Windows.Forms.AnchorStyles.Top | global::System.Windows.Forms.AnchorStyles.Right)));
             this.rolesList.Location = new global::System.Drawing.Point(543, 6);
             this.rolesList.Name = "rolesList";
-            this.rolesList.Roles = Xbim.FilterHelper.RoleFilter.Unknown;
+            this.rolesList.Roles = RoleFilter.Unknown;
             this.rolesList.Size = new global::System.Drawing.Size(91, 88);
             this.rolesList.TabIndex = 0;
             this.rolesList.Leave += new global::System.EventHandler(this.rolesList_Leave);

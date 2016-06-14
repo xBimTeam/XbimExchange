@@ -6,11 +6,12 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
-using Xbim.FilterHelper;
+using Xbim.CobieLiteUk;
+using Xbim.CobieLiteUk.FilterHelper;
 using Xbim.Ifc;
 using Xbim.IO;
 
-namespace Xbim.COBieLiteUK.Client
+namespace Xbim.CobieLiteUk.Client
 {
     public partial class Federate : Form
     {

@@ -3,9 +3,10 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Windows.Forms;
-using Xbim.FilterHelper;
+using Xbim.CobieLiteUk.FilterHelper;
+using Xbim.CobieLiteUk;
 
-namespace Xbim.COBieLiteUK.Client
+namespace Xbim.CobieLiteUk.Client
 {
     public partial class PropertyMapTab : UserControl
     {

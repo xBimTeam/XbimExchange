@@ -3,9 +3,9 @@ using System.Text.RegularExpressions;
 
 namespace XbimExchanger.DPoWToCOBieLiteUK
 {
-    class MappingContactToContact : MappingAttributableObjectToCOBieObject<Xbim.DPoW.Contact, Xbim.COBieLiteUK.Contact>
+    class MappingContactToContact : MappingAttributableObjectToCOBieObject<Xbim.DPoW.Contact, Xbim.CobieLiteUk.Contact>
     {
-        protected override Xbim.COBieLiteUK.Contact Mapping(Xbim.DPoW.Contact source, Xbim.COBieLiteUK.Contact target)
+        protected override Xbim.CobieLiteUk.Contact Mapping(Xbim.DPoW.Contact source, Xbim.CobieLiteUk.Contact target)
         {
             base.Mapping(source, target);
 

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using Xbim.Common;
-using Xbim.COBieLiteUK;
+using Xbim.CobieLiteUk;
 using Xbim.Ifc4.Interfaces;
 
 namespace XbimExchanger.IfcToCOBieLiteUK

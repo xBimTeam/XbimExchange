@@ -5,7 +5,7 @@ using System.Linq;
 using System.Xml.Serialization;
 using Newtonsoft.Json;
 
-namespace Xbim.COBieLiteUK
+namespace Xbim.CobieLiteUk
 {
     public partial class System
     {
@@ -23,7 +23,7 @@ namespace Xbim.COBieLiteUK
             }
         }
 
-        internal protected override List<CobieObject> MergeDuplicates(List<CobieObject> objects, TextWriter log)
+        protected internal override List<CobieObject> MergeDuplicates(List<CobieObject> objects, TextWriter log)
         {
             var candidates = objects.OfType<System>().ToList();
             if (!candidates.Any()) return new List<CobieObject>();

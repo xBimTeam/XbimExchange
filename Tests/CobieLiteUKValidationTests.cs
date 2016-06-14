@@ -1,9 +1,9 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Xbim.CobieLiteUK.Validation;
-using Xbim.CobieLiteUK.Validation.Reporting;
-using Xbim.COBieLiteUK;
+using Xbim.CobieLiteUk.Validation;
+using Xbim.CobieLiteUk.Validation.Reporting;
+using Xbim.CobieLiteUk;
 using Xbim.Ifc;
 using XbimExchanger.IfcToCOBieLiteUK;
 

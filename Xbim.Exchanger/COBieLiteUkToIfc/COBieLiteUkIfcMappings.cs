@@ -1,5 +1,5 @@
 ﻿
-using Xbim.COBieLiteUK;
+using Xbim.CobieLiteUk;
 using Xbim.Common;
 using XbimExchanger.IfcHelpers;
 

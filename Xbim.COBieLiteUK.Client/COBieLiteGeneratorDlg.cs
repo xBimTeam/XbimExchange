@@ -7,18 +7,16 @@ using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 using Xbim.Common.Exceptions;
-using Xbim.FilterHelper;
+using Xbim.CobieLiteUk.FilterHelper;
+using Xbim.CobieLiteUk;
 using XbimExchanger.IfcToCOBieLiteUK;
 using XbimExchanger.IfcToCOBieLiteUK.Conversion;
 
-namespace Xbim.COBieLiteUK.Client
+namespace Xbim.CobieLiteUk.Client
 {
     // ReSharper disable once InconsistentNaming
     public partial class COBieLiteGeneratorDlg : Form
     {
-
-        
-
         /// <summary>
         /// Worker
         /// </summary>
@@ -44,7 +42,7 @@ namespace Xbim.COBieLiteUK.Client
         /// <summary>
         /// Mappings for COBie proerties from IFC
         /// </summary>
-        private COBiePropertyMapping PropertyMaps { get; set; }
+        private CobiePropertyMapping PropertyMaps { get; set; }
 
         /// <summary>
         /// Constructor
@@ -66,7 +64,7 @@ namespace Xbim.COBieLiteUK.Client
                 _assetfilters.FillRolesFilterHolderFromDir(dir);
             }
 
-            PropertyMaps = new COBiePropertyMapping(ConfigFile);
+            PropertyMaps = new CobiePropertyMapping(ConfigFile);
             MapRefModelsRoles = new Dictionary<FileInfo, RoleFilter>();
         }
 
@@ -530,7 +528,7 @@ namespace Xbim.COBieLiteUK.Client
                 if (filterDlg.ShowDialog() != DialogResult.OK) 
                     return;
                 _assetfilters = filterDlg.RolesFilters;
-                _assetfilters.WriteXMLRolesFilterHolderToDir(dir);
+                _assetfilters.WriteXmlRolesFilterHolderToDir(dir);
             }
             finally
             {

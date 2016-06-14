@@ -1,8 +1,8 @@
 ﻿using System.IO;
-using Xbim.CobieLiteUK.Validation;
-using Xbim.CobieLiteUK.Validation.Reporting;
+using Xbim.CobieLiteUk.Validation;
+using Xbim.CobieLiteUk.Validation.Reporting;
 
-namespace Xbim.COBieLiteUK.Validation.Profiling
+namespace Xbim.CobieLiteUk.Validation.Profiling
 {
     class Program
     {

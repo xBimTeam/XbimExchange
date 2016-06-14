@@ -1,4 +1,4 @@
-﻿namespace Xbim.COBieLiteUK
+﻿namespace Xbim.CobieLiteUk
 {
     public partial class Impact
     {

@@ -2,7 +2,7 @@
 using System.IO;
 using Xsd2Code.Library;
 
-namespace Xbim.COBieLiteUK.CodeGeneration
+namespace Xbim.CobieLiteUk.CodeGeneration
 {
     class Program
     {

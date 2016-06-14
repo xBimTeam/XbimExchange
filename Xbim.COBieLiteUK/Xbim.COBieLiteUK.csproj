@@ -7,7 +7,7 @@
     <ProjectGuid>{90DEF072-96C7-4972-835E-909C41169CB4}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Xbim.COBieLiteUK</RootNamespace>
+    <RootNamespace>Xbim.CobieLiteUk</RootNamespace>
     <AssemblyName>Xbim.COBieLiteUK</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
@@ -178,10 +178,12 @@
     <Compile Include="EqCompare\SpareCompareKey.cs" />
     <Compile Include="EqCompare\StringBuilderExtender.cs" />
     <Compile Include="EqCompare\StringCompareKey.cs" />
-    <Compile Include="FilterHelper\COBiePropertyMapping.cs" />
+    <Compile Include="FilterHelper\CobiePropertyMapping.cs" />
+    <Compile Include="FilterHelper\ImportSet.cs" />
     <Compile Include="FilterHelper\ObjectFilter.cs" />
     <Compile Include="FilterHelper\PropertyFilter.cs" />
     <Compile Include="FilterHelper\OutPutFilters.cs" />
+    <Compile Include="FilterHelper\RoleFilter.cs" />
     <Compile Include="FilterHelper\SerializableDictionary.cs" />
     <Compile Include="Floor.cs" />
     <Compile Include="Impact.cs" />

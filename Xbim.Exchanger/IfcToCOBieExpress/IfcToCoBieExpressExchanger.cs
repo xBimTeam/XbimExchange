@@ -2,7 +2,8 @@
 using System.Linq;
 using Xbim.CobieExpress;
 using Xbim.Common;
-using Xbim.FilterHelper;
+using Xbim.CobieLiteUk;
+using Xbim.CobieLiteUk.FilterHelper;
 using Xbim.Ifc;
 using Xbim.Ifc4.Interfaces;
 using XbimExchanger.IfcToCOBieExpress.Classifications;

@@ -2,7 +2,7 @@
 using SAttribute = System.Attribute;
 
 // ReSharper disable once CheckNamespace
-namespace Xbim.COBieLiteUK
+namespace Xbim.CobieLiteUk
 {
     [AttributeUsage(AttributeTargets.Class, AllowMultiple = true)]
     public class MappingAttribute: SAttribute

@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace Xbim.COBieLiteUK
+namespace Xbim.CobieLiteUk
 {
     public partial class Floor
     {

@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Diagnostics;
 using System.IO;
-using Xbim.COBieLiteUK;
+using Xbim.CobieLiteUk;
 
 namespace COBieLiteUK.Profiling
 {

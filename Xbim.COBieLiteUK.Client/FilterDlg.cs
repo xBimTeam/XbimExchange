@@ -2,9 +2,10 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Windows.Forms;
-using Xbim.FilterHelper;
+using Xbim.CobieLiteUk;
+using Xbim.CobieLiteUk.FilterHelper;
 
-namespace Xbim.COBieLiteUK.Client
+namespace Xbim.CobieLiteUk.Client
 {
     public partial class FilterDlg : Form
     {

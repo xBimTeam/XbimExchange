@@ -1,5 +1,5 @@
 ﻿using System.Linq;
-using Xbim.COBieLiteUK;
+using Xbim.CobieLiteUk;
 using Xbim.Ifc2x3.Extensions;
 using Xbim.Ifc2x3.ProductExtension;
 

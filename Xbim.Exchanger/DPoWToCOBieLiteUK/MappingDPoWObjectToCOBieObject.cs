@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Xbim.COBieLiteUK;
+using Xbim.CobieLiteUk;
 using Xbim.DPoW;
 using Xbim.Properties;
-using Attribute = Xbim.COBieLiteUK.Attribute;
+using Attribute = Xbim.CobieLiteUk.Attribute;
 using ProjectStage = Xbim.DPoW.ProjectStage;
 using Version = Xbim.Properties.Version;
 

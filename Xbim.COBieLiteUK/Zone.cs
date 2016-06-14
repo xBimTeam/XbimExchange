@@ -5,7 +5,7 @@ using System.Linq;
 using System.Xml.Serialization;
 using Newtonsoft.Json;
 
-namespace Xbim.COBieLiteUK
+namespace Xbim.CobieLiteUk
 {
     public partial class Zone
     {

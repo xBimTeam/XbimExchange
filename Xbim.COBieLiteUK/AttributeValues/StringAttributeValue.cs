@@ -5,7 +5,7 @@ using System.Xml.Serialization;
 using Newtonsoft.Json;
 
 // ReSharper disable once CheckNamespace
-namespace Xbim.COBieLiteUK
+namespace Xbim.CobieLiteUk
 {
     public partial class StringAttributeValue
     {

@@ -4,7 +4,7 @@ using System.Configuration;
 using System.Diagnostics;
 using System.Linq;
 
-namespace Xbim.FilterHelper
+namespace Xbim.CobieLiteUk.FilterHelper
 {
     /// <summary>
     /// Filter on property set names, and properties names held within the set, used to extract attribute sheets

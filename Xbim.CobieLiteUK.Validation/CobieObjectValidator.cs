@@ -1,11 +1,11 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using Xbim.CobieLiteUK.Validation.Extensions;
-using Xbim.CobieLiteUK.Validation.RequirementDetails;
-using Xbim.COBieLiteUK;
+using Xbim.CobieLiteUk.Validation.Extensions;
+using Xbim.CobieLiteUk.Validation.RequirementDetails;
+using Xbim.CobieLiteUk;
 
-namespace Xbim.CobieLiteUK.Validation
+namespace Xbim.CobieLiteUk.Validation
 {
     internal class CobieObjectValidator<T, TSub> : IValidator
         where T : CobieObject, new()

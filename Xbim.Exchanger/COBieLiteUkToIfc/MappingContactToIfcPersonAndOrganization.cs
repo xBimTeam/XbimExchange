@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Linq;
-using Xbim.COBieLiteUK;
+using Xbim.CobieLiteUk;
 using Xbim.Ifc2x3.ActorResource;
 
 namespace XbimExchanger.COBieLiteUkToIfc

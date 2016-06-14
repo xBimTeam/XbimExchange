@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using Xbim.Common;
-using Xbim.COBieLiteUK;
+using Xbim.CobieLiteUk;
 using Xbim.Ifc4.Interfaces;
 
 

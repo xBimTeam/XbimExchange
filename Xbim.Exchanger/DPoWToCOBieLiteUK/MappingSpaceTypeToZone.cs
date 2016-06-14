@@ -1,5 +1,5 @@
 ﻿using Xbim.DPoW;
-using Xbim.COBieLiteUK;
+using Xbim.CobieLiteUk;
 
 namespace XbimExchanger.DPoWToCOBieLiteUK
 {

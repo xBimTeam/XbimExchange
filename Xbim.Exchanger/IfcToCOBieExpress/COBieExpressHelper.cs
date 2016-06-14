@@ -8,7 +8,8 @@ using System.Text.RegularExpressions;
 using Xbim.CobieExpress;
 using Xbim.Common;
 using Xbim.Common.Logging;
-using Xbim.FilterHelper;
+using Xbim.CobieLiteUk.FilterHelper;
+using Xbim.CobieLiteUk;
 using Xbim.Ifc;
 using Xbim.Ifc4.Interfaces;
 using XbimExchanger.IfcToCOBieExpress.EqCompare;
@@ -77,7 +78,7 @@ namespace XbimExchanger.IfcToCOBieExpress
         /// <summary>
         /// Object to use to report progress on Exchangers
         /// </summary>
-        public Xbim.COBieLiteUK.ProgressReporter ReportProgress
+        public Xbim.CobieLiteUk.ProgressReporter ReportProgress
         { get; set; }
 
         private readonly IfcStore _model;
@@ -246,7 +247,7 @@ namespace XbimExchanger.IfcToCOBieExpress
         /// <param name="reportProgress"></param>
         /// <param name="extId"></param>
         /// <param name="sysMode"></param>
-        public COBieExpressHelper(IfcToCoBieExpressExchanger exchanger, Xbim.COBieLiteUK.ProgressReporter reportProgress, OutPutFilters filter = null, string configurationFile = null, EntityIdentifierMode extId = EntityIdentifierMode.IfcEntityLabels, SystemExtractionMode sysMode = SystemExtractionMode.System | SystemExtractionMode.Types)
+        public COBieExpressHelper(IfcToCoBieExpressExchanger exchanger, Xbim.CobieLiteUk.ProgressReporter reportProgress, OutPutFilters filter = null, string configurationFile = null, EntityIdentifierMode extId = EntityIdentifierMode.IfcEntityLabels, SystemExtractionMode sysMode = SystemExtractionMode.System | SystemExtractionMode.Types)
         {
             _categoryMapping = exchanger.GetOrCreateMappings<MappingIfcClassificationReferenceToCategory>();
             _externalObjectMapping = exchanger.GetOrCreateMappings<MappingStringToExternalObject>();
@@ -823,7 +824,7 @@ namespace XbimExchanger.IfcToCOBieExpress
             }
 
             //using COBiePropertyMapping to set properties, might pass this into function, but for now read file passed file name, or default
-            var propertyMaps = new COBiePropertyMapping(new FileInfo(tmpFile));
+            var propertyMaps = new CobiePropertyMapping(new FileInfo(tmpFile));
             _cobieFieldMap = propertyMaps.GetDictOfProperties();
             
             if (_configFileName == null)

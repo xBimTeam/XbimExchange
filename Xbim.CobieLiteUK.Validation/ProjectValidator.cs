@@ -1,6 +1,6 @@
-﻿using Xbim.COBieLiteUK;
+﻿using Xbim.CobieLiteUk;
 
-namespace Xbim.CobieLiteUK.Validation
+namespace Xbim.CobieLiteUk.Validation
 {
     internal class ProjectValidator : IValidator
     {

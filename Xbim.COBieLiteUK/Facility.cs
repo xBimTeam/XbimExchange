@@ -13,12 +13,13 @@ using Newtonsoft.Json.Converters;
 using NPOI.HSSF.UserModel;
 using NPOI.SS.UserModel;
 using NPOI.XSSF.UserModel;
-using Xbim.COBieLiteUK.Converters;
+using Xbim.CobieLiteUk.Converters;
 using Formatting = System.Xml.Formatting;
-using Xbim.FilterHelper;
+using Xbim.CobieLiteUk;
+using Xbim.CobieLiteUk.FilterHelper;
 using Xbim.COBie.EqCompare;
 
-namespace Xbim.COBieLiteUK
+namespace Xbim.CobieLiteUk
 {
     public partial class Facility
     {

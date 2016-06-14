@@ -7,7 +7,7 @@
     <ProjectGuid>{4482D2F2-9E2E-4AB4-B8E9-7507DC28393B}</ProjectGuid>
     <OutputType>WinExe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Xbim.COBieLiteUK.Client</RootNamespace>
+    <RootNamespace>Xbim.CobieLiteUk.Client</RootNamespace>
     <AssemblyName>Xbim.COBieLiteUK.Client</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>

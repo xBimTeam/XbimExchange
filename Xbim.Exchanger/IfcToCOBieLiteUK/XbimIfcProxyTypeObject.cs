@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using log4net;
-using Xbim.COBieLiteUK;
+using Xbim.CobieLiteUk;
 
 using Xbim.Ifc4.Interfaces;
 

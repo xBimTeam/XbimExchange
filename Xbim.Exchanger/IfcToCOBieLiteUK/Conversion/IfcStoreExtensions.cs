@@ -3,7 +3,8 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using Xbim.Common.Federation;
-using Xbim.FilterHelper;
+using Xbim.CobieLiteUk;
+using Xbim.CobieLiteUk.FilterHelper;
 using Xbim.Ifc;
 using Xbim.Ifc4.Interfaces;
 

@@ -1,7 +1,7 @@
 ﻿using System;
 using System.IO;
 using System.Text;
-using Xbim.COBieLiteUK;
+using Xbim.CobieLiteUk;
 
 namespace Xbim.COBie.EqCompare
 {

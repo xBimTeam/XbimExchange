@@ -2,7 +2,7 @@
 using System.IO;
 using System.Linq;
 
-namespace Xbim.COBieLiteUK
+namespace Xbim.CobieLiteUk
 {
     public partial class Assembly 
     {

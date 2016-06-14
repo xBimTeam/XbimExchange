@@ -2,14 +2,14 @@
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
-using Xbim.COBieLiteUK;
+using Xbim.CobieLiteUk;
 using Xbim.DPoW;
-using AssetType = Xbim.COBieLiteUK.AssetType;
-using Attribute = Xbim.COBieLiteUK.Attribute;
-using Contact = Xbim.COBieLiteUK.Contact;
+using AssetType = Xbim.CobieLiteUk.AssetType;
+using Attribute = Xbim.CobieLiteUk.Attribute;
+using Contact = Xbim.CobieLiteUk.Contact;
 using SpaceType = Xbim.DPoW.SpaceType;
-using FacilityType = Xbim.COBieLiteUK.Facility;
-using ProjectStage = Xbim.COBieLiteUK.ProjectStage;
+using FacilityType = Xbim.CobieLiteUk.Facility;
+using ProjectStage = Xbim.CobieLiteUk.ProjectStage;
 
 namespace XbimExchanger.DPoWToCOBieLiteUK
 {
@@ -79,14 +79,14 @@ namespace XbimExchanger.DPoWToCOBieLiteUK
                 if (assetType.Assets == null) continue;
                 foreach (var asset in assetType.Assets)
                 {
-                    if (target.Systems == null) target.Systems = new List<Xbim.COBieLiteUK.System>();
+                    if (target.Systems == null) target.Systems = new List<Xbim.CobieLiteUk.System>();
                     var isInSystem = target.Systems.Any(system => system.Components != null && system.Components.Any(k => k.Name == asset.Name));
                     if (isInSystem) continue;
                     
                     var defaultSystem = target.Systems.FirstOrDefault(s => s.Name == "Default system");
                     if (defaultSystem == null)
                     {
-                        defaultSystem = new Xbim.COBieLiteUK.System{Name = "Default system"};
+                        defaultSystem = new Xbim.CobieLiteUk.System{Name = "Default system"};
                         target.Systems.Add(defaultSystem);
                     }
                     if (defaultSystem.Components == null) defaultSystem.Components = new List<AssetKey>();
@@ -123,7 +123,7 @@ namespace XbimExchanger.DPoWToCOBieLiteUK
         {
             var sProject = source.Project;
             if (sProject == null) return;
-            target.Project = new Xbim.COBieLiteUK.Project
+            target.Project = new Xbim.CobieLiteUk.Project
             {
                 ExternalId = sProject.Id.ToString(),
                 Description = sProject.Description,

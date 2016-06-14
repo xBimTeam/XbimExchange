@@ -1,7 +1,7 @@
 ﻿using System.Diagnostics;
 using Xbim.Common;
 
-namespace Xbim.COBieLiteUK
+namespace Xbim.CobieLiteUk
 {
     public class ProgressReporter
     {

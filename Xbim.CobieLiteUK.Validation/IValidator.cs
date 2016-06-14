@@ -1,4 +1,4 @@
-﻿namespace Xbim.CobieLiteUK.Validation
+﻿namespace Xbim.CobieLiteUk.Validation
 {
     /// <summary>
     /// Options that determine the interruption behaviour for operations.

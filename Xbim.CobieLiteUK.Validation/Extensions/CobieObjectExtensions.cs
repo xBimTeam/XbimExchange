@@ -1,8 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using Xbim.COBieLiteUK;
+using Xbim.CobieLiteUk;
 
-namespace Xbim.CobieLiteUK.Validation.Extensions
+namespace Xbim.CobieLiteUk.Validation.Extensions
 {
     /// <summary>
     /// Provides extension methods to simplify the execution of validation algorithms on CobieLiteUK AssetTypes.

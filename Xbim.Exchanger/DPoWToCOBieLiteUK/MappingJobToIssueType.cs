@@ -1,4 +1,4 @@
-﻿using Xbim.COBieLiteUK;
+﻿using Xbim.CobieLiteUk;
 
 namespace XbimExchanger.DPoWToCOBieLiteUK
 {
@@ -22,14 +22,14 @@ namespace XbimExchanger.DPoWToCOBieLiteUK
                 if (person != null)
                 {
                     var cMap = Exchanger.GetOrCreateMappings<MappingContactToContact>();
-                    Xbim.COBieLiteUK.Contact contact;
+                    Xbim.CobieLiteUk.Contact contact;
                     if (cMap.GetTargetObject(person.Id.ToString(), out contact))
                         target.Owner = new ContactKey() { Email = contact.Email };    
                 }
                 else if (role != null)
                 {
                     var rMap = Exchanger.GetOrCreateMappings<MappingRoleToContact>();
-                    Xbim.COBieLiteUK.Contact contact;
+                    Xbim.CobieLiteUk.Contact contact;
                     if (rMap.GetTargetObject(role.Id.ToString(), out contact))
                         target.Owner = new ContactKey { Email = contact.Email };    
                 }

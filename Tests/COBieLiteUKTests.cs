@@ -1,14 +1,15 @@
 ﻿using System;
 using System.IO;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Xbim.COBieLiteUK;
+using Xbim.CobieLiteUk;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
-using Xbim.CobieLiteUK.Validation;
+using Xbim.CobieLiteUk.Validation;
 using XbimExchanger.IfcToCOBieLiteUK;
-using Attribute = Xbim.COBieLiteUK.Attribute;
-using Xbim.FilterHelper;
+using Attribute = Xbim.CobieLiteUk.Attribute;
+using Xbim.CobieLiteUk;
+using Xbim.CobieLiteUk.FilterHelper;
 using Xbim.Ifc;
 
 

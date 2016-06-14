@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Xbim.COBieLiteUK;
+using Xbim.CobieLiteUk;
 
-namespace Xbim.CobieLiteUK.Validation.Extensions
+namespace Xbim.CobieLiteUk.Validation.Extensions
 {
     /// <summary>
     /// development support class

@@ -2,7 +2,7 @@
 using System.Text.RegularExpressions;
 
 // ReSharper disable once CheckNamespace
-namespace Xbim.COBieLiteUK
+namespace Xbim.CobieLiteUk
 {
     public static class Templates
     {

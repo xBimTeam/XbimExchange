@@ -2,7 +2,7 @@
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
-namespace Xbim.COBieLiteUK.Converters
+namespace Xbim.CobieLiteUk.Converters
 {
     internal class AttributeConverter : JsonConverter
     {

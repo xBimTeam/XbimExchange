@@ -4,9 +4,9 @@ using System.Configuration;
 using System.IO;
 using System.Linq;
 
-namespace Xbim.FilterHelper
+namespace Xbim.CobieLiteUk.FilterHelper
 {
-    public class COBiePropertyMapping
+    public class CobiePropertyMapping
     {
         /// <summary>
         /// current section names in config file
@@ -49,7 +49,7 @@ namespace Xbim.FilterHelper
         /// <summary>
         /// Constructor to initialise objects
         /// </summary>
-        public COBiePropertyMapping()
+        public CobiePropertyMapping()
         {
             CommonPaths = new List<AttributePaths>();
             SparePaths = new List<AttributePaths>();
@@ -75,29 +75,27 @@ namespace Xbim.FilterHelper
         /// Constructor
         /// </summary>
         /// <param name="configFileName">FileInfo, config file</param>
-        public COBiePropertyMapping(FileInfo configFileName ) : this()
+        public CobiePropertyMapping(FileInfo configFileName ) : this()
         {
-            if (configFileName.Exists)
+            if (!configFileName.Exists) 
+                return;
+            ConfigFile = configFileName;
+            try
             {
-                ConfigFile = configFileName;
-                try
+                var configMap = new ExeConfigurationFileMap { ExeConfigFilename = ConfigFile.FullName };
+                var config = ConfigurationManager.OpenMappedExeConfiguration(configMap, ConfigurationUserLevel.None);
+                foreach (var sectionKey in _sectionKeys)
                 {
-                    var configMap = new ExeConfigurationFileMap { ExeConfigFilename = ConfigFile.FullName };
-                    var config = ConfigurationManager.OpenMappedExeConfiguration(configMap, ConfigurationUserLevel.None);
-                    foreach (var sectionKey in _sectionKeys)
-                    {
-                        var proxy = GetStorageList(sectionKey); //swap to correct path list
-                        var section = config.GetSection(sectionKey);
-                        proxy.AddRange(from KeyValueConfigurationElement keyVal in ((AppSettingsSection) section).Settings select new AttributePaths(keyVal.Key, keyVal.Value));
-                    }
+                    var proxy = GetStorageList(sectionKey); //swap to correct path list
+                    var section = config.GetSection(sectionKey);
+                    proxy.AddRange(from KeyValueConfigurationElement keyVal in ((AppSettingsSection) section).Settings select new AttributePaths(keyVal.Key, keyVal.Value));
+                }
                     
-                }
-                catch (Exception)
-                {
-                    throw new FormatException(string.Format("Formate incorrect: Delete {0} and restart application", ConfigFile.FullName));
-                }
             }
-            
+            catch (Exception)
+            {
+                throw new FormatException(string.Format("Formate incorrect: Delete {0} and restart application", ConfigFile.FullName));
+            }
         }
 
         /// <summary>

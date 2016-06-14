@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using Xbim.COBieLiteUK;
+using Xbim.CobieLiteUk;
 
 namespace Xbim.COBie.EqCompare
 {

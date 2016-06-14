@@ -1,15 +1,15 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using Xbim.Common;
-using Xbim.COBieLiteUK;
+using Xbim.CobieLiteUk;
 using Xbim.Ifc4.Interfaces;
 
 
 namespace XbimExchanger.IfcToCOBieLiteUK
 {
-    class MappingIfcSystemToSystem : XbimMappings<IModel, List<Facility>, string, IIfcSystem, Xbim.COBieLiteUK.System>
+    class MappingIfcSystemToSystem : XbimMappings<IModel, List<Facility>, string, IIfcSystem, Xbim.CobieLiteUk.System>
     {
-        protected override Xbim.COBieLiteUK.System Mapping(IIfcSystem ifcSystem, Xbim.COBieLiteUK.System target)
+        protected override Xbim.CobieLiteUk.System Mapping(IIfcSystem ifcSystem, Xbim.CobieLiteUk.System target)
         {
             var helper = ((IfcToCOBieLiteUkExchanger)Exchanger).Helper;
             target.ExternalEntity = helper.ExternalEntityName(ifcSystem);
@@ -46,9 +46,9 @@ namespace XbimExchanger.IfcToCOBieLiteUK
             return target;
         }
 
-        public override Xbim.COBieLiteUK.System CreateTargetObject()
+        public override Xbim.CobieLiteUk.System CreateTargetObject()
         {
-            return new Xbim.COBieLiteUK.System();
+            return new Xbim.CobieLiteUk.System();
         }
     }
 }

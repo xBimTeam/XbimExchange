@@ -1,4 +1,4 @@
-﻿namespace Xbim.CobieLiteUK.Validation.RequirementDetails
+﻿namespace Xbim.CobieLiteUk.Validation.RequirementDetails
 {
     internal class RequirementProvision<T>
     {

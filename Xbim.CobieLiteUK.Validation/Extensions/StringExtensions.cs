@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace Xbim.CobieLiteUK.Validation.Extensions
+namespace Xbim.CobieLiteUk.Validation.Extensions
 {
     internal static class StringExtensions
     {

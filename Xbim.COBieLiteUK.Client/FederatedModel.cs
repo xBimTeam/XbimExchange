@@ -4,7 +4,8 @@ using System.IO;
 using System.Linq;
 using Xbim.Common.Federation;
 using Xbim.Common.Step21;
-using Xbim.FilterHelper;
+using Xbim.CobieLiteUk;
+using Xbim.CobieLiteUk.FilterHelper;
 using Xbim.Ifc;
 using Xbim.Ifc4.ActorResource;
 using Xbim.Ifc4.Interfaces;
@@ -12,7 +13,7 @@ using Xbim.Ifc4.Kernel;
 using XbimExchanger.IfcToCOBieLiteUK.Conversion;
 using IfcRoleEnum = Xbim.Ifc4.Interfaces.IfcRoleEnum;
 
-namespace Xbim.COBieLiteUK.Client
+namespace Xbim.CobieLiteUk.Client
 {
     public class FederatedModel : IDisposable
     {

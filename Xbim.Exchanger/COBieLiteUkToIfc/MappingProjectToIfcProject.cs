@@ -1,4 +1,4 @@
-﻿using Xbim.COBieLiteUK;
+﻿using Xbim.CobieLiteUk;
 using Xbim.Ifc2x3.Kernel;
 
 namespace XbimExchanger.COBieLiteUkToIfc
