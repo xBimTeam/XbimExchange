@@ -775,14 +775,11 @@ namespace Tests
             const string ifcTestFile = @"Lakeside_Restaurant.ifc";
             using (var m = IfcStore.Open(ifcTestFile))
             {
-                
-                var xbimTestFile = Path.ChangeExtension(ifcTestFile, "xbim");
-                var jsonFile = Path.ChangeExtension(ifcTestFile, "json");
-               
+                var jsonFile = Path.ChangeExtension(ifcTestFile, "json");               
                 var facilities = new List<Facility>();
 
-                OutPutFilters rolefilters = new OutPutFilters();
-                RoleFilter reqRoles = RoleFilter.Unknown; //RoleFilter.Architectural |  RoleFilter.Mechanical | RoleFilter.Electrical | RoleFilter.FireProtection | RoleFilter.Plumbing;
+                var rolefilters = new OutPutFilters();
+                const RoleFilter reqRoles = RoleFilter.Unknown; //RoleFilter.Architectural |  RoleFilter.Mechanical | RoleFilter.Electrical | RoleFilter.FireProtection | RoleFilter.Plumbing;
                 rolefilters.ApplyRoleFilters(reqRoles);
 
                 var ifcToCoBieLiteUkExchanger = new IfcToCOBieLiteUkExchanger(m, facilities, null, rolefilters);

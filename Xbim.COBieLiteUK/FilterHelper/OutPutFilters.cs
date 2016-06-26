@@ -117,23 +117,22 @@ namespace Xbim.CobieLiteUk.FilterHelper
 
             //role storage
             RolesFilterHolder = new Dictionary<RoleFilter, OutPutFilters>();
-            
         }
 
         /// <summary>
         /// Constructor for default set configFileName = null, or passed in configuration file path
         /// </summary>
         /// <param name="configFileName"></param>
-        public OutPutFilters(string configFileName, RoleFilter role, ImportSet setsToImport = ImportSet.All) : this()
+        public OutPutFilters(string configFileName, RoleFilter roleFlags, ImportSet setsToImport = ImportSet.All) : this()
         {
-            AppliedRoles = role;
+            AppliedRoles = roleFlags;
             FiltersHelperInit(configFileName, setsToImport);
         }
 
-        public OutPutFilters(RoleFilter role) : this()
+        public OutPutFilters(RoleFilter roleFlags) : this()
         {
-            AppliedRoles = role;
-            FiltersHelperInit(role.ToResourceName());
+            AppliedRoles = roleFlags;
+            FiltersHelperInit(roleFlags.ToResourceName());
         }
 
         /// <summary>
@@ -194,10 +193,9 @@ namespace Xbim.CobieLiteUk.FilterHelper
                 ComponentFilter = new PropertyFilter(config.GetSection("ComponentFilter"));
                 CommonFilter = new PropertyFilter(config.GetSection("CommonFilter"));
             }
-            if (configFileName == null)
-            {
-                File.Delete(config.FilePath);
-            }
+            // API restructure:
+            // a call to File.Delete(config.FilePath); has been removed
+            // it is strange for the configuration reading routine to delete a configuration file
         }
 
         /// <summary>
@@ -476,13 +474,10 @@ namespace Xbim.CobieLiteUk.FilterHelper
                     mergeFilter = RolesFilterHolder[role];
                 }
                 else
-                {   //load defaults
-                    var mergeFile = GetDefaultRoleFile(role);
-                    if (!string.IsNullOrEmpty(mergeFile))
-                    {
-                        mergeFilter = new OutPutFilters(mergeFile, role);
-                        RolesFilterHolder[role] = mergeFilter;
-                    }
+                {
+                    // load defaults
+                    mergeFilter = GetDefaults(role);
+                    RolesFilterHolder[role] = mergeFilter;
                 }
                 if (mergeFilter != null)
                 {
@@ -539,7 +534,7 @@ namespace Xbim.CobieLiteUk.FilterHelper
         {
             foreach (RoleFilter role in Enum.GetValues(typeof(RoleFilter)))
             {
-                string roleFile = GetDefaultRoleFile(role);
+                string roleFile = role.ToResourceName();
                 if (!string.IsNullOrEmpty(roleFile))
                 {
                     RolesFilterHolder[role] = new OutPutFilters(roleFile, role);
@@ -566,7 +561,7 @@ namespace Xbim.CobieLiteUk.FilterHelper
                 }
                 else
                 {
-                    var roleFile = GetDefaultRoleFile(role);
+                    var roleFile = role.ToResourceName();
                     if (!string.IsNullOrEmpty(roleFile))
                     {
                         RolesFilterHolder[role] = new OutPutFilters(roleFile, role);
@@ -598,11 +593,11 @@ namespace Xbim.CobieLiteUk.FilterHelper
         /// <returns>OutPutFilters</returns>
         public OutPutFilters GetRoleFilter(RoleFilter role)
         {
-             if ((role & (role - 1)) != 0)
+            if ((role & (role - 1)) != 0)
             {
                 throw new ArgumentException("More than one flag set on role");
             }
-           
+
             if (RolesFilterHolder.ContainsKey(role))
             {
                 return RolesFilterHolder[role];
@@ -627,12 +622,10 @@ namespace Xbim.CobieLiteUk.FilterHelper
             {
                 throw new ArgumentException("More than one flag set on role");
             }
-            string filterFile = GetDefaultRoleFile(role);
-            if (!string.IsNullOrEmpty(filterFile))
-            {
-                return new OutPutFilters(filterFile, role);
-            }
-            return null;
+            var filterFile = role.ToResourceName();
+            return !string.IsNullOrEmpty(filterFile) 
+                ? new OutPutFilters(filterFile, role) 
+                : null;
         }
 
 
@@ -651,33 +644,6 @@ namespace Xbim.CobieLiteUk.FilterHelper
             }
 
             RolesFilterHolder[role] = filter;
-        }
-
-        /// <summary>
-        /// Get default embedded resource file for a specified role
-        /// </summary>
-        /// <param name="role">RoleFilter</param>
-        /// <returns></returns>
-        private static string GetDefaultRoleFile(RoleFilter role)
-        {
-            // no need to throw an error here, let the receiver manage a problem if the string is empty
-            switch (role)
-            {
-                case RoleFilter.Unknown:
-                    return "Xbim.COBieLiteUK.FilterHelper.COBieDefaultFilters.config";
-                case RoleFilter.Architectural:
-                    return "Xbim.COBieLiteUK.FilterHelper.COBieArchitecturalFilters.config";
-                case RoleFilter.Mechanical:
-                    return "Xbim.COBieLiteUK.FilterHelper.COBieMechanicalFilters.config";
-                case RoleFilter.Electrical:
-                    return "Xbim.COBieLiteUK.FilterHelper.COBieElectricalFilters.config";
-                case RoleFilter.Plumbing:
-                    return "Xbim.COBieLiteUK.FilterHelper.COBiePlumbingFilters.config";
-                case RoleFilter.FireProtection:
-                    return "Xbim.COBieLiteUK.FilterHelper.COBieFireProtectionFilters.config";
-                default:
-                    return string.Empty;
-            }
         }
 
         #endregion

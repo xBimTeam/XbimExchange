@@ -125,7 +125,7 @@ namespace XbimExchanger.IfcToCOBieExpress
         private Lookup<string, IfcElement> _elementTypeToElementObjectMap;
 */
         private Dictionary<IIfcTypeObject, IIfcAsset> _assetAsignments;
-        private Dictionary<IIfcSystem, IEnumerable<IIfcObjectDefinition>> _systemAssignment;
+        private Dictionary<IIfcSystem, IItemSet<IIfcObjectDefinition>> _systemAssignment;
         private Dictionary<IIfcObjectDefinition, List<IIfcSystem>> _systemLookup;
         private Dictionary<IIfcElement, List<IIfcSpatialElement>> _spaceAssetLookup;
         private Dictionary<IIfcSpace, IIfcBuildingStorey> _spaceFloorLookup;
@@ -540,7 +540,7 @@ namespace XbimExchanger.IfcToCOBieExpress
 
         private void GetSystems()
         {
-            _systemAssignment = new Dictionary<IIfcSystem, IEnumerable<IIfcObjectDefinition>>();
+            _systemAssignment = new Dictionary<IIfcSystem, IItemSet<IIfcObjectDefinition>>();
             if (SystemMode.HasFlag(SystemExtractionMode.System))
             {
                 _systemAssignment =
@@ -1005,7 +1005,7 @@ namespace XbimExchanger.IfcToCOBieExpress
         /// <summary>
         /// 
         /// </summary>
-        public IDictionary<IIfcSystem, IEnumerable<IIfcObjectDefinition>> SystemAssignment
+        public IDictionary<IIfcSystem, IItemSet<IIfcObjectDefinition>> SystemAssignment
         {
             get { return _systemAssignment; }
         }
@@ -1697,12 +1697,12 @@ namespace XbimExchanger.IfcToCOBieExpress
         /// </summary>
         /// <param name="ifcSystem"></param>
         /// <returns></returns>
-        public IEnumerable<IIfcObjectDefinition> GetSystemAssignments(IIfcSystem ifcSystem)
+        public IItemSet<IIfcObjectDefinition> GetSystemAssignments(IIfcSystem ifcSystem)
         {
-            IEnumerable<IIfcObjectDefinition> assignments;
+            IItemSet<IIfcObjectDefinition> assignments;
             return SystemAssignment.TryGetValue(ifcSystem, out assignments) ? 
                 assignments : 
-                Enumerable.Empty<IIfcObjectDefinition>();
+                null; // todo: is it better to return an empty IItemSet? 
         }
 
 

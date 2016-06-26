@@ -132,7 +132,7 @@ namespace XbimExchanger.IfcToCOBieLiteUK
         private Lookup<string, IfcElement> _elementTypeToElementObjectMap;
 */
         private Dictionary<IIfcTypeObject, IIfcAsset> _assetAsignments;
-        private Dictionary<IIfcSystem, IEnumerable<IIfcObjectDefinition>> _systemAssignment;
+        private Dictionary<IIfcSystem, IItemSet<IIfcObjectDefinition>> _systemAssignment;
         private Dictionary<IIfcObjectDefinition, List<IIfcSystem>> _systemLookup;
         private HashSet<string> _cobieProperties = new HashSet<string>();
         private Dictionary<IIfcElement, List<IIfcSpatialElement>> _spaceAssetLookup;
@@ -507,13 +507,13 @@ namespace XbimExchanger.IfcToCOBieLiteUK
 
         private void GetSystems()
         {
-            _systemAssignment = new Dictionary<IIfcSystem, IEnumerable<IIfcObjectDefinition>>();
+            _systemAssignment = new Dictionary<IIfcSystem, IItemSet<IIfcObjectDefinition>>();
             if (SystemMode.HasFlag(SystemExtractionMode.System))
             {
-                _systemAssignment =
+                var SystemAssignmentSet =
                         _model.Instances.OfType<IIfcRelAssignsToGroup>().Where(r => r.RelatingGroup is IIfcSystem)
-                        .Distinct(new IfcRelAssignsToGroupRelatedGroupObjCompare()) //make sure we do not have duplicate keys, or ToDictionary will throw ex. could lose RelatedObjects though. 
-                        .ToDictionary(k => (IIfcSystem)k.RelatingGroup, v => v.RelatedObjects);
+                        .Distinct(new IfcRelAssignsToGroupRelatedGroupObjCompare()); //make sure we do not have duplicate keys, or ToDictionary will throw ex. could lose RelatedObjects though. 
+                var ret = SystemAssignmentSet.ToDictionary(k => (IIfcSystem)k.RelatingGroup, v => v.RelatedObjects);
                 _systemLookup = new Dictionary<IIfcObjectDefinition, List<IIfcSystem>>();
                 ReportProgress.NextStage(SystemAssignment.Count, 35);
                 foreach (var systemAssignment in SystemAssignment)
@@ -1008,7 +1008,7 @@ namespace XbimExchanger.IfcToCOBieLiteUK
         /// <summary>
         /// 
         /// </summary>
-        public IDictionary<IIfcSystem, IEnumerable<IIfcObjectDefinition>> SystemAssignment
+        public IDictionary<IIfcSystem, IItemSet<IIfcObjectDefinition>> SystemAssignment
         {
             get { return _systemAssignment; }
         }
@@ -1726,13 +1726,12 @@ namespace XbimExchanger.IfcToCOBieLiteUK
         /// </summary>
         /// <param name="ifcSystem"></param>
         /// <returns></returns>
-        public IEnumerable<IIfcObjectDefinition> GetSystemAssignments(IIfcSystem ifcSystem)
+        public IItemSet<IIfcObjectDefinition> GetSystemAssignments(IIfcSystem ifcSystem)
         {
-            IEnumerable<IIfcObjectDefinition> assignments;
-            if (SystemAssignment.TryGetValue(ifcSystem, out assignments))
-                return assignments;
-            return Enumerable.Empty<IIfcObjectDefinition>();
-            
+            IItemSet<IIfcObjectDefinition> assignments;
+            return SystemAssignment.TryGetValue(ifcSystem, out assignments) 
+                ? assignments 
+                : null;
         }
 
 
@@ -1767,11 +1766,10 @@ namespace XbimExchanger.IfcToCOBieLiteUK
             if (!string.IsNullOrWhiteSpace(building.Name))
                 return building.Name;
             var project = _model.Instances.FirstOrDefault<IIfcProject>();
-            if (project != null)
-            {
-                if (!string.IsNullOrWhiteSpace(project.Name))
-                    return project.Name;
-            }
+            if (project == null) 
+                return "Unknown";
+            if (!string.IsNullOrWhiteSpace(project.Name))
+                return project.Name;
             return "Unknown";
         }
 

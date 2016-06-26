@@ -20,9 +20,10 @@ namespace Xbim.CobieLiteUk.FilterHelper
     {
         public static string ToResourceName(this RoleFilter filter)
         {
+            const string format = "Xbim.CobieLiteUk.FilterHelper.COBie{0}Filters.config";
             return filter == RoleFilter.Unknown 
-                ? "Xbim.COBieLiteUK.FilterHelper.COBieDefaultFilters.config" 
-                : string.Format("Xbim.COBieLiteUK.FilterHelper.COBie{0}Filters.config", filter);
+                ? string.Format(format, "Default") 
+                : string.Format(format, filter);
         }
     }
 }
