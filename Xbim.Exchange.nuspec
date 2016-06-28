@@ -3,7 +3,7 @@
     <metadata>
         <id>Xbim.Exchange</id>
         <!-- note: development versions are generally in the form 4.1.0-V0001, use 4 digits for consistency next time -->
-        <version>4.0.0-V034</version>
+        <version>4.0.0-V035</version>
         <title>xBIM Exchange</title>
         <authors>xBIM team</authors>
         <owners>Steve Lockley</owners>
@@ -26,8 +26,7 @@ IOS and Android versions are under development.</description>
       <tags>BIM, IFC, IfcXml, IfcZip, COBie, COBieLite, .Net, C#, BuildingSmart</tags>
       <dependencies>
         <dependency id="NPOI" version="2.1.3.1" />
-        <dependency id="Xbim.Geometry" version="4.0.0-V0076" />
-        <dependency id="Xbim.Essentials" version="4.0.0-V203" />
+        <dependency id="Xbim.Geometry" version="4.0.0-V0077" />
         <dependency id="Xbim.PropertySets" version="3.1.10" />
       </dependencies>
     </metadata>
