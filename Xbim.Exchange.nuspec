@@ -3,7 +3,7 @@
     <metadata>
         <id>Xbim.Exchange</id>
         <!-- note: development versions are generally in the form 4.1.0-V0001, use 4 digits for consistency next time -->
-        <version>4.0.0-V035</version>
+        <version>4.0.0-V036</version>
         <title>xBIM Exchange</title>
         <authors>xBIM team</authors>
         <owners>Steve Lockley</owners>
@@ -19,6 +19,7 @@ The xBIM project provides packages to convert IFC models to COBie spreadsheets i
 IOS and Android versions are under development.</description>
         <summary>The .Net toolkit for developing BIM applications based on the IFC standard. Essential support for the Ifc data model</summary>
         <releaseNotes>
+          4.0 contains the code ported to the multiple schema infrastructure of Xbim.Essentials 4.
           3.1 contains signed libaries targeting net40 framework.
           3.0 contains an implementation of the COBieLite protocol as well as the COBieLite Spreadsheet format.
         </releaseNotes>

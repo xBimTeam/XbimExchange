@@ -9,7 +9,6 @@ using Assembly = System.Reflection.Assembly;
 using Xbim.CobieLiteUk;
 using Xbim.CobieLiteUk.FilterHelper;
 using Attribute = Xbim.CobieLiteUk.Attribute;
-using Xbim.CobieLiteUk;
 using XbimExchanger.COBieLiteHelpers;
 using XbimExchanger.IfcHelpers.Ifc2x3;
 using Xbim.Ifc;
@@ -987,7 +986,7 @@ namespace XbimExchanger.COBieLiteUkToIfc
                                 .ElectronicMailAddresses.First(),
                         CreatedOn =
                             (oh.CreationDate != null)
-                                ? IfcTimeStamp.ToDateTime(oh.CreationDate).ToString()
+                                ? IfcTimeStamp.ToDateTime(oh.CreationDate).ToString(CultureInfo.InvariantCulture)
                                 : string.Empty,
                         ExtSystem =
                             (oh.LastModifyingApplication == null)

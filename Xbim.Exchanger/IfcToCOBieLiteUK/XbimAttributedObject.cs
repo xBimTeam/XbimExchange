@@ -711,7 +711,7 @@ namespace XbimExchanger.IfcToCOBieLiteUK
                     return false;
                 }
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 var message = string.Format(
                     "Conversion of '{0}' ({1}) to {2} failed.", 

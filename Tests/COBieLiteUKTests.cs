@@ -8,7 +8,6 @@ using System.Linq;
 using Xbim.CobieLiteUk.Validation;
 using XbimExchanger.IfcToCOBieLiteUK;
 using Attribute = Xbim.CobieLiteUk.Attribute;
-using Xbim.CobieLiteUk;
 using Xbim.CobieLiteUk.FilterHelper;
 using Xbim.Ifc;
 

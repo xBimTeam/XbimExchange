@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using Xbim.CobieLiteUk;
-using Xbim.CobieLiteUk;
 using Xbim.CobieLiteUk.FilterHelper;
 using Xbim.Common;
 using Xbim.Ifc4.Interfaces;
