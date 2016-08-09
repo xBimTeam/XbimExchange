@@ -29,7 +29,7 @@ IOS and Android versions are under development.</description>
         <dependency id="NPOI" version="2.1.3.1" />
         <dependency id="Xbim.Geometry" version="4.0.0-V0078" />
         <dependency id="Xbim.PropertySets" version="3.1.11" />
-        <!-- note: Xbim.Cobie is currently only used in the test solution; this is strange and needs to be verified. -->
+        <!-- note: Xbim.Cobie is currently only used in the test project; this is strange and needs to be verified. -->
         <dependency id="Xbim.Cobie" version="4.0.0-V221" />
       </dependencies>
     </metadata>
