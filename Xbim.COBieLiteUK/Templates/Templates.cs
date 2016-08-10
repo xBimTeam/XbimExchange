@@ -11,12 +11,12 @@ namespace Xbim.CobieLiteUk
             var extension = excelFormatType == ExcelTypeEnum.XLS
                 ? "xls"
                 : "xlsx";
-            return string.Format("Xbim.COBieLiteUK.Templates.{0}.{1}", templateType, extension.ToLowerInvariant());
+            return string.Format("Xbim.CobieLiteUk.Templates.{0}.{1}", templateType, extension.ToLowerInvariant());
         }
 
         public static IEnumerable<string> GetAvalilableTemplateTypes()
         {
-            var re = new Regex("Xbim.COBieLiteUK.Templates.([a-zA-Z0-9]+).xls[x]*");
+            var re = new Regex("Xbim.CobieLiteUk.Templates.([a-zA-Z0-9]+).xls[x]*");
             var available = global::System.Reflection.Assembly.GetExecutingAssembly().GetManifestResourceNames();
 
             var emitted = new List<string>();

@@ -132,6 +132,28 @@ namespace Tests
         //}
 
         [TestMethod]
+        public void CobieLiteUkTemplatesOk()
+        {
+            var ret = Templates.GetAvalilableTemplateTypes().ToList();
+            Assert.AreEqual(ret.Count, 1);
+
+            var t = typeof(Templates);
+            
+            Stream templateStream = null;
+
+            foreach (var templateVersion in ret)
+            {
+                var resourceName = Templates.FullResourceName(templateVersion, ExcelTypeEnum.XLS);
+                templateStream = t.Assembly.GetManifestResourceStream(resourceName);
+                Assert.IsNotNull(templateStream);
+
+                resourceName = Templates.FullResourceName(templateVersion, ExcelTypeEnum.XLSX);
+                templateStream = t.Assembly.GetManifestResourceStream(resourceName);
+                Assert.IsNotNull(templateStream);
+            }
+        }
+
+        [TestMethod]
         public void CoBieLiteUkCreation()
         {
             var facility = new Facility

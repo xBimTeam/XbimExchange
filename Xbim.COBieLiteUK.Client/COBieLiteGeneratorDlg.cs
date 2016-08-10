@@ -103,7 +103,9 @@ namespace Xbim.CobieLiteUk.Client
                 checkedListSys.SetItemChecked(i, true);
             }
             //set template from resources
-            txtTemplate.Items.AddRange(Templates.GetAvalilableTemplateTypes().OfType<object>().ToArray());
+            var t1 = Templates.GetAvalilableTemplateTypes();
+            var tmps = t1.OfType<object>().ToArray();
+            txtTemplate.Items.AddRange(tmps);
             if (txtTemplate.Items.Count > 0)
                 txtTemplate.SelectedIndex = 0;
             cmboxFiletype.SelectedIndex = 1;
