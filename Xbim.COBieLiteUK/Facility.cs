@@ -18,6 +18,7 @@ using Formatting = System.Xml.Formatting;
 using Xbim.CobieLiteUk;
 using Xbim.CobieLiteUk.FilterHelper;
 using Xbim.COBie.EqCompare;
+using Xbim.CobieLiteUk.Schemas;
 
 namespace Xbim.CobieLiteUk
 {
@@ -271,14 +272,26 @@ namespace Xbim.CobieLiteUk
 
         public static Facility ReadXml(Stream stream)
         {
+            Facility facility;
             var serializer = GetXmlSerializer();
-            var facility = (Facility)serializer.Deserialize(stream);
+            facility = (Facility)serializer.Deserialize(stream);
             facility.SetFacility(facility);
             return facility;
         }
 
-        public static Facility ReadXml(string path)
+        public static Facility ReadXml(string path, bool ignoreNamespaces = false)
         {
+            if (ignoreNamespaces)
+            {
+                FileInfo f = new FileInfo(path);
+                var serializer = GetXmlSerializer();
+                using (var textreader = f.OpenText())
+                {
+                    var facility = (Facility)serializer.Deserialize(new NamespaceTolerantXmlTextReader(textreader));
+                    facility.SetFacility(facility);
+                    return facility;
+                }
+            }
             using (var stream = File.OpenRead(path))
             {
                 var facility = ReadXml(stream);

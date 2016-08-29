@@ -45,7 +45,6 @@ namespace XbimExchanger.IfcToCOBieExpress
         PropertyMaps = 0x2, //include properties as set by GetPropMap("SystemMaps")
         Types = 0x4, //include types as system listing all defined objects in componentnsnames
     }
-
     
     /// <summary>
     /// 
@@ -114,16 +113,11 @@ namespace XbimExchanger.IfcToCOBieExpress
         private Dictionary<IIfcSpace, HashSet<IIfcZone>> _spaceZones;
 
         private Dictionary<IIfcObjectDefinition, XbimAttributedObject> _attributedObjects;
-
-        private Dictionary<string, string[]> _cobieFieldMap;
-        
+     
         private Dictionary<IIfcObject, XbimIfcProxyTypeObject> _objectToTypeObjectMap;
 
         private readonly Dictionary<XbimIfcProxyTypeObject, List<IIfcElement>> _definingTypeObjectMap =new Dictionary<XbimIfcProxyTypeObject, List<IIfcElement>>();
 
-/*
-        private Lookup<string, IfcElement> _elementTypeToElementObjectMap;
-*/
         private Dictionary<IIfcTypeObject, IIfcAsset> _assetAsignments;
         private Dictionary<IIfcSystem, IItemSet<IIfcObjectDefinition>> _systemAssignment;
         private Dictionary<IIfcObjectDefinition, List<IIfcSystem>> _systemLookup;
@@ -593,12 +587,13 @@ namespace XbimExchanger.IfcToCOBieExpress
         /// </summary>
         /// <param name="filedKey">Field name</param>
         /// <returns>string[]</returns>
-        public string[] GetPropMap(string filedKey)
+        public string[] GetPropMap(string fieldKey)
         {
-            string[] propertyNames;
-            return _cobieFieldMap.TryGetValue("SystemMaps", out propertyNames) ? 
-                propertyNames : 
-                new string[] { };
+            var propertyNames = _cobiePropertyMaps.GetMap(fieldKey);
+            if (propertyNames == null)
+                return new string[] { };
+            else
+                return propertyNames;    
         }
         
 
@@ -795,7 +790,7 @@ namespace XbimExchanger.IfcToCOBieExpress
 
        }
 
-        
+        CobiePropertyMapping _cobiePropertyMaps;
 
         private void LoadCobieMaps()
         {
@@ -824,9 +819,7 @@ namespace XbimExchanger.IfcToCOBieExpress
             }
 
             //using COBiePropertyMapping to set properties, might pass this into function, but for now read file passed file name, or default
-            var propertyMaps = new CobiePropertyMapping(new FileInfo(tmpFile));
-            _cobieFieldMap = propertyMaps.GetDictOfProperties();
-            
+            _cobiePropertyMaps = new CobiePropertyMapping(new FileInfo(tmpFile));            
             if (_configFileName == null)
                 File.Delete(tmpFile);
         }
@@ -1283,9 +1276,9 @@ namespace XbimExchanger.IfcToCOBieExpress
             var result = default(TSimpleType);
             if (!_attributedObjects.TryGetValue(ifcObjectDefinition, out attributedObject)) 
                 return;
-            
-            string[] propertyNames;
-            if (_cobieFieldMap.TryGetValue(valueName, out propertyNames))
+
+            var propertyNames = _cobiePropertyMaps.GetMap(valueName);
+            if (propertyNames != null)
             {
                 if (propertyNames.Any(propertyName => attributedObject.TryGetAttributeValue(propertyName, out result)))
                     setter(result);
@@ -1307,8 +1300,8 @@ namespace XbimExchanger.IfcToCOBieExpress
             XbimAttributedObject attributedObject;
             if (_attributedObjects.TryGetValue(ifcObject, out attributedObject))
             {
-                string[] propertyNames;
-                if (_cobieFieldMap.TryGetValue(valueName, out propertyNames))
+                var propertyNames = _cobiePropertyMaps.GetMap(valueName);
+                if (propertyNames != null)
                 {
                     foreach (var propertyName in propertyNames)
                     {
@@ -1324,9 +1317,7 @@ namespace XbimExchanger.IfcToCOBieExpress
             }
             return null;
         }
-
         
-
         private IIfcTypeObject GetDefiningTypeObject(IIfcObject ifcObject)
         {
             XbimIfcProxyTypeObject definingType;
@@ -1567,7 +1558,7 @@ namespace XbimExchanger.IfcToCOBieExpress
             }
         }
 
-       
+
 
         /// <summary>
         /// 
@@ -1580,8 +1571,9 @@ namespace XbimExchanger.IfcToCOBieExpress
         {
             XbimAttributedObject attributedObject;
             if (!_attributedObjects.TryGetValue(ifcObjectDefinition, out attributedObject)) return null;
-            string[] propertyNames;
-            if (!_cobieFieldMap.TryGetValue(valueName, out propertyNames))
+            var propertyNames = _cobiePropertyMaps.GetMap(valueName);
+
+            if (propertyNames == null)
                 throw new ArgumentException("Illegal COBie Attribute name:", valueName);
             foreach (var propertyName in propertyNames)
             {
@@ -1591,17 +1583,13 @@ namespace XbimExchanger.IfcToCOBieExpress
             }
             return null;
         }
-
-
-
-
+        
         /// <summary>
         /// 
         /// </summary>
         /// <returns></returns>
         public void GetContacts()
         {
-
             SundryContacts = new Dictionary<string, CobieContact>();
 
             //get any actors and select their

@@ -13,7 +13,6 @@ namespace Xbim.CobieLiteUk.FilterHelper
         /// </summary>
         private readonly string[] _sectionKeys = { "SpacePropertyMaps", "FloorPropertyMaps", "AssetPropertyMaps", "AssetTypePropertyMaps", "SystemPropertyMaps", "CommonPropertyMaps", "SparePropertyMaps" };
 
-
         /// <summary>
         /// Common List of attribute paths
         /// </summary>
@@ -44,7 +43,7 @@ namespace Xbim.CobieLiteUk.FilterHelper
         /// <summary>
         /// File info for config file
         /// </summary>
-        public FileInfo ConfigFile{ get; set; }
+        public FileInfo ConfigFile { get; set; }
 
         /// <summary>
         /// Constructor to initialise objects
@@ -75,9 +74,9 @@ namespace Xbim.CobieLiteUk.FilterHelper
         /// Constructor
         /// </summary>
         /// <param name="configFileName">FileInfo, config file</param>
-        public CobiePropertyMapping(FileInfo configFileName ) : this()
+        public CobiePropertyMapping(FileInfo configFileName) : this()
         {
-            if (!configFileName.Exists) 
+            if (!configFileName.Exists)
                 return;
             ConfigFile = configFileName;
             try
@@ -88,13 +87,13 @@ namespace Xbim.CobieLiteUk.FilterHelper
                 {
                     var proxy = GetStorageList(sectionKey); //swap to correct path list
                     var section = config.GetSection(sectionKey);
-                    proxy.AddRange(from KeyValueConfigurationElement keyVal in ((AppSettingsSection) section).Settings select new AttributePaths(keyVal.Key, keyVal.Value));
+                    proxy.AddRange(from KeyValueConfigurationElement keyVal in ((AppSettingsSection)section).Settings select new AttributePaths(keyVal.Key, keyVal.Value));
                 }
-                    
+
             }
             catch (Exception)
             {
-                throw new FormatException(string.Format("Formate incorrect: Delete {0} and restart application", ConfigFile.FullName));
+                throw new FormatException(string.Format("Incorrect configuration file format: Delete {0} and restart application", ConfigFile.FullName));
             }
         }
 
@@ -146,14 +145,31 @@ namespace Xbim.CobieLiteUk.FilterHelper
                     return null;
             }
         }
+        
+        Dictionary<string, string[]> _dictOfProperties;
 
         /// <summary>
         /// Get the Property mapping for all sections
         /// </summary>
         /// <returns>Dictionary </returns>
-        public Dictionary<string, string[]> GetDictOfProperties()
+        public Dictionary<string, string[]> DictOfProperties
         {
-            return _sectionKeys.SelectMany(GetStorageList).ToDictionary(item => item.Key, item => item.PSetPaths);
+            get
+            {
+                if (_dictOfProperties == null)
+                    _dictOfProperties = _sectionKeys.SelectMany(GetStorageList).ToDictionary(item => item.Key, item => item.PSetPaths);
+                return _dictOfProperties;
+            }
+        }
+
+        public string[] GetMap(string cobieAttributeName)
+        {
+            string[] propertyNames;
+            if ( DictOfProperties.TryGetValue(cobieAttributeName, out propertyNames))
+            {
+                return propertyNames;
+            }
+            return null;
         }
     }
 
@@ -184,9 +200,7 @@ namespace Xbim.CobieLiteUk.FilterHelper
                 return string.Join(";",PSetPaths);
             }
         }
-
         
-
         /// <summary>
         /// Constructor
         /// </summary>
@@ -194,14 +208,8 @@ namespace Xbim.CobieLiteUk.FilterHelper
         /// <param name="attPaths">; delimited sting of pset.name paths</param>
         public AttributePaths(string key, string attPaths)
         {
-            Key = key;
-            
+            Key = key;   
             PSetPaths = attPaths.Split(new[] { ';' }, StringSplitOptions.RemoveEmptyEntries);
-        }
-
-        
+        }   
     }
-
-
-    
 }

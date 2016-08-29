@@ -788,6 +788,17 @@ namespace Tests
                     c => c.GetType() == typeof (Contact) && c.Name == "martin.cerny@northumbria.ac.uk");
         }
 
+        [DeploymentItem("ValidationFiles\\Lakeside_Restaurant-stage6-COBie.xml")]
+        [DeploymentItem("ValidationFiles\\DownloadedFormNBSToolkit.xml")]
+        [TestMethod]
+        public void XmlReadTest()
+        {
+            // can it read a self-generated xml with no namespace correction?
+            var v2 = Facility.ReadXml(@"Lakeside_Restaurant-stage6-COBie.xml", false);
+            // can it read a NBS-generated file with namespace correction?
+            var v3 = Facility.ReadXml(@"DownloadedFormNBSToolkit.xml", true);
+        }
+
         [DeploymentItem("TestFiles\\OBN1-COBie-UK-2014.xlsx")]
         [TestMethod]
         [DeploymentItem("ValidationFiles\\Lakeside_Restaurant.ifc")]
@@ -858,6 +869,7 @@ namespace Tests
             var submitted = Facility.ReadJson("Lakeside_restaurant.json");
             Assert.IsNotNull(submitted.AssetTypes);
             var requirement = Facility.ReadJson("Lakeside_Restaurant-stage6-COBie.json");
+            requirement.WriteXml(@"C:\Users\Claudio\Desktop\Lakeside_Restaurant-stage6-COBie.xml");
             Assert.IsNotNull(requirement.AssetTypes);
             var submittedAssetTypes = new List<AssetType>();
             foreach (var assetTypeRequirement in requirement.AssetTypes)

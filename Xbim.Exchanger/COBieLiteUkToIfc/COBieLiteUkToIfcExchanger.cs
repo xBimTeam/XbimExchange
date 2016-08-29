@@ -99,7 +99,7 @@ namespace XbimExchanger.COBieLiteUkToIfc
                     );
             }
             var propertyMaps = new CobiePropertyMapping(new FileInfo(tmpFile));
-            var cobieFieldMap = propertyMaps.GetDictOfProperties().Where(d => d.Value.FirstOrDefault() != null).ToDictionary(d => d.Key, d => d.Value.First());
+            var cobieFieldMap = propertyMaps.DictOfProperties.Where(d => d.Value.FirstOrDefault() != null).ToDictionary(d => d.Key, d => d.Value.First());
             foreach (var item in cobieFieldMap)
             {
                 var names = item.Value.Split(new[] { '.' }, StringSplitOptions.RemoveEmptyEntries);
