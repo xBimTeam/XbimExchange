@@ -799,6 +799,17 @@ namespace Tests
             var v3 = Facility.ReadXml(@"DownloadedFormNBSToolkit.xml", true);
         }
 
+        [DeploymentItem("TestFiles\\Example_Bim_Toolkit_Stage4.zip")]
+        [TestMethod]
+        public void ZipReadTest()
+        {
+            // can it read a zip file exported from theNBS's digital bim toolkit?
+            var v2 = Facility.ReadZip(@"Example_Bim_Toolkit_Stage4.zip");
+            Assert.IsNotNull(v2);
+        }
+
+
+
         [DeploymentItem("TestFiles\\OBN1-COBie-UK-2014.xlsx")]
         [TestMethod]
         [DeploymentItem("ValidationFiles\\Lakeside_Restaurant.ifc")]

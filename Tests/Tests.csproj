@@ -110,6 +110,9 @@
     <None Include="TestFiles\2012-03-23-Duplex-Design.xlsx">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Include="TestFiles\Example_Bim_Toolkit_Stage4.zip">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Include="TestFiles\Ifc\Clinic-Handover-v12.ifc">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
