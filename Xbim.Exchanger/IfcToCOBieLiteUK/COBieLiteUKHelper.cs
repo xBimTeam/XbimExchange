@@ -593,7 +593,9 @@ namespace XbimExchanger.IfcToCOBieLiteUK
             {
                 var hash = GetTypeObjectHashString(typeObject);
                 var typeName = BuildTypeName(typeObject);
-                proxyTypesByHash.Add(hash, new XbimIfcProxyTypeObject(this, typeObject, typeName));
+                // it is possible for elements in the distinct call above to have the same hash, so we test before adding.
+                if (!proxyTypesByHash.ContainsKey(hash))
+                    proxyTypesByHash.Add(hash, new XbimIfcProxyTypeObject(this, typeObject, typeName));
                 ReportProgress.IncrementAndUpdate();
             }
 
