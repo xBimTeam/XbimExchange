@@ -1,8 +1,8 @@
 ﻿using System.ComponentModel;
 
-namespace XbimExchanger.IfcToCOBieLiteUK.Conversion
+namespace XbimExchanger.IfcHelpers
 {
-    public interface ICobieLiteConverter
+    public interface ICobieConverter
     {
         void Run(CobieConversionParams args);
 

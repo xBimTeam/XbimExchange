@@ -11,10 +11,11 @@ using Xbim.CobieLiteUk.FilterHelper;
 using Xbim.Ifc;
 using Xbim.IO;
 using XbimExchanger.COBieLiteUkToIfc;
+using XbimExchanger.IfcHelpers;
 
 namespace XbimExchanger.IfcToCOBieLiteUK.Conversion
 {
-    public class CobieLiteConverter : ICobieLiteConverter
+    public class CobieLiteConverter : ICobieConverter
     {
         private static readonly ILog Logger = LogManager.GetLogger("Xbim.COBieLiteUK.Client.CobieLiteConverter");
 
@@ -119,6 +120,8 @@ namespace XbimExchanger.IfcToCOBieLiteUK.Conversion
                         fullFileName = CreateXmlFile(fullFileName, facilityType);
                         break;
                     case ExportFormatEnum.IFC:
+                    case ExportFormatEnum.STEP21:
+                        throw new NotSupportedException("COBie lite does not have a STEP21 option");
                     default:
                         fullFileName = CreateIfcFile(fullFileName, facilityType);
                         break;

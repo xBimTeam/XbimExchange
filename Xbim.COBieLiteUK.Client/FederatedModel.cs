@@ -12,6 +12,7 @@ using Xbim.Ifc4.Interfaces;
 using Xbim.Ifc4.Kernel;
 using XbimExchanger.IfcToCOBieLiteUK.Conversion;
 using IfcRoleEnum = Xbim.Ifc4.Interfaces.IfcRoleEnum;
+using XbimExchanger.IfcHelpers;
 
 namespace Xbim.CobieLiteUk.Client
 {

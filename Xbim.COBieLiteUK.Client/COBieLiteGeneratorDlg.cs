@@ -11,6 +11,8 @@ using Xbim.CobieLiteUk.FilterHelper;
 using Xbim.CobieLiteUk;
 using XbimExchanger.IfcToCOBieLiteUK;
 using XbimExchanger.IfcToCOBieLiteUK.Conversion;
+using XbimExchanger.IfcToCOBieExpress.Conversion;
+using XbimExchanger.IfcHelpers;
 
 namespace Xbim.CobieLiteUk.Client
 {
@@ -20,7 +22,7 @@ namespace Xbim.CobieLiteUk.Client
         /// <summary>
         /// Worker
         /// </summary>
-        private ICobieLiteConverter _cobieWorker;
+        private ICobieConverter _cobieWorker;
 
         /// <summary>
         /// Filters for Extracting COBie, Role Filtering
@@ -108,6 +110,10 @@ namespace Xbim.CobieLiteUk.Client
             txtTemplate.Items.AddRange(tmps);
             if (txtTemplate.Items.Count > 0)
                 txtTemplate.SelectedIndex = 0;
+            
+
+            cmBoxCOBieType.DataSource = Enum.GetValues(typeof(COBieType));
+            cmboxFiletype.DataSource = Enum.GetValues(typeof(ExportFormatEnum));
             cmboxFiletype.SelectedIndex = 1;
 
             //set up tooltips
@@ -208,11 +214,31 @@ namespace Xbim.CobieLiteUk.Client
             }
             btnGenerate.Enabled = false;
 
-            if (_cobieWorker == null)
+            //get required type of COBie
+            COBieType cobieType;
+            Enum.TryParse<COBieType>(cmBoxCOBieType.SelectedValue.ToString(), out cobieType);
+
+            if (cobieType == COBieType.COBieLiteUK)
             {
-                _cobieWorker = new CobieLiteConverter();
-                _cobieWorker.Worker.ProgressChanged += WorkerProgressChanged;
-                _cobieWorker.Worker.RunWorkerCompleted += WorkerCompleted;
+                if (_cobieWorker == null || !(_cobieWorker is CobieLiteConverter))
+                {
+                    _cobieWorker = new CobieLiteConverter();
+                    _cobieWorker.Worker.ProgressChanged += WorkerProgressChanged;
+                    _cobieWorker.Worker.RunWorkerCompleted += WorkerCompleted;
+                } 
+            }
+            else if (cobieType == COBieType.COBieExpress)
+            {
+                if (_cobieWorker == null || !(_cobieWorker is CobieExpressConverter))
+                {
+                    _cobieWorker = new CobieExpressConverter();
+                    _cobieWorker.Worker.ProgressChanged += WorkerProgressChanged;
+                    _cobieWorker.Worker.RunWorkerCompleted += WorkerCompleted;
+                }
+            }
+            else
+            {
+                throw new ArgumentException("Unknown COBieType requested");
             }
             //get Excel File Type
             var excelType = GetExcelType();
@@ -300,7 +326,15 @@ namespace Xbim.CobieLiteUk.Client
                 foreach (var file in files)
                 {
                     if (!string.IsNullOrEmpty(file) && File.Exists(file))
-                        Process.Start(file);
+                        try
+                        {
+                            Process.Start(file);
+                        }
+                        catch (Exception)
+                        {
+
+                            throw new ArgumentException("File extension is not associated with a program");
+                        } 
                 }
             }
             ProgressBar.Visible = false;
@@ -414,7 +448,8 @@ namespace Xbim.CobieLiteUk.Client
         private void UpdateCheckOpenExcel()
         {
             chkBoxOpenFile.Enabled = cmboxFiletype.Text.Equals("XLS", StringComparison.OrdinalIgnoreCase) ||
-                                     cmboxFiletype.Text.Equals("XLSX", StringComparison.OrdinalIgnoreCase);
+                                     cmboxFiletype.Text.Equals("XLSX", StringComparison.OrdinalIgnoreCase) ||
+                                     cmboxFiletype.Text.Equals("STEP21", StringComparison.OrdinalIgnoreCase);
             chkBoxOpenFile.Checked = chkBoxOpenFile.Enabled;
         }
 
@@ -621,6 +656,13 @@ namespace Xbim.CobieLiteUk.Client
 
 
         }
+    }
+
+    enum COBieType
+    {
+        COBieLiteUK,
+        COBieExpress,
+
     }
 
     // ReSharper disable InconsistentNaming

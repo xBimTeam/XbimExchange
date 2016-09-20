@@ -60,6 +60,7 @@ namespace Xbim.CobieLiteUk.Client
             this.groupBox3 = new global::System.Windows.Forms.GroupBox();
             this.grpIfcGenerationMaps = new global::System.Windows.Forms.GroupBox();
             this.groupBox4 = new global::System.Windows.Forms.GroupBox();
+            this.cmBoxCOBieType = new global::System.Windows.Forms.ComboBox();
             this.groupBox1.SuspendLayout();
             this.statusStrip1.SuspendLayout();
             this.groupBox2.SuspendLayout();
@@ -165,12 +166,6 @@ namespace Xbim.CobieLiteUk.Client
             this.cmboxFiletype.Anchor = ((global::System.Windows.Forms.AnchorStyles)((global::System.Windows.Forms.AnchorStyles.Bottom | global::System.Windows.Forms.AnchorStyles.Right)));
             this.cmboxFiletype.DropDownStyle = global::System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cmboxFiletype.FormattingEnabled = true;
-            this.cmboxFiletype.Items.AddRange(new object[] {
-            "XLS",
-            "XLSX",
-            "JSON",
-            "XML",
-            "IFC"});
             this.cmboxFiletype.Location = new global::System.Drawing.Point(514, 480);
             this.cmboxFiletype.Name = "cmboxFiletype";
             this.cmboxFiletype.Size = new global::System.Drawing.Size(174, 21);
@@ -372,7 +367,7 @@ namespace Xbim.CobieLiteUk.Client
             this.rolesList.Location = new global::System.Drawing.Point(15, 8);
             this.rolesList.Margin = new global::System.Windows.Forms.Padding(4);
             this.rolesList.Name = "rolesList";
-            this.rolesList.Roles = RoleFilter.Unknown;
+            this.rolesList.Roles = Xbim.CobieLiteUk.FilterHelper.RoleFilter.Unknown;
             this.rolesList.Size = new global::System.Drawing.Size(137, 83);
             this.rolesList.TabIndex = 31;
             // 
@@ -396,7 +391,7 @@ namespace Xbim.CobieLiteUk.Client
             this.grpIfcGenerationMaps.Anchor = ((global::System.Windows.Forms.AnchorStyles)(((global::System.Windows.Forms.AnchorStyles.Top | global::System.Windows.Forms.AnchorStyles.Left) 
             | global::System.Windows.Forms.AnchorStyles.Right)));
             this.grpIfcGenerationMaps.Controls.Add(this.btnPropMaps);
-            this.grpIfcGenerationMaps.Enabled = false;
+            this.grpIfcGenerationMaps.Enabled = true;
             this.grpIfcGenerationMaps.Location = new global::System.Drawing.Point(6, 215);
             this.grpIfcGenerationMaps.Name = "grpIfcGenerationMaps";
             this.grpIfcGenerationMaps.Size = new global::System.Drawing.Size(162, 57);
@@ -416,11 +411,22 @@ namespace Xbim.CobieLiteUk.Client
             this.groupBox4.TabStop = false;
             this.groupBox4.Text = "System modes";
             // 
-            // COBieLiteGeneratorDlg
+            // cmBoxCOBieType
+            // 
+            this.cmBoxCOBieType.Anchor = ((global::System.Windows.Forms.AnchorStyles)((global::System.Windows.Forms.AnchorStyles.Bottom | global::System.Windows.Forms.AnchorStyles.Right)));
+            this.cmBoxCOBieType.DropDownStyle = global::System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cmBoxCOBieType.FormattingEnabled = true;
+            this.cmBoxCOBieType.Location = new global::System.Drawing.Point(514, 453);
+            this.cmBoxCOBieType.Name = "cmBoxCOBieType";
+            this.cmBoxCOBieType.Size = new global::System.Drawing.Size(174, 21);
+            this.cmBoxCOBieType.TabIndex = 34;
+            // 
+            // global::global::System
             // 
             this.AutoScaleDimensions = new global::System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = global::System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new global::System.Drawing.Size(696, 558);
+            this.Controls.Add(this.cmBoxCOBieType);
             this.Controls.Add(this.groupBox3);
             this.Controls.Add(this.rolesList);
             this.Controls.Add(this.chkBoxOpenFile);
@@ -433,7 +439,7 @@ namespace Xbim.CobieLiteUk.Client
             this.MaximizeBox = false;
             this.MinimizeBox = false;
             this.MinimumSize = new global::System.Drawing.Size(638, 545);
-            this.Name = "COBieLiteGeneratorDlg";
+            this.Name = "global::global::System";
             this.Text = "XBim COBieLiteUK Test Harness";
             this.Load += new global::System.EventHandler(this.COBieLiteGenerator_Load);
             this.groupBox1.ResumeLayout(false);
@@ -483,6 +489,7 @@ namespace Xbim.CobieLiteUk.Client
         private global::System.Windows.Forms.GroupBox groupBox3;
         private global::System.Windows.Forms.GroupBox grpIfcGenerationMaps;
         private global::System.Windows.Forms.GroupBox groupBox4;
+        private global::System.Windows.Forms.ComboBox cmBoxCOBieType;
     }
 }
 

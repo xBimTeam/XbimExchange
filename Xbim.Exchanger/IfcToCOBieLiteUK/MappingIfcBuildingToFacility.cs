@@ -4,6 +4,7 @@ using Xbim.Common;
 using Xbim.CobieLiteUk;
 using Xbim.Ifc4.Interfaces;
 using netSystem = System;
+using XbimExchanger.IfcHelpers;
 
 namespace XbimExchanger.IfcToCOBieLiteUK 
 {

@@ -7,6 +7,7 @@ using Xbim.CobieLiteUk.FilterHelper;
 using Xbim.Ifc;
 using Xbim.Ifc4.Interfaces;
 using XbimExchanger.IfcToCOBieExpress.Classifications;
+using XbimExchanger.IfcHelpers;
 
 namespace XbimExchanger.IfcToCOBieExpress
 {

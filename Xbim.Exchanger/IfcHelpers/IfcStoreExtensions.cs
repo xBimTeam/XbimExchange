@@ -8,7 +8,7 @@ using Xbim.CobieLiteUk.FilterHelper;
 using Xbim.Ifc;
 using Xbim.Ifc4.Interfaces;
 
-namespace XbimExchanger.IfcToCOBieLiteUK.Conversion
+namespace XbimExchanger.IfcHelpers
 {
     public static class IfcStoreExtensions
     {
