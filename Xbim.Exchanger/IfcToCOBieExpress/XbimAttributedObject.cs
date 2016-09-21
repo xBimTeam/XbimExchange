@@ -735,25 +735,31 @@ namespace XbimExchanger.IfcToCOBieExpress
 
         private static DateTime ReadDateTime(string str)
         {
-            var parts = str.Split(new[] {':', '-', 'T', 'Z'},StringSplitOptions.RemoveEmptyEntries);
-            if (parts.Length==6) //it is a date time
+            try
             {
-                var year = Convert.ToInt32(parts[0]);
-                var month = Convert.ToInt32(parts[1]);
-                var day = Convert.ToInt32(parts[2]);
-                var hours = Convert.ToInt32(parts[3]);
-                var minutes = Convert.ToInt32(parts[4]);
-                var seconds = Convert.ToInt32(parts[5]);
-                return new DateTime(year, month, day, hours, minutes, seconds, str.Last() == 'Z' ? DateTimeKind.Utc : DateTimeKind.Unspecified);
+                var parts = str.Split(new[] { ':', '-', 'T', 'Z' }, StringSplitOptions.RemoveEmptyEntries);
+                if (parts.Length == 6) //it is a date time
+                {
+                    var year = Convert.ToInt32(parts[0]);
+                    var month = Convert.ToInt32(parts[1]);
+                    var day = Convert.ToInt32(parts[2]);
+                    var hours = Convert.ToInt32(parts[3]);
+                    var minutes = Convert.ToInt32(parts[4]);
+                    var seconds = Convert.ToInt32(parts[5]);
+                    return new DateTime(year, month, day, hours, minutes, seconds, str.Last() == 'Z' ? DateTimeKind.Utc : DateTimeKind.Unspecified);
+                }
+                if (parts.Length == 3) //it is a date
+                {
+                    var year = Convert.ToInt32(parts[0]);
+                    var month = Convert.ToInt32(parts[1]);
+                    var day = Convert.ToInt32(parts[2]);
+                    return new DateTime(year, month, day);
+                }
             }
-            if (parts.Length == 3) //it is a date
+            catch (Exception) //eat and log exception so default is returned
             {
-                var year = Convert.ToInt32(parts[0]);
-                var month = Convert.ToInt32(parts[1]);
-                var day = Convert.ToInt32(parts[2]);
-                return new DateTime(year, month, day);
+                COBieExpressHelper.Logger.WarnFormat("Date Time Conversion: An illegal date time string has been found [{0}]", str);
             }
-            COBieExpressHelper.Logger.WarnFormat("Date Time Conversion: An illegal date time string has been found [{0}]", str);
             return default(DateTime);
         }
 

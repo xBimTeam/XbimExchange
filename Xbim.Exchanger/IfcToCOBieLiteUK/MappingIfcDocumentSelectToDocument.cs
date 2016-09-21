@@ -167,7 +167,7 @@ namespace XbimExchanger.IfcToCOBieLiteUK
             if (ifcDocumentInformation.CreationTime != null)
             {
                 var created = ifcDocumentInformation.CreationTime ?? ifcDocumentInformation.LastRevisionTime;
-                if (created.HasValue)
+                if (created.HasValue && created.Value != null) //appears that a true HasValue can have a null value????
                 {
                     return DateTime.Parse(created);
                 }

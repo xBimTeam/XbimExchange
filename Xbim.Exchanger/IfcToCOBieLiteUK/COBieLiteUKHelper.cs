@@ -227,6 +227,25 @@ namespace XbimExchanger.IfcToCOBieLiteUK
                             .ToDictionary(gr => gr.Key, gr => gr.Select(item => item.Value));
         }
 
+        //TODO: remove this once fix is released in Essentials
+        /// <summary>
+        /// quick fix for bug in bim.Ifc2x3.Kernel.IfcRelAssigns get RelatedObjectsType exception on nullable enumeration
+        /// </summary>
+        /// <param name="res"></param>
+        /// <returns></returns>
+        private bool HasValueRelatedObjectsTypeFix(IIfcRelAssignsToResource res)
+        {
+            try
+            {
+                return res.RelatedObjectsType == null;
+            }
+            catch (Exception)
+            {
+
+                return false;
+            }
+        }
+
         /// <summary>
         /// Convert all IIfcRelAssignsToResource to a dictionary of IIfcConstructionProductResource, List of IIfcRoot
         /// </summary>
@@ -238,7 +257,7 @@ namespace XbimExchanger.IfcToCOBieLiteUK
             var ifcRelAssignsToResource = _model.Instances.OfType<IIfcRelAssignsToResource>().Where(
                 r => r.RelatingResource is IIfcConstructionProductResource && 
                     (
-                        r.RelatedObjectsType == null 
+                        !HasValueRelatedObjectsTypeFix(r) //r.RelatedObjectsType == null 
                         || r.RelatedObjectsType == IfcObjectTypeEnum.PRODUCT
                         || r.RelatedObjectsType == IfcObjectTypeEnum.NOTDEFINED)
                     ).ToList(); //linked to IIfcRoot objects
