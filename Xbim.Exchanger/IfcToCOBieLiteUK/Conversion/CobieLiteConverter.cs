@@ -119,9 +119,9 @@ namespace XbimExchanger.IfcToCOBieLiteUK.Conversion
                     case ExportFormatEnum.XML:
                         fullFileName = CreateXmlFile(fullFileName, facilityType);
                         break;
-                    case ExportFormatEnum.IFC:
                     case ExportFormatEnum.STEP21:
                         throw new NotSupportedException("COBie lite does not have a STEP21 option");
+                    case ExportFormatEnum.IFC:
                     default:
                         fullFileName = CreateIfcFile(fullFileName, facilityType);
                         break;
