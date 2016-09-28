@@ -11,7 +11,6 @@ using Xbim.Ifc2x3.Extensions;
 using Xbim.Common.Geometry;
 using Xbim.ModelGeometry.Scene;
 
-
 namespace Xbim.COBie.Data
 {
     /// <summary>
