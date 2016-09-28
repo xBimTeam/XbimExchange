@@ -332,13 +332,39 @@ namespace XbimExchanger.IfcToCOBieLiteUK
         //}
 
 
+        private static double ConvertToDouble(string input)
+        {
+            // Matches the first numebr with or without leading minus.
+            var match = System.Text.RegularExpressions.Regex.Match(input, @"-?[0-9\.]+");
+
+            if (match.Success)
+            {
+            
+                return double.Parse(match.Value);
+            }
+            return 0; // Or any other default value.
+        }
+
+        private static int ConvertToInt(string input)
+        {
+            // Matches the first numebr with or without leading minus.
+            var match = System.Text.RegularExpressions.Regex.Match(input, "-?[0-9]+");
+
+            if (match.Success)
+            {
+
+                return int.Parse(match.Value);
+            }
+            return 0; // Or any other default value.
+        }
         private static void SetCoBieAttributeValue<TCoBieValueBaseType>(TCoBieValueBaseType result, IExpressValueType ifcValue) where TCoBieValueBaseType : AttributeValue
         {
             var stringValueType = result as StringAttributeValue;
             var decimalValueType = result as DecimalAttributeValue;
             var booleanValueType = result as BooleanAttributeValue;
             var integerValueType = result as IntegerAttributeValue;
-
+            var str =  ifcValue.ToString();
+            if (string.IsNullOrWhiteSpace(str)) return;
             if (stringValueType != null)
             {
                 stringValueType.Value = ifcValue.ToString();
@@ -347,7 +373,7 @@ namespace XbimExchanger.IfcToCOBieLiteUK
             {
                 try
                 {
-                    decimalValueType.Value = Convert.ToDouble(ifcValue.Value);
+                    decimalValueType.Value = ConvertToDouble(str);
                 }
                 catch(NullReferenceException)
                 {
@@ -395,7 +421,7 @@ namespace XbimExchanger.IfcToCOBieLiteUK
                 try
                 {
                     //this looks like an error in COBieLite, suggest should be same as Decimal and Boolean
-                    integerValueType.Value = Convert.ToInt32(ifcValue.Value);
+                    integerValueType.Value = ConvertToInt(str);
                 }
                 catch (NullReferenceException)
                 {
@@ -696,7 +722,15 @@ namespace XbimExchanger.IfcToCOBieLiteUK
                 }
                 else if (ifcValue.UnderlyingSystemType == typeof(string))
                 {
-                    value = (TValue) Convert.ChangeType(ifcValue.Value, typeof(TValue));
+                    var str = ifcValue.Value as string;
+                    if(!string.IsNullOrWhiteSpace(str))
+                        value = (TValue) Convert.ChangeType(ifcValue.Value, typeof(TValue));
+                    else
+                    {
+                        value = new TValue();
+                        return false;
+                    }
+
                 }
                 else if (
                     ifcValue.UnderlyingSystemType == typeof(bool) 
@@ -711,13 +745,13 @@ namespace XbimExchanger.IfcToCOBieLiteUK
                     return false;
                 }
             }
-            catch (Exception)
+            catch (Exception e)
             {
                 var message = string.Format(
-                    "Conversion of '{0}' ({1}) to {2} failed.", 
+                    "Conversion of '{0}' ({1}) to {2} failed.{3}", 
                     ifcValue.Value,
                     ifcValue.Value.GetType(), 
-                    typeof(TValue));
+                    typeof(TValue),e.Message);
                 Logger.DebugFormat(message);
                 value = new TValue();
                 return false;

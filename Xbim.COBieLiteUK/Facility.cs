@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
+using System.IO.Compression;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
@@ -15,12 +16,9 @@ using NPOI.SS.UserModel;
 using NPOI.XSSF.UserModel;
 using Xbim.CobieLiteUk.Converters;
 using Formatting = System.Xml.Formatting;
-using Xbim.CobieLiteUk;
 using Xbim.CobieLiteUk.FilterHelper;
 using Xbim.COBie.EqCompare;
 using Xbim.CobieLiteUk.Schemas;
-using ICSharpCode.SharpZipLib.Zip;
-using ICSharpCode.SharpZipLib.Core;
 
 namespace Xbim.CobieLiteUk
 {
@@ -289,45 +287,21 @@ namespace Xbim.CobieLiteUk
         /// <returns>A valid facility or null if no suitable file has been found</returns>
         public static Facility ReadZip(string path)
         {
-            ZipFile zf = null;
-            string outName = null;
-            try
+            //FileStream fs = File.OpenRead(path);
+            using (var zf = ZipFile.Open(path, ZipArchiveMode.Read))
             {
-                FileStream fs = File.OpenRead(path);
-                zf = new ZipFile(fs);
-                foreach (ZipEntry zipEntry in zf)
+                foreach (var zipEntry in zf.Entries)
                 {
-                    if (!zipEntry.IsFile)
-                    {
-                        continue; // Ignore directories
-                    }
+
                     FileInfo entryFileName = new FileInfo(zipEntry.Name);
                     if (entryFileName.Extension != ".xml")
                         continue;
-                    Stream zipStream = zf.GetInputStream(zipEntry);
-
-                    outName = Path.GetTempFileName();
-
-                    // Unzip file in buffered chunks. This is just as fast as unpacking to a buffer the full size
-                    // of the file, but does not waste memory.
-                    using (FileStream streamWriter = File.Create(outName))
+                    using (var zipStream = zipEntry.Open())
                     {
-                        StreamUtils.Copy(zipStream, streamWriter, new byte[4096]);
+                        var facility = ReadXml(zipStream);
+                        zipStream.Close();
+                        return facility;
                     }
-                    return ReadXml(outName, true);
-                }
-            }
-            finally
-            {
-                if (zf != null)
-                {
-                    zf.IsStreamOwner = true; // Makes close also shut the underlying stream
-                    zf.Close(); // Ensure we release resources
-                }
-                if (!string.IsNullOrEmpty(outName))
-                {
-                    if (File.Exists(outName))
-                        File.Delete(outName);
                 }
             }
             return null;

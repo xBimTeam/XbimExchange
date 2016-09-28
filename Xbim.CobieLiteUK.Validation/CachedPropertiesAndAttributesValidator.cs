@@ -3,8 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Xbim.CobieLiteUk.Validation.RequirementDetails;
-using Xbim.CobieLiteUk;
-using Attribute = Xbim.CobieLiteUk.Attribute;
 
 namespace Xbim.CobieLiteUk.Validation
 {

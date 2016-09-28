@@ -2,8 +2,6 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
-using Xbim.CobieLiteUk;
-using Attribute = Xbim.CobieLiteUk.Attribute;
 
 namespace Xbim.CobieLiteUk.Validation.Reporting
 {

@@ -3,7 +3,7 @@
     <metadata>
         <id>Xbim.Exchange</id>
         <!-- note: development versions are generally in the form 4.1.0-V0001, use 4 digits for consistency next time -->
-        <version>4.0.0-V043</version>
+        <version>4.0.0-V044</version>
         <title>xBIM Exchange</title>
         <authors>xBIM team</authors>
         <owners>Steve Lockley</owners>
@@ -26,11 +26,14 @@ IOS and Android versions are under development.</description>
         <language>en-GB</language>
       <tags>BIM, IFC, IfcXml, IfcZip, COBie, COBieLite, .Net, C#, BuildingSmart</tags>
       <dependencies>
-        <dependency id="NPOI" version="2.1.3.1" />
-        <dependency id="Xbim.Geometry" version="4.0.0-V0079" />
-        <dependency id="Xbim.PropertySets" version="3.1.11" />
+        <dependency id="log4net" version="2.0.5"  />
+        <dependency id="ManagedEsent" version="1.9.4"/>
+        <dependency id="Newtonsoft.Json" version="9.0.1" />
+        <dependency id="NPOI" version="2.2.1" />
+        <dependency id="SharpZipLib" version="0.86.0"  />
+        <dependency id="Xbim.Essentials" version="4.0.0-V236"  />
         <!-- note: Xbim.Cobie is currently only used in the test project; this is strange and needs to be verified. -->
-        <dependency id="Xbim.Cobie" version="4.0.0-V226" />
+        <dependency id="Xbim.Cobie" version="4.0.0-V236" />
       </dependencies>
     </metadata>
     <files>

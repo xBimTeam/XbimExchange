@@ -8,12 +8,10 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-using log4net;
+namespace Xbim.CobieLiteUk.Client.Properties
+{
 
-namespace Xbim.CobieLiteUk.Client.Properties {
-    using global::System;
-    
-    
+
     /// <summary>
     ///   A strongly-typed resource class, for looking up localized strings, etc.
     /// </summary>

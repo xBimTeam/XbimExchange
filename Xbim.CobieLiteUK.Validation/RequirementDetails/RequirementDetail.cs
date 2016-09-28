@@ -1,6 +1,4 @@
 ﻿using System;
-using Xbim.CobieLiteUk;
-using Attribute = Xbim.CobieLiteUk.Attribute;
 
 namespace Xbim.CobieLiteUk.Validation.RequirementDetails
 {
