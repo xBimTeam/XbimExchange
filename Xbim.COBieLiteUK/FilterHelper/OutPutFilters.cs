@@ -1,24 +1,19 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Configuration;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Xbim.IO;
-using System.Reflection;
-using Newtonsoft.Json;
-using System.Xml.Serialization;
 using System.IO;
-using Xbim.COBieLiteUK;
-using Xbim.Ifc2x3.Kernel;
+using System.Linq;
+using System.Xml.Serialization;
+using log4net;
+using Newtonsoft.Json;
+using Xbim.Ifc4.Interfaces;
 
-
-
-
-namespace Xbim.FilterHelper
+namespace Xbim.CobieLiteUk.FilterHelper
 {
     public class OutPutFilters
     {
+        private static readonly ILog Log = LogManager.GetLogger("Xbim.CobieLiteUk.FilterHelper");
+
         #region Properties
 
         /// <summary>
@@ -83,8 +78,6 @@ namespace Xbim.FilterHelper
         [XmlIgnore][JsonIgnore]
         private Dictionary<RoleFilter, OutPutFilters> RolesFilterHolder { get; set; }
 
-        
-
         /// <summary>
         /// Nothing set in RolesFilterHolder
         /// </summary>
@@ -124,27 +117,30 @@ namespace Xbim.FilterHelper
 
             //role storage
             RolesFilterHolder = new Dictionary<RoleFilter, OutPutFilters>();
-            
         }
-        
+
         /// <summary>
         /// Constructor for default set configFileName = null, or passed in configuration file path
         /// </summary>
         /// <param name="configFileName"></param>
-        public OutPutFilters(string configFileName, RoleFilter role, ImportSet import = ImportSet.All) : this()
+        public OutPutFilters(string configFileName, RoleFilter roleFlags, ImportSet setsToImport = ImportSet.All) : this()
         {
-            AppliedRoles = role;
-            FiltersHelperInit(import, configFileName);
+            AppliedRoles = roleFlags;
+            FiltersHelperInit(configFileName, setsToImport);
         }
 
+        public OutPutFilters(RoleFilter roleFlags) : this()
+        {
+            AppliedRoles = roleFlags;
+            FiltersHelperInit(roleFlags.ToResourceName());
+        }
 
         /// <summary>
         /// Constructor to apply roles, and pass custom role OutPutFilters
         /// </summary>
         /// <param name="roles">RoleFilter flags on roles to filter on</param>
         /// <param name="rolesFilter">Dictionary of role to OutPutFilters</param>
-        public OutPutFilters(RoleFilter roles, Dictionary<RoleFilter, OutPutFilters> rolesFilter = null)
-            : this()
+        public OutPutFilters(RoleFilter roles, Dictionary<RoleFilter, OutPutFilters> rolesFilter = null) : this()
         {
             ApplyRoleFilters(roles, false, rolesFilter);
         }
@@ -164,23 +160,20 @@ namespace Xbim.FilterHelper
             FloorFilter.IsEmpty() && FacilityFilter.IsEmpty() && SpareFilter.IsEmpty() && 
             ComponentFilter.IsEmpty() && CommonFilter.IsEmpty();
         }
+
         /// <summary>
         /// Will read Configuration file if passed, or default COBieAttributesFilters.config
         /// </summary>
         /// <param name="configFileName">Full path/name for config file</param>
-        private void FiltersHelperInit(ImportSet import, string configFileName = null)
+        /// <param name="import"></param>
+        private void FiltersHelperInit(string configFileName = null, ImportSet import = ImportSet.All)
         {
-            string resFile = configFileName;
             //set default
-            if (resFile == null)
-            {
-                resFile = "Xbim.COBieLiteUK.FilterHelper.COBieDefaultFilters.config";               
-            }
-            
-            Configuration config = GetResourceConfig(resFile);
+            var sourceFile = configFileName ?? RoleFilter.Unknown.ToResourceName();
+            var config = GetConfig(sourceFile);
 
             //IfcProduct and IfcTypeObject filters
-            if ((import == ImportSet.All) || (import == ImportSet.IfcFilters))
+            if (import == ImportSet.All || import == ImportSet.IfcFilters)
             {
                 IfcProductFilter = new ObjectFilter(config.GetSection("IfcElementInclusion"));
                 IfcTypeObjectFilter = new ObjectFilter(config.GetSection("IfcTypeInclusion"));
@@ -189,7 +182,7 @@ namespace Xbim.FilterHelper
             }
             
             //Property name filters
-            if ((import == ImportSet.All) || (import == ImportSet.PropertyFilters))
+            if (import == ImportSet.All || import == ImportSet.PropertyFilters)
             {
                 ZoneFilter = new PropertyFilter(config.GetSection("ZoneFilter"));
                 TypeFilter = new PropertyFilter(config.GetSection("TypeFilter"));
@@ -200,59 +193,52 @@ namespace Xbim.FilterHelper
                 ComponentFilter = new PropertyFilter(config.GetSection("ComponentFilter"));
                 CommonFilter = new PropertyFilter(config.GetSection("CommonFilter"));
             }
-            
-
-            if (configFileName == null)
-            {
-                File.Delete(config.FilePath);
-            }
-            
+            // API restructure:
+            // a call to File.Delete(config.FilePath); has been removed
+            // it is strange for the configuration reading routine to delete a configuration file
         }
 
         /// <summary>
         /// Get Configuration object from the passed file path or embedded resource file
         /// </summary>
-        /// <param name="resFileName">file path or resource name</param>
+        /// <param name="fileOrResourceName">file path or resource name; an existing file gets the priortiy over an omonymous resource name</param>
         /// <returns></returns>
-        private Configuration GetResourceConfig(string resFileName)
+        private static Configuration GetConfig(string fileOrResourceName)
         {
-            string tmpFile = resFileName;
-            bool isResourcFile = !File.Exists(resFileName);
-            if (isResourcFile)
+            
+            if (!File.Exists(fileOrResourceName))
             {
-                tmpFile = Path.GetTempPath() + Guid.NewGuid().ToString() + ".tmp";
-
-                var asss = System.Reflection.Assembly.GetExecutingAssembly();
-
-                using (var input = asss.GetManifestResourceStream(resFileName))
+                // try to save resource to temporary file
+                
+                var asss = global::System.Reflection.Assembly.GetExecutingAssembly();
+                using (var input = asss.GetManifestResourceStream(fileOrResourceName))
                 {
-                    if (input != null)
+                    if (input == null)
                     {
-                        using (var output = File.Create(tmpFile))
-                        {
-                            if (input != null) input.CopyTo(output);
-                        }
+                        Log.ErrorFormat("Could not load configuration file: {0}.", fileOrResourceName);
+                        return null;
                     }
-                }
-
-                if (!File.Exists(tmpFile))
-                {
-                    throw new FileNotFoundException(string.Format(@"File not found ""{0}"".", tmpFile));
-                }
+                    var tmpFile = Path.GetTempPath() + Guid.NewGuid() + ".tmp";
+                    using (var output = File.Create(tmpFile))
+                    {
+                        input.CopyTo(output);
+                    }
+                    fileOrResourceName = tmpFile;
+                }               
             }
 
             Configuration config;
             try
             {
-                var configMap = new ExeConfigurationFileMap { ExeConfigFilename = tmpFile };
+                var configMap = new ExeConfigurationFileMap { ExeConfigFilename = fileOrResourceName };
                 config = ConfigurationManager.OpenMappedExeConfiguration(configMap, ConfigurationUserLevel.None);
-
             }
             catch (Exception ex)
             {
-                throw new ConfigurationErrorsException(string.Format(@"Error loading configuration file ""{0}"". Error: {1}", tmpFile, ex.Message));
+                var message = string.Format(@"Error loading configuration file '{0}'.", fileOrResourceName);
+                Log.Error(message, ex);
+                throw;
             }
-
             return config;
         }
 
@@ -313,7 +299,7 @@ namespace Xbim.FilterHelper
         /// <returns>bool</returns>
         public bool NameFilterOnParent(string testStr, CobieObject parent = null)
         {
-            bool result = false;
+            var result = false;
             if (!string.IsNullOrEmpty(testStr))
             {
                 result = CommonFilter.NameFilter(testStr);
@@ -397,7 +383,7 @@ namespace Xbim.FilterHelper
                 {
                     exclude =  IfcProductFilter.ItemsFilter(obj.ExternalEntity);
                     //check the element is not defined by a type which is excluded, by default if no type, then no element included
-                    if (!exclude && (parent != null) && (parent is AssetType))
+                    if (!exclude && parent is AssetType)
                     {
                         exclude = IfcTypeObjectFilter.ItemsFilter(parent.ExternalEntity, preDefinedType);
                     }
@@ -416,16 +402,16 @@ namespace Xbim.FilterHelper
         /// </summary>
         /// <param name="obj"></param>
         /// <returns>bool true = exclude</returns>
-        public bool ObjFilter(IfcObjectDefinition obj, bool checkType = true)
+        public bool ObjFilter(IIfcObjectDefinition obj, bool checkType = true)
         {
             bool exclude = false;
-            if (obj is IfcProduct)
+            if (obj is IIfcProduct)
             {
                 exclude = IfcProductFilter.ItemsFilter(obj);
                 //check the element is not defined by a type which is excluded, by default if no type, then no element included
                 if (!exclude && checkType)
                 {
-                    IfcTypeObject objType = ((IfcProduct)obj).IsDefinedBy.OfType<IfcRelDefinesByType>().Select(rdbt => rdbt.RelatingType).FirstOrDefault(); //assuming only one IfcRelDefinesByType
+                    var objType = Enumerable.OfType<IIfcRelDefinesByType>(((IIfcProduct)obj).IsDefinedBy).Select(rdbt => rdbt.RelatingType).FirstOrDefault(); //assuming only one IfcRelDefinesByType
                     if (objType != null) //if no type defined lets include it for now
                     {
                         exclude = IfcTypeObjectFilter.ItemsFilter(objType); 
@@ -433,7 +419,7 @@ namespace Xbim.FilterHelper
                 }
                 
             }
-            else if (obj is IfcTypeProduct)
+            else if (obj is IIfcTypeProduct)
             {
                 exclude = IfcTypeObjectFilter.ItemsFilter(obj);
             }
@@ -476,45 +462,40 @@ namespace Xbim.FilterHelper
                 RolesFilterHolder = rolesFilter;
             }
 
-            bool init = append ? !this.IsEmpty(): false;
+            var init = append && !IsEmpty();
             
             OutPutFilters mergeFilter = null;
             foreach (RoleFilter role in Enum.GetValues(typeof(RoleFilter)))
             {
-                if (roles.HasFlag(role))
+                if (!roles.HasFlag(role)) 
+                    continue;
+                if (RolesFilterHolder.ContainsKey(role))
                 {
-                    if (RolesFilterHolder.ContainsKey(role))
+                    mergeFilter = RolesFilterHolder[role];
+                }
+                else
+                {
+                    // load defaults
+                    mergeFilter = GetDefaults(role);
+                    RolesFilterHolder[role] = mergeFilter;
+                }
+                if (mergeFilter != null)
+                {
+                    if (!init)
                     {
-                        mergeFilter = RolesFilterHolder[role];
+                        Copy(mergeFilter); //start a fresh
+                        init = true;//want to merge on next loop iteration
                     }
                     else
-                    {   //load defaults
-                        string mergeFile = GetDefaultRoleFile(role);
-                        if (!string.IsNullOrEmpty(mergeFile))
-                        {
-                            mergeFilter = new OutPutFilters(mergeFile, role);
-                            RolesFilterHolder[role] = mergeFilter;
-                        }
-                    }
-                    if (mergeFilter != null)
                     {
-                        if (!init)
-                        {
-                            this.Copy(mergeFilter); //start a fresh
-                            init = true;//want to merge on next loop iteration
-                        }
-                        else
-                        {
-                            this.Merge(mergeFilter);
-                        }
+                        Merge(mergeFilter);
                     }
-                    mergeFilter = null;
                 }
-
+                mergeFilter = null;
             }
             //add the default property filters
             OutPutFilters defaultPropFilters = new OutPutFilters(null, RoleFilter.Unknown, ImportSet.PropertyFilters);
-            this.Merge(defaultPropFilters);
+            Merge(defaultPropFilters);
 
             //save the applied roles at end as this.Copy(mergeFilter) would set to first role in RoleFilter
             AppliedRoles = roles; 
@@ -542,7 +523,7 @@ namespace Xbim.FilterHelper
                 modelFilterMap.Add(item.Key, roleFilter);
             }
 
-            this.Copy(saveFilter); //reset this filter back to state at top of function
+            Copy(saveFilter); //reset this filter back to state at top of function
             return modelFilterMap;
         }
 
@@ -553,7 +534,7 @@ namespace Xbim.FilterHelper
         {
             foreach (RoleFilter role in Enum.GetValues(typeof(RoleFilter)))
             {
-                string roleFile = GetDefaultRoleFile(role);
+                string roleFile = role.ToResourceName();
                 if (!string.IsNullOrEmpty(roleFile))
                 {
                     RolesFilterHolder[role] = new OutPutFilters(roleFile, role);
@@ -568,45 +549,40 @@ namespace Xbim.FilterHelper
         /// <param name="dir">DirectoryInfo</param>
         public void FillRolesFilterHolderFromDir(DirectoryInfo dir)
         {
-            if (dir.Exists)
+            if (!dir.Exists) 
+                return;
+            foreach (RoleFilter role in Enum.GetValues(typeof(RoleFilter)))
             {
-                foreach (RoleFilter role in Enum.GetValues(typeof(RoleFilter)))
+                var fileName = Path.Combine(dir.FullName, role + "Filters.xml");
+                var fileInfo = new FileInfo(fileName);
+                if (fileInfo.Exists)
                 {
-
-
-                    string fileName = Path.Combine(dir.FullName, role.ToString() + "Filters.xml");
-                    FileInfo fileInfo = new FileInfo(fileName);
-                    if (fileInfo.Exists)
+                    RolesFilterHolder[role] = DeserializeXml(fileInfo);
+                }
+                else
+                {
+                    var roleFile = role.ToResourceName();
+                    if (!string.IsNullOrEmpty(roleFile))
                     {
-                        RolesFilterHolder[role] = DeserializeXML(fileInfo);
-                    }
-                    else
-                    {
-                        string roleFile = GetDefaultRoleFile(role);
-                        if (!string.IsNullOrEmpty(roleFile))
-                        {
-                            RolesFilterHolder[role] = new OutPutFilters(roleFile, role);
-                        }
+                        RolesFilterHolder[role] = new OutPutFilters(roleFile, role);
                     }
                 }
             }
-
         }
 
         /// <summary>
         /// Write to xml roleFilter files on passed directory
         /// </summary>
         /// <param name="dir">DirectoryInfo</param>
-        public void WriteXMLRolesFilterHolderToDir(DirectoryInfo dir)
+        public void WriteXmlRolesFilterHolderToDir(DirectoryInfo dir)
         {
-            if (dir.Exists)
+            if (!dir.Exists) 
+                return;
+            foreach (var item in RolesFilterHolder)
             {
-                foreach (var item in RolesFilterHolder)
-                {
-                    string fileName = Path.Combine(dir.FullName, item.Key.ToString() + "Filters.xml");
-                    FileInfo fileInfo = new FileInfo(fileName);
-                    item.Value.SerializeXML(fileInfo);
-                }
+                var fileName = Path.Combine(dir.FullName, item.Key + "Filters.xml");
+                var fileInfo = new FileInfo(fileName);
+                item.Value.SerializeXml(fileInfo);
             }
         }
 
@@ -617,22 +593,20 @@ namespace Xbim.FilterHelper
         /// <returns>OutPutFilters</returns>
         public OutPutFilters GetRoleFilter(RoleFilter role)
         {
-             if ((role & (role - 1)) != 0)
+            if ((role & (role - 1)) != 0)
             {
                 throw new ArgumentException("More than one flag set on role");
             }
-           
+
             if (RolesFilterHolder.ContainsKey(role))
             {
                 return RolesFilterHolder[role];
             }
-            else
-            {   //load defaults
-                var objFilter = GetDefaults(role);
-                if (objFilter != null)
-                {
-                    RolesFilterHolder[role] = objFilter;
-                }
+            //load defaults
+            var objFilter = GetDefaults(role);
+            if (objFilter != null)
+            {
+                RolesFilterHolder[role] = objFilter;
             }
             return RolesFilterHolder[role];
         }
@@ -644,19 +618,17 @@ namespace Xbim.FilterHelper
         /// <returns>OutPutFilters</returns>
         public static OutPutFilters GetDefaults(RoleFilter role)
         {
-             if ((role & (role - 1)) != 0)
+            if ((role & (role - 1)) != 0)
             {
                 throw new ArgumentException("More than one flag set on role");
             }
-             string filterFile = GetDefaultRoleFile(role);
-             if (!string.IsNullOrEmpty(filterFile))
-             {
-                 return new OutPutFilters(filterFile, role);
-             }
-             return null;
+            var filterFile = role.ToResourceName();
+            return !string.IsNullOrEmpty(filterFile) 
+                ? new OutPutFilters(filterFile, role) 
+                : null;
         }
 
-        
+
 
         /// <summary>
         /// Add filter for a role, used by ApplyRoleFilters for none default filters
@@ -674,36 +646,6 @@ namespace Xbim.FilterHelper
             RolesFilterHolder[role] = filter;
         }
 
-        /// <summary>
-        /// Get default embedded resource file for a specified role
-        /// </summary>
-        /// <param name="role">RoleFilter</param>
-        /// <returns></returns>
-        private static string GetDefaultRoleFile(RoleFilter role)
-        {
-            if ((role & (role - 1)) != 0)
-            {
-                throw new ArgumentException("More than one flag set on role");
-            }
-            switch (role)
-            {
-                case RoleFilter.Unknown:
-                    return "Xbim.COBieLiteUK.FilterHelper.COBieDefaultFilters.config";
-                case RoleFilter.Architectural:
-                    return "Xbim.COBieLiteUK.FilterHelper.COBieArchitecturalFilters.config";
-                case RoleFilter.Mechanical:
-                    return "Xbim.COBieLiteUK.FilterHelper.COBieMechanicalFilters.config";
-                case RoleFilter.Electrical:
-                    return "Xbim.COBieLiteUK.FilterHelper.COBieElectricalFilters.config";
-                case RoleFilter.Plumbing:
-                    return "Xbim.COBieLiteUK.FilterHelper.COBiePlumbingFilters.config";
-                case RoleFilter.FireProtection:
-                    return "Xbim.COBieLiteUK.FilterHelper.COBieFireProtectionFilters.config";
-                default:
-                    return string.Empty;
-            }
-        }
-
         #endregion
 
         #region Serialize
@@ -712,10 +654,10 @@ namespace Xbim.FilterHelper
         /// Save object as xml file
         /// </summary>
         /// <param name="filename">FileInfo</param>
-        public void SerializeXML(FileInfo filename)
+        public void SerializeXml(FileInfo filename)
         {
-            XmlSerializer writer = new XmlSerializer(typeof(OutPutFilters));
-            using (System.IO.StreamWriter file = new System.IO.StreamWriter(filename.FullName))
+            var writer = new XmlSerializer(typeof(OutPutFilters));
+            using (var file = new StreamWriter(filename.FullName))
             {
                 writer.Serialize(file, this);
             }
@@ -726,11 +668,11 @@ namespace Xbim.FilterHelper
         /// </summary>
         /// <param name="filename">FileInfo</param>
         /// <returns>OutPutFilters</returns>
-        public static OutPutFilters DeserializeXML(FileInfo filename)
+        public static OutPutFilters DeserializeXml(FileInfo filename)
         {
-            OutPutFilters result = null;
-            XmlSerializer writer = new XmlSerializer(typeof(OutPutFilters));
-            using (System.IO.StreamReader file = new System.IO.StreamReader(filename.FullName))
+            OutPutFilters result;
+            var writer = new XmlSerializer(typeof(OutPutFilters));
+            using (var file = new StreamReader(filename.FullName))
             {
                 result =  (OutPutFilters)writer.Deserialize(file);
             }
@@ -741,10 +683,10 @@ namespace Xbim.FilterHelper
         /// Save object as JSON 
         /// </summary>
         /// <param name="filename">FileInfo</param>
-        public void SerializeJSON (FileInfo filename)
+        public void SerializeJson (FileInfo filename)
         {
-            JsonSerializer writer = new JsonSerializer();
-            using (System.IO.StreamWriter file = new System.IO.StreamWriter(filename.FullName))
+            var writer = new JsonSerializer();
+            using (var file = new StreamWriter(filename.FullName))
             {
                 writer.Serialize(file, this);
             }
@@ -755,11 +697,11 @@ namespace Xbim.FilterHelper
         /// </summary>
         /// <param name="filename">FileInfo</param>
         /// <returns>OutPutFilters</returns>
-        public static OutPutFilters DeserializeJSON(FileInfo filename)
+        public static OutPutFilters DeserializeJson(FileInfo filename)
         {
-            OutPutFilters result = null;
-            JsonSerializer writer = new JsonSerializer();
-            using (System.IO.StreamReader file = new System.IO.StreamReader(filename.FullName))
+            OutPutFilters result;
+            var writer = new JsonSerializer();
+            using (var file = new StreamReader(filename.FullName))
             {
                 result = (OutPutFilters)writer.Deserialize(file, typeof(OutPutFilters));
             }
@@ -767,31 +709,5 @@ namespace Xbim.FilterHelper
         }
 
         #endregion
-    }
-
-
-    /// <summary>
-    /// Merge Flags for roles in deciding if an object is allowed or discarded depending on the role of the model
-    /// </summary>
-    [Flags] //allows use to | and & values for multiple boolean tests
-    public enum RoleFilter
-    {
-        Unknown = 0x1,
-        Architectural = 0x2,
-        Mechanical = 0x4,
-        Electrical = 0x8,
-        Plumbing = 0x10,
-        FireProtection = 0x20
-
-    }
-
-    /// <summary>
-    /// used to control import
-    /// </summary>
-    public enum ImportSet
-    {
-        All,
-        IfcFilters,
-        PropertyFilters
     }
 }

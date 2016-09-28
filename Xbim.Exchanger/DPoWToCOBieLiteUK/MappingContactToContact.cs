@@ -1,17 +1,11 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Text.RegularExpressions;
-using System.Threading.Tasks;
-using Xbim.COBieLiteUK;
-using Xbim.DPoW;
 
 namespace XbimExchanger.DPoWToCOBieLiteUK
 {
-    class MappingContactToContact : MappingAttributableObjectToCOBieObject<Xbim.DPoW.Contact, Xbim.COBieLiteUK.Contact>
+    class MappingContactToContact : MappingAttributableObjectToCOBieObject<Xbim.DPoW.Contact, Xbim.CobieLiteUk.Contact>
     {
-        protected override Xbim.COBieLiteUK.Contact Mapping(Xbim.DPoW.Contact source, Xbim.COBieLiteUK.Contact target)
+        protected override Xbim.CobieLiteUk.Contact Mapping(Xbim.DPoW.Contact source, Xbim.CobieLiteUk.Contact target)
         {
             base.Mapping(source, target);
 

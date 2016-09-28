@@ -1,9 +1,9 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using Xbim.CobieLiteUK.Validation.Extensions;
-using Xbim.COBieLiteUK;
+using Xbim.CobieLiteUk.Validation.Extensions;
+using Xbim.CobieLiteUk;
 
-namespace Xbim.CobieLiteUK.Validation.Reporting
+namespace Xbim.CobieLiteUk.Validation.Reporting
 {
     internal class TwoLevelRequirementPointer<T, TSub> 
         where T : CobieObject

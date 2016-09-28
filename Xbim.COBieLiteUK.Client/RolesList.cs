@@ -1,14 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Drawing;
-using System.Data;
 using System.Linq;
-using System.Text;
 using System.Windows.Forms;
-using Xbim.FilterHelper;
+using Xbim.CobieLiteUk;
+using Xbim.CobieLiteUk.FilterHelper;
 
-namespace Xbim.Client
+namespace Xbim.CobieLiteUk.Client
 {
     public partial class RolesList : UserControl
     {

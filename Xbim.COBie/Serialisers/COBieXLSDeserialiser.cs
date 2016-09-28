@@ -1,9 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using Xbim.COBie.Contracts;
-using System.Reflection;
 using Xbim.COBie.Rows;
 using System.IO;
 using NPOI.HSSF.UserModel;

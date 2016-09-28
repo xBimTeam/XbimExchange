@@ -1,11 +1,13 @@
 ﻿using System;
 using System.Linq;
+using Xbim.Common;
 using Xbim.COBieLite;
 using Xbim.Ifc2x3.Kernel;
 using Xbim.Ifc2x3.MeasureResource;
 using Xbim.Ifc2x3.ProductExtension;
 using Xbim.Ifc2x3.Extensions;
 using XbimExchanger.IfcHelpers;
+using XbimExchanger.IfcHelpers.Ifc2x3;
 
 namespace XbimExchanger.COBieLiteToIfc
 {
@@ -38,72 +40,80 @@ namespace XbimExchanger.COBieLiteToIfc
             
             #endregion
 
-            #region Project
-            var projectMapping = Exchanger.GetOrCreateMappings<MappingProjectTypeToIfcProject>();
+            var ifcProject = Exchanger.TargetRepository.Instances.OfType<IfcProject>().FirstOrDefault();
+            
+
             //COBie does nor require a project but Ifc does
-            var ifcProject = Exchanger.TargetRepository.IfcProject;
-            projectMapping.AddMapping(facility.ProjectAssignment, ifcProject);
-            InitialiseUnits(ifcProject);
-            #endregion
 
-            #region Site
-            //add the relationship between the site and the building if a site exists
-            if (facility.SiteAssignment != null)
-            {
-                var siteMapping = Exchanger.GetOrCreateMappings<MappingSiteTypeToIfcSite>();
-                var ifcSite = siteMapping.AddMapping(facility.SiteAssignment,
-                    siteMapping.GetOrCreateTargetObject(facility.SiteAssignment.externalID ?? Guid.NewGuid().ToString()));
-                //add the relationship between the site and the project and the building
-                ifcProject.AddSite(ifcSite);
-                ifcSite.AddBuilding(ifcBuilding);
-            }
-            else //relate the building to the project
-                ifcProject.AddBuilding(ifcBuilding); 
-            #endregion
+            if (ifcProject == null)
+               ifcProject= Exchanger.TargetRepository.Instances.New<IfcProject>();
+     
 
-            #region Floors
-            //write out the floors if we have any
-            if (facility.Floors != null)
-            {
-                var floorMapping = Exchanger.GetOrCreateMappings<MappingFloorTypeToIfcBuildingStorey>();
-                foreach (var floor in facility.Floors)
+            #region Project
+                var projectMapping = Exchanger.GetOrCreateMappings<MappingProjectTypeToIfcProject>();
+                projectMapping.AddMapping(facility.ProjectAssignment, ifcProject);
+                InitialiseUnits(ifcProject);
+
+                #endregion
+
+                #region Site
+                //add the relationship between the site and the building if a site exists
+                if (facility.SiteAssignment != null)
                 {
-                    var ifcFloor = floorMapping.AddMapping(floor, floorMapping.GetOrCreateTargetObject(floor.externalID));
-                    ifcBuilding.AddToSpatialDecomposition(ifcFloor);
+                    var siteMapping = Exchanger.GetOrCreateMappings<MappingSiteTypeToIfcSite>();
+                    var ifcSite = siteMapping.AddMapping(facility.SiteAssignment,
+                        siteMapping.GetOrCreateTargetObject(facility.SiteAssignment.externalID ?? Guid.NewGuid().ToString()));
+                    //add the relationship between the site and the project and the building
+                    ifcProject.AddSite(ifcSite);
+                    ifcSite.AddBuilding(ifcBuilding);
                 }
-            } 
-            #endregion
+                else //relate the building to the project
+                    ifcProject.AddBuilding(ifcBuilding);
+                #endregion
 
-
-            #region AssetTypes
-            //write out the floors if we have any
-            if (facility.AssetTypes != null)
-            {
-                var assetTypeMapping = Exchanger.GetOrCreateMappings<MappingAssetTypeInfoTypeToIfcTypeObject>();
-                foreach (var assetType in facility.AssetTypes.OrderBy(a=>a.externalEntityName))
+                #region Floors
+                //write out the floors if we have any
+                if (facility.Floors != null)
                 {
-                    Exchanger.BeginAssetTypeInfoType();
-                    assetTypeMapping.AddMapping(assetType, assetTypeMapping.GetOrCreateTargetObject(assetType.externalID));
-                    Exchanger.EndAssetTypeInfoType();
-                   
+                    var floorMapping = Exchanger.GetOrCreateMappings<MappingFloorTypeToIfcBuildingStorey>();
+                    foreach (var floor in facility.Floors)
+                    {
+                        var ifcFloor = floorMapping.AddMapping(floor, floorMapping.GetOrCreateTargetObject(floor.externalID));
+                        ifcBuilding.AddToSpatialDecomposition(ifcFloor);
+                    }
                 }
-            }
-            #endregion
+                #endregion
 
-            #region Attributes
-            if (facility.FacilityAttributes != null)
-            {
-                foreach (var attribute in facility.FacilityAttributes)
-                    Exchanger.ConvertAttributeTypeToIfcObjectProperty(ifcBuilding, attribute);
-            }
-            #endregion
 
-            #region Add Space Geometry
+                #region AssetTypes
+                //write out the floors if we have any
+                if (facility.AssetTypes != null)
+                {
+                    var assetTypeMapping = Exchanger.GetOrCreateMappings<MappingAssetTypeInfoTypeToIfcTypeObject>();
+                    foreach (var assetType in facility.AssetTypes.OrderBy(a => a.externalEntityName))
+                    {
+                        Exchanger.BeginAssetTypeInfoType();
+                        assetTypeMapping.AddMapping(assetType, assetTypeMapping.GetOrCreateTargetObject(assetType.externalID));
+                        Exchanger.EndAssetTypeInfoType();
 
-            CreateSpaceProxies();
+                    }
+                }
+                #endregion
 
-            #endregion
+                #region Attributes
+                if (facility.FacilityAttributes != null)
+                {
+                    foreach (var attribute in facility.FacilityAttributes)
+                        Exchanger.ConvertAttributeTypeToIfcObjectProperty(ifcBuilding, attribute);
+                }
+                #endregion
 
+                #region Add Space Geometry
+
+                CreateSpaceProxies();
+
+                #endregion
+            
             return ifcBuilding;
         }
 
@@ -117,8 +127,9 @@ namespace XbimExchanger.COBieLiteToIfc
 
         private void InitialiseUnits(IfcProject ifcProject)
         {      
+            ifcProject.Initialize(ProjectUnits.SIUnitsUK);
             //Area
-            var areaUnit = ifcProject.UnitsInContext.GetAreaUnit() as IfcSIUnit; //they always are as we are initialising to this
+            var areaUnit = ifcProject.UnitsInContext.AreaUnit as IfcSIUnit; //they always are as we are initialising to this
             if (areaUnit!=null && Exchanger.DefaultAreaUnit.HasValue)
             {
                 var defaultAreaUnit = Exchanger.DefaultAreaUnit.Value;
@@ -141,7 +152,7 @@ namespace XbimExchanger.COBieLiteToIfc
             }
 
             //Length
-            var linearUnit = ifcProject.UnitsInContext.GetLengthUnit() as IfcSIUnit; //they always are as we are initialising to this
+            var linearUnit = ifcProject.UnitsInContext.LengthUnit as IfcSIUnit; //they always are as we are initialising to this
             if (linearUnit != null && Exchanger.DefaultLinearUnit.HasValue)
             {
                 var defaultLinearUnit = Exchanger.DefaultLinearUnit.Value;
@@ -163,7 +174,7 @@ namespace XbimExchanger.COBieLiteToIfc
                 }
             }
             //Volume
-            var volumeUnit = ifcProject.UnitsInContext.GetVolumeUnit() as IfcSIUnit; //they always are as we are initialising to this
+            var volumeUnit = ifcProject.UnitsInContext.VolumeUnit as IfcSIUnit; //they always are as we are initialising to this
             if (volumeUnit != null && Exchanger.DefaultVolumeUnit.HasValue)
             {
                 var defaultVolumeUnit = Exchanger.DefaultVolumeUnit.Value;

@@ -1,13 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using Xbim.COBie.Rows;
-using Xbim.Ifc2x3.ActorResource;
-using Xbim.Ifc2x3.Kernel;
 using Xbim.Ifc2x3.ProductExtension;
-using Xbim.Ifc2x3.UtilityResource;
-using Xbim.XbimExtensions;
 //using Xbim.Ifc2x3.SharedBldgElements;
 using Xbim.COBie.Serialisers.XbimSerialiser;
 
@@ -38,7 +32,7 @@ namespace Xbim.COBie.Data
             COBieSheet<COBieConnectionRow> connections = new COBieSheet<COBieConnectionRow>(Constants.WORKSHEET_CONNECTION);
 
             // get all IfcRelConnectsElements objects from IFC file
-            IEnumerable<IfcRelConnectsElements> ifcRelConnectsElements = Model.Instances.OfType<IfcRelConnectsElements>()
+            IEnumerable<IfcRelConnectsElements> ifcRelConnectsElements = Model.FederatedInstances.OfType<IfcRelConnectsElements>()
                                                                         .Where(rce => rce.RelatedElement != null &&
                                                                                       !Context.Exclude.ObjectType.Component.Contains(rce.RelatedElement.GetType()) &&
                                                                                       rce.RelatingElement != null &&
@@ -46,7 +40,7 @@ namespace Xbim.COBie.Data
                                                                                       );
             //get ifcRelConnectsPorts only if we have ifcRelConnectsElements
             IEnumerable<IfcRelConnectsPorts> ifcRelConnectsPorts = Enumerable.Empty<IfcRelConnectsPorts>();
-            if (ifcRelConnectsElements.Count() > 0) ifcRelConnectsPorts = Model.Instances.OfType<IfcRelConnectsPorts>();
+            if (ifcRelConnectsElements.Count() > 0) ifcRelConnectsPorts = Model.FederatedInstances.OfType<IfcRelConnectsPorts>();
 
             ProgressIndicator.Initialise("Creating Connections", ifcRelConnectsElements.Count());
 

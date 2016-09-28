@@ -1,18 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Xbim.COBieLiteUK;
-using Xbim.Ifc2x3.Kernel;
-using Xbim.Ifc2x3.ProductExtension;
-using Xbim.IO;
+﻿using System.Collections.Generic;
+using Xbim.Common;
+using Xbim.CobieLiteUk;
+using Xbim.Ifc4.Interfaces;
+
 
 namespace XbimExchanger.IfcToCOBieLiteUK
 {
-    class MappingIfcProjectToProject : XbimMappings<XbimModel, List<Facility>, string, IfcProject, Project>
+    class MappingIfcProjectToProject : XbimMappings<IModel, List<Facility>, string, IIfcProject, Project>
     {
-        protected override Project Mapping(IfcProject source, Project target)
+        protected override Project Mapping(IIfcProject source, Project target)
         {
             var helper = ((IfcToCOBieLiteUkExchanger)Exchanger).Helper;
             target.ExternalEntity = helper.ExternalEntityName(source);
@@ -21,6 +17,11 @@ namespace XbimExchanger.IfcToCOBieLiteUK
             target.Name = source.Name;
             target.Description = source.Description;
             return target;
+        }
+
+        public override Project CreateTargetObject()
+        {
+            return new Project();
         }
     }
 }

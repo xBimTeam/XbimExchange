@@ -5,21 +5,15 @@ using System.Text;
 using Xbim.Ifc2x3.UtilityResource;
 using Xbim.Ifc2x3.MeasureResource;
 using Xbim.Ifc2x3.Kernel;
-using Xbim.XbimExtensions;
 using Xbim.Ifc2x3.GeometryResource;
 using Xbim.Ifc2x3.ActorResource;
 using Xbim.Ifc2x3.ProductExtension;
 using Xbim.Ifc2x3.ExternalReferenceResource;
 using Xbim.Ifc2x3.PropertyResource;
 using Xbim.Ifc2x3.Extensions;
-using Xbim.Ifc.SelectTypes;
-using Xbim.Ifc2x3.ApprovalResource;
 using Xbim.Ifc2x3.ConstructionMgmtDomain;
-using System.Reflection;
-using Xbim.IO;
-using Xbim.XbimExtensions.SelectTypes;
-using Xbim.XbimExtensions.Interfaces;
-using Xbim.Ifc2x3.MaterialResource;
+using Xbim.Ifc2x3.IO;
+using Xbim.IO.Esent;
 
 namespace Xbim.COBie.Serialisers.XbimSerialiser
 {
@@ -122,14 +116,14 @@ namespace Xbim.COBie.Serialisers.XbimSerialiser
         /// <param name="createdOn">Date the object was created on</param>
         protected void SetOwnerHistory(IfcRoot ifcRoot, string externalSystem, IfcPersonAndOrganization createdBy, string createdOn)
         {
-            IfcTimeStamp stamp = null;
+            IfcTimeStamp? stamp = null;
             if (ValidateString(createdOn))
             {
                 DateTime dateTime;
                 if (DateTime.TryParse(createdOn, out dateTime))
                     stamp = IfcTimeStamp.ToTimeStamp(dateTime);
             }
-            IfcOwnerHistory ifcOwnerHistory = Model.Instances.OfType<IfcOwnerHistory>().Where(oh => (oh.CreationDate == stamp) &&
+            var ifcOwnerHistory = Model.FederatedInstances.OfType<IfcOwnerHistory>().Where(oh => (oh.CreationDate == stamp) &&
                                                                            (oh.OwningUser == createdBy) &&
                                                                            (((oh.OwningApplication != null) && (oh.OwningApplication.ApplicationFullName.ToString().ToLower() == externalSystem.ToLower()) )||
                                                                             ((oh.LastModifyingApplication != null) && (oh.LastModifyingApplication.ApplicationFullName.ToString().ToLower() == externalSystem.ToLower()))
@@ -155,15 +149,15 @@ namespace Xbim.COBie.Serialisers.XbimSerialiser
             if (ValidateString(externalSystem))
             {
                 //ApplicationIdentifier is a required field so we need a value
-                string applicationIdentifier = string.Empty;
-                string[] externalSystemSplit = externalSystem.Split(' ');
+                var applicationIdentifier = string.Empty;
+                var externalSystemSplit = externalSystem.Split(' ');
                 applicationIdentifier = externalSystemSplit.FirstOrDefault(); //assume first word in application can be used a identifier
                 if (string.IsNullOrEmpty(applicationIdentifier))
                     applicationIdentifier = ""; //set a value as a required field
 
                 //create an organization for the external system
-                string orgName = externalSystem.Split(' ').FirstOrDefault();
-                ifcOrganization = Model.Instances.OfType<IfcOrganization>().Where(o => o.Name == orgName).FirstOrDefault();
+                var orgName = externalSystem.Split(' ').FirstOrDefault();
+                ifcOrganization = Model.FederatedInstances.OfType<IfcOrganization>().Where(o => o.Name == orgName).FirstOrDefault();
                 if (ifcOrganization == null)
                 {
                     ifcOrganization = Model.Instances.New<IfcOrganization>();
@@ -172,7 +166,7 @@ namespace Xbim.COBie.Serialisers.XbimSerialiser
                     else
                         ifcOrganization.Name = "Unknown"; //is not an optional field so fill with unknown value
                 }
-                ifcApplication = Model.Instances.OfType<IfcApplication>().Where(app => app.ApplicationFullName == externalSystem).FirstOrDefault();
+                ifcApplication = Model.FederatedInstances.OfType<IfcApplication>().Where(app => app.ApplicationFullName == externalSystem).FirstOrDefault();
                 if (ifcApplication == null)
                     ifcApplication = Model.Instances.New<IfcApplication>(app =>
                     {
@@ -185,14 +179,14 @@ namespace Xbim.COBie.Serialisers.XbimSerialiser
             }
             else
             { //Owner history OwningApplication is not an optional field so fill with unknown value
-                ifcOrganization = Model.Instances.OfType<IfcOrganization>().Where(o => o.Name == "").FirstOrDefault();
+                ifcOrganization = Model.FederatedInstances.OfType<IfcOrganization>().Where(o => o.Name == "").FirstOrDefault();
                 if (ifcOrganization == null)
                 {
                     ifcOrganization = Model.Instances.New<IfcOrganization>();
                     ifcOrganization.Name = "Unknown"; //is not an optional field so fill with unknown value
                         
                 }
-                ifcApplication = Model.Instances.OfType<IfcApplication>().Where(app => app.ApplicationFullName == "").FirstOrDefault();
+                ifcApplication = Model.FederatedInstances.OfType<IfcApplication>().Where(app => app.ApplicationFullName == "").FirstOrDefault();
                 if (ifcApplication == null)
                     ifcApplication = Model.Instances.New<IfcApplication>(app =>
                     {
@@ -203,7 +197,7 @@ namespace Xbim.COBie.Serialisers.XbimSerialiser
                     });
             }
 
-            IfcTimeStamp stamp = null;
+            IfcTimeStamp stamp = new IfcTimeStamp();
             if (ValidateString(createdOn))
             {
                 DateTime dateTime;// = new DateTime(0, DateTimeKind.Utc);
@@ -214,10 +208,10 @@ namespace Xbim.COBie.Serialisers.XbimSerialiser
                 else
                 {
                     //try and get just the date part of the date time, as a conversion above failed, so assume time might be corrupt
-                    int idx = createdOn.IndexOf("T");
+                    var idx = createdOn.IndexOf("T");
                     if (idx > -1)
                     {
-                        string date = createdOn.Substring(0, idx);
+                        var date = createdOn.Substring(0, idx);
                         if (DateTime.TryParse(date, out dateTime))
                         {
                             stamp = IfcTimeStamp.ToTimeStamp(dateTime);
@@ -278,35 +272,26 @@ namespace Xbim.COBie.Serialisers.XbimSerialiser
         {
             if (!Contacts.ContainsKey(email)) //should filter on merge also unless Contacts is reset
             {
-                IfcPerson ifcPerson = Model.Instances.New<IfcPerson>();
-                IfcOrganization ifcOrganization = Model.Instances.New<IfcOrganization>();
-                IfcPersonAndOrganization ifcPersonAndOrganization = Model.Instances.New<IfcPersonAndOrganization>();
+                var ifcPerson = Model.Instances.New<IfcPerson>();
+                var ifcOrganization = Model.Instances.New<IfcOrganization>();
+                var ifcPersonAndOrganization = Model.Instances.New<IfcPersonAndOrganization>();
             
                 Contacts.Add(email, ifcPersonAndOrganization); //build a list to reference for History objects
 
                 //add email
-                IfcTelecomAddress ifcTelecomAddress = Model.Instances.New<IfcTelecomAddress>();
+                var ifcTelecomAddress = Model.Instances.New<IfcTelecomAddress>();
                 if (ValidateString(email))
                 {
-                    if (ifcTelecomAddress.ElectronicMailAddresses == null)
-                        ifcTelecomAddress.SetElectronicMailAddress(email); //create the LabelCollection and set to ElectronicMailAddresses field
-                    else
-                        ifcTelecomAddress.ElectronicMailAddresses.Add(email); //add to existing collection
+                    ifcTelecomAddress.ElectronicMailAddresses.Add(email); //add to existing collection
                 }
                 //add Company
                 ifcOrganization.Name = "Unknown"; //is not an optional field so fill with unknown value
 
-                IfcPostalAddress ifcPostalAddress = Model.Instances.New<IfcPostalAddress>();
+                var ifcPostalAddress = Model.Instances.New<IfcPostalAddress>();
                 //add Telecom Address
-                if (ifcPerson.Addresses == null)
-                    ifcPerson.SetTelecomAddresss(ifcTelecomAddress);//create the AddressCollection and set to Addresses field
-                else
-                    ifcPerson.Addresses.Add(ifcTelecomAddress);//add to existing collection
+                ifcPerson.Addresses.Add(ifcTelecomAddress);//add to existing collection
                 // Add blank postal address
-                if (ifcPerson.Addresses == null)
-                    ifcPerson.SetPostalAddresss(ifcPostalAddress);//create the AddressCollection and set to Addresses field
-                else
-                    ifcPerson.Addresses.Add(ifcPostalAddress);//add to existing collection
+                ifcPerson.Addresses.Add(ifcPostalAddress);//add to existing collection
 
                 //add the person and the organization objects 
                 ifcPersonAndOrganization.ThePerson = ifcPerson;
@@ -333,7 +318,7 @@ namespace Xbim.COBie.Serialisers.XbimSerialiser
         /// <returns>IfcBuilding Object</returns>
         protected IfcBuilding GetBuilding()
         {
-            IEnumerable<IfcBuilding> ifcBuildings = Model.Instances.OfType<IfcBuilding>();
+            var ifcBuildings = Model.FederatedInstances.OfType<IfcBuilding>();
             if ((ifcBuildings.Count() > 1) || (ifcBuildings.Count() == 0))
                 throw new Exception(string.Format("COBieXBimSerialiser: Expecting one IfcBuilding, Found {0}", ifcBuildings.Count().ToString()));
             return ifcBuildings.FirstOrDefault();
@@ -344,7 +329,7 @@ namespace Xbim.COBie.Serialisers.XbimSerialiser
         /// <returns>IfcSite Object</returns>
         protected IfcSite GetSite()
         {
-            IEnumerable<IfcSite> ifcSites = Model.Instances.OfType<IfcSite>();
+            var ifcSites = Model.FederatedInstances.OfType<IfcSite>();
             if ((ifcSites.Count() > 1) || (ifcSites.Count() == 0))
                 throw new Exception(string.Format("COBieXBimSerialiser: Expecting one IfcSite, Found {0}", ifcSites.Count().ToString()));
             return ifcSites.FirstOrDefault();
@@ -365,7 +350,7 @@ namespace Xbim.COBie.Serialisers.XbimSerialiser
 
         protected IfcBuildingStorey GetBuildingStory (string name)
         {
-            IEnumerable<IfcBuildingStorey> ifcBuildingStoreys = Model.Instances.OfType<IfcBuildingStorey>().Where(bs => bs.Name == name);
+            var ifcBuildingStoreys = Model.FederatedInstances.OfType<IfcBuildingStorey>().Where(bs => bs.Name == name);
             if ((ifcBuildingStoreys.Count() > 1) || (ifcBuildingStoreys.Count() == 0))
                 throw new Exception(string.Format("COBieXBimSerialiser: Expecting one IfcBuildingStorey with name of {1}, Found {0}", ifcBuildingStoreys.Count().ToString(), name));
             return ifcBuildingStoreys.FirstOrDefault();
@@ -380,9 +365,9 @@ namespace Xbim.COBie.Serialisers.XbimSerialiser
         {
             if (ValidateString(category))
             {
-                string itemReference = "";
-                string name = "";
-                string[] splitCategory = category.Split(':');
+                var itemReference = "";
+                var name = "";
+                var splitCategory = category.Split(':');
                 //see if we have a split category name like "11-11: Assembly Facilities"
                 if (splitCategory.Count() == 2)
                 {
@@ -394,7 +379,7 @@ namespace Xbim.COBie.Serialisers.XbimSerialiser
 
             
                 //check to see if we have a IfcRelAssociatesClassification associated with this category
-                IfcRelAssociatesClassification ifcRelAssociatesClassification = Model.Instances.OfType<IfcRelAssociatesClassification>()
+                var ifcRelAssociatesClassification = Model.FederatedInstances.OfType<IfcRelAssociatesClassification>()
                                     .Where(rac => rac.RelatingClassification != null 
                                         && (rac.RelatingClassification is IfcClassificationReference)
                                         && (   ((((IfcClassificationReference)rac.RelatingClassification).ItemReference.ToString().ToLower() == itemReference.ToLower())
@@ -407,7 +392,7 @@ namespace Xbim.COBie.Serialisers.XbimSerialiser
                 if (ifcRelAssociatesClassification == null)
                 {
                     //check we have a IfcClassificationReference holding the category
-                    IfcClassificationReference ifcClassificationReference = Model.Instances.OfType<IfcClassificationReference>()
+                    var ifcClassificationReference = Model.FederatedInstances.OfType<IfcClassificationReference>()
                                     .Where(cr =>(  (cr.ItemReference.ToString().ToLower() == itemReference.ToLower())
                                                 && (cr.Name.ToString().ToLower() == name.ToLower())
                                                 )
@@ -437,12 +422,12 @@ namespace Xbim.COBie.Serialisers.XbimSerialiser
         {
             if (ValidateString(extId))
             {
-                IfcGloballyUniqueId id = new IfcGloballyUniqueId(extId);
+                var id = new IfcGloballyUniqueId(extId);
                 ifcRoot.GlobalId = id;
             }
             else //if null passed then create a new Guid
             {
-                ifcRoot.GlobalId = IfcGloballyUniqueId.NewGuid();
+                ifcRoot.GlobalId = new IfcGloballyUniqueId(Guid.NewGuid().ToString());
             }
         }
 
@@ -453,13 +438,17 @@ namespace Xbim.COBie.Serialisers.XbimSerialiser
         /// <returns>bool</returns>
         public static bool ValidGlobalId(string extId)
         {
-
-            Guid guid;
-            var isGuid = IfcGloballyUniqueId.TryConvertFromBase64(extId, out guid);
-            if (!isGuid) return false;
-            string guidStr = IfcGloballyUniqueId.ConvertToBase64(guid);
-            if (extId != guidStr) return false;
-            else return true;
+            try
+            {
+                Guid guid = IfcGloballyUniqueId.ConvertFromBase64(extId);
+                var guidStr = IfcGloballyUniqueId.ConvertToBase64(guid);
+                return extId == guidStr;
+            }
+            catch (Exception)
+            {
+                return false;
+            }
+            
         }
 
         /// <summary>
@@ -472,7 +461,7 @@ namespace Xbim.COBie.Serialisers.XbimSerialiser
         {
             if (!string.IsNullOrEmpty(pSetDescription))
             {
-            IfcRelDefinesByProperties ifcRelDefinesByProperties = obj.IsDefinedByProperties.FirstOrDefault(r => r.RelatingPropertyDefinition.Name == pSetName);
+            var ifcRelDefinesByProperties = obj.IsDefinedByProperties.FirstOrDefault(r => r.RelatingPropertyDefinition.Name == pSetName);
             if (ifcRelDefinesByProperties != null)
                 ifcRelDefinesByProperties.RelatingPropertyDefinition.Description = pSetDescription;
             }
@@ -495,7 +484,7 @@ namespace Xbim.COBie.Serialisers.XbimSerialiser
                 else
                     propertyName = "NoName";
             
-            IfcPropertySingleValue ifcPropertySingleValue = ifcObject.SetPropertySingleValue(pSetName, propertyName, value);
+            var ifcPropertySingleValue = ifcObject.SetPropertySingleValue(pSetName, propertyName, value);
             if (!string.IsNullOrEmpty(propertyDescription))
                 ifcPropertySingleValue.Description = propertyDescription; //description to property Single Value
             //set description for the property set, nice to have but optional
@@ -509,16 +498,17 @@ namespace Xbim.COBie.Serialisers.XbimSerialiser
         /// </summary>
         /// <param name="ifcObject">IfcObject to add property set too</param>
         /// <param name="pSetName">name of the property set</param>
+        /// <param name="pSetDescription"></param>
         protected IfcPropertySet AddPropertySet(IfcObject ifcObject, string pSetName, string pSetDescription)
         {
-            IfcPropertySet ifcPropertySet = ifcObject.GetPropertySet(pSetName);
+            var ifcPropertySet = ifcObject.GetPropertySet(pSetName);
             if (ifcPropertySet == null)
             {
                 ifcPropertySet = Model.Instances.New<IfcPropertySet>();
                 ifcPropertySet.Name = pSetName;
                 ifcPropertySet.Description = pSetDescription;
                 //set relationship
-                IfcRelDefinesByProperties ifcRelDefinesByProperties = Model.Instances.New<IfcRelDefinesByProperties>();
+                var ifcRelDefinesByProperties = Model.Instances.New<IfcRelDefinesByProperties>();
                 ifcRelDefinesByProperties.RelatingPropertyDefinition = ifcPropertySet;
                 ifcRelDefinesByProperties.RelatedObjects.Add(ifcObject);
             }
@@ -532,7 +522,7 @@ namespace Xbim.COBie.Serialisers.XbimSerialiser
         /// <param name="pSetName">name of the property set</param>
         protected IfcPropertySet AddPropertySet(IfcTypeObject ifcObject, string pSetName, string pSetDescription)
         {
-            IfcPropertySet ifcPropertySet = ifcObject.GetPropertySet(pSetName);
+            var ifcPropertySet = ifcObject.GetPropertySet(pSetName);
             if (ifcPropertySet == null)
             {
                 ifcPropertySet = Model.Instances.New<IfcPropertySet>();
@@ -553,7 +543,7 @@ namespace Xbim.COBie.Serialisers.XbimSerialiser
         protected IfcPropertySingleValue AddPropertySingleValue(IfcPropertySet ifcPropertySet, string propertyName, string propertyDescription, IfcValue value, IfcUnit unit)
         {
             //see if we have this property single value, if so overwrite the value
-            IfcPropertySingleValue ifcPropertySingleValue = ifcPropertySet.HasProperties.Where<IfcPropertySingleValue>(p => p.Name == propertyName).FirstOrDefault();
+            var ifcPropertySingleValue = ifcPropertySet.HasProperties.Where<IfcPropertySingleValue>(p => p.Name == propertyName).FirstOrDefault();
             if (ifcPropertySingleValue == null)
             {
                 if (string.IsNullOrEmpty(propertyName))//required value on IfcPropertySingleValue
@@ -585,7 +575,7 @@ namespace Xbim.COBie.Serialisers.XbimSerialiser
         /// <returns></returns>
         protected IfcPropertyEnumeratedValue AddPropertyEnumeratedValue(IfcPropertySet ifcPropertySet, string propertyName, string propertyDescription, IfcValue[] values, IfcValue[] enumValues, IfcUnit unit)
         {
-            IfcPropertyEnumeratedValue ifcPropertyEnumeratedValue = ifcPropertySet.HasProperties.Where<IfcPropertyEnumeratedValue>(p => p.Name == propertyName).FirstOrDefault();
+            var ifcPropertyEnumeratedValue = ifcPropertySet.HasProperties.Where<IfcPropertyEnumeratedValue>(p => p.Name == propertyName).FirstOrDefault();
 
             if (ifcPropertyEnumeratedValue != null)
             {
@@ -610,11 +600,11 @@ namespace Xbim.COBie.Serialisers.XbimSerialiser
                  ifcPropertyEnumeratedValue.Description = propertyDescription;
             }
            
-            foreach (IfcValue ifcValue in values)
+            foreach (var ifcValue in values)
             {
                 ifcPropertyEnumeratedValue.EnumerationValues.Add(ifcValue);
             }
-            foreach (IfcValue ifcValue in enumValues)
+            foreach (var ifcValue in enumValues)
             {
                 ifcPropertyEnumeratedValue.EnumerationReference.EnumerationValues.Add(ifcValue);
             }
@@ -640,7 +630,7 @@ namespace Xbim.COBie.Serialisers.XbimSerialiser
         /// <returns>IfcPropertyTableValue</returns>
         protected IfcPropertyTableValue AddPropertyTableValue(IfcPropertySet ifcPropertySet, string propertyName, string propertyDescription, string values, string expression, string unit)
         {
-            IfcPropertyTableValue ifcPropertyTableValue = ifcPropertySet.HasProperties.Where<IfcPropertyTableValue>(p => p.Name == propertyName).FirstOrDefault();
+            var ifcPropertyTableValue = ifcPropertySet.HasProperties.Where<IfcPropertyTableValue>(p => p.Name == propertyName).FirstOrDefault();
 
             if (ifcPropertyTableValue != null)
             {
@@ -669,19 +659,19 @@ namespace Xbim.COBie.Serialisers.XbimSerialiser
             }
             
             values = values.Replace("(", ""); //remove the start brackets
-            string[] valueArray = values.Split(new char[] { ')' }, StringSplitOptions.RemoveEmptyEntries);
-            foreach (string item in valueArray)
+            var valueArray = values.Split(new char[] { ')' }, StringSplitOptions.RemoveEmptyEntries);
+            foreach (var item in valueArray)
             {
-                IfcValue[] ifcValues = GetValueArray(item);
+                var ifcValues = GetValueArray(item);
                 ifcPropertyTableValue.DefiningValues.Add(ifcValues.First());
                 ifcPropertyTableValue.DefinedValues.Add(ifcValues.Last());
             }
             //add unit
             if (ValidateString(unit))
             {
-                string[] strValues = unit.Split(':');
-                IfcUnit definingUnit = GetIfcUnit(strValues.First());
-                IfcUnit definedUnit = GetIfcUnit(strValues.Last());
+                var strValues = unit.Split(':');
+                var definingUnit = GetIfcUnit(strValues.First());
+                var definedUnit = GetIfcUnit(strValues.Last());
 
                 if (definingUnit != null)
                     ifcPropertyTableValue.DefiningUnit = definingUnit;
@@ -703,14 +693,14 @@ namespace Xbim.COBie.Serialisers.XbimSerialiser
         /// <returns>IfcValue[]</returns>
         public IfcValue[] GetValueArray(string value)
         {
-            char splitKey = GetSplitChar(value);
+            var splitKey = GetSplitChar(value);
             double number;
             IfcValue[] ifcValues;
-            string[] strValues = value.Split(splitKey);
+            var strValues = value.Split(splitKey);
             ifcValues = new IfcValue[strValues.Length];
-            for (int i = 0; i < strValues.Length; i++)
+            for (var i = 0; i < strValues.Length; i++)
             {
-                string str = strValues[i].Trim();//.Replace(" ", ""); //enumeration so remove spaces, now assume user entered correctly
+                var str = strValues[i].Trim();//.Replace(" ", ""); //enumeration so remove spaces, now assume user entered correctly
                 if (double.TryParse(str, out number))
                     ifcValues[i] = new IfcReal((double)number);
                 else
@@ -747,7 +737,7 @@ namespace Xbim.COBie.Serialisers.XbimSerialiser
         public static char GetSplitChar(string value)
         {
             //swapped these on 28 Nov 2012, might cause problem, should see in testing
-            char splitKey = ':'; //contained within names so give "," a higher likelihood
+            var splitKey = ':'; //contained within names so give "," a higher likelihood
             if (value.Contains(",")) 
                 splitKey = ',';
             return splitKey;
@@ -762,7 +752,7 @@ namespace Xbim.COBie.Serialisers.XbimSerialiser
         {
             if (ValidateString(str))
             {
-                char splitKey = GetSplitChar(str);
+                var splitKey = GetSplitChar(str);
                 return SplitString(str, splitKey);
             }
             else
@@ -780,7 +770,7 @@ namespace Xbim.COBie.Serialisers.XbimSerialiser
         {
             if (!string.IsNullOrEmpty(pSetDescription))
             {
-                IfcPropertySet ifcPropertySet = obj.HasPropertySets.OfType<IfcPropertySet>().Where(r => r.Name == pSetName).FirstOrDefault();
+                var ifcPropertySet = obj.HasPropertySets.OfType<IfcPropertySet>().Where(r => r.Name == pSetName).FirstOrDefault();
                 if (ifcPropertySet != null)
                     ifcPropertySet.Description = pSetDescription;
             }
@@ -805,7 +795,7 @@ namespace Xbim.COBie.Serialisers.XbimSerialiser
                     propertyName = "";
 
             }
-            IfcPropertySingleValue ifcPropertySingleValue = ifcObject.SetPropertySingleValue(pSetName, propertyName, value);
+            var ifcPropertySingleValue = ifcObject.SetPropertySingleValue(pSetName, propertyName, value);
             if (!string.IsNullOrEmpty(propertyDescription))
                 ifcPropertySingleValue.Description = propertyDescription; //description to property Single Value
             //set description for the property set, nice to have but optional
@@ -865,11 +855,11 @@ namespace Xbim.COBie.Serialisers.XbimSerialiser
                 IEnumerable<IfcSIUnit> ifcSIUnits;
                 if (returnPrefix != null)
                 {
-                    ifcSIUnits = Model.Instances.Where<IfcSIUnit>(siu => (siu.Name == (IfcSIUnitName)returnUnit) && (siu.Prefix == (IfcSIPrefix)returnPrefix));
+                    ifcSIUnits = Model.FederatedInstances.Where<IfcSIUnit>(siu => (siu.Name == (IfcSIUnitName)returnUnit) && (siu.Prefix == (IfcSIPrefix)returnPrefix));
                 }
                 else
                 {
-                    ifcSIUnits = Model.Instances.Where<IfcSIUnit>(siu => siu.Name == (IfcSIUnitName)returnUnit && siu.Prefix == null);
+                    ifcSIUnits = Model.FederatedInstances.Where<IfcSIUnit>(siu => siu.Name == (IfcSIUnitName)returnUnit && siu.Prefix == null);
                 }
                 
                 if (ifcSIUnits.Any())
@@ -878,7 +868,7 @@ namespace Xbim.COBie.Serialisers.XbimSerialiser
                 }
                 else
                 {
-                    IfcUnitEnum IfcUnitEnum = MappingUnitType((IfcSIUnitName)returnUnit); //get the unit type for the IfcSIUnitName
+                    var IfcUnitEnum = MappingUnitType((IfcSIUnitName)returnUnit); //get the unit type for the IfcSIUnitName
                     ifcSIUnit = Model.Instances.New<IfcSIUnit>(si =>
                                             {
                                                 si.UnitType = IfcUnitEnum;
@@ -982,22 +972,22 @@ namespace Xbim.COBie.Serialisers.XbimSerialiser
             }
 
 
-            string sqText = "";
-            string baseUnit = "";
-            string testPrefix = "";
+            var sqText = "";
+            var baseUnit = "";
+            var testPrefix = "";
 
-            string prefixUnit = "";
-            string unitName = "";
+            var prefixUnit = "";
+            var unitName = "";
 
-            string[] ifcSIUnitNames = Enum.GetNames(typeof(IfcSIUnitName));
-            string[] ifcSIPrefixs = Enum.GetNames(typeof(IfcSIPrefix));
+            var ifcSIUnitNames = Enum.GetNames(typeof(IfcSIUnitName));
+            var ifcSIPrefixs = Enum.GetNames(typeof(IfcSIPrefix));
             //check for "_" ifcSIUnitName held in the value
-            foreach (string name in ifcSIUnitNames)
+            foreach (var name in ifcSIUnitNames)
             {
                 if (name.Contains("_"))
                 {
                     //see COBieData.GetUnitName method for the setting of the names via the enum's
-                    string[] split = name.Split('_');   //see if _ delimited value such as SQUARE_METRE
+                    var split = name.Split('_');   //see if _ delimited value such as SQUARE_METRE
                     if (split.Length > 1) sqText = split.First().ToLower();
                     baseUnit = split.Last().ToLower();
                     if (value.Contains(sqText) && value.Contains(baseUnit))
@@ -1014,7 +1004,7 @@ namespace Xbim.COBie.Serialisers.XbimSerialiser
 
             }
             //see if we had prefixes in the string name
-            foreach (string prefix in ifcSIPrefixs)
+            foreach (var prefix in ifcSIPrefixs)
             {
                 testPrefix = sqText + prefix; //add the front end of any "_" unit name from above, or default will be ""
                 if ((value.Length >= testPrefix.Length) && (testPrefix.ToLower() == value.Substring(0, testPrefix.Length))) //see if the front end matched
@@ -1026,7 +1016,7 @@ namespace Xbim.COBie.Serialisers.XbimSerialiser
             }
             if (string.IsNullOrEmpty(unitName)) //no "_" unit name was used so lets test for the rest
             {
-                foreach (string name in ifcSIUnitNames)
+                foreach (var name in ifcSIUnitNames)
                 {
                     if ((!name.Contains("_")) && //skip under scores
                         value.Contains(name.ToLower()) && //holds the text, but two value that conflict are STERADIAN  and RADIAN  so
@@ -1067,12 +1057,12 @@ namespace Xbim.COBie.Serialisers.XbimSerialiser
             //ensure we have worksheet name format 
             sheetName = sheetName.ToLower().Trim();
             sheetName = char.ToUpper(sheetName[0]) + sheetName.Substring(1);
-            string objName = rowName;
+            var objName = rowName;
             rowName = rowName.ToLower().Trim();
             switch (sheetName)
             {
                 case Constants.WORKSHEET_TYPE:
-                    IfcTypeObject ifcTypeObject = Model.Instances.Where<IfcTypeObject>(obj => obj.Name.ToString().ToLower().Trim() == rowName).FirstOrDefault();
+                    var ifcTypeObject = Model.FederatedInstances.Where<IfcTypeObject>(obj => obj.Name.ToString().ToLower().Trim() == rowName).FirstOrDefault();
                     //if no Type Object create one to maintain relationship
                     if (ifcTypeObject == null)
                     {
@@ -1081,7 +1071,7 @@ namespace Xbim.COBie.Serialisers.XbimSerialiser
                     }
                     return ifcTypeObject;
                 case Constants.WORKSHEET_COMPONENT:
-                    IfcElement ifcElement = Model.Instances.Where<IfcElement>(obj => obj.Name.ToString().ToLower().Trim() == rowName).FirstOrDefault();
+                    var ifcElement = Model.FederatedInstances.Where<IfcElement>(obj => obj.Name.ToString().ToLower().Trim() == rowName).FirstOrDefault();
                     //if no Element Object create one to maintain relationship
                     if (ifcElement == null)
                     {
@@ -1090,30 +1080,30 @@ namespace Xbim.COBie.Serialisers.XbimSerialiser
                     }
                     return ifcElement;
                 case Constants.WORKSHEET_JOB:
-                    return Model.Instances.Where<IfcProcess>(obj => obj.Name.ToString().ToLower().Trim() == rowName).FirstOrDefault();
+                    return Model.FederatedInstances.Where<IfcProcess>(obj => obj.Name.ToString().ToLower().Trim() == rowName).FirstOrDefault();
                 case Constants.WORKSHEET_ASSEMBLY:
-                    return Model.Instances.Where<IfcRelDecomposes>(obj => obj.Name.ToString().ToLower().Trim() == rowName).FirstOrDefault();
+                    return Model.FederatedInstances.Where<IfcRelDecomposes>(obj => obj.Name.ToString().ToLower().Trim() == rowName).FirstOrDefault();
                 case Constants.WORKSHEET_CONNECTION:
-                    return Model.Instances.Where<IfcRelConnectsElements>(obj => obj.Name.ToString().ToLower().Trim() == rowName).FirstOrDefault();
+                    return Model.FederatedInstances.Where<IfcRelConnectsElements>(obj => obj.Name.ToString().ToLower().Trim() == rowName).FirstOrDefault();
                 case Constants.WORKSHEET_FACILITY:
-                    IfcRoot ifcRoot = Model.Instances.Where<IfcSite>(obj => obj.Name.ToString().ToLower().Trim() == rowName).FirstOrDefault();
+                    IfcRoot ifcRoot = Model.FederatedInstances.Where<IfcSite>(obj => obj.Name.ToString().ToLower().Trim() == rowName).FirstOrDefault();
                     if (ifcRoot == null)
-                        ifcRoot = Model.Instances.Where<IfcBuilding>(obj => obj.Name.ToString().ToLower().Trim() == rowName).FirstOrDefault();
+                        ifcRoot = Model.FederatedInstances.Where<IfcBuilding>(obj => obj.Name.ToString().ToLower().Trim() == rowName).FirstOrDefault();
                     if (ifcRoot == null)
-                        ifcRoot = Model.Instances.Where<IfcProject>(obj => obj.Name.ToString().ToLower().Trim() == rowName).FirstOrDefault();
+                        ifcRoot = Model.FederatedInstances.Where<IfcProject>(obj => obj.Name.ToString().ToLower().Trim() == rowName).FirstOrDefault();
 	                return ifcRoot;
                 case Constants.WORKSHEET_FLOOR:
-                    return Model.Instances.Where<IfcBuildingStorey>(to => to.Name.ToString().ToLower().Trim() == rowName).FirstOrDefault();
+                    return Model.FederatedInstances.Where<IfcBuildingStorey>(to => to.Name.ToString().ToLower().Trim() == rowName).FirstOrDefault();
                 case Constants.WORKSHEET_RESOURCE:
-                    return Model.Instances.Where<IfcConstructionEquipmentResource>(obj => obj.Name.ToString().ToLower().Trim() == rowName).FirstOrDefault();
+                    return Model.FederatedInstances.Where<IfcConstructionEquipmentResource>(obj => obj.Name.ToString().ToLower().Trim() == rowName).FirstOrDefault();
                 case Constants.WORKSHEET_SPACE:
-                    return Model.Instances.Where<IfcSpace>(obj => obj.Name.ToString().ToLower().Trim() == rowName).FirstOrDefault();
+                    return Model.FederatedInstances.Where<IfcSpace>(obj => obj.Name.ToString().ToLower().Trim() == rowName).FirstOrDefault();
                 case Constants.WORKSHEET_SPARE:
-                    return Model.Instances.Where<IfcConstructionProductResource>(obj => obj.Name.ToString().ToLower().Trim() == rowName).FirstOrDefault();
+                    return Model.FederatedInstances.Where<IfcConstructionProductResource>(obj => obj.Name.ToString().ToLower().Trim() == rowName).FirstOrDefault();
                 case Constants.WORKSHEET_SYSTEM:
-                    return Model.Instances.Where<IfcGroup>(obj => obj.Name.ToString().ToLower().Trim() == rowName).FirstOrDefault();
+                    return Model.FederatedInstances.Where<IfcGroup>(obj => obj.Name.ToString().ToLower().Trim() == rowName).FirstOrDefault();
                 case Constants.WORKSHEET_ZONE:
-                    return Model.Instances.Where<IfcZone>(obj => obj.Name.ToString().ToLower().Trim() == rowName).FirstOrDefault();
+                    return Model.FederatedInstances.Where<IfcZone>(obj => obj.Name.ToString().ToLower().Trim() == rowName).FirstOrDefault();
                 default:
                     return null;
                     
@@ -1128,9 +1118,9 @@ namespace Xbim.COBie.Serialisers.XbimSerialiser
         public IfcActorSelect GetActorSelect(string email)
         {
             //srl the following fixes errors in the logic  and are more performant
-            var ifcActorSelect = (Model.Instances.OfType<IfcPersonAndOrganization>().FirstOrDefault<IfcActorSelect>(a => a.HasEmail(email)) ??
-                                  Model.Instances.OfType<IfcOrganization>().FirstOrDefault<IfcActorSelect>(a => a.HasEmail(email))) ??
-                                 Model.Instances.OfType<IfcPerson>().FirstOrDefault<IfcActorSelect>(a => a.HasEmail(email));
+            var ifcActorSelect = (Model.FederatedInstances.OfType<IfcPersonAndOrganization>().FirstOrDefault<IfcActorSelect>(a => a.HasEmail(email)) ??
+                                  Model.FederatedInstances.OfType<IfcOrganization>().FirstOrDefault<IfcActorSelect>(a => a.HasEmail(email))) ??
+                                 Model.FederatedInstances.OfType<IfcPerson>().FirstOrDefault<IfcActorSelect>(a => a.HasEmail(email));
             return ifcActorSelect;
         }
 
@@ -1143,10 +1133,10 @@ namespace Xbim.COBie.Serialisers.XbimSerialiser
         /// <returns></returns>
         public static string JoinStrings (char splitChar, List<string> strings)
         {
-            StringBuilder sb = new StringBuilder();
-            string split_Char = splitChar.ToString();
-            int i = 1;
-            foreach (string str in strings)
+            var sb = new StringBuilder();
+            var split_Char = splitChar.ToString();
+            var i = 1;
+            foreach (var str in strings)
             {
                 sb.Append(str.Replace(split_Char, "\\" + split_Char));
                 if (i < strings.Count)
@@ -1168,10 +1158,10 @@ namespace Xbim.COBie.Serialisers.XbimSerialiser
         /// <returns></returns>
         public static List<string> SplitString(string str, char splitChar)
         {
-            List<string> strings = new List<string>();
-            StringBuilder sb = new StringBuilder();
-            bool isEscaped = false;
-            foreach (char c in str)
+            var strings = new List<string>();
+            var sb = new StringBuilder();
+            var isEscaped = false;
+            foreach (var c in str)
             {
                 if (c == '\\')
                 {
@@ -1205,12 +1195,12 @@ namespace Xbim.COBie.Serialisers.XbimSerialiser
         /// <returns>string with (???) removed</returns>
         public string GetMaterialName(string str)
         {
-            int end = GetLastMatchChar(str, '(');
+            var end = GetLastMatchChar(str, '(');
             if (end < 0) //no match return original
                 return str;
  
             //check we have a number in the brackets
-            double? isNum = GetLayerThickness(str);
+            var isNum = GetLayerThickness(str);
             if (isNum == null) //no number so return original
                 return str;
             
@@ -1223,8 +1213,8 @@ namespace Xbim.COBie.Serialisers.XbimSerialiser
         /// <returns>double value or null</returns>
         public  double? GetLayerThickness(string str)
         {
-            int start = GetLastMatchChar(str, '(');
-            int end = GetLastMatchChar(str, ')');
+            var start = GetLastMatchChar(str, '(');
+            var end = GetLastMatchChar(str, ')');
             if ((start < 0) || (end < 0)) //failed to find bracket pair
             {
                 return null;
@@ -1246,11 +1236,11 @@ namespace Xbim.COBie.Serialisers.XbimSerialiser
         /// <returns></returns>
         public int GetLastMatchChar(string str, char match)
         {
-            char[] arr = str.ToCharArray();
+            var arr = str.ToCharArray();
             Array.Reverse(arr);
-            string newStr = new string(arr);
+            var newStr = new string(arr);
 
-            int end = newStr.IndexOf(match);
+            var end = newStr.IndexOf(match);
             if (end >= 0) //bracket found, if not will return -1
             {
                 end = str.Length - end - 1; //less one more zero based, as length is not zero based
@@ -1270,8 +1260,8 @@ namespace Xbim.COBie.Serialisers.XbimSerialiser
             {
                 if (ValidateString(name)) //we have a primary key to check
                 {
-                    string testName = name.ToLower().Trim();
-                    T testObj = Model.Instances.Where<T>(bs => bs.Name.ToString().ToLower().Trim() == testName).FirstOrDefault();
+                    var testName = name.ToLower().Trim();
+                    var testObj = Model.FederatedInstances.Where<T>(bs => bs.Name.ToString().ToLower().Trim() == testName).FirstOrDefault();
                     if (testObj != null)
                     {
 #if DEBUG
@@ -1296,8 +1286,8 @@ namespace Xbim.COBie.Serialisers.XbimSerialiser
             {
                 if (ValidateString(name)) //we have a primary key to check
                 {
-                    string testName = name.ToLower().Trim();
-                    IEnumerable<T> testObjs = Model.Instances.Where<T>(bs => bs.Name.ToString().ToLower().Trim() == testName);
+                    var testName = name.ToLower().Trim();
+                    var testObjs = Model.FederatedInstances.Where<T>(bs => bs.Name.ToString().ToLower().Trim() == testName);
                     return testObjs;
                 }
             }

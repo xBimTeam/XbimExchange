@@ -1,14 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
+﻿using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Xbim.Ifc2x3.ExternalReferenceResource;
 using Xbim.Ifc2x3.Kernel;
 using Xbim.IO;
-using Xbim.XbimExtensions;
-using Xbim.XbimExtensions.SelectTypes;
+using XbimModel = Xbim.Ifc2x3.IO.XbimModel;
 
 namespace Tests
 {
@@ -142,7 +139,7 @@ namespace Tests
                         }
                     }
 
-                    var orphanDocA = CreateDocInfo(_model, "orphanDocA", @"c:");
+                    CreateDocInfo(_model, "orphanDocA", @"c:");
                     
 
                     var orphanDocB = _model.Instances.New<IfcDocumentReference>();
@@ -150,7 +147,7 @@ namespace Tests
                     orphanDocB.Location = @"x:";
                     txn.Commit();
 
-                    _model.SaveAs("Clinic-Handover_ChildDocs.ifc", Xbim.XbimExtensions.Interfaces.XbimStorageType.IFC);
+                    _model.SaveAs("Clinic-Handover_ChildDocs.ifc", IfcStorageType.Ifc);
                 }
 
 
@@ -162,7 +159,7 @@ namespace Tests
 
 
                 //get the already attached to entity documents 
-                var docInfosAttached = docToObjs.Select(Dictionary => Dictionary.Key).OfType<IfcDocumentInformation>();
+                var docInfosAttached = docToObjs.Select(dictionary => dictionary.Key).OfType<IfcDocumentInformation>();
                 
                 //see if we have any documents not attached to IfcRoot objects, but could be attached as children documents to a parent document
                 var docInfosNotAttached = docAllInfos.Except(docInfosAttached);
@@ -184,7 +181,7 @@ namespace Tests
                 //get all the doc reference objects held in the model
                 var docAllRefs = _model.Instances.OfType<IfcDocumentReference>();
                 //get all attached document references
-                var docRefsAttached = docToObjs.Select(Dictionary => Dictionary.Key).OfType<IfcDocumentReference>();
+                var docRefsAttached = docToObjs.Select(dictionary => dictionary.Key).OfType<IfcDocumentReference>();
                 //checked on direct attached to object document references
                 var docRefsNotAttached = docAllRefs.Except(docRefsAttached).ToList();
                 
@@ -232,7 +229,7 @@ namespace Tests
             var docRef = model.Instances.New<IfcDocumentReference>();
             docRef.Location = location;
             docRef.Name = "Ref" + name + ".txt";
-            docinfo.SetDocumentReferences(true, new IfcDocumentReference[] { docRef });
+            docinfo.DocumentReferences.Add(docRef);
             return docinfo;
         }
         

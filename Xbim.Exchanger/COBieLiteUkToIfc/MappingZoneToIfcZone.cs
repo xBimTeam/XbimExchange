@@ -1,8 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using Xbim.COBieLiteUK;
+﻿using System.Linq;
+using Xbim.CobieLiteUk;
 using Xbim.Ifc2x3.ProductExtension;
 
 namespace XbimExchanger.COBieLiteUkToIfc
@@ -52,6 +49,12 @@ namespace XbimExchanger.COBieLiteUkToIfc
 
             #endregion
 
+            #region Documents
+            if (zone.Documents != null && zone.Documents.Any())
+            {
+                Exchanger.ConvertDocumentsToDocumentSelect(ifcZone, zone.Documents);
+            }
+            #endregion
 
             return ifcZone;
 

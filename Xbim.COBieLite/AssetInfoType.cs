@@ -1,12 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Xml.Serialization;
 using Newtonsoft.Json;
-using Xbim.Ifc2x3.Kernel;
-using Xbim.Ifc2x3.ProductExtension;
+using Xbim.Ifc4.Interfaces;
+
 
 namespace Xbim.COBieLite
 {
@@ -14,7 +12,7 @@ namespace Xbim.COBieLite
     {
     
 
-        public AssetInfoType(IfcElement ifcElement, CoBieLiteHelper helper)
+        public AssetInfoType(IIfcElement ifcElement, CoBieLiteHelper helper)
             : this()
         {
             externalEntityName = helper.ExternalEntityName(ifcElement);
@@ -41,7 +39,7 @@ namespace Xbim.COBieLite
                 AssetAttributes = new AttributeCollectionType { Attribute = ifcAttributes };
             
             //System Assignments
-            List<IfcSystem> systems;
+            List<IIfcSystem> systems;
             if (helper.SystemLookup.TryGetValue(ifcElement, out systems))
             {
                 AssetSystemAssignments = new SystemAssignmentCollectionType { SystemAssignment = new List<SystemKeyType>(systems.Count) };
@@ -52,7 +50,7 @@ namespace Xbim.COBieLite
             }
 
              //Space Assignments
-            List<IfcSpace> spaces;
+            List<IIfcSpace> spaces;
             if (helper.SpaceAssetLookup.TryGetValue(ifcElement, out spaces))
             {
                 AssetSpaceAssignments = new SpaceAssignmentCollectionType { SpaceAssignment = new List<SpaceKeyType>(spaces.Count) };

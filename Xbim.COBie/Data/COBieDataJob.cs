@@ -1,17 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using Xbim.COBie.Rows;
 using Xbim.Ifc2x3.ConstructionMgmtDomain;
-using Xbim.Ifc2x3.ExternalReferenceResource;
 using Xbim.Ifc2x3.Kernel;
-using Xbim.Ifc2x3.ProcessExtensions;
-using Xbim.XbimExtensions;
 using Xbim.Ifc2x3.PropertyResource;
-using Xbim.Ifc2x3.MeasureResource;
-using Xbim.XbimExtensions.SelectTypes;
 using Xbim.COBie.Serialisers.XbimSerialiser;
+using Xbim.Ifc2x3.ProcessExtension;
 
 namespace Xbim.COBie.Data
 {
@@ -38,25 +33,25 @@ namespace Xbim.COBie.Data
             ProgressIndicator.ReportMessage("Starting Jobs...");
 
             //create new sheet
-            COBieSheet<COBieJobRow> jobs = new COBieSheet<COBieJobRow>(Constants.WORKSHEET_JOB);
+            var jobs = new COBieSheet<COBieJobRow>(Constants.WORKSHEET_JOB);
 
             // get all IfcTask objects from IFC file
-            IEnumerable<IfcTask> ifcTasks = Model.Instances.OfType<IfcTask>();
+            var ifcTasks = Model.FederatedInstances.OfType<IfcTask>();
 
-            COBieDataPropertySetValues allPropertyValues = new COBieDataPropertySetValues(); //properties helper class
+            var allPropertyValues = new COBieDataPropertySetValues(); //properties helper class
             
-            //IfcTypeObject typObj = Model.Instances.OfType<IfcTypeObject>().FirstOrDefault();
-            IfcConstructionEquipmentResource cer = Model.Instances.OfType<IfcConstructionEquipmentResource>().FirstOrDefault();
+            //IfcTypeObject typObj = Model.FederatedInstances.OfType<IfcTypeObject>().FirstOrDefault();
+            var cer = Model.FederatedInstances.OfType<IfcConstructionEquipmentResource>().FirstOrDefault();
 
             ProgressIndicator.Initialise("Creating Jobs", ifcTasks.Count());
 
-            foreach (IfcTask ifcTask in ifcTasks)
+            foreach (var ifcTask in ifcTasks)
             {
                 ProgressIndicator.IncrementAndUpdate();
 
                 if (ifcTask == null) continue;
 
-                COBieJobRow job = new COBieJobRow(jobs);
+                var job = new COBieJobRow(jobs);
 
                 job.Name =  (string.IsNullOrEmpty(ifcTask.Name.ToString())) ? DEFAULT_STRING : ifcTask.Name.ToString();
                 job.CreatedBy = GetTelecomEmailAddress(ifcTask.OwnerHistory);
@@ -68,9 +63,9 @@ namespace Xbim.COBie.Data
                 job.Description = (string.IsNullOrEmpty(ifcTask.Description.ToString())) ? DEFAULT_STRING : ifcTask.Description.ToString();
 
                 allPropertyValues.SetAllPropertyValues(ifcTask); //set properties values to this task
-                IfcPropertySingleValue ifcPropertySingleValue = allPropertyValues.GetPropertySingleValue("TaskDuration");
+                var ifcPropertySingleValue = allPropertyValues.GetPropertySingleValue("TaskDuration");
                 job.Duration = ((ifcPropertySingleValue != null) && (ifcPropertySingleValue.NominalValue != null)) ? ConvertNumberOrDefault(ifcPropertySingleValue.NominalValue.ToString()) : DEFAULT_NUMERIC;
-                string unitName = ((ifcPropertySingleValue != null) && (ifcPropertySingleValue.Unit != null)) ? GetUnitName(ifcPropertySingleValue.Unit) : null; 
+                var unitName = ((ifcPropertySingleValue != null) && (ifcPropertySingleValue.Unit != null)) ? GetUnitName(ifcPropertySingleValue.Unit) : null; 
                 job.DurationUnit = (string.IsNullOrEmpty(unitName)) ?  DEFAULT_STRING : unitName;
 
                 ifcPropertySingleValue = allPropertyValues.GetPropertySingleValue("TaskStartDate");
@@ -107,7 +102,7 @@ namespace Xbim.COBie.Data
         /// <returns></returns>
         private string GetStartTime(IfcPropertySingleValue ifcPropertySingleValue)
         {
-            string startData = "";
+            var startData = "";
             if ((ifcPropertySingleValue != null) && (ifcPropertySingleValue.NominalValue != null))
                 startData = ifcPropertySingleValue.NominalValue.ToString(); 
             
@@ -126,11 +121,11 @@ namespace Xbim.COBie.Data
         /// <returns>string holding predecessor name of last task(s)</returns>
         private string GetPriors(IfcTask ifcTask)
         {
-            IEnumerable<IfcRelSequence> isSuccessorFrom = ifcTask.IsSuccessorFrom;
-            List<string> relatingTasks = new List<string>();
-            foreach (IfcRelSequence ifcRelSequence in isSuccessorFrom)
+            var isSuccessorFrom = ifcTask.IsSuccessorFrom;
+            var relatingTasks = new List<string>();
+            foreach (var ifcRelSequence in isSuccessorFrom)
             {
-                IfcTask relatingIfcTask = ifcRelSequence.RelatingProcess as IfcTask;
+                var relatingIfcTask = ifcRelSequence.RelatingProcess as IfcTask;
                 if (relatingIfcTask != null)
                     relatingTasks.Add(relatingIfcTask.TaskId.ToString().Trim());
             }
@@ -149,9 +144,9 @@ namespace Xbim.COBie.Data
         /// <returns>delimited string of the resources</returns>
         private string GetResources(IfcTask ifcTask)
         {
-            IEnumerable<IfcConstructionEquipmentResource> ifcConstructionEquipmentResources = ifcTask.OperatesOn.SelectMany(ratp => ratp.RelatedObjects.OfType<IfcConstructionEquipmentResource>());
-            List<string> strList = new List<string>();
-            foreach (IfcConstructionEquipmentResource ifcConstructionEquipmentResource in ifcConstructionEquipmentResources)
+            var ifcConstructionEquipmentResources = ifcTask.OperatesOn.SelectMany(ratp => ratp.RelatedObjects.OfType<IfcConstructionEquipmentResource>());
+            var strList = new List<string>();
+            foreach (var ifcConstructionEquipmentResource in ifcConstructionEquipmentResources)
             {
                 if ((ifcConstructionEquipmentResource != null) && (!string.IsNullOrEmpty(ifcConstructionEquipmentResource.Name.ToString())))
                 {
@@ -169,7 +164,7 @@ namespace Xbim.COBie.Data
         private string GetObjectType(IfcTask ifcTask)
         {
             //first try
-            IEnumerable<IfcTypeObject> ifcTypeObjects = ifcTask.OperatesOn.SelectMany(ratp => ratp.RelatedObjects.OfType<IfcTypeObject>());
+            var ifcTypeObjects = ifcTask.OperatesOn.SelectMany(ratp => ratp.RelatedObjects.OfType<IfcTypeObject>());
             //second try on IsDefinedBy.OfType<IfcRelDefinesByType>
             if ((ifcTypeObjects == null) || (ifcTypeObjects.Count() == 0)) 
                 ifcTypeObjects = ifcTask.IsDefinedBy.OfType<IfcRelDefinesByType>().Select(idb => (idb as IfcRelDefinesByType).RelatingType);
@@ -181,8 +176,8 @@ namespace Xbim.COBie.Data
             //convert to string and return if all ok
             if ((ifcTypeObjects != null) || (ifcTypeObjects.Count() > 0))
             {
-                List<string> strList = new List<string>();
-                foreach (IfcTypeObject ifcTypeItem in ifcTypeObjects)
+                var strList = new List<string>();
+                foreach (var ifcTypeItem in ifcTypeObjects)
                 {
                     if ((ifcTypeItem != null) && (!string.IsNullOrEmpty(ifcTypeItem.Name.ToString())))
                     {
@@ -197,12 +192,12 @@ namespace Xbim.COBie.Data
             //last try on IsDefinedBy.OfType<IfcRelDefinesByProperties> for IfcObject
             if ((ifcTypeObjects == null) || (ifcTypeObjects.Count() == 0))
             {
-                IEnumerable<IfcObject> ifcObjects = ifcTask.IsDefinedBy.OfType<IfcRelDefinesByProperties>().SelectMany(idb => idb.RelatedObjects);
-                List<string> strList = new List<string>();
-                foreach (IfcObject ifcObject in ifcObjects)
+                var ifcObjects = ifcTask.IsDefinedBy.OfType<IfcRelDefinesByProperties>().SelectMany(idb => idb.RelatedObjects);
+                var strList = new List<string>();
+                foreach (var ifcObject in ifcObjects)
                 {
-                    IEnumerable<IfcRelDefinesByType> ifcRelDefinesByTypes = ifcObject.IsDefinedBy.OfType<IfcRelDefinesByType>();
-                    foreach (IfcRelDefinesByType ifcRelDefinesByType in ifcRelDefinesByTypes)
+                    var ifcRelDefinesByTypes = ifcObject.IsDefinedBy.OfType<IfcRelDefinesByType>();
+                    foreach (var ifcRelDefinesByType in ifcRelDefinesByTypes)
                     {
                         if ((ifcRelDefinesByType != null) &&
                             (ifcRelDefinesByType.RelatingType != null) &&

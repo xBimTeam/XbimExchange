@@ -1,15 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Drawing;
-using System.Data;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
-
-namespace Xbim.Client
+namespace Xbim.CobieLiteUk.Client
 {
     public partial class EditableList : UserControl
     {
@@ -67,11 +61,11 @@ namespace Xbim.Client
         public EditableList()
         {
             InitializeComponent();
-            editlistView.Columns[0].Width = editlistView.Width - 4;
-            editlistView.Height = this.Height - 4;
+            editlistView.Columns[0].AutoResize(ColumnHeaderAutoResizeStyle.None);
+            editlistView.Columns[0].Width = editlistView.Width - 10;
+            editlistView.Columns[0].AutoResize(ColumnHeaderAutoResizeStyle.ColumnContent);
             AllUpper = true;
             //SetReadOnly();
-
         }
 
         /// <summary>

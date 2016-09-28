@@ -1,14 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using Xbim.XbimExtensions;
-using Xbim.Ifc2x3.Kernel;
-using Xbim.Ifc2x3.ProductExtension;
-using Xbim.Ifc2x3.MeasureResource;
-using Xbim.Ifc2x3.UtilityResource;
-using Xbim.XbimExtensions.SelectTypes;
-using System.Reflection;
 
 namespace Xbim.COBie.Rows
 {

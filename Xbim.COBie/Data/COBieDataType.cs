@@ -1,17 +1,18 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Diagnostics;
+using System.Globalization;
 using System.Linq;
 using System.Reflection;
 using Xbim.COBie.Rows;
-using Xbim.Ifc2x3.Extensions;
-using Xbim.Ifc2x3.ExternalReferenceResource;
 using Xbim.Ifc2x3.Kernel;
 using Xbim.Ifc2x3.MeasureResource;
 using Xbim.Ifc2x3.PropertyResource;
 using Xbim.Ifc2x3.SharedFacilitiesElements;
 using Xbim.Ifc2x3.UtilityResource;
 using Xbim.Ifc2x3.MaterialResource;
-using System.Diagnostics;
-using System;
+using Xbim.Ifc4.Interfaces;
+
 
 namespace Xbim.COBie.Data
 {
@@ -48,11 +49,14 @@ namespace Xbim.COBie.Data
 #endif            
             ProgressIndicator.ReportMessage("Starting Types...");
 
+            var ifcProject = Model.Instances.FirstOrDefault<IIfcProject>();
+            Debug.Assert(ifcProject != null);
+
             // Create new Sheet
             COBieSheet<COBieTypeRow> types = new COBieSheet<COBieTypeRow>(Constants.WORKSHEET_TYPE);
             
             //group the types by name as we need to filter duplicate items in for each loop
-            IEnumerable<IfcTypeObject> ifcTypeObjects = Model.Instances.OfType<IfcTypeObject>()
+            IEnumerable<IfcTypeObject> ifcTypeObjects = Model.FederatedInstances.OfType<IfcTypeObject>()
                 .Select(type => type)
                 .Where(type => !Context.Exclude.ObjectType.Types.Contains(type.GetType()))
                 .GroupBy(type => type.Name).SelectMany(g => g);//.Distinct()
@@ -133,7 +137,7 @@ namespace Xbim.COBie.Data
             ProgressIndicator.Finalise();
             //--------------Loop all IfcMaterialLayerSet-----------------------------
             ProgressIndicator.ReportMessage("Starting MaterialLayerSets...");
-            IEnumerable<IfcMaterialLayerSet> ifcMaterialLayerSets = Model.Instances.OfType<IfcMaterialLayerSet>();
+            IEnumerable<IfcMaterialLayerSet> ifcMaterialLayerSets = Model.FederatedInstances.OfType<IfcMaterialLayerSet>();
             ChildNamesList rowHolderChildNames = new ChildNamesList();
             ChildNamesList rowHolderLayerChildNames = new ChildNamesList();
             
@@ -153,13 +157,13 @@ namespace Xbim.COBie.Data
                 }
                 else //default to the project as we failed to find a IfcRoot object to extract it from
                 {
-                    createdBy = GetTelecomEmailAddress(Model.IfcProject.OwnerHistory);
-                    createdOn = GetCreatedOnDateAsFmtString(Model.IfcProject.OwnerHistory);
-                    extSystem = GetExternalSystem(Model.IfcProject.OwnerHistory);
+                    createdBy = GetTelecomEmailAddress(ifcProject.OwnerHistory);
+                    createdOn = GetCreatedOnDateAsFmtString(ifcProject.OwnerHistory);
+                    extSystem = GetExternalSystem(ifcProject.OwnerHistory);
                 }
                 //add materialLayerSet name to rows
                 COBieTypeRow matSetRow = new COBieTypeRow(types);
-                matSetRow.Name = (string.IsNullOrEmpty(ifcMaterialLayerSet.Name)) ? DEFAULT_STRING : ifcMaterialLayerSet.Name;
+                matSetRow.Name = (string.IsNullOrEmpty(ifcMaterialLayerSet.LayerSetName)) ? DEFAULT_STRING : ifcMaterialLayerSet.LayerSetName.ToString();
                 matSetRow.CreatedBy = createdBy;
                 matSetRow.CreatedOn = createdOn;
                 matSetRow.ExtSystem = extSystem;
@@ -176,7 +180,7 @@ namespace Xbim.COBie.Data
                     {
                         string name = ifcMaterialLayer.Material.Name.ToString().Trim();
                         double thickness = ifcMaterialLayer.LayerThickness;
-                        string keyName = name + " (" + thickness.ToString() + ")";
+                        string keyName = name + " (" + thickness.ToString(CultureInfo.InvariantCulture) + ")";
                         if (!rowHolderLayerChildNames.Contains(keyName.ToLower())) //check we do not already have it
                         {
                             COBieTypeRow matRow = new COBieTypeRow(types);
@@ -206,7 +210,7 @@ namespace Xbim.COBie.Data
             //--------Loop Materials in case they are not in a layer Set-----
             ProgressIndicator.ReportMessage("Starting Materials...");
             
-            IEnumerable<IfcMaterial> ifcMaterials = Model.Instances.OfType<IfcMaterial>();
+            IEnumerable<IfcMaterial> ifcMaterials = Model.FederatedInstances.OfType<IfcMaterial>();
             ProgressIndicator.Initialise("Creating Materials", ifcMaterials.Count());
             foreach (IfcMaterial ifcMaterial in ifcMaterials)
             {
@@ -749,21 +753,21 @@ namespace Xbim.COBie.Data
         /// <returns>List of IfcPropertySingleValue which are contained in AttNames</returns>
         private IEnumerable<IfcPropertySingleValue> GetTypeObjRelAttributes(IfcTypeObject typeObj, List<string> attNames)
         {
-            IEnumerable<IfcPropertySingleValue> properties = Enumerable.Empty<IfcPropertySingleValue>();
+            var properties = Enumerable.Empty<IIfcPropertySingleValue>();
             // can hold zero or 1 ObjectTypeOf (IfcRelDefinesByType- holds list of objects of this type in RelatedObjects property) so test return
             var typeInstanceRel = typeObj.ObjectTypeOf.FirstOrDefault(); 
             if (typeInstanceRel != null)
             {
                 // TODO: Check usage of GetAllProperties - duplicates Properties from Type?
-                foreach (IfcPropertySet pset in typeInstanceRel.RelatedObjects.First().GetAllPropertySets()) 
+                foreach (var pset in typeInstanceRel.RelatedObjects.First().PropertySets) 
                 {
                     //has to have 1 or more object that are of this type, so get first and see what we get
-                    properties = properties.Concat(pset.HasProperties.Where<IfcPropertySingleValue>(p => attNames.Contains(p.Name.ToString())));
+                    properties = properties.Concat(pset.HasProperties.OfType<IIfcPropertySingleValue>().Where(p => attNames.Contains(p.Name.ToString())));
                 }
             }
 
 
-            return properties;
+            return properties.Cast<IfcPropertySingleValue>();
         }
 
         

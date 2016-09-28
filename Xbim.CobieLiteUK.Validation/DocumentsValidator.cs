@@ -1,11 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Xbim.CobieLiteUK.Validation.Extensions;
-using Xbim.COBieLiteUK;
-using Attribute = Xbim.COBieLiteUK.Attribute;
+using Xbim.CobieLiteUk.Validation.Extensions;
 
-namespace Xbim.CobieLiteUK.Validation
+namespace Xbim.CobieLiteUk.Validation
 {
     internal class DocumentsValidator : IValidator
     {

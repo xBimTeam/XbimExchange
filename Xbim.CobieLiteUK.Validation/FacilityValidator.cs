@@ -1,10 +1,10 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using Xbim.CobieLiteUK.Validation.Extensions;
-using Xbim.COBieLiteUK;
+using Xbim.CobieLiteUk.Validation.Extensions;
+using Xbim.CobieLiteUk;
 
-namespace Xbim.CobieLiteUK.Validation
+namespace Xbim.CobieLiteUk.Validation
 {
     internal enum StatusOptions
     {

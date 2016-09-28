@@ -1,8 +1,6 @@
 ﻿using System;
 using System.CodeDom;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Xml.Schema;
 
 namespace Xsd2Code.Library.Extensions

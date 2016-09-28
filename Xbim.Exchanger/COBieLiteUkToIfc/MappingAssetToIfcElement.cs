@@ -1,12 +1,11 @@
-﻿using System;
-using System.Linq;
-using Xbim.COBieLiteUK;
+﻿using System.Linq;
+using Xbim.CobieLiteUk;
 using Xbim.Ifc2x3.Extensions;
 using Xbim.Ifc2x3.ProductExtension;
 
 namespace XbimExchanger.COBieLiteUkToIfc
 {
-    class MappingAssetToIfcElement<TToObject> : CoBieLiteUkIfcMappings<string, Asset, TToObject> where TToObject : IfcElement, new()
+    class MappingAssetToIfcElement<TToObject> : CoBieLiteUkIfcMappings<string, Asset, TToObject> where TToObject : IfcElement
     {
 
         protected override TToObject Mapping(Asset asset, TToObject ifcElement)
@@ -47,6 +46,13 @@ namespace XbimExchanger.COBieLiteUkToIfc
 
                     ifcSpace.AddElement(ifcElement);
                 }
+            }
+            #endregion
+
+            #region Documents
+            if (asset.Documents != null && asset.Documents.Any())
+            {
+                Exchanger.ConvertDocumentsToDocumentSelect(ifcElement, asset.Documents);
             }
             #endregion
 

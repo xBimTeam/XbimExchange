@@ -3,18 +3,22 @@ using System.Collections.Generic;
 using System.Configuration;
 using System.IO;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Xml;
 
-namespace Xbim.FilterHelper
+namespace Xbim.CobieLiteUk.FilterHelper
 {
-    public class COBiePropertyMapping
+    public class CobiePropertyMapping
     {
         /// <summary>
         /// current section names in config file
         /// </summary>
-        private string[] _sectionKeys = new string[] { "SpacePropertyMaps", "FloorPropertyMaps", "AssetPropertyMaps", "AssetTypePropertyMaps", "SystemPropertyMaps" };
+        private readonly string[] _sectionKeys = { "SpacePropertyMaps", "FloorPropertyMaps", "AssetPropertyMaps", "AssetTypePropertyMaps", "SystemPropertyMaps", "CommonPropertyMaps", "SparePropertyMaps" };
+
+        /// <summary>
+        /// Common List of attribute paths
+        /// </summary>
+        public List<AttributePaths> CommonPaths { get; set; }
+
+        public List<AttributePaths> SparePaths { get; set; }
         /// <summary>
         /// Space List of attribute paths
         /// </summary>
@@ -39,13 +43,15 @@ namespace Xbim.FilterHelper
         /// <summary>
         /// File info for config file
         /// </summary>
-        public FileInfo ConfigFile{ get; set; }
+        public FileInfo ConfigFile { get; set; }
 
         /// <summary>
         /// Constructor to initialise objects
         /// </summary>
-        public COBiePropertyMapping()
+        public CobiePropertyMapping()
         {
+            CommonPaths = new List<AttributePaths>();
+            SparePaths = new List<AttributePaths>();
             SpacePaths = new List<AttributePaths>();
             FloorPaths = new List<AttributePaths>();
             AssetPaths = new List<AttributePaths>();
@@ -68,32 +74,27 @@ namespace Xbim.FilterHelper
         /// Constructor
         /// </summary>
         /// <param name="configFileName">FileInfo, config file</param>
-        public COBiePropertyMapping(FileInfo configFileName ) : this()
+        public CobiePropertyMapping(FileInfo configFileName) : this()
         {
-            if (configFileName.Exists)
+            if (!configFileName.Exists)
+                return;
+            ConfigFile = configFileName;
+            try
             {
-                ConfigFile = configFileName;
-                try
+                var configMap = new ExeConfigurationFileMap { ExeConfigFilename = ConfigFile.FullName };
+                var config = ConfigurationManager.OpenMappedExeConfiguration(configMap, ConfigurationUserLevel.None);
+                foreach (var sectionKey in _sectionKeys)
                 {
-                    var configMap = new ExeConfigurationFileMap { ExeConfigFilename = ConfigFile.FullName };
-                    Configuration config = ConfigurationManager.OpenMappedExeConfiguration(configMap, ConfigurationUserLevel.None);
-                    foreach (string sectionKey in _sectionKeys)
-                    {
-                        var proxy = GetStorageList(sectionKey); //swap to correct path list
-                        ConfigurationSection section = config.GetSection(sectionKey);
-                        foreach (KeyValueConfigurationElement keyVal in ((AppSettingsSection)section).Settings)
-                        {
-                            proxy.Add(new AttributePaths(keyVal.Key, keyVal.Value));
-                        }
-                    }
-                    
+                    var proxy = GetStorageList(sectionKey); //swap to correct path list
+                    var section = config.GetSection(sectionKey);
+                    proxy.AddRange(from KeyValueConfigurationElement keyVal in ((AppSettingsSection)section).Settings select new AttributePaths(keyVal.Key, keyVal.Value));
                 }
-                catch (Exception)
-                { 
-                    throw;
-                }
+
             }
-            
+            catch (Exception)
+            {
+                throw new FormatException(string.Format("Incorrect configuration file format: Delete {0} and restart application", ConfigFile.FullName));
+            }
         }
 
         /// <summary>
@@ -102,27 +103,19 @@ namespace Xbim.FilterHelper
         public void Save()
         {
             //save any changes back to the config file
-            try
+            var configMap = new ExeConfigurationFileMap { ExeConfigFilename = ConfigFile.FullName };
+            var config = ConfigurationManager.OpenMappedExeConfiguration(configMap, ConfigurationUserLevel.None);
+            foreach (var sectionKey in _sectionKeys)
             {
-                var configMap = new ExeConfigurationFileMap { ExeConfigFilename = ConfigFile.FullName };
-                Configuration config = ConfigurationManager.OpenMappedExeConfiguration(configMap, ConfigurationUserLevel.None);
-                foreach (string sectionKey in _sectionKeys)
+                var proxy = GetStorageList(sectionKey); //swap to correct path list
+                var section = (AppSettingsSection)config.GetSection(sectionKey);
+                foreach (var item in proxy)
                 {
-                    var proxy = GetStorageList(sectionKey); //swap to correct path list
-                    AppSettingsSection section = (AppSettingsSection)config.GetSection(sectionKey);
-                    foreach (AttributePaths item in proxy)
-                    {
-                        section.Settings[item.Key].Value = item.Value;
-                    }
+                    section.Settings[item.Key].Value = item.Value;
                 }
-                //save back to file
-                config.Save(ConfigurationSaveMode.Modified);
             }
-            catch (Exception)
-            {
-                
-                throw;
-            }
+            //save back to file
+            config.Save(ConfigurationSaveMode.Modified);
         }
 
         /// <summary>
@@ -134,6 +127,10 @@ namespace Xbim.FilterHelper
         {
             switch (sectionKey)
             {
+                case "CommonPropertyMaps":
+                    return CommonPaths;
+                case "SparePropertyMaps":
+                    return SparePaths;
                 case "SpacePropertyMaps":
                     return SpacePaths;
                 case "FloorPropertyMaps":
@@ -148,26 +145,32 @@ namespace Xbim.FilterHelper
                     return null;
             }
         }
+        
+        Dictionary<string, string[]> _dictOfProperties;
 
         /// <summary>
         /// Get the Property mapping for all sections
         /// </summary>
         /// <returns>Dictionary </returns>
-        public Dictionary<string, string[]> GetDictOfProperties()
+        public Dictionary<string, string[]> DictOfProperties
         {
-            var value = new Dictionary<String, String[]>();
-            foreach (string sectionKey in _sectionKeys)
+            get
             {
-                foreach (AttributePaths item in GetStorageList(sectionKey))
-                {
-                    value.Add(item.Key, item.PSetPaths);
-                } 
+                if (_dictOfProperties == null)
+                    _dictOfProperties = _sectionKeys.SelectMany(GetStorageList).ToDictionary(item => item.Key, item => item.PSetPaths);
+                return _dictOfProperties;
             }
-            return value;
         }
 
-
-
+        public string[] GetMap(string cobieAttributeName)
+        {
+            string[] propertyNames;
+            if ( DictOfProperties.TryGetValue(cobieAttributeName, out propertyNames))
+            {
+                return propertyNames;
+            }
+            return null;
+        }
     }
 
     //----------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -197,9 +200,7 @@ namespace Xbim.FilterHelper
                 return string.Join(";",PSetPaths);
             }
         }
-
         
-
         /// <summary>
         /// Constructor
         /// </summary>
@@ -207,14 +208,8 @@ namespace Xbim.FilterHelper
         /// <param name="attPaths">; delimited sting of pset.name paths</param>
         public AttributePaths(string key, string attPaths)
         {
-            Key = key;
-            
+            Key = key;   
             PSetPaths = attPaths.Split(new[] { ';' }, StringSplitOptions.RemoveEmptyEntries);
-        }
-
-        
+        }   
     }
-
-
-    
 }

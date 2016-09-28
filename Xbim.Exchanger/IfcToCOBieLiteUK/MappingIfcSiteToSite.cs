@@ -1,13 +1,14 @@
 ﻿using System.Collections.Generic;
-using Xbim.COBieLiteUK;
-using Xbim.Ifc2x3.ProductExtension;
-using Xbim.IO;
+using Xbim.Common;
+using Xbim.CobieLiteUk;
+using Xbim.Ifc4.Interfaces;
+
 
 namespace XbimExchanger.IfcToCOBieLiteUK
 {
-    class MappingIfcSiteToSite : XbimMappings<XbimModel, List<Facility>, string, IfcSite, Site>
+    class MappingIfcSiteToSite : XbimMappings<IModel, List<Facility>, string, IIfcSite, Site>
     {
-        protected override Site Mapping(IfcSite ifcSite, Site site)
+        protected override Site Mapping(IIfcSite ifcSite, Site site)
         {
             var helper = ((IfcToCOBieLiteUkExchanger)Exchanger).Helper;
             site.ExternalEntity = helper.ExternalEntityName(ifcSite);
@@ -16,6 +17,11 @@ namespace XbimExchanger.IfcToCOBieLiteUK
             site.Name = ifcSite.LongName;
             site.Description = ifcSite.Description;
             return site;
+        }
+
+        public override Site CreateTargetObject()
+        {
+            return new Site();
         }
     }
 }

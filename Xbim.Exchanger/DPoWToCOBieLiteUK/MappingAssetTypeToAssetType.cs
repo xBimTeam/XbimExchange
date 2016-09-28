@@ -1,10 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using Xbim.COBieLiteUK;
-using Xbim.DPoW;
-using CAssetType = Xbim.COBieLiteUK.AssetType;
+using Xbim.CobieLiteUk;
+using CAssetType = Xbim.CobieLiteUk.AssetType;
 using DAssetType = Xbim.DPoW.AssetType;
 
 namespace XbimExchanger.DPoWToCOBieLiteUK

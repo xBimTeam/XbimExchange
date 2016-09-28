@@ -1,22 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
-using Xbim.FilterHelper;
+using Xbim.CobieLiteUk.FilterHelper;
+using Xbim.CobieLiteUk;
 
-namespace Xbim.Client
+namespace Xbim.CobieLiteUk.Client
 {
     public partial class PropertyMapDlg : Form
     {
 
-        public COBiePropertyMapping  PropertyMaps { get; set; }
-        public PropertyMapDlg(COBiePropertyMapping maps)
+        public CobiePropertyMapping  PropertyMaps { get; set; }
+        public PropertyMapDlg(CobiePropertyMapping maps)
         {
             InitializeComponent();
             PropertyMaps = maps;
@@ -31,9 +26,11 @@ namespace Xbim.Client
             foreach (string item in PropertyMaps.SectionKeys)
             {
                 string removeStr = "PropertyMaps";
-                TabPage page = new System.Windows.Forms.TabPage(item.Substring(0, item.Length - removeStr.Length ));
+                TabPage page = new global::System.Windows.Forms.TabPage(item.Substring(0, item.Length - removeStr.Length ));
                 page.Name = item;
-                page.Controls.Add(new PropertyMapTab(GetPaths(item)));
+                var propTab = new PropertyMapTab(GetPaths(item));
+                page.Controls.Add(propTab);
+                propTab.Dock = DockStyle.Fill;
                 tabControl.TabPages.Add(page);
             }
         }
@@ -47,6 +44,10 @@ namespace Xbim.Client
         {
             switch (sectionKey)
             {
+                case "CommonPropertyMaps":
+                    return PropertyMaps.CommonPaths;
+                case "SparePropertyMaps":
+                    return PropertyMaps.SparePaths;
                 case "SpacePropertyMaps":
                     return PropertyMaps.SpacePaths;
                 case "FloorPropertyMaps":
@@ -78,6 +79,12 @@ namespace Xbim.Client
                     var mapsTab = (PropertyMapTab)propMapTabCtr;
                     switch (tabName)
                     {
+                        case "CommonPropertyMaps":
+                            PropertyMaps.CommonPaths = mapsTab.PropPaths;
+                            break;
+                        case "SparePropertyMaps":
+                           PropertyMaps.SparePaths = mapsTab.PropPaths;
+                            break;                         
                         case "SpacePropertyMaps":
                             PropertyMaps.SpacePaths = mapsTab.PropPaths;
                             break;
@@ -110,7 +117,7 @@ namespace Xbim.Client
 
             if (tempConfig.Exists)
             {
-                PropertyMaps = new COBiePropertyMapping(tempConfig);
+                PropertyMaps = new CobiePropertyMapping(tempConfig);
                 PropertyMaps.ConfigFile = filename; //set back to correct file
                 foreach (TabPage item in tabControl.TabPages)
                 {

@@ -1,40 +1,24 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Xbim.COBieLiteUK;
-using Xbim.Exchanger.IfcToCOBieLiteUK.Classifications;
-using Xbim.FilterHelper;
-using Xbim.Ifc2x3.ProductExtension;
-using Xbim.IO;
-using Xbim.XbimExtensions.Interfaces;
+using Xbim.CobieLiteUk;
+using Xbim.CobieLiteUk.FilterHelper;
+using Xbim.Common;
+using Xbim.Ifc4.Interfaces;
+using XbimExchanger.IfcHelpers;
 
 namespace XbimExchanger.IfcToCOBieLiteUK
 {
-    /// <summary>
-    /// 
-    /// </summary>
-    public class IfcToCOBieLiteUkExchanger : XbimExchanger<XbimModel, List<Facility>>
+    public class IfcToCOBieLiteUkExchanger : XbimExchanger<IModel, List<Facility>>
     {
-        private bool _classify = false;
-        internal CoBieLiteUkHelper Helper;
+        internal CoBieLiteUkHelper Helper ;
         /// <summary>
-        /// Instantiates a new IfcToCOBieLiteUkExchanger class.
+        /// Instantiates a new IIfcToCOBieLiteUkExchanger class.
         /// </summary>
-        /// <param name="source"></param>
-        /// <param name="target"></param>
-        /// <param name="reportProgress"></param>
-        /// <param name="filter"></param>
-        /// <param name="configFile"></param>
-        /// <param name="extId"></param>
-        /// <param name="sysMode"></param>
-        /// <param name="classify"></param>
-        public IfcToCOBieLiteUkExchanger(XbimModel source, List<Facility> target, ReportProgressDelegate reportProgress = null, OutPutFilters filter = null, string configFile = null, EntityIdentifierMode extId = EntityIdentifierMode.IfcEntityLabels, SystemExtractionMode sysMode = SystemExtractionMode.System | SystemExtractionMode.Types, bool classify = false) : base(source, target)
+        public IfcToCOBieLiteUkExchanger(IModel source, List<Facility> target, ReportProgressDelegate reportProgress = null, OutPutFilters filter = null, string configFile = null, EntityIdentifierMode extId = EntityIdentifierMode.IfcEntityLabels, SystemExtractionMode sysMode = SystemExtractionMode.System | SystemExtractionMode.Types) 
+            : base(source, target)
         {
             ReportProgress.Progress = reportProgress; //set reporter
             Helper = new CoBieLiteUkHelper(source, ReportProgress, filter, configFile, extId, sysMode);
-            this._classify = classify;
         }
 
         /// <summary>
@@ -44,14 +28,12 @@ namespace XbimExchanger.IfcToCOBieLiteUK
         public override List<Facility> Convert()
         {
             var mapping = GetOrCreateMappings<MappingIfcBuildingToFacility>();
-            var buildings = SourceRepository.Instances.OfType<IfcBuilding>().ToList();
+            var buildings = SourceRepository.Instances.OfType<IIfcBuilding>().ToList();
             var facilities = new List<Facility>(buildings.Count);
             foreach (var ifcBuilding in buildings)
             {
                 var facility = new Facility();
                 facility = mapping.AddMapping(ifcBuilding, facility);
-                if (_classify)
-                    facility.Classify();
                 facilities.Add(facility);
             }
             return facilities;

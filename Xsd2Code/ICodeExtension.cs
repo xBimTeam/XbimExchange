@@ -6,8 +6,6 @@
 
 namespace Xsd2Code
 {
-    using System;
-
     /// <summary>
     /// Extention interface
     /// </summary>

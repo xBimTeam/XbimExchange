@@ -2,28 +2,41 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Text;
-using System.Text.RegularExpressions;
-using Xbim.COBieLiteUK;
-using Xbim.Ifc2x3.DateTimeResource;
-using Xbim.Ifc2x3.ExternalReferenceResource;
-using Xbim.Ifc2x3.Kernel;
-using Xbim.Ifc2x3.MeasureResource;
-using Xbim.IO;
-using Xbim.XbimExtensions.SelectTypes;
+using Xbim.Common;
+using Xbim.CobieLiteUk;
+using Xbim.Ifc4.Interfaces;
 
 namespace XbimExchanger.IfcToCOBieLiteUK
 {
-    internal class MappingIfcDocumentSelectToDocument : XbimMappings<XbimModel, List<Facility>, string, IfcDocumentSelect, Document> 
+    internal class MappingIfcDocumentSelectToDocument : XbimMappings<IModel, List<Facility>, string, IIfcDocumentSelect, Document> 
     {
+
+        /// <summary>
+        /// Helper
+        /// </summary>
         private CoBieLiteUkHelper Helper
         { get; set; }
         
-       
-        public HashSet<IfcDocumentInformation> ChainInstMap
+        /// <summary>
+        /// List of created documents names, used to get next duplicate name
+        /// </summary>
+        private List<string> UsedNames
         { get; set; }
 
-        protected override Document Mapping(IfcDocumentSelect source, Document target)
+        /// <summary>
+        /// Stop infinite loops
+        /// </summary>
+        private HashSet<IIfcDocumentInformation> ChainInstMap
+        { get; set; }
+
+        
+        /// <summary>
+        /// Required by Interface
+        /// </summary>
+        /// <param name="source"></param>
+        /// <param name="target"></param>
+        /// <returns></returns>
+        protected override Document Mapping(IIfcDocumentSelect source, Document target)
         {
             throw new NotImplementedException(); //see MappingMulti method
         }
@@ -33,29 +46,30 @@ namespace XbimExchanger.IfcToCOBieLiteUK
         /// </summary>
         /// <param name="ifcDocumentSelect"></param>
         /// <returns></returns>
-        public List<Document> MappingMulti(IfcDocumentSelect ifcDocumentSelect)
+        public List<Document> MappingMulti(IIfcDocumentSelect ifcDocumentSelect)
         {
+            if (UsedNames == null) UsedNames = new List<string>();
+
             List<Document> docList = new List<Document>();
-            Helper = ((IfcToCOBieLiteUkExchanger)Exchanger).Helper;
+            if (Helper == null) Helper = ((IfcToCOBieLiteUkExchanger)Exchanger).Helper;
             //process IfcDocumentReference first
-            if (ifcDocumentSelect is IfcDocumentReference)
+            if (ifcDocumentSelect is IIfcDocumentReference)
             {
-                var ifcDocumentReference = ifcDocumentSelect as IfcDocumentReference;
-                if (ifcDocumentReference.ReferenceToDocument != null)
+                var ifcDocumentReference = ifcDocumentSelect as IIfcDocumentReference;
+                if (ifcDocumentReference.ReferencedDocument != null)
                 {
-                    docList.Add(ConvertToDocument(ifcDocumentReference, ifcDocumentReference.ReferenceToDocument.FirstOrDefault()));//ReferenceToDocument is a SET [0:1]
+                    docList.Add(ConvertToDocument(ifcDocumentReference, ifcDocumentReference.ReferencedDocument));//ReferenceToDocument is a SET [0:1]
                     return docList;
                 }
             }
             //must be IfcDocumentInformation
-            var ifcDocumentInformation = ifcDocumentSelect as IfcDocumentInformation;
-            if (ifcDocumentInformation.DocumentReferences != null)
+            var ifcDocumentInformation = ifcDocumentSelect as IIfcDocumentInformation;
+
+            foreach (IIfcDocumentReference ifcDocumentReference in ifcDocumentInformation.HasDocumentReferences)
             {
-                foreach (IfcDocumentReference ifcDocumentReference in ifcDocumentInformation.DocumentReferences)
-                {
-                    docList.Add(ConvertToDocument(ifcDocumentReference, ifcDocumentInformation));
-                }
+                docList.Add(ConvertToDocument(ifcDocumentReference, ifcDocumentInformation));
             }
+
             //Do the children files
             var childDocList = GetChildDocs(ifcDocumentInformation);
             //link child documents to first document in the list
@@ -77,7 +91,7 @@ namespace XbimExchanger.IfcToCOBieLiteUK
         /// </summary>
         /// <param name="ifcDocumentInformation">IfcDocumentInformation</param>
         /// <returns>List of Document</returns>
-        private List<Document> GetChildDocs( IfcDocumentInformation ifcDocumentInformation)
+        private List<Document> GetChildDocs(IIfcDocumentInformation ifcDocumentInformation)
         {
            
 
@@ -85,10 +99,10 @@ namespace XbimExchanger.IfcToCOBieLiteUK
             var ChildRels = ifcDocumentInformation.IsPointer.FirstOrDefault();//SET[0:1] gets the relationship when ifcDocumentInformation is the RelatingDocument (parent) document
             if (ChildRels != null && ChildRels.RelatedDocuments != null)
             {
-                foreach (IfcDocumentInformation item in ChildRels.RelatedDocuments)
+                foreach (IIfcDocumentInformation item in ChildRels.RelatedDocuments)
                 {
                     if (ChainInstMap == null) //set ChainInstMap, used to avoid infinite loop
-                        ChainInstMap = new HashSet<IfcDocumentInformation>();
+                        ChainInstMap = new HashSet<IIfcDocumentInformation>();
 
                     if (!ChainInstMap.Contains(item)) //check we have not already evaluated this IfcDocumentInformation
                     {
@@ -106,7 +120,7 @@ namespace XbimExchanger.IfcToCOBieLiteUK
         /// <param name="ifcDocumentReference">Document Reference Object</param>
         /// <param name="document">Document Object</param>
         /// <returns>Document</returns>
-        private Document ConvertToDocument(IfcDocumentReference ifcDocumentReference, IfcDocumentInformation ifcDocumentInformation)
+        private Document ConvertToDocument(IIfcDocumentReference ifcDocumentReference, IIfcDocumentInformation ifcDocumentInformation)
         {
            
             string name = GetName(ifcDocumentInformation) ?? GetName(ifcDocumentReference);
@@ -116,7 +130,7 @@ namespace XbimExchanger.IfcToCOBieLiteUK
                 name = "Document";
             }
             //check for duplicates, if found add a (#) => "DocName(1)", if none return name unchanged
-            name = GetNextName(name); 
+            name = Helper.GetNextName(name, UsedNames); 
 
             var document = new Document();
             document.Name= name;
@@ -125,11 +139,9 @@ namespace XbimExchanger.IfcToCOBieLiteUK
 
             document.Categories = (ifcDocumentInformation != null) && (!string.IsNullOrEmpty(ifcDocumentInformation.Purpose)) ? new List<Category>(new[] { new Category { Code = ifcDocumentInformation.Purpose } }) : null;
 
-            //ApprovalBy will be reset to a string field as ContactKey field is incorrect but for now fill ContactKey.email
-            //document.ApprovalBy = (ifcDocumentInformation != null) && (!string.IsNullOrEmpty(ifcDocumentInformation.IntendedUse)) ? new ContactKey() { Email = ifcDocumentInformation.IntendedUse } : null;
             document.ApprovalBy = (ifcDocumentInformation != null) && (!string.IsNullOrEmpty(ifcDocumentInformation.IntendedUse)) ? ifcDocumentInformation.IntendedUse : null; //once fixed
             
-           document.Stage = (ifcDocumentInformation != null) && (!string.IsNullOrEmpty(ifcDocumentInformation.Scope)) ? ifcDocumentInformation.Scope : null;
+            document.Stage = (ifcDocumentInformation != null) && (!string.IsNullOrEmpty(ifcDocumentInformation.Scope)) ? ifcDocumentInformation.Scope : null;
 
             document.Directory = GetFileDirectory(ifcDocumentReference);
             document.File = GetFileName(ifcDocumentReference);
@@ -139,11 +151,9 @@ namespace XbimExchanger.IfcToCOBieLiteUK
             document.ExternalId = null;
 
             document.Description = (ifcDocumentInformation != null) && (!string.IsNullOrEmpty(ifcDocumentInformation.Description)) ? ifcDocumentInformation.Description.ToString() : null;
-            document.Reference = (ifcDocumentInformation != null) && 
-                                    (ifcDocumentInformation.DocumentId != null) && 
-                                    (ifcDocumentInformation.DocumentId.Value != null) && 
-                                    (!string.IsNullOrEmpty(ifcDocumentInformation.DocumentId.Value.ToString())) ? ifcDocumentInformation.DocumentId.Value.ToString() : null;
-            Helper.DocumentProgress.Add(document);
+            document.Reference = ifcDocumentInformation.Identification;
+                                    
+            UsedNames.Add(document.Name);
             return document;
         }
 
@@ -152,14 +162,14 @@ namespace XbimExchanger.IfcToCOBieLiteUK
         /// </summary>
         /// <param name="ifcDocumentInformation"></param>
         /// <returns></returns>
-        private DateTime? GetCreatedOn(IfcDocumentInformation ifcDocumentInformation)
+        private DateTime? GetCreatedOn(IIfcDocumentInformation ifcDocumentInformation)
         {
             if (ifcDocumentInformation.CreationTime != null)
             {
                 var created = ifcDocumentInformation.CreationTime ?? ifcDocumentInformation.LastRevisionTime;
-                if (created != null)
+                if (created.HasValue && created.Value != null) //appears that a true HasValue can have a null value????
                 {
-                    return new DateTime(created.DateComponent.YearComponent, created.DateComponent.MonthComponent, created.DateComponent.DayComponent);
+                    return DateTime.Parse(created);
                 }
                 
             } 
@@ -177,7 +187,7 @@ namespace XbimExchanger.IfcToCOBieLiteUK
         /// </summary>
         /// <param name="ifcDocumentInformation"></param>
         /// <returns></returns>
-        private ContactKey GetCreatedBy(IfcDocumentInformation ifcDocumentInformation)
+        private ContactKey GetCreatedBy(IIfcDocumentInformation ifcDocumentInformation)
         {
             if (ifcDocumentInformation.DocumentOwner != null)
             {
@@ -192,63 +202,7 @@ namespace XbimExchanger.IfcToCOBieLiteUK
             return null;
         }
 
-        /// <summary>
-        /// Get next name for duplicates
-        /// </summary>
-        /// <param name="name"></param>
-        /// <returns></returns>
-        private string GetNextName(string name)
-        {
-            //do we have any matching names
-            if (Helper.DocumentProgress != null && Helper.DocumentProgress.Any())
-            {
-                var found = Helper.DocumentProgress.Where(d => d.Name.StartsWith(name,StringComparison.OrdinalIgnoreCase)).Select(n => n.Name);
-
-                if (found.Any())
-                {
-                    if ((found.Count() == 1) && (found.First().Length == name.Length)) //we match the whole name
-                    {
-                        return name + "(1)"; //first duplicate
-                    }
-                    var srch = name + "(";
-
-                    //we have duplicates so get names that are in correct format
-                    var correctFormat = found.Where(s => s.StartsWith(srch, StringComparison.OrdinalIgnoreCase) && s.EndsWith(")"));
-                    if (correctFormat.Any())
-                    {
-                        var number = correctFormat.Max(s => GetNextNo(srch, s));//.OrderBy(s => s).LastOrDefault();
-                        if (number > 0)
-                        {
-                            return srch + number.ToString() + ")";
-                        }
-                    }
-                } 
-            }
-            //string is not found or we failed to add next number return input argument string
-            return name;
-        }
-        /// <summary>
-        /// Get next number from string in a format Name(#), so "This Document(10)" should return 11
-        /// </summary>
-        /// <param name="prefix">string up to  and including'(', such as "Name(" </param>
-        /// <param name="number">string formated "Name(#)", such as "Name(10)" </param>
-        /// <returns>int</returns>
-        private int GetNextNo(string prefix, string number)
-        {
-            var start = prefix.Length;
-            var lgth = number.Length - start - 1;
-            number = number.Substring(start, lgth); //get the string between brackets
-            var strNo = Regex.Match(number, @"\d+").Value;
-            if (!string.IsNullOrEmpty(strNo))
-            {
-                int no;
-                if (int.TryParse(strNo, out no))
-                {
-                    return ++no;
-                }
-            }
-            return 0;
-        }
+        
         
 
         /// <summary>
@@ -256,7 +210,7 @@ namespace XbimExchanger.IfcToCOBieLiteUK
         /// </summary>
         /// <param name="ifcDocumentReference">Document Reference Object</param>
         /// <returns>string or null</returns>
-        private string GetName(IfcDocumentReference ifcDocumentReference)
+        private string GetName(IIfcDocumentReference ifcDocumentReference)
         {
             if (ifcDocumentReference == null)
                 return null;
@@ -280,7 +234,7 @@ namespace XbimExchanger.IfcToCOBieLiteUK
         /// </summary>
         /// <param name="ifcDocumentInformation">Document Information Object</param>
         /// <returns>string or null</returns>
-        private string GetName(IfcDocumentInformation ifcDocumentInformation)
+        private string GetName(IIfcDocumentInformation ifcDocumentInformation)
         {
             if (ifcDocumentInformation == null)
                 return null;
@@ -298,7 +252,7 @@ namespace XbimExchanger.IfcToCOBieLiteUK
         /// </summary>
         /// <param name="ifcDocumentReference">Document Reference Object</param>
         /// <returns>string</returns>
-        private string GetFileDirectory(IfcDocumentReference ifcDocumentReference)
+        private string GetFileDirectory(IIfcDocumentReference ifcDocumentReference)
         {
             if (ifcDocumentReference == null)
                 return null;
@@ -314,7 +268,7 @@ namespace XbimExchanger.IfcToCOBieLiteUK
         /// </summary>
         /// <param name="ifcDocumentReference">Document Reference Object</param>
         /// <returns>string</returns>
-        private string GetFileName(IfcDocumentReference ifcDocumentReference)
+        private string GetFileName(IIfcDocumentReference ifcDocumentReference)
         {
             if (ifcDocumentReference == null)
                 return null;
@@ -337,5 +291,10 @@ namespace XbimExchanger.IfcToCOBieLiteUK
             return null;
         }
 
+
+        public override Document CreateTargetObject()
+        {
+            return new Document();
+        }
     }
 }

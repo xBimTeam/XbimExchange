@@ -1,7 +1,6 @@
-﻿using System;
-using Xbim.COBieLiteUK;
+﻿using System.Linq;
+using Xbim.CobieLiteUk;
 using Xbim.Ifc2x3.ProductExtension;
-using XbimExchanger.IfcHelpers;
 
 namespace XbimExchanger.COBieLiteUkToIfc
 {
@@ -23,20 +22,15 @@ namespace XbimExchanger.COBieLiteUkToIfc
                 foreach (var attribute in spaceType.Attributes)
                     Exchanger.ConvertAttributeTypeToIfcObjectProperty(ifcSpace, attribute);
             }
+            #endregion
 
-            #region Attributes
-
-            if (spaceType.Attributes != null)
+            #region Documents
+            if (spaceType.Documents != null && spaceType.Documents.Any())
             {
-
-                foreach (var attribute in spaceType.Attributes)
-                {
-                    Exchanger.ConvertAttributeTypeToIfcObjectProperty(ifcSpace, attribute);
-                }
+                Exchanger.ConvertDocumentsToDocumentSelect(ifcSpace, spaceType.Documents);
             }
             #endregion
-
-            #endregion
+            
             return ifcSpace;
         }
     }

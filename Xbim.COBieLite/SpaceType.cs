@@ -1,15 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Xml.Serialization;
 using Newtonsoft.Json;
 using Xbim.COBieLite.CollectionTypes;
-using Xbim.Ifc2x3.Extensions;
-using Xbim.Ifc2x3.MeasureResource;
-using Xbim.Ifc2x3.ProductExtension;
-using Xbim.Ifc2x3.QuantityResource;
+using Xbim.Ifc4.Interfaces;
+
 
 namespace Xbim.COBieLite
 {
@@ -18,7 +13,7 @@ namespace Xbim.COBieLite
         
         //private IfcSpace _ifcSpace;
 
-        public SpaceType(IfcSpace ifcSpace, CoBieLiteHelper helper)
+        public SpaceType(IIfcSpace ifcSpace, CoBieLiteHelper helper)
             : this()
         {
            // _ifcSpace = ifcSpace;

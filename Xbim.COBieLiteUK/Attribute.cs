@@ -1,10 +1,7 @@
 ﻿using System.Xml.Serialization;
 using Newtonsoft.Json;
-using Newtonsoft.Json.Converters;
-using Xbim.COBieLiteUK.Converters;
-using System.IO;
 
-namespace Xbim.COBieLiteUK
+namespace Xbim.CobieLiteUk
 {
     public partial class Attribute
     {
@@ -14,7 +11,5 @@ namespace Xbim.COBieLiteUK
         /// </summary>
         [XmlIgnore][JsonIgnore]
         public string PropertySetName { get { return ExternalEntity; } set { ExternalEntity = value; } }
-
-     
     }
 }

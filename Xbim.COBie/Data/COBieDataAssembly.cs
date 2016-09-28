@@ -1,15 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
-using Xbim.XbimExtensions;
 using Xbim.COBie.Rows;
 using Xbim.Ifc2x3.Kernel;
-using Xbim.Ifc2x3.ExternalReferenceResource;
-using Xbim.Ifc2x3.ProductExtension;
 using Xbim.Ifc2x3.MaterialResource;
 using Xbim.Ifc2x3.UtilityResource;
 using Xbim.COBie.Serialisers.XbimSerialiser;
+using Xbim.Ifc2x3.MeasureResource;
+using Xbim.Ifc4.Interfaces;
 
 namespace Xbim.COBie.Data
 {
@@ -35,11 +34,15 @@ namespace Xbim.COBie.Data
         {
             ProgressIndicator.ReportMessage("Starting Assemblies...");
             //Create new sheet
+
+            var ifcProject = Model.Instances.FirstOrDefault<IIfcProject>();
+            Debug.Assert(ifcProject != null);
+
             COBieSheet<COBieAssemblyRow> assemblies = new COBieSheet<COBieAssemblyRow>(Constants.WORKSHEET_ASSEMBLY);
 
             // get ifcRelAggregates objects from IFC file what are not in the excludedTypes type list
-            IEnumerable<IfcRelAggregates> ifcRelAggregates = Model.Instances.OfType<IfcRelAggregates>();
-            IEnumerable<IfcRelNests> ifcRelNests = Model.Instances.OfType<IfcRelNests>(); 
+            IEnumerable<IfcRelAggregates> ifcRelAggregates = Model.FederatedInstances.OfType<IfcRelAggregates>();
+            IEnumerable<IfcRelNests> ifcRelNests = Model.FederatedInstances.OfType<IfcRelNests>(); 
             
 
             IEnumerable<IfcRelDecomposes> relAll = (from ra in ifcRelAggregates
@@ -91,12 +94,12 @@ namespace Xbim.COBie.Data
             }
 
             //--------------Loop all IfcMaterialLayerSet-----------------------------
-            IEnumerable<IfcMaterialLayerSet> ifcMaterialLayerSets = Model.Instances.OfType<IfcMaterialLayerSet>();
+            IEnumerable<IfcMaterialLayerSet> ifcMaterialLayerSets = Model.FederatedInstances.OfType<IfcMaterialLayerSet>();
             char setNamePostFix = 'A';       
             foreach (IfcMaterialLayerSet ifcMaterialLayerSet in ifcMaterialLayerSets)
             {
                 COBieAssemblyRow assembly = new COBieAssemblyRow(assemblies);
-                if (string.IsNullOrEmpty(ifcMaterialLayerSet.Name))
+                if (string.IsNullOrEmpty(ifcMaterialLayerSet.LayerSetName))
                 {
                     assembly.Name = "Material Layer Set " + setNamePostFix;
                     setNamePostFix++;
@@ -115,14 +118,14 @@ namespace Xbim.COBie.Data
                 }
                 else //default to the project as we failed to find a IfcRoot object to extract it from
                 {
-                    assembly.CreatedBy = GetTelecomEmailAddress(Model.IfcProject.OwnerHistory);
-                    assembly.CreatedOn = GetCreatedOnDateAsFmtString(Model.IfcProject.OwnerHistory);
-                    assembly.ExtSystem = GetExternalSystem(Model.IfcProject.OwnerHistory);
+                    assembly.CreatedBy = GetTelecomEmailAddress(ifcProject.OwnerHistory);
+                    assembly.CreatedOn = GetCreatedOnDateAsFmtString(ifcProject.OwnerHistory);
+                    assembly.ExtSystem = GetExternalSystem(ifcProject.OwnerHistory);
                 }
 
                 assembly.SheetName = Constants.WORKSHEET_TYPE; //any material objects should be in the TYPE sheet
                 assembly.Description = GetMaterialSetDescription(ifcMaterialLayerSet.MaterialLayers.ToList());
-                assembly.ParentName = (!string.IsNullOrEmpty(ifcMaterialLayerSet.Name)) ? ifcMaterialLayerSet.Name : DEFAULT_STRING;
+                assembly.ParentName = (!string.IsNullOrEmpty(ifcMaterialLayerSet.LayerSetName)) ? ifcMaterialLayerSet.LayerSetName : new IfcLabel(DEFAULT_STRING);
                 assembly.AssemblyType = "Layer";
                 assembly.ExtObject = ifcMaterialLayerSet.GetType().Name;              
 

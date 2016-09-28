@@ -1,17 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using Xbim.COBieLiteUK;
-using Xbim.Ifc2x3.Kernel;
-using Xbim.Ifc2x3.ProductExtension;
-using Xbim.IO;
+using Xbim.Common;
+using Xbim.CobieLiteUk;
+using Xbim.Ifc4.Interfaces;
+
 
 namespace XbimExchanger.IfcToCOBieLiteUK
 {
-    class MappingIfcSystemToSystem : XbimMappings<XbimModel, List<Facility>, string, IfcSystem, Xbim.COBieLiteUK.System>
+    class MappingIfcSystemToSystem : XbimMappings<IModel, List<Facility>, string, IIfcSystem, Xbim.CobieLiteUk.System>
     {
-        protected override Xbim.COBieLiteUK.System Mapping(IfcSystem ifcSystem, Xbim.COBieLiteUK.System target)
+        protected override Xbim.CobieLiteUk.System Mapping(IIfcSystem ifcSystem, Xbim.CobieLiteUk.System target)
         {
             var helper = ((IfcToCOBieLiteUkExchanger)Exchanger).Helper;
             target.ExternalEntity = helper.ExternalEntityName(ifcSystem);
@@ -25,7 +23,7 @@ namespace XbimExchanger.IfcToCOBieLiteUK
             target.Categories = helper.GetCategories(ifcSystem);
             //Add Assets
             var systemAssignments = helper.GetSystemAssignments(ifcSystem);
-            var ifcObjectDefinitions = systemAssignments as IList<IfcObjectDefinition> ?? systemAssignments.ToList();
+            var ifcObjectDefinitions = systemAssignments as IList<IIfcObjectDefinition> ?? systemAssignments.ToList();
             if (ifcObjectDefinitions.Any())
             {
                 target.Components = new List<AssetKey>();
@@ -46,6 +44,11 @@ namespace XbimExchanger.IfcToCOBieLiteUK
             //TODO:
             //System Issues
             return target;
+        }
+
+        public override Xbim.CobieLiteUk.System CreateTargetObject()
+        {
+            return new Xbim.CobieLiteUk.System();
         }
     }
 }

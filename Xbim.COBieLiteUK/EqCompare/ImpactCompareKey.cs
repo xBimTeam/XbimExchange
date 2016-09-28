@@ -1,8 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using Xbim.COBieLiteUK;
+using Xbim.CobieLiteUk;
 
 namespace Xbim.COBie.EqCompare
 {

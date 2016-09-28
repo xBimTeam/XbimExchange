@@ -1,9 +1,6 @@
-﻿using Xbim.XbimExtensions;
-using Xbim.Ifc2x3.ProductExtension;
-using System.Xml;
+﻿using System.Xml;
 using Xbim.COBie.Rows;
 using Xbim.COBie.Data;
-using System;
 using System.Collections.Generic;
 
 namespace Xbim.COBie

@@ -1,11 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Reflection;
-using Xbim.IO;
-using System.Collections;
+﻿using System.Collections.Generic;
 using Xbim.COBie.Contracts;
+using Xbim.Ifc;
 
 
 namespace Xbim.COBie
@@ -25,7 +20,7 @@ namespace Xbim.COBie
         object SheetMetaData { get; set; }
 
 
-        List<string> ValidateComponentMerge(XbimModel model, COBieMergeRoles fileRoles);
+        List<string> ValidateComponentMerge(IfcStore model, COBieMergeRoles fileRoles);
         int ValidateAttributeMerge(List<string> Keys);
         int ValidateTypeMerge(List<string> GlobalIds);
         int ValidateSystemMerge(List<string> names);

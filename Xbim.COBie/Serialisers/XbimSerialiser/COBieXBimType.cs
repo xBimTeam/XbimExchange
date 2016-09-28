@@ -1,18 +1,11 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using Xbim.COBie.Rows;
-using Xbim.XbimExtensions.Transactions;
 using Xbim.Ifc2x3.Kernel;
 using Xbim.Ifc2x3.MeasureResource;
-using Xbim.Ifc2x3.PropertyResource;
-using Xbim.XbimExtensions;
-using System.Reflection;
+using Xbim.Common;
+using Xbim.Common.Metadata;
 using Xbim.Ifc2x3.MaterialResource;
-using Xbim.Ifc2x3.SharedBldgServiceElements;
-using Xbim.IO;
-using Xbim.XbimExtensions.Interfaces;
 
 namespace Xbim.COBie.Serialisers.XbimSerialiser
 {
@@ -31,19 +24,19 @@ namespace Xbim.COBie.Serialisers.XbimSerialiser
         /// <param name="cOBieSheet">COBieSheet of COBieTypeRow to read data from</param>
         public void SerialiseType(COBieSheet<COBieTypeRow> cOBieSheet)
         {
-            using (XbimReadWriteTransaction trans = Model.BeginTransaction("Add Type"))
+            using (var trans = Model.BeginTransaction("Add Type"))
             {
                 try
                 {
-                    int count = 1;
+                    var count = 1;
                     ProgressIndicator.ReportMessage("Starting Types...");
                     ProgressIndicator.Initialise("Creating Types", cOBieSheet.RowCount);
-                    for (int i = 0; i < cOBieSheet.RowCount; i++)
+                    for (var i = 0; i < cOBieSheet.RowCount; i++)
                     {
                         BumpTransaction(trans, count);
                         count++;
                         ProgressIndicator.IncrementAndUpdate();
-                        COBieTypeRow row = cOBieSheet[i];
+                        var row = cOBieSheet[i];
                         if ((ValidateString(row.ExtObject)) &&
                             (row.ExtObject.ToLower().Contains("ifcmaterial"))
                             )
@@ -79,20 +72,20 @@ namespace Xbim.COBie.Serialisers.XbimSerialiser
                     (row.ExtObject.ToLower() == "ifcmateriallayer")
                     )
                 {
-                    string name = GetMaterialName(row.Name);
-                    ifcMaterial = Model.Instances.Where<IfcMaterial>(m => m.Name.ToString().ToLower() == name.ToLower()).FirstOrDefault();
+                    var name = GetMaterialName(row.Name);
+                    ifcMaterial = Model.FederatedInstances.Where<IfcMaterial>(m => m.Name.ToString().ToLower() == name.ToLower()).FirstOrDefault();
                     if (ifcMaterial == null)
                         ifcMaterial = Model.Instances.New<IfcMaterial>(m => { m.Name = name; });
                 }
                 if ((ifcMaterial != null) && (row.ExtObject.ToLower() == "ifcmateriallayer"))
                 {
                     IfcMaterialLayer ifcMaterialLayer = null;
-                    double matThick = 0.0;
+                    var matThick = 0.0;
                     if ((ValidateString(row.NominalWidth)) &&
                         (!double.TryParse(row.NominalWidth, out matThick))
                         )
                         matThick = 0.0;
-                    ifcMaterialLayer = Model.Instances.Where<IfcMaterialLayer>(ml => ml.Material == ifcMaterial && ml.LayerThickness == matThick).FirstOrDefault();
+                    ifcMaterialLayer = Model.FederatedInstances.Where<IfcMaterialLayer>(ml => ml.Material == ifcMaterial && ml.LayerThickness == matThick).FirstOrDefault();
                     if (ifcMaterialLayer == null) 
                         ifcMaterialLayer = Model.Instances.New<IfcMaterialLayer>(ml => { ml.Material = ifcMaterial; ml.LayerThickness = matThick; });
                 } 
@@ -111,7 +104,7 @@ namespace Xbim.COBie.Serialisers.XbimSerialiser
                 return;//we have it so no need to create
             }
 
-            IfcTypeObject ifcTypeObject = GetTypeInstance(row.ExtObject, Model);
+            var ifcTypeObject = GetTypeInstance(row.ExtObject, Model);
 
             if (ifcTypeObject != null)
             {
@@ -120,9 +113,9 @@ namespace Xbim.COBie.Serialisers.XbimSerialiser
             
                 //using statement will set the Model.OwnerHistoryAddObject to ifcTypeObject.OwnerHistory as OwnerHistoryAddObject is used upon any property changes, 
                 //then swaps the original OwnerHistoryAddObject back in the dispose, so set any properties within the using statement
-                using (COBieXBimEditScope context = new COBieXBimEditScope(Model, ifcTypeObject.OwnerHistory))
+                using (var context = new COBieXBimEditScope(Model, ifcTypeObject.OwnerHistory))
                 {
-                    string name = row.Name;
+                    var name = row.Name;
                     //Add Name
                     if (ValidateString(row.Name)) ifcTypeObject.Name = row.Name;
 
@@ -153,7 +146,7 @@ namespace Xbim.COBie.Serialisers.XbimSerialiser
 
                     if (ValidateString(row.WarrantyDurationLabor))
                     {
-                        IfcPropertySingleValue ifcPropertySingleValue = AddPropertySingleValue(ifcTypeObject, "COBie_Warranty", null, "WarrantyDurationLabor", "Labour Warranty length for " + name, new IfcLabel(row.WarrantyDurationLabor));
+                        var ifcPropertySingleValue = AddPropertySingleValue(ifcTypeObject, "COBie_Warranty", null, "WarrantyDurationLabor", "Labour Warranty length for " + name, new IfcLabel(row.WarrantyDurationLabor));
                         //WarrantyDurationUnit
                         if (ValidateString(row.WarrantyDurationUnit))
                             ifcPropertySingleValue.Unit = GetDurationUnit(row.WarrantyDurationUnit);
@@ -161,32 +154,32 @@ namespace Xbim.COBie.Serialisers.XbimSerialiser
 
                     if (ValidateString(row.ReplacementCost))
                     {
-                        double? value = GetDoubleFromString(row.ReplacementCost);
+                        var value = GetDoubleFromString(row.ReplacementCost);
                         if (value != null)
                             AddPropertySingleValue(ifcTypeObject, "Pset_EconomicImpactValues", "Economic Impact Values", "ReplacementCost", "Replacement Cost for" + name, new IfcReal((double)value));
                     }
                     if (ValidateString(row.ExpectedLife))
                     {
-                        IfcPropertySingleValue ifcPropertySingleValue = AddPropertySingleValue(ifcTypeObject, "Pset_ServiceLife", "Service Life", "ServiceLifeDuration", "Service Life length for " + name, new IfcLabel(row.ExpectedLife));
+                        var ifcPropertySingleValue = AddPropertySingleValue(ifcTypeObject, "Pset_ServiceLife", "Service Life", "ServiceLifeDuration", "Service Life length for " + name, new IfcLabel(row.ExpectedLife));
                         if (ValidateString(row.DurationUnit))
                             ifcPropertySingleValue.Unit = GetDurationUnit(row.DurationUnit);
                     }
                     //changed from "Pset_Specification" via v16 matrix sheet to "COBie_Specification"
                     if (ValidateString(row.NominalLength))
                     {
-                        double? value = GetDoubleFromString(row.NominalLength);
+                        var value = GetDoubleFromString(row.NominalLength);
                         if (value != null)
                             AddPropertySingleValue(ifcTypeObject, "COBie_Specification", "Specification Properties", "NominalLength", "Nominal Length Value for " + name, new IfcReal((double)value));
                     }
                     if (ValidateString(row.NominalWidth))
                     {
-                        double? value = GetDoubleFromString(row.NominalWidth);
+                        var value = GetDoubleFromString(row.NominalWidth);
                         if (value != null)
                             AddPropertySingleValue(ifcTypeObject, "COBie_Specification", null, "NominalWidth", "Nominal Width Value for " + name, new IfcReal((double)value));
                     }
                     if (ValidateString(row.NominalHeight))
                     {
-                        double? value = GetDoubleFromString(row.NominalHeight);
+                        var value = GetDoubleFromString(row.NominalHeight);
                         if (value != null)
                             AddPropertySingleValue(ifcTypeObject, "COBie_Specification", null, "NominalHeight", "Nominal Height Value for " + name, new IfcReal((double)value));
                     }
@@ -250,12 +243,12 @@ namespace Xbim.COBie.Serialisers.XbimSerialiser
         {
             typeName = typeName.Trim().ToUpper();
             
-            IfcType ifcType;
+            ExpressType ifcType;
             IfcTypeObject ifcTypeObject = null;
-            if (IfcMetaData.TryGetIfcType(typeName, out ifcType))
+            if (model.Metadata.TryGetExpressType(typeName, out ifcType))
             {
-                MethodInfo method = typeof(IXbimInstanceCollection).GetMethod("New", Type.EmptyTypes);
-                MethodInfo generic = method.MakeGenericMethod(ifcType.Type);
+                var method = typeof(IEntityCollection).GetMethod("New", Type.EmptyTypes);
+                var generic = method.MakeGenericMethod(ifcType.Type);
                 var newObj = generic.Invoke(model.Instances, null);
                 if (newObj is IfcTypeObject)
                     ifcTypeObject = (IfcTypeObject)newObj;

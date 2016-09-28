@@ -1,11 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using Xbim.COBie.Rows;
-using Xbim.XbimExtensions.Transactions;
 using Xbim.Ifc2x3.ConstructionMgmtDomain;
-using Xbim.IO;
+using Xbim.IO.Esent;
 
 namespace Xbim.COBie.Serialisers.XbimSerialiser
 {

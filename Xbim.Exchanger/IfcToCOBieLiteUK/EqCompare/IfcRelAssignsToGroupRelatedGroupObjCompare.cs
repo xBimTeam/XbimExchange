@@ -1,8 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using Xbim.Ifc2x3.Kernel;
+using Xbim.Ifc4.Interfaces;
+
 
 namespace XbimExchanger.IfcToCOBieLiteUK.EqCompare
 {
@@ -10,9 +9,9 @@ namespace XbimExchanger.IfcToCOBieLiteUK.EqCompare
     /// <summary>
     /// Compare IfcRelAssignsToGroup.RelatedGroup obj references
     /// </summary>
-    public class IfcRelAssignsToGroupRelatedGroupObjCompare : IEqualityComparer<IfcRelAssignsToGroup>
+    public class IfcRelAssignsToGroupRelatedGroupObjCompare : IEqualityComparer<IIfcRelAssignsToGroup>
     {
-        public bool Equals(IfcRelAssignsToGroup x, IfcRelAssignsToGroup y)
+        public bool Equals(IIfcRelAssignsToGroup x, IIfcRelAssignsToGroup y)
         {
             if (Object.ReferenceEquals(x, y)) //same instance
                 return true;
@@ -30,7 +29,7 @@ namespace XbimExchanger.IfcToCOBieLiteUK.EqCompare
             return x.RelatingGroup.Equals(y.RelatingGroup);
         }
 
-        public int GetHashCode(IfcRelAssignsToGroup obj)
+        public int GetHashCode(IIfcRelAssignsToGroup obj)
         {
             if (Object.ReferenceEquals(obj, null))
                 return 0;

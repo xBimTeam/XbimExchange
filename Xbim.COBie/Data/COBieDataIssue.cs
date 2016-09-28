@@ -1,17 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
-using System.Text;
 using Xbim.COBie.Rows;
 using Xbim.Ifc2x3.ApprovalResource;
-using Xbim.Ifc2x3.UtilityResource;
-using Xbim.XbimExtensions;
 using Xbim.Ifc2x3.Kernel;
 using Xbim.Ifc2x3.ControlExtension;
 using Xbim.Ifc2x3.PropertyResource;
-using Xbim.Ifc2x3.ProcessExtensions;
 using Xbim.Ifc2x3.ActorResource;
-using Xbim.Ifc2x3.MeasureResource;
+using Xbim.Ifc4.Interfaces;
 
 namespace Xbim.COBie.Data
 {
@@ -35,18 +31,20 @@ namespace Xbim.COBie.Data
         public override COBieSheet<COBieIssueRow> Fill()
         {
             ProgressIndicator.ReportMessage("Starting Issues...");
+            var ifcProject = Model.Instances.FirstOrDefault<IIfcProject>();
+            Debug.Assert(ifcProject != null);
 
             //create new sheet
-            COBieSheet<COBieIssueRow> issues = new COBieSheet<COBieIssueRow>(Constants.WORKSHEET_ISSUE);
+            var issues = new COBieSheet<COBieIssueRow>(Constants.WORKSHEET_ISSUE);
             
-            //IEnumerable<IfcPropertySet> ifcProperties = Model.Instances.OfType<IfcPropertySet>().Where(ps => ps.Name.ToString() == "Pset_Risk");
+            //IEnumerable<IfcPropertySet> ifcProperties = Model.FederatedInstances.OfType<IfcPropertySet>().Where(ps => ps.Name.ToString() == "Pset_Risk");
             
 
             // get all IfcApproval objects from IFC file
-            IEnumerable<IfcApproval> ifcApprovals = Model.Instances.OfType<IfcApproval>();
+            IEnumerable<IfcApproval> ifcApprovals = Model.FederatedInstances.OfType<IfcApproval>();
             ProgressIndicator.Initialise("Creating Issues", ifcApprovals.Count());
 
-            List<IfcRelAssociatesApproval> ifcRelAssociatesApprovals = Model.Instances.OfType<IfcRelAssociatesApproval>().ToList();
+            List<IfcRelAssociatesApproval> ifcRelAssociatesApprovals = Model.FederatedInstances.OfType<IfcRelAssociatesApproval>().ToList();
 
             foreach (IfcApproval ifcApproval in ifcApprovals)
             {
@@ -75,8 +73,8 @@ namespace Xbim.COBie.Data
                 else
                 {
                     //if property set is null use project defaults
-                    issue.CreatedBy = GetTelecomEmailAddress(Model.IfcProject.OwnerHistory);
-                    issue.CreatedOn = GetCreatedOnDateAsFmtString(Model.IfcProject.OwnerHistory);
+                    issue.CreatedBy = GetTelecomEmailAddress(ifcProject.OwnerHistory);
+                    issue.CreatedOn = GetCreatedOnDateAsFmtString(ifcProject.OwnerHistory);
                 }
                 Interval propValues = GetPropertyEnumValue(propertyList, "RiskType");
                 issue.Type = propValues.Value;
@@ -142,7 +140,7 @@ namespace Xbim.COBie.Data
             List<IfcRoot> ifcRootObjs = new List<IfcRoot>();
             if (ifcRelAssociatesApprovals == null)
             {
-                ifcRelAssociatesApprovals = Model.Instances.OfType<IfcRelAssociatesApproval>().ToList();
+                ifcRelAssociatesApprovals = Model.FederatedInstances.OfType<IfcRelAssociatesApproval>().ToList();
             }
             IEnumerable<IfcRoot> IfcRoots = ifcRelAssociatesApprovals.Where(ral => ral.RelatingApproval.EntityLabel == ifcApproval.EntityLabel)
                                             .SelectMany(ral => ral.RelatedObjects).OfType<IfcRoot>();
@@ -165,7 +163,7 @@ namespace Xbim.COBie.Data
             string eMail = DEFAULT_STRING;
             if (ifcApprovalActorRelationships == null)
             {
-                ifcApprovalActorRelationships = Model.Instances.OfType<IfcApprovalActorRelationship>().ToList();
+                ifcApprovalActorRelationships = Model.FederatedInstances.OfType<IfcApprovalActorRelationship>().ToList();
             }
             IfcPersonAndOrganization IfcPersonAndOrganization = ifcApprovalActorRelationships
                                                        .Where(aar => aar.Approval.EntityLabel == ifcApproval.EntityLabel)

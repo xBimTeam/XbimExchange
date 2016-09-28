@@ -1,10 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using Xbim.COBie.Rows;
 using Xbim.Ifc2x3.Kernel;
-using Xbim.XbimExtensions;
 using Xbim.Ifc2x3.PropertyResource;
 
 namespace Xbim.COBie.Data
@@ -37,7 +34,7 @@ namespace Xbim.COBie.Data
 
             // get all IfcPropertySet objects from IFC file
 
-            IEnumerable<IfcPropertySet> ifcProperties = Model.Instances.OfType<IfcPropertySet>().Where(ps => ps.Name.ToString() == "Pset_EnvironmentalImpactValues");
+            IEnumerable<IfcPropertySet> ifcProperties = Model.FederatedInstances.OfType<IfcPropertySet>().Where(ps => ps.Name.ToString() == "Pset_EnvironmentalImpactValues");
 
             ProgressIndicator.Initialise("Creating Impacts", ifcProperties.Count());
 

@@ -1,7 +1,7 @@
 ﻿using System;
-using Xbim.COBieLiteUK;
+using Xbim.CobieLiteUk;
 
-namespace Xbim.CobieLiteUK.Validation.Reporting
+namespace Xbim.CobieLiteUk.Validation.Reporting
 {
     class VisualValue : IVisualValue
     {

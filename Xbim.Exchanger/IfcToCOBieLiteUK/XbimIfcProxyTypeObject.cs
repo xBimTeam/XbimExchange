@@ -1,9 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Xbim.COBieLiteUK;
-using Xbim.Ifc2x3.Kernel;
-using Xbim.Ifc2x3.SharedFacilitiesElements;
+using log4net;
+using Xbim.CobieLiteUk;
+
+using Xbim.Ifc4.Interfaces;
 
 namespace XbimExchanger.IfcToCOBieLiteUK
 {
@@ -12,7 +13,9 @@ namespace XbimExchanger.IfcToCOBieLiteUK
     /// </summary>
     public class XbimIfcProxyTypeObject
     {
-        private readonly IfcTypeObject _ifcTypeObject;
+        private static readonly ILog Logger = LogManager.GetLogger("XbimExchanger.IfcToCOBieLiteUK.XbimIfcProxyTypeObject");
+
+        private readonly IIfcTypeObject _ifcTypeObject;
         private readonly CoBieLiteUkHelper _helper;
         private readonly string _name;
 
@@ -33,7 +36,7 @@ namespace XbimExchanger.IfcToCOBieLiteUK
         /// <param name="helper"></param>
         /// <param name="typeObject"></param>
         /// <param name="typeName"></param>
-        public XbimIfcProxyTypeObject(CoBieLiteUkHelper helper, IfcTypeObject typeObject, string typeName)
+        public XbimIfcProxyTypeObject(CoBieLiteUkHelper helper, IIfcTypeObject typeObject, string typeName)
         {
             _ifcTypeObject = typeObject;
             _helper = helper;
@@ -112,10 +115,11 @@ namespace XbimExchanger.IfcToCOBieLiteUK
                     AssetPortability accCategoryEnum;
                     if (Enum.TryParse(accCategoryString, true, out accCategoryEnum))
                         return accCategoryEnum;
-                    CoBieLiteUkHelper.Logger.WarnFormat(
-                        "AssetTypeAccountingCategory: An illegal value of [{0}] has been passed for the category of #{1}={2}.",
-                        accCategoryString, _ifcTypeObject.EntityLabel, _ifcTypeObject.GetType().Name);
-                    IfcAsset ifcAsset;
+                    Logger.WarnFormat("AssetTypeAccountingCategory: An illegal value of '{0}' has been passed for the category of Entity #{1} ({2}).",
+                        accCategoryString, 
+                        _ifcTypeObject.EntityLabel, 
+                        _ifcTypeObject.GetType().Name);
+                    IIfcAsset ifcAsset;
                     if (_helper.AssetAsignments.TryGetValue(_ifcTypeObject, out ifcAsset))
                     {
                         string portability =
@@ -131,7 +135,7 @@ namespace XbimExchanger.IfcToCOBieLiteUK
                         return accCategoryEnum;
                     }
                     //Responsibility matrix, 'SpreadSheet Schema' tab, cell S81
-                    if (_ifcTypeObject is IfcFurnitureType) 
+                    if (_ifcTypeObject is IIfcFurnitureType) 
                     {
                         return AssetPortability.Moveable;
                     }
@@ -147,7 +151,7 @@ namespace XbimExchanger.IfcToCOBieLiteUK
         /// <param name="valueName">property map key</param>
         /// <param name="ifcTypeObject">ifcTypeObject</param>
         /// <returns>property value</returns>
-        private string GetObjPropByAssoc(string valueName, IfcTypeObject ifcTypeObject)
+        private string GetObjPropByAssoc(string valueName, IIfcTypeObject ifcTypeObject)
         {
             string accCategoryString = string.Empty;
             var ObjDefByType = _helper.DefiningTypeObjectMap.Where(pair => (pair.Key.IfcTypeObject != null) && (pair.Key.IfcTypeObject == ifcTypeObject)).SelectMany(p => p.Value);
@@ -184,7 +188,7 @@ namespace XbimExchanger.IfcToCOBieLiteUK
         /// <summary>
         /// returns the type object null if this is a generated type
         /// </summary>
-        public IfcTypeObject IfcTypeObject { get { return _ifcTypeObject; }}
+        public IIfcTypeObject IfcTypeObject { get { return _ifcTypeObject; }}
 
         /// <summary>
         /// Returns the entity label , -1 if this is a generated type </summary>

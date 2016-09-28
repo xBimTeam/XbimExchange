@@ -1,5 +1,4 @@
 ﻿using Microsoft.Xml.Serialization.GeneratedAssembly;
-using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -8,13 +7,10 @@ using System.Xml.Serialization;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Bson;
 using Xbim.COBieLite.CollectionTypes;
-using Xbim.Ifc2x3.Extensions;
-using Xbim.Ifc2x3.Kernel;
-using Xbim.Ifc2x3.ProductExtension;
-using Xbim.XbimExtensions.SelectTypes;
 using Xbim.COBieLite.Converters;
 using Newtonsoft.Json.Converters;
 using Formatting = Newtonsoft.Json.Formatting;
+using Xbim.Ifc4.Interfaces;
 
 namespace Xbim.COBieLite
 {
@@ -40,27 +36,27 @@ namespace Xbim.COBieLite
             return serialiser;
         }
 
-        public FacilityType(IfcBuilding ifcBuilding, CoBieLiteHelper helper)
+        public FacilityType(IIfcBuilding ifcBuilding, CoBieLiteHelper helper)
             : this()
         {
             //   _ifcBuilding = ifcBuilding;
-            var model = ifcBuilding.ModelOf;
+            var model = ifcBuilding.Model;
             externalEntityName = helper.ExternalEntityName(ifcBuilding);
             externalID = helper.ExternalEntityIdentity(ifcBuilding);
             externalSystemName = helper.ExternalSystemName(ifcBuilding);
             FacilityName = ifcBuilding.Name;
             FacilityDescription = ifcBuilding.Description;
             FacilityCategory = helper.GetClassification(ifcBuilding);
-            var ifcProject = model.Instances.OfType<IfcProject>().FirstOrDefault();
+            var ifcProject = model.Instances.OfType<IIfcProject>().FirstOrDefault();
             if (ifcProject != null)
             {
                 ProjectAssignment = new ProjectType(ifcProject, helper);
-                var ifcSite = ifcProject.GetSpatialStructuralElements().FirstOrDefault(p => p is IfcSite) as IfcSite;
+                var ifcSite = ifcProject.SpatialStructuralElements.FirstOrDefault(p => p is IIfcSite) as IIfcSite;
                 if (ifcSite != null) SiteAssignment = new SiteType(ifcSite, helper);
                 SetDefaultUnits(helper);
                 FacilityDeliverablePhaseName = ifcProject.Phase;
-                var storeys = ifcBuilding.GetBuildingStoreys(true);
-                var ifcBuildingStories = storeys as IList<IfcBuildingStorey> ?? storeys.ToList();
+                var storeys = ifcBuilding.BuildingStoreys;
+                var ifcBuildingStories = storeys as IList<IIfcBuildingStorey> ?? storeys.ToList();
                 if (ifcBuildingStories.Any())
                 {
                     Floors = new FloorCollectionType {Floor = new List<FloorType>(ifcBuildingStories.Count)};
@@ -90,7 +86,7 @@ namespace Xbim.COBieLite
             }
 
             //Assets
-            var allAssetsinThisFacility = new HashSet<IfcElement>(helper.GetAllAssets(ifcBuilding));
+            var allAssetsinThisFacility = new HashSet<IIfcElement>(helper.GetAllAssets(ifcBuilding));
 
             //AssetTypes
             //Get all assets that are in this facility/building
@@ -126,7 +122,7 @@ namespace Xbim.COBieLite
 
             //Contacts
             var contacts = helper.GetContacts();
-            var ifcActors = contacts as IfcActorSelect[] ?? contacts.ToArray();
+            var ifcActors = contacts as IIfcActorSelect[] ?? contacts.ToArray();
             if (ifcActors.Any())
             {
                 Contacts = new ContactCollectionType
@@ -144,12 +140,12 @@ namespace Xbim.COBieLite
 
 
 
-        private static List<IfcTypeObject> AllAssetTypesInThisFacility(IfcBuilding ifcBuilding,
-            HashSet<IfcElement> allAssetsinThisFacility, CoBieLiteHelper helper)
+        private static List<IIfcTypeObject> AllAssetTypesInThisFacility(IIfcBuilding ifcBuilding,
+            HashSet<IIfcElement> allAssetsinThisFacility, CoBieLiteHelper helper)
         {
 
             var allAssetTypes = helper.DefiningTypeObjectMap;
-            var allAssetTypesInThisFacility = new List<IfcTypeObject>(allAssetTypes.Count);
+            var allAssetTypesInThisFacility = new List<IIfcTypeObject>(allAssetTypes.Count);
             foreach (var assetTypeKeyValue in allAssetTypes)
             {
                 //if any defining type has an object in this building/facility then we need to include it
@@ -159,26 +155,26 @@ namespace Xbim.COBieLite
             return allAssetTypesInThisFacility;
         }
 
-        private IEnumerable<IfcZone> GetAllZones(IEnumerable<IfcSpace> allSpaces, CoBieLiteHelper helper)
+        private IEnumerable<IIfcZone> GetAllZones(IEnumerable<IIfcSpace> allSpaces, CoBieLiteHelper helper)
         {
-            var allZones = new HashSet<IfcZone>();
+            var allZones = new HashSet<IIfcZone>();
             foreach (var space in allSpaces)
                 foreach (var zone in helper.GetZones(space))
                     allZones.Add(zone);
             return allZones;
         }
 
-        private IEnumerable<IfcSpace> GetAllSpaces(IfcBuilding ifcBuilding)
+        private IEnumerable<IIfcSpace> GetAllSpaces(IIfcBuilding ifcBuilding)
         {
-            var spaces = new HashSet<IfcSpace>();
-            foreach (var space in ifcBuilding.GetSpaces().ToList())
+            var spaces = new HashSet<IIfcSpace>();
+            foreach (var space in ifcBuilding.Spaces.ToList())
                 spaces.Add(space);
-            foreach (var storey in ifcBuilding.GetBuildingStoreys().ToList())
+            foreach (var storey in ifcBuilding.BuildingStoreys.ToList())
             {
-                foreach (var storeySpace in storey.GetSpaces().ToList())
+                foreach (var storeySpace in storey.Spaces.ToList())
                 {
                     spaces.Add(storeySpace);
-                    foreach (var spaceSpace in storeySpace.GetSpaces().ToList())
+                    foreach (var spaceSpace in storeySpace.Spaces.ToList())
                         spaces.Add(spaceSpace); //get sub spaces
                 }
             }

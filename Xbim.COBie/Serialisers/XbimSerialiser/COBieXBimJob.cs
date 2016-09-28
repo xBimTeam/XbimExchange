@@ -1,16 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using Xbim.COBie.Rows;
-using Xbim.XbimExtensions.Transactions;
-using Xbim.Ifc2x3.ProcessExtensions;
 using Xbim.Ifc2x3.Kernel;
-using Xbim.Ifc2x3.Extensions;
 using Xbim.Ifc2x3.MeasureResource;
 using Xbim.Ifc2x3.PropertyResource;
 using Xbim.Ifc2x3.ConstructionMgmtDomain;
-using Xbim.IO;
+using Xbim.Ifc2x3.ProcessExtension;
+using Xbim.IO.Esent;
 
 
 namespace Xbim.COBie.Serialisers.XbimSerialiser
@@ -41,8 +38,8 @@ namespace Xbim.COBie.Serialisers.XbimSerialiser
                 try
                 {
                     int count = 1;
-                    IfcTypeObjects = Model.Instances.OfType<IfcTypeObject>();
-                    IfcConstructionEquipmentResources = Model.Instances.OfType<IfcConstructionEquipmentResource>();
+                    IfcTypeObjects = Model.FederatedInstances.OfType<IfcTypeObject>();
+                    IfcConstructionEquipmentResources = Model.FederatedInstances.OfType<IfcConstructionEquipmentResource>();
 
                     ProgressIndicator.ReportMessage("Starting Jobs...");
                     ProgressIndicator.Initialise("Creating Jobs", (cOBieSheet.RowCount * 2));
@@ -56,7 +53,7 @@ namespace Xbim.COBie.Serialisers.XbimSerialiser
                         
                     }
                     //we need to assign IfcRelSequence relationships, but we need all tasks implemented, so loop rows again
-                    IfcTasks = Model.Instances.OfType<IfcTask>(); //get new tasks
+                    IfcTasks = Model.FederatedInstances.OfType<IfcTask>(); //get new tasks
                     for (int i = 0; i < cOBieSheet.RowCount; i++)
                     {
                         BumpTransaction(trans, count);
@@ -107,7 +104,7 @@ namespace Xbim.COBie.Serialisers.XbimSerialiser
                 ifcTask = CheckIfObjExistOnMerge<IfcTask>(row.Name).Where(task => task.TaskId == taskNo).FirstOrDefault();
                 if (ifcTask != null)
                 {
-                    IfcRelAssignsToProcess processRel = Model.Instances.Where<IfcRelAssignsToProcess>(rd => rd.RelatingProcess == ifcTask).FirstOrDefault();
+                    IfcRelAssignsToProcess processRel = Model.FederatedInstances.Where<IfcRelAssignsToProcess>(rd => rd.RelatingProcess == ifcTask).FirstOrDefault();
                     int matchCount = ifcTypeObjects.Count(to => processRel.RelatedObjects.Contains(to));
                     if (matchCount == ifcTypeObjects.Count()) //task IfcRelAssignsToProcess object hold the correct number of ifcTypeObjects objects so consider a match
                         return; //consider a match so return
@@ -205,7 +202,7 @@ namespace Xbim.COBie.Serialisers.XbimSerialiser
         public void SetRelAssignsToProcess(IfcProcess processObj, IEnumerable<IfcObjectDefinition> typeObjs)
         {
             //find any existing relationships to this type
-            IfcRelAssignsToProcess processRel = Model.Instances.Where<IfcRelAssignsToProcess>(rd => rd.RelatingProcess == processObj).FirstOrDefault();
+            IfcRelAssignsToProcess processRel = Model.FederatedInstances.Where<IfcRelAssignsToProcess>(rd => rd.RelatingProcess == processObj).FirstOrDefault();
             if (processRel == null) //none defined create the relationship
             {
                 processRel = Model.Instances.New<IfcRelAssignsToProcess>();

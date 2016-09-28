@@ -1,24 +1,23 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using Xbim.COBieLiteUK;
-using Xbim.Ifc2x3.Kernel;
-using Xbim.Ifc2x3.PropertyResource;
-using Xbim.IO;
+using Xbim.Common;
+using Xbim.CobieLiteUk;
+using Xbim.Ifc4.Interfaces;
+
 
 namespace XbimExchanger.IfcToCOBieLiteUK
 {
-    public class MappingSystemViaIfcPropertyToSystem : XbimMappings<XbimModel, List<Facility>, string, IfcPropertySet, Xbim.COBieLiteUK.System>
+    public class MappingSystemViaIfcPropertyToSystem : XbimMappings<IModel, List<Facility>, string, IIfcPropertySet, Xbim.CobieLiteUk.System>
     {
-        protected override Xbim.COBieLiteUK.System Mapping(IfcPropertySet pSet, Xbim.COBieLiteUK.System target)
+        protected override Xbim.CobieLiteUk.System Mapping(IIfcPropertySet pSet, Xbim.CobieLiteUk.System target)
         {
             var helper = ((IfcToCOBieLiteUkExchanger)Exchanger).Helper;
 
             //Add Assets
             var systemAssignments = helper.GetSystemAssignments(pSet);
 
-            var ifcObjectDefinitions = systemAssignments as IList<IfcObjectDefinition> ?? systemAssignments.ToList();
+            var ifcObjectDefinitions = systemAssignments as IList<IIfcObjectDefinition> ?? systemAssignments.ToList();
             string name = string.Empty;
             if (ifcObjectDefinitions.Any())
             {
@@ -65,7 +64,7 @@ namespace XbimExchanger.IfcToCOBieLiteUK
         /// <param name="helper">CoBieLiteUkHelper</param>
         /// <param name="ifcObject">IfcObjectDefinition</param>
         /// <returns></returns>
-        private static string GetSystemName(CoBieLiteUkHelper helper, IList<IfcObjectDefinition> ifcObjects )
+        private static string GetSystemName(CoBieLiteUkHelper helper, IList<IIfcObjectDefinition> ifcObjects )
         {   string name = string.Empty;
             var propMaps = helper.GetPropMap("SystemMaps").ToList();
             if (propMaps.Count() > 0)
@@ -80,7 +79,7 @@ namespace XbimExchanger.IfcToCOBieLiteUK
                     {
                         //get propery values as system name
                         var value = atts.Properties.Where(prop => propMaps.Contains(prop.Key)) //properties which match mappings
-                                                   .Select(prop => prop.Value).OfType<IfcPropertySingleValue>()
+                                                   .Select(prop => prop.Value).OfType<IIfcPropertySingleValue>()
                                                    .Where(propSV => propSV.NominalValue != null && !string.IsNullOrEmpty(propSV.NominalValue.ToString())) //has a value
                                                    .Select(propSV => propSV.Name.ToString() + ":" + propSV.NominalValue.ToString())
                                                    .Distinct().OrderBy(s => propNameOrder.IndexOf(s.Split(new Char[] { ':' })[0]));
@@ -92,7 +91,7 @@ namespace XbimExchanger.IfcToCOBieLiteUK
                         {
                             //Try and get the property names as system name
                             value = atts.Properties.Where(prop => propMaps.Contains(prop.Key)) //properties which match mappings
-                                                   .Select(prop => prop.Value).OfType<IfcPropertySingleValue>()
+                                                   .Select(prop => prop.Value).OfType<IIfcPropertySingleValue>()
                                                    .Where(propSV => propSV.Name != null && !string.IsNullOrEmpty(propSV.Name.ToString()))
                                                    .Select(prop => prop.Name.ToString())
                                                    .Distinct().OrderBy(s => propNameOrder.IndexOf(s));
@@ -108,5 +107,10 @@ namespace XbimExchanger.IfcToCOBieLiteUK
             return name;
         }
 
+
+        public override Xbim.CobieLiteUk.System CreateTargetObject()
+        {
+            return new Xbim.CobieLiteUk.System();
+        }
     }
 }

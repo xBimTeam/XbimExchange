@@ -3,21 +3,21 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using System.Linq;
+using log4net;
 using NPOI.HSSF.UserModel;
 using NPOI.HSSF.Util;
 using NPOI.SS.UserModel;
-using Xbim.COBie;
-using Xbim.COBie.Rows;
 using Xbim.COBie.Contracts;
-
 
 namespace Xbim.COBie.Serialisers
 {
     /// <summary>
     /// Formats COBie data into an Excel XLS 
     /// </summary>
+    // ReSharper disable once InconsistentNaming
     public class COBieXLSSerialiser : ICOBieSerialiser
     {
+        private static readonly ILog Log = LogManager.GetLogger("Xbim.COBie.Serialisers.COBieXLSSerialiser");
 
         const string DefaultFileName = "Cobie.xls";
         const string DefaultTemplateFileName = @"Templates\COBie-UK-2012-template.xls";
@@ -25,8 +25,9 @@ namespace Xbim.COBie.Serialisers
         const string ErrorsSheet = "Errors";
         const string RulesSheet = "Rules";
 
-        Dictionary<COBieAllowedType, HSSFCellStyle> _cellStyles = new Dictionary<COBieAllowedType, HSSFCellStyle>();
-        Dictionary<string, HSSFColor> _colours = new Dictionary<string, HSSFColor>();
+        readonly Dictionary<COBieAllowedType, HSSFCellStyle> _cellStyles = new Dictionary<COBieAllowedType, HSSFCellStyle>();
+        readonly Dictionary<string, HSSFColor> _colours = new Dictionary<string, HSSFColor>();
+        // ReSharper disable once InconsistentNaming
         public int _commentCount = 0;
 
         public COBieXLSSerialiser() : this(DefaultFileName, DefaultTemplateFileName)
@@ -40,7 +41,7 @@ namespace Xbim.COBie.Serialisers
         {
             FileName = fileName;
             TemplateFileName = templateFileName;
-            hasErrorLevel = typeof(COBieError).GetProperties().Where(prop => prop.Name == "ErrorLevel").Any();
+            HasErrorLevel = typeof(COBieError).GetProperties().Any(prop => prop.Name == "ErrorLevel");
             _commentCount = 0;
             Excludes = new FilterValues();//get the rules for excludes for generating COBie
         }
@@ -51,7 +52,7 @@ namespace Xbim.COBie.Serialisers
         /// <summary>
         /// COBeError has the ErrorLevel property
         /// </summary>
-        private bool hasErrorLevel { get;  set; }
+        private bool HasErrorLevel { get;  set; }
 
         /// <summary>
         /// Class holds exclude rules, now required as a tab to excel workbook
@@ -61,15 +62,26 @@ namespace Xbim.COBie.Serialisers
         /// <summary>
         /// Formats the COBie data into an Excel XLS file
         /// </summary>
-        /// <param name="cobie"></param>
-        public void Serialise(COBieWorkbook workbook, ICOBieValidationTemplate ValidationTemplate = null)
+        public void Serialise(COBieWorkbook workbook, ICOBieValidationTemplate validationTemplate = null)
         {
-            if (workbook == null) { throw new ArgumentNullException("COBie", "COBieXLSSerialiser.Serialise does not accept null as the COBie data parameter."); }
+            if (workbook == null)
+            {
+                throw new ArgumentNullException("workbook", "COBieXLSSerialiser.Serialise does not accept null as the COBieWorkbook data parameter.");
+            }
 
             if (!File.Exists(TemplateFileName))
-                throw new Exception("COBie creation error. Could not locate template file " + TemplateFileName);
+            {
+                var di = new DirectoryInfo(".");
+                var msg =
+                    string.Format(
+                        "COBie creation error. Could not locate template file '{0}' from executing folder '{1}'",
+                        TemplateFileName, di.FullName);
+                var e = new FileNotFoundException(msg, TemplateFileName);
+                Log.Error(msg, e);
+                throw e;
+            }
             // Load template file
-            FileStream excelFile = File.Open(TemplateFileName, FileMode.Open, FileAccess.Read);
+            var excelFile = File.Open(TemplateFileName, FileMode.Open, FileAccess.Read);
 
             XlsWorkbook = new HSSFWorkbook(excelFile, true);
 
@@ -82,11 +94,11 @@ namespace Xbim.COBie.Serialisers
 
             UpdateInstructions();
 
-            ReportErrors(workbook, ValidationTemplate);
+            ReportErrors(workbook, validationTemplate);
 
             ReportRules();
 
-            using (FileStream exportFile = File.Open(FileName, FileMode.OpenOrCreate, FileAccess.Write, FileShare.None))
+            using (var exportFile = File.Open(FileName, FileMode.OpenOrCreate, FileAccess.Write, FileShare.None))
             {
                 XlsWorkbook.Write(exportFile);
             }
@@ -179,7 +191,7 @@ namespace Xbim.COBie.Serialisers
                         if (excelCell != null)
                         {
                             string description = error.ErrorDescription;
-                            if(hasErrorLevel)
+                            if(HasErrorLevel)
                             {
                                 if (error.ErrorLevel == COBieError.ErrorLevels.Warning)
                                     description = "Warning: " + description;
@@ -207,12 +219,9 @@ namespace Xbim.COBie.Serialisers
                             }
                             else
                             {
-                                excelCell.CellComment.String = new HSSFRichTextString(excelCell.CellComment.String.ToString() + " Also " + description);
+                                excelCell.CellComment.String = new HSSFRichTextString(excelCell.CellComment.String + " Also " + description);
                             }
-                            
-                            
                         }
-                        
                     }
                 }
             }
@@ -237,28 +246,22 @@ namespace Xbim.COBie.Serialisers
 
         private void CreateColours(string colourName, byte red, byte green, byte blue)
         {
-            HSSFPalette palette = XlsWorkbook.GetCustomPalette();
-            HSSFColor colour = palette.FindSimilarColor(red, green, blue);
-            if (colour == null)
-            {
-                // First 64 are system colours
-                //srl this code does not work with the latest version of NPOI
-                //if  (NPOI.HSSF.Record.PaletteRecord.STANDARD_PALETTE_SIZE  < 64 )
-                //{
-                //     NPOI.HSSF.Record.PaletteRecord.STANDARD_PALETTE_SIZE = 64; 
-                //}
-                //NPOI.HSSF.Record.PaletteRecord.STANDARD_PALETTE_SIZE++;
-                colour = palette.AddColor(red, green, blue);
-            }
+            var palette = XlsWorkbook.GetCustomPalette();
+            var colour = palette.FindSimilarColor(red, green, blue) ?? palette.AddColor(red, green, blue);
             _colours.Add(colourName, colour);
         }
 
         private void CreateFormat(COBieAllowedType type, string formatString, string colourName)
         {
-            HSSFCellStyle cellStyle;
-            cellStyle = XlsWorkbook.CreateCellStyle() as HSSFCellStyle;
- 
-            HSSFDataFormat dataFormat = XlsWorkbook.CreateDataFormat() as HSSFDataFormat;
+            var cellStyle = XlsWorkbook.CreateCellStyle() as HSSFCellStyle;
+            var dataFormat = XlsWorkbook.CreateDataFormat() as HSSFDataFormat;
+
+            if (cellStyle == null || dataFormat == null)
+            {
+                Log.ErrorFormat("Error producing Excel cell style or format in workbook.");
+                return;
+            }
+                
             cellStyle.DataFormat = dataFormat.GetFormat(formatString);
             
             cellStyle.FillForegroundColor = _colours[colourName].Indexed;
@@ -283,25 +286,20 @@ namespace Xbim.COBie.Serialisers
             }
         }
 
-        private void ReportErrors(COBieWorkbook workbook, ICOBieValidationTemplate ValidationTemplate = null)
+        private void ReportErrors(COBieWorkbook workbook, ICOBieValidationTemplate validationTemplate = null)
         {
-            ISheet errorsSheet = XlsWorkbook.GetSheet(ErrorsSheet) ?? XlsWorkbook.CreateSheet(ErrorsSheet);
-
-            //if we are validating here then ensure we have Indices on each sheet
-            //workbook.CreateIndices();
-            ICOBieSheetValidationTemplate SheetValidator = null;
-    
-            
+            var errorsSheet = XlsWorkbook.GetSheet(ErrorsSheet) ?? XlsWorkbook.CreateSheet(ErrorsSheet);
+            ICOBieSheetValidationTemplate sheetValidator = null;
             foreach(var sheet in workbook.OrderBy(w=>w.SheetName))
             {
                 if(sheet.SheetName != Constants.WORKSHEET_PICKLISTS)
                 {
-                    if (ValidationTemplate != null && ValidationTemplate.Sheet.ContainsKey(sheet.SheetName))
+                    if (validationTemplate != null && validationTemplate.Sheet.ContainsKey(sheet.SheetName))
                     {
-                        SheetValidator = ValidationTemplate.Sheet[sheet.SheetName];
+                        sheetValidator = validationTemplate.Sheet[sheet.SheetName];
                     }
                     // Ensure the validation is up to date
-                     sheet.Validate(workbook, ErrorRowIndexBase.RowTwo, SheetValidator);
+                     sheet.Validate(workbook, ErrorRowIndexBase.RowTwo, sheetValidator);
                 }
 
                 WriteErrors(errorsSheet, sheet.Errors);  
@@ -309,6 +307,7 @@ namespace Xbim.COBie.Serialisers
         }
 
 
+        // ReSharper disable once RedundantDefaultMemberInitializer
         int _row = 0;
         private void WriteErrors(ISheet errorsSheet, COBieErrorCollection errorCollection)
         {
@@ -319,7 +318,7 @@ namespace Xbim.COBie.Serialisers
                           .OrderBy(r => r.SheetName);
             
             //just in case we do not have ErrorLevel property in sheet COBieErrorCollection COBieError
-            if (!hasErrorLevel)
+            if (!HasErrorLevel)
             {
                 summary = errorCollection
                           .GroupBy(row => new { row.SheetName, row.FieldName, row.ErrorType })
@@ -352,8 +351,8 @@ namespace Xbim.COBie.Serialisers
 
                 excelCell = excelRow.GetCell(col) ?? excelRow.CreateCell(col);
                 excelCell.SetCellValue("Warning Count");
-                col++;
 
+                // now update row
                 _row++; 
             }
             
@@ -381,8 +380,9 @@ namespace Xbim.COBie.Serialisers
 
                 excelCell = excelRow.GetCell(col) ?? excelRow.CreateCell(col);
                 excelCell.SetCellValue(error.CountWarning);
-                col++;
                 
+
+                // now update row
                 _row++;
             }
             for (int c = 0 ; c < 5 ; c++)
@@ -468,12 +468,12 @@ namespace Xbim.COBie.Serialisers
         /// <param name="excludeObjects">List of types</param>
         private void WriteExcludesObjects(int col, ISheet rulesSheet, List<Type> excludeObjects)
         {
-            int row = 2;
+            var row = 2;
             foreach (Type typeobj in excludeObjects)
             {
-                IRow excelRow = rulesSheet.GetRow(row) ?? rulesSheet.CreateRow(row);
-                ICell excelCell = excelRow.GetCell(col) ?? excelRow.CreateCell(col);
-                excelCell.SetCellValue(typeobj.Name.ToString());
+                var excelRow = rulesSheet.GetRow(row) ?? rulesSheet.CreateRow(row);
+                var excelCell = excelRow.GetCell(col) ?? excelRow.CreateCell(col);
+                excelCell.SetCellValue(typeobj.Name);
                 row++;
             }
         }
@@ -509,30 +509,20 @@ namespace Xbim.COBie.Serialisers
             {
                 if (!columns[i].IsMatch(sheetHeaders[i]))
                 {
-                    Console.WriteLine(@"{2} column {3} Mismatch: {0} {1}",
-              columns[i].ColumnName, sheetHeaders[i], sheetName, i);
+                    Console.WriteLine(@"{2} column {3} Mismatch: {0} {1}", columns[i].ColumnName, sheetHeaders[i], sheetName, i);
                 }
             }
-
         }
-
-
-
         
         private List<string> GetTargetHeaders(ISheet excelSheet)
         {
-            List<string> headers = new List<string>();
-
-            IRow headerRow = excelSheet.GetRow(0);
+            var headers = new List<string>();
+            var headerRow = excelSheet.GetRow(0);
             if (headerRow == null)
                 return headers;
 
-            foreach (ICell cell in headerRow.Cells)
-            {
-                headers.Add(cell.StringCellValue);
-            }
+            headers.AddRange(headerRow.Cells.Select(cell => cell.StringCellValue));
             return headers;
-
         }
 
         private void FormatCell(ICell excelCell, COBieCell cell)
@@ -547,28 +537,22 @@ namespace Xbim.COBie.Serialisers
 
         private void SetCellValue(ICell excelCell, COBieCell cell)
         {
-            if (SetCellTypedValue(excelCell, cell) == false)
-            {
-                //check text length will fit in cell
-                if (cell.CellValue.Length >= short.MaxValue)
-                { 
-                    //truncate cell text to max length
-                    excelCell.SetCellValue(cell.CellValue.Substring(0, short.MaxValue - 1));
-                }
-                else
-                {
-                    excelCell.SetCellValue(cell.CellValue);
-                }
-            }
+            if (SetCellTypedValue(excelCell, cell)) 
+                return;
+            
+            //check text length will fit in cell
+            excelCell.SetCellValue(cell.CellValue.Length >= short.MaxValue
+                ? cell.CellValue.Substring(0, short.MaxValue - 1)
+                : cell.CellValue);
         }
 
         private bool SetCellTypedValue(ICell excelCell, COBieCell cell)
         {
-            bool processed = false;
+            var processed = false;
 
             try
             {
-                if (String.IsNullOrEmpty(cell.CellValue) || cell.CellValue == Constants.DEFAULT_STRING)
+                if (string.IsNullOrEmpty(cell.CellValue) || cell.CellValue == Constants.DEFAULT_STRING)
                 {
                     return false;
                 }
@@ -579,7 +563,8 @@ namespace Xbim.COBie.Serialisers
                     case COBieAllowedType.ISODateTime:
                     case COBieAllowedType.ISODate:
                         DateTime date;
-                        if (DateTime.TryParse(cell.CellValue, CultureInfo.InvariantCulture, DateTimeStyles.AssumeUniversal | DateTimeStyles.AdjustToUniversal, out date))
+                        if (DateTime.TryParse(cell.CellValue, CultureInfo.InvariantCulture,
+                            DateTimeStyles.AssumeUniversal | DateTimeStyles.AdjustToUniversal, out date))
                         {
                             excelCell.SetCellValue(date);
                             processed = true;
@@ -587,20 +572,19 @@ namespace Xbim.COBie.Serialisers
                         break;
 
                     case COBieAllowedType.Numeric:
-                        Double val;
-                        if (Double.TryParse(cell.CellValue, out val))
+                        double val;
+                        if (double.TryParse(cell.CellValue, out val))
                         {
                             excelCell.SetCellValue(val);
                             processed = true;
                         }
                         break;
-
-                    default:
-                        break;
                 }
             }
-            catch (SystemException)
-            { /* Carry on */ }
+            catch (SystemException se)
+            {
+                Log.Error("Error in the excel file management", se);
+            }
 
             return processed;
         }

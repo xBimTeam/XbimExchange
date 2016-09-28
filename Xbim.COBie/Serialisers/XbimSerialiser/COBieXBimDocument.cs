@@ -1,16 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using Xbim.XbimExtensions.Transactions;
 using Xbim.COBie.Rows;
 using Xbim.Ifc2x3.Kernel;
 using Xbim.Ifc2x3.ExternalReferenceResource;
 using Xbim.Ifc2x3.ProductExtension;
-using Xbim.XbimExtensions;
-using Xbim.Ifc2x3.ApprovalResource;
 using Xbim.Ifc2x3.ConstructionMgmtDomain;
-using Xbim.IO;
+using Xbim.Ifc2x3.MeasureResource;
+using Xbim.IO.Esent;
 
 namespace Xbim.COBie.Serialisers.XbimSerialiser
 {
@@ -139,7 +136,7 @@ namespace Xbim.COBie.Serialisers.XbimSerialiser
                     IfcRoot ifcRoot = GetObjectRelationship(row);
                     if (ifcRoot != null)
                     {
-                        IfcRelAssociatesDocument ifcRelAssociatesDocument = Model.Instances.Where<IfcRelAssociatesDocument>(di => di.RelatedObjects.Contains(ifcRoot)).FirstOrDefault();
+                        IfcRelAssociatesDocument ifcRelAssociatesDocument = Model.FederatedInstances.Where<IfcRelAssociatesDocument>(di => di.RelatedObjects.Contains(ifcRoot)).FirstOrDefault();
                         if (ifcRelAssociatesDocument != null)
                         {
                             string testName = row.Name.ToLower().Trim();
@@ -180,16 +177,17 @@ namespace Xbim.COBie.Serialisers.XbimSerialiser
                 //create the Document References
                 if (strNameValues.Count > 0)
                 {
-                    IfcDocumentReference[] ifcDocumentReferences = new IfcDocumentReference[strNameValues.Count];
                     int i = 0;
-                    foreach (string name in strNameValues)
+                    foreach (var name in strNameValues)
                     {
-                        ifcDocumentReferences[i] = Model.Instances.New<IfcDocumentReference>(dr => { dr.Name = name; });
+                        var docref = Model.Instances.New<IfcDocumentReference>();
+                        docref.Name=new IfcLabel(name); 
                         if (strLocationValues != null)
-                            ifcDocumentReferences[i].Location = strLocationValues[i];
+                            docref.Location = strLocationValues[i];
+                        ifcDocumentInformation.DocumentReferences.Add(docref);
                         i++;
                     }
-                    ifcDocumentInformation.SetDocumentReferences(true, ifcDocumentReferences);
+                  
                 }
 
             }
@@ -199,7 +197,6 @@ namespace Xbim.COBie.Serialisers.XbimSerialiser
         /// Add the object the document relates too
         /// </summary>
         /// <param name="row">COBieDocumentRow holding row data</param>
-        /// <param name="ifcRelAssociatesDocument">IfcRelAssociatesDocument object to hold relationship</param>
         private IfcRoot GetObjectRelationship(COBieDocumentRow row)
         {
             IfcRoot ifcRoot = null;
@@ -220,7 +217,7 @@ namespace Xbim.COBie.Serialisers.XbimSerialiser
                     case Constants.WORKSHEET_TYPE:
                         //get all types, one time only
                         if (IfcTypeObjects == null)
-                            IfcTypeObjects = Model.Instances.OfType<IfcTypeObject>();
+                            IfcTypeObjects = Model.FederatedInstances.OfType<IfcTypeObject>();
                         ifcRoot = IfcTypeObjects.Where(to => to.Name.ToString().ToLower().Trim() == rowName).FirstOrDefault();
                         if (ifcRoot == null)
                         {
@@ -237,7 +234,7 @@ namespace Xbim.COBie.Serialisers.XbimSerialiser
                     case Constants.WORKSHEET_COMPONENT:
                         //get all types, one time only
                         if (IfcElements == null)
-                            IfcElements = Model.Instances.OfType<IfcElement>();
+                            IfcElements = Model.FederatedInstances.OfType<IfcElement>();
                         ifcRoot = IfcElements.Where(to => to.Name.ToString().ToLower().Trim() == rowName).FirstOrDefault();
                         string elementTypeName = "IFCVIRTUALELEMENT";
                         if (ifcRoot == null)
@@ -271,47 +268,47 @@ namespace Xbim.COBie.Serialisers.XbimSerialiser
                         }
                         break;
                     case Constants.WORKSHEET_JOB:
-                        ifcRoot = Model.Instances.Where<IfcProcess>(to => to.Name.ToString().ToLower().Trim() == rowName).FirstOrDefault();
+                        ifcRoot = Model.FederatedInstances.Where<IfcProcess>(to => to.Name.ToString().ToLower().Trim() == rowName).FirstOrDefault();
                         break;
                     case Constants.WORKSHEET_ASSEMBLY:
-                        ifcRoot = Model.Instances.Where<IfcRelDecomposes>(to => to.Name.ToString().ToLower().Trim() == rowName).FirstOrDefault();
+                        ifcRoot = Model.FederatedInstances.Where<IfcRelDecomposes>(to => to.Name.ToString().ToLower().Trim() == rowName).FirstOrDefault();
                         break;
                     case Constants.WORKSHEET_CONNECTION:
-                        ifcRoot = Model.Instances.Where<IfcRelConnects>(to => to.Name.ToString().ToLower().Trim() == rowName).FirstOrDefault();
+                        ifcRoot = Model.FederatedInstances.Where<IfcRelConnects>(to => to.Name.ToString().ToLower().Trim() == rowName).FirstOrDefault();
                         break;
                     case Constants.WORKSHEET_FACILITY:
-                        ifcRoot = Model.Instances.Where<IfcBuilding>(to => to.Name.ToString().ToLower().Trim() == rowName).FirstOrDefault();
+                        ifcRoot = Model.FederatedInstances.Where<IfcBuilding>(to => to.Name.ToString().ToLower().Trim() == rowName).FirstOrDefault();
                         if (ifcRoot == null)
-                            ifcRoot = Model.Instances.Where<IfcSite>(to => to.Name.ToString().ToLower().Trim() == rowName).FirstOrDefault();
+                            ifcRoot = Model.FederatedInstances.Where<IfcSite>(to => to.Name.ToString().ToLower().Trim() == rowName).FirstOrDefault();
                         if (ifcRoot == null)
-                            ifcRoot = Model.Instances.Where<IfcProject>(to => to.Name.ToString().ToLower().Trim() == rowName).FirstOrDefault();
+                            ifcRoot = Model.FederatedInstances.Where<IfcProject>(to => to.Name.ToString().ToLower().Trim() == rowName).FirstOrDefault();
                         break;
                     case Constants.WORKSHEET_FLOOR:
-                        ifcRoot = Model.Instances.Where<IfcBuildingStorey>(to => to.Name.ToString().ToLower().Trim() == rowName).FirstOrDefault();
+                        ifcRoot = Model.FederatedInstances.Where<IfcBuildingStorey>(to => to.Name.ToString().ToLower().Trim() == rowName).FirstOrDefault();
                         break;
                     case Constants.WORKSHEET_RESOURCE:
-                        ifcRoot = Model.Instances.Where<IfcConstructionEquipmentResource>(to => to.Name.ToString().ToLower().Trim() == rowName).FirstOrDefault();
+                        ifcRoot = Model.FederatedInstances.Where<IfcConstructionEquipmentResource>(to => to.Name.ToString().ToLower().Trim() == rowName).FirstOrDefault();
                         break;
                     case Constants.WORKSHEET_SPACE:
-                        ifcRoot = Model.Instances.Where<IfcSpace>(to => to.Name.ToString().ToLower().Trim() == rowName).FirstOrDefault();
+                        ifcRoot = Model.FederatedInstances.Where<IfcSpace>(to => to.Name.ToString().ToLower().Trim() == rowName).FirstOrDefault();
                         break;
                     case Constants.WORKSHEET_SPARE:
-                        ifcRoot = Model.Instances.Where<IfcConstructionProductResource>(to => to.Name.ToString().ToLower().Trim() == rowName).FirstOrDefault();
+                        ifcRoot = Model.FederatedInstances.Where<IfcConstructionProductResource>(to => to.Name.ToString().ToLower().Trim() == rowName).FirstOrDefault();
                         break;
                     case Constants.WORKSHEET_SYSTEM:
-                        ifcRoot = Model.Instances.Where<IfcGroup>(to => to.Name.ToString().ToLower().Trim() == rowName).FirstOrDefault();
+                        ifcRoot = Model.FederatedInstances.Where<IfcGroup>(to => to.Name.ToString().ToLower().Trim() == rowName).FirstOrDefault();
                         break;
                     case Constants.WORKSHEET_ZONE:
-                        ifcRoot = Model.Instances.Where<IfcZone>(to => to.Name.ToString().ToLower().Trim() == rowName).FirstOrDefault();
+                        ifcRoot = Model.FederatedInstances.Where<IfcZone>(to => to.Name.ToString().ToLower().Trim() == rowName).FirstOrDefault();
                         break;
                     //case "document": //not derived from IfcRoot
-                    //    ifcRoot = Model.Instances.Where<IfcDocumentInformation>(to => to.Name.ToString().ToLower().Trim() == rowName).FirstOrDefault();
+                    //    ifcRoot = Model.FederatedInstances.Where<IfcDocumentInformation>(to => to.Name.ToString().ToLower().Trim() == rowName).FirstOrDefault();
                     //    break;
                     //case "contact": //not derived from IfcRoot
-                    //    ifcRoot = Model.Instances.Where<IfcPersonAndOrganization>(to => to.Name.ToString().ToLower().Trim() == rowName).FirstOrDefault();
+                    //    ifcRoot = Model.FederatedInstances.Where<IfcPersonAndOrganization>(to => to.Name.ToString().ToLower().Trim() == rowName).FirstOrDefault();
                     //    break;
                     //case "issue": //not derived from IfcRoot
-                    //    ifcRoot = Model.Instances.Where<IfcApproval>(to => to.Name.ToString().ToLower().Trim() == rowName).FirstOrDefault();
+                    //    ifcRoot = Model.FederatedInstances.Where<IfcApproval>(to => to.Name.ToString().ToLower().Trim() == rowName).FirstOrDefault();
                     //    break;
                     default:
                         break;

@@ -1,9 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using Xbim.COBie;
-using Xbim.COBie.Rows;
 using System.IO;
 using Xbim.COBie.Contracts;
 
@@ -29,7 +24,7 @@ namespace Xbim.COBie.Serialisers
         public string FileName { get; set; }
         public string TemplateFileName { get; set; }
 
-        public void Serialise(COBieWorkbook workbook, ICOBieValidationTemplate ValidationTemplate = null)
+        public void Serialise(COBieWorkbook workbook, ICOBieValidationTemplate validationTemplate = null)
         {
             if (workbook == null) 
             {

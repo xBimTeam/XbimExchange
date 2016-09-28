@@ -1,12 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Runtime.Serialization;
-using Xbim.XbimExtensions;
-using Xbim.Ifc2x3.Kernel;
-using Xbim.Ifc2x3.ActorResource;
-using System.Reflection;
 
 
 namespace Xbim.COBie.Rows

@@ -22,9 +22,7 @@
 // </remarks>
 // --------------------------------------------------------------------------------------------------------------------
 
-using System.Collections.ObjectModel;
 using System.Text;
-using Xsd2Code.Library.Properties;
 
 namespace Xsd2Code.Library.Extensions
 {

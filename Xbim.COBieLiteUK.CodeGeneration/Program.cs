@@ -1,12 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Xsd2Code.Library;
 
-namespace Xbim.COBieLiteUK.CodeGeneration
+namespace Xbim.CobieLiteUk.CodeGeneration
 {
     class Program
     {

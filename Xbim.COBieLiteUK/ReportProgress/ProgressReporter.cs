@@ -1,11 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Text;
-using Xbim.XbimExtensions.Interfaces;
+﻿using System.Diagnostics;
+using Xbim.Common;
 
-namespace Xbim.COBieLiteUK
+namespace Xbim.CobieLiteUk
 {
     public class ProgressReporter
     {

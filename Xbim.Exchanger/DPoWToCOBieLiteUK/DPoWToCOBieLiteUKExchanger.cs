@@ -1,11 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Xbim.COBieLiteUK;
-using FacilityType = Xbim.COBieLiteUK.Facility;
+using FacilityType = Xbim.CobieLiteUk.Facility;
 using Xbim.DPoW;
 
 namespace XbimExchanger.DPoWToCOBieLiteUK

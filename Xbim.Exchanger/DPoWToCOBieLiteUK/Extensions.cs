@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Xbim.COBieLiteUK;
+using Xbim.CobieLiteUk;
 using Xbim.DPoW;
-using CAttribute = Xbim.COBieLiteUK.Attribute;
+using CAttribute = Xbim.CobieLiteUk.Attribute;
 using DAttribute = Xbim.DPoW.Attribute;
 namespace XbimExchanger.DPoWToCOBieLiteUK
 {

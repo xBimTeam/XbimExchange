@@ -1,13 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using Xbim.COBie.Rows;
-using Xbim.XbimExtensions.Transactions;
 using Xbim.Ifc2x3.Kernel;
 using Xbim.Ifc2x3.ProductExtension;
 using Xbim.Ifc2x3.MaterialResource;
-using Xbim.IO;
+using Xbim.IO.Esent;
 
 namespace Xbim.COBie.Serialisers.XbimSerialiser
 {
@@ -40,9 +38,9 @@ namespace Xbim.COBie.Serialisers.XbimSerialiser
                 try
                 {
                     int count = 1;
-                    IfcElements = Model.Instances.OfType<IfcElement>();
-                    IfcTypeObjects = Model.Instances.OfType<IfcTypeObject>();
-                    IfcMaterialLayers = Model.Instances.OfType<IfcMaterialLayer>();
+                    IfcElements = Model.FederatedInstances.OfType<IfcElement>();
+                    IfcTypeObjects = Model.FederatedInstances.OfType<IfcTypeObject>();
+                    IfcMaterialLayers = Model.FederatedInstances.OfType<IfcMaterialLayer>();
 
                     ProgressIndicator.ReportMessage("Starting Assemblies...");
                     ProgressIndicator.Initialise("Creating Assemblies", cOBieSheet.RowCount);
@@ -90,19 +88,19 @@ namespace Xbim.COBie.Serialisers.XbimSerialiser
                     ifcMaterialLayerSet = LastIfcMaterialLayerSet;
                 else
                 {
-                    ifcMaterialLayerSet = Model.Instances.Where<IfcMaterialLayerSet>(mls => mls.LayerSetName == row.ParentName).FirstOrDefault();
+                    ifcMaterialLayerSet = Model.FederatedInstances.Where<IfcMaterialLayerSet>(mls => mls.LayerSetName == row.ParentName).FirstOrDefault();
                     if (ifcMaterialLayerSet == null)
                         ifcMaterialLayerSet = Model.Instances.New<IfcMaterialLayerSet>(mls => { mls.LayerSetName = row.ParentName; });
 
-                    ifcMaterialLayerSetUsage = Model.Instances.Where<IfcMaterialLayerSetUsage>(mlsu => mlsu.ForLayerSet == ifcMaterialLayerSet).FirstOrDefault();
+                    ifcMaterialLayerSetUsage = Model.FederatedInstances.Where<IfcMaterialLayerSetUsage>(mlsu => mlsu.ForLayerSet == ifcMaterialLayerSet).FirstOrDefault();
                     if (ifcMaterialLayerSetUsage == null)
                         ifcMaterialLayerSetUsage = Model.Instances.New<IfcMaterialLayerSetUsage>(mlsu => { mlsu.ForLayerSet = ifcMaterialLayerSet; });
                     
                     string placeholderText = "Place holder for material layer Set " + row.ParentName;
-                    ifcBuildingElementProxy = Model.Instances.Where<IfcBuildingElementProxy>(bep =>  bep.Name == placeholderText).FirstOrDefault();
+                    ifcBuildingElementProxy = Model.FederatedInstances.Where<IfcBuildingElementProxy>(bep =>  bep.Name == placeholderText).FirstOrDefault();
                     if (ifcBuildingElementProxy == null)
                         ifcBuildingElementProxy = Model.Instances.New<IfcBuildingElementProxy>(bep => { bep.Name = placeholderText; });
-                    ifcRelAssociatesMaterial = Model.Instances.Where<IfcRelAssociatesMaterial>(ras => ((ras.RelatingMaterial as IfcMaterialLayerSetUsage)  == ifcMaterialLayerSetUsage) ).FirstOrDefault();
+                    ifcRelAssociatesMaterial = Model.FederatedInstances.Where<IfcRelAssociatesMaterial>(ras => ((ras.RelatingMaterial as IfcMaterialLayerSetUsage)  == ifcMaterialLayerSetUsage) ).FirstOrDefault();
                     if (ifcRelAssociatesMaterial == null)
                     {
                         ifcRelAssociatesMaterial = Model.Instances.New<IfcRelAssociatesMaterial>(ras =>
@@ -170,7 +168,7 @@ namespace Xbim.COBie.Serialisers.XbimSerialiser
                     if (ValidateString(row.Name))
                     {
                         string testName = row.Name.ToLower().Trim();
-                        ifcRelDecomposes = Model.Instances.Where<IfcRelDecomposes>(rc => (rc.Name.ToString().ToLower().Trim() == testName) && (rc.RelatingObject == relatingObject)).FirstOrDefault();
+                        ifcRelDecomposes = Model.FederatedInstances.Where<IfcRelDecomposes>(rc => (rc.Name.ToString().ToLower().Trim() == testName) && (rc.RelatingObject == relatingObject)).FirstOrDefault();
                     }
 
                     if ((ifcRelDecomposes == null) && (relatingObject != null))

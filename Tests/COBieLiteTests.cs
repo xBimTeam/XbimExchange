@@ -4,8 +4,9 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Xbim.Common.Step21;
 using Xbim.COBieLite;
-using Xbim.IO;
+using Xbim.Ifc;
 
 // ReSharper disable once CheckNamespace
 namespace Xbim.Tests.COBie
@@ -46,22 +47,25 @@ namespace Xbim.Tests.COBie
         [TestMethod]
         public void CanOpenTemporaryModel()
         {
-            var model = XbimModel.CreateTemporaryModel();
-            model.Initialise();
+            var model = IfcStore.Create(new XbimEditorCredentials(), IfcSchemaVersion.Ifc2X3, XbimStoreType.InMemoryModel);
+           
             var helper = new CoBieLiteHelper(model, "UniClass");
-            helper.GetFacilities();
+            foreach (var facilityType in helper.GetFacilities())
+            {
+                
+            }
         }
 
         [TestMethod]
         public void ConvertCoBieLiteToJson()
         {
-            using (var m = new XbimModel())
+            var IfcTestFile = "2012-03-23-Duplex-Handover.ifc";
+            using (var m = IfcStore.Open(IfcTestFile))
             {
-                var IfcTestFile = "2012-03-23-Duplex-Handover.ifc";
+                
                 //IfcTestFile = @"D:\Users\steve\My Documents\DPoW\001 NBS Lakeside Restaurant 2014.ifc";
-                var XbimTestFile = Path.ChangeExtension(IfcTestFile, "xbim");
-                var JsonFile = Path.ChangeExtension(IfcTestFile, "json");
-                m.CreateFrom(IfcTestFile, XbimTestFile, null, true, true);
+                var xbimTestFile = Path.ChangeExtension(IfcTestFile, "xbim");
+                var jsonFile = Path.ChangeExtension(IfcTestFile, "json");
                 var helper = new CoBieLiteHelper(m,"UniClass");
                 var facilities = helper.GetFacilities();
                 foreach (var facilityType in facilities)
@@ -69,7 +73,7 @@ namespace Xbim.Tests.COBie
                     Assert.IsTrue(facilityType.FacilityDefaultLinearUnitSpecified);
                     Assert.IsTrue(facilityType.FacilityDefaultAreaUnitSpecified);
                     Assert.IsTrue(facilityType.FacilityDefaultVolumeUnitSpecified);
-                    using (var fs = new StreamWriter(JsonFile))
+                    using (var fs = new StreamWriter(jsonFile))
                     {
                         CoBieLiteHelper.WriteJson(fs, facilityType);
                         fs.Close();
@@ -82,13 +86,11 @@ namespace Xbim.Tests.COBie
         [TestMethod]
         public void ConvertCoBieLiteToXml()
         {
-
-            using (var m = new XbimModel())
-            {
-                const string ifcTestFile = "2012-03-23-Duplex-Handover.ifc";
-               // var IfcTestFile = @"D:\Users\steve\xBIM\Test Models\BimAlliance BillEast\Model 1 Duplex Apartment\Duplex_MEP_20110907.ifc";
-                var xbimTestFile = Path.ChangeExtension(ifcTestFile, "xbim");
-                m.CreateFrom(ifcTestFile, xbimTestFile, null, true, true);
+          
+            const string ifcTestFile = "2012-03-23-Duplex-Handover.ifc";
+            using (var m = IfcStore.Open(ifcTestFile))
+            {       
+                var xbimTestFile = Path.ChangeExtension(ifcTestFile, "xbim");             
                 var helper = new CoBieLiteHelper(m, "UniClass");
                 var facilities = helper.GetFacilities();
                 var i = 1;
@@ -113,13 +115,12 @@ namespace Xbim.Tests.COBie
         [TestMethod]
         public void ConvertCoBieLiteToBson()
         {
-
-            using (var m = new XbimModel())
+            const string ifcTestFile = "2012-03-23-Duplex-Handover.ifc";
+            using (var m = IfcStore.Open(ifcTestFile))
             {
-                const string ifcTestFile = "2012-03-23-Duplex-Handover.ifc";
+                
                // IfcTestFile = @"C:\Data\dev\XbimTeam\XbimExchange\Tests\TestFiles\Standard_Classroom_CIC_6_Project_mod2.ifc";
-                var xbimTestFile = Path.ChangeExtension(ifcTestFile, "xbim");
-                m.CreateFrom(ifcTestFile, xbimTestFile, null, true, true);
+                        
                 var helper = new CoBieLiteHelper(m, "UniClass");
                 var facilities = helper.GetFacilities();
                 foreach (var facilityType in facilities)
@@ -138,24 +139,7 @@ namespace Xbim.Tests.COBie
             }
         }
 
-        [TestMethod]
-        public void ConvertCoBieLiteToIfc()
-        {
-
-            using (var m = new XbimModel())
-            {
-                m.CreateFrom("2012-03-23-Duplex-Handover.ifc", "2012-03-23-Duplex-Handover.xbim", null, true, true);
-                var helper = new CoBieLiteHelper(m, "UniClass");
-                var facilities = helper.GetFacilities();
-                foreach (var facilityType in facilities)
-                {
-                    using (new FileStream("facility.bson", FileMode.Create))
-                    {                       
-                         helper.WriteIfc(Console.Out, facilityType);
-                    }
-                }
-            }
-        }
+       
 
         [TestMethod]
         public void ReadAndWriteCOBieLiteJSONWithValueConverter()

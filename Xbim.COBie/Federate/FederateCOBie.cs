@@ -2,9 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using Xbim.COBie.Contracts;
-using Xbim.COBie.Rows;
-using Xbim.XbimExtensions.Interfaces;
-using System.Reflection;
+using Xbim.Common;
 
 namespace Xbim.COBie.Federate
 {

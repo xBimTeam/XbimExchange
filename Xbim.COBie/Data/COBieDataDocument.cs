@@ -1,16 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
-using System.Text;
 using Xbim.COBie.Rows;
 using Xbim.Ifc2x3.ActorResource;
 using Xbim.Ifc2x3.ExternalReferenceResource;
-using Xbim.Ifc2x3.ProductExtension;
-using Xbim.Ifc2x3.UtilityResource;
-using Xbim.XbimExtensions;
 using Xbim.Ifc2x3.Kernel;
-using Xbim.Ifc2x3.MeasureResource;
 using Xbim.COBie.Serialisers.XbimSerialiser;
+using Xbim.Ifc4.Interfaces;
 
 namespace Xbim.COBie.Data
 {
@@ -35,12 +32,14 @@ namespace Xbim.COBie.Data
         public override COBieSheet<COBieDocumentRow> Fill()
         {
             ProgressIndicator.ReportMessage("Starting Documents...");
+            var ifcProject = Model.Instances.FirstOrDefault<IIfcProject>();
+            Debug.Assert(ifcProject != null);
 
             //create new sheet
             COBieSheet<COBieDocumentRow> documents = new COBieSheet<COBieDocumentRow>(Constants.WORKSHEET_DOCUMENT);
 
             // get all IfcBuildingStory objects from IFC file
-            IEnumerable<IfcDocumentInformation> docInfos = Model.Instances.OfType<IfcDocumentInformation>();
+            IEnumerable<IfcDocumentInformation> docInfos = Model.FederatedInstances.OfType<IfcDocumentInformation>();
             ProgressIndicator.Initialise("Creating Documents", docInfos.Count());
 
             foreach (IfcDocumentInformation di in docInfos)
@@ -66,15 +65,15 @@ namespace Xbim.COBie.Data
                     else if (di.DocumentOwner is IfcOrganization)
                         doc.CreatedBy = GetEmail(di.DocumentOwner as IfcOrganization, null);
                 }
-                else if ((Model.IfcProject as IfcRoot).OwnerHistory != null)
-                    doc.CreatedBy = GetTelecomEmailAddress((Model.IfcProject as IfcRoot).OwnerHistory);
+                else if (ifcProject.OwnerHistory != null)
+                    doc.CreatedBy = GetTelecomEmailAddress(ifcProject.OwnerHistory);
 
 
                 if ((ifcRelAssociatesDocument != null) && (ifcRelAssociatesDocument.OwnerHistory != null))
                     doc.CreatedOn = GetCreatedOnDateAsFmtString(ifcRelAssociatesDocument.OwnerHistory);
                 else if (di.CreationTime != null)
                     doc.CreatedOn = di.CreationTime.ToString();
-                else if ((Model.IfcProject as IfcRoot).OwnerHistory != null)
+                else if (ifcProject.OwnerHistory != null)
                     doc.CreatedOn = Context.RunDateTime;
 
                 
@@ -222,7 +221,7 @@ namespace Xbim.COBie.Data
         {
             if (ifcRelAssociatesDocuments == null)
             {
-                ifcRelAssociatesDocuments = Model.Instances.OfType<IfcRelAssociatesDocument>().ToList();
+                ifcRelAssociatesDocuments = Model.FederatedInstances.OfType<IfcRelAssociatesDocument>().ToList();
             }
             return ifcRelAssociatesDocuments.Where<IfcRelAssociatesDocument>(irad => (irad.RelatingDocument as IfcDocumentInformation) == ifcDocumentInformation);
         }

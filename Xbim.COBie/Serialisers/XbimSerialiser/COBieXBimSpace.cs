@@ -1,14 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using Xbim.COBie.Rows;
-using Xbim.XbimExtensions.Transactions;
 using Xbim.Ifc2x3.ProductExtension;
 using Xbim.Ifc2x3.Extensions;
 using Xbim.Ifc2x3.MeasureResource;
 using Xbim.Ifc2x3.QuantityResource;
-using Xbim.IO;
+using Xbim.IO.Esent;
 
 namespace Xbim.COBie.Serialisers.XbimSerialiser
 {
@@ -193,7 +191,7 @@ namespace Xbim.COBie.Serialisers.XbimSerialiser
                 }
                 else
                 {
-                    spaceBuildingStory = Model.Instances.OfType<IfcBuildingStorey>().Where(bs => bs.Name.ToString().ToLower().Trim() == floorName.ToLower().Trim()).FirstOrDefault();
+                    spaceBuildingStory = Model.FederatedInstances.OfType<IfcBuildingStorey>().Where(bs => bs.Name.ToString().ToLower().Trim() == floorName.ToLower().Trim()).FirstOrDefault();
                     if (spaceBuildingStory != null)
                         Floors.Add(floorName, spaceBuildingStory);
                 }

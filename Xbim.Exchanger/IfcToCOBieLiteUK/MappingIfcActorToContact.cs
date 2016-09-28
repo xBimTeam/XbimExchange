@@ -1,9 +1,9 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using Xbim.COBieLiteUK;
-using Xbim.Ifc2x3.ActorResource;
-using Xbim.IO;
-using Xbim.XbimExtensions.SelectTypes;
+using Xbim.CobieLiteUk;
+using Xbim.Common;
+using Xbim.Ifc4.Interfaces;
+
 
 namespace XbimExchanger.IfcToCOBieLiteUK
 {
@@ -19,14 +19,14 @@ namespace XbimExchanger.IfcToCOBieLiteUK
             return obj.Email.GetHashCode();
         }
     }
-    class MappingIfcActorToContact : XbimMappings<XbimModel, List<Facility>, string, IfcActorSelect, Contact>
+    class MappingIfcActorToContact : XbimMappings<IModel, List<Facility>, string, IIfcActorSelect, Contact>
     {
-        protected override Contact Mapping(IfcActorSelect actor, Contact target)
+        protected override Contact Mapping(IIfcActorSelect actor, Contact target)
         {
             var helper = ((IfcToCOBieLiteUkExchanger)Exchanger).Helper;
-            var personAndOrganization = actor as IfcPersonAndOrganization;
-            var person = actor as IfcPerson;
-            var organisation = actor as IfcOrganization;
+            var personAndOrganization = actor as IIfcPersonAndOrganization;
+            var person = actor as IIfcPerson;
+            var organisation = actor as IIfcOrganization;
             if (personAndOrganization != null)
             {
                 ConvertOrganisation(target, personAndOrganization.TheOrganization);
@@ -40,9 +40,9 @@ namespace XbimExchanger.IfcToCOBieLiteUK
 
             if (string.IsNullOrWhiteSpace(target.Email))
             {
-               target.Email = string.Format("unknown{0}@undefined.email", actor.EntityLabel);
+               target.Email = string.Format("unknown{0}@undefined.email", ((IPersistEntity)actor).EntityLabel);
             }
-            target.CreatedBy = helper.GetCreatedBy(actor);
+            target.CreatedBy = helper.GetCreatedBy(actor, true);
             target.CreatedOn = helper.GetCreatedOn(actor);
             if (target.Categories == null || !target.Categories.Any())
             {
@@ -59,12 +59,12 @@ namespace XbimExchanger.IfcToCOBieLiteUK
         }
 
 
-        private void ConvertOrganisation(Contact target, IfcOrganization ifcOrganization)
+        private void ConvertOrganisation(Contact target, IIfcOrganization ifcOrganization)
         {
             if (ifcOrganization.Addresses != null)
             {
-                var telecom = ifcOrganization.Addresses.OfType<IfcTelecomAddress>().FirstOrDefault(a => a.ElectronicMailAddresses.Any(e => !string.IsNullOrWhiteSpace(e)));
-                var postal = ifcOrganization.Addresses.OfType<IfcPostalAddress>().FirstOrDefault();
+                var telecom = ifcOrganization.Addresses.OfType<IIfcTelecomAddress>().FirstOrDefault(a => a.ElectronicMailAddresses.Any(e => !string.IsNullOrWhiteSpace(e)));
+                var postal = ifcOrganization.Addresses.OfType<IIfcPostalAddress>().FirstOrDefault();
 
                 if (telecom!=null)
                 {
@@ -88,7 +88,7 @@ namespace XbimExchanger.IfcToCOBieLiteUK
                 var roles = ifcOrganization.Roles;
                 if (roles.Any())
                 {
-                    target.Categories = new List<Category>(roles.Count);
+                    target.Categories = new List<Category>(roles.Count());
                     foreach (var role in roles)
                         target.Categories.Add(new Category { Classification = "Role", Code = role.Role.ToString(), Description = role.Description });
                 }
@@ -99,15 +99,15 @@ namespace XbimExchanger.IfcToCOBieLiteUK
 
         }
 
-        private void ConvertPerson(Contact target, IfcPerson ifcPerson)
+        private void ConvertPerson(Contact target, IIfcPerson ifcPerson)
         {
             target.FamilyName = ifcPerson.FamilyName;
             target.GivenName = ifcPerson.GivenName;
 
             if (ifcPerson.Addresses != null)
             {
-                var telecom = ifcPerson.Addresses.OfType<IfcTelecomAddress>().FirstOrDefault();
-                var postal = ifcPerson.Addresses.OfType<IfcPostalAddress>().FirstOrDefault();
+                var telecom = ifcPerson.Addresses.OfType<IIfcTelecomAddress>().FirstOrDefault();
+                var postal = ifcPerson.Addresses.OfType<IIfcPostalAddress>().FirstOrDefault();
                 
                 if (telecom!=null)
                 {
@@ -154,13 +154,18 @@ namespace XbimExchanger.IfcToCOBieLiteUK
                 var roles = ifcPerson.Roles;
                 if (roles.Any())
                 {
-                    target.Categories = new List<Category>(roles.Count);
+                    target.Categories = new List<Category>(roles.Count());
                     foreach (var role in roles)
                         target.Categories.Add(new Category { Classification = "Role", Code = role.Role.ToString(), Description = role.Description });
                 }
 
             }
 
+        }
+
+        public override Contact CreateTargetObject()
+        {
+            return new Contact();
         }
     }
 }

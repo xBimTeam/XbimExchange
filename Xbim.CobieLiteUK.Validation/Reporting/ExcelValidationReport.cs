@@ -9,9 +9,9 @@ using NPOI.SS.UserModel;
 using NPOI.SS.Util;
 using NPOI.XSSF.UserModel;
 using Xbim.Common.Logging;
-using Xbim.COBieLiteUK;
+using Xbim.CobieLiteUk;
 
-namespace Xbim.CobieLiteUK.Validation.Reporting
+namespace Xbim.CobieLiteUk.Validation.Reporting
 {
     /// <summary>
     /// Can create an Excel report containing summary and detailed reports on provided and missing information.

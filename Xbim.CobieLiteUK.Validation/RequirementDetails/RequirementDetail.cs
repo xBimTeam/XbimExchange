@@ -1,8 +1,6 @@
 ﻿using System;
-using Xbim.COBieLiteUK;
-using Attribute = Xbim.COBieLiteUK.Attribute;
 
-namespace Xbim.CobieLiteUK.Validation.RequirementDetails
+namespace Xbim.CobieLiteUk.Validation.RequirementDetails
 {
     /// <summary>
     /// Contains an evaluation criterion to apply.

@@ -1,15 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using Xbim.COBie.Rows;
-using Xbim.Ifc2x3.ExternalReferenceResource;
-using Xbim.Ifc2x3.Kernel;
 using Xbim.Ifc2x3.ProductExtension;
 using Xbim.Ifc2x3.QuantityResource;
-using Xbim.XbimExtensions;
-using Xbim.Ifc2x3.Extensions;
-using Xbim.Ifc2x3.PropertyResource;
 
 namespace Xbim.COBie.Data
 {
@@ -42,14 +35,14 @@ namespace Xbim.COBie.Data
             COBieSheet<COBieFloorRow> floors = new COBieSheet<COBieFloorRow>(Constants.WORKSHEET_FLOOR);
 
             // get all IfcBuildingStory objects from IFC file
-            IEnumerable<IfcBuildingStorey> buildingStories = Model.Instances.OfType<IfcBuildingStorey>();
+            IEnumerable<IfcBuildingStorey> buildingStories = Model.FederatedInstances.OfType<IfcBuildingStorey>();
 
             COBieDataPropertySetValues allPropertyValues = new COBieDataPropertySetValues(); //properties helper class
             COBieDataAttributeBuilder attributeBuilder = new COBieDataAttributeBuilder(Context, allPropertyValues);
             attributeBuilder.InitialiseAttributes(ref _attributes);
             
             
-            //IfcClassification ifcClassification = Model.Instances.OfType<IfcClassification>().FirstOrDefault();
+            //IfcClassification ifcClassification = Model.FederatedInstances.OfType<IfcClassification>().FirstOrDefault();
             //list of attributes to exclude form attribute sheet
             
             //set up filters on COBieDataPropertySetValues for the SetAttributes only

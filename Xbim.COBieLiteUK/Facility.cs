@@ -1,28 +1,31 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.Diagnostics.CodeAnalysis;
 using System.IO;
+using System.IO.Compression;
 using System.Linq;
-using System.Reflection;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Xml;
 using System.Xml.Serialization;
+using log4net;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 using NPOI.HSSF.UserModel;
 using NPOI.SS.UserModel;
 using NPOI.XSSF.UserModel;
-using Xbim.COBieLiteUK.Converters;
+using Xbim.CobieLiteUk.Converters;
 using Formatting = System.Xml.Formatting;
-using Xbim.FilterHelper;
+using Xbim.CobieLiteUk.FilterHelper;
 using Xbim.COBie.EqCompare;
+using Xbim.CobieLiteUk.Schemas;
 
-namespace Xbim.COBieLiteUK
+namespace Xbim.CobieLiteUk
 {
     public partial class Facility
     {
+        private static readonly ILog Log = LogManager.GetLogger("Xbim.COBieLiteUK.Facility");
+
         public Facility()
         {
             Metadata = new Metadata();
@@ -269,14 +272,54 @@ namespace Xbim.COBieLiteUK
 
         public static Facility ReadXml(Stream stream)
         {
+            Facility facility;
             var serializer = GetXmlSerializer();
-            var facility = (Facility)serializer.Deserialize(stream);
+            facility = (Facility)serializer.Deserialize(stream);
             facility.SetFacility(facility);
             return facility;
         }
 
-        public static Facility ReadXml(string path)
+        /// <summary>
+        /// Attempts to find an XML file in a compressed archive.
+        /// This function has been implemented to simplify the management of NBS Bim Toolkit exported projects
+        /// </summary>
+        /// <param name="path">A string poiting to the archive file name.</param>
+        /// <returns>A valid facility or null if no suitable file has been found</returns>
+        public static Facility ReadZip(string path)
         {
+            //FileStream fs = File.OpenRead(path);
+            using (var zf = ZipFile.Open(path, ZipArchiveMode.Read))
+            {
+                foreach (var zipEntry in zf.Entries)
+                {
+
+                    FileInfo entryFileName = new FileInfo(zipEntry.Name);
+                    if (entryFileName.Extension != ".xml")
+                        continue;
+                    using (var zipStream = zipEntry.Open())
+                    {
+                        var facility = ReadXml(zipStream);
+                        zipStream.Close();
+                        return facility;
+                    }
+                }
+            }
+            return null;
+        }
+
+        public static Facility ReadXml(string path, bool ignoreNamespaces = false)
+        {
+            if (ignoreNamespaces)
+            {
+                FileInfo f = new FileInfo(path);
+                var serializer = GetXmlSerializer();
+                using (var textreader = f.OpenText())
+                {
+                    var facility = (Facility)serializer.Deserialize(new NamespaceTolerantXmlTextReader(textreader));
+                    facility.SetFacility(facility);
+                    return facility;
+                }
+            }
             using (var stream = File.OpenRead(path))
             {
                 var facility = ReadXml(stream);
@@ -537,17 +580,26 @@ namespace Xbim.COBieLiteUK
 
         #region Writing COBie Spreadsheet
 
-        public void WriteCobie(Stream stream, ExcelTypeEnum type, out string message,
-            OutPutFilters assetfilters = null, string version = "UK2012", bool useTemplate = true)
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="stream"></param>
+        /// <param name="type"></param>
+        /// <param name="message"></param>
+        /// <param name="assetfilters"></param>
+        /// <param name="templateVersion">Use a template selected amongst the admissible values returned from the Templates.GetAvalilableTemplateTypes() function</param>
+        /// <param name="useTemplate"></param>
+        public void WriteCobie(Stream stream, ExcelTypeEnum type, out string message, OutPutFilters assetfilters = null, string templateVersion = "UK2012", bool useTemplate = true)
         {
             Stream templateStream = null;
             if (useTemplate)
             {
-                var templateName = version + (type == ExcelTypeEnum.XLS ? ".xls" : ".xlsx");
-                templateStream =
-                    GetType()
-                        .Assembly.GetManifestResourceStream(String.Format("{0}.Templates.{1}", GetType().Namespace,
-                            templateName));
+                var resourceName = Templates.FullResourceName(templateVersion, type);
+                templateStream = GetType().Assembly.GetManifestResourceStream(resourceName);
+                if (templateStream == null)
+                {
+                    Log.ErrorFormat("Template '{0}' could not be found in assembly streams.", resourceName);
+                }
             }
 
             IWorkbook workbook;
@@ -569,7 +621,7 @@ namespace Xbim.COBieLiteUK
 
             ReportProgress.Reset(GetChildren().Count(), 100, "Creating Excel COBie");
 
-            WriteToCobie(workbook, log, null, new Dictionary<Type, int>(), new List<string>(), new Dictionary<string, int>(), assetfilters, version);
+            WriteToCobie(workbook, log, null, new Dictionary<Type, int>(), new List<string>(), new Dictionary<string, int>(), assetfilters, templateVersion);
 
             watch.Stop();
             Debug.WriteLine("Creating NPOI model: {0}ms", watch.ElapsedMilliseconds);

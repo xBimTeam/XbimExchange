@@ -1,15 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using Xbim.XbimExtensions;
 using Xbim.COBie.Rows;
 using Xbim.Ifc2x3.ConstructionMgmtDomain;
 using Xbim.Ifc2x3.Kernel;
-using Xbim.Ifc2x3.ExternalReferenceResource;
-using Xbim.Ifc2x3.Extensions;
-using Xbim.Ifc2x3.PropertyResource;
 using Xbim.COBie.Serialisers.XbimSerialiser;
+using Xbim.Ifc2x3.Interfaces;
 
 namespace Xbim.COBie.Data
 {
@@ -38,7 +33,7 @@ namespace Xbim.COBie.Data
             //Create new sheet
             COBieSheet<COBieSpareRow> spares = new COBieSheet<COBieSpareRow>(Constants.WORKSHEET_SPARE);
                         // get all IfcBuildingStory objects from IFC file
-            IEnumerable<IfcConstructionProductResource> ifcConstructionProductResources = Model.Instances.OfType<IfcConstructionProductResource>();
+            IEnumerable<IfcConstructionProductResource> ifcConstructionProductResources = Model.FederatedInstances.OfType<IfcConstructionProductResource>();
 
             COBieDataPropertySetValues allPropertyValues = new COBieDataPropertySetValues(); //properties helper class
             COBieDataAttributeBuilder attributeBuilder = new COBieDataAttributeBuilder(Context, allPropertyValues);
@@ -49,7 +44,7 @@ namespace Xbim.COBie.Data
             attributeBuilder.ExcludeAttributePropertyNamesWildcard.AddRange(Context.Exclude.Spare.AttributesContain);
             
 
-            //IfcTypeObject typeObject = Model.Instances.OfType<IfcTypeObject>().FirstOrDefault();
+            //IfcTypeObject typeObject = Model.FederatedInstances.OfType<IfcTypeObject>().FirstOrDefault();
 
             ProgressIndicator.Initialise("Creating Spares", ifcConstructionProductResources.Count());
 
@@ -83,17 +78,16 @@ namespace Xbim.COBie.Data
                     spare.Description = (ifcConstructionProductResource == null) ? "" : ifcConstructionProductResource.Description.ToString();
 
                 //get information from Pset_Spare_COBie property set 
-                IfcPropertySingleValue ifcPropertySingleValue = null;
-                IfcPropertySet ifcPropertySet =  ifcConstructionProductResource.GetPropertySet("Pset_Spare_COBie");
+                var ifcPropertySet =  ifcConstructionProductResource.GetPropertySet("Pset_Spare_COBie");
                 if (ifcPropertySet != null)
                 {
-                    ifcPropertySingleValue = ifcPropertySet.HasProperties.Where<IfcPropertySingleValue>(p => p.Name == "Suppliers").FirstOrDefault();
+                    var ifcPropertySingleValue = ifcPropertySet.HasProperties.OfType<IIfcPropertySingleValue>().FirstOrDefault(p => p.Name == "Suppliers");
                     spare.Suppliers = ((ifcPropertySingleValue != null) && (!string.IsNullOrEmpty(ifcPropertySingleValue.NominalValue.ToString()))) ? ifcPropertySingleValue.NominalValue.ToString() : DEFAULT_STRING;
 
-                    ifcPropertySingleValue = ifcPropertySet.HasProperties.Where<IfcPropertySingleValue>(p => p.Name == "SetNumber").FirstOrDefault();
+                    ifcPropertySingleValue = ifcPropertySet.HasProperties.OfType<IIfcPropertySingleValue>().FirstOrDefault(p => p.Name == "SetNumber");
                     spare.SetNumber = ((ifcPropertySingleValue != null) && (!string.IsNullOrEmpty(ifcPropertySingleValue.NominalValue.ToString()))) ? ifcPropertySingleValue.NominalValue.ToString() : DEFAULT_STRING; ;
 
-                    ifcPropertySingleValue = ifcPropertySet.HasProperties.Where<IfcPropertySingleValue>(p => p.Name == "PartNumber").FirstOrDefault();
+                    ifcPropertySingleValue = ifcPropertySet.HasProperties.OfType<IIfcPropertySingleValue>().FirstOrDefault(p => p.Name == "PartNumber");
                     spare.PartNumber = ((ifcPropertySingleValue != null) && (!string.IsNullOrEmpty(ifcPropertySingleValue.NominalValue.ToString()))) ? ifcPropertySingleValue.NominalValue.ToString() : DEFAULT_STRING; ;
                 }
                 else

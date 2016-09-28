@@ -1,17 +1,15 @@
 ﻿using System;
 using System.IO;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Xbim.COBieLiteUK;
+using Xbim.CobieLiteUk;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
-using System.Text.RegularExpressions;
-using Xbim.CobieLiteUK.Validation;
-using Xbim.IO;
+using Xbim.CobieLiteUk.Validation;
 using XbimExchanger.IfcToCOBieLiteUK;
-using Attribute = Xbim.COBieLiteUK.Attribute;
-using XbimExchanger.COBieLiteHelpers;
-using Xbim.FilterHelper;
+using Attribute = Xbim.CobieLiteUk.Attribute;
+using Xbim.CobieLiteUk.FilterHelper;
+using Xbim.Ifc;
 
 
 namespace Tests
@@ -132,6 +130,28 @@ namespace Tests
         //        }
         //    }
         //}
+
+        [TestMethod]
+        public void CobieLiteUkTemplatesOk()
+        {
+            var ret = Templates.GetAvalilableTemplateTypes().ToList();
+            Assert.AreEqual(ret.Count, 1);
+
+            var t = typeof(Templates);
+            
+            Stream templateStream = null;
+
+            foreach (var templateVersion in ret)
+            {
+                var resourceName = Templates.FullResourceName(templateVersion, ExcelTypeEnum.XLS);
+                templateStream = t.Assembly.GetManifestResourceStream(resourceName);
+                Assert.IsNotNull(templateStream);
+
+                resourceName = Templates.FullResourceName(templateVersion, ExcelTypeEnum.XLSX);
+                templateStream = t.Assembly.GetManifestResourceStream(resourceName);
+                Assert.IsNotNull(templateStream);
+            }
+        }
 
         [TestMethod]
         public void CoBieLiteUkCreation()
@@ -768,21 +788,41 @@ namespace Tests
                     c => c.GetType() == typeof (Contact) && c.Name == "martin.cerny@northumbria.ac.uk");
         }
 
+        [DeploymentItem("ValidationFiles\\Lakeside_Restaurant-stage6-COBie.xml")]
+        [DeploymentItem("ValidationFiles\\DownloadedFormNBSToolkit.xml")]
+        [TestMethod]
+        public void XmlReadTest()
+        {
+            // can it read a self-generated xml with no namespace correction?
+            var v2 = Facility.ReadXml(@"Lakeside_Restaurant-stage6-COBie.xml", false);
+            // can it read a NBS-generated file with namespace correction?
+            var v3 = Facility.ReadXml(@"DownloadedFormNBSToolkit.xml", true);
+        }
+
+        [DeploymentItem("TestFiles\\Example_Bim_Toolkit_Stage4.zip")]
+        [TestMethod]
+        public void ZipReadTest()
+        {
+            // can it read a zip file exported from theNBS's digital bim toolkit?
+            var v2 = Facility.ReadZip(@"Example_Bim_Toolkit_Stage4.zip");
+            Assert.IsNotNull(v2);
+        }
+
+
+
         [DeploymentItem("TestFiles\\OBN1-COBie-UK-2014.xlsx")]
         [TestMethod]
         [DeploymentItem("ValidationFiles\\Lakeside_Restaurant.ifc")]
         public void IfcToCoBieLiteUkTest()
         {
-            using (var m = new XbimModel())
+            const string ifcTestFile = @"Lakeside_Restaurant.ifc";
+            using (var m = IfcStore.Open(ifcTestFile))
             {
-                const string ifcTestFile = @"Lakeside_Restaurant.ifc";
-                var xbimTestFile = Path.ChangeExtension(ifcTestFile, "xbim");
-                var jsonFile = Path.ChangeExtension(ifcTestFile, "json");
-                m.CreateFrom(ifcTestFile, xbimTestFile, null, true, true);
+                var jsonFile = Path.ChangeExtension(ifcTestFile, "json");               
                 var facilities = new List<Facility>();
 
-                OutPutFilters rolefilters = new OutPutFilters();
-                RoleFilter reqRoles = RoleFilter.Unknown; //RoleFilter.Architectural |  RoleFilter.Mechanical | RoleFilter.Electrical | RoleFilter.FireProtection | RoleFilter.Plumbing;
+                var rolefilters = new OutPutFilters();
+                const RoleFilter reqRoles = RoleFilter.Unknown; //RoleFilter.Architectural |  RoleFilter.Mechanical | RoleFilter.Electrical | RoleFilter.FireProtection | RoleFilter.Plumbing;
                 rolefilters.ApplyRoleFilters(reqRoles);
 
                 var ifcToCoBieLiteUkExchanger = new IfcToCOBieLiteUkExchanger(m, facilities, null, rolefilters);
@@ -840,6 +880,7 @@ namespace Tests
             var submitted = Facility.ReadJson("Lakeside_restaurant.json");
             Assert.IsNotNull(submitted.AssetTypes);
             var requirement = Facility.ReadJson("Lakeside_Restaurant-stage6-COBie.json");
+            requirement.WriteXml(@"C:\Users\Claudio\Desktop\Lakeside_Restaurant-stage6-COBie.xml");
             Assert.IsNotNull(requirement.AssetTypes);
             var submittedAssetTypes = new List<AssetType>();
             foreach (var assetTypeRequirement in requirement.AssetTypes)

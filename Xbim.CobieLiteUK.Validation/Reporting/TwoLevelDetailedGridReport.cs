@@ -2,10 +2,8 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
-using Xbim.COBieLiteUK;
-using Attribute = Xbim.COBieLiteUK.Attribute;
 
-namespace Xbim.CobieLiteUK.Validation.Reporting
+namespace Xbim.CobieLiteUk.Validation.Reporting
 {
     /// <summary>
     /// Data preparation layer for the production or reports that group all AssetTypes/Assets associated with an assetType requirement

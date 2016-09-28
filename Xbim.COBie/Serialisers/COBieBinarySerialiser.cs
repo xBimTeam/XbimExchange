@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using Xbim.COBie.Contracts;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.IO;
@@ -18,7 +15,7 @@ namespace Xbim.COBie.Serialisers
 
         }
 
-        public void Serialise(COBieWorkbook workbook, ICOBieValidationTemplate ValidationTemplate = null)
+        public void Serialise(COBieWorkbook workbook, ICOBieValidationTemplate validationTemplate = null)
         {
             if (workbook == null)
             {

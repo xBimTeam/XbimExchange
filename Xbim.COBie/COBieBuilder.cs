@@ -1,19 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Xml;
-using System.Xml.Serialization;
 using Xbim.COBie.Rows;
-using Xbim.XbimExtensions;
-using Xbim.Ifc2x3.Extensions;
 using System.Linq;
-using System.Reflection;
+using Xbim.Common.Metadata;
 using Xbim.COBie.Contracts;
 using Xbim.COBie.Serialisers;
 using Xbim.Ifc2x3.ProductExtension;
 using Xbim.Ifc2x3.Kernel;
-using Xbim.IO;
-
 
 
 namespace Xbim.COBie
@@ -96,7 +90,7 @@ namespace Xbim.COBie
                 SetExcludeObjTypeTypes(CobiePickLists);
             }
             //start the Cache
-            Context.Model.CacheStart();
+            Context.Model.BeginCaching();
                 
             //contact sheet first as it will fill contact information lookups for other sheets
             Workbook.Add(cq.GetCOBieContactSheet());
@@ -175,8 +169,8 @@ namespace Xbim.COBie
                         (!string.IsNullOrEmpty(colvalue.CellValue))
                         )
                     {
-                        IfcType ifcType;
-                        if (IfcMetaData.TryGetIfcType(colvalue.CellValue.Trim().ToUpper(), out ifcType))
+                        ExpressType ifcType;
+                        if (Context.Model.Metadata.TryGetExpressType(colvalue.CellValue.Trim().ToUpper(), out ifcType))
                             classTypes.Remove(ifcType.Type);
                     }
                 }

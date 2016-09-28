@@ -1,12 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Xbim.COBieLiteUK;
+﻿using System.Collections.Generic;
+using Xbim.CobieLiteUk;
 using Xbim.DPoW;
 using Contact = Xbim.DPoW.Contact;
-using FacilityType = Xbim.COBieLiteUK.Facility;
+using FacilityType = Xbim.CobieLiteUk.Facility;
 
 namespace XbimExchanger.DPoWToCOBieLiteUK
 {
@@ -35,6 +31,11 @@ namespace XbimExchanger.DPoWToCOBieLiteUK
             target.CreatedOn = Exchanger.SourceRepository.CreatedOn;
 
             return target;
+        }
+
+        public override TTargetType CreateTargetObject()
+        {
+            return new TTargetType();
         }
     }
 }

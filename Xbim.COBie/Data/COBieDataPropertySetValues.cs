@@ -2,7 +2,7 @@
 using System.Linq;
 using Xbim.Ifc2x3.Kernel;
 using Xbim.Ifc2x3.PropertyResource;
-using System;
+
 //using System;
 
 

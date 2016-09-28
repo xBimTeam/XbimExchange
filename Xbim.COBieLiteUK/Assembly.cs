@@ -1,15 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace Xbim.COBieLiteUK
+namespace Xbim.CobieLiteUk
 {
     public partial class Assembly 
     {
-        internal protected override List<CobieObject> MergeDuplicates(List<CobieObject> objects, TextWriter log)
+        protected internal override List<CobieObject> MergeDuplicates(List<CobieObject> objects, TextWriter log)
         {
             var candidates = objects.OfType<Assembly>().ToList();
             if (!candidates.Any()) return new List<CobieObject>();

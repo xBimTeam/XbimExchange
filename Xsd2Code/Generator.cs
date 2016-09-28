@@ -1,10 +1,8 @@
 using System;
 using System.CodeDom;
 using System.Collections.Generic;
-using System.IO;
 using System.Xml.Schema;
 using System.Xml.Serialization;
-using Xsd2Code.Library.Extensions;
 using Xsd2Code.Library.Helpers;
 using System.Xml;
 using System.Linq;

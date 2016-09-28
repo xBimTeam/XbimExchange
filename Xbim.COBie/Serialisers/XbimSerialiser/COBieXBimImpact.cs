@@ -1,17 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using Xbim.COBie.Rows;
-using Xbim.XbimExtensions.Transactions;
 using Xbim.Ifc2x3.Kernel;
-using Xbim.Ifc2x3.ProductExtension;
 using Xbim.Ifc2x3.MeasureResource;
-using Xbim.Ifc.SelectTypes;
-using Xbim.XbimExtensions.SelectTypes;
-using Xbim.IO;
-using Xbim.Ifc2x3.Extensions;
-
+using Xbim.IO.Esent;
 
 
 namespace Xbim.COBie.Serialisers.XbimSerialiser
@@ -79,7 +72,7 @@ namespace Xbim.COBie.Serialisers.XbimSerialiser
             if (row.SheetName.ToLower().Trim() == "type")
             {
                 if (IfcTypeObjects == null)
-                            IfcTypeObjects = Model.Instances.OfType<IfcTypeObject>();
+                            IfcTypeObjects = Model.FederatedInstances.OfType<IfcTypeObject>();
                 IfcTypeObject ifcTypeObject = IfcTypeObjects.Where(to => to.Name.ToString().ToLower() == row.RowName.ToLower()).FirstOrDefault();
                 if (ifcTypeObject != null)
                 {
@@ -101,13 +94,13 @@ namespace Xbim.COBie.Serialisers.XbimSerialiser
             else
             {
                 if (IfcProducts == null)
-                    IfcProducts = Model.Instances.OfType<IfcProduct>();
+                    IfcProducts = Model.FederatedInstances.OfType<IfcProduct>();
                 IfcProduct ifcProduct = IfcProducts.Where(to => to.Name.ToString().ToLower() == row.RowName.ToLower()).FirstOrDefault();
                 if (ifcProduct != null)
                 {
                     if (XBimContext.IsMerge)
                     {
-                        ifcPropertySet = ifcProduct.GetPropertySet(pSetName);
+                        ifcPropertySet = ifcProduct.GetPropertySet(pSetName) as IfcPropertySet;
                         if (ifcPropertySet != null)//Property set Pset_EnvironmentalImpactValues already set so assume exists so skip
                         {
 #if DEBUG

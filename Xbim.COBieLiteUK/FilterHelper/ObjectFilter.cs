@@ -1,23 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Configuration;
-using System.Diagnostics;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Xbim.Ifc2x3.Kernel;
-using Xbim.IO;
+using Xbim.Ifc4.Interfaces;
 
-namespace Xbim.FilterHelper
+namespace Xbim.CobieLiteUk.FilterHelper
 {
     /// <summary>
     /// Filter on object type names, used to filter Type and Component COBie Sheets
     /// </summary>
     public class ObjectFilter
     {
-
-        
-
         #region Properties
         /// <summary>
         /// Keyed list with true or false values, true to include. false to exclude
@@ -35,12 +28,9 @@ namespace Xbim.FilterHelper
         private List<string> _itemsToExclude;
         private List<string> ItemsToExclude
         {
-            get
-            {
-                if (_itemsToExclude == null)
-                    _itemsToExclude = Items.Where(e => e.Value == false).Select(e => e.Key).ToList();
-
-                return _itemsToExclude;
+            get {
+                return _itemsToExclude ??
+                       (_itemsToExclude = Items.Where(e => e.Value == false).Select(e => e.Key).ToList());
             }
         }
 
@@ -61,22 +51,16 @@ namespace Xbim.FilterHelper
         /// <param name="section">ConfigurationSection from configuration file</param>
         public ObjectFilter(ConfigurationSection section) : this()
         {
-            if (section != null)
+            if (section == null) return;
+
+            foreach (KeyValueConfigurationElement keyVal in ((AppSettingsSection)section).Settings)
             {
-                foreach (KeyValueConfigurationElement keyVal in ((AppSettingsSection)section).Settings)
-                {
-                    if (!string.IsNullOrEmpty(keyVal.Key))
-                    {
-                        bool include = false;
-                        if (String.Compare(keyVal.Value, "YES", StringComparison.OrdinalIgnoreCase) == 0)
-                        {
-                            include = true;
-                        }
-                        Items.Add(keyVal.Key.ToUpper(), include);
-                    }
-                }
+                if (string.IsNullOrEmpty(keyVal.Key)) continue;
+                var include = string.Compare(keyVal.Value, "YES", StringComparison.OrdinalIgnoreCase) == 0;
+                Items.Add(keyVal.Key.ToUpper(), include);
             }
         }
+
         #endregion
 
         #region Methods
@@ -105,10 +89,7 @@ namespace Xbim.FilterHelper
                     PreDefinedType[ifcElement] = definedTypes;
                     return true;
                 }
-                else
-                {
-                    PreDefinedType.Add(ifcElement, definedTypes);
-                }
+                PreDefinedType.Add(ifcElement, definedTypes);
             }
             catch (Exception)
             {
@@ -123,19 +104,16 @@ namespace Xbim.FilterHelper
         /// <param name="section"></param>
         public void FillPreDefinedTypes(ConfigurationSection section)
         {
-            if (section != null)
+            if (section == null) return;
+            foreach (KeyValueConfigurationElement keyVal in ((AppSettingsSection)section).Settings)
             {
-                foreach (KeyValueConfigurationElement keyVal in ((AppSettingsSection)section).Settings)
-                {
-                    if (!string.IsNullOrEmpty(keyVal.Value))
-                    {
-                        var values = keyVal.Value.Split(new[] { ';' }, StringSplitOptions.RemoveEmptyEntries).ToList().ConvertAll(s => s.ToUpper()).ToArray();
-                        PreDefinedType.Add(keyVal.Key.ToUpper(), values);
-                    }
-                }
+                if (string.IsNullOrEmpty(keyVal.Value)) continue;
+
+                var values = keyVal.Value.Split(new[] { ';' }, StringSplitOptions.RemoveEmptyEntries).ToList().ConvertAll(s => s.ToUpper()).ToArray();
+                PreDefinedType.Add(keyVal.Key.ToUpper(), values);
             }
         }
-        
+
         /// <summary>
         /// Test for string exists in ItemsToExclude string lists
         /// </summary>
@@ -148,16 +126,12 @@ namespace Xbim.FilterHelper
             
             testStr = testStr.ToUpper();
             //check for predefinedtype enum value passed as string
-            bool ExcludeDefinedType = false; //if preDefinedType is null or preDefinedType does not exist in PredefinedType dictionary 
-            if ((preDefinedType != null) &&
-                PreDefinedType.ContainsKey(testStr)
-                )
-            {
-                preDefinedType = preDefinedType.ToUpper();
-                ExcludeDefinedType = !PreDefinedType[testStr].Contains(preDefinedType);
-            }
+            if ((preDefinedType == null) || !PreDefinedType.ContainsKey(testStr))
+                return ItemsToExclude.Contains(testStr);
+            preDefinedType = preDefinedType.ToUpper();
+            var excludeDefinedType = !PreDefinedType[testStr].Contains(preDefinedType);
 
-            return (ItemsToExclude.Contains(testStr) || ExcludeDefinedType);
+            return ItemsToExclude.Contains(testStr) || excludeDefinedType;
         }
 
 
@@ -167,32 +141,26 @@ namespace Xbim.FilterHelper
         /// </summary>
         /// <param name="obj">IfcObjectDefinition object</param>
         /// <returns>bool, true = exclude</returns>
-        public bool ItemsFilter(IfcObjectDefinition obj)
+        public bool ItemsFilter(IIfcObjectDefinition obj)
         {
-            if (ItemsToExclude.Count == 0) return false; //nothing to test against
+            if (ItemsToExclude.Count == 0) 
+                return false; //nothing to test against
 
             var objType = obj.GetType();
             var objString = objType.Name.ToUpper(); //obj.ToString().ToUpper(); //or this might work, obj.IfcType().IfcTypeEnum.ToString();
-            bool result = ItemsToExclude.Contains(objString);
-            
-            if (!result && (PreDefinedType.ContainsKey(objString)))
+            var result = ItemsToExclude.Contains(objString);
+
+            if (result || !PreDefinedType.ContainsKey(objString)) return result;
+            var objPreDefinedProp = objType.GetProperty("PredefinedType");
+
+            if (objPreDefinedProp == null) return false;
+            var objPreDefValue = objPreDefinedProp.GetValue(obj,null);
+
+            if (objPreDefValue == null) return false;
+            var preDefType = objPreDefValue.ToString();
+            if (!string.IsNullOrEmpty(preDefType))
             {
-                var objPreDefinedProp = objType.GetProperty("PredefinedType");
-            
-                if (objPreDefinedProp != null)
-                {
-
-                    var objPreDefValue = objPreDefinedProp.GetValue(obj,null);
-
-                    if (objPreDefValue != null)
-                    {
-                        var preDefType = objPreDefValue.ToString();
-                        if (!string.IsNullOrEmpty(preDefType))
-                        {
-                            result = !PreDefinedType[objString].Contains(preDefType.ToUpper());
-                        } 
-                    }
-                }
+                result = !PreDefinedType[objString].Contains(preDefType.ToUpper());
             }
             return result;
         }
@@ -206,19 +174,19 @@ namespace Xbim.FilterHelper
             _itemsToExclude = null; //reset exclude
 
             //find all includes for the incoming merge ObjectFilter
-            var mergeInc = mergeFilter.Items.Where(i => i.Value == true).ToDictionary(i => i.Key, v => v.Value);
+            var mergeInc = mergeFilter.Items.Where(i => i.Value).ToDictionary(i => i.Key, v => v.Value);
             //set the true flag on 'this' Items with same key as incoming merges found above in mergeInc
             foreach (var pair in mergeInc)
             {
                 Items[pair.Key] = pair.Value;
             }
             
-            var mergeData = this.PreDefinedType.Concat(mergeFilter.PreDefinedType).GroupBy(v => v.Key).ToDictionary(k => k.Key, v => v.SelectMany(x => x.Value).Distinct().ToArray());
+            var mergeData = PreDefinedType.Concat(mergeFilter.PreDefinedType).GroupBy(v => v.Key).ToDictionary(k => k.Key, v => v.SelectMany(x => x.Value).Distinct().ToArray());
             //rebuild PreDefinedType from merge linq statement
-            this.PreDefinedType.Clear();
+            PreDefinedType.Clear();
             foreach (var item in mergeData)
             {
-                this.PreDefinedType.Add(item.Key, item.Value);
+                PreDefinedType.Add(item.Key, item.Value);
             }
 
         }
@@ -231,17 +199,17 @@ namespace Xbim.FilterHelper
         {
             _itemsToExclude = null; //reset exclude
 
-            this.Items.Clear();
+            Items.Clear();
             //fill dictionary from passed argument  Items
             foreach (var pair in copyFilter.Items)
             {
-                this.Items[pair.Key] = pair.Value;
+                Items[pair.Key] = pair.Value;
             }
 
-            this.PreDefinedType.Clear();
+            PreDefinedType.Clear();
             foreach (var pair in copyFilter.PreDefinedType)
             {
-                this.PreDefinedType[pair.Key] = pair.Value;
+                PreDefinedType[pair.Key] = pair.Value;
             }
         }
 
@@ -251,12 +219,10 @@ namespace Xbim.FilterHelper
         public void Clear()
         {
             _itemsToExclude = null; //reset exclude
-            this.Items.Clear();
-            this.PreDefinedType.Clear();
+            Items.Clear();
+            PreDefinedType.Clear();
         }
 
         #endregion
-
-
     }
 }

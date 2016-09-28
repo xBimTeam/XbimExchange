@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using Xbim.Ifc2x3.ExternalReferenceResource;
-using Xbim.XbimExtensions.Interfaces;
-using Xbim.IO;
 using Xbim.COBie.Data;
 using Xbim.Ifc2x3.ActorResource;
+using Xbim.Ifc2x3.IO;
+using Xbim.Common;
+using Xbim.Ifc;
 
 namespace Xbim.COBie
 {
@@ -25,7 +25,7 @@ namespace Xbim.COBie
         /// <summary>
         /// Map models to roles for federated models
         /// </summary>
-        public Dictionary<XbimModel, COBieMergeRoles> MapMergeRoles { get; private set; } 
+        public Dictionary<IModel, COBieMergeRoles> MapMergeRoles { get; private set; } 
  
         private  GlobalUnits _workBookUnits;
         /// <summary>
@@ -82,7 +82,7 @@ namespace Xbim.COBie
 
             //set the row index to report error rows on
             ErrorRowStartIndex = ErrorRowIndexBase.RowTwo; //default for excel sheet
-            MapMergeRoles = new Dictionary<XbimModel, COBieMergeRoles>();
+            MapMergeRoles = new Dictionary<IModel, COBieMergeRoles>();
 
         }
 
@@ -96,25 +96,28 @@ namespace Xbim.COBie
         /// <summary>
         /// Get merge roles for federated models, used to work out Model Merge Precedence Rules
         /// </summary>
-        private Dictionary<XbimModel, COBieMergeRoles> LinkRoleToModel()
+        private Dictionary<IModel, COBieMergeRoles> LinkRoleToModel()
         {
-            Dictionary<IfcRole, COBieMergeRoles> mapMergeRoles = MapRolesForMerge();//assign merge role to a IfcRoleEnum value
-            Dictionary<XbimModel, COBieMergeRoles> mapModelToMergeRoles = new Dictionary<XbimModel, COBieMergeRoles>();
+            var mapMergeRoles = MapRolesForMerge();//assign merge role to a IfcRoleEnum value
+            var mapModelToMergeRoles = new Dictionary<IModel, COBieMergeRoles>();
             
             //mapModelToMergeRoles.Add(Model, COBieMergeRoles.Unknown); //assume that it is just the holder model(xBIMf) (as xbim is creating holding file .xbimf) for and all the models are in the Model.RefencedModels property
             
             //now get the referenced models
             foreach (var refModel in Model.ReferencedModels)
             {
-                IfcDocumentInformation doc = refModel.DocumentInformation;
-                IfcOrganization owner = doc.DocumentOwner as IfcOrganization;
-                if ((owner != null) && (owner.Roles != null))
+               // IfcDocumentInformation doc = refModel.DocumentInformation;
+              //  var owner = doc.DocumentOwner as IfcOrganization;
+              //  if ((owner != null) && (owner.Roles != null))
                 {
-                    COBieMergeRoles mergeRoles = COBieMergeRoles.Unknown;
+                    var mergeRoles = COBieMergeRoles.Unknown;
                     
-                    foreach (var role in owner.Roles)
+                   // foreach (var role in owner.Roles)
                     {
-                        IfcRole roleitem = role.Role;
+
+                        IfcRoleEnum roleitem;
+                        if( !Enum.TryParse(refModel.Role,true,out  roleitem))
+                            roleitem = IfcRoleEnum.USERDEFINED;
 
                         if (mapMergeRoles[roleitem] != COBieMergeRoles.Unknown)
                         {
@@ -124,7 +127,7 @@ namespace Xbim.COBie
                                 mergeRoles = mergeRoles ^ COBieMergeRoles.Unknown;
                         }
                     }
-                    mapModelToMergeRoles.Add(refModel.Model, mergeRoles);
+                    mapModelToMergeRoles.Add((XbimModel)refModel.Model, mergeRoles);
                 }
             }
             return mapModelToMergeRoles;
@@ -135,43 +138,43 @@ namespace Xbim.COBie
         /// Map ifcRols to the MergeRole for COBie
         /// </summary>
         /// <returns></returns>
-        private Dictionary<IfcRole, COBieMergeRoles> MapRolesForMerge()
+        private Dictionary<IfcRoleEnum, COBieMergeRoles> MapRolesForMerge()
         {
-            Dictionary<IfcRole, COBieMergeRoles> mapRoles = new Dictionary<IfcRole,COBieMergeRoles>();
-            foreach (var item in Enum.GetValues(typeof(IfcRole)))
+            var mapRoles = new Dictionary<IfcRoleEnum,COBieMergeRoles>();
+            foreach (var item in Enum.GetValues(typeof(IfcRoleEnum)))
             {
-                IfcRole role = (IfcRole)item;
+                var role = (IfcRoleEnum)item;
                 switch (role)
                 {
-                    case IfcRole.Supplier:
-                    case IfcRole.Manufacturer:
-                    case IfcRole.Contractor:
-                    case IfcRole.Subcontractor:
-                    case IfcRole.StructuralEngineer:
-                    case IfcRole.CostEngineer:
-                    case IfcRole.Client:
-                    case IfcRole.BuildingOwner:
-                    case IfcRole.BuildingOperator:
-                    case IfcRole.ProjectManager:
-                    case IfcRole.FacilitiesManager:
-                    case IfcRole.CivilEngineer:
-                    case IfcRole.ComissioningEngineer:
-                    case IfcRole.Engineer:
-                    case IfcRole.Consultant:
-                    case IfcRole.ConstructionManager:
-                    case IfcRole.FieldConstructionManager:
-                    case IfcRole.Owner:
-                    case IfcRole.Reseller:
-                    case IfcRole.UserDefined:
+                    case IfcRoleEnum.SUPPLIER:
+                    case IfcRoleEnum.MANUFACTURER:
+                    case IfcRoleEnum.CONTRACTOR:
+                    case IfcRoleEnum.SUBCONTRACTOR:
+                    case IfcRoleEnum.STRUCTURALENGINEER:
+                    case IfcRoleEnum.COSTENGINEER:
+                    case IfcRoleEnum.CLIENT:
+                    case IfcRoleEnum.BUILDINGOWNER:
+                    case IfcRoleEnum.BUILDINGOPERATOR:
+                    case IfcRoleEnum.PROJECTMANAGER:
+                    case IfcRoleEnum.FACILITIESMANAGER:
+                    case IfcRoleEnum.CIVILENGINEER:
+                    case IfcRoleEnum.COMISSIONINGENGINEER:
+                    case IfcRoleEnum.ENGINEER:
+                    case IfcRoleEnum.CONSULTANT:
+                    case IfcRoleEnum.CONSTRUCTIONMANAGER:
+                    case IfcRoleEnum.FIELDCONSTRUCTIONMANAGER:
+                    case IfcRoleEnum.OWNER:
+                    case IfcRoleEnum.RESELLER:
+                    case IfcRoleEnum.USERDEFINED:
                         mapRoles.Add(role, COBieMergeRoles.Unknown);
                         break;
-                    case IfcRole.Architect:
+                    case IfcRoleEnum.ARCHITECT:
                         mapRoles.Add(role, COBieMergeRoles.Architectural);
                         break;
-                    case IfcRole.MechanicalEngineer:
+                    case IfcRoleEnum.MECHANICALENGINEER:
                         mapRoles.Add(role, COBieMergeRoles.Mechanical);
                         break;
-                    case IfcRole.ElectricalEngineer:
+                    case IfcRoleEnum.ELECTRICALENGINEER:
                         mapRoles.Add(role, COBieMergeRoles.Electrical);
                         break;
                     default:
@@ -196,9 +199,9 @@ namespace Xbim.COBie
         /// Gets the model defined in this context to generate COBie data from
         /// </summary>
         
-        private XbimModel _model;
+        private IfcStore _model;
 
-        public XbimModel Model
+        public IfcStore Model
         {
             get { return _model; }
             set { 

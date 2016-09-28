@@ -1,28 +1,28 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Data;
-using System.Drawing;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
-using Xbim.FilterHelper;
-using Xbim.COBieLiteUK;
-using System.Diagnostics;
-using Xbim.IO;
-using XbimExchanger.IfcToCOBieLiteUK;
 using Xbim.Common.Exceptions;
+using Xbim.CobieLiteUk.FilterHelper;
+using Xbim.CobieLiteUk;
+using XbimExchanger.IfcToCOBieLiteUK;
+using XbimExchanger.IfcToCOBieLiteUK.Conversion;
+using XbimExchanger.IfcToCOBieExpress.Conversion;
+using XbimExchanger.IfcHelpers;
 
-namespace Xbim.Client
+namespace Xbim.CobieLiteUk.Client
 {
+    // ReSharper disable once InconsistentNaming
     public partial class COBieLiteGeneratorDlg : Form
     {
         /// <summary>
         /// Worker
         /// </summary>
-        private ICOBieLiteWorker _cobieWorker;
+        private ICobieConverter _cobieWorker;
 
         /// <summary>
         /// Filters for Extracting COBie, Role Filtering
@@ -32,9 +32,9 @@ namespace Xbim.Client
         /// <summary>
         /// Refrence models to OutPutFilters mappings
         /// </summary>
-        public Dictionary<FileInfo, RoleFilter> MapRefModelsRoles {get; private set; }
+        public Dictionary<FileInfo, RoleFilter> MapRefModelsRoles { get; private set; }
 
-        
+
 
         /// <summary>
         /// Config File holding mappings for ifc property extractions
@@ -44,7 +44,7 @@ namespace Xbim.Client
         /// <summary>
         /// Mappings for COBie proerties from IFC
         /// </summary>
-        private COBiePropertyMapping PropertyMaps { get;  set; }
+        private CobiePropertyMapping PropertyMaps { get; set; }
 
         /// <summary>
         /// Constructor
@@ -53,7 +53,7 @@ namespace Xbim.Client
         {
             InitializeComponent();
             //set default role filters held in FillRolesFilterHolder property list
-            DirectoryInfo dir = new DirectoryInfo(AppDomain.CurrentDomain.BaseDirectory);
+            var dir = new DirectoryInfo(AppDomain.CurrentDomain.BaseDirectory);
             ConfigFile = new FileInfo(Path.Combine(dir.FullName, "COBieAttributesCustom.config"));
             if (!ConfigFile.Exists)
             {
@@ -66,22 +66,23 @@ namespace Xbim.Client
                 _assetfilters.FillRolesFilterHolderFromDir(dir);
             }
 
-            PropertyMaps = new COBiePropertyMapping(ConfigFile);
+            PropertyMaps = new CobiePropertyMapping(ConfigFile);
             MapRefModelsRoles = new Dictionary<FileInfo, RoleFilter>();
         }
-        
+
         /// <summary>
         /// Copy resource help config file to working directory
         /// </summary>
-        /// <param name="fileName"></param>
         public void CreateDefaultAppConfig(FileInfo configFile)
         {
-            var asss = System.Reflection.Assembly.GetAssembly(typeof(IfcToCOBieLiteUkExchanger));
-
+            var asss = global::System.Reflection.Assembly.GetAssembly(typeof (IfcToCOBieLiteUkExchanger));
             using (var input = asss.GetManifestResourceStream("XbimExchanger.IfcToCOBieLiteUK.COBieAttributes.config"))
-            using (var output = configFile.Create())
             {
-                if (input != null) input.CopyTo(output);
+                if (input != null) 
+                using (var output = configFile.Create())
+                {
+                    input.CopyTo(output);
+                }
             }
             configFile.Refresh();
         }
@@ -93,31 +94,39 @@ namespace Xbim.Client
         /// <param name="e"></param>
         private void COBieLiteGenerator_Load(object sender, EventArgs e)
         {
-            //set roles
-            //var roleList = Enum.GetNames(typeof(RoleFilter));
-            //checkedListRoles.Items.AddRange(roleList.Where(r => r != RoleFilter.Unknown.ToString()).ToArray());
-            var sysList = Enum.GetNames(typeof(SystemExtractionMode));
-            checkedListSys.Items.AddRange(sysList.Where(r => r != SystemExtractionMode.System.ToString()).ToArray());
-            for (int i = 0; i < checkedListSys.Items.Count; i++) //set all to ticked
+            var sysList =
+                Enum.GetValues(typeof (SystemExtractionMode))
+                    .OfType<SystemExtractionMode>()
+                    .Where(r => r != SystemExtractionMode.System);
+
+            checkedListSys.Items.AddRange(sysList.OfType<object>().ToArray());
+            for (var i = 0; i < checkedListSys.Items.Count; i++) //set all to ticked
             {
                 checkedListSys.SetItemChecked(i, true);
             }
             //set template from resources
-            var templates = typeof(Xbim.COBieLiteUK.Facility).Assembly.GetManifestResourceNames();
-            templates = templates.Where(x => x.Contains(".Templates.")).ToArray();
-            templates = templates.Select(x => x.Split(new char[] { '.' })[3]).Distinct().ToArray();
-            txtTemplate.Items.AddRange(templates);
-            txtTemplate.SelectedIndex = 0;
+            var t1 = Templates.GetAvalilableTemplateTypes();
+            var tmps = t1.OfType<object>().ToArray();
+            txtTemplate.Items.AddRange(tmps);
+            if (txtTemplate.Items.Count > 0)
+                txtTemplate.SelectedIndex = 0;
+            
+
+            cmBoxCOBieType.DataSource = Enum.GetValues(typeof(COBieType));
+            cmboxFiletype.DataSource = Enum.GetValues(typeof(ExportFormatEnum));
             cmboxFiletype.SelectedIndex = 1;
 
             //set up tooltips
-            ToolTip tooltip = new ToolTip();
-            tooltip.AutoPopDelay = 8000;
-            tooltip.InitialDelay = 1000;
-            tooltip.ReshowDelay = 500;
-            tooltip.ShowAlways = true;
-            tooltip.IsBalloon = true;
-            tooltip.SetToolTip(chkBoxFlipFilter, "Export all excludes to excel file, Note PropertySet Excludes are not flipped");
+            var tooltip = new ToolTip
+            {
+                AutoPopDelay = 8000,
+                InitialDelay = 1000,
+                ReshowDelay = 500,
+                ShowAlways = true,
+                IsBalloon = true
+            };
+            tooltip.SetToolTip(chkBoxFlipFilter,
+                "Export all excludes to excel file, Note PropertySet Excludes are not flipped");
             tooltip.SetToolTip(chkBoxOpenFile, "Open in excel once file is created");
             tooltip.SetToolTip(rolesList, "Select roles for export filtering");
             tooltip.SetToolTip(btnGenerate, "Generate COBie excel workbook");
@@ -125,12 +134,12 @@ namespace Xbim.Client
             tooltip.SetToolTip(btnFederate, "Create federated file to extract COBie from");
             tooltip.SetToolTip(btnBrowseTemplate, "Select template excel file");
             tooltip.SetToolTip(cmboxFiletype, "Select excel file extension to generate");
-            tooltip.SetToolTip(btnClassFilter, "Setup Filter");
-            tooltip.SetToolTip(btnMergeFilter, "Filter To Apply, based on selected roles");
-            tooltip.SetToolTip(btnPropMaps, "Set PropertySet.PropertyName mappings to COBie Fileds");
-            tooltip.SetToolTip(chkBoxIds, "Tick to change GUID IDs to Entity IDs");
-            tooltip.SetToolTip(checkedListSys, "Tick to include additional Systems (ifcSystems always included)\nPropertyMaps = PropertySet Mappings, System Tab in \"Property Maps\" dialog\nTypes = Object Types listing associated components (not assigned to system)");
-
+            tooltip.SetToolTip(btnClassFilter, "Edit filter configuration for the different role settings");
+            tooltip.SetToolTip(btnMergeFilter, "Filter resulting from the merge of all currently selected roles");
+            tooltip.SetToolTip(btnPropMaps, "Set PropertySet.PropertyName mappings to be used for conversion to IFC format.");
+            tooltip.SetToolTip(chkBoxIds, "Tick to use EntityLabel instead of GUID for identity purposes.");
+            tooltip.SetToolTip(checkedListSys,
+                "Tick to include additional Systems (ifcSystems always included)\nPropertyMaps = PropertySet Mappings, System Tab in \"Property Maps\" dialog\nTypes = Object Types listing associated components (not assigned to system)");
         }
 
         /// <summary>
@@ -145,7 +154,7 @@ namespace Xbim.Client
                 {
                     foreach (var item in MapRefModelsRoles)
                     {
-                        AppendLog(string.Format("{0} has Roles: {1}",item.Key.Name, item.Value.ToString("F")));
+                        AppendLog(string.Format("{0} has Roles: {1}", item.Key.Name, item.Value.ToString("F")));
                     }
                 }
                 else
@@ -166,14 +175,14 @@ namespace Xbim.Client
         /// <returns></returns>
         private SystemExtractionMode SetSystemMode()
         {
-            SystemExtractionMode sysMode = SystemExtractionMode.System;
+            var sysMode = SystemExtractionMode.System;
             var checkedSysMode = checkedListSys.CheckedItems;
             //add the checked system modes
             foreach (var item in checkedSysMode)
             {
                 try
                 {
-                    SystemExtractionMode mode = (SystemExtractionMode)Enum.Parse(typeof(SystemExtractionMode), (string)item);
+                    var mode = (SystemExtractionMode)Enum.Parse(typeof(SystemExtractionMode), item.ToString());    
                     sysMode |= mode;
                 }
                 catch (Exception)
@@ -184,8 +193,6 @@ namespace Xbim.Client
 
             return sysMode;
         }
-        
-        
 
         /// <summary>
         /// On Click Generate Button
@@ -196,26 +203,47 @@ namespace Xbim.Client
         {
             if (chkBoxFlipFilter.Checked)
             {
-                var result = MessageBox.Show("Flip Filter is ticked, this will show only excluded items, Do you want to continue", "Warning", MessageBoxButtons.YesNo);
-                if (result == System.Windows.Forms.DialogResult.No)
+                // ReSharper disable LocalizableElement
+                var result = MessageBox.Show(
+                    "Flip Filter is ticked, this will show only excluded items, Do you want to continue",
+                    "Warning", MessageBoxButtons.YesNo);
+                if (result == DialogResult.No)
                 {
                     return;
                 }
             }
             btnGenerate.Enabled = false;
 
-           
-            
-            if (_cobieWorker == null)
+            //get required type of COBie
+            COBieType cobieType;
+            Enum.TryParse<COBieType>(cmBoxCOBieType.SelectedValue.ToString(), out cobieType);
+
+            if (cobieType == COBieType.COBieLiteUK)
             {
-                _cobieWorker = new COBieLiteWorker();
-                _cobieWorker.Worker.ProgressChanged += WorkerProgressChanged;
-                _cobieWorker.Worker.RunWorkerCompleted += WorkerCompleted;
+                if (_cobieWorker == null || !(_cobieWorker is CobieLiteConverter))
+                {
+                    _cobieWorker = new CobieLiteConverter();
+                    _cobieWorker.Worker.ProgressChanged += WorkerProgressChanged;
+                    _cobieWorker.Worker.RunWorkerCompleted += WorkerCompleted;
+                } 
+            }
+            else if (cobieType == COBieType.COBieExpress)
+            {
+                if (_cobieWorker == null || !(_cobieWorker is CobieExpressConverter))
+                {
+                    _cobieWorker = new CobieExpressConverter();
+                    _cobieWorker.Worker.ProgressChanged += WorkerProgressChanged;
+                    _cobieWorker.Worker.RunWorkerCompleted += WorkerCompleted;
+                }
+            }
+            else
+            {
+                throw new ArgumentException("Unknown COBieType requested");
             }
             //get Excel File Type
-            ExportTypeEnum excelType = GetExcelType();
+            var excelType = GetExcelType();
             //set filters
-            RoleFilter filterRoles = SetRoles();
+            var filterRoles = SetRoles();
             if (!chkBoxNoFilter.Checked)
             {
                 _assetfilters.ApplyRoleFilters(filterRoles);
@@ -223,25 +251,26 @@ namespace Xbim.Client
             }
 
             //set parameters
-            var args = new Params { ModelFile = txtPath.Text,
+            var conversionSettings = new CobieConversionParams
+            {
+                Source =  txtPath.Text,
+                OutputFileName = Path.ChangeExtension(txtPath.Text, "Cobie"),
                 TemplateFile = txtTemplate.Text,
-                Roles = filterRoles,
-                ExportType = excelType,
-                FlipFilter = chkBoxFlipFilter.Checked,
-                OpenExcel = chkBoxOpenFile.Checked,
-                FilterOff = chkBoxNoFilter.Checked,
+                ExportFormat = excelType,
                 ExtId = chkBoxIds.Checked ? EntityIdentifierMode.IfcEntityLabels : EntityIdentifierMode.GloballyUniqueIds,
                 SysMode = SetSystemMode(),
                 Filter = chkBoxNoFilter.Checked ? new OutPutFilters() : _assetfilters,
                 ConfigFile = ConfigFile.FullName,
-                Log = chkBoxLog.Checked,
+                Log = chkBoxLog.Checked
             };
+            
             //run worker
-           _cobieWorker.Run(args);
+            _cobieWorker.Run(conversionSettings);
 
         }
 
         #region Worker Methods
+
         /// <summary>
         /// Worker Complete method
         /// </summary>
@@ -251,11 +280,12 @@ namespace Xbim.Client
         {
             try
             {
-                if (args.Result is Exception)
+                var ex = args.Result as Exception;
+                if (ex != null)
                 {
-                    StringBuilder sb = new StringBuilder();
-                    Exception ex = args.Result as Exception;
-                    string indent = "";
+                    var sb = new StringBuilder();
+
+                    var indent = "";
                     while (ex != null)
                     {
                         sb.AppendFormat("{0}{1}\n", indent, ex.Message);
@@ -266,7 +296,7 @@ namespace Xbim.Client
                 }
                 else
                 {
-                    string errMsg = args.Result as string;
+                    var errMsg = args.Result as string;
                     if (!string.IsNullOrEmpty(errMsg))
                         AppendLog(errMsg);
 
@@ -274,8 +304,8 @@ namespace Xbim.Client
             }
             catch (Exception ex)
             {
-                StringBuilder sb = new StringBuilder();
-                string indent = "";
+                var sb = new StringBuilder();
+                var indent = "";
 
                 while (ex != null)
                 {
@@ -290,9 +320,22 @@ namespace Xbim.Client
                 btnGenerate.Enabled = true;
             }
             //open file if ticked to open excel
-            if (chkBoxOpenFile.Checked && args.Result != null && !string.IsNullOrEmpty(args.Result.ToString()))
+            if (chkBoxOpenFile.Checked && args.Result is IEnumerable<string>)
             {
-                Process.Start(args.Result.ToString());
+                var files = args.Result as IEnumerable<string>;
+                foreach (var file in files)
+                {
+                    if (!string.IsNullOrEmpty(file) && File.Exists(file))
+                        try
+                        {
+                            Process.Start(file);
+                        }
+                        catch (Exception)
+                        {
+
+                            throw new ArgumentException("File extension is not associated with a program");
+                        } 
+                }
             }
             ProgressBar.Visible = false;
         }
@@ -304,7 +347,7 @@ namespace Xbim.Client
         /// <param name="args"></param>
         public void WorkerProgressChanged(object s, ProgressChangedEventArgs args)
         {
-            
+
             //Show message in Text List Box
             if (args.ProgressPercentage == 0)
             {
@@ -331,7 +374,8 @@ namespace Xbim.Client
         {
             txtOutput.AppendText(text + Environment.NewLine);
             txtOutput.ScrollToCaret();
-        } 
+        }
+
         #endregion
 
 
@@ -339,18 +383,9 @@ namespace Xbim.Client
         /// Get Excel Type From Combo
         /// </summary>
         /// <returns>ExcelTypeEnum</returns>
-        private ExportTypeEnum GetExcelType()
+        private ExportFormatEnum GetExcelType()
         {
-            ExportTypeEnum excelType;
-            try
-            {
-                excelType = (ExportTypeEnum)Enum.Parse(typeof(ExportTypeEnum), cmboxFiletype.Text);
-            }
-            catch (Exception)
-            {
-                throw;
-            }
-            return excelType;
+            return (ExportFormatEnum) Enum.Parse(typeof (ExportFormatEnum), cmboxFiletype.Text);
         }
 
 
@@ -361,43 +396,61 @@ namespace Xbim.Client
         /// <param name="e"></param>
         private void btnBrowse_Click(object sender, EventArgs e)
         {
-            OpenFileDialog dlg = new OpenFileDialog();
-            dlg.Filter = "All XBim Files|*.ifc;*.ifcxml;*.ifczip;*.xbim;*.xbimf|IFC Files|*.ifc;*.ifcxml;*.ifczip|Xbim Files|*.xbim|Xbim Federated Files|*.xbimf|Excel Files|*.xls;*.xlsx|Json Files|*.json|Xml Files|*.xml"; //
-            dlg.Title = "Choose a source file";
-
-            dlg.CheckFileExists = true;
-            // Show open file dialog box 
-            if (dlg.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+            var dlg = new OpenFileDialog
             {
-                txtPath.Text = dlg.FileName;
-                string fileExt = Path.GetExtension(txtPath.Text);
-                MapRefModelsRoles.Clear();
-                if (fileExt.Equals(".xbimf", StringComparison.OrdinalIgnoreCase))
-                {
-                    using (var fedModel = new FederatedModel(new FileInfo(txtPath.Text)))
-                    {
-                        if (fedModel.Model.IsFederation)
-                        {
-                            MapRefModelsRoles = fedModel.RefModelRoles.ToDictionary(m => new FileInfo(m.Key.DatabaseName), m => m.Value);
-                        }
-                        else
-                        {
-                            throw new XbimException(string.Format("Model is not Federated: {0}", fedModel.FileNameXbimf));
-                        }
-                    }
-                   
-                }
-                rolesList.Enabled = !(fileExt.Equals(".xbimf", StringComparison.OrdinalIgnoreCase) 
-                    || fileExt.Equals(".json", StringComparison.OrdinalIgnoreCase)
-                    || fileExt.Equals(".xml", StringComparison.OrdinalIgnoreCase)
-                    || fileExt.Equals(".xls", StringComparison.OrdinalIgnoreCase)
-                    || fileExt.Equals(".xlsx", StringComparison.OrdinalIgnoreCase)
-                    );
+                Filter =
+                    "All XBim Files|*.ifc;*.ifcxml;*.ifczip;*.xbim;*.xbimf|IFC Files|*.ifc;*.ifcxml;*.ifczip|Xbim Files|*.xbim|Xbim Federated Files|*.xbimf|Excel Files|*.xls;*.xlsx|Json Files|*.json|Xml Files|*.xml",
+                Title = "Choose a source file",
+                CheckFileExists = true
+            };
 
-                chkBoxOpenFile.Enabled = cmboxFiletype.Text.Equals("XLS", StringComparison.OrdinalIgnoreCase) || cmboxFiletype.Text.Equals("XLSX", StringComparison.OrdinalIgnoreCase);
-                chkBoxOpenFile.Checked = chkBoxOpenFile.Enabled;
+            // Show open file dialog box 
+            if (dlg.ShowDialog() != DialogResult.OK)
+                return;
+
+
+            txtPath.Text = dlg.FileName;
+            UpdateUiFromFilename();
+        }
+
+        private void UpdateUiFromFilename()
+        {
+            UpdateCheckOpenExcel();
+            var fileExt = Path.GetExtension(txtPath.Text);
+            MapRefModelsRoles.Clear();
+            if (string.IsNullOrEmpty(fileExt))
+                return;
+            if (fileExt.Equals(".xbimf", StringComparison.OrdinalIgnoreCase))
+            {
+                // this gets the federated model from an xbimf file
+                using (var fedModel = new FederatedModel(new FileInfo(txtPath.Text)))
+                {
+                    if (fedModel.Model.IsFederation)
+                    {
+                        MapRefModelsRoles = fedModel.RefModelRoles.ToDictionary(m => new FileInfo(m.Key.Name),
+                            m => m.Value);
+                    }
+                    else
+                    {
+                        throw new XbimException(string.Format("Model is not Federated: {0}", txtPath.Text));
+                    }
+                }
             }
-            
+            rolesList.Enabled = !(
+                fileExt.Equals(".xbimf", StringComparison.OrdinalIgnoreCase)
+                || fileExt.Equals(".json", StringComparison.OrdinalIgnoreCase)
+                || fileExt.Equals(".xml", StringComparison.OrdinalIgnoreCase)
+                || fileExt.Equals(".xls", StringComparison.OrdinalIgnoreCase)
+                || fileExt.Equals(".xlsx", StringComparison.OrdinalIgnoreCase)
+                );
+        }
+
+        private void UpdateCheckOpenExcel()
+        {
+            chkBoxOpenFile.Enabled = cmboxFiletype.Text.Equals("XLS", StringComparison.OrdinalIgnoreCase) ||
+                                     cmboxFiletype.Text.Equals("XLSX", StringComparison.OrdinalIgnoreCase) ||
+                                     cmboxFiletype.Text.Equals("STEP21", StringComparison.OrdinalIgnoreCase);
+            chkBoxOpenFile.Checked = chkBoxOpenFile.Enabled;
         }
 
         /// <summary>
@@ -407,14 +460,17 @@ namespace Xbim.Client
         /// <param name="e"></param>
         private void btnFederate_Click(object sender, EventArgs e)
         {
-            Federate FedDlg = new Federate(txtPath.Text);
-            var result = FedDlg.ShowDialog(this);
+            var fedDlg = new Federate(txtPath.Text);
+            var result = fedDlg.ShowDialog(this);
             if (result == DialogResult.OK)
             {
-                txtPath.Text = FedDlg.FileName;
-                MapRefModelsRoles = FedDlg.FileRoles;
+                txtPath.Text = fedDlg.FileName;
+                MapRefModelsRoles = fedDlg.FileRoles;
             }
-            rolesList.Enabled = (Path.GetExtension(txtPath.Text).ToUpper() != ".XBIMF");
+            var ext = Path.GetExtension(txtPath.Text);
+            if (string.IsNullOrEmpty(ext))
+                return;
+            rolesList.Enabled = (ext.ToUpperInvariant() != ".XBIMF");
         }
 
         /// <summary>
@@ -424,17 +480,18 @@ namespace Xbim.Client
         /// <param name="e"></param>
         private void btnBrowseTemplate_Click(object sender, EventArgs e)
         {
-            OpenFileDialog dlg = new OpenFileDialog();
-            dlg.Title = "Choose a COBie template file";
-            dlg.Filter = "Excel Files|*.xls;*.xlsx";
-            
-            dlg.CheckFileExists = true;
-            if (dlg.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+            var dlg = new OpenFileDialog
             {
-                txtTemplate.Text = dlg.FileName;
-                SetExcelType();
-                cmboxFiletype.Enabled = false;
-            }
+                Title = "Choose a COBie template file",
+                Filter = "Excel Files|*.xls;*.xlsx",
+                CheckFileExists = true
+            };
+
+            if (dlg.ShowDialog() != DialogResult.OK) 
+                return;
+            txtTemplate.Text = dlg.FileName;
+            SetExcelType();
+            cmboxFiletype.Enabled = false;
         }
 
         /// <summary>
@@ -443,10 +500,9 @@ namespace Xbim.Client
         private void SetExcelType()
         {
             var ext = Path.GetExtension(txtTemplate.Text);
-            if (!string.IsNullOrEmpty(ext))
-            {
-                ext = ext.Substring(1).ToUpper();
-            }
+            if (string.IsNullOrEmpty(ext)) 
+                return;
+            ext = ext.Substring(1).ToUpper();
             cmboxFiletype.SelectedIndex = cmboxFiletype.Items.IndexOf(ext);
         }
 
@@ -459,6 +515,7 @@ namespace Xbim.Client
         {
             cmboxFiletype.Enabled = true; //enable excel file type combo
         }
+
         /// <summary>
         /// Clear Text Box
         /// </summary>
@@ -469,8 +526,6 @@ namespace Xbim.Client
             txtOutput.Clear();
         }
 
-        
-
         /// <summary>
         /// Display notes on filter flip option
         /// </summary>
@@ -480,7 +535,9 @@ namespace Xbim.Client
         {
             if (chkBoxFlipFilter.Checked)
             {
-                txtOutput.AppendText("Test purposes Only: Will export filtered items to excel workbook, ignoring property set filters to ensure property names are shown" + Environment.NewLine);
+                txtOutput.AppendText(
+                    "Test purposes Only: Will export filtered items to excel workbook, ignoring property set filters to ensure property names are shown" +
+                    Environment.NewLine);
             }
             else
             {
@@ -495,28 +552,25 @@ namespace Xbim.Client
         /// <param name="e"></param>
         private void btnClassFilter_Click(object sender, EventArgs e)
         {
-            DirectoryInfo dir = new DirectoryInfo(AppDomain.CurrentDomain.BaseDirectory);
+            var dir = new DirectoryInfo(AppDomain.CurrentDomain.BaseDirectory);
             //set the defaults if not already set
             if (_assetfilters.DefaultsNotSet)
             {
-                
                 _assetfilters.FillRolesFilterHolderFromDir(dir);
             }
             try
             {
                 Cursor.Current = Cursors.WaitCursor;
-                FilterDlg filterDlg = new FilterDlg(_assetfilters);
-                if (filterDlg.ShowDialog() == DialogResult.OK)
-                {
-                    _assetfilters = filterDlg.RolesFilters;
-                    _assetfilters.WriteXMLRolesFilterHolderToDir(dir);
-                }
+                var filterDlg = new FilterDlg(_assetfilters);
+                if (filterDlg.ShowDialog() != DialogResult.OK) 
+                    return;
+                _assetfilters = filterDlg.RolesFilters;
+                _assetfilters.WriteXmlRolesFilterHolderToDir(dir);
             }
             finally
             {
                 Cursor.Current = Cursors.Default;
             }
-            
         }
 
         /// <summary>
@@ -529,38 +583,33 @@ namespace Xbim.Client
             //set the defaults if not already set
             if (_assetfilters.DefaultsNotSet)
             {
-                DirectoryInfo dir = new DirectoryInfo(AppDomain.CurrentDomain.BaseDirectory);
+                var dir = new DirectoryInfo(AppDomain.CurrentDomain.BaseDirectory);
                 _assetfilters.FillRolesFilterHolderFromDir(dir);
             }
             try
             {
                 Cursor.Current = Cursors.WaitCursor;
-                FilterDlg filterDlg = null;
-                string fileExt = Path.GetExtension(txtPath.Text);
-                if (fileExt.Equals(".xbimf", StringComparison.OrdinalIgnoreCase))
+                FilterDlg filterDlg;
+                var fileExt = Path.GetExtension(txtPath.Text);
+
+                if (fileExt != null && fileExt.Equals(".xbimf", StringComparison.OrdinalIgnoreCase))
                 {
-                    Dictionary<FileInfo, OutPutFilters> FedFilters = _assetfilters.SetFedModelFilter<FileInfo>(MapRefModelsRoles);
-                    filterDlg = new FilterDlg(_assetfilters, true, FedFilters);
+                    var fedFilters = _assetfilters.SetFedModelFilter(MapRefModelsRoles);
+                    filterDlg = new FilterDlg(_assetfilters, true, fedFilters);
                 }
                 else
                 {
                     MapRefModelsRoles.Clear();
-                    RoleFilter roles = SetRoles();
+                    var roles = SetRoles();
                     _assetfilters.ApplyRoleFilters(roles);
                     filterDlg = new FilterDlg(_assetfilters, true);
                 }
-
-                //read only
-                if (filterDlg != null)
-                {
-                    filterDlg.ShowDialog();
-                }
+                filterDlg.ShowDialog();
             }
             finally
             {
                 Cursor.Current = Cursors.Default;
             }
-            
         }
 
         /// <summary>
@@ -591,33 +640,30 @@ namespace Xbim.Client
         /// <param name="e"></param>
         private void btnPropMaps_Click(object sender, EventArgs e)
         {
-            PropertyMapDlg PropMapDlg = new PropertyMapDlg(PropertyMaps);
-            var result = PropMapDlg.ShowDialog(this);
-            if (result == DialogResult.OK)
-            {
-                PropertyMaps = PropMapDlg.PropertyMaps;
-                PropertyMaps.Save();
-            }
+            var propMapDlg = new PropertyMapDlg(PropertyMaps);
+            var result = propMapDlg.ShowDialog(this);
+            if (result != DialogResult.OK) 
+                return;
+            PropertyMaps = propMapDlg.PropertyMaps;
+            PropertyMaps.Save();
         }
-
-        
-
-        
 
         private void cmboxFiletype_SelectedIndexChanged(object sender, EventArgs e)
         {
-            chkBoxOpenFile.Enabled = cmboxFiletype.Text.Equals("XLS", StringComparison.OrdinalIgnoreCase) || cmboxFiletype.Text.Equals("XLSX", StringComparison.OrdinalIgnoreCase);
-            chkBoxOpenFile.Checked = chkBoxOpenFile.Enabled;
+            UpdateCheckOpenExcel();
+
+            grpIfcGenerationMaps.Enabled = cmboxFiletype.Text.Equals("IFC", StringComparison.OrdinalIgnoreCase);
+
+
         }
-
-        
     }
-    public enum ExportTypeEnum
+
+    enum COBieType
     {
-        XLS,
-        XLSX,
-        JSON,
-        XML,
+        COBieLiteUK,
+        COBieExpress,
+
     }
 
+    // ReSharper disable InconsistentNaming
 }

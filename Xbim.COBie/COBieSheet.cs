@@ -2,14 +2,12 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using System.Resources;
 using Xbim.COBie.Resources;
-using System.Diagnostics;
-using Xbim.IO;
-using Xbim.Ifc2x3.SharedBldgElements;
+
 using Xbim.Ifc2x3.ProductExtension;
 using Xbim.Ifc2x3.Kernel;
 using Xbim.COBie.Contracts;
+using Xbim.Ifc;
 
 namespace Xbim.COBie
 {
@@ -263,7 +261,7 @@ namespace Xbim.COBie
         /// </summary>
         /// <param name="model">model the cobie file was generated from</param>
         /// <param name="fileRoles">the file roles</param>
-        public List<string> ValidateComponentMerge(XbimModel model, COBieMergeRoles fileRoles) 
+        public List<string> ValidateComponentMerge(IfcStore model, COBieMergeRoles fileRoles) 
         {
             List<string> typeObjectGlobalId = new List<string>();
             List<string> typeObjectGlobalIdKeep = new List<string>();
@@ -273,7 +271,7 @@ namespace Xbim.COBie
                 COBieColumn colExtObj = Columns.Where(c => c.Value.ColumnName == "ExtObject").Select(c => c.Value).FirstOrDefault();
                 COBieColumn colExtId = Columns.Where(c => c.Value.ColumnName == "ExtIdentifier").Select(c => c.Value).FirstOrDefault();
                 
-                List<IfcElement> elements = model.InstancesLocal.OfType<IfcElement>().ToList(); //get all IfcElements, 
+                List<IfcElement> elements = model.FederatedInstances.OfType<IfcElement>().ToList(); //get all IfcElements, 
                 
                 List<T> RemainRows = new List<T>();
                 if (colExtObj != null)

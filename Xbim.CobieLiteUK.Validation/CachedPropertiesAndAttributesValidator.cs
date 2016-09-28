@@ -2,11 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using Xbim.CobieLiteUK.Validation.RequirementDetails;
-using Xbim.COBieLiteUK;
-using Attribute = Xbim.COBieLiteUK.Attribute;
+using Xbim.CobieLiteUk.Validation.RequirementDetails;
 
-namespace Xbim.CobieLiteUK.Validation
+namespace Xbim.CobieLiteUk.Validation
 {
     class CachedPropertiesAndAttributesValidator<T> where T : CobieObject, new()
     {

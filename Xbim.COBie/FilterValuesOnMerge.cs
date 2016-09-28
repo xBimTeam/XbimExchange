@@ -1,15 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
+using Xbim.Ifc2x3.BuildingcontrolsDomain;
 using Xbim.Ifc2x3.SharedBldgServiceElements;
 using Xbim.Ifc2x3.ProductExtension;
 using Xbim.Ifc2x3.StructuralElementsDomain;
 using Xbim.Ifc2x3.SharedBldgElements;
 using Xbim.Ifc2x3.ElectricalDomain;
-using Xbim.XbimExtensions;
 using Xbim.Ifc2x3.Kernel;
-using Xbim.Ifc2x3.BuildingControlsDomain;
 using Xbim.Ifc2x3.HVACDomain;
 using Xbim.Ifc2x3.SharedFacilitiesElements;
 using Xbim.Ifc2x3.PlumbingFireProtectionDomain;
@@ -589,9 +587,10 @@ namespace Xbim.COBie
                 //as stored in Ifc 2x3
                 var ifcFlowMeterType = ifcDistributionFlowElement.IsDefinedBy.OfType<IfcRelDefinesByType>().Select(rdbt => rdbt.RelatingType).OfType<IfcFlowMeterType>();  //Excel cell ref A758
                 //Excel A753 to A757 id full range of the IfcFlowMeterTypeEnum(2x4) assume that 2x3 full values OK which is a property of IfcFlowMeterType, so if we have IfcFlowMeterType.Any() then we have covered this requirement
-                if (ifcFlowMeterType.Any())
+                var ifcFlowMeterTypes = ifcFlowMeterType as IList<IfcFlowMeterType> ?? ifcFlowMeterType.ToList();
+                if (ifcFlowMeterTypes.Any())
                 {
-                    switch (ifcFlowMeterType.First().PredefinedType)
+                    switch (ifcFlowMeterTypes.First().PredefinedType)
                     {
                         case IfcFlowMeterTypeEnum.ELECTRICMETER:
                             return MatchRoles(fileRoles, COBieMergeRoles.Electrical);
@@ -705,29 +704,30 @@ namespace Xbim.COBie
                 var ifcSensorType = ifcDistributionControlElement.IsDefinedBy.OfType<IfcRelDefinesByType>().Select(rdbt => rdbt.RelatingType).OfType<IfcSensorType>();  //Excel cell ref E241
                 //Excel E1060 to E1080 , CONDUCTANCESENSOR, CONTACTSENSOR, IONCONCENTRATIONSENSOR, LEVELSENSOR, PHSENSOR, RADIATIONSENSOR, RADIOACTIVITYSENSOR, WINDSENSOR -  IFC2x4(not supported)
                 //sheet shows nothing for IFC2x3, assumed that if the IfcSensorTypeEnum (ifc2x3) contains any of the ifc2x4 items that the rule would hold.
-                if (ifcSensorType.Where(st => st.PredefinedType == IfcSensorTypeEnum.FIRESENSOR).Any())
+                var ifcSensorTypes = ifcSensorType as IList<IfcSensorType> ?? ifcSensorType.ToList();
+                if (ifcSensorTypes.Any(st => st.PredefinedType == IfcSensorTypeEnum.FIRESENSOR))
                     return MatchRoles(fileRoles,  COBieMergeRoles.FireProtection);
-                if (ifcSensorType.Where(st => st.PredefinedType == IfcSensorTypeEnum.FLOWSENSOR).Any())
+                if (ifcSensorTypes.Any(st => st.PredefinedType == IfcSensorTypeEnum.FLOWSENSOR))
                     return MatchRoles(fileRoles, COBieMergeRoles.Mechanical);
-                if (ifcSensorType.Where(st => st.PredefinedType == IfcSensorTypeEnum.GASSENSOR).Any())
+                if (ifcSensorTypes.Any(st => st.PredefinedType == IfcSensorTypeEnum.GASSENSOR))
                     return MatchRoles(fileRoles, COBieMergeRoles.Mechanical);
-                if (ifcSensorType.Where(st => st.PredefinedType == IfcSensorTypeEnum.HEATSENSOR).Any())
+                if (ifcSensorTypes.Any(st => st.PredefinedType == IfcSensorTypeEnum.HEATSENSOR))
                     return MatchRoles(fileRoles, COBieMergeRoles.FireProtection);
-                if (ifcSensorType.Where(st => st.PredefinedType == IfcSensorTypeEnum.HUMIDITYSENSOR).Any())
+                if (ifcSensorTypes.Any(st => st.PredefinedType == IfcSensorTypeEnum.HUMIDITYSENSOR))
                     return MatchRoles(fileRoles, COBieMergeRoles.Mechanical);
-                if (ifcSensorType.Where(st => st.PredefinedType == IfcSensorTypeEnum.LIGHTSENSOR).Any())
+                if (ifcSensorTypes.Any(st => st.PredefinedType == IfcSensorTypeEnum.LIGHTSENSOR))
                     return MatchRoles(fileRoles, COBieMergeRoles.Electrical);
-                if (ifcSensorType.Where(st => st.PredefinedType == IfcSensorTypeEnum.MOISTURESENSOR).Any())
+                if (ifcSensorTypes.Any(st => st.PredefinedType == IfcSensorTypeEnum.MOISTURESENSOR))
                     return MatchRoles(fileRoles, COBieMergeRoles.Mechanical);
-                if (ifcSensorType.Where(st => st.PredefinedType == IfcSensorTypeEnum.MOVEMENTSENSOR).Any())
+                if (ifcSensorTypes.Any(st => st.PredefinedType == IfcSensorTypeEnum.MOVEMENTSENSOR))
                     return MatchRoles(fileRoles, COBieMergeRoles.Electrical);
-                if (ifcSensorType.Where(st => st.PredefinedType == IfcSensorTypeEnum.PRESSURESENSOR).Any())
+                if (ifcSensorTypes.Any(st => st.PredefinedType == IfcSensorTypeEnum.PRESSURESENSOR))
                     return MatchRoles(fileRoles, COBieMergeRoles.Mechanical | COBieMergeRoles.Electrical);
-                if (ifcSensorType.Where(st => st.PredefinedType == IfcSensorTypeEnum.SMOKESENSOR).Any())
+                if (ifcSensorTypes.Any(st => st.PredefinedType == IfcSensorTypeEnum.SMOKESENSOR))
                     return MatchRoles(fileRoles, COBieMergeRoles.Electrical);
-                if (ifcSensorType.Where(st => st.PredefinedType == IfcSensorTypeEnum.SOUNDSENSOR).Any())
+                if (ifcSensorTypes.Any(st => st.PredefinedType == IfcSensorTypeEnum.SOUNDSENSOR))
                     return MatchRoles(fileRoles, COBieMergeRoles.Mechanical | COBieMergeRoles.Electrical | COBieMergeRoles.FireProtection);
-                if (ifcSensorType.Where(st => st.PredefinedType == IfcSensorTypeEnum.TEMPERATURESENSOR).Any())
+                if (ifcSensorTypes.Any(st => st.PredefinedType == IfcSensorTypeEnum.TEMPERATURESENSOR))
                     return MatchRoles(fileRoles, COBieMergeRoles.Mechanical | COBieMergeRoles.Electrical );
 
                 

@@ -1,8 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using Xbim.COBieLiteUK;
-using Xbim.Ifc2x3.ActorResource;
-using Xbim.XbimExtensions.SelectTypes;
+using Xbim.CobieLiteUk;
+using Xbim.Ifc4.Interfaces;
+
 
 namespace XbimExchanger.IfcToCOBieLiteUK
 {
@@ -25,11 +25,11 @@ namespace XbimExchanger.IfcToCOBieLiteUK
         /// </summary>
         /// <param name="actor"></param>
         /// <param name="helper"></param>
-        public ContactConverter(IfcActorSelect actor, CoBieLiteUkHelper helper)
+        public ContactConverter(IIfcActorSelect actor, CoBieLiteUkHelper helper)
         {
-            var personAndOrganization = actor as IfcPersonAndOrganization;
-            var person = actor as IfcPerson;
-            var organisation = actor as IfcOrganization;
+            var personAndOrganization = actor as IIfcPersonAndOrganization;
+            var person = actor as IIfcPerson;
+            var organisation = actor as IIfcOrganization;
             if (personAndOrganization != null)
             {
                 ConvertOrganisation(personAndOrganization.TheOrganization, helper);
@@ -49,13 +49,13 @@ namespace XbimExchanger.IfcToCOBieLiteUK
           
         }
 
-        private void ConvertOrganisation(IfcOrganization ifcOrganization, CoBieLiteUkHelper helper)
+        private void ConvertOrganisation(IIfcOrganization ifcOrganization, CoBieLiteUkHelper helper)
         {
             if (ifcOrganization.Addresses != null)
             {
-                var telecom = ifcOrganization.Addresses.OfType<IfcTelecomAddress>();
-                var postal = ifcOrganization.Addresses.OfType<IfcPostalAddress>();
-                var ifcTelecomAddresses = telecom as IfcTelecomAddress[] ?? telecom.ToArray();
+                var telecom = ifcOrganization.Addresses.OfType<IIfcTelecomAddress>();
+                var postal = ifcOrganization.Addresses.OfType<IIfcPostalAddress>();
+                var ifcTelecomAddresses = telecom.ToArray();
                 if (ifcTelecomAddresses.Any())
                 {
                     var emailAddresses = string.Join(";",ifcTelecomAddresses.SelectMany(t => t.ElectronicMailAddresses));
@@ -70,7 +70,7 @@ namespace XbimExchanger.IfcToCOBieLiteUK
 
                 }
 
-                var ifcPostalAddresses = postal as IfcPostalAddress[] ?? postal.ToArray();
+                var ifcPostalAddresses =  postal.ToArray();
                 if (ifcPostalAddresses.Any())
                 {
                     var deptNames = string.Join(";",ifcPostalAddresses.Where(p=>p.InternalLocation.HasValue).SelectMany(p => p.InternalLocation.ToString()));
@@ -100,7 +100,7 @@ namespace XbimExchanger.IfcToCOBieLiteUK
                 var roles = ifcOrganization.Roles;
                 if (roles.Any())
                 {
-                    Categories = new List<Category>(roles.Count);
+                    Categories = new List<Category>(roles.Count());
                     foreach (var role in roles)
                         Categories.Add(new Category {Classification = "Role", Code=role.Role.ToString(), Description = role.Description});
                 }
@@ -111,16 +111,16 @@ namespace XbimExchanger.IfcToCOBieLiteUK
           
         }
 
-        private void ConvertPerson(IfcPerson ifcPerson, CoBieLiteUkHelper helper)
+        private void ConvertPerson(IIfcPerson ifcPerson, CoBieLiteUkHelper helper)
         {
             FamilyName = ifcPerson.FamilyName;
             GivenName = ifcPerson.GivenName;
            
             if (ifcPerson.Addresses != null)
             {
-                var telecom = ifcPerson.Addresses.OfType<IfcTelecomAddress>();
-                var postal = ifcPerson.Addresses.OfType<IfcPostalAddress>();
-                var ifcTelecomAddresses = telecom as IfcTelecomAddress[] ?? telecom.ToArray();
+                var telecom = ifcPerson.Addresses.OfType<IIfcTelecomAddress>();
+                var postal = ifcPerson.Addresses.OfType<IIfcPostalAddress>();
+                var ifcTelecomAddresses = telecom.ToArray();
                 if (ifcTelecomAddresses.Any())
                 {
                     var emailAddresses = string.Join(";", ifcTelecomAddresses.Where(t => t.ElectronicMailAddresses != null).SelectMany(t => t.ElectronicMailAddresses));
@@ -134,7 +134,7 @@ namespace XbimExchanger.IfcToCOBieLiteUK
                     //    ContactURL = string.Join(";", url, ContactURL ?? ""); ;
                 }
 
-                var ifcPostalAddresses = postal as IfcPostalAddress[] ?? postal.ToArray();
+                var ifcPostalAddresses = postal.ToArray();
                 if (ifcPostalAddresses.Any())
                 {
                     var deptNames = string.Join(";", ifcPostalAddresses.Where(p => p.InternalLocation.HasValue).SelectMany(p => p.InternalLocation.ToString()));
@@ -162,7 +162,7 @@ namespace XbimExchanger.IfcToCOBieLiteUK
                 var roles = ifcPerson.Roles;
                 if (roles.Any())
                 {
-                    Categories = new List<Category>(roles.Count);
+                    Categories = new List<Category>(roles.Count());
                     foreach (var role in roles)
                         Categories.Add(new Category { Classification = "Role", Code = role.Role.ToString(), Description = role.Description });
                 } 

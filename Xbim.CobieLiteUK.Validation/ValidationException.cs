@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Xbim.CobieLiteUK.Validation
+namespace Xbim.CobieLiteUk.Validation
 {
     /// <summary>
     /// An error occurred inside the Validation engine.

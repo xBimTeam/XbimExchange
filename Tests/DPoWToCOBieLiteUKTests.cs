@@ -1,15 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Newtonsoft.Json;
-using Xbim.COBieLiteUK;
 using Xbim.DPoW;
-using Xbim.Ifc2x3.Kernel;
-using Xbim.IO;
-using Xbim.XbimExtensions.Interfaces;
-using XbimExchanger.COBieLiteToIfc;
 using XbimExchanger.DPoWToCOBieLiteUK;
 using ProjectStage = Xbim.DPoW.ProjectStage;
 
@@ -32,7 +25,7 @@ namespace Tests
             string msg;
             foreach (var stage in pow.ProjectStages)
             {
-                var facility = new Xbim.COBieLiteUK.Facility();
+                var facility = new Xbim.CobieLiteUk.Facility();
                 var exchanger = new DPoWToCOBieLiteUKExchanger(pow, facility, stage);
                 exchanger.Convert();
                 var output = Path.Combine(dir, stage.Name + ".cobieliteUK.json");
@@ -51,7 +44,7 @@ namespace Tests
             //try to reload to make sure serialization and deserilization works in both directions
             foreach (var output in outputs)
             {
-                var facility = Xbim.COBieLiteUK.Facility.ReadJson(output);
+                var facility = Xbim.CobieLiteUk.Facility.ReadJson(output);
             }
         }
 
@@ -68,7 +61,7 @@ namespace Tests
                 var xlsx = Path.Combine(dir, stage.Name + ".xlsx");
                 var ifc = Path.Combine(dir, stage.Name + ".ifc");
 
-                var facility = new Xbim.COBieLiteUK.Facility();
+                var facility = new Xbim.CobieLiteUk.Facility();
                 var cobieExchanger = new DPoWToCOBieLiteUKExchanger(pow, facility, stage);
                 cobieExchanger.Convert(DateTime.Now);
 

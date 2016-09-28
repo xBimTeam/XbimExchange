@@ -1,10 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 
-namespace Xbim.COBieLiteUK
+namespace Xbim.CobieLiteUk
 {
     public partial class Asset
     {
@@ -40,12 +36,11 @@ namespace Xbim.COBieLiteUK
         internal override void AfterCobieRead()
         {
             base.AfterCobieRead();
-            if (AssemblyOf != null && AssemblyOf.ChildAssetsOrTypes != null)
+            if (AssemblyOf == null || AssemblyOf.ChildAssetsOrTypes == null) 
+                return;
+            foreach (var key in AssemblyOf.ChildAssetsOrTypes)
             {
-                foreach (var key in AssemblyOf.ChildAssetsOrTypes)
-                {
-                    key.KeyType = EntityType.Asset;
-                }
+                key.KeyType = EntityType.Asset;
             }
         }
     }

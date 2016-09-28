@@ -4,7 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
 
-namespace Xbim.COBieLiteUK.WebOptimization
+namespace Xbim.CobieLiteUk.WebOptimization
 {
     internal class Program
     {
@@ -133,7 +133,7 @@ namespace Xbim.COBieLiteUK.WebOptimization
             var resources = f.Get<Resource>().Where(i => i != null).ToList();
             var spaces = f.Get<Space>().Where(i => i != null).ToList();
             var spares = f.Get<Spare>().Where(i => i != null).ToList();
-            var systems = (f.Systems ?? new List<Xbim.COBieLiteUK.System>()).Where(i => i != null).ToList();
+            var systems = (f.Systems ?? new List<Xbim.CobieLiteUk.System>()).Where(i => i != null).ToList();
             var zones = (f.Zones ?? new List<Zone>()).Where(i => i != null).ToList();
 
             //report

@@ -1,7 +1,8 @@
 ﻿using System.Linq;
 using System.Xml.Serialization;
 using Newtonsoft.Json;
-using Xbim.Ifc2x3.ProductExtension;
+using Xbim.Ifc4.Interfaces;
+
 
 namespace Xbim.COBieLite
 {
@@ -9,7 +10,7 @@ namespace Xbim.COBieLite
     {
     
 
-        public ZoneType(IfcZone ifcZone, CoBieLiteHelper helper)
+        public ZoneType(IIfcZone ifcZone, CoBieLiteHelper helper)
             : this()
         {
             externalEntityName = helper.ExternalEntityName(ifcZone);

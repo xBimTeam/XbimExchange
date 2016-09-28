@@ -1,4 +1,5 @@
-﻿using Xbim.COBieLiteUK;
+﻿using System.Linq;
+using Xbim.CobieLiteUk;
 using Xbim.Ifc2x3.Extensions;
 using Xbim.Ifc2x3.ProductExtension;
 
@@ -56,6 +57,13 @@ namespace XbimExchanger.COBieLiteUkToIfc
                 {
                    Exchanger.ConvertAttributeTypeToIfcObjectProperty(buildingStorey, attribute);
                 }
+            }
+            #endregion
+
+            #region Documents
+            if (floor.Documents != null && floor.Documents.Any())
+            {
+                Exchanger.ConvertDocumentsToDocumentSelect(buildingStorey, floor.Documents);
             }
             #endregion
             return buildingStorey;

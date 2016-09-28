@@ -2,7 +2,8 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2011/10/nuspec.xsd">
     <metadata>
         <id>Xbim.Exchange</id>
-        <version>3.1.15</version>
+        <!-- note: development versions are generally in the form 4.1.0-V0001, use 4 digits for consistency next time -->
+        <version>4.0.0-V044</version>
         <title>xBIM Exchange</title>
         <authors>xBIM team</authors>
         <owners>Steve Lockley</owners>
@@ -18,15 +19,21 @@ The xBIM project provides packages to convert IFC models to COBie spreadsheets i
 IOS and Android versions are under development.</description>
         <summary>The .Net toolkit for developing BIM applications based on the IFC standard. Essential support for the Ifc data model</summary>
         <releaseNotes>
+          4.0 contains the code ported to the multiple schema infrastructure of Xbim.Essentials 4.
           3.1 contains signed libaries targeting net40 framework.
           3.0 contains an implementation of the COBieLite protocol as well as the COBieLite Spreadsheet format.
         </releaseNotes>
         <language>en-GB</language>
       <tags>BIM, IFC, IfcXml, IfcZip, COBie, COBieLite, .Net, C#, BuildingSmart</tags>
       <dependencies>
-        <dependency id="NPOI" version="2.1.3.1" />
-        <dependency id="Xbim.Geometry" version="3.1.15" />
-        <dependency id="Xbim.PropertySets" version="3.1.10" />
+        <dependency id="log4net" version="2.0.5"  />
+        <dependency id="ManagedEsent" version="1.9.4"/>
+        <dependency id="Newtonsoft.Json" version="9.0.1" />
+        <dependency id="NPOI" version="2.2.1" />
+        <dependency id="SharpZipLib" version="0.86.0"  />
+        <dependency id="Xbim.Essentials" version="4.0.0-V236"  />
+        <!-- note: Xbim.Cobie is currently only used in the test project; this is strange and needs to be verified. -->
+        <dependency id="Xbim.Cobie" version="4.0.0-V236" />
       </dependencies>
     </metadata>
     <files>
@@ -50,10 +57,6 @@ IOS and Android versions are under development.</description>
       <file src="Output\Release\Xbim.COBieLiteUK.Validation.pdb" target="lib\net40\Xbim.COBieLiteUK.Validation.pdb" />
       <file src="Output\Release\Xbim.DPoW.pdb" target="lib\net40\Xbim.DPoW.pdb" />
       <file src="Output\Release\Xbim.Exchanger.pdb" target="lib\net40\Xbim.Exchanger.pdb" />
-      
-      <file src="Output\Release\Uniclass2015_Ac_v0_1.csv" target="content\net40\Uniclass2015_Ac_v0_1.csv" />
-      <file src="Output\Release\Uniclass2015_Pr_v1_1.csv" target="content\net40\Uniclass2015_Pr_v1_1.csv" />
-      <file src="Output\Release\Uniclass2015_Ss_v1_1.csv" target="content\net40\Uniclass2015_Ss_v1_1.csv" />
     </files>
 
   </package>

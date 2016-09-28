@@ -1,13 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-
 using Xbim.Ifc2x3.ProductExtension;
 using Xbim.COBie.Rows;
-using Xbim.XbimExtensions.Transactions;
 using Xbim.Ifc2x3.Extensions;
-using Xbim.IO;
+using Xbim.IO.Esent;
 
 namespace Xbim.COBie.Serialisers.XbimSerialiser
 {
@@ -132,7 +129,7 @@ namespace Xbim.COBie.Serialisers.XbimSerialiser
                 }
                 else
                 {
-                    space = Model.Instances.OfType<IfcSpace>().Where(sp => sp.Name.ToString().ToLower() == spaceName).FirstOrDefault();
+                    space = Model.FederatedInstances.OfType<IfcSpace>().Where(sp => sp.Name.ToString().ToLower() == spaceName).FirstOrDefault();
                     if (space != null)
                         Spaces.Add(spaceName, space);
                 }

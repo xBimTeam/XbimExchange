@@ -2,13 +2,10 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Xml.Serialization;
 using Newtonsoft.Json;
-using Xbim.XbimExtensions.Transactions.Extensions;
 
-namespace Xbim.COBieLiteUK
+namespace Xbim.CobieLiteUk
 {
     public partial class System
     {
@@ -26,7 +23,7 @@ namespace Xbim.COBieLiteUK
             }
         }
 
-        internal protected override List<CobieObject> MergeDuplicates(List<CobieObject> objects, TextWriter log)
+        protected internal override List<CobieObject> MergeDuplicates(List<CobieObject> objects, TextWriter log)
         {
             var candidates = objects.OfType<System>().ToList();
             if (!candidates.Any()) return new List<CobieObject>();

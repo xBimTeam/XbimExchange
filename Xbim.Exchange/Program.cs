@@ -1,29 +1,33 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
-using Xbim.CobieLiteUK.Validation;
-using Xbim.CobieLiteUK.Validation.Reporting;
-using Xbim.COBieLiteUK;
+using System.Xml;
+using Xbim.CobieExpress;
+using Xbim.CobieLiteUk.Validation;
+using Xbim.CobieLiteUk.Validation.Reporting;
+using Xbim.Common.Step21;
+using Xbim.CobieLiteUk;
+using Xbim.Ifc;
 using Xbim.IO;
+using Xbim.IO.Memory;
 using Xbim.ModelGeometry.Scene;
-using Xbim.XbimExtensions;
-using Xbim.XbimExtensions.Interfaces;
 using XbimExchanger.COBieLiteUkToIfc;
+using XbimExchanger.IfcToCOBieExpress;
 using XbimExchanger.IfcToCOBieLiteUK;
-using XbimGeometry.Interfaces;
+
 
 
 namespace Xbim.Exchange
 {
-    class Program
+    internal class Program
     {
-       
         static void Main(string[] args)
         {
             
             if (args.Length < 1)
             {
-                Console.WriteLine("No Ifc or xBim file specified");
+                Console.WriteLine("No IIfc or xBim file specified");
                 return;
             }
             var fileName = args[0];
@@ -31,22 +35,46 @@ namespace Xbim.Exchange
            
             using (var model = GetModel(fileName))
             {
-                if (model != null)
+                if (model == null)
                 {
+                    Console.WriteLine("No model to process. Press any key to exit");
+                    Console.Read();
+                    return;
+                }
                    
                     var context = new Xbim3DModelContext(model);
-                    context.CreateContext(geomStorageType: XbimGeometryType.PolyhedronBinary);
+                    context.CreateContext();
                     var wexBimFilename = Path.ChangeExtension(fileName, "wexBIM");
                     using (var wexBiMfile = new FileStream(wexBimFilename, FileMode.Create, FileAccess.Write))
                     {
                         using (var wexBimBinaryWriter = new BinaryWriter(wexBiMfile))
                         {
                             Console.WriteLine("Creating " + wexBimFilename);
-                            context.Write(wexBimBinaryWriter);
+                            model.SaveAsWexBim(wexBimBinaryWriter);
                             wexBimBinaryWriter.Close();
                         }
                         wexBiMfile.Close();
                     }
+                //now do COBieExpress
+                var cobie = new MemoryModel(new EntityFactory());
+                var cobieExpressFile = Path.ChangeExtension(fileName, ".cobie");
+                var cobieExpressXmlFile = Path.ChangeExtension(fileName, ".cobieXml");
+                var cobieExpressZipFile = Path.ChangeExtension(fileName, ".cobieZip");
+                var w = new Stopwatch();
+                using (var txn = cobie.BeginTransaction("IFC data in"))
+                {
+                    var exchanger = new IfcToCoBieExpressExchanger(model, cobie);
+                    w.Start();
+                    exchanger.Convert();
+                    w.Stop();
+                    txn.Commit();
+                }
+                Console.WriteLine("COBieExpress model created in {0}ms", w.ElapsedMilliseconds);
+                cobie.SaveAsStep21(File.Create(cobieExpressFile));
+                cobie.SaveAsStep21Zip(File.Create(cobieExpressZipFile));
+                cobie.SaveAsXml(File.Create(cobieExpressXmlFile), new XmlWriterSettings{Indent = true, IndentChars = "\t"});
+
+
                     //now do the DPoW files
                     var fileNameWithoutExtension = Path.GetFileNameWithoutExtension(fileName);
                     var fileDirectoryName = Path.GetDirectoryName(fileName);
@@ -91,38 +119,45 @@ namespace Xbim.Exchange
                             stream.Close();
                         }
 
-                        facility.ValidateUK2012(Console.Out,true);
+                    facility.ValidateUK2012(Console.Out, true);
                         string cobieValidatedFile = Path.ChangeExtension(dPoWFile, "Validated.Xlsx");
                         facility.WriteCobie(cobieValidatedFile, out error);
                         dPoWFile = Path.ChangeExtension(dPoWFile, "xbim");
-                        Console.WriteLine("Creating " + dPoWFile);
-                        using (var ifcModel = XbimModel.CreateModel(dPoWFile))
+                        var credentials = new XbimEditorCredentials()
                         {
-                            ifcModel.Initialise("Xbim Tester", "XbimTeam", "Xbim.Exchanger", "Xbim Development Team", "3.0");
-                            ifcModel.ReloadModelFactors();
+                            ApplicationDevelopersName = "XbimTeam",
+                            ApplicationFullName = "Xbim.Exchanger",
+                            EditorsOrganisationName = "Xbim Development Team",
+                            EditorsFamilyName = "Xbim Tester",
+                            ApplicationVersion = "3.0"
+                        };
+                        Console.WriteLine("Creating " + dPoWFile);
+                    using (
+                        var ifcModel = IfcStore.Create(credentials, IfcSchemaVersion.Ifc2X3,
+                            XbimStoreType.EsentDatabase))
+                        {                          
                             using (var txn = ifcModel.BeginTransaction("Convert from COBieLiteUK"))
                             {
-                                var coBieLiteUkToIfcExchanger = new CoBieLiteUkToIfcExchanger(facility, ifcModel);
-                                coBieLiteUkToIfcExchanger.Convert();
+                                var coBieLiteUkToIIfcExchanger = new CoBieLiteUkToIfcExchanger(facility, ifcModel);
+                                coBieLiteUkToIIfcExchanger.Convert();
                                 txn.Commit();
                                 //var err = model.Validate(model.Instances, Console.Out);
                             }
                             dPoWFile = Path.ChangeExtension(dPoWFile, "ifc");
                             Console.WriteLine("Creating " + dPoWFile);
-                            ifcModel.SaveAs(dPoWFile, XbimStorageType.IFC);
+                            ifcModel.SaveAs(dPoWFile, IfcStorageType.Ifc);
                             ifcModel.Close();
                         }
                     }
                     model.Close();
                 }
-            }
             Console.WriteLine("Press any key to exit");
             Console.Read();
         }
 
-        private static XbimModel GetModel(string fileName)
+        private static IfcStore GetModel(string fileName)
         {
-            XbimModel openModel = null;
+            IfcStore openModel = null;
             var extension = Path.GetExtension(fileName);
             if (string.IsNullOrWhiteSpace(extension))
             {
@@ -136,17 +171,17 @@ namespace Xbim.Exchange
                     fileName = Path.ChangeExtension(fileName, "ifcxml");
             }
 
-            if (File.Exists(fileName))
-            {
+            if (!File.Exists(fileName)) return null;
+
                 extension = Path.GetExtension(fileName);
-                if (String.Compare(extension, ".xbim", StringComparison.OrdinalIgnoreCase) == 0) //just open xbim
+            if (string.Compare(extension, ".xbim", StringComparison.OrdinalIgnoreCase) == 0) //just open xbim
                 {
 
                     try
                     {
-                        var model = new XbimModel();
+                        
                         Console.WriteLine("Opening " + fileName);
-                        model.Open(fileName, XbimDBAccess.ReadWrite);
+                        var model = IfcStore.Open(fileName);
                         //delete any geometry
                         openModel = model;
                     }
@@ -159,12 +194,11 @@ namespace Xbim.Exchange
                 }
                 else //we need to create the xBIM file
                 {
-                    var model = new XbimModel();
+                   
                     try
                     {
-                        Console.WriteLine("Creating " + Path.ChangeExtension(fileName, ".xBIM"));
-                        model.CreateFrom(fileName, null, null, true);
-                        openModel = model;
+                        Console.WriteLine("Creating " + Path.GetFileNameWithoutExtension(fileName));
+                        openModel = IfcStore.Open(fileName);
                     }
                     catch (Exception e)
                     {
@@ -173,7 +207,6 @@ namespace Xbim.Exchange
                     }
 
                 }
-            }
             return openModel;
         }
     }

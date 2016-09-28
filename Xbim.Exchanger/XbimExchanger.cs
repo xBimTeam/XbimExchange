@@ -1,8 +1,7 @@
 ﻿using System;
 using System.Collections.Concurrent;
 using System.Globalization;
-using Xbim.COBieLiteUK;
-using Xbim.XbimExtensions.Interfaces;
+using Xbim.CobieLiteUk;
 
 namespace XbimExchanger
 {

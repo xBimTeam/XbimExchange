@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
-using Xbim.COBieLiteUK;
+using Xbim.CobieLiteUk;
 
-namespace Xbim.CobieLiteUK.Validation.RequirementDetails
+namespace Xbim.CobieLiteUk.Validation.RequirementDetails
 {
     internal class CobieObjectCategoryMatch 
     {

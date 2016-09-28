@@ -108,7 +108,7 @@ namespace Xbim.COBie.Serialisers
         /// Formats the COBie data into an Excel XLS file
         /// </summary>
         /// <param name="cobie"></param>
-        public void Serialise(COBieWorkbook workbook, ICOBieValidationTemplate ValidationTemplate = null)
+        public void Serialise(COBieWorkbook workbook, ICOBieValidationTemplate validationTemplate = null)
         {
             if (workbook == null) { throw new ArgumentNullException("COBie", "COBieXLSXSerialiser.Serialise does not accept null as the COBie data parameter."); }
 
@@ -128,7 +128,7 @@ namespace Xbim.COBie.Serialisers
 
             UpdateInstructions();
 
-            ReportErrors(workbook, ValidationTemplate);
+            ReportErrors(workbook, validationTemplate);
 
             ReportRules();
 

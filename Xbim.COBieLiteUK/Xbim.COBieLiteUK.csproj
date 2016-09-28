@@ -7,9 +7,9 @@
     <ProjectGuid>{90DEF072-96C7-4972-835E-909C41169CB4}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Xbim.COBieLiteUK</RootNamespace>
+    <RootNamespace>Xbim.CobieLiteUk</RootNamespace>
     <AssemblyName>Xbim.COBieLiteUK</AssemblyName>
-    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <NuGetPackageImportStamp>258f9bea</NuGetPackageImportStamp>
     <TargetFrameworkProfile />
@@ -43,60 +43,78 @@
     <AssemblyOriginatorKeyFile>XbimOpenSourceKeyFile.snk</AssemblyOriginatorKeyFile>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Esent.Interop, Version=1.9.2.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\packages\ManagedEsent.1.9.2.0\lib\net40\Esent.Interop.dll</HintPath>
+    <Reference Include="Esent.Interop, Version=1.9.4.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\ManagedEsent.1.9.4\lib\net40\Esent.Interop.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="ICSharpCode.SharpZipLib, Version=0.86.0.518, Culture=neutral, PublicKeyToken=1b03e6acf1164f73, processorArchitecture=MSIL">
-      <HintPath>..\packages\SharpZipLib.0.86.0\lib\20\ICSharpCode.SharpZipLib.dll</HintPath>
+    <Reference Include="log4net, Version=1.2.15.0, Culture=neutral, PublicKeyToken=669e0ddf0bb1aa2a, processorArchitecture=MSIL">
+      <HintPath>..\packages\log4net.2.0.5\lib\net40-full\log4net.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="log4net, Version=1.2.13.0, Culture=neutral, PublicKeyToken=669e0ddf0bb1aa2a, processorArchitecture=MSIL">
-      <HintPath>..\packages\log4net.2.0.3\lib\net40-full\log4net.dll</HintPath>
+    <Reference Include="Newtonsoft.Json, Version=9.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.9.0.1\lib\net40\Newtonsoft.Json.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Newtonsoft.Json, Version=6.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
-      <HintPath>..\packages\Newtonsoft.Json.6.0.8\lib\net40\Newtonsoft.Json.dll</HintPath>
+    <Reference Include="NPOI, Version=2.2.1.0, Culture=neutral, PublicKeyToken=0df73ec7942b34e1, processorArchitecture=MSIL">
+      <HintPath>..\packages\NPOI.2.2.1\lib\net40\NPOI.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="NPOI, Version=2.1.3.1, Culture=neutral, PublicKeyToken=0df73ec7942b34e1, processorArchitecture=MSIL">
-      <HintPath>..\packages\NPOI.2.1.3.1\lib\net40\NPOI.dll</HintPath>
+    <Reference Include="NPOI.OOXML, Version=2.2.1.0, Culture=neutral, PublicKeyToken=0df73ec7942b34e1, processorArchitecture=MSIL">
+      <HintPath>..\packages\NPOI.2.2.1\lib\net40\NPOI.OOXML.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="NPOI.OOXML, Version=2.1.3.1, Culture=neutral, PublicKeyToken=0df73ec7942b34e1, processorArchitecture=MSIL">
-      <HintPath>..\packages\NPOI.2.1.3.1\lib\net40\NPOI.OOXML.dll</HintPath>
+    <Reference Include="NPOI.OpenXml4Net, Version=2.2.1.0, Culture=neutral, PublicKeyToken=0df73ec7942b34e1, processorArchitecture=MSIL">
+      <HintPath>..\packages\NPOI.2.2.1\lib\net40\NPOI.OpenXml4Net.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="NPOI.OpenXml4Net, Version=2.1.3.1, Culture=neutral, PublicKeyToken=0df73ec7942b34e1, processorArchitecture=MSIL">
-      <HintPath>..\packages\NPOI.2.1.3.1\lib\net40\NPOI.OpenXml4Net.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="NPOI.OpenXmlFormats, Version=2.1.3.1, Culture=neutral, PublicKeyToken=0df73ec7942b34e1, processorArchitecture=MSIL">
-      <HintPath>..\packages\NPOI.2.1.3.1\lib\net40\NPOI.OpenXmlFormats.dll</HintPath>
+    <Reference Include="NPOI.OpenXmlFormats, Version=2.2.1.0, Culture=neutral, PublicKeyToken=0df73ec7942b34e1, processorArchitecture=MSIL">
+      <HintPath>..\packages\NPOI.2.2.1\lib\net40\NPOI.OpenXmlFormats.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
+    <Reference Include="System.IO.Compression" />
+    <Reference Include="System.IO.Compression.FileSystem" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
-    <Reference Include="Xbim.Common, Version=3.1.0.0, Culture=neutral, PublicKeyToken=11e3655e576ec5a9, processorArchitecture=MSIL">
-      <HintPath>..\packages\Xbim.Essentials.3.1.10\lib\net40\Xbim.Common.dll</HintPath>
+    <Reference Include="Xbim.CobieExpress, Version=3.2.0.0, Culture=neutral, PublicKeyToken=11e3655e576ec5a9, processorArchitecture=MSIL">
+      <HintPath>..\packages\Xbim.Essentials.4.0.0-V236\lib\net40\Xbim.CobieExpress.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Xbim.Ifc.Extensions, Version=3.1.0.0, Culture=neutral, PublicKeyToken=11e3655e576ec5a9, processorArchitecture=MSIL">
-      <HintPath>..\packages\Xbim.Essentials.3.1.10\lib\net40\Xbim.Ifc.Extensions.dll</HintPath>
+    <Reference Include="Xbim.Common, Version=3.2.0.0, Culture=neutral, PublicKeyToken=11e3655e576ec5a9, processorArchitecture=MSIL">
+      <HintPath>..\packages\Xbim.Essentials.4.0.0-V236\lib\net40\Xbim.Common.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Xbim.Ifc2x3, Version=3.1.0.0, Culture=neutral, PublicKeyToken=11e3655e576ec5a9, processorArchitecture=MSIL">
-      <HintPath>..\packages\Xbim.Essentials.3.1.10\lib\net40\Xbim.Ifc2x3.dll</HintPath>
+    <Reference Include="Xbim.Ifc, Version=3.2.0.0, Culture=neutral, PublicKeyToken=11e3655e576ec5a9, processorArchitecture=MSIL">
+      <HintPath>..\packages\Xbim.Essentials.4.0.0-V236\lib\net40\Xbim.Ifc.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Xbim.IO, Version=3.1.0.0, Culture=neutral, PublicKeyToken=11e3655e576ec5a9, processorArchitecture=MSIL">
-      <HintPath>..\packages\Xbim.Essentials.3.1.10\lib\net40\Xbim.IO.dll</HintPath>
+    <Reference Include="Xbim.Ifc.Extensions, Version=3.2.0.0, Culture=neutral, PublicKeyToken=11e3655e576ec5a9, processorArchitecture=MSIL">
+      <HintPath>..\packages\Xbim.Essentials.4.0.0-V236\lib\net40\Xbim.Ifc.Extensions.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Xbim.Ifc2x3, Version=3.2.0.0, Culture=neutral, PublicKeyToken=11e3655e576ec5a9, processorArchitecture=MSIL">
+      <HintPath>..\packages\Xbim.Essentials.4.0.0-V236\lib\net40\Xbim.Ifc2x3.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Xbim.Ifc2x3.IO, Version=3.2.0.0, Culture=neutral, PublicKeyToken=11e3655e576ec5a9, processorArchitecture=MSIL">
+      <HintPath>..\packages\Xbim.Essentials.4.0.0-V236\lib\net40\Xbim.Ifc2x3.IO.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Xbim.Ifc4, Version=3.2.0.0, Culture=neutral, PublicKeyToken=11e3655e576ec5a9, processorArchitecture=MSIL">
+      <HintPath>..\packages\Xbim.Essentials.4.0.0-V236\lib\net40\Xbim.Ifc4.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Xbim.IO, Version=3.2.0.0, Culture=neutral, PublicKeyToken=11e3655e576ec5a9, processorArchitecture=MSIL">
+      <HintPath>..\packages\Xbim.Essentials.4.0.0-V236\lib\net40\Xbim.IO.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Xbim.Tessellator, Version=3.2.0.0, Culture=neutral, PublicKeyToken=11e3655e576ec5a9, processorArchitecture=MSIL">
+      <HintPath>..\packages\Xbim.Essentials.4.0.0-V236\lib\net40\Xbim.Tessellator.dll</HintPath>
       <Private>True</Private>
     </Reference>
   </ItemGroup>
@@ -150,10 +168,12 @@
     <Compile Include="EqCompare\SpareCompareKey.cs" />
     <Compile Include="EqCompare\StringBuilderExtender.cs" />
     <Compile Include="EqCompare\StringCompareKey.cs" />
-    <Compile Include="FilterHelper\COBiePropertyMapping.cs" />
+    <Compile Include="FilterHelper\CobiePropertyMapping.cs" />
+    <Compile Include="FilterHelper\ImportSet.cs" />
     <Compile Include="FilterHelper\ObjectFilter.cs" />
     <Compile Include="FilterHelper\PropertyFilter.cs" />
     <Compile Include="FilterHelper\OutPutFilters.cs" />
+    <Compile Include="FilterHelper\RoleFilter.cs" />
     <Compile Include="FilterHelper\SerializableDictionary.cs" />
     <Compile Include="Floor.cs" />
     <Compile Include="Impact.cs" />
@@ -175,10 +195,12 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Schemas\cobieliteuk.designer.cs" />
     <Compile Include="EntityKeys\ContactKey.cs" />
+    <Compile Include="Schemas\NamespaceTolerantXmlTextReader.cs" />
     <Compile Include="Space.cs" />
     <Compile Include="Spare.cs" />
     <Compile Include="AttributeValues\StringAttributeValue.cs" />
     <Compile Include="System.cs" />
+    <Compile Include="Templates\Templates.cs" />
     <Compile Include="Zone.cs" />
   </ItemGroup>
   <ItemGroup>

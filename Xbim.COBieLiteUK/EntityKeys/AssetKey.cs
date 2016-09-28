@@ -5,7 +5,7 @@ using Newtonsoft.Json;
 using System.Collections.Generic;
 
 // ReSharper disable once CheckNamespace
-namespace Xbim.COBieLiteUK
+namespace Xbim.CobieLiteUk
 {
     public partial class AssetKey : IEntityKey
     {

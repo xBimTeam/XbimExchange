@@ -1,18 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using Xbim.COBie.Rows;
-using Xbim.XbimExtensions.Transactions;
 using Xbim.Ifc2x3.Kernel;
 using Xbim.Ifc2x3.ProductExtension;
-using Xbim.Ifc2x3.UtilityResource;
 using Xbim.Ifc2x3.Extensions;
-using Xbim.XbimExtensions;
 using System.Reflection;
-using Xbim.IO;
-using Xbim.XbimExtensions.Interfaces;
-using Xbim.Ifc2x3.PropertyResource;
+using Xbim.Common;
+using Xbim.Common.Metadata;
+using Xbim.IO.Esent;
 
 namespace Xbim.COBie.Serialisers.XbimSerialiser
 {
@@ -92,7 +88,7 @@ namespace Xbim.COBie.Serialisers.XbimSerialiser
             if (CheckIfExistOnMerge<IfcSystem>(row.Name))
             {
                 string testName = row.Name.ToLower().Trim();
-                IfcSystemObj = Model.Instances.Where<IfcSystem>(bs => bs.Name.ToString().ToLower().Trim() == testName).FirstOrDefault();
+                IfcSystemObj = Model.FederatedInstances.Where<IfcSystem>(bs => bs.Name.ToString().ToLower().Trim() == testName).FirstOrDefault();
                 return;//we have it so no need to create
             }
 
@@ -120,22 +116,22 @@ namespace Xbim.COBie.Serialisers.XbimSerialiser
         /// Create an instance of an group object via a string name
         /// </summary>
         /// <param name="groupTypeName">String holding object type name we want to create</param>
-        /// <param name="model">Model object</param>
         /// <returns></returns>
         public IfcSystem GetGroupInstance(string groupTypeName)
         {
             groupTypeName = groupTypeName.Trim().ToUpper();
-            IfcType ifcType;
+            ExpressType ifcType;
             IfcSystem ifcSystem = null;
-            if ((IfcMetaData.TryGetIfcType(groupTypeName, out ifcType)) &&
+            if ((Model.Metadata.TryGetExpressType(groupTypeName, out ifcType)) &&
                 (typeof(IfcSystem).IsAssignableFrom(ifcType.Type)) //check it is a system class name
                 )
             {
-                MethodInfo method = typeof(IXbimInstanceCollection).GetMethod("New", Type.EmptyTypes);
+                MethodInfo method = typeof(IEntityCollection).GetMethod("New", Type.EmptyTypes);
                 MethodInfo generic = method.MakeGenericMethod(ifcType.Type);
                 var eleObj = generic.Invoke(Model.Instances, null);
-                if (eleObj is IfcSystem)
-                    ifcSystem = (IfcSystem)eleObj;
+                var obj = eleObj as IfcSystem;
+                if (obj != null)
+                    ifcSystem = obj;
             }
 
 
@@ -159,7 +155,7 @@ namespace Xbim.COBie.Serialisers.XbimSerialiser
                 //check to see is the component name is a single component
                 List<string> compNames = new List<string>();
                 string testCompName = componentNames.ToLower().Trim();
-                IfcProduct ifcProduct = Model.Instances.OfType<IfcProduct>().Where(p => p.Name.ToString().ToLower().Trim() == testCompName).FirstOrDefault();
+                IfcProduct ifcProduct = Model.FederatedInstances.OfType<IfcProduct>().Where(p => p.Name.ToString().ToLower().Trim() == testCompName).FirstOrDefault();
                 if (ifcProduct != null)
                     compNames.Add(componentNames);
                 else
@@ -171,7 +167,7 @@ namespace Xbim.COBie.Serialisers.XbimSerialiser
                     if (ValidateString(componentName))
                     {
                         string compName = componentName.ToLower().Trim();
-                        ifcProduct = Model.Instances.OfType<IfcProduct>().Where(p => p.Name.ToString().ToLower().Trim() == compName).FirstOrDefault();
+                        ifcProduct = Model.FederatedInstances.OfType<IfcProduct>().Where(p => p.Name.ToString().ToLower().Trim() == compName).FirstOrDefault();
                         if (ifcProduct != null)
                             ifcProductList.Add(ifcProduct);
                     }

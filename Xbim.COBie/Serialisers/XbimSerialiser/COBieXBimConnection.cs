@@ -1,13 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using Xbim.XbimExtensions.Transactions;
 using Xbim.COBie.Rows;
 using Xbim.Ifc2x3.ProductExtension;
-using Xbim.Ifc2x3.Kernel;
 using Xbim.Ifc2x3.SharedBldgServiceElements;
-using Xbim.IO;
+using Xbim.IO.Esent;
 
 namespace Xbim.COBie.Serialisers.XbimSerialiser
 {
@@ -36,7 +33,7 @@ namespace Xbim.COBie.Serialisers.XbimSerialiser
                 try
                 {
                     int count = 1;
-                    IfcElements = Model.Instances.OfType<IfcElement>();
+                    IfcElements = Model.FederatedInstances.OfType<IfcElement>();
                     
                     ProgressIndicator.ReportMessage("Starting Connections...");
                     ProgressIndicator.Initialise("Creating Connections", cOBieSheet.RowCount);

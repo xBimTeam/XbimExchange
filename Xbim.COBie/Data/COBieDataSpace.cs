@@ -1,18 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
+using System.Globalization;
 using System.Linq;
-using System.Text;
 using Xbim.COBie.Rows;
-using Xbim.Ifc2x3.Extensions;
 using Xbim.Ifc2x3.MeasureResource;
 using Xbim.Ifc2x3.ProductExtension;
 using Xbim.Ifc2x3.QuantityResource;
-using Xbim.XbimExtensions;
-using System.Collections;
-using Xbim.Ifc2x3.PropertyResource;
-using Xbim.Ifc2x3.Kernel;
-using Xbim.Ifc2x3.ExternalReferenceResource;
-using System.Diagnostics;
 
 namespace Xbim.COBie.Data
 {
@@ -46,7 +40,7 @@ namespace Xbim.COBie.Data
             COBieSheet<COBieSpaceRow> spaces = new COBieSheet<COBieSpaceRow>(Constants.WORKSHEET_SPACE);
             
             // get all IfcBuildingStory objects from IFC file
-            List<IfcSpace> ifcSpaces = Model.Instances.OfType<IfcSpace>().OrderBy(ifcSpace => ifcSpace.Name, new CompareIfcLabel()).ToList();
+            List<IfcSpace> ifcSpaces = Model.FederatedInstances.OfType<IfcSpace>().OrderBy(ifcSpace => ifcSpace.Name, new CompareIfcLabel()).ToList();
             
             COBieDataPropertySetValues allPropertyValues = new COBieDataPropertySetValues(); //properties helper class
             COBieDataAttributeBuilder attributeBuilder = new COBieDataAttributeBuilder(Context, allPropertyValues);
@@ -79,8 +73,8 @@ namespace Xbim.COBie.Data
                 space.CreatedOn = ValidateString(createdOn) ? createdOn : GetCreatedOnDateAsFmtString(ifcSpace.OwnerHistory);
 
                 space.Category = GetCategory(ifcSpace);
-
-                space.FloorName = ((ifcSpace.SpatialStructuralElementParent != null) && (!string.IsNullOrEmpty(ifcSpace.SpatialStructuralElementParent.Name))) ? ifcSpace.SpatialStructuralElementParent.Name.ToString() : DEFAULT_STRING;
+                var floor = ifcSpace.Decomposes.FirstOrDefault();
+                space.FloorName = ((floor != null) && (!string.IsNullOrEmpty(floor.Name))) ? floor.Name.ToString() : DEFAULT_STRING;
                 string description = allPropertyValues.GetPropertySingleValueValue("COBieDescription", false);//support for COBie Toolkit for Autodesk Revit
                 space.Description = ValidateString(description) ? description : GetSpaceDescription(ifcSpace);
                 string extSystem = allPropertyValues.GetPropertySingleValueValue("COBieExtSystem", false);//support for COBie Toolkit for Autodesk Revit
@@ -131,16 +125,16 @@ namespace Xbim.COBie.Data
             if (!string.IsNullOrEmpty(Context.WorkBookUnits.AreaUnit))
                 areaUnit = Context.WorkBookUnits.AreaUnit;//see what the global area unit is
           
-            IfcAreaMeasure netAreaValue = ifcSpace.GetNetFloorArea();  //this extension has the GSA built in so no need to get again
+            IfcAreaMeasure? netAreaValue = ifcSpace.NetFloorArea;  //this extension has the GSA built in so no need to get again
             if (netAreaValue != null)
             {
-                areavalue = ((double)netAreaValue);
+                areavalue = ((double)netAreaValue.Value);
                 if (areavalue > 0.0)
                 {
                     //if ((!string.IsNullOrEmpty(areaUnit)) && (areaUnit.ToLower().Contains("milli")) && (areavalue > 250000.0)) //we are using millimetres, and areavalue is lightly to be in mmsq if over 250000(0.5msq)
                     //    areavalue = areavalue / 1000000.0;
 
-                    return areavalue.ToString();
+                    return areavalue.ToString(CultureInfo.InvariantCulture);
                 }
             }
 
@@ -186,21 +180,20 @@ namespace Xbim.COBie.Data
             
             
             //Do Gross Areas 
-            IfcAreaMeasure grossAreaValue = ifcSpace.GetGrossFloorArea();
+            IfcAreaMeasure? grossAreaValue = ifcSpace.GrossFloorArea;
             if (grossAreaValue != null)
                 areavalue = ((double)grossAreaValue);
             else//if we fail on IfcAreaMeasure try GSA keys
             {
                 IfcQuantityArea spArea = ifcSpace.GetQuantity<IfcQuantityArea>("GSA Space Areas", "GSA BIM Area");
-                if ((spArea is IfcQuantityArea) && (spArea.AreaValue != null))
-                    areavalue = ((double)spArea.AreaValue);
+                areavalue = spArea.AreaValue;
             }
             if (areavalue > 0.0)
 	        {
                 //if ((!string.IsNullOrEmpty(areaUnit)) && (areaUnit.ToLower().Contains("milli")) && (areavalue > 250000.0)) //we are using millimetres, and areavalue is lightly to be in mmsq if over 250000(0.5msq)
                 //    areavalue = areavalue / 1000000.0;
                 
-		         return areavalue.ToString();
+		         return areavalue.ToString(CultureInfo.InvariantCulture);
 	        }
             
             //Fall back to properties
@@ -238,9 +231,9 @@ namespace Xbim.COBie.Data
         /// <returns>property value as string or default value</returns>
         private string GetUsableHeight(IfcSpace ifcSpace, COBieDataPropertySetValues allPropertyValues)
         {
-            IfcLengthMeasure usableHt = ifcSpace.GetHeight();
+            IfcLengthMeasure? usableHt = ifcSpace.Height;
             if (usableHt != null)
-            return ((double)usableHt).ToString();
+            return ((double)usableHt).ToString(CultureInfo.InvariantCulture);
             
             //Fall back to properties
             //get the property single values for this ifcSpace

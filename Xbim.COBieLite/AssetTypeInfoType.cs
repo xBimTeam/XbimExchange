@@ -4,9 +4,8 @@ using System.Linq;
 using System.Xml.Serialization;
 using Newtonsoft.Json;
 using Xbim.COBieLite.CollectionTypes;
-using Xbim.Ifc2x3.Kernel;
-using Xbim.Ifc2x3.ProductExtension;
-using Xbim.Ifc2x3.SharedFacilitiesElements;
+using Xbim.Ifc4.Interfaces;
+
 
 namespace Xbim.COBieLite
 {
@@ -15,7 +14,7 @@ namespace Xbim.COBieLite
        
      
 
-        public AssetTypeInfoType(IfcTypeObject ifcTypeObject, CoBieLiteHelper helper)
+        public AssetTypeInfoType(IIfcTypeObject ifcTypeObject, CoBieLiteHelper helper)
             : this()
         {
             externalEntityName = helper.ExternalEntityName(ifcTypeObject);
@@ -34,7 +33,7 @@ namespace Xbim.COBieLite
             }
             if (string.IsNullOrWhiteSpace(AssetTypeCategory)) //try the asset assignment
             {
-                IfcAsset ifcAsset;
+                IIfcAsset ifcAsset;
                 if(helper.AssetAsignments.TryGetValue(ifcTypeObject, out ifcAsset))
                     AssetTypeCategory = helper.GetCoBieAttribute<StringValueType>("AssetTypeAccountingCategory", ifcAsset).StringValue;
             }
@@ -56,11 +55,11 @@ namespace Xbim.COBieLite
             AssetTypeSustainabilityPerformanceDescription = helper.GetCoBieProperty("AssetTypeSustainabilityPerformanceDescription", ifcTypeObject);
 
             //The Assets
-            List<IfcElement> allAssetsofThisType;
+            List<IIfcElement> allAssetsofThisType;
             if (helper.DefiningTypeObjectMap.TryGetValue(ifcTypeObject, out allAssetsofThisType)) //should always work
             {
                 Assets = new AssetCollectionType { Asset =  new List<AssetInfoType>(allAssetsofThisType.Count)};
-                foreach (IfcElement t in allAssetsofThisType)
+                foreach (IIfcElement t in allAssetsofThisType)
                 {
                     Assets.Add(new AssetInfoType(t, helper));
                 }

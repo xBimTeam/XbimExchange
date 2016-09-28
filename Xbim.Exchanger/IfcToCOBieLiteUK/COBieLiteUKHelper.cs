@@ -1,62 +1,23 @@
-﻿
-using System;
+﻿using System;
 using System.Collections.Generic;
-using System.Configuration;
-using System.Diagnostics;
 using System.Globalization;
 using System.IO;
 using System.Linq;
-using Xbim.COBieLiteUK;
-using Xbim.Common.Logging;
-using Xbim.FilterHelper;
-using Xbim.Ifc2x3.ActorResource;
-using Xbim.Ifc2x3.Extensions;
-using Xbim.Ifc2x3.ExternalReferenceResource;
-using Xbim.Ifc2x3.Kernel;
-using Xbim.Ifc2x3.MeasureResource;
-using Xbim.Ifc2x3.ProductExtension;
-using Xbim.Ifc2x3.PropertyResource;
-using Xbim.Ifc2x3.QuantityResource;
-using Xbim.Ifc2x3.SharedBldgElements;
-using Xbim.Ifc2x3.SharedFacilitiesElements;
-using Xbim.Ifc2x3.UtilityResource;
-using Xbim.IO;
-using Xbim.XbimExtensions.SelectTypes;
+using System.Text.RegularExpressions;
+using log4net;
+using Xbim.CobieLiteUk;
+using Xbim.Common;
+using Xbim.CobieLiteUk.FilterHelper;
+using Xbim.Ifc4.Interfaces;
 using XbimExchanger.IfcToCOBieLiteUK.EqCompare;
-using Attribute = Xbim.COBieLiteUK.Attribute;
+using Attribute = Xbim.CobieLiteUk.Attribute;
 using SystemAssembly = System.Reflection.Assembly;
+using System.Diagnostics;
+using XbimExchanger.IfcHelpers;
 
 namespace XbimExchanger.IfcToCOBieLiteUK
 {
-    /// <summary>
-    /// 
-    /// </summary>
-    public enum EntityIdentifierMode
-    {
-        /// <summary>
-        /// Use the Entity Label in the Ifc file (e.g. #23)
-        /// </summary>
-        IfcEntityLabels = 0,
-        /// <summary>
-        /// Use the GlobalId of the Entity (e.g. "10mjSDZJj9gPS2PrQaxa3z")
-        /// </summary>
-        GloballyUniqueIds = 1,
-        /// <summary>
-        /// Does not write any External Identifier for Entities
-        /// </summary>
-        None = 2
-    }
-
-    /// <summary>
-    /// Control what we extract from IFC as systems
-    /// </summary>
-    [Flags]
-    public enum SystemExtractionMode
-    {
-        System = 0x1, //default and should always be set
-        PropertyMaps = 0x2, //include properties as set by GetPropMap("SystemMaps")
-        Types = 0x4, //include types as system listing all defined objects in componentnsnames
-    }
+    
 
     
     /// <summary>
@@ -84,15 +45,14 @@ namespace XbimExchanger.IfcToCOBieLiteUK
     /// </summary>
     public class CoBieLiteUkHelper
     {
-
-        internal static readonly ILogger Logger = LoggerFactory.GetLogger();
+        private static readonly ILog Logger = LogManager.GetLogger("XbimExchanger.IfcToCOBieLiteUK.CoBieLiteUkHelper");
         /// <summary>
         /// Object to use to report progress on Exchangers
         /// </summary>
         public ProgressReporter ReportProgress
         { get; set; }
 
-        private readonly XbimModel _model;
+        private readonly IModel _model;
         private readonly string _creatingApplication;
 
         #region Model measurement units
@@ -126,69 +86,63 @@ namespace XbimExchanger.IfcToCOBieLiteUK
         #region Lookups
 
         //Classification for any root object
-        private Dictionary<IfcRoot, List<IfcClassificationReference>> _classifiedObjects;
+        private Dictionary<IIfcDefinitionSelect, List<IIfcClassificationReference>> _classifiedObjects;
 
-        private Dictionary<IfcZone, HashSet<IfcSpace>> _zoneSpaces;
-        private Dictionary<IfcSpace, HashSet<IfcZone>> _spaceZones;
+        private Dictionary<IIfcZone, HashSet<IIfcSpace>> _zoneSpaces;
+        private Dictionary<IIfcSpace, HashSet<IIfcZone>> _spaceZones;
 
-        private Dictionary<IfcObjectDefinition, XbimAttributedObject> _attributedObjects;
+        private Dictionary<IIfcObjectDefinition, XbimAttributedObject> _attributedObjects;
 
-        private Dictionary<string, string[]> _cobieFieldMap;
+        // private Dictionary<string, string[]> _cobieFieldMap;
         
-        private Dictionary<IfcObject, XbimIfcProxyTypeObject> _objectToTypeObjectMap;
+        private Dictionary<IIfcObject, XbimIfcProxyTypeObject> _objectToTypeObjectMap;
 
-        private Dictionary<XbimIfcProxyTypeObject, List<IfcElement>> _definingTypeObjectMap =
-            new Dictionary<XbimIfcProxyTypeObject, List<IfcElement>>();
+        private Dictionary<XbimIfcProxyTypeObject, List<IIfcElement>> _definingTypeObjectMap =
+            new Dictionary<XbimIfcProxyTypeObject, List<IIfcElement>>();
 
 /*
         private Lookup<string, IfcElement> _elementTypeToElementObjectMap;
 */
-        private Dictionary<IfcTypeObject, IfcAsset> _assetAsignments;
-        private Dictionary<IfcSystem, ObjectDefinitionSet> _systemAssignment;
-        private Dictionary<IfcObjectDefinition, List<IfcSystem>> _systemLookup;
-        private HashSet<string> _cobieProperties = new HashSet<string>();
-        private Dictionary<IfcElement, List<IfcSpatialStructureElement>> _spaceAssetLookup;
-        private Dictionary<IfcSpace, IfcBuildingStorey> _spaceFloorLookup;
-        private Dictionary<IfcSpatialStructureElement, List<IfcSpatialStructureElement>> _spatialDecomposition;
+        private Dictionary<IIfcTypeObject, IIfcAsset> _assetAsignments;
+        private Dictionary<IIfcSystem, IItemSet<IIfcObjectDefinition>> _systemAssignment;
+        private Dictionary<IIfcObjectDefinition, List<IIfcSystem>> _systemLookup;
+        // private HashSet<string> _cobieProperties = new HashSet<string>();
+        private Dictionary<IIfcElement, List<IIfcSpatialElement>> _spaceAssetLookup;
+        private Dictionary<IIfcSpace, IIfcBuildingStorey> _spaceFloorLookup;
+        private Dictionary<IIfcSpatialStructureElement, List<IIfcSpatialStructureElement>> _spatialDecomposition;
         private readonly Dictionary<string, int> _typeNames = new Dictionary<string, int>();
 
         #region Document Lookups
         /// <summary>
         /// Document to Object mapping
         /// </summary>
-        public Dictionary<IfcRoot, IEnumerable<IfcDocumentSelect>> DocumentLookup
+        public Dictionary<IIfcDefinitionSelect, IEnumerable<IIfcDocumentSelect>> DocumentLookup
         { get; private set; }
 
         /// <summary>
-        /// Documents not attached to ant IfcRoot object
+        /// Documents not attached to ant IIfcRoot object
         /// </summary>
-        public IEnumerable<IfcDocumentSelect> OrphanDocs
+        public IEnumerable<IIfcDocumentSelect> OrphanDocs
         { get; private set; }
 
         /// <summary>
-        /// Document to IfcRelAssociatesDocument mapping, fall back info from ifcRelAssociatesDocument history, if nothing set on IfcDocumentInformation dates
+        /// Document to IIfcRelAssociatesDocument mapping, fall back info from IIfcRelAssociatesDocument history, if nothing set on IIfcDocumentInformation dates
         /// </summary>
-        public Dictionary<IfcDocumentSelect, IfcRelAssociatesDocument> DocumentOwnerLookup
+        public Dictionary<IIfcDocumentSelect, IIfcRelAssociatesDocument> DocumentOwnerLookup
         { get; private set; }
 
-        /// <summary>
-        /// Document to Linked Children Documents
-        /// </summary>
-        //public Dictionary<IfcDocumentInformation, IfcDocumentInformationRelationship> DocToChildDocsLookup
-        //{ get; private set; }
-
-        /// <summary>
-        /// Lookup of documents already processed, do not want to add what we already have
-        /// </summary>
-        public List<Document> DocumentProgress
-        { get; set; }
         #endregion
 
+        #region Spare 
+
+        public Dictionary<IIfcRoot, IEnumerable<IIfcConstructionProductResource>> SpareLookup
+        { get; private set; }
+        #endregion
 
         /// <summary>
         /// Property Sets used to establish systems as per responsibility matrix 
         /// </summary>
-        public Dictionary<IfcPropertySet, IEnumerable<IfcObject>> SystemViaPropAssignment { get; private set; }
+        public Dictionary<IIfcPropertySet, IEnumerable<IIfcObjectDefinition>> SystemViaPropAssignment { get; private set; }
         #endregion
 
         #region Filters
@@ -197,10 +151,10 @@ namespace XbimExchanger.IfcToCOBieLiteUK
 
         #endregion
 
-        private readonly string _configFileName;
-        private List<IfcActorSelect> _contacts;
-        private Dictionary<IfcPersonAndOrganization, ContactKey> _createdByKeys;
-        private Dictionary<IfcActorSelect, IfcActor> _actors;
+        private readonly string _attributesMapsConfigFileName;
+        private List<IIfcActorSelect> _contacts;
+        private Dictionary<IIfcActorSelect, ContactKey> _createdByKeys;
+        private Dictionary<IIfcActorSelect, IIfcActor> _actors;
         public static List<Category> UnknownCategory = new List<Category>(new[] { new Category { Code = "unknown" } });
         private readonly Contact _xbimCreatedBy = new Contact
         {
@@ -229,17 +183,12 @@ namespace XbimExchanger.IfcToCOBieLiteUK
             }
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="model"></param>
-        /// <param name="configurationFile"></param>
-        public CoBieLiteUkHelper(XbimModel model, ProgressReporter reportProgress, OutPutFilters filter = null, string configurationFile = null, EntityIdentifierMode extId = EntityIdentifierMode.IfcEntityLabels, SystemExtractionMode sysMode = SystemExtractionMode.System | SystemExtractionMode.Types)
+        public CoBieLiteUkHelper(IModel model, ProgressReporter reportProgress, OutPutFilters filter = null, string attributesMapsConfigurationFile = null, EntityIdentifierMode extId = EntityIdentifierMode.IfcEntityLabels, SystemExtractionMode sysMode = SystemExtractionMode.System | SystemExtractionMode.Types)
         {
-            
             //set props
-            _configFileName = configurationFile;
-            Filter = filter != null ? filter : new OutPutFilters();
+            _attributesMapsConfigFileName = attributesMapsConfigurationFile;
+            Filter = filter 
+                ?? new OutPutFilters();
             _model = model;
             EntityIdentifierMode = extId;
             SystemMode = sysMode;
@@ -255,45 +204,102 @@ namespace XbimExchanger.IfcToCOBieLiteUK
             GetClassificationDictionary();//8%
             GetSpacesAndZones();//13%
             GetUnits();
+            GetSpare();
             GetTypeMaps();//25%
             GetDocumentSelects();
             GetPropertySets();//33%
             GetSystems();//38%
             GetSpaceAssetLookup();//40%
-            
         }
 
-        internal void AddDocuments(MappingIfcDocumentSelectToDocument docsMappings, CobieObject target, IfcRoot ifcRoot)
+        /// <summary>
+        /// Get Spare lookup and set SpareLookup property
+        /// </summary>
+        public void GetSpare()
         {
-            if (ifcRoot != null)
-            {
-                if (target.Documents == null)
-                {
-                    target.Documents = new List<Document>();
-                }
-                var facilitydocs = GetDocuments(ifcRoot);
+            Dictionary<IIfcConstructionProductResource, List<IIfcRoot>> spareToObjs = GetSpareResource();
 
-                foreach (var docSel in facilitydocs)
+            //reverse lookup to entity to list of documents
+            SpareLookup = spareToObjs
+                            .SelectMany(pair => pair.Value
+                            .Select(val => new { Key = val, Value = pair.Key }))
+                            .GroupBy(item => item.Key)
+                            .ToDictionary(gr => gr.Key, gr => gr.Select(item => item.Value));
+        }
+
+        /// <summary>
+        /// Convert all IIfcRelAssignsToResource to a dictionary of IIfcConstructionProductResource, List of IIfcRoot
+        /// </summary>
+        /// <returns>Dictionary of IIfcConstructionProductResource, List of IIfcRoot</returns>
+        private Dictionary<IIfcConstructionProductResource, List<IIfcRoot>> GetSpareResource()
+        {
+            Dictionary<IIfcResourceSelect, List<IIfcObjectDefinition>> resourceToObjs;
+
+            var ifcRelAssignsToResource = _model.Instances.OfType<IIfcRelAssignsToResource>().Where(
+                r => r.RelatingResource is IIfcConstructionProductResource && 
+                    (
+                        r.RelatedObjectsType == null 
+                        || r.RelatedObjectsType == IfcObjectTypeEnum.PRODUCT
+                        || r.RelatedObjectsType == IfcObjectTypeEnum.NOTDEFINED)
+                    ).ToList(); //linked to IIfcRoot objects
+
+            var dups = ifcRelAssignsToResource.GroupBy(d => d.RelatingResource).SelectMany(grp => grp.Skip(1)).ToList(); //get any duplicate related resource objects
+            if (dups.Any())
+            {
+                //remove the duplicates related resource objects and convert to dictionary
+                resourceToObjs = ifcRelAssignsToResource.Except(dups).ToDictionary(p => p.RelatingResource, p => p.RelatedObjects.ToList());
+                //merge any duplicate related resource objects resource into list of single link of IfcConstructionProductResource to IfcRoot list, as duplicate related object could hold different IfcConstructionProductResource so lets not lose them
+                var dupsMerge = dups.GroupBy(d => d.RelatingResource).Select(p => new { x = p.Key, y = p.SelectMany(c => c.RelatedObjects) });
+
+                //add the duplicate lists to the resourceToObjs list
+                foreach (var item in dupsMerge)
                 {
-                    List<Document> docs = docsMappings.MappingMulti(docSel);
-                    target.Documents.AddRange(docs);
-                } 
+                    resourceToObjs[item.x] = resourceToObjs[item.x].Union(item.y).ToList(); //union will exclude any duplicates
+                }
+            }
+            else
+            {
+                //no duplicates, so just convert to dictionary
+                resourceToObjs = ifcRelAssignsToResource.ToDictionary(p => p.RelatingResource, p => p.RelatedObjects.ToList());
+            }
+            //finally convert to correct types in Dictionary
+            return resourceToObjs.ToDictionary(r => r.Key as IIfcConstructionProductResource, r => r.Value.ConvertAll(x => (IIfcRoot)x));
+        } 
+
+
+        /// <summary>
+        /// Add document to List of Documents
+        /// </summary>
+        /// <param name="docsMappings">Mapping object</param>
+        /// <param name="target">Target object holding the document list - CobieObject</param>
+        /// <param name="ifcRoot">Object holding the documents</param>
+        internal void AddDocuments(MappingIfcDocumentSelectToDocument docsMappings, CobieObject target, IIfcDefinitionSelect ifcRoot)
+        {
+            if (ifcRoot == null) 
+                return;
+            if (target.Documents == null)
+            {
+                target.Documents = new List<Document>();
+            }
+            var facilitydocs = GetDocuments(ifcRoot);
+
+            foreach (var docSel in facilitydocs)
+            {
+                var docs = docsMappings.MappingMulti(docSel);
+                target.Documents.AddRange(docs);
             }
         }
 
         /// <summary>
         /// Return the documents associated with the object
         /// </summary>
-        /// <param name="ifcRoot">Object to get associated documents</param>
+        /// <param name="ifcSelect">Object to get associated documents</param>
         /// <returns></returns>
-        public IEnumerable<IfcDocumentSelect> GetDocuments(IfcRoot ifcRoot)
+        public IEnumerable<IIfcDocumentSelect> GetDocuments(IIfcDefinitionSelect ifcSelect)
         {
-            if (DocumentLookup.ContainsKey(ifcRoot))
-            {
-                return DocumentLookup[ifcRoot];
-            }
-
-            return Enumerable.Empty<IfcDocumentSelect>();
+            return DocumentLookup.ContainsKey(ifcSelect) 
+                ? DocumentLookup[ifcSelect] 
+                : Enumerable.Empty<IIfcDocumentSelect>();
         }
 
         /// <summary>
@@ -301,8 +307,8 @@ namespace XbimExchanger.IfcToCOBieLiteUK
         /// </summary>
         private void GetDocumentSelects()
         {
-            Dictionary<IfcDocumentSelect, List<IfcRoot>> docToObjs = GetAssociatedDocuments();
-            
+            var docToObjs = GetAssociatedDocuments();
+
             //get orphan docs, not attached to IfcRoot objects
             OrphanDocs = GetOrphanDocuments(docToObjs);
 
@@ -313,54 +319,41 @@ namespace XbimExchanger.IfcToCOBieLiteUK
                             .GroupBy(item => item.Key)
                             .ToDictionary(gr => gr.Key, gr => gr.Select(item => item.Value));
 
-            DocumentProgress = new List<Document>();
-
         }
        
         /// <summary>
         /// Get Orphan documents
         /// </summary>
         /// <param name="docToObjs">Document linked to objects</param>
-        /// <returns>List of IfcDocumentSelect</returns>
-        private IEnumerable<IfcDocumentSelect> GetOrphanDocuments(Dictionary<IfcDocumentSelect, List<IfcRoot>> docToObjs)
+        /// <returns>List of IIfcDocumentSelect</returns>
+        private IEnumerable<IIfcDocumentSelect> GetOrphanDocuments(Dictionary<IIfcDocumentSelect, List<IIfcDefinitionSelect>> docToObjs)
         {
             //------GET ORPHAN DOCUMENTINFOS------
             //Get all documents information objects held in model
-            var docAllInfos = _model.Instances.OfType<IfcDocumentInformation>();
+            var docAllInfos = _model.Instances.OfType<IIfcDocumentInformation>();
             //Get the child document relationships
-            var childDocRels = _model.Instances.OfType<IfcDocumentInformationRelationship>();
+            var childDocRels = _model.Instances.OfType<IIfcDocumentInformationRelationship>();
 
-            var xxx = docAllInfos.Where(d => d.Name != null && d.Name.ToString().StartsWith("X-Ray"));
-            //try
-            //{
-            //    DocToChildDocsLookup = childDocRels.ToDictionary(p => p.RelatingDocument, p => p);
-            //}
-            //catch (Exception) //if we fall over just set to empty, duplicate keys etc...
-            //{
-            //    DocToChildDocsLookup = new Dictionary<IfcDocumentInformation, IfcDocumentInformationRelationship>();
-            //}
-
-
-            //see if we have any documents not attached to IfcRoot objects, but could be attached as children documents to a parent document...
+            //see if we have any documents not attached to IIfcRoot objects, but could be attached as children documents to a parent document...
 
             //get the already attached to entity documents 
-            var docInfosAttached = docToObjs.Select(dic => dic.Key).OfType<IfcDocumentInformation>();
+            var docInfosAttached = docToObjs.Select(dic => dic.Key).OfType<IIfcDocumentInformation>();
             var docInfosNotAttached = docAllInfos.Except(docInfosAttached);
            
-            //get document infos attached to the IfcDocumentReference, which are directly linked to IfcRoot objects
-            var docRefsAttached = docToObjs.Select(Dictionary => Dictionary.Key).OfType<IfcDocumentReference>();//attached to IfcRoot docRefs
+            //get document infos attached to the IIfcDocumentReference, which are directly linked to IIfcRoot objects
+            var docRefsAttached = docToObjs.Select(Dictionary => Dictionary.Key).OfType<IIfcDocumentReference>();//attached to IIfcRoot docRefs
             if (docRefsAttached.Any())
             {
-                var docRefsInfos = docAllInfos.Where(info => info.DocumentReferences != null && info.DocumentReferences.Any(doc => docRefsAttached.Contains(doc)));
-                docInfosNotAttached = docAllInfos.Except(docRefsInfos); //remove the DocInfos attached to the DocRefs that are attached to IfcRoot Objects
-                docInfosAttached = docInfosAttached.Union(docRefsInfos); //add the DocInfos attached to the DocRefs that are attached to IfcRoot Objects
+                var docRefsInfos = docAllInfos.Where(info => info.HasDocumentReferences.Any(doc => docRefsAttached.Contains(doc)));
+                docInfosNotAttached = docAllInfos.Except(docRefsInfos); //remove the DocInfos attached to the DocRefs that are attached to IIfcRoot Objects
+                docInfosAttached = docInfosAttached.Union(docRefsInfos); //add the DocInfos attached to the DocRefs that are attached to IIfcRoot Objects
             }
            
-            List<IfcDocumentInformation> docChildren = docInfosAttached.ToList(); //first check on docs attached to IfcRoot Objects, and attached to IfcDocumentReference(which are attached to IfcRoot)
+            List<IIfcDocumentInformation> docChildren = docInfosAttached.ToList(); //first check on docs attached to IIfcRoot Objects, and attached to IIfcDocumentReference(which are attached to IIfcRoot)
             int idx = 0;
             do
             {
-                //get the relationships that are attached to the docs already associated with an IfcRoot object on first pass, then associated with all children, drilling down until nothing found
+                //get the relationships that are attached to the docs already associated with an IIfcRoot object on first pass, then associated with all children, drilling down until nothing found
                 docChildren = childDocRels.Where(docRel => docChildren.Contains(docRel.RelatingDocument)).SelectMany(docRel => docRel.RelatedDocuments).ToList(); //docs that are children to attached entity docs, drilling down
                 docInfosNotAttached = docInfosNotAttached.Except(docChildren); //attached by association to the root parent document, so remove from none attached document list
 
@@ -369,46 +362,46 @@ namespace XbimExchanger.IfcToCOBieLiteUK
 
             //------GET ORPHAN DOCUMENTREFERENCES------
             //get all the doc reference objects held in the model
-            var docAllRefs = _model.Instances.OfType<IfcDocumentReference>();
+            var docAllRefs = _model.Instances.OfType<IIfcDocumentReference>();
            
             //checked on direct attached to object document references
             var docRefsNotAttached = docAllRefs.Except(docRefsAttached).ToList();
 
-            //Check for document references held in the IfcDocumentInformation objects
-            var docRefsAttachedDocInfo = docAllInfos.Where(docInfo => docInfo.DocumentReferences != null).SelectMany(docInfo => docInfo.DocumentReferences);
+            //Check for document references held in the IIfcDocumentInformation objects
+            var docRefsAttachedDocInfo = docAllInfos.SelectMany(docInfo => docInfo.HasDocumentReferences);
             //remove from Not Attached list
             docRefsNotAttached = docRefsNotAttached.Except(docRefsAttachedDocInfo).ToList();
 
-            return docInfosNotAttached.Cast<IfcDocumentSelect>().Concat(docRefsNotAttached);
+            return docInfosNotAttached.Cast<IIfcDocumentSelect>().Concat(docRefsNotAttached);
         }
 
 
         /// <summary>
         /// Document linked to objects
         /// </summary>
-        /// <returns>IfcDocumentSelect attached to ifcRoot objects,</returns>
-        private Dictionary<IfcDocumentSelect, List<IfcRoot>> GetAssociatedDocuments()
+        /// <returns>IIfcDocumentSelect attached to IIfcRoot objects,</returns>
+        private Dictionary<IIfcDocumentSelect, List<IIfcDefinitionSelect>> GetAssociatedDocuments()
         {
-            var ifcRelAssociatesDocuments = _model.Instances.OfType<IfcRelAssociatesDocument>(); //linked to IfcRoot objects
+            var ifcRelAssociatesDocuments = _model.Instances.OfType<IIfcRelAssociatesDocument>(); //linked to IIfcRoot objects
 
             //get fall back owner history
             DocumentOwnerLookup = ifcRelAssociatesDocuments.ToDictionary(p => p.RelatingDocument, p => p);
 
-            var dups = ifcRelAssociatesDocuments.GroupBy(d => d.RelatingDocument).SelectMany(grp => grp.Skip(1)); //get any duplicate documents 
+            var dups = ifcRelAssociatesDocuments.GroupBy(d => d.RelatingDocument).SelectMany(grp => grp.Skip(1)); //get any duplicate related documents objects
 
-            //merge any duplicate IfcDocumentSelect IfcRoot objects to a single link of IfcDocumentSelect to IfcRoot list
-            Dictionary<IfcDocumentSelect, List<IfcRoot>> docToObjs = null;
+            //merge any duplicate IIfcDocumentSelect IIfcRoot objects to a single link of IIfcDocumentSelect to IIfcRoot list
+            Dictionary<IIfcDocumentSelect, List<IIfcDefinitionSelect>> docToObjs = null;
             if (dups.Any())
             {
-                //remove the duplicates and convert to dictionary
+                //remove the duplicates related documents objects and convert to dictionary
                 docToObjs = ifcRelAssociatesDocuments.Except(dups).ToDictionary(p => p.RelatingDocument, p => p.RelatedObjects.ToList());
-                //merge any duplicate objects into list of single link of IfcDocumentSelect to IfcRoot list
+                //merge any duplicate related documents objects documents into list of single link of IIfcDocumentSelect to IfcRoot list, as duplicate related object could hold different documents so lets not lose them
                 var dupsMerge = dups.GroupBy(d => d.RelatingDocument).Select(p => new { x = p.Key, y = p.SelectMany(c => c.RelatedObjects) });
 
                 //add the duplicate lists to the DocToObjs list
                 foreach (var item in dupsMerge)
                 {
-                    docToObjs[item.x] = docToObjs[item.x].Union(item.y).ToList();
+                    docToObjs[item.x] = docToObjs[item.x].Union(item.y).ToList(); //union will exclude any duplicates
                 }
             }
             else
@@ -419,16 +412,76 @@ namespace XbimExchanger.IfcToCOBieLiteUK
             return docToObjs;
         }
 
+        /// <summary>
+        /// Get next name for duplicates
+        /// </summary>
+        /// <param name="name">name to check</param>
+        /// <param name="usedNames">List of names already used</param>
+        /// <returns>name to use</returns>
+        public string GetNextName(string name, List<string> usedNames)
+        {
+            //do we have any matching names
+            if (usedNames != null && usedNames.Any())
+            {
+                var found = usedNames.Where(d => d.StartsWith(name, StringComparison.OrdinalIgnoreCase)).Select(n => n);
+
+                if (found.Any())
+                {
+                    if ((found.Count() == 1) && (found.First().Length == name.Length)) //we match the whole name
+                    {
+                        return name + "(1)"; //first duplicate
+                    }
+                    var srch = name + "(";
+
+                    //we have duplicates so get names that are in correct format
+                    var correctFormat = found.Where(s => s.StartsWith(srch, StringComparison.OrdinalIgnoreCase) && s.EndsWith(")"));
+                    if (correctFormat.Any())
+                    {
+                        var number = correctFormat.Max(s => GetNextNo(srch, s));//.OrderBy(s => s).LastOrDefault();
+                        if (number > 0)
+                        {
+                            return srch + number.ToString() + ")";
+                        }
+                    }
+                }
+            }
+            //string is not found or we failed to add next number return input argument string
+            return name;
+        }
+
+        /// <summary>
+        /// Get next number from string in a format Name(#), so "This Document(10)" should return 11
+        /// </summary>
+        /// <param name="prefix">string up to  and including'(', such as "Name(" </param>
+        /// <param name="number">string formated "Name(#)", such as "Name(10)" </param>
+        /// <returns>int</returns>
+        private int GetNextNo(string prefix, string number)
+        {
+            var start = prefix.Length;
+            var lgth = number.Length - start - 1;
+            number = number.Substring(start, lgth); //get the string between brackets
+            var strNo = Regex.Match(number, @"\d+").Value;
+            if (!string.IsNullOrEmpty(strNo))
+            {
+                int no;
+                if (int.TryParse(strNo, out no))
+                {
+                    return ++no;
+                }
+            }
+            return 0;
+        }
+
         private void GetSystems()
         {
-            _systemAssignment = new Dictionary<IfcSystem, ObjectDefinitionSet>();
+            _systemAssignment = new Dictionary<IIfcSystem, IItemSet<IIfcObjectDefinition>>();
             if (SystemMode.HasFlag(SystemExtractionMode.System))
             {
-                _systemAssignment =
-                        _model.Instances.OfType<IfcRelAssignsToGroup>().Where(r => r.RelatingGroup is IfcSystem)
-                        .Distinct(new IfcRelAssignsToGroupRelatedGroupObjCompare()) //make sure we do not have duplicate keys, or ToDictionary will throw ex. could lose RelatedObjects though. 
-                        .ToDictionary(k => (IfcSystem)k.RelatingGroup, v => v.RelatedObjects);
-                _systemLookup = new Dictionary<IfcObjectDefinition, List<IfcSystem>>();
+                var SystemAssignmentSet =
+                        _model.Instances.OfType<IIfcRelAssignsToGroup>().Where(r => r.RelatingGroup is IIfcSystem)
+                        .Distinct(new IfcRelAssignsToGroupRelatedGroupObjCompare()); //make sure we do not have duplicate keys, or ToDictionary will throw ex. could lose RelatedObjects though. 
+                var ret = SystemAssignmentSet.ToDictionary(k => (IIfcSystem)k.RelatingGroup, v => v.RelatedObjects);
+                _systemLookup = new Dictionary<IIfcObjectDefinition, List<IIfcSystem>>();
                 ReportProgress.NextStage(SystemAssignment.Count, 35);
                 foreach (var systemAssignment in SystemAssignment)
                 {
@@ -437,32 +490,32 @@ namespace XbimExchanger.IfcToCOBieLiteUK
                         if (_systemLookup.ContainsKey(objectDefinition))
                             _systemLookup[objectDefinition].Add(systemAssignment.Key);
                         else
-                            _systemLookup.Add(objectDefinition, new List<IfcSystem>(new[] { systemAssignment.Key }));
+                            _systemLookup.Add(objectDefinition, new List<IIfcSystem>(new[] { systemAssignment.Key }));
                     }
                     ReportProgress.IncrementAndUpdate();
                 }
             }
 
             //Use PropertySet Property with names matching config values on section name = SystemPropertyMaps with key=SystemMaps
-            SystemViaPropAssignment = new Dictionary<IfcPropertySet, IEnumerable<IfcObject>>();
+            SystemViaPropAssignment = new Dictionary<IIfcPropertySet, IEnumerable<IIfcObjectDefinition>>();
             if (SystemMode.HasFlag(SystemExtractionMode.PropertyMaps))
             {
                 var props = GetPropMap("SystemMaps");
                 ReportProgress.NextStage(props.Count(), 35);
                 foreach (var propertyName in props)
                 {
-                    var propmap = propertyName.Split(new Char[] { '.' }, StringSplitOptions.RemoveEmptyEntries);
-                    if (propmap.Count() == 2)
+                    var propNamesArray = propertyName.Split(new Char[] { '.' }, StringSplitOptions.RemoveEmptyEntries);
+                    if (propNamesArray.Count() == 2)
                     {
-                        var sets = Model.Instances.OfType<IfcPropertySet>()
-                            .Where(ps => ps.Name != null && propmap[0].Equals(ps.Name, StringComparison.OrdinalIgnoreCase)
-                                    && ps.PropertyDefinitionOf.Any()
-                                    && ps.HasProperties.OfType<IfcPropertySingleValue>().Where(psv => psv.Name == propmap[1]).Any()
+                        var sets = Model.Instances.OfType<IIfcPropertySet>()
+                            .Where(ps => ps.Name != null && propNamesArray[0].Equals(ps.Name, StringComparison.OrdinalIgnoreCase)
+                                    && ps.DefinesOccurrence.Any()
+                                    && ps.HasProperties.OfType<IIfcPropertySingleValue>().Where(psv => psv.Name == propNamesArray[1]).Any()
                                     && !SystemViaPropAssignment.ContainsKey(ps)
-                                    )
-                            .SelectMany(ps => ps.PropertyDefinitionOf)
-                            .Where(dbp => dbp.RelatedObjects.Where(e => _objectToTypeObjectMap.Keys.Contains(e)).Any()) //only none filtered objects
-                            .ToDictionary(dbp => dbp.RelatingPropertyDefinition as IfcPropertySet, dbp => dbp.RelatedObjects.AsEnumerable());
+                                    ) // finds a property set with the given name, containing a property of required name, a valid occurrence 
+                            .SelectMany(ps => ps.DefinesOccurrence) // then navigates to its occurrence
+                            .Where(dbp => dbp.RelatedObjects.Where(e => _objectToTypeObjectMap.Keys.Contains(e)).Any()) // to filter according to the objectType
+                            .ToDictionary(dbp => dbp.RelatingPropertyDefinition as IIfcPropertySet, dbp => dbp.RelatedObjects.AsEnumerable());
 
                         SystemViaPropAssignment = SystemViaPropAssignment.Concat(sets).ToDictionary(p => p.Key, p => p.Value);
                     }
@@ -476,10 +529,11 @@ namespace XbimExchanger.IfcToCOBieLiteUK
         /// </summary>
         /// <param name="FiledKey">Field name</param>
         /// <returns>string[]</returns>
-        public string[] GetPropMap(string FiledKey)
+        public string[] GetPropMap(string fieldKey)
         {
+            // todo: Is the function needed? Is it working as expected?
             string[] propertyNames;
-            if (_cobieFieldMap.TryGetValue("SystemMaps", out propertyNames))
+            if (_cobiePropertyMaps.DictOfProperties.TryGetValue(fieldKey, out propertyNames))
             {
                 return propertyNames;
             }
@@ -490,51 +544,50 @@ namespace XbimExchanger.IfcToCOBieLiteUK
         /// <summary>
         /// 
         /// </summary>
-        public IDictionary<XbimIfcProxyTypeObject, List<IfcElement>> DefiningTypeObjectMap
+        public IDictionary<XbimIfcProxyTypeObject, List<IIfcElement>> DefiningTypeObjectMap
         {
             get { return _definingTypeObjectMap; }
         }
+
         private void GetTypeMaps()
         {
+            // init retained dictionaries
+            _definingTypeObjectMap = new Dictionary<XbimIfcProxyTypeObject, List<IIfcElement>>();
+            _objectToTypeObjectMap = new Dictionary<IIfcObject, XbimIfcProxyTypeObject>();
+            _assetAsignments = new Dictionary<IIfcTypeObject, IIfcAsset>();
 
-            var relDefinesByType = _model.Instances.OfType<IfcRelDefinesByType>().Where(r => !Filter.ObjFilter(r.RelatingType)).ToList();
+            var relDefinesByType = _model.Instances.OfType<IIfcRelDefinesByType>().Where(r => !Filter.ObjFilter(r.RelatingType)).ToList();
+            
             //creates a dictionary of uniqueness for type objects
-            var propertySetHashes = new Dictionary<string,string>();
-            var proxyTypesByKey = new Dictionary<string, XbimIfcProxyTypeObject>();
-            var relDefinesByRelType = relDefinesByType.Select(r => r.RelatingType);
+            var proxyTypesByHash = new Dictionary<string, XbimIfcProxyTypeObject>();
+            var relDefinesByRelType = relDefinesByType.Select(r => r.RelatingType).Distinct();
             ReportProgress.NextStage(relDefinesByRelType.Count(), 17);
             foreach (var typeObject in relDefinesByRelType)
             {
                 var hash = GetTypeObjectHashString(typeObject);
-                if (!propertySetHashes.ContainsKey(hash))
-                {
-                    var typeName = BuildTypeName(typeObject);
-                    propertySetHashes.Add(hash, typeName);
-                    proxyTypesByKey.Add(hash, new XbimIfcProxyTypeObject(this, typeObject, typeName));
-                }
+                var typeName = BuildTypeName(typeObject);
+                // it is possible for elements in the distinct call above to have the same hash, so we test before adding.
+                if (!proxyTypesByHash.ContainsKey(hash))
+                    proxyTypesByHash.Add(hash, new XbimIfcProxyTypeObject(this, typeObject, typeName));
                 ReportProgress.IncrementAndUpdate();
-
             }
 
-            var assemblyParts = new HashSet<IfcObjectDefinition>(_model.Instances.OfType<IfcRelAggregates>().SelectMany(a => a.RelatedObjects));
-            var grouping = relDefinesByType.GroupBy(k => proxyTypesByKey[GetTypeObjectHashString(k.RelatingType)],
+            var assemblyParts = new HashSet<IIfcObjectDefinition>(_model.Instances.OfType<IIfcRelAggregates>().SelectMany(a => a.RelatedObjects));
+            var grouping = relDefinesByType.GroupBy(k => proxyTypesByHash[GetTypeObjectHashString(k.RelatingType)],
                 kv => kv.RelatedObjects).ToList();
             ReportProgress.NextStage(grouping.Count(), 19);
             foreach (var group in grouping)
             {
                 //filter on in assembly, and ifcElement if filtered in ProductFilter even if the ifcTypeObject is not filtered (passed filter in relDefinesByType assignment above)
-                var allObjects = group.SelectMany(o => o).OfType<IfcElement>().Where(e => !assemblyParts.Contains(e) && !Filter.ObjFilter(e, false)).ToList();  
+                var allObjects = group.SelectMany(o => o).OfType<IIfcElement>().Where(e => !assemblyParts.Contains(e) && !Filter.ObjFilter(e, false)).ToList();  
                 _definingTypeObjectMap.Add(group.Key,allObjects);
                 ReportProgress.IncrementAndUpdate();
             }
             
-            _objectToTypeObjectMap = new Dictionary<IfcObject, XbimIfcProxyTypeObject>();
-
-
             ReportProgress.NextStage(_definingTypeObjectMap.Count(), 21);
             foreach (var typeObjectToObjects in _definingTypeObjectMap)
             {
-                foreach (var ifcObject in typeObjectToObjects.Value.Where(t => !(t is IfcFeatureElement) && !assemblyParts.Contains(t)))
+                foreach (var ifcObject in typeObjectToObjects.Value.Where(t => !(t is IIfcFeatureElement) && !assemblyParts.Contains(t)))
                 {
                     _objectToTypeObjectMap.Add(ifcObject, typeObjectToObjects.Key);
                 }
@@ -545,15 +598,15 @@ namespace XbimExchanger.IfcToCOBieLiteUK
             
             //get all Assets that don't belong to an Ifc Type or are not classified
             //get all IfcElements that aren't classified or have a type
-            //var existingAssets = _classifiedObjects.Keys.OfType<IfcElement>()
-            //    .Concat(_objectToTypeObjectMap.Keys.OfType<IfcElement>()).Distinct();
-            var existingAssets = _objectToTypeObjectMap.Keys.OfType<IfcElement>();
+            //var existingAssets = _classifiedObjects.Keys.OfType<IIfcElement>()
+            //    .Concat(_objectToTypeObjectMap.Keys.OfType<IIfcElement>()).Distinct();
+            var existingAssets = _objectToTypeObjectMap.Keys.OfType<IIfcElement>();
 
-            //retrieve all the IfcElements from the model and exclude them if they are a member of an IfcType, 
-            var unCategorizedAssets = _model.Instances.OfType<IfcElement>()
-                .Where(t => !(t is IfcFeatureElement) && !assemblyParts.Contains(t) && !Filter.ObjFilter(t)) //filter ifcElement it ifcTypeObject it is defined by is in excluded list of ifcTypeobjects
+            //retrieve all the IfcElements from the model and exclude them if they are a member of an IIfcType, 
+            var unCategorizedAssets = _model.Instances.OfType<IIfcElement>()
+                .Where(t => !(t is IIfcFeatureElement) && !assemblyParts.Contains(t) && !Filter.ObjFilter(t)) //filter IIfcElement it IIfcTypeObject it is defined by is in excluded list of IIfcTypeobjects
                 .Except(existingAssets);
-            //convert to a Lookup with the key the type of the IfcElement and the value a list of IfcElements
+            //convert to a Lookup with the key the type of the IIfcElement and the value a list of IIfcElements
             //if the object has a classification we use this to distinguish types
 
             var unCategorizedAssetsWithTypes = unCategorizedAssets.GroupBy
@@ -562,16 +615,16 @@ namespace XbimExchanger.IfcToCOBieLiteUK
             foreach (var unCategorizedAssetsWithType in unCategorizedAssetsWithTypes)
             {
                 XbimIfcProxyTypeObject proxyType;
-                if (proxyTypesByKey.ContainsKey(unCategorizedAssetsWithType.Key))
+                if (proxyTypesByHash.ContainsKey(unCategorizedAssetsWithType.Key))
                 {
-                    proxyType = proxyTypesByKey[unCategorizedAssetsWithType.Key];
+                    proxyType = proxyTypesByHash[unCategorizedAssetsWithType.Key];
                     _definingTypeObjectMap[proxyType].AddRange(
                         unCategorizedAssetsWithType.Value);
                 }
                 else
                 {
                     proxyType = new XbimIfcProxyTypeObject(this,unCategorizedAssetsWithType.Key);
-                    proxyTypesByKey.Add(unCategorizedAssetsWithType.Key, proxyType);
+                    proxyTypesByHash.Add(unCategorizedAssetsWithType.Key, proxyType);
                     _definingTypeObjectMap.Add(proxyType, unCategorizedAssetsWithType.Value);
                 }
                 foreach (var ifcObject in unCategorizedAssetsWithType.Value)
@@ -580,27 +633,21 @@ namespace XbimExchanger.IfcToCOBieLiteUK
                 }
                 ReportProgress.IncrementAndUpdate();
             }
-            
-           
 
             //Get asset assignments
-
-            var assetRels = _model.Instances.OfType<IfcRelAssignsToGroup>()
-                .Where(r => r.RelatingGroup is IfcAsset);
-
-            _assetAsignments = new Dictionary<IfcTypeObject, IfcAsset>();
+            var assetRels = _model.Instances.OfType<IIfcRelAssignsToGroup>()
+                .Where(r => r.RelatingGroup is IIfcAsset);
             ReportProgress.NextStage(assetRels.Count(), 25);
             foreach (var assetRel in assetRels)
             {
                 foreach (var assetType in assetRel.RelatedObjects)
-                    if ((assetType is IfcTypeObject) && !Filter.ObjFilter(assetType))
-                        AssetAsignments[(IfcTypeObject)assetType] = (IfcAsset)assetRel.RelatingGroup;
+                    if ((assetType is IIfcTypeObject) && !Filter.ObjFilter(assetType))
+                        AssetAsignments[(IIfcTypeObject)assetType] = (IIfcAsset)assetRel.RelatingGroup;
                 ReportProgress.IncrementAndUpdate();
             }
-           
         }
 
-        private static string GetTypeObjectHashString(IfcTypeObject typeObject)
+        private static string GetTypeObjectHashString(IIfcTypeObject typeObject)
         {
             var hashString = "";
             if (typeObject.HasPropertySets != null && typeObject.HasPropertySets.Any())
@@ -618,17 +665,17 @@ namespace XbimExchanger.IfcToCOBieLiteUK
             return hashString;
         }
 
-        private string ChangeNameFromStyleToType(IfcTypeObject ifcTypeObject)
+        private string ChangeNameFromStyleToType(IIfcTypeObject ifcTypeObject)
         {
-            if (ifcTypeObject is IfcDoorStyle )
+            if (ifcTypeObject is IIfcDoorStyle )
                 return "DoorType";
-            if (ifcTypeObject is IfcWindowStyle)
+            if (ifcTypeObject is IIfcWindowStyle)
                 return "WindowType";
             return ifcTypeObject.GetType().Name.Substring(3);
             
         }
 
-        private string BuildTypeName(IfcTypeObject ifcTypeObject)
+        private string BuildTypeName(IIfcTypeObject ifcTypeObject)
         {
             var typeName = AllocateTypeName(ChangeNameFromStyleToType(ifcTypeObject));
             //remove names
@@ -647,49 +694,49 @@ namespace XbimExchanger.IfcToCOBieLiteUK
 
         /// <summary>
         /// For an element gets a XbimIfcProxyTypeObject for the asset
-       /// </summary>
-       /// <param name="element"></param>
-       /// <returns></returns>
-        public XbimIfcProxyTypeObject GetProxyTypeObject(IfcElement element)
-       {
-           XbimIfcProxyTypeObject ifcTypeObject;
+        /// </summary>
+        /// <param name="element"></param>
+        /// <returns></returns>
+        public XbimIfcProxyTypeObject GetProxyTypeObject(IIfcElement element)
+        {
+            XbimIfcProxyTypeObject ifcTypeObject;
             //If there is a formal IfcTypeObject then use that name
-           if (_objectToTypeObjectMap.TryGetValue(element, out ifcTypeObject))
-           {
+            if (_objectToTypeObjectMap.TryGetValue(element, out ifcTypeObject))
+            {
                 return ifcTypeObject;
-           }
+            }
 
-           //get element name
-           string name = element.Name;
-           //look to see if it has been classified
-           var categories = GetCategories(element);
-           if (categories != null && categories.Any())
-           {
-               //prefer the Uniclass2015 code
-               foreach (var category in categories)
-               {
-                   if (category.Classification != null &&
-                       category.Classification.ToUpperInvariant().Contains("UNICLASS2015"))
-                       return new XbimIfcProxyTypeObject(this, string.Format("{0}Type {1}", element.GetType().Name.Substring(3), category.Code));
-               }
-               //otherwise take the first
-               return new XbimIfcProxyTypeObject(this,string.Format("{0}Type {1}", element.GetType().Name.Substring(3), categories.First().Code));
-           }
-           //its unclassified
-           if (!string.IsNullOrWhiteSpace(name))
-           {
-               
-               return new XbimIfcProxyTypeObject(this, string.Format("{0}Type {1}",element.GetType().Name.Substring(3), name));
-           }
-           return new XbimIfcProxyTypeObject(this, AllocateTypeName(element.GetType().Name.Substring(3)+"Type"));
-       }
+            //get element name
+            string name = element.Name;
+            //look to see if it has been classified
+            var categories = GetCategories(element, false);
+            if (categories != null && categories.Any())
+            {
+                //prefer the Uniclass2015 code
+                foreach (var category in categories)
+                {
+                    if (category.Classification != null &&
+                        category.Classification.ToUpperInvariant().Contains("UNICLASS2015"))
+                        return new XbimIfcProxyTypeObject(this, string.Format("{0}Type {1}", element.GetType().Name.Substring(3), category.Code));
+                }
+                //otherwise take the first
+                return new XbimIfcProxyTypeObject(this, string.Format("{0}Type {1}", element.GetType().Name.Substring(3), categories.First().Code));
+            }
+            //its unclassified
+            if (!string.IsNullOrWhiteSpace(name))
+            {
 
-        
+                return new XbimIfcProxyTypeObject(this, string.Format("{0}Type {1}", element.GetType().Name.Substring(3), name));
+            }
+            return new XbimIfcProxyTypeObject(this, AllocateTypeName(element.GetType().Name.Substring(3) + "Type"));
+        }
+
+        private CobiePropertyMapping _cobiePropertyMaps;
 
         private void LoadCobieMaps()
         {
-            var tmpFile = _configFileName;
-            if (_configFileName == null)
+            var tmpFile = _attributesMapsConfigFileName;
+            if (tmpFile == null) // if no configuration file is set then set an 
             {
                 tmpFile = Path.GetTempPath() + Guid.NewGuid().ToString() + ".csv";
 
@@ -713,26 +760,26 @@ namespace XbimExchanger.IfcToCOBieLiteUK
             }
 
             //using COBiePropertyMapping to set properties, might pass this into function, but for now read file passed file name, or default
-            COBiePropertyMapping propertyMaps = new COBiePropertyMapping(new FileInfo(tmpFile));
-            _cobieFieldMap = propertyMaps.GetDictOfProperties();
-            _cobieProperties = new HashSet<string>(_cobieFieldMap.SelectMany(pair => pair.Value).ToList());
+            _cobiePropertyMaps = new CobiePropertyMapping(new FileInfo(tmpFile));
             
+            // _cobieProperties = new HashSet<string>(_cobieFieldMap.SelectMany(pair => pair.Value).ToList()); // it was never used.
             
-            if (_configFileName == null)
+            if (_attributesMapsConfigFileName == null)
             {
+                // if a temporary file has been created from the manifest resource then delete it
                 File.Delete(tmpFile);
             }
         }
 
         private void GetPropertySets()
         {
-            _attributedObjects = new Dictionary<IfcObjectDefinition, XbimAttributedObject>();
-            var relProps = _model.Instances.OfType<IfcRelDefinesByProperties>().ToList();
+            _attributedObjects = new Dictionary<IIfcObjectDefinition, XbimAttributedObject>();
+            var relProps = _model.Instances.OfType<IIfcRelDefinesByProperties>().ToList();
             ReportProgress.NextStage(relProps.Count, 29);
             foreach (var relProp in relProps)
             {
-                //get objects left after the IfcElement filters, plus none IfcElement (floors, spaces...)
-                var filteredObjects = relProp.RelatedObjects.Where(obj => _objectToTypeObjectMap.Keys.Contains(obj) || !(obj is IfcElement));
+                //get objects left after the IfcElement filters, plus non-IfcElement (floors, spaces...)
+                var filteredObjects = relProp.RelatedObjects.Where(obj => _objectToTypeObjectMap.Keys.Contains(obj) || !(obj is IIfcElement));
                 foreach (var ifcObject in filteredObjects)
                 {
                     XbimAttributedObject attributedObject;
@@ -770,37 +817,37 @@ namespace XbimExchanger.IfcToCOBieLiteUK
 
         private void GetSpacesAndZones()
         {
-            _spatialDecomposition = _model.Instances.OfType<IfcRelAggregates>().Where(r=>r.RelatingObject is IfcSpatialStructureElement)
-                .ToDictionary(ifcRelAggregate => (IfcSpatialStructureElement) ifcRelAggregate.RelatingObject, ifcRelAggregate => ifcRelAggregate.RelatedObjects.OfType<IfcSpatialStructureElement>().ToList());
+            _spatialDecomposition = _model.Instances.OfType<IIfcRelAggregates>().Where(r=>r.RelatingObject is IIfcSpatialStructureElement)
+                .ToDictionary(ifcRelAggregate => (IIfcSpatialStructureElement) ifcRelAggregate.RelatingObject, ifcRelAggregate => ifcRelAggregate.RelatedObjects.OfType<IIfcSpatialStructureElement>().ToList());
             ReportProgress.NextStage(_spatialDecomposition.Count(), 10);
             //get the relationship between spaces and storeys
-            _spaceFloorLookup = new Dictionary<IfcSpace, IfcBuildingStorey>();
+            _spaceFloorLookup = new Dictionary<IIfcSpace, IIfcBuildingStorey>();
             foreach (var spatialElement in _spatialDecomposition)
             {
-                var key = spatialElement.Key as IfcBuildingStorey;
+                var key = spatialElement.Key as IIfcBuildingStorey;
                 if (key != null) //only care if the space is on a floor (COBie rule)
                 {
-                    foreach (var ifcSpace in spatialElement.Value.OfType<IfcSpace>())
+                    foreach (var ifcSpace in spatialElement.Value.OfType<IIfcSpace>())
                         _spaceFloorLookup[ifcSpace] = key;
                 }
                 ReportProgress.IncrementAndUpdate();
             }
 
-            var relZones = _model.Instances.OfType<IfcRelAssignsToGroup>().Where(r=>r.RelatingGroup is IfcZone).ToList();
+            var relZones = _model.Instances.OfType<IIfcRelAssignsToGroup>().Where(r=>r.RelatingGroup is IIfcZone).ToList();
             ReportProgress.NextStage(relZones.Count(), 13);
-            _zoneSpaces = new Dictionary<IfcZone, HashSet<IfcSpace>>();
-            _spaceZones = new Dictionary<IfcSpace, HashSet<IfcZone>>();
+            _zoneSpaces = new Dictionary<IIfcZone, HashSet<IIfcSpace>>();
+            _spaceZones = new Dictionary<IIfcSpace, HashSet<IIfcZone>>();
             foreach (var relZone in relZones)
             {
-                var spaces = relZone.RelatedObjects.OfType<IfcSpace>().ToList();
+                var spaces = relZone.RelatedObjects.OfType<IIfcSpace>().ToList();
                 if (spaces.Any())
                 {
                     //add the spaces to each zone lookup
-                    var zone = (IfcZone) relZone.RelatingGroup;
-                    HashSet<IfcSpace> zoneSpaces;
+                    var zone = (IIfcZone) relZone.RelatingGroup;
+                    HashSet<IIfcSpace> zoneSpaces;
                     if (!ZoneSpaces.TryGetValue(zone, out zoneSpaces))
                     {
-                        zoneSpaces = new HashSet<IfcSpace>();
+                        zoneSpaces = new HashSet<IIfcSpace>();
                         ZoneSpaces.Add(zone,zoneSpaces);
                     }
                     foreach (var space in spaces) zoneSpaces.Add(space);
@@ -808,10 +855,10 @@ namespace XbimExchanger.IfcToCOBieLiteUK
                     //now add the zones to the space lookup         
                     foreach (var ifcSpace in spaces)
                     {
-                        HashSet<IfcZone> spaceZones;
+                        HashSet<IIfcZone> spaceZones;
                         if (!_spaceZones.TryGetValue(ifcSpace, out spaceZones))
                         {
-                            spaceZones = new HashSet<IfcZone>();
+                            spaceZones = new HashSet<IIfcZone>();
                             _spaceZones.Add(ifcSpace,spaceZones);
                         }
                         spaceZones.Add(zone);
@@ -826,12 +873,12 @@ namespace XbimExchanger.IfcToCOBieLiteUK
         /// </summary>
         /// <param name="space"></param>
         /// <returns></returns>
-        public IEnumerable<IfcZone> GetZones(IfcSpace space)
+        public IEnumerable<IIfcZone> GetZones(IIfcSpace space)
         {
-            HashSet<IfcZone> zones;
+            HashSet<IIfcZone> zones;
             if (_spaceZones.TryGetValue(space, out zones))
                 return zones;
-            return Enumerable.Empty<IfcZone>();
+            return Enumerable.Empty<IIfcZone>();
         }
         /// <summary>
         /// 
@@ -900,7 +947,7 @@ namespace XbimExchanger.IfcToCOBieLiteUK
         /// <summary>
         /// 
         /// </summary>
-        public XbimModel Model
+        public IModel Model
         {
             get { return _model; }
         }
@@ -908,21 +955,21 @@ namespace XbimExchanger.IfcToCOBieLiteUK
         /// <summary>
         /// 
         /// </summary>
-        public Dictionary<IfcTypeObject, IfcAsset> AssetAsignments
+        public Dictionary<IIfcTypeObject, IIfcAsset> AssetAsignments
         {
             get { return _assetAsignments; }
         }
         /// <summary>
         /// 
         /// </summary>
-        public IDictionary<IfcObjectDefinition, List<IfcSystem>> SystemLookup
+        public IDictionary<IIfcObjectDefinition, List<IIfcSystem>> SystemLookup
         {
             get { return _systemLookup; }
         }
         /// <summary>
         /// 
         /// </summary>
-        public IDictionary<IfcSystem, ObjectDefinitionSet> SystemAssignment
+        public IDictionary<IIfcSystem, IItemSet<IIfcObjectDefinition>> SystemAssignment
         {
             get { return _systemAssignment; }
         }
@@ -930,7 +977,7 @@ namespace XbimExchanger.IfcToCOBieLiteUK
         /// <summary>
         /// 
         /// </summary>
-        public IDictionary<IfcElement, List<IfcSpatialStructureElement>> SpaceAssetLookup
+        public IDictionary<IIfcElement, List<IIfcSpatialElement>> SpaceAssetLookup
         {
             get { return _spaceAssetLookup; }
         }
@@ -938,7 +985,7 @@ namespace XbimExchanger.IfcToCOBieLiteUK
         /// <summary>
         /// 
         /// </summary>
-        public IDictionary<IfcSpace, IfcBuildingStorey> SpaceFloorLookup
+        public IDictionary<IIfcSpace, IIfcBuildingStorey> SpaceFloorLookup
         {
             get { return _spaceFloorLookup; }
         }
@@ -946,14 +993,14 @@ namespace XbimExchanger.IfcToCOBieLiteUK
         /// <summary>
         /// 
         /// </summary>
-        public Dictionary<IfcZone, HashSet<IfcSpace>> ZoneSpaces
+        public Dictionary<IIfcZone, HashSet<IIfcSpace>> ZoneSpaces
         {
             get { return _zoneSpaces; }
         }
 
 
 
-        public List<IfcActorSelect> Contacts
+        public List<IIfcActorSelect> Contacts
         {
             get { return _contacts; }
         }
@@ -971,38 +1018,40 @@ namespace XbimExchanger.IfcToCOBieLiteUK
 
         private void GetUnits()
         {
-            var ifcProject = Model.IfcProject;
+            var ifcProject = Model.Instances.FirstOrDefault<IIfcProject>();
+            if (ifcProject.UnitsInContext == null)
+                return;
             foreach (var unit in ifcProject.UnitsInContext.Units)
             {
-                if (unit is IfcNamedUnit)
+                if (unit is IIfcNamedUnit)
                 {
-                    var unitType = (unit as IfcNamedUnit).UnitType;
+                    var unitType = (unit as IIfcNamedUnit).UnitType;
                     switch (unitType)
                     {
                         case IfcUnitEnum.AREAUNIT:
                             AreaUnit au;
-                            _hasAreaUnit = Enum.TryParse(AdjustUnitName(unit.GetName()), true,
+                            _hasAreaUnit = Enum.TryParse(AdjustUnitName(unit.FullName), true,
                                 out au);
                             if (_hasAreaUnit) _modelAreaUnit = au;
                             break;
                         case IfcUnitEnum.LENGTHUNIT:
                             LinearUnit lu;
-                            _hasLinearUnit = Enum.TryParse(AdjustUnitName(unit.GetName()), true,
+                            _hasLinearUnit = Enum.TryParse(AdjustUnitName(unit.FullName), true,
                                 out lu);
                             if (_hasLinearUnit) _modelLinearUnit = lu;
                             break;
                         case IfcUnitEnum.VOLUMEUNIT:
                             VolumeUnit vu;
-                            _hasVolumeUnit = Enum.TryParse(AdjustUnitName(unit.GetName()), true,
+                            _hasVolumeUnit = Enum.TryParse(AdjustUnitName(unit.FullName), true,
                                 out vu);
                             if (_hasVolumeUnit) _modelVolumeUnit = vu;
                             break;
                     }
                 }
-                else if (unit is IfcMonetaryUnit)
+                else if (unit is IIfcMonetaryUnit)
                 {
                     CurrencyUnit cu;
-                    _hasCurrencyUnit = Enum.TryParse(unit.GetName(), true,
+                    _hasCurrencyUnit = Enum.TryParse(unit.FullName, true,
                         out cu);
                     if (_hasCurrencyUnit) _modelCurrencyUnit = cu;
                 }
@@ -1025,37 +1074,38 @@ namespace XbimExchanger.IfcToCOBieLiteUK
         {
 
 
-            _classifiedObjects = new Dictionary<IfcRoot, List<IfcClassificationReference>>();
+            _classifiedObjects = new Dictionary<IIfcDefinitionSelect, List<IIfcClassificationReference>>();
             //create a dictionary of classified objects
             ReportProgress.NextStage(_classifiedObjects.Count(), 8);
-            foreach (var ifcRelAssociatesClassification in Model.Instances.OfType<IfcRelAssociatesClassification>())
+            foreach (var ifcRelAssociatesClassification in Model.Instances.OfType<IIfcRelAssociatesClassification>())
             {
                 foreach (var relatedObject in ifcRelAssociatesClassification.RelatedObjects)
                 {
-                    List<IfcClassificationReference> classificationList;
+                    List<IIfcClassificationReference> classificationList;
                     if (!_classifiedObjects.TryGetValue(relatedObject, out classificationList))
                     {
-                        classificationList = new List<IfcClassificationReference>();
+                        classificationList = new List<IIfcClassificationReference>();
                         _classifiedObjects.Add(relatedObject, classificationList);
                     }
-                    classificationList.Add(((IfcClassificationReference)ifcRelAssociatesClassification.RelatingClassification));
+                    classificationList.Add(((IIfcClassificationReference)ifcRelAssociatesClassification.RelatingClassification));
                     ReportProgress.IncrementAndUpdate();
                 }
             }
         }
 
-        private List<Category> ConvertToCategories(IEnumerable<IfcClassificationReference> classifications)
+        private List<Category> ConvertToCategories(IEnumerable<IIfcClassificationReference> classifications)
         {
             var categories = new List<Category>();
             foreach (var classification in classifications)
-            {
+            { 
                 var category = new Category();
-                if (classification.ReferencedSource != null)
-                    category.Classification = classification.ReferencedSource.Name;               
-                if (classification.ItemReference.HasValue && classification.Name.HasValue &&
-                    string.CompareOrdinal(classification.ItemReference, classification.Name) == 0)
+                var refSource = classification.ReferencedSource as IIfcClassification;
+                if (refSource != null)
+                    category.Classification = refSource.Name;
+                if (classification.Identification.HasValue && classification.Name.HasValue &&
+                    string.CompareOrdinal(classification.Identification, classification.Name) == 0)
                 {
-                    var strRef = classification.ItemReference.Value.ToString();
+                    var strRef = classification.Identification.Value.ToString();
                     var parts = strRef.Split(new[] {':', ';', '/', '\\'}, StringSplitOptions.RemoveEmptyEntries);
                     if (parts.Length > 1)
                         category.Description = parts[1];
@@ -1064,7 +1114,7 @@ namespace XbimExchanger.IfcToCOBieLiteUK
                 }
                 else
                 {
-                    category.Code = classification.ItemReference;
+                    category.Code = classification.Identification;
                     category.Description = classification.Name;
                 }
                 if (category.Code != null && string.CompareOrdinal(category.Code.ToLower(),"n/a")!=0 )
@@ -1072,18 +1122,55 @@ namespace XbimExchanger.IfcToCOBieLiteUK
             }
             return categories;
         }
+
+        /// <summary>
+        /// Set Category with code and description as single delimited string
+        /// </summary>
+        /// <param name="strRef">Uniclass string</param>
+        /// <returns>List of Category Objects</returns>
+        private List<Category> ConvertToCategories(string strRef)
+        {
+            var categories = new List<Category>();
+            var category = new Category();
+            var parts = strRef.Split(new[] { ':', ';', '/', '\\' }, StringSplitOptions.RemoveEmptyEntries);
+            if (parts.Length > 1)
+                category.Description = parts[1];
+            if (parts.Length > 0)
+                category.Code = parts[0];
+            categories.Add(category);
+            return categories;
+        }
+
+        /// <summary>
+        /// Set Category with code and description
+        /// </summary>
+        /// <param name="code">Uniclass code</param>
+        /// <param name="desc">Uniclass description</param>
+        /// <returns>List of Category Objects</returns>
+        private List<Category> ConvertToCategories(string code, string desc)
+        {
+            var categories = new List<Category>();
+            var category = new Category();
+            if (!string.IsNullOrEmpty(code))
+                category.Code = code;
+            if (!string.IsNullOrEmpty(desc))
+                category.Description = desc;
+            categories.Add(category);
+            return categories;
+        }
+
         /// <summary>
         /// Returns the COBie Category for this object, based on the Ifc Classification
         /// </summary>
         /// <param name="classifiedObject"></param>
         /// <returns></returns>
-        public List<Category> GetCategories(IfcRoot classifiedObject)
+        public List<Category> GetCategories(IIfcDefinitionSelect classifiedObject, bool useProp = true)
         {
-            List<IfcClassificationReference> classifications;
+            List<IIfcClassificationReference> classifications;
             if (_classifiedObjects.TryGetValue(classifiedObject, out classifications))
                 return  ConvertToCategories(classifications);
             //if the object is an IfcObject we might be able to get a classification from its aggregating type
-            var ifcObject = classifiedObject as IfcObject;
+            var ifcObject = classifiedObject as IIfcObject;
             if (ifcObject != null)
             {
                 var definingTypeObject = GetDefiningTypeObject(ifcObject); //do we have a defining type
@@ -1093,7 +1180,33 @@ namespace XbimExchanger.IfcToCOBieLiteUK
                         return ConvertToCategories(classifications);
                 }
             }
-          
+            //get category from properties
+            if (useProp && (classifiedObject is IIfcObjectDefinition))
+            {
+               
+                var code = GetCoBieProperty("CommonCategoryCode", classifiedObject as IIfcObjectDefinition);
+                var desc = GetCoBieProperty("CommonCategoryDescription", classifiedObject as IIfcObjectDefinition);
+                if (!string.IsNullOrEmpty(code) && !string.IsNullOrEmpty(desc))
+                {
+                    return ConvertToCategories(code, desc);
+                }
+                else
+                {
+                    var cat = GetCoBieProperty("CommonCategoryCode", classifiedObject as IIfcObjectDefinition);
+                    if (!string.IsNullOrEmpty(cat))
+                    {
+                        return ConvertToCategories(cat);
+                    }
+                    else if (string.IsNullOrEmpty(code) && string.IsNullOrEmpty(desc))
+                    {
+                        return UnknownCategory;
+                    }
+                    else //have code, or description
+                    {
+                        return ConvertToCategories(cat);
+                    }
+                }
+            }
             return UnknownCategory;
         }
 
@@ -1102,7 +1215,7 @@ namespace XbimExchanger.IfcToCOBieLiteUK
         /// </summary>
         /// <param name="ifcRootObject"></param>
         /// <returns></returns>
-        public string GetCreatingApplication(IfcRoot ifcRootObject)
+        public string GetCreatingApplication(IIfcRoot ifcRootObject)
         {
             if (ifcRootObject.OwnerHistory.LastModifyingApplication != null)
                 return "xBIM from " + ifcRootObject.OwnerHistory.LastModifyingApplication.ApplicationFullName;
@@ -1120,9 +1233,9 @@ namespace XbimExchanger.IfcToCOBieLiteUK
         /// </summary>
         /// <param name="areaUnit"></param>
         /// <returns></returns>
-        public string GetAreaUnit(IfcQuantityArea areaUnit)
+        public string GetAreaUnit(IIfcQuantityArea areaUnit)
         {
-            return areaUnit.Unit != null ? areaUnit.Unit.GetName() : ModelAreaUnit.ToString();
+            return areaUnit.Unit != null ? areaUnit.Unit.FullName : ModelAreaUnit.ToString();
         }
 
         /// <summary>
@@ -1130,9 +1243,9 @@ namespace XbimExchanger.IfcToCOBieLiteUK
         /// </summary>
         /// <param name="lengthUnit"></param>
         /// <returns></returns>
-        public string GetLinearUnit(IfcQuantityLength lengthUnit)
+        public string GetLinearUnit(IIfcQuantityLength lengthUnit)
         {
-            return lengthUnit.Unit != null ? lengthUnit.Unit.GetName() : ModelLinearUnit.ToString();
+            return lengthUnit.Unit != null ? lengthUnit.Unit.FullName : ModelLinearUnit.ToString();
         }
 
         /// <summary>
@@ -1140,34 +1253,26 @@ namespace XbimExchanger.IfcToCOBieLiteUK
         /// </summary>
         /// <param name="volumeUnit"></param>
         /// <returns></returns>
-        public string GetVolumeUnit(IfcQuantityVolume volumeUnit)
+        public string GetVolumeUnit(IIfcQuantityVolume volumeUnit)
         {
-            return volumeUnit.Unit != null ? volumeUnit.Unit.GetName() : ModelVolumeUnit.ToString();
+            return volumeUnit.Unit != null ? volumeUnit.Unit.FullName : ModelVolumeUnit.ToString();
         }
 
         #endregion
 
-
-
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="valueName"></param>
-        /// <param name="ifcObjectDefinition"></param>
-        /// <typeparam name="TCoBieValueBaseType"></typeparam>
-        /// <returns></returns>
-        /// <exception cref="ArgumentException"></exception>
-        public TCoBieValueBaseType GetCoBieAttribute<TCoBieValueBaseType>(string valueName, IfcObjectDefinition ifcObjectDefinition)
+        public TCoBieValueBaseType GetCoBieAttribute<TCoBieValueBaseType>(string cobieAttributeName, IIfcObjectDefinition ifcObjectDefinition)
             where TCoBieValueBaseType : AttributeValue, new()
         {
             XbimAttributedObject attributedObject;
             var result = new TCoBieValueBaseType();
             if (_attributedObjects.TryGetValue(ifcObjectDefinition, out attributedObject))
             {
-                string[] propertyNames;
-                if (_cobieFieldMap.TryGetValue(valueName, out propertyNames))
+                string[] propertyNames = _cobiePropertyMaps.GetMap(cobieAttributeName);
+                if (propertyNames == null)
+                    throw new ArgumentException("Illegal COBie Attribute name:", cobieAttributeName);
+                else 
                 {
+                    // todo: follow for debug
                     foreach (var propertyName in propertyNames)
                     {
                         if (attributedObject.GetAttributeValue(propertyName, ref result))
@@ -1175,10 +1280,6 @@ namespace XbimExchanger.IfcToCOBieLiteUK
                             return result;
                         }
                     }
-                }
-                else
-                {
-                    throw new ArgumentException("Illegal COBie Attribute name:", valueName);
                 }
             }
             return result;
@@ -1192,13 +1293,13 @@ namespace XbimExchanger.IfcToCOBieLiteUK
         /// <typeparam name="TValue"></typeparam>
         /// <returns></returns>
         /// <exception cref="ArgumentException"></exception>
-        public TValue? GetCoBieProperty<TValue>(string valueName, IfcObject ifcObject) where TValue:struct
+        public TValue? GetCoBieProperty<TValue>(string valueName, IIfcObject ifcObject) where TValue:struct
         {
             XbimAttributedObject attributedObject;
             if (_attributedObjects.TryGetValue(ifcObject, out attributedObject))
             {
-                string[] propertyNames;
-                if (_cobieFieldMap.TryGetValue(valueName, out propertyNames))
+                var propertyNames = _cobiePropertyMaps.GetMap(valueName);
+                if (propertyNames != null)
                 {
                     foreach (var propertyName in propertyNames)
                     {
@@ -1209,7 +1310,7 @@ namespace XbimExchanger.IfcToCOBieLiteUK
                 }
                 else
                 {
-                    throw new ArgumentException("Illegal COBie Attribute name:", valueName);
+                    throw new ArgumentException("Invalid COBie Attribute name:", valueName);
                 }
             }
             return null;
@@ -1217,7 +1318,7 @@ namespace XbimExchanger.IfcToCOBieLiteUK
 
         
 
-        private IfcTypeObject GetDefiningTypeObject(IfcObject ifcObject)
+        private IIfcTypeObject GetDefiningTypeObject(IIfcObject ifcObject)
         {
             XbimIfcProxyTypeObject definingType;
             _objectToTypeObjectMap.TryGetValue(ifcObject, out definingType);
@@ -1229,7 +1330,7 @@ namespace XbimExchanger.IfcToCOBieLiteUK
         /// </summary>
         /// <param name="ifcObjectDefinition">ifcObjectDefinition, IfcTypeObject, IfcObject</param>
         /// <returns>XbimAttributedObject</returns>
-        public XbimAttributedObject GetAttributesObj(IfcObjectDefinition ifcObjectDefinition)
+        public XbimAttributedObject GetAttributesObj(IIfcObjectDefinition ifcObjectDefinition)
         {
             XbimAttributedObject attributedObject;
             if (_attributedObjects.TryGetValue(ifcObjectDefinition, out attributedObject))
@@ -1248,8 +1349,9 @@ namespace XbimExchanger.IfcToCOBieLiteUK
         /// </summary>
         /// <param name="ifcObjectDefinition"></param>
         /// <returns></returns>
-        public List<Attribute> GetAttributes(IfcObjectDefinition ifcObjectDefinition)
+        public List<Attribute> GetAttributes(IIfcObjectDefinition ifcObjectDefinition)
         {
+            Debug.WriteLine($"Getting attributes for #{ifcObjectDefinition.EntityLabel}");
             var uniqueAttributes = new Dictionary<string, Attribute>();
             XbimAttributedObject attributedObject;
             if (_attributedObjects.TryGetValue(ifcObjectDefinition, out attributedObject))
@@ -1318,7 +1420,7 @@ namespace XbimExchanger.IfcToCOBieLiteUK
         /// </summary>
         /// <param name="ifcObjectDefinition"></param>
         /// <returns></returns>
-        public Attribute MakeAttribute(IfcObjectDefinition ifcObjectDefinition, string attributeName, object attributeValue)
+        public Attribute MakeAttribute(IIfcObjectDefinition ifcObjectDefinition, string attributeName, object attributeValue)
         {
             var newAttribute = new Attribute();
             newAttribute.CreatedBy = GetCreatedBy(ifcObjectDefinition);
@@ -1336,7 +1438,7 @@ namespace XbimExchanger.IfcToCOBieLiteUK
         /// </summary>
         /// <param name="ifcObject"></param>
         /// <returns></returns>
-        public string ExternalEntityIdentity(IfcRoot ifcObject)
+        public string ExternalEntityIdentity(IIfcRoot ifcObject)
         {
             switch (EntityIdentifierMode)
             {
@@ -1355,7 +1457,7 @@ namespace XbimExchanger.IfcToCOBieLiteUK
         /// </summary>
         /// <param name="ifcObject"></param>
         /// <returns></returns>
-        public string ExternalEntityName(IfcRoot ifcObject)
+        public string ExternalEntityName(IIfcRoot ifcObject)
         {
             if (
                 ExternalReferenceMode == ExternalReferenceMode.IgnoreEntityName ||
@@ -1364,11 +1466,19 @@ namespace XbimExchanger.IfcToCOBieLiteUK
             return ifcObject.GetType().Name;
         }
 
-        internal string ExternalSystemName(IfcRoot ifcObject = null)
+        internal string ExternalSystemName(IIfcRoot ifcObject = null, bool usePropFirst = false)
         {
             if (ExternalReferenceMode == ExternalReferenceMode.IgnoreSystem ||
                 ExternalReferenceMode == ExternalReferenceMode.IgnoreSystemAndEntityName)
                 return null;
+            if (usePropFirst && (ifcObject is IIfcObjectDefinition))//support for COBie Toolkit for Autodesk Revit(had this in on old code, not sure if still relevant. this note date 8/10/2015)
+            {
+                var extSystem = GetCoBieProperty("CommonExtSystem", ifcObject as IIfcObjectDefinition);
+                if (!string.IsNullOrEmpty(extSystem))
+                {
+                    return extSystem;
+                }
+            }
             return "xBIM"; //GetCreatingApplication(ifcObject);
         }
 
@@ -1378,22 +1488,23 @@ namespace XbimExchanger.IfcToCOBieLiteUK
         {
           
             //get all elements that are contained in any spatial structure of this building
-            _spaceAssetLookup = new Dictionary<IfcElement, List<IfcSpatialStructureElement>>(); 
+            _spaceAssetLookup = new Dictionary<IIfcElement, List<IIfcSpatialElement>>(); 
            
-            var ifcRelContainedInSpaces = _model.Instances.OfType<IfcRelContainedInSpatialStructure>().ToList();
+            var ifcRelContainedInSpaces = _model.Instances.OfType<IIfcRelContainedInSpatialStructure>().ToList();
             ReportProgress.NextStage(ifcRelContainedInSpaces.Count, 40);
             foreach (var ifcRelContainedInSpace in ifcRelContainedInSpaces)
             {
-                foreach (var element in ifcRelContainedInSpace.RelatedElements.OfType<IfcElement>())
+                foreach (var element in ifcRelContainedInSpace.RelatedElements.OfType<IIfcElement>())
                 { 
-                    List<IfcSpatialStructureElement> spaceList;
+                    List<IIfcSpatialElement> spaceList;
                     if (!SpaceAssetLookup.TryGetValue(element, out spaceList))
                     {
-                        spaceList = new List<IfcSpatialStructureElement>();
+                        spaceList = new List<IIfcSpatialElement>();
                         SpaceAssetLookup[element] = spaceList;
 
                     }
-                    spaceList.Add(ifcRelContainedInSpace.RelatingStructure);
+                    var container = ifcRelContainedInSpace.RelatingStructure;
+                    spaceList.Add(container);
                 }
                 ReportProgress.IncrementAndUpdate();
             }
@@ -1404,24 +1515,24 @@ namespace XbimExchanger.IfcToCOBieLiteUK
         /// </summary>
         /// <param name="ifcBuilding"></param>
         /// <returns></returns>
-        public IEnumerable<IfcElement> GetAllAssets(IfcBuilding ifcBuilding)
+        public IEnumerable<IIfcElement> GetAllAssets(IIfcBuilding ifcBuilding)
         {
-            var spatialStructureOfBuilding = new HashSet<IfcSpatialStructureElement>(); // all the spatial decomposition of the building
+            var spatialStructureOfBuilding = new HashSet<IIfcSpatialStructureElement>(); // all the spatial decomposition of the building
            
             //get all the spatial structural elements which may contain assets
             DecomposeSpatialStructure(ifcBuilding, spatialStructureOfBuilding);
             //get all elements that are contained in the spatial structure of this building
-            var elementsInBuilding = _model.Instances.OfType<IfcRelContainedInSpatialStructure>()
+            var elementsInBuilding = _model.Instances.OfType<IIfcRelContainedInSpatialStructure>()
                 .Where(r => spatialStructureOfBuilding.Contains(r.RelatingStructure))
-                .SelectMany(s=>s.RelatedElements.OfType<IfcElement>()).Distinct();
+                .SelectMany(s=>s.RelatedElements.OfType<IIfcElement>()).Distinct();
             //remove
             return elementsInBuilding;
         }
 
-        private void DecomposeSpatialStructure(IfcSpatialStructureElement ifcSpatialStructuralElement,
-            HashSet<IfcSpatialStructureElement> allSpatialStructuralElements)
+        private void DecomposeSpatialStructure(IIfcSpatialStructureElement ifcSpatialStructuralElement,
+            HashSet<IIfcSpatialStructureElement> allSpatialStructuralElements)
         {
-            List<IfcSpatialStructureElement> spatialElements;
+            List<IIfcSpatialStructureElement> spatialElements;
             if (_spatialDecomposition.TryGetValue(ifcSpatialStructuralElement, out spatialElements))
             {
                 foreach (var spatialElement in spatialElements)
@@ -1441,13 +1552,13 @@ namespace XbimExchanger.IfcToCOBieLiteUK
         /// <param name="ifcObjectDefinition"></param>
         /// <returns></returns>
         /// <exception cref="ArgumentException"></exception>
-        public string GetCoBieProperty(string valueName, IfcObjectDefinition ifcObjectDefinition)
+        public string GetCoBieProperty(string valueName, IIfcObjectDefinition ifcObjectDefinition)
         {
             XbimAttributedObject attributedObject;
             if (_attributedObjects.TryGetValue(ifcObjectDefinition, out attributedObject))
             {
-                string[] propertyNames;
-                if (_cobieFieldMap.TryGetValue(valueName, out propertyNames))
+                var propertyNames = _cobiePropertyMaps.GetMap(valueName);
+                if (propertyNames != null)
                 {
                     foreach (var propertyName in propertyNames)
                     {
@@ -1475,26 +1586,35 @@ namespace XbimExchanger.IfcToCOBieLiteUK
         {
             
             //get any actors and select their
-            var ifcActors = _model.Instances.OfType<IfcActor>().ToList();
-            var actors = new HashSet<IfcActorSelect>(ifcActors.Select(a => a.TheActor)); //unique actors
-            var personOrgs =  new HashSet<IfcActorSelect>(_model.Instances.OfType<IfcPersonAndOrganization>().Where(p => !actors.Contains(p)));
-            actors = new HashSet<IfcActorSelect>(actors.Concat(personOrgs));
-            var personsAlreadyIn = new HashSet<IfcActorSelect>(actors.Where(a => a is IfcPerson));
+            var ifcActors = _model.Instances.OfType<IIfcActor>().ToList();
+            var actors = new HashSet<IIfcActorSelect>(ifcActors.Select(a => a.TheActor)); //unique actors
 
-            var persons = new HashSet<IfcActorSelect>(_model.Instances.OfType<IfcPerson>().Where(p => !personsAlreadyIn.Contains(p)));
+            var personOrgs =  new HashSet<IIfcActorSelect>(_model.Instances.OfType<IIfcPersonAndOrganization>().Where(p => !actors.Contains(p)));
+            actors = new HashSet<IIfcActorSelect>(actors.Concat(personOrgs));
+
+            var orgAlreadyIn = actors.OfType<IIfcPersonAndOrganization>().Select(po => po.TheOrganization);
+            var orgs = _model.Instances.OfType<IIfcOrganization>().Where(p => !orgAlreadyIn.Contains(p) && p.Addresses != null); //lets only see ones with any address info
+            actors = new HashSet<IIfcActorSelect>(actors.Union(orgs)); //union will exclude duplicates
+
+            var personsAlreadyIn = actors.Where(a => a is IIfcPerson);
+            personsAlreadyIn = personsAlreadyIn.Union(actors.OfType<IIfcPersonAndOrganization>().Select(po => po.ThePerson));//union will exclude duplicates
+            var persons = new HashSet<IIfcActorSelect>(_model.Instances.OfType<IIfcPerson>().Where(p => !personsAlreadyIn.Contains(p)));
+
             _contacts = actors.Concat(persons).ToList();
-            _actors = new Dictionary<IfcActorSelect, IfcActor>();
+
+            _actors = new Dictionary<IIfcActorSelect, IIfcActor>();
             //set progress report
-            ReportProgress.NextStage(ifcActors.Count + actors.OfType<IfcPersonAndOrganization>().Count(), 5);
+            ReportProgress.NextStage(ifcActors.Count + actors.OfType<IIfcPersonAndOrganization>().Count(), 5);
             foreach (var actor in ifcActors)
             {
                 if(!_actors.ContainsKey(actor.TheActor))
                     _actors.Add(actor.TheActor,actor);
                 ReportProgress.IncrementAndUpdate();
             }
-            _createdByKeys = new Dictionary<IfcPersonAndOrganization, ContactKey>();
-            //sort out createdByKeys, these will always be IfcPersonAndOrganization
-            foreach (var actor in actors.OfType<IfcPersonAndOrganization>())
+
+            _createdByKeys = new Dictionary<IIfcActorSelect, ContactKey>();
+            //sort out createdByKeys, these will always be IIfcPersonAndOrganization which are held in IfcOwnerHistory fields
+            foreach (var actor in actors.OfType<IIfcPersonAndOrganization>())
             {
                 _createdByKeys.Add(actor, new ContactKey { Email = EmailAddressOf(actor) });
                 ReportProgress.IncrementAndUpdate();
@@ -1502,22 +1622,36 @@ namespace XbimExchanger.IfcToCOBieLiteUK
             _sundryContacts = new Dictionary<string, Contact>();
         }
 
-        public string EmailAddressOf(IfcPersonAndOrganization personOrg)
+        public string EmailAddressOf(IIfcActorSelect personOrg)
         {
-            var person = personOrg.ThePerson;
-            var organisation = personOrg.TheOrganization;
-            //get a default that will be unique
-            var email = string.Format("unknown{0}@undefined.email", personOrg.EntityLabel);
-            if (organisation.Addresses != null)
+            IIfcPerson person = null;
+            IIfcOrganization organisation= null;
+            if (personOrg is IIfcPerson)
             {
-                var telecom = organisation.Addresses.OfType<IfcTelecomAddress>().FirstOrDefault(a=>a.ElectronicMailAddresses.Any(e=>!string.IsNullOrWhiteSpace(e)));
+                person = personOrg as IIfcPerson;
+            }
+            if (personOrg is IIfcOrganization)
+            {
+                organisation = personOrg as IIfcOrganization;
+            }
+            if (personOrg is IIfcPersonAndOrganization)
+            {
+                person = (personOrg as IIfcPersonAndOrganization).ThePerson;
+                organisation = (personOrg as IIfcPersonAndOrganization).TheOrganization;
+            }
+            
+            //get a default that will be unique
+            var email = string.Format("unknown{0}@undefined.email", ((IPersistEntity)personOrg).EntityLabel);
+            if ((organisation != null) && (organisation.Addresses != null))
+            {
+                var telecom = organisation.Addresses.OfType<IIfcTelecomAddress>().FirstOrDefault(a=>a.ElectronicMailAddresses.Any(e=>!string.IsNullOrWhiteSpace(e)));
                 if (telecom != null)
                     email = telecom.ElectronicMailAddresses.FirstOrDefault(e => !string.IsNullOrWhiteSpace(e));
             }
             //overwrite if we have it at person level
-            if (person.Addresses != null)
+            if ((person != null) && (person.Addresses != null))
             {
-                var telecom = person.Addresses.OfType<IfcTelecomAddress>().FirstOrDefault(a => a.ElectronicMailAddresses.Any(e => !string.IsNullOrWhiteSpace(e)));
+                var telecom = person.Addresses.OfType<IIfcTelecomAddress>().FirstOrDefault(a => a.ElectronicMailAddresses.Any(e => !string.IsNullOrWhiteSpace(e)));
                 if (telecom != null)
                     email = telecom.ElectronicMailAddresses.FirstOrDefault(e => !string.IsNullOrWhiteSpace(e));
             }
@@ -1529,12 +1663,12 @@ namespace XbimExchanger.IfcToCOBieLiteUK
         /// </summary>
         /// <param name="ifcZone"></param>
         /// <returns></returns>
-        public IEnumerable<IfcSpace> GetSpaces(IfcZone ifcZone)
+        public IEnumerable<IIfcSpace> GetSpaces(IIfcZone ifcZone)
         {
-            HashSet<IfcSpace> spaces;
+            HashSet<IIfcSpace> spaces;
             if (_zoneSpaces.TryGetValue(ifcZone, out spaces))
                 return spaces;
-            return Enumerable.Empty<IfcSpace>();
+            return Enumerable.Empty<IIfcSpace>();
         }
 
         /// <summary>
@@ -1542,13 +1676,12 @@ namespace XbimExchanger.IfcToCOBieLiteUK
         /// </summary>
         /// <param name="ifcSystem"></param>
         /// <returns></returns>
-        public IEnumerable<IfcObjectDefinition> GetSystemAssignments(IfcSystem ifcSystem)
+        public IItemSet<IIfcObjectDefinition> GetSystemAssignments(IIfcSystem ifcSystem)
         {
-            ObjectDefinitionSet assignments;
-            if (SystemAssignment.TryGetValue(ifcSystem, out assignments))
-                return assignments;
-            return Enumerable.Empty<IfcObjectDefinition>();
-            
+            IItemSet<IIfcObjectDefinition> assignments;
+            return SystemAssignment.TryGetValue(ifcSystem, out assignments) 
+                ? assignments 
+                : null;
         }
 
 
@@ -1557,12 +1690,12 @@ namespace XbimExchanger.IfcToCOBieLiteUK
         /// </summary>
         /// <param name="ifcPropertySet"></param>
         /// <returns></returns>
-        public IEnumerable<IfcObjectDefinition> GetSystemAssignments(IfcPropertySet ifcPropertySet)
+        public IEnumerable<IIfcObjectDefinition> GetSystemAssignments(IIfcPropertySet ifcPropertySet)
         {
-            IEnumerable<IfcObject> assignments;
+            IEnumerable<IIfcObjectDefinition> assignments;
             if (SystemViaPropAssignment.TryGetValue(ifcPropertySet, out assignments))
                 return assignments;
-            return Enumerable.Empty<IfcObjectDefinition>();
+            return Enumerable.Empty<IIfcObjectDefinition>();
 
         }
         /// <summary>
@@ -1570,30 +1703,40 @@ namespace XbimExchanger.IfcToCOBieLiteUK
         /// </summary>
         /// <param name="ifcElement"></param>
         /// <returns></returns>
-        public IEnumerable<IfcSpatialStructureElement> GetSpaces(IfcElement ifcElement)
+        public IEnumerable<IIfcSpatialElement> GetSpaces(IIfcElement ifcElement)
         {
-            List<IfcSpatialStructureElement> spaceList;
+            List<IIfcSpatialElement> spaceList;
             if (_spaceAssetLookup.TryGetValue(ifcElement, out spaceList))
                 return spaceList;
-            return Enumerable.Empty<IfcSpatialStructureElement>();
+            return Enumerable.Empty<IIfcSpatialElement>();
         }
 
-        internal string GetFacilityName(IfcBuilding building)
+        internal string GetFacilityName(IIfcBuilding building)
         {
             if (!string.IsNullOrWhiteSpace(building.Name))
                 return building.Name;
-            if (!string.IsNullOrWhiteSpace(_model.IfcProject.Name))
-                return _model.IfcProject.Name;
+            var project = _model.Instances.FirstOrDefault<IIfcProject>();
+            if (project == null) 
+                return "Unknown";
+            if (!string.IsNullOrWhiteSpace(project.Name))
+                return project.Name;
             return "Unknown";
-            
         }
 
-        internal ContactKey GetCreatedBy(IfcRoot ifcRoot = null)
+        internal ContactKey GetCreatedBy(IIfcRoot ifcRoot = null, bool usePropFirst = false)
         {
             ContactKey key;
             if (ifcRoot != null)
             {
-                if (ifcRoot.OwnerHistory.LastModifyingUser != null)
+                if (usePropFirst && (ifcRoot is IIfcObjectDefinition))//support for COBie Toolkit for Autodesk Revit(had this in on old code, not sure if still relevant. this note date 8/10/2015)
+                {
+                    var email = GetCoBieProperty("CommonCreatedBy", ifcRoot as IIfcObjectDefinition);
+                    if (!string.IsNullOrEmpty(email))
+                    {
+                        return new ContactKey { Email = email };
+                    }
+                }
+                else if (ifcRoot.OwnerHistory.LastModifyingUser != null)
                 {
                     if (_createdByKeys.TryGetValue(ifcRoot.OwnerHistory.LastModifyingUser, out key))
                         return key;
@@ -1603,34 +1746,102 @@ namespace XbimExchanger.IfcToCOBieLiteUK
                     if (_createdByKeys.TryGetValue(ifcRoot.OwnerHistory.OwningUser, out key))
                         return key;
                 }
+
             }
             key = new ContactKey {Email=XbimCreatedBy.Email};
             return key;
         }
 
-        internal DateTime? GetCreatedOn(IfcRoot ifcRoot = null)
+        internal DateTime? GetCreatedOn(IIfcRoot ifcRoot = null, bool usePropFirst = false)
         {
             //use last modified date if we have one
-            if(ifcRoot!=null)
-            return IfcTimeStamp.ToDateTime(ifcRoot.OwnerHistory.LastModifiedDate ?? ifcRoot.OwnerHistory.CreationDate);
+            if (ifcRoot != null)
+            {
+                if (usePropFirst)
+                {
+                    DateTime? propDate;
+                    if (GetCreatedOnFromProp(ifcRoot, out propDate))
+                    {
+                        return propDate;
+                    }
+                }
+                var dateTime = ifcRoot.OwnerHistory.LastModifiedDate ?? ifcRoot.OwnerHistory.CreationDate;
+                return dateTime.ToDateTime();
+            }
             return DateTime.Now;
         }
-
-        internal ContactKey GetCreatedBy(IfcActorSelect actorSelect)
+        /// <summary>
+        /// Get CreateDate from properties
+        /// </summary>
+        /// <param name="ifcRoot">object to get properties on</param>
+        /// <param name="date">out Date</param>
+        /// <returns>bool</returns>
+        private bool GetCreatedOnFromProp(IIfcRoot ifcRoot, out DateTime? date)
         {
-            IfcActor actor;
-            if (_actors.TryGetValue(actorSelect, out actor))
+            DateTime foundDate;
+            if (ifcRoot is IIfcObjectDefinition)//support for COBie Toolkit for Autodesk Revit(had this in on old code, not sure if still relevant. this note date 8/10/2015)
+            {
+                var createdOn = GetCoBieProperty("CommonCreatedOn", ifcRoot as IIfcObjectDefinition);
+                if (!string.IsNullOrEmpty(createdOn))
+                {
+                   if (DateTime.TryParse(createdOn, out foundDate))
+                    {
+                        date = foundDate;
+                        return true;
+                    }
+                    else
+                    {
+                        //try and get just the date part of the date time, as a conversion above failed, so assume time might be corrupt
+                        int idx = createdOn.IndexOf("T");
+                        if (idx > -1)
+                        {
+                            string datestr = createdOn.Substring(0, idx);
+                            if (DateTime.TryParse(datestr, out foundDate))
+                            {
+                                date = foundDate;
+                                return true;
+                            }
+                        }
+                    }
+                }
+            }
+            date = null;
+            return false;
+        }
+
+        /// <summary>
+        /// Get ContactKey for CreatedBy, first from IfcActor OwnerHistory if useOwnerHistory = true, then IfcActorSelect returning the ContactKey for the IfcActorSelect
+        /// </summary>
+        /// <param name="actorSelect">IfcActorSelect Object</param>
+        /// <param name="useOwnerHistory">bool true get created by from owner history</param>
+        /// <returns>ContactKey</returns>
+        internal ContactKey GetCreatedBy(IIfcActorSelect actorSelect, bool useOwnerHistory = false)
+        {
+            //As IfcActor have Owner History, and we are looking for ownerHistory, try and see if IfcActor is associated with the Actor Select
+            IIfcActor actor;
+            if (useOwnerHistory && _actors.TryGetValue(actorSelect, out actor))
+            {
                 return GetCreatedBy(actor);
+            }
+
+            ContactKey key;
+            if (_createdByKeys.TryGetValue(actorSelect, out key))
+            {
+                return key;
+            }
+
             return new ContactKey {Email = XbimCreatedBy.Email};
         }
 
-        internal DateTime? GetCreatedOn(IfcActorSelect actorSelect)
+        internal DateTime? GetCreatedOn(IIfcActorSelect actorSelect)
         {
-            IfcActor actor;
+            IIfcActor actor;
             if (_actors.TryGetValue(actorSelect, out actor))
                 return GetCreatedOn(actor);
             return DateTime.Now;
         }
+
+        
 
         internal Zone CreateXbimDefaultZone()
         {
@@ -1644,9 +1855,9 @@ namespace XbimExchanger.IfcToCOBieLiteUK
             };
         }
 
-        internal Xbim.COBieLiteUK.System CreateUndefinedSystem()
+        internal Xbim.CobieLiteUk.System CreateUndefinedSystem()
         {
-            return new Xbim.COBieLiteUK.System
+            return new Xbim.CobieLiteUk.System
             {
                 Name = "Default System",
                 CreatedBy = new ContactKey { Email = XbimCreatedBy.Email },

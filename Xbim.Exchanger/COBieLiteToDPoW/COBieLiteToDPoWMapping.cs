@@ -1,15 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Xbim.COBieLite;
+﻿using Xbim.COBieLite;
 using Xbim.DPoW;
 
 namespace XbimExchanger.COBieLiteToDPoW
 {
-    abstract class COBieLiteToDPoWMapping<TSource, TTarget>: XbimMappings<FacilityType, PlanOfWork, string, TSource, TTarget> where TTarget: new()
+    abstract class COBieLiteToDPoWMapping<TSource, TTarget>: XbimMappings<FacilityType, PlanOfWork, string, TSource, TTarget> where TTarget:new()
     {
-       
+
+        public override TTarget CreateTargetObject()
+        {
+            return new TTarget();
+        }
+
+      
     }
 }

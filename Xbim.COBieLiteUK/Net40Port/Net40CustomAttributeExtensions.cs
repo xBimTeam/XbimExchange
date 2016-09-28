@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Reflection;
 using msSys = System;
 
-namespace Xbim.COBieLiteUK.Net40PortHelpers
+namespace Xbim.CobieLiteUk.Net40PortHelpers
 {
      
     public static class CustomAttributeExtensions

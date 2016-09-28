@@ -1,11 +1,14 @@
 ﻿using System;
 using System.Linq;
-using Xbim.COBieLiteUK;
+using Xbim.Common;
+using Xbim.CobieLiteUk;
 using Xbim.Ifc2x3.Kernel;
 using Xbim.Ifc2x3.MeasureResource;
 using Xbim.Ifc2x3.ProductExtension;
 using Xbim.Ifc2x3.Extensions;
 using XbimExchanger.IfcHelpers;
+using Xbim.Ifc2x3.ActorResource;
+using XbimExchanger.IfcHelpers.Ifc2x3;
 
 namespace XbimExchanger.COBieLiteUkToIfc
 {
@@ -27,7 +30,34 @@ namespace XbimExchanger.COBieLiteUkToIfc
             Exchanger.DefaultAreaUnit = new IfcUnitConverter(facility.AreaUnits.ToString());
             Exchanger.DefaultVolumeUnit = new IfcUnitConverter(facility.VolumeUnits.ToString());
             Exchanger.DefaultCurrencyUnit = facility.CurrencyUnit;
-            
+
+            #endregion
+
+            #region Contacts
+            if (facility.Contacts != null && facility.Contacts.Any())
+            {
+                var ContactMapping = Exchanger.GetOrCreateMappings<MappingContactToIfcPersonAndOrganization>();
+                foreach (var contact in facility.Contacts)
+                {
+                    IfcPersonAndOrganization ifcPersonAndOrganization = ContactMapping.AddMapping(contact, ContactMapping.GetOrCreateTargetObject(contact.ExternalId));
+                    //assign relationship
+                    //create IfcActor to set CreatedBy and CreatedOn for next time ifc is imported as IfcActor is derived from IfcRoot
+                    IfcActor actor = Exchanger.TargetRepository.Instances.New<IfcActor>();
+                    Exchanger.SetUserHistory(actor, contact.ExternalSystem, (contact.CreatedBy == null) ? null : contact.CreatedBy.Email, (contact.CreatedOn == null) ? DateTime.Now : (DateTime)contact.CreatedOn);
+                    using (OwnerHistoryEditScope context = new OwnerHistoryEditScope(Exchanger.TargetRepository, actor.OwnerHistory))
+                    {
+                        actor.TheActor = ifcPersonAndOrganization;
+                    }
+                    //assign the actor to the building
+                    IfcRelAssignsToActor ifcRelAssignsToActor = Exchanger.TargetRepository.Instances.New<IfcRelAssignsToActor>();
+                    Exchanger.SetUserHistory(ifcRelAssignsToActor, contact.ExternalSystem, (contact.CreatedBy == null) ? null : contact.CreatedBy.Email, (contact.CreatedOn == null) ? DateTime.Now : (DateTime)contact.CreatedOn);
+                    using (OwnerHistoryEditScope context = new OwnerHistoryEditScope(Exchanger.TargetRepository, ifcRelAssignsToActor.OwnerHistory))
+                    {
+                        ifcRelAssignsToActor.RelatingActor = actor;
+                        ifcRelAssignsToActor.RelatedObjects.Add(ifcBuilding);
+                    }
+                } 
+            }
             #endregion
 
             #region Categories
@@ -41,9 +71,14 @@ namespace XbimExchanger.COBieLiteUkToIfc
 
 
             #region Project
-            var projectMapping = Exchanger.GetOrCreateMappings<MappingProjectToIfcProject>();
+            
+            
+            
             //COBie does nor require a project but Ifc does
-            var ifcProject = Exchanger.TargetRepository.IfcProject;
+            var ifcProject = Exchanger.TargetRepository.Instances.OfType<IfcProject>().FirstOrDefault();
+            if (ifcProject == null)
+               ifcProject= Exchanger.TargetRepository.Instances.New<IfcProject>();
+            var projectMapping = Exchanger.GetOrCreateMappings<MappingProjectToIfcProject>();
             projectMapping.AddMapping(facility.Project, ifcProject);
             InitialiseUnits(ifcProject);
             #endregion
@@ -113,8 +148,14 @@ namespace XbimExchanger.COBieLiteUkToIfc
                 }
             }
 
-             #endregion
+            #endregion
 
+            #region Documents
+            if (facility.Documents != null && facility.Documents.Any())
+            {
+                Exchanger.ConvertDocumentsToDocumentSelect(ifcBuilding, facility.Documents);
+            }
+            #endregion
 
             #region Add Space Geometry
 
@@ -134,9 +175,10 @@ namespace XbimExchanger.COBieLiteUkToIfc
         }
 
         private void InitialiseUnits(IfcProject ifcProject)
-        {      
+        {
+            ifcProject.Initialize(ProjectUnits.SIUnitsUK);
             //Area
-            var areaUnit = ifcProject.UnitsInContext.GetAreaUnit() as IfcSIUnit; //they always are as we are initialising to this
+            var areaUnit = ifcProject.UnitsInContext.AreaUnit as IfcSIUnit; //they always are as we are initialising to this
             if (areaUnit!=null && Exchanger.DefaultAreaUnit.HasValue)
             {
                 var defaultAreaUnit = Exchanger.DefaultAreaUnit.Value;
@@ -159,7 +201,7 @@ namespace XbimExchanger.COBieLiteUkToIfc
             }
 
             //Length
-            var linearUnit = ifcProject.UnitsInContext.GetLengthUnit() as IfcSIUnit; //they always are as we are initialising to this
+            var linearUnit = ifcProject.UnitsInContext.LengthUnit as IfcSIUnit; //they always are as we are initialising to this
             if (linearUnit != null && Exchanger.DefaultLinearUnit.HasValue)
             {
                 var defaultLinearUnit = Exchanger.DefaultLinearUnit.Value;
@@ -181,7 +223,7 @@ namespace XbimExchanger.COBieLiteUkToIfc
                 }
             }
             //Volume
-            var volumeUnit = ifcProject.UnitsInContext.GetVolumeUnit() as IfcSIUnit; //they always are as we are initialising to this
+            var volumeUnit = ifcProject.UnitsInContext.VolumeUnit as IfcSIUnit; //they always are as we are initialising to this
             if (volumeUnit != null && Exchanger.DefaultVolumeUnit.HasValue)
             {
                 var defaultVolumeUnit = Exchanger.DefaultVolumeUnit.Value;

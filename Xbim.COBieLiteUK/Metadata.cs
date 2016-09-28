@@ -3,13 +3,11 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using NPOI.SS.UserModel;
 using NPOI.SS.Util;
-using Xbim.COBieLiteUK.Net40PortHelpers;
+using Xbim.CobieLiteUk.Net40PortHelpers;
 
-namespace Xbim.COBieLiteUK
+namespace Xbim.CobieLiteUk
 {
     public partial class Metadata
     {

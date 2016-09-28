@@ -1,5 +1,5 @@
 ﻿using System.Linq;
-using Xbim.COBieLiteUK;
+using Xbim.CobieLiteUk;
 using XbimExchanger.COBieLiteHelpers;
 
 namespace XbimExchanger.COBieLiteUkToIfc

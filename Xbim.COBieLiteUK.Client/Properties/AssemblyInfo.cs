@@ -1,5 +1,4 @@
 ﻿using System.Reflection;
-using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 
 // General Information about an assembly is controlled through the following 
@@ -8,9 +7,9 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyTitle("Xbim.COBieLiteUK.Client")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("4Projects Limited")]
-[assembly: AssemblyProduct("Xbim.COBieLiteUK.Client")]
-[assembly: AssemblyCopyright("Copyright © 4Projects Limited 2015")]
+[assembly: AssemblyCompany("XBim Team")]
+[assembly: AssemblyProduct("XBim Exchange Tools")]
+[assembly: AssemblyCopyright("")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
