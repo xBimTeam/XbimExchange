@@ -880,7 +880,7 @@ namespace Tests
             var submitted = Facility.ReadJson("Lakeside_restaurant.json");
             Assert.IsNotNull(submitted.AssetTypes);
             var requirement = Facility.ReadJson("Lakeside_Restaurant-stage6-COBie.json");
-            requirement.WriteXml(@"C:\Users\Claudio\Desktop\Lakeside_Restaurant-stage6-COBie.xml");
+            requirement.WriteXml(@"Lakeside_Restaurant-stage6-COBie.xml");
             Assert.IsNotNull(requirement.AssetTypes);
             var submittedAssetTypes = new List<AssetType>();
             foreach (var assetTypeRequirement in requirement.AssetTypes)
