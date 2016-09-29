@@ -1351,7 +1351,7 @@ namespace XbimExchanger.IfcToCOBieLiteUK
         /// <returns></returns>
         public List<Attribute> GetAttributes(IIfcObjectDefinition ifcObjectDefinition)
         {
-            Debug.WriteLine($"Getting attributes for #{ifcObjectDefinition.EntityLabel}");
+           
             var uniqueAttributes = new Dictionary<string, Attribute>();
             XbimAttributedObject attributedObject;
             if (_attributedObjects.TryGetValue(ifcObjectDefinition, out attributedObject))

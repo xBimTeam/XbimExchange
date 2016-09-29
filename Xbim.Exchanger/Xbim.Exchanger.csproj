@@ -117,7 +117,7 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="Xbim.Properties, Version=3.1.0.0, Culture=neutral, PublicKeyToken=11e3655e576ec5a9, processorArchitecture=MSIL">
-      <HintPath>..\packages\Xbim.PropertySets.3.1.11\lib\net40\Xbim.Properties.dll</HintPath>
+      <HintPath>..\packages\Xbim.PropertySets.4.4.0.0\lib\net40\Xbim.Properties.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Xbim.Tessellator, Version=3.2.0.0, Culture=neutral, PublicKeyToken=11e3655e576ec5a9, processorArchitecture=MSIL">
