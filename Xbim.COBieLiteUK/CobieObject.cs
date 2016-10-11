@@ -1301,8 +1301,10 @@ namespace Xbim.CobieLiteUk
                     }
 
                     //if there was no alias try to parse the value
-                    var val = Enum.Parse(type, cell.StringCellValue, true);
+                    string parseVal = cell.StringCellValue == "unknown" ? "notdefined" : cell.StringCellValue;
+                    var val = Enum.Parse(type, parseVal, true);
                     info.SetValue(obj, val);
+
                     return;
                 }
                 catch (Exception)

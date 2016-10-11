@@ -365,6 +365,8 @@ namespace Xbim.CobieLiteUk
 
         public IEnumerable<TNewCobieObject> Clone<TNewCobieObject>(IEnumerable<TNewCobieObject> originalCobieObjects) where TNewCobieObject : CobieObject, new()
         {
+            if (originalCobieObjects == null)
+                return Enumerable.Empty<TNewCobieObject>();
             return originalCobieObjects.Select(Clone);
         }
 

@@ -49,6 +49,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Samples", "Samples", "{28F2
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CreateCobiePas1192", "CreateCobiePas1192\CreateCobiePas1192.csproj", "{0FFCC872-61A4-475D-9D8B-DCF21B5C0BC2}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CValidate", "CValidate\CValidate.csproj", "{CC9CBA3B-9793-4004-A5F5-058CE3021C76}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -123,6 +125,10 @@ Global
 		{0FFCC872-61A4-475D-9D8B-DCF21B5C0BC2}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0FFCC872-61A4-475D-9D8B-DCF21B5C0BC2}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0FFCC872-61A4-475D-9D8B-DCF21B5C0BC2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CC9CBA3B-9793-4004-A5F5-058CE3021C76}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CC9CBA3B-9793-4004-A5F5-058CE3021C76}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CC9CBA3B-9793-4004-A5F5-058CE3021C76}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CC9CBA3B-9793-4004-A5F5-058CE3021C76}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
