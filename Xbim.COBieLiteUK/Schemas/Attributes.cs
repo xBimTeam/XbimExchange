@@ -20,6 +20,24 @@ namespace Xbim.CobieLiteUk
         {
             return (MappingAttribute)MemberwiseClone();
         }
+
+        public override string ToString()
+        {
+            return $"{Column} = {Header}";
+        }
+
+        public string GetDefaultValue()
+        {
+            if (!string.IsNullOrWhiteSpace(PickList))
+            {
+                return "unknown";
+            }
+            if (IsExtension)
+            {
+                return "";
+            }
+            return "n/a";
+        }
     }
 
     [AttributeUsage(AttributeTargets.Class, AllowMultiple = true)]

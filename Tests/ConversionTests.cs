@@ -10,6 +10,7 @@ using Xbim.ModelGeometry.Scene;
 using XbimExchanger.COBieLiteToIfc;
 using XbimExchanger.IfcHelpers;
 using XbimExchanger.IfcHelpers.Ifc2x3;
+using Xbim.CobieLiteUk;
 
 namespace Tests
 {
@@ -21,6 +22,21 @@ namespace Tests
     [TestClass]
     public class ConversionTests
     {
+        [TestMethod]
+        [DeploymentItem(@"ValidationFiles\Lakeside_Restaurant-stage6-COBie.json")]
+        public void CanSaveJsonToXlsxAndBack()
+        {
+            string msg;
+            var compFac = Facility.ReadJson(@"Lakeside_Restaurant-stage6-COBie.json");
+            compFac.WriteJson("testoutA.json", true);
+            compFac.WriteCobie(@"testout.xlsx", out msg);
+
+            var readback = Facility.ReadCobie(@"testout.xlsx", out msg);
+            readback.WriteJson("testoutB.json", true);
+
+            // todo: testoutB and testoutA should eventually be identical.
+        }
+
         [TestMethod]
         public void ConverIfcToWexBim()
         {

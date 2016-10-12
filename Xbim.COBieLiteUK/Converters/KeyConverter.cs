@@ -40,8 +40,15 @@ namespace Xbim.CobieLiteUk.Converters
 
                 if (jObject != null)
                 {
-                    jObject.Add("KeyType", key.ForType.Name);
-                    jObject.WriteTo(writer);
+                    try
+                    {
+                        jObject.Add("KeyType", key.ForType.Name);
+                        jObject.WriteTo(writer);
+                    }
+                    catch
+                    {
+
+                    }
                 }
                 else
                 {

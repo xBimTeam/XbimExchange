@@ -84,32 +84,22 @@ namespace Tests
         [TestMethod]
         [DeploymentItem(@"ValidationFiles\VP\")]
         public void TestViewpointValidation()
-        {            
+        {
             string msg;
             var subFl = Facility.ReadCobie(@"VP\Submitted.xlsx", out msg);
             var reqFl = Facility.ReadCobie(@"VP\Required.xlsx", out msg);
 
             var validator = new FacilityValidator();
             var result = validator.Validate(reqFl, subFl);
-           
-            result.WriteJson(@"..\..\XlsLakesideWithDocumentsValidationStage6.json", true);
 
-        [TestMethod]
-        [DeploymentItem(@"ValidationFiles\XLSX\")]
-        public void CanSaveJsonFromXlsx()
-        {
-            string msg;
-            var reqFl = Facility.ReadCobie(@"XLSX\Requirements6.xlsx", out msg);
-            var compFac = Facility.ReadJson(@"C:\Data\dev\XbimTeam\XbimExchange\Tests\ValidationFiles\XLSX\outOk.json");
-            compFac.WriteCobie(@"C:\Data\dev\XbimTeam\XbimExchange\Tests\ValidationFiles\XLSX\outest.xlsx", out msg);
-
-
-
-
-            var val = reqFl.AssetTypes[0].Issues[0];
-            var valOk = compFac.AssetTypes[0].Issues[0];
-            reqFl.WriteJson(@"outFromJson.json", true);
+            const string repName = @"..\..\VPValidationReport.xlsx";
+            var xRep = new ExcelValidationReport();
+            var ret = xRep.Create(result, repName);
+            
+            result.WriteCobie(@"..\..\VPValidationResult.xlsx", out msg);
         }
+
+        
 
         [TestMethod]
         [DeploymentItem(@"ValidationFiles\XLSX\")]
@@ -124,7 +114,6 @@ namespace Tests
             
             var xRep = new ExcelValidationReport();
             var ret = xRep.Create(result, @"C:\Data\dev\XbimTeam\XbimExchange\Tests\ValidationFiles\XLSX\Report.xlsx");
-
         }
 
         [TestMethod]

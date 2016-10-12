@@ -301,16 +301,10 @@ namespace Xbim.CobieLiteUk
 
         private void SetDefaultCellValue(MappingAttribute mapping, ICell cell)
         {
-            if (!String.IsNullOrWhiteSpace(mapping.PickList))
-            {
-                cell.SetCellValue("unknown");
-                return;
-            }
-            if (mapping.IsExtension)
-            {
-                return ;
-            }
-            cell.SetCellValue("n/a");
+            var v = mapping.GetDefaultValue();
+            if (v != "")
+                cell.SetCellValue(v);
+            return;
         }
 
         internal virtual void WriteToCobie(IWorkbook workbook, TextWriter log, CobieObject parent,
@@ -319,6 +313,12 @@ namespace Xbim.CobieLiteUk
         {
             if (!Filter(assetfilters, parent)) //filter out IfcElement and IfcTypeObject Excludes, property set names, and property set property names
             {
+                var sheetName = GetSheetName(GetType(), version);
+                if (sheetName == "Issue")
+                {
+
+                }
+
                 var mappings = GetMapping(GetType(), version, false).OrderBy(m => m.Column).ToList();
                 if (!mappings.Any())
                 {
@@ -327,7 +327,7 @@ namespace Xbim.CobieLiteUk
                 }
 
                 //get or create a sheet
-                var sheetName = GetSheetName(GetType(), version);
+                
                 var sheet = workbook.GetSheet(sheetName) ?? workbook.CreateSheet(sheetName);
 
                 //get the next row in rowNumber is less than 1 or use the argument to get or create new row
@@ -420,8 +420,7 @@ namespace Xbim.CobieLiteUk
                     }
 
                     var value = GetCobieProperty(mapping, log);
-                    if (value == null ||
-                        (value.ValueType == CobieValueType.String && String.IsNullOrWhiteSpace(value.StringValue)))
+                    if (value == null || (value.ValueType == CobieValueType.String && String.IsNullOrWhiteSpace(value.StringValue)))
                         SetDefaultCellValue(mapping, cell);
                     else
                     {
@@ -994,13 +993,24 @@ namespace Xbim.CobieLiteUk
             message = log.ToString();
         }
 
-        private static string SetMemberValue(object obj, string path, ICell cell, IEnumerable<MappingAttribute> mappings,
+        private static string SetMemberValue(object obj, string path, ICell cell, List<MappingAttribute> mappings,
             Dictionary<string, string> classificationNameCache)
         {
             var log = new StringWriter();
 
             //If the value is n/a it is the same as if it was not defined at all
-            if (cell.CellType == CellType.String && ((cell.StringCellValue.ToLower() == "n/a") || string.IsNullOrWhiteSpace(cell.StringCellValue)))
+            if (cell.CellType == CellType.String
+                &&
+                (
+                    cell.StringCellValue.ToLower() == "n/a"
+                    || string.IsNullOrWhiteSpace(cell.StringCellValue)
+                    ||
+                    (
+                        cell.StringCellValue.ToLower() == "unknown"
+                        //&&
+                        //mappings[cell.ColumnIndex - 1].GetDefaultValue() == "unknown"
+                    )
+                ))
                 return "";
 
             var parts = path.Split('.').ToList();
@@ -1314,19 +1324,20 @@ namespace Xbim.CobieLiteUk
             }
 
             //if not suitable type was found, report it as a bug
-            throw new Exception("Unsupported type " + type.Name + " for value '" + cell.ToString() + "'");
+            var message = "Unsupported type " + type.Name + " for value '" + cell.ToString() + "'";
+            throw new Exception(message);
         }
 
         private static Dictionary<string, List<MappingAttribute>> _mappingAttrsCache =
             new Dictionary<string, List<MappingAttribute>>();
 
-        private static IEnumerable<MappingAttribute> GetMapping(Type type, string mapping, bool clone)
+        private static List<MappingAttribute> GetMapping(Type type, string mapping, bool clone)
         {
             var key = String.Format("{0}.{1}", mapping, type.Name);
             List<MappingAttribute> result;
             if (_mappingAttrsCache.TryGetValue(key, out result))
                 return clone
-                    ? result.Select(a => a.Clone())
+                    ? result.Select(a => a.Clone()).ToList()
                     : result;
 
             result = type.GetCustomAttributes<MappingAttribute>().Where(a => a.Type == mapping).ToList();
@@ -1344,7 +1355,7 @@ namespace Xbim.CobieLiteUk
             //cache for the next use
             _mappingAttrsCache.Add(key, result);
             return clone
-                ? result.Select(a => a.Clone())
+                ? result.Select(a => a.Clone()).ToList()
                 : result;
         }
 

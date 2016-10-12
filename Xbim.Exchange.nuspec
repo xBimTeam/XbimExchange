@@ -3,7 +3,7 @@
     <metadata>
         <id>Xbim.Exchange.4</id>
         <!-- note: development versions are generally in the form 4.1.0-V0001, use 4 digits for consistency next time -->
-        <version>4.0.1</version>
+        <version>4.0.2</version>
         <title>xBIM Exchange 4</title>
         <authors>xBIM Team</authors>
         <owners>Steve Lockley</owners>
@@ -32,7 +32,7 @@ IOS and Android versions are under development.</description>
         <dependency id="Xbim.Essentials.4" version="4.0.0"  />
         <!-- note: Xbim.Cobie is currently only used in the test project; this is strange and needs to be verified. -->
         <dependency id="Xbim.Cobie.4" version="4.0.0" />
-        <dependency id="Xbim.Geometry.4" version="4.0.0" />
+        <dependency id="Xbim.Geometry.4" version="4.0.4" />
       </dependencies>
     </metadata>
     <files>
