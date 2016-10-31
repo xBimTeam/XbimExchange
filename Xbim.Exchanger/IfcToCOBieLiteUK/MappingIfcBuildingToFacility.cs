@@ -47,8 +47,11 @@ namespace XbimExchanger.IfcToCOBieLiteUK
                     
                     if(ifcSite.RefLatitude.HasValue && ifcSite.RefLongitude.HasValue)
                     {
-                        facility.Attributes.Add(helper.MakeAttribute(ifcSite, "RefLatitude", ifcSite.RefLatitude.Value.AsDouble));
-                        facility.Attributes.Add(helper.MakeAttribute(ifcSite, "RefLongtitude", ifcSite.RefLongitude.Value.AsDouble));
+                        if (facility.Attributes != null)
+                        {
+                            facility.Attributes.Add(helper.MakeAttribute(ifcSite, "RefLatitude", ifcSite.RefLatitude.Value.AsDouble));
+                            facility.Attributes.Add(helper.MakeAttribute(ifcSite, "RefLongtitude", ifcSite.RefLongitude.Value.AsDouble));                            
+                        }
                     }
                 }
                 else //create a default "External area"

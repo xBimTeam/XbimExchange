@@ -23,7 +23,7 @@ namespace Xbim.CobieLiteUk
 
         public override string ToString()
         {
-            return $"{Column} = {Header}";
+            return string.Format("{0} = {1}", Column, Header);
         }
 
         public string GetDefaultValue()
