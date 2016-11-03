@@ -2,7 +2,7 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2011/10/nuspec.xsd">
     <metadata>
         <id>Xbim.Exchange</id>
-        <!-- note: development versions are generally in the form 4.1.0-V0001, use 4 digits for consistency next time -->
+        <!-- note: development versions are generally in the form 4.0.0-V0001, use 4 digits for consistency next time -->
         <version>4.0.3</version>
         <title>xBIM Exchange</title>
         <authors>xBIM Team</authors>

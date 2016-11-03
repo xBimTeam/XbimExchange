@@ -24,6 +24,5 @@ namespace Xbim.DPoW
             if (stage.AssetTypes == null || AggregationOfAssetTypes == null) return new AssetType[0];
             return stage.AssetTypes.Where(at => AggregationOfAssetTypes.Contains(at.Id));
         }
-
     }
 }
