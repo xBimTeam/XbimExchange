@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2011/10/nuspec.xsd">
+  <metadata>
+    <id>XplorerPlugin.DPoW</id>
+    <version>4.0.4-V0001</version>
+    <title>XplorerPlugin.DPoW Validator</title>
+    <authors>xBIM team</authors>
+    <owners>xBIM team</owners>
+    <licenseUrl>https://raw.githubusercontent.com/xBimTeam/XbimEssentials/master/LICENCE.md</licenseUrl>
+    <projectUrl>https://github.com/xBimTeam/</projectUrl>
+    <iconUrl>https://avatars1.githubusercontent.com/u/2284875?v=3&amp;s=240</iconUrl>
+    <requireLicenseAcceptance>true</requireLicenseAcceptance>
+    <description>Integration with Xplorer UI for XplorerPlugin.DPoW Validating functions.</description>
+    <summary>.</summary>
+    <language>en-GB</language>
+    <!-- the XplorerPlugin tag is used to identify plugins available for donwload from XbimXplorer-->
+    <tags>DPoW Validating, theNBS, digital bim toolkit, XplorerPlugin</tags>
+    <!-- dependencies need to be worked out, at this stage they will be ignored during install -->
+    <dependencies>
+      <dependency id="Xbim.WindowsUI" version="4.0.10-V0004" />
+    </dependencies>
+  </metadata>
+  <files>
+    <file src="XplorerPlugin.DPoW\bin\Release\XplorerPlugin.DPoW.exe"         target="lib\net45\" />
+    <file src="XplorerPlugin.DPoW\bin\Release\Microsoft.Practices.ServiceLocation.dll"         target="lib\net45\" />
+    <file src="XplorerPlugin.DPoW\bin\Release\Microsoft.Practices.Unity.dll"         target="lib\net45\" />
+    <file src="XplorerPlugin.DPoW\bin\Release\Xbim.CobieExpress.IO.dll"         target="lib\net45\" />
+    <file src="XplorerPlugin.DPoW\bin\Release\Xbim.COBieLite.dll"         target="lib\net45\" />
+    <file src="XplorerPlugin.DPoW\bin\Release\Xbim.COBieLiteUK.dll"         target="lib\net45\" />
+    <file src="XplorerPlugin.DPoW\bin\Release\Xbim.CobieLiteUK.Validation.dll"         target="lib\net45\" />
+    <file src="XplorerPlugin.DPoW\bin\Release\Xbim.DPoW.dll"         target="lib\net45\" />
+    <file src="XplorerPlugin.DPoW\bin\Release\Xbim.Exchanger.dll"         target="lib\net45\" />
+    <file src="XplorerPlugin.DPoW\bin\Release\Xbim.IO.TableStore.dll"         target="lib\net45\" />
+    <file src="XplorerPlugin.DPoW\bin\Release\Xbim.Properties.dll"         target="lib\net45\" />
+    <file src="XplorerPlugin.DPoW\bin\Release\Xbim.WindowsUI.DPoWValidation.exe"         target="lib\net45\" />
+  </files>
+</package>

@@ -119,11 +119,18 @@ namespace XplorerPlugin.CobieExport.UI
             TxtFolderName.Text = dir.FullName;
 
             // configure settings for exporter
-            var asss = System.Reflection.Assembly.GetAssembly(GetType());
-            var pluginDir = new FileInfo(asss.Location).Directory;
+            var ass = System.Reflection.Assembly.GetAssembly(GetType());
+            if (_parentWindow == null)
+            {
+                Log.Error("attempt to locate DiskLess assembly without a valid IXbimXplorerPluginMasterWindow.");
+                return;
+            }
+            var assemblyFile = _parentWindow.GetAssemblyLocation(ass);
+
+            var pluginDir = new FileInfo(assemblyFile).Directory;
             if (pluginDir == null)
             {
-                Log.ErrorFormat("Failed to get plugin folder.");
+                Log.ErrorFormat("Failed to determine plugin folder under IXbimXplorerPluginMasterWindow.");
                 return;
             }
 
@@ -164,10 +171,6 @@ namespace XplorerPlugin.CobieExport.UI
         public CobieLiteUkExport()
         {
             InitializeComponent();
-            Log.Debug("InitializeComponent completed.");
-            return;
-            ConfigureFolder();
-
             // prepare templates list
             AvailableTemplates = new ObservableCollection<string>();
             foreach (var avail in Templates.GetAvalilableTemplateTypes())
