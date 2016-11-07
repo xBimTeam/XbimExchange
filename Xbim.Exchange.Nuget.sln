@@ -10,9 +10,9 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{CFAD1D1D-D584-4FB9-B795-64F25B888F26}"
 	ProjectSection(SolutionItems) = preProject
 		SharedAssemblyInfo.cs = SharedAssemblyInfo.cs
-		Xbim.Exchange.nuspec = Xbim.Exchange.nuspec
-		XplorerPlugin.CobieExport.nuspec = XplorerPlugin.CobieExport.nuspec
-		XplorerPlugin.DPoW.nuspec = XplorerPlugin.DPoW.nuspec
+		Xbim.Exchange.package.nuspec = Xbim.Exchange.package.nuspec
+		XplorerPlugin.CobieExport.plugin.nuspec = XplorerPlugin.CobieExport.plugin.nuspec
+		XplorerPlugin.DPoW.plugin.nuspec = XplorerPlugin.DPoW.plugin.nuspec
 	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Xbim.COBieLite", "Xbim.COBieLite\Xbim.COBieLite.csproj", "{E550C721-50AF-4AD0-998E-0C61F305EEC8}"
