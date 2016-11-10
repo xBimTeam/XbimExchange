@@ -9,7 +9,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Xbim.COBie.Client", "Xbim.C
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{CFAD1D1D-D584-4FB9-B795-64F25B888F26}"
 	ProjectSection(SolutionItems) = preProject
-		Xbim.Exchange.nuspec = Xbim.Exchange.nuspec
+		SharedAssemblyInfo.cs = SharedAssemblyInfo.cs
+		Xbim.Exchange.package.nuspec = Xbim.Exchange.package.nuspec
+		XplorerPlugin.CobieExport.plugin.nuspec = XplorerPlugin.CobieExport.plugin.nuspec
+		XplorerPlugin.DPoW.plugin.nuspec = XplorerPlugin.DPoW.plugin.nuspec
 	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Xbim.COBieLite", "Xbim.COBieLite\Xbim.COBieLite.csproj", "{E550C721-50AF-4AD0-998E-0C61F305EEC8}"
@@ -49,7 +52,13 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Samples", "Samples", "{28F2
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CreateCobiePas1192", "CreateCobiePas1192\CreateCobiePas1192.csproj", "{0FFCC872-61A4-475D-9D8B-DCF21B5C0BC2}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CValidate", "CValidate\CValidate.csproj", "{CC9CBA3B-9793-4004-A5F5-058CE3021C76}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "WindowsUI", "WindowsUI", "{1C44BBB3-B268-454B-B8E9-E55935DA99A0}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XplorerPlugin.CobieExport", "XplorerPlugin.CobieExport\XplorerPlugin.CobieExport.csproj", "{771CDB24-CB35-4669-A8AC-4A13800667FB}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XplorerPlugin.DPoW", "XplorerPlugin.DPoW\XplorerPlugin.DPoW.csproj", "{845161EC-C065-413E-8B0B-C4C1D2C6449D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Xbim.WindowsUI.DPoWValidation", "Xbim.WindowsUI.DPoWValidation\Xbim.WindowsUI.DPoWValidation.csproj", "{1E708A3F-4EB6-4BFD-98AE-FF3EFB60B78B}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -125,10 +134,18 @@ Global
 		{0FFCC872-61A4-475D-9D8B-DCF21B5C0BC2}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0FFCC872-61A4-475D-9D8B-DCF21B5C0BC2}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0FFCC872-61A4-475D-9D8B-DCF21B5C0BC2}.Release|Any CPU.Build.0 = Release|Any CPU
-		{CC9CBA3B-9793-4004-A5F5-058CE3021C76}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{CC9CBA3B-9793-4004-A5F5-058CE3021C76}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{CC9CBA3B-9793-4004-A5F5-058CE3021C76}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{CC9CBA3B-9793-4004-A5F5-058CE3021C76}.Release|Any CPU.Build.0 = Release|Any CPU
+		{771CDB24-CB35-4669-A8AC-4A13800667FB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{771CDB24-CB35-4669-A8AC-4A13800667FB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{771CDB24-CB35-4669-A8AC-4A13800667FB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{771CDB24-CB35-4669-A8AC-4A13800667FB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{845161EC-C065-413E-8B0B-C4C1D2C6449D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{845161EC-C065-413E-8B0B-C4C1D2C6449D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{845161EC-C065-413E-8B0B-C4C1D2C6449D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{845161EC-C065-413E-8B0B-C4C1D2C6449D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1E708A3F-4EB6-4BFD-98AE-FF3EFB60B78B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1E708A3F-4EB6-4BFD-98AE-FF3EFB60B78B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1E708A3F-4EB6-4BFD-98AE-FF3EFB60B78B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1E708A3F-4EB6-4BFD-98AE-FF3EFB60B78B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -141,5 +158,8 @@ Global
 		{D78043F8-A253-41AD-86B0-02143DE75BBD} = {3D4383C4-C053-4EC1-BBB7-D768314F37BE}
 		{29027C2C-7F0B-4238-AF7A-216400005E3A} = {3D4383C4-C053-4EC1-BBB7-D768314F37BE}
 		{0FFCC872-61A4-475D-9D8B-DCF21B5C0BC2} = {28F2890C-CD09-4301-86EF-373CC492B751}
+		{771CDB24-CB35-4669-A8AC-4A13800667FB} = {1C44BBB3-B268-454B-B8E9-E55935DA99A0}
+		{845161EC-C065-413E-8B0B-C4C1D2C6449D} = {1C44BBB3-B268-454B-B8E9-E55935DA99A0}
+		{1E708A3F-4EB6-4BFD-98AE-FF3EFB60B78B} = {1C44BBB3-B268-454B-B8E9-E55935DA99A0}
 	EndGlobalSection
 EndGlobal
