@@ -29,9 +29,9 @@ IOS and Android versions are under development.</description>
         <dependency id="Newtonsoft.Json" version="9.0.1" />
         <dependency id="NPOI" version="2.2.1" />
         <dependency id="SharpZipLib" version="0.86.0" />
-        <dependency id="Xbim.Essentials" version="4.0.8" />
+        <dependency id="Xbim.Essentials" version="4.0.13" />
         <!-- note: Xbim.Cobie is currently only used in the test project; this is strange and needs to be verified. -->
-        <dependency id="Xbim.Cobie" version="4.0.8" />
+        <dependency id="Xbim.Cobie" version="4.0.13" />
         <dependency id="Xbim.Geometry" version="4.0.11" />
       </dependencies>
     </metadata>

@@ -272,11 +272,10 @@ namespace Xbim.CobieLiteUk
 
         public static Facility ReadXml(Stream stream)
         {
-            Facility facility;
             var serializer = GetXmlSerializer();
-            facility = (Facility)serializer.Deserialize(stream);
-            facility.SetFacility(facility);
-            return facility;
+            var deserialised = (Facility)serializer.Deserialize(stream);
+            deserialised.Refresh();
+            return deserialised;
         }
 
         /// <summary>
