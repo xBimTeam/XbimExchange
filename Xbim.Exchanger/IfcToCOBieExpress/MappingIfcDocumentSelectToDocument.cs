@@ -90,7 +90,7 @@ namespace XbimExchanger.IfcToCOBieExpress
         private IEnumerable<CobieDocument> GetChildDocs(IIfcDocumentInformation ifcDocumentInformation)
         {
             var childDocList = new List<CobieDocument>();
-            var childRels = ifcDocumentInformation.IsPointer.FirstOrDefault();//SET[0:1] gets the relationship when ifcDocumentInformation is the RelatingDocument (parent) document
+            var childRels = ifcDocumentInformation?.IsPointer.FirstOrDefault();//SET[0:1] gets the relationship when ifcDocumentInformation is the RelatingDocument (parent) document
             if (childRels == null || childRels.RelatedDocuments == null) 
                 return childDocList;
 

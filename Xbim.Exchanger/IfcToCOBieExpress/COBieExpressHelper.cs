@@ -96,7 +96,7 @@ namespace XbimExchanger.IfcToCOBieExpress
         private Dictionary<IIfcObjectDefinition, List<IIfcSystem>> _systemLookup;
         private Dictionary<IIfcElement, List<IIfcSpatialElement>> _spaceAssetLookup;
         private Dictionary<IIfcSpace, IIfcBuildingStorey> _spaceFloorLookup;
-        private Dictionary<IIfcSpatialStructureElement, List<IIfcSpatialStructureElement>> _spatialDecomposition;
+        private ILookup<IIfcSpatialStructureElement, List<IIfcSpatialStructureElement>> _spatialDecomposition;
         private readonly Dictionary<string, int> _typeNames = new Dictionary<string, int>();
 
         #region Document Lookups
@@ -599,7 +599,7 @@ namespace XbimExchanger.IfcToCOBieExpress
         private void GetTypeMaps()
         {
 
-            var relDefinesByType = _model.Instances.OfType<IIfcRelDefinesByType>().Where(r => !Filter.ObjFilter(r.RelatingType)).ToList();
+            var relDefinesByType = _model.Instances.OfType<IIfcRelDefinesByType>().Where(r => !Filter.ObjFilter(r.RelatingType) && r.RelatingType != null).ToList();
             //creates a dictionary of uniqueness for type objects
             var propertySetHashes = new Dictionary<string,string>();
             var proxyTypesByKey = new Dictionary<string, XbimIfcProxyTypeObject>();
@@ -704,6 +704,10 @@ namespace XbimExchanger.IfcToCOBieExpress
 
         private static string GetTypeObjectHashString(IIfcTypeObject typeObject)
         {
+            if (typeObject == null)
+            {
+                return "null";
+            }
             var hashString = "";
             if (typeObject.HasPropertySets != null && typeObject.HasPropertySets.Any())
             {
@@ -719,6 +723,8 @@ namespace XbimExchanger.IfcToCOBieExpress
 
         private string ChangeNameFromStyleToType(IIfcTypeObject ifcTypeObject)
         {
+            if (ifcTypeObject == null)
+                return "null";
             if (ifcTypeObject is IIfcDoorStyle )
                 return "DoorType";
             if (ifcTypeObject is IIfcWindowStyle)
@@ -863,7 +869,7 @@ namespace XbimExchanger.IfcToCOBieExpress
         private void GetSpacesAndZones()
         {
             _spatialDecomposition = _model.Instances.OfType<IIfcRelAggregates>().Where(r=>r.RelatingObject is IIfcSpatialStructureElement)
-                .ToDictionary(ifcRelAggregate => (IIfcSpatialStructureElement) ifcRelAggregate.RelatingObject, ifcRelAggregate => ifcRelAggregate.RelatedObjects.OfType<IIfcSpatialStructureElement>().ToList());
+                .ToLookup(ifcRelAggregate => (IIfcSpatialStructureElement) ifcRelAggregate.RelatingObject, ifcRelAggregate => ifcRelAggregate.RelatedObjects.OfType<IIfcSpatialStructureElement>().ToList());
             ReportProgress.NextStage(_spatialDecomposition.Count, 10);
             //get the relationship between spaces and storeys
             _spaceFloorLookup = new Dictionary<IIfcSpace, IIfcBuildingStorey>();
@@ -872,7 +878,7 @@ namespace XbimExchanger.IfcToCOBieExpress
                 var key = spatialElement.Key as IIfcBuildingStorey;
                 if (key != null) //only care if the space is on a floor (COBie rule)
                 {
-                    foreach (var ifcSpace in spatialElement.Value.OfType<IIfcSpace>())
+                    foreach (var ifcSpace in spatialElement.OfType<IIfcSpace>())
                         _spaceFloorLookup[ifcSpace] = key;
                 }
                 ReportProgress.IncrementAndUpdate();
@@ -1027,39 +1033,42 @@ namespace XbimExchanger.IfcToCOBieExpress
 
         private void GetUnits()
         {
-            var ifcProject = Model.Instances.FirstOrDefault<IIfcProject>();
-            foreach (var unit in ifcProject.UnitsInContext.Units)
+            var ifcProject = Model?.Instances?.FirstOrDefault<IIfcProject>();
+            if (ifcProject != null)
             {
-                if (unit is IIfcNamedUnit)
+                foreach (var unit in ifcProject.UnitsInContext.Units)
                 {
-                    var unitType = (unit as IIfcNamedUnit).UnitType;
-                    switch (unitType)
+                    if (unit is IIfcNamedUnit)
                     {
-                        case IfcUnitEnum.AREAUNIT:
-                            var areaUnitName = AdjustUnitName(unit.FullName);
-                            HasAreaUnit = !string.IsNullOrWhiteSpace(areaUnitName);
-                            if (HasAreaUnit) ModelAreaUnit = Target.Instances.New<CobieAreaUnit>(au => au.Value = areaUnitName);
-                            break;
-                        case IfcUnitEnum.LENGTHUNIT:
-                            var lengthUnitName = AdjustUnitName(unit.FullName);
-                            HasLinearUnit = !string.IsNullOrWhiteSpace(lengthUnitName);
-                            if (HasLinearUnit) ModelLinearUnit = Target.Instances.New<CobieLinearUnit>(au => au.Value = lengthUnitName);
-                            break;
-                        case IfcUnitEnum.VOLUMEUNIT:
-                            var volumeUnitName = AdjustUnitName(unit.FullName);
-                            HasVolumeUnit = !string.IsNullOrWhiteSpace(volumeUnitName);
-                            if (HasVolumeUnit) ModelVolumeUnit = Target.Instances.New<CobieVolumeUnit>(vu => vu.Value = volumeUnitName);
-                            break;
+                        var unitType = (unit as IIfcNamedUnit).UnitType;
+                        switch (unitType)
+                        {
+                            case IfcUnitEnum.AREAUNIT:
+                                var areaUnitName = AdjustUnitName(unit.FullName);
+                                HasAreaUnit = !string.IsNullOrWhiteSpace(areaUnitName);
+                                if (HasAreaUnit) ModelAreaUnit = Target.Instances.New<CobieAreaUnit>(au => au.Value = areaUnitName);
+                                break;
+                            case IfcUnitEnum.LENGTHUNIT:
+                                var lengthUnitName = AdjustUnitName(unit.FullName);
+                                HasLinearUnit = !string.IsNullOrWhiteSpace(lengthUnitName);
+                                if (HasLinearUnit) ModelLinearUnit = Target.Instances.New<CobieLinearUnit>(au => au.Value = lengthUnitName);
+                                break;
+                            case IfcUnitEnum.VOLUMEUNIT:
+                                var volumeUnitName = AdjustUnitName(unit.FullName);
+                                HasVolumeUnit = !string.IsNullOrWhiteSpace(volumeUnitName);
+                                if (HasVolumeUnit) ModelVolumeUnit = Target.Instances.New<CobieVolumeUnit>(vu => vu.Value = volumeUnitName);
+                                break;
+                        }
                     }
-                }
-                else if (unit is IIfcMonetaryUnit)
-                {
-                    var currencyUnitName = unit.FullName;
-                    HasCurrencyUnit = !string.IsNullOrWhiteSpace(currencyUnitName);
-                    if (HasCurrencyUnit) ModelCurrencyUnit = Target.Instances.New<CobieCurrencyUnit>(cu => cu.Value = currencyUnitName);
-                }
+                    else if (unit is IIfcMonetaryUnit)
+                    {
+                        var currencyUnitName = unit.FullName;
+                        HasCurrencyUnit = !string.IsNullOrWhiteSpace(currencyUnitName);
+                        if (HasCurrencyUnit) ModelCurrencyUnit = Target.Instances.New<CobieCurrencyUnit>(cu => cu.Value = currencyUnitName);
+                    }
 
-                //this.FacilityDefaultMeasurementStandard needs to be resolved
+                    //this.FacilityDefaultMeasurementStandard needs to be resolved
+                }
             }
         }
         /// <summary>
@@ -1539,13 +1548,16 @@ namespace XbimExchanger.IfcToCOBieExpress
         private void DecomposeSpatialStructure(IIfcSpatialStructureElement ifcSpatialStructuralElement,
             HashSet<IIfcSpatialStructureElement> allSpatialStructuralElements)
         {
-            List<IIfcSpatialStructureElement> spatialElements;
-            if (_spatialDecomposition.TryGetValue(ifcSpatialStructuralElement, out spatialElements))
+            if (_spatialDecomposition.Contains(ifcSpatialStructuralElement))
             {
-                foreach (var spatialElement in spatialElements)
+                var spatialElements = _spatialDecomposition.Where(x => x.Key == ifcSpatialStructuralElement).Select(x => x).FirstOrDefault();
+                foreach (var spatialElementList in spatialElements)
                 {
-                    allSpatialStructuralElements.Add(spatialElement);
-                    DecomposeSpatialStructure(spatialElement, allSpatialStructuralElements);
+                    foreach (var spatialElement in spatialElementList)
+                    {
+                        allSpatialStructuralElements.Add(spatialElement);
+                        DecomposeSpatialStructure(spatialElement, allSpatialStructuralElements);
+                    }
                 }
             }
         }
@@ -1765,12 +1777,12 @@ namespace XbimExchanger.IfcToCOBieExpress
                 contact.Category = UnknownRole;
                 return contact;
             }
-            if (ifcRoot.OwnerHistory.LastModifyingUser != null)
+            if (ifcRoot.OwnerHistory?.LastModifyingUser != null)
             {
                 if (_contacts.TryGetValue(ifcRoot.OwnerHistory.LastModifyingUser, out contact))
                     return contact;
             }
-            else if (ifcRoot.OwnerHistory.OwningUser != null)
+            else if (ifcRoot.OwnerHistory?.OwningUser != null)
             {
                 if (_contacts.TryGetValue(ifcRoot.OwnerHistory.OwningUser, out contact))
                     return contact;
@@ -1791,8 +1803,15 @@ namespace XbimExchanger.IfcToCOBieExpress
             }
 
             //use last modified date if we have one
-            var dateTime = ifcRoot.OwnerHistory.LastModifiedDate ?? ifcRoot.OwnerHistory.CreationDate;
-            return dateTime.ToDateTime();
+            if (ifcRoot.OwnerHistory != null)
+            {
+                var dateTime = ifcRoot.OwnerHistory.LastModifiedDate ?? ifcRoot.OwnerHistory.CreationDate;
+                return dateTime.ToDateTime();
+            }
+            else
+            {
+                return DateTime.Now;
+            }
         }
 
         /// <summary>
