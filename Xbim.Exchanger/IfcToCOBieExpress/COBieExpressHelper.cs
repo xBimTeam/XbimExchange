@@ -1034,7 +1034,7 @@ namespace XbimExchanger.IfcToCOBieExpress
         private void GetUnits()
         {
             var ifcProject = Model?.Instances?.FirstOrDefault<IIfcProject>();
-            if (ifcProject != null)
+            if (ifcProject != null && ifcProject.UnitsInContext != null && ifcProject.UnitsInContext.Units != null)
             {
                 foreach (var unit in ifcProject.UnitsInContext.Units)
                 {
