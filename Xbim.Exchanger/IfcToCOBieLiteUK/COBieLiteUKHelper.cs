@@ -1644,18 +1644,38 @@ namespace XbimExchanger.IfcToCOBieLiteUK
             var email = string.Format("unknown{0}@undefined.email", ((IPersistEntity)personOrg).EntityLabel);
             if ((organisation != null) && (organisation.Addresses != null))
             {
-                var telecom = organisation.Addresses.OfType<IIfcTelecomAddress>().FirstOrDefault(a=>a.ElectronicMailAddresses.Any(e=>!string.IsNullOrWhiteSpace(e)));
-                if (telecom != null)
-                    email = telecom.ElectronicMailAddresses.FirstOrDefault(e => !string.IsNullOrWhiteSpace(e));
+                var tmpMail = ValidMailAddress(organisation.Addresses);
+                if (tmpMail != null)
+                    email = tmpMail;
             }
             //overwrite if we have it at person level
             if ((person != null) && (person.Addresses != null))
-            {
-                var telecom = person.Addresses.OfType<IIfcTelecomAddress>().FirstOrDefault(a => a.ElectronicMailAddresses.Any(e => !string.IsNullOrWhiteSpace(e)));
-                if (telecom != null)
-                    email = telecom.ElectronicMailAddresses.FirstOrDefault(e => !string.IsNullOrWhiteSpace(e));
+            {    
+                var tmpMail = ValidMailAddress(person.Addresses);
+                if (tmpMail != null)
+                    email = tmpMail;
             }
             return email;
+        }
+
+        private static string ValidMailAddress(IItemSet<IIfcAddress> addresses)
+        {
+            var telecoms = addresses.OfType<IIfcTelecomAddress>();
+            foreach (var ifcTelecomAddress in telecoms)
+            {
+                if (ifcTelecomAddress.ElectronicMailAddresses == null)
+                    continue;
+                var emails =
+                    from telecomElectronicMailAddress
+                    in ifcTelecomAddress.ElectronicMailAddresses
+                    where telecomElectronicMailAddress.Value != null
+                    select telecomElectronicMailAddress.Value.ToString();
+
+                var email = emails.FirstOrDefault();
+                if (email != null)
+                    return email;
+            }
+            return null;
         }
 
         /// <summary>
