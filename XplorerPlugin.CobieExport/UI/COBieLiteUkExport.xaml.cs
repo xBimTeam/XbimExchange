@@ -347,6 +347,12 @@ namespace XplorerPlugin.CobieExport.UI
 
             // get Excel File Type
             var excelType = GetExcelType();
+            if (string.IsNullOrEmpty(Model.FileName))
+            {
+                Log.Error("Model file needs to be saved.");
+                return;
+            }
+
             var v = new FileInfo(Model.FileName);
             var exportFileName = Path.ChangeExtension(Path.Combine(TxtFolderName.Text, v.Name), "tempExtension");
 

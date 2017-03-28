@@ -361,12 +361,12 @@ namespace XbimExchanger.IfcToCOBieLiteUK.Conversion
                     var ifcToCoBieLiteUkExchanger = new IfcToCOBieLiteUkExchanger(
                         filter.Key.Model,
                         new List<Facility>(),
-                         Worker.ReportProgress, 
-                        filter.Value,
+                        Worker.ReportProgress,
+                        parameters.Filter, // todo: this was filter.Value, but the value seems to be invalid.
                         parameters.ConfigFile,
                         parameters.ExtId,
                         parameters.SysMode
-                        );
+                    );
                     ifcToCoBieLiteUkExchanger.ReportProgress.Progress = Worker.ReportProgress;
                     var rolesFacility = ifcToCoBieLiteUkExchanger.Convert();
 
@@ -380,6 +380,8 @@ namespace XbimExchanger.IfcToCOBieLiteUK.Conversion
                         rolesFacilities.Add(filter.Value.AppliedRoles, rolesFacility);
                     }
                 }
+
+                // todo: xxx why is this RoleFilter.Architectural?
                 var fedFacilities =
                     rolesFacilities.OrderByDescending(d => d.Key.HasFlag(RoleFilter.Architectural))
                         .SelectMany(p => p.Value)
