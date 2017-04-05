@@ -61,7 +61,7 @@ namespace XbimExchanger.IfcToCOBieLiteUK
 
         private void ConvertOrganisation(Contact target, IIfcOrganization ifcOrganization)
         {
-            if (ifcOrganization.Addresses != null)
+            if (ifcOrganization.Addresses != null && ifcOrganization.Addresses.Any())
             {
                 var telecom = ifcOrganization.Addresses.OfType<IIfcTelecomAddress>().FirstOrDefault(a => a.ElectronicMailAddresses.Any(e => !string.IsNullOrWhiteSpace(e)));
                 var postal = ifcOrganization.Addresses.OfType<IIfcPostalAddress>().FirstOrDefault();
@@ -74,7 +74,6 @@ namespace XbimExchanger.IfcToCOBieLiteUK
 
                 if (postal!=null)
                 {
-
                     target.Department = postal.InternalLocation;
                     target.Street = postal.AddressLines != null ? postal.AddressLines.ToString() : null;
                     target.PostalBox = postal.PostalBox;
@@ -95,7 +94,6 @@ namespace XbimExchanger.IfcToCOBieLiteUK
             }
 
             target.Company = ifcOrganization.Name;
-
 
         }
 
