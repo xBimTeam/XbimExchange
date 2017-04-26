@@ -214,7 +214,7 @@ namespace XbimExchanger.IfcToCOBieExpress
         /// <param name="reportProgress"></param>
         /// <param name="extId"></param>
         /// <param name="sysMode"></param>
-        public COBieExpressHelper(IfcToCoBieExpressExchanger exchanger, Xbim.CobieLiteUk.ProgressReporter reportProgress, OutPutFilters filter = null, string configurationFile = null, EntityIdentifierMode extId = EntityIdentifierMode.IfcEntityLabels, SystemExtractionMode sysMode = SystemExtractionMode.System | SystemExtractionMode.Types)
+        public COBieExpressHelper(IfcToCoBieExpressExchanger exchanger, Xbim.CobieLiteUk.ProgressReporter reportProgress, OutPutFilters filter = null, string configurationFile = null, EntityIdentifierMode extId = EntityIdentifierMode.IfcEntityLabels, SystemExtractionMode sysMode = SystemExtractionMode.System | SystemExtractionMode.Types, CobieContact creatorContact = null)
         {
             _categoryMapping = exchanger.GetOrCreateMappings<MappingIfcClassificationReferenceToCategory>();
             _externalObjectMapping = exchanger.GetOrCreateMappings<MappingStringToExternalObject>();
@@ -222,6 +222,8 @@ namespace XbimExchanger.IfcToCOBieExpress
             _contactMapping = exchanger.GetOrCreateMappings<MappingIfcActorToContact>();
             _documentMapping = exchanger.GetOrCreateMappings<MappingIfcDocumentSelectToDocument>();
             _now = DateTime.Now;
+
+            XbimContact = creatorContact;
 
             //set props
             _configFileName = configurationFile;
