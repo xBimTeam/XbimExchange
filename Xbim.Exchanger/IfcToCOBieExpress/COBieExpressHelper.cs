@@ -203,6 +203,10 @@ namespace XbimExchanger.IfcToCOBieExpress
                     SundryContacts.Add(_xbimContact.Email, _xbimContact);
                 return _xbimContact;
             }
+            set
+            {
+                _xbimContact = value;
+            }
         }
 
         /// <summary>
@@ -223,7 +227,7 @@ namespace XbimExchanger.IfcToCOBieExpress
             _documentMapping = exchanger.GetOrCreateMappings<MappingIfcDocumentSelectToDocument>();
             _now = DateTime.Now;
 
-            XbimContact = creatorContact;
+            _xbimContact = creatorContact;
 
             //set props
             _configFileName = configurationFile;

@@ -3,7 +3,7 @@
     <metadata>
         <id>Xbim.Exchange</id>
         <!-- note: development versions are generally in the form 4.0.0-V0002, use 4 digits for consistency next time -->
-        <version>4.0.7-V0002</version>
+        <version>4.0.7-V0003</version>
         <title>xBIM Exchange</title>
         <authors>xBIM Team</authors>
         <owners>Steve Lockley</owners>
