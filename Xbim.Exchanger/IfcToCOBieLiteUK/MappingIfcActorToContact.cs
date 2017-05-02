@@ -109,20 +109,17 @@ namespace XbimExchanger.IfcToCOBieLiteUK
                 
                 if (telecom!=null)
                 {
-                    if (telecom.ElectronicMailAddresses != null)
-                    {
-                        var emailAddress =
-                            telecom.ElectronicMailAddresses.FirstOrDefault(t => !string.IsNullOrWhiteSpace(t));
-                        if (!string.IsNullOrWhiteSpace(emailAddress)) //override any set if we have one at person level
-                            target.Email = emailAddress;
-                    }
-                    if (telecom.TelephoneNumbers != null)
-                    {
-                        var phoneNum = telecom.TelephoneNumbers.FirstOrDefault(t => !string.IsNullOrWhiteSpace(t));
-                        if (!string.IsNullOrWhiteSpace(phoneNum))
-                            target.Phone = phoneNum;
-                    }
-                   
+                    // todo: it looks like the Resharper ReplaceWithSingleCallToFirstOrDefault produces wrong results if accepted
+                    // ReSharper disable once ReplaceWithSingleCallToFirstOrDefault
+                    var ml = telecom.ElectronicMailAddresses?.Where(t => t != null && !string.IsNullOrWhiteSpace(t.ToString())).FirstOrDefault().ToString();
+                    if (!string.IsNullOrWhiteSpace(ml))
+                        target.Email = ml;
+
+                    // todo: it looks like the Resharper ReplaceWithSingleCallToFirstOrDefault produces wrong results if accepted
+                    // ReSharper disable once ReplaceWithSingleCallToFirstOrDefault
+                    var phoneNum = telecom.TelephoneNumbers?.Where(t => t!= null && !string.IsNullOrWhiteSpace(t.ToString())).FirstOrDefault().ToString();
+                    if (!string.IsNullOrWhiteSpace(phoneNum))
+                        target.Phone = phoneNum;
                 }
 
 

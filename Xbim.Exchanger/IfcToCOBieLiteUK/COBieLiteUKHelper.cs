@@ -1843,12 +1843,14 @@ namespace XbimExchanger.IfcToCOBieLiteUK
             {
                 return GetCreatedBy(actor);
             }
+            
 
             ContactKey key;
             if (_createdByKeys.TryGetValue(actorSelect, out key))
             {
                 return key;
             }
+
 
             return new ContactKey {Email = XbimCreatedBy.Email};
         }

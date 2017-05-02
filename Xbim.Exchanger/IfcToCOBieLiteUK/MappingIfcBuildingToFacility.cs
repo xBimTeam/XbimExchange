@@ -188,7 +188,6 @@ namespace XbimExchanger.IfcToCOBieLiteUK
 
             //Contacts
             var ifcActorSelects = helper.Contacts;
-
             if (ifcActorSelects!=null && ifcActorSelects.Any())
             {
                 Exchanger.ReportProgress.NextStage(ifcActorSelects.Count(), 97); //finish progress at 97% 

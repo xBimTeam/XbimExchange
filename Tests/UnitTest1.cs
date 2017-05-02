@@ -3,12 +3,14 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Xbim.CobieLiteUk;
 using Xbim.Ifc;
 using XbimExchanger.IfcToCOBieLiteUK;
 using Xbim.Ifc2x3.ActorResource;
 using Xbim.Ifc2x3.Kernel;
 using Xbim.Ifc2x3.ProductExtension;
 using Xbim.Ifc2x3.UtilityResource;
+using Xbim.IO;
 using IfcInterfaces = Xbim.Ifc4.Interfaces;
 
 namespace Tests
@@ -24,12 +26,20 @@ namespace Tests
         public void XbimExchangeIssues17()
         {
             var model = CreateandInitModel("xbimTest");
+            var IfcfileName = Path.GetTempPath() + Guid.NewGuid() + ".ifc";
+            
             PopulatePerson(model);
             var site = CreateSite(model, "default site");
             CreateBuilding(model, "default building", site);
 
+
+            model.SaveAs(IfcfileName, IfcStorageType.Ifc);
+
             var fileName = Path.GetTempPath() + Guid.NewGuid() + ".xlsx";
-            SaveCobieFile(model, fileName);
+            var saved = SaveCobieFile(model, fileName);
+            var firstFac = saved.FirstOrDefault();
+
+            Assert.AreEqual(firstFac.CreatedBy.Email, @"blahblah@google.com");
         }
 
         private static void PopulatePerson(IfcStore model)
@@ -186,7 +196,7 @@ namespace Tests
         }
 
 
-        public static void SaveCobieFile(IfcStore model, string outputFile)
+        public static List<Xbim.CobieLiteUk.Facility> SaveCobieFile(IfcStore model, string outputFile)
         {
             //Logger.LogCurrentMethod();
             var facilities = new List<Xbim.CobieLiteUk.Facility>();
@@ -211,6 +221,7 @@ namespace Tests
                 Assert.IsTrue(File.Exists(cobieFile));
                 break;
             }
+            return facilities;
         }
     }
 }
