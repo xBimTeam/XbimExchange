@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using Xbim.CobieLiteUk;
 using Xbim.Common;
@@ -110,8 +111,13 @@ namespace XbimExchanger.IfcToCOBieLiteUK
                 if (telecom!=null)
                 {
                     // todo: it looks like the Resharper ReplaceWithSingleCallToFirstOrDefault produces wrong results if accepted
-                    // ReSharper disable once ReplaceWithSingleCallToFirstOrDefault
+                    // var ml = telecom.ElectronicMailAddresses?.Where(t => t != null && !string.IsNullOrWhiteSpace(t.ToString())).FirstOrDefault().ToString();
+                    // var ml1 = telecom.ElectronicMailAddresses?.FirstOrDefault(x => x != null && !string.IsNullOrWhiteSpace(x.ToString())).ToString();
+
                     var ml = telecom.ElectronicMailAddresses?.Where(t => t != null && !string.IsNullOrWhiteSpace(t.ToString())).FirstOrDefault().ToString();
+
+                    // Debug.Assert(ml == ml1);
+
                     if (!string.IsNullOrWhiteSpace(ml))
                         target.Email = ml;
 

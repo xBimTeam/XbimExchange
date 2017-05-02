@@ -3,15 +3,17 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Xbim.CobieLiteUk;
 using Xbim.Ifc;
 using XbimExchanger.IfcToCOBieLiteUK;
 using Xbim.Ifc2x3.ActorResource;
 using Xbim.Ifc2x3.Kernel;
 using Xbim.Ifc2x3.ProductExtension;
 using Xbim.Ifc2x3.UtilityResource;
+using Xbim.Ifc4.Interfaces;
 using Xbim.IO;
-using IfcInterfaces = Xbim.Ifc4.Interfaces;
+using IfcAddressTypeEnum = Xbim.Ifc2x3.ActorResource.IfcAddressTypeEnum;
+using IfcElementCompositionEnum = Xbim.Ifc2x3.ProductExtension.IfcElementCompositionEnum;
+
 
 namespace Tests
 {
@@ -31,15 +33,28 @@ namespace Tests
             PopulatePerson(model);
             var site = CreateSite(model, "default site");
             CreateBuilding(model, "default building", site);
-
-
+            
             model.SaveAs(IfcfileName, IfcStorageType.Ifc);
 
             var fileName = Path.GetTempPath() + Guid.NewGuid() + ".xlsx";
             var saved = SaveCobieFile(model, fileName);
             var firstFac = saved.FirstOrDefault();
-
+            Assert.IsNotNull(firstFac);
             Assert.AreEqual(firstFac.CreatedBy.Email, @"blahblah@google.com");
+
+            // extra test - The following behaviour is not understood and does not seem to happen in a similar test in Essentials.
+            // 
+            var p = model.Instances[1] as IfcPerson;
+            Assert.IsNotNull(p);
+            var telecom = p.Addresses.OfType<IIfcTelecomAddress>().FirstOrDefault();
+            Assert.IsNotNull(telecom);
+            Assert.IsNotNull(telecom.ElectronicMailAddresses);
+
+            // the following linq queries below should return the same value, indeed resharper suggest to transform one into the other
+            var ml1 = telecom.ElectronicMailAddresses.Where(t => t != null && !string.IsNullOrWhiteSpace(t.ToString())).FirstOrDefault(); // working
+            var ml2 = telecom.ElectronicMailAddresses.FirstOrDefault(t => t != null && !string.IsNullOrWhiteSpace(t.ToString())); // not working
+            Assert.AreEqual(ml1, ml2);
+
         }
 
         private static void PopulatePerson(IfcStore model)
@@ -179,13 +194,13 @@ namespace Tests
         }
 
         public static void AddBuildingElement(
-            IfcInterfaces.IIfcObjectDefinition site,
-            IfcInterfaces.IIfcObjectDefinition building)
+            IIfcObjectDefinition site,
+            IIfcObjectDefinition building)
         {
-            IEnumerable<IfcInterfaces.IIfcRelAggregates> decomposition = site.IsDecomposedBy;
+            IEnumerable<IIfcRelAggregates> decomposition = site.IsDecomposedBy;
             if (decomposition.Count() == 0) //none defined create the relationship
             {
-                IfcInterfaces.IIfcRelAggregates relSub = site.Model.Instances.New<IfcRelAggregates>();
+                IIfcRelAggregates relSub = site.Model.Instances.New<IfcRelAggregates>();
                 relSub.RelatingObject = site;
                 relSub.RelatedObjects.Add(building);
             }
