@@ -16,8 +16,6 @@ using XbimExchanger.COBieLiteUkToIfc;
 using XbimExchanger.IfcToCOBieExpress;
 using XbimExchanger.IfcToCOBieLiteUK;
 
-
-
 namespace Xbim.Exchange
 {
     internal class Program
@@ -27,7 +25,7 @@ namespace Xbim.Exchange
             
             if (args.Length < 1)
             {
-                Console.WriteLine("No IIfc or xBim file specified");
+                Console.WriteLine("No Ifc or xBim file specified");
                 return;
             }
             var fileName = args[0];

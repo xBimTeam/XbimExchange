@@ -186,6 +186,7 @@
     <Compile Include="DPoWToCOBieLite\MappingPlanOfWorkToFacilityType.cs" />
     <Compile Include="DPoWToCOBieLite\MappingRoleToContact.cs" />
     <Compile Include="DPoWToCOBieLite\MappingSpaceTypeToSpaceType.cs" />
+    <Compile Include="CobieHelpers\ContactFunctions.cs" />
     <Compile Include="IfcToCOBieExpress\Conversion\CobieExpressConverter.cs" />
     <Compile Include="IfcToCOBieExpress\MappingIfcObjectToAsset.cs" />
     <Compile Include="IfcToCOBieExpress\MappingStringToCategory.cs" />
@@ -222,7 +223,6 @@
     <Compile Include="IfcToCOBieExpress\XbimAttributedObject.cs" />
     <Compile Include="IfcToCOBieExpress\XbimIfcProxyTypeObject.cs" />
     <Compile Include="IfcToCOBieLiteUK\COBieLiteUKHelper.cs" />
-    <Compile Include="IfcToCOBieLiteUK\ContactConverter.cs" />
     <Compile Include="IfcHelpers\CobieConversionParams.cs" />
     <Compile Include="IfcToCOBieLiteUK\Conversion\CobieLiteConverter.cs" />
     <Compile Include="IfcHelpers\ExportTypeEnum.cs" />

@@ -13,13 +13,11 @@ using XbimExchanger.IfcToCOBieLiteUK.EqCompare;
 using Attribute = Xbim.CobieLiteUk.Attribute;
 using SystemAssembly = System.Reflection.Assembly;
 using System.Diagnostics;
+using XbimExchanger.CobieHelpers;
 using XbimExchanger.IfcHelpers;
 
 namespace XbimExchanger.IfcToCOBieLiteUK
-{
-    
-
-    
+{    
     /// <summary>
     /// 
     /// </summary>
@@ -1616,68 +1614,14 @@ namespace XbimExchanger.IfcToCOBieLiteUK
             //sort out createdByKeys, these will always be IIfcPersonAndOrganization which are held in IfcOwnerHistory fields
             foreach (var actor in actors.OfType<IIfcPersonAndOrganization>())
             {
-                _createdByKeys.Add(actor, new ContactKey { Email = EmailAddressOf(actor) });
+                _createdByKeys.Add(actor, new ContactKey { Email = ContactFunctions.EmailAddressOf(actor) });
                 ReportProgress.IncrementAndUpdate();
             }
             _sundryContacts = new Dictionary<string, Contact>();
         }
 
-        public string EmailAddressOf(IIfcActorSelect personOrg)
-        {
-            IIfcPerson person = null;
-            IIfcOrganization organisation= null;
-            if (personOrg is IIfcPerson)
-            {
-                person = personOrg as IIfcPerson;
-            }
-            if (personOrg is IIfcOrganization)
-            {
-                organisation = personOrg as IIfcOrganization;
-            }
-            if (personOrg is IIfcPersonAndOrganization)
-            {
-                person = (personOrg as IIfcPersonAndOrganization).ThePerson;
-                organisation = (personOrg as IIfcPersonAndOrganization).TheOrganization;
-            }
-            
-            //get a default that will be unique
-            var email = string.Format("unknown{0}@undefined.email", ((IPersistEntity)personOrg).EntityLabel);
-            if ((organisation != null) && (organisation.Addresses != null))
-            {
-                var tmpMail = ValidMailAddress(organisation.Addresses);
-                if (tmpMail != null)
-                    email = tmpMail;
-            }
-            //overwrite if we have it at person level
-            if ((person != null) && (person.Addresses != null))
-            {    
-                var tmpMail = ValidMailAddress(person.Addresses);
-                if (tmpMail != null)
-                    email = tmpMail;
-            }
-            return email;
-        }
-
-        private static string ValidMailAddress(IItemSet<IIfcAddress> addresses)
-        {
-            var telecoms = addresses.OfType<IIfcTelecomAddress>();
-            foreach (var ifcTelecomAddress in telecoms)
-            {
-                if (ifcTelecomAddress.ElectronicMailAddresses == null)
-                    continue;
-                var emails =
-                    from telecomElectronicMailAddress
-                    in ifcTelecomAddress.ElectronicMailAddresses
-                    where telecomElectronicMailAddress.Value != null
-                    select telecomElectronicMailAddress.Value.ToString();
-
-                var email = emails.FirstOrDefault();
-                if (email != null)
-                    return email;
-            }
-            return null;
-        }
-
+      
+        
         /// <summary>
         /// 
         /// </summary>
