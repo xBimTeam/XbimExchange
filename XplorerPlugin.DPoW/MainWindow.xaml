@@ -1,25 +1,33 @@
 ﻿<UserControl x:Class="XplorerPlugin.DPoW.MainWindow"
-        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-        xmlns:controls="clr-namespace:Xbim.WindowsUI.DPoWValidation.Controls;assembly=Xbim.WindowsUI.DPoWValidation">
-    <!-- Height="350" Width="525" -->
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    MinWidth="300" MinHeight="300"
+    >
     <Grid>
         <Button x:Name="OpenButton" 
                 Content="Open DPoW requirements" Click="OpenFile" 
                 Height="22" Width="200" HorizontalAlignment="Center" Grid.Row="0" 
                 Visibility="{Binding OpenButtonVisibility}" />
-        
+
         <Grid x:Name="Ui" Visibility="{Binding UIVisibility}" >
             <Grid.RowDefinitions>
                 <RowDefinition Height="7*" />
                 <RowDefinition Height="5*" />
             </Grid.RowDefinitions>
             <TabControl Grid.Row="0" Margin="5,5,5,10" >
-                <TabItem Header="Results">
+                <TabItem Header="View">
                     <Grid>
-                        <ComboBox x:Name="Classifications" SelectionChanged="UpdateList" VerticalAlignment="Top"/>
-                        <ListView x:Name="LstAssets" Margin="0,25,0,0" SelectionChanged="SetSelectedAsset" MouseDoubleClick="GotoAsset" >
+                        <TextBlock Margin="5,10">Select the cobie element to display</TextBlock>
+                        <Button Height="24" VerticalAlignment="Top" Margin="5,30,5,0" Click="ViewModel" >View Model</Button>
+                        <Button Height="24" VerticalAlignment="Top" Margin="5,60,5,0" Click="ViewReq" >View requirement</Button>
+                        <Button Height="24" VerticalAlignment="Top" Margin="5,90,5,0" Click="ViewRes" >View validation result</Button>
+                    </Grid>
+                </TabItem>
+                <TabItem Header="Asset types">
+                    <Grid>
+                        <Label Margin="0" >Classification</Label>
+                        <ComboBox x:Name="Classifications" SelectionChanged="UpdateList" VerticalAlignment="Top" Margin="0,28,0,0" Height="22"/>
+                        <ListView x:Name="LstAssets" Margin="0,55,0,0" SelectionChanged="SetSelectedAsset" MouseDoubleClick="GotoAsset" >
                             <ListView.ItemTemplate>
                                 <DataTemplate>
                                     <WrapPanel>
@@ -29,7 +37,7 @@
                                 </DataTemplate>
                             </ListView.ItemTemplate>
                         </ListView>
-                        
+
                     </Grid>
                 </TabItem>
                 <TabItem Header="Commands">

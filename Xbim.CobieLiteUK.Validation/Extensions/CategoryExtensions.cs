@@ -47,6 +47,10 @@ namespace Xbim.CobieLiteUk.Validation.Extensions
 
         public static bool IsChildOf(this Category testedCategory, Category requiredCategory)
         {
+            if (string.IsNullOrEmpty(requiredCategory.Code))
+            {
+                return false;
+            }
             return
                 //testedCategory.Classification == requiredCategory.Classification 
                 //&& 

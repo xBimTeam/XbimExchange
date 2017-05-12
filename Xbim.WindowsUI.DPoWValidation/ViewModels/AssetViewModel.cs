@@ -24,7 +24,6 @@ namespace Xbim.WindowsUI.DPoWValidation.ViewModels
                 }
                 catch (Exception)
                 {
-
                     return null;
                 }
             }

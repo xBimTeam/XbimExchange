@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Windows;
@@ -12,6 +13,7 @@ using Xbim.Common;
 using Xbim.CobieLiteUk;
 using Xbim.CobieLiteUk.Validation;
 using Xbim.Ifc;
+using Xbim.Presentation;
 using Xbim.Presentation.XplorerPluginSystem;
 using Xbim.WindowsUI.DPoWValidation.IO;
 using Xbim.WindowsUI.DPoWValidation.ViewModels;
@@ -66,7 +68,6 @@ namespace XplorerPlugin.DPoW
             // FacilityViewer.DataContext = new DPoWFacilityViewModel(ReqFacility);
 
             IsFileOpen = true;
-
             try
             {
                 Classifications.ItemsSource = facility.AssetTypes.Where(at => at.Categories != null)
@@ -78,9 +79,9 @@ namespace XplorerPlugin.DPoW
                     Classifications.SelectedItem = 0;
                 }
             }
-            catch
+            catch (Exception ex)
             {
-                // ignored
+                Log.Error($"Error setting facility", ex);
             }
         }
 
@@ -175,7 +176,28 @@ namespace XplorerPlugin.DPoW
                 return;
             var f = new FacilityValidator();
             ValFacility = f.Validate(ReqFacility, ModelFacility);
+            PrepareAssetResolve(ValFacility);
             SetFacility(ValFacility);
+        }
+
+        private Dictionary<int, Asset> _validatedItems = new Dictionary<int, Asset>();
+
+        private void PrepareAssetResolve(Facility valFacility)
+        {
+            _validatedItems = new Dictionary<int, Asset>();
+            foreach (var valFacilityAssetType in valFacility.AssetTypes)
+            {
+                if (valFacilityAssetType.Assets == null)
+                    continue;
+                foreach (var asset in valFacilityAssetType.Assets)
+                {
+                    int iEl;
+                    if (int.TryParse(asset.ExternalId, out iEl))
+                    {
+                        _validatedItems.Add(iEl, asset);
+                    }
+                }
+            }
         }
 
         // Model
@@ -194,21 +216,14 @@ namespace XplorerPlugin.DPoW
         internal Facility ValFacility;
         internal Facility ViewFacility;
 
-        public string WindowTitle
-        {
-            get { return "Digital Plan of Work"; }
-        }
-        
+        public string WindowTitle => "Digital Plan of Work";
+
         private void TrafficLight(object sender, RoutedEventArgs e)
         {
-            //var ls = new TrafficLightStyler((XbimModel)this.Model, this);
-            //ls.UseAmber = UseAmber;
-            //xpWindow.DrawingControl.LayerStyler = ls;
-
-            //var newLayerStyler = new ValidationResultStyler();
-            //xpWindow.DrawingControl.GeomSupport2LayerStyler = newLayerStyler;
-
-            //xpWindow.DrawingControl.ReloadModel(/*Options: DrawingControl3D.ModelRefreshOptions.ViewPreserveAll*/);
+            var ls = new TrafficLightStyler(Model, this);
+            // ls.UseAmber = UseAmber;
+            _xpWindow.DrawingControl.DefaultLayerStyler = ls;
+            _xpWindow.DrawingControl.ReloadModel(DrawingControl3D.ModelRefreshOptions.ViewPreserveAll);
         }
 
         private void CloseFile(object sender, RoutedEventArgs e)
@@ -232,7 +247,9 @@ namespace XplorerPlugin.DPoW
 
         private void UpdateList(object sender, SelectionChangedEventArgs e)
         {
-            var selectedCode = Classifications.SelectedItem.ToString();
+            var selectedCode = Classifications.SelectedItem?.ToString();
+            if (string.IsNullOrEmpty(selectedCode))
+                return;
             var lst = new ObservableCollection<AssetViewModel>();
 
             if (ViewFacility.AssetTypes == null)
@@ -266,6 +283,27 @@ namespace XplorerPlugin.DPoW
             if (!selectedLabel.HasValue)
                 return;
             _xpWindow.SelectedItem = Model.Instances[selectedLabel.Value];
+        }
+
+        private void ViewModel(object sender, RoutedEventArgs e)
+        {
+            SetFacility(ModelFacility);
+        }
+
+        private void ViewReq(object sender, RoutedEventArgs e)
+        {
+            SetFacility(ReqFacility);
+        }
+
+        private void ViewRes(object sender, RoutedEventArgs e)
+        {
+            SetFacility(ValFacility);
+        }
+
+        public Asset ResolveAsset(IPersistEntity ent)
+        {
+            Asset a;
+            return _validatedItems.TryGetValue(ent.EntityLabel, out a) ? a : null;
         }
     }
 }
