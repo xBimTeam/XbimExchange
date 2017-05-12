@@ -7,7 +7,7 @@ namespace Xbim.CobieLiteUk.Validation.Extensions
     /// <summary>
     /// Provides extension methods to simplify the execution of validation algorithms on CobieLiteUK AssetTypes.
     /// </summary>
-    static internal class CobieObjectExtensions
+    internal static class CobieObjectExtensions
     {
         public static List<T> GetChildObjects<T>(this CobieObject obj)
         {
@@ -89,64 +89,64 @@ namespace Xbim.CobieLiteUk.Validation.Extensions
         private const string RequirementNameAttributeName = "RefRequirementName";
         private const string AttributesPropertySetName = "DPoW Attributes";
 
-        static public string GetRequirementExternalSystem(this CobieObject retType)
+        public static string GetRequirementExternalSystem(this CobieObject retType)
         {
             return GetStringValue(retType, RequirementExternalSystemAttributeName);
         }
 
-        static public string GetRequirementExternalId(this CobieObject retType)
+        public static string GetRequirementExternalId(this CobieObject retType)
         {
             return GetStringValue(retType, RequirementExternalIdAttributeName);
         }
 
-        static public string GetRequirementName(this CobieObject retType)
+        public static string GetRequirementName(this CobieObject retType)
         {
             return GetStringValue(retType, RequirementNameAttributeName);
         }
 
 
-        static public void SetRequirementExternalSystem(this CobieObject retType, string value)
+        public static void SetRequirementExternalSystem(this CobieObject retType, string value)
         {
             if (retType == null)
                 return;
             SetStringValue(retType, value, RequirementExternalSystemAttributeName, "ExternalSystem of the requirement group.");
         }
 
-        static public void SetRequirementExternalId(this CobieObject retType, string value)
+        public static void SetRequirementExternalId(this CobieObject retType, string value)
         {
             if (retType == null)
                 return;
             SetStringValue(retType, value, RequirementExternalIdAttributeName, "ExternalId of the requirement group.");
         }
 
-        static public void SetRequirementName(this CobieObject retType, string value)
+        public static void SetRequirementName(this CobieObject retType, string value)
         {
             if (retType == null)
                 return;
             SetStringValue(retType, value, RequirementNameAttributeName, "Name of the requirement group.");
         }
 
-        static public void SetSubmittedChildrenCount(this CobieObject retType, int value)
+        public static void SetSubmittedChildrenCount(this CobieObject retType, int value)
         {
             if (retType == null)
                 return;
             SetIntegerValue(retType, value, SubmittedChildrenAttributeName, "Count of submitted items.");
         }
 
-        static public int GetSubmittedChildrenCount(this CobieObject retType)
+        public static int GetSubmittedChildrenCount(this CobieObject retType)
         {
             return GetIntegerValue(retType, SubmittedChildrenAttributeName);
         }
 
 
-        static public void SetValidChildrenCount(this CobieObject retType, int value)
+        public static void SetValidChildrenCount(this CobieObject retType, int value)
         {
             if (retType == null)
                 return;
             SetIntegerValue(retType, value, ValidChildrenAttributeName, "Count of submitted items that satisfy requirements.");
         }
 
-        static public int GetValidChildrenCount(this CobieObject retType)
+        public static int GetValidChildrenCount(this CobieObject retType)
         {
             return GetIntegerValue(retType, ValidChildrenAttributeName);
         }

@@ -111,7 +111,7 @@ namespace Xbim.COBieLite.Converters
                 }
 
                 //if it is datetime, try to get specific type from enumeration
-                var dtVal = "";
+                string dtVal;
                 var date = (DateTime)item;
                 switch (attrValue.ItemElementName)
                 {

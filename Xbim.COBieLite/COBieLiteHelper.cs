@@ -753,7 +753,7 @@ namespace Xbim.COBieLite
 
         #region Exporters
 
-        static public void WriteBson(BinaryWriter binaryWriter, FacilityType theFacility)
+        public static void WriteBson(BinaryWriter binaryWriter, FacilityType theFacility)
         {
             var serializerSettings = new JsonSerializerSettings
             {
@@ -767,20 +767,20 @@ namespace Xbim.COBieLite
             serialiser.Serialize(writer, theFacility);
         }
 
-        static public void WriteJson(TextWriter textWriter, FacilityType theFacility)
+        public static void WriteJson(TextWriter textWriter, FacilityType theFacility)
         {
             var serialiser = FacilityType.GetJsonSerializer();
             serialiser.Serialize(textWriter, theFacility);
 
         }
 
-        static public FacilityType ReadJson(TextReader textReader)
+        public static FacilityType ReadJson(TextReader textReader)
         {
             var serialiser = FacilityType.GetJsonSerializer();
             return (FacilityType)serialiser.Deserialize(textReader, typeof(FacilityType));
         }
 
-        static public FacilityType ReadJson(string path)
+        public static FacilityType ReadJson(string path)
         {
             using (var textReader = File.OpenText(path))
             {
@@ -802,7 +802,7 @@ namespace Xbim.COBieLite
         }
        
 
-        static public void WriteXml(TextWriter textWriter, FacilityType theFacility)
+        public static void WriteXml(TextWriter textWriter, FacilityType theFacility)
         {
             var namespaces = new XmlSerializerNamespaces(new[]
             {
@@ -929,9 +929,6 @@ namespace Xbim.COBieLite
             }
             return null;
         }
-
-
-
 
         public IEnumerable<IIfcActorSelect> GetContacts()
         {

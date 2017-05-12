@@ -50,13 +50,10 @@ namespace Tests
             Assert.IsNotNull(telecom.ElectronicMailAddresses);
 
             // the following linq queries below should return the same value, indeed resharper suggest to transform one into the other
+            // ReSharper disable once ReplaceWithSingleCallToFirstOrDefault
             var ml1 = telecom.ElectronicMailAddresses.Where(t => t != null && !string.IsNullOrWhiteSpace(t.ToString())).FirstOrDefault(); // working
             var ml2 = telecom.ElectronicMailAddresses.FirstOrDefault(t => t != null && !string.IsNullOrWhiteSpace(t.ToString())); // not working
             Assert.AreEqual(ml1, ml2);
-
-            // todo: when this test passes it's possible to change some of the calls, search for 
-            // todo: "ReSharper disable once ReplaceWithSingleCallToFirstOrDefault" to find them
-
         }
 
         private static void PopulatePerson(IfcStore model)

@@ -120,11 +120,8 @@ namespace XbimExchanger.CobieHelpers
 
                 if (email == null && telecom.ElectronicMailAddresses != null)
                 {
-                    // todo: it looks like the Resharper ReplaceWithSingleCallToFirstOrDefault produces wrong results if accepted
-                    // ReSharper disable once ReplaceWithSingleCallToFirstOrDefault
-                    var ml = telecom.ElectronicMailAddresses.Where(
-                            t => t != null && !string.IsNullOrWhiteSpace(t.ToString()))
-                            .FirstOrDefault().ToString();
+                    var ml = telecom.ElectronicMailAddresses
+                            .FirstOrDefault(t => t != null && !string.IsNullOrWhiteSpace(t.ToString())).ToString();
                     if (!string.IsNullOrWhiteSpace(ml))
                     {
                         email = ml;
@@ -134,11 +131,8 @@ namespace XbimExchanger.CobieHelpers
 
                 if (phone == null && telecom.TelephoneNumbers != null)
                 {
-                    // todo: it looks like the Resharper ReplaceWithSingleCallToFirstOrDefault produces wrong results if accepted
-                    // ReSharper disable once ReplaceWithSingleCallToFirstOrDefault
-                    var phoneNum = telecom.TelephoneNumbers.Where(
-                            t => t != null && !string.IsNullOrWhiteSpace(t.ToString()))
-                            .FirstOrDefault()
+                    var phoneNum = telecom.TelephoneNumbers
+                            .FirstOrDefault(t => t != null && !string.IsNullOrWhiteSpace(t.ToString()))
                             .ToString();
                     if (!string.IsNullOrWhiteSpace(phoneNum))
                     {

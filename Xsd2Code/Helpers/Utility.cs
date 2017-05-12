@@ -97,7 +97,7 @@ namespace Xsd2Code.Library.Helpers
         /// </summary>
         /// <param name="provider">Code DOM provider</param>
         /// <returns><see cref="GenerationLanguage"/></returns>
-        static private GenerationLanguage GetGenerationLanguage(CodeDomProvider provider)
+        private static GenerationLanguage GetGenerationLanguage(CodeDomProvider provider)
         {
             return GetGenerationLanguage(provider.FileExtension.Replace(".", ""));
         }

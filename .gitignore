@@ -184,3 +184,4 @@ FakesAssemblies/
 /Xbim.DPoW.Schema/CodeGeneration.Log.xml
 SharedFileVersionInfo.cs
 /Tests/ValidationFiles
+DuplicateCodeReport.xml

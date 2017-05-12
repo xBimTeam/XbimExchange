@@ -267,13 +267,13 @@ namespace Xbim.COBieLite
         }
 
 
-        static public FacilityType ReadJson(TextReader textReader)
+        public static FacilityType ReadJson(TextReader textReader)
         {
             var serialiser = GetJsonSerializer();
             return (FacilityType)serialiser.Deserialize(textReader, typeof(FacilityType));
         }
 
-        static public FacilityType ReadJson(string path)
+        public static FacilityType ReadJson(string path)
         {
             using (var textReader = File.OpenText(path))
             {
@@ -310,16 +310,13 @@ namespace Xbim.COBieLite
                 new XmlQualifiedName("core", "http://docs.buildingsmartalliance.org/nbims03/cobie/core"),
                 new XmlQualifiedName("xsi", "http://www.w3.org/2001/XMLSchema-instance")
             });
-
-            var x = FacilityType.GetSerializer();
-
+            var x = GetSerializer();
             using (var xtw = new XbimCoBieLiteXmlWriter(textWriter))
             {
                 xtw.Formatting = System.Xml.Formatting.Indented;
                 // Now serialize our object.
                 x.Serialize(xtw, this, namespaces);
             }
-
         }
 
         #endregion

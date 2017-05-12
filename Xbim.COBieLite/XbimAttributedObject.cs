@@ -151,7 +151,7 @@ namespace Xbim.COBieLite
             if (ifcPropertyEnumeratedValue != null)
             {
 
-                if (ifcPropertyEnumeratedValue.EnumerationValues.Count() == 1)
+                if (ifcPropertyEnumeratedValue.EnumerationValues.Count == 1)
                     return ifcPropertyEnumeratedValue.EnumerationValues.First().ToString();
                 var result = "";
                 foreach (var enumValue in ifcPropertyEnumeratedValue.EnumerationValues)
@@ -205,7 +205,7 @@ namespace Xbim.COBieLite
             {
                 if (ifcPropertyEnumeratedValue.EnumerationReference != null)
                     result.UnitName = ifcPropertyEnumeratedValue.EnumerationReference.Unit.FullName;
-                if (ifcPropertyEnumeratedValue.EnumerationValues.Count()==1)
+                if (ifcPropertyEnumeratedValue.EnumerationValues.Count==1)
                     SetCoBieAttributeValue(result, ifcPropertyEnumeratedValue.EnumerationValues.First());
                 else if (result is StringValueType) //if it is a string we can add all the  values in a list
                 {
@@ -250,7 +250,7 @@ namespace Xbim.COBieLite
             {
                 if (ifcPropertyListValue.Unit!=null)
                     result.UnitName = ifcPropertyListValue.Unit.FullName;
-                if (ifcPropertyListValue.ListValues.Count() == 1)
+                if (ifcPropertyListValue.ListValues.Count == 1)
                     SetCoBieAttributeValue(result, ifcPropertyListValue.ListValues.First());
                 else if (result is StringValueType) //if it is a string we can add all the  values in a list
                 {
@@ -400,7 +400,7 @@ namespace Xbim.COBieLite
         /// </summary>
         /// <param name="ifcProperty"></param>
         /// <returns></returns>
-        static public TValue ConvertToSimpleType<TValue>(IIfcProperty ifcProperty) where TValue:struct
+        public static TValue ConvertToSimpleType<TValue>(IIfcProperty ifcProperty) where TValue:struct
         {
 
             var ifcPropertySingleValue = ifcProperty as IIfcPropertySingleValue;
@@ -417,7 +417,7 @@ namespace Xbim.COBieLite
             if (ifcPropertyEnumeratedValue != null)
             {
                
-                if (ifcPropertyEnumeratedValue.EnumerationValues.Count() == 1)
+                if (ifcPropertyEnumeratedValue.EnumerationValues.Count == 1)
                     return (TValue) Convert.ChangeType(ifcPropertyEnumeratedValue.EnumerationValues.First().ToString(), typeof(TValue));
                 var result = "";
                 foreach (var enumValue in ifcPropertyEnumeratedValue.EnumerationValues)
@@ -447,7 +447,7 @@ namespace Xbim.COBieLite
         }
 
 
-        static public AttributeType ConvertToAttributeType(IIfcProperty ifcProperty)
+        public static AttributeType ConvertToAttributeType(IIfcProperty ifcProperty)
         {
             
              var attributeType = new AttributeType
@@ -481,7 +481,7 @@ namespace Xbim.COBieLite
                 attributeType.AttributeValue.Item = valueItem;
                 if (ifcPropertyEnumeratedValue.EnumerationReference != null && ifcPropertyEnumeratedValue.EnumerationReference.Unit!= null)
                     valueItem.UnitName = ifcPropertyEnumeratedValue.EnumerationReference.Unit.FullName;
-                if (ifcPropertyEnumeratedValue.EnumerationValues.Count()==1)
+                if (ifcPropertyEnumeratedValue.EnumerationValues.Count==1)
                     valueItem.StringValue =  ifcPropertyEnumeratedValue.EnumerationValues.First().ToString();
                 else
                 {
@@ -494,11 +494,11 @@ namespace Xbim.COBieLite
                 }
                 //add in the allowed values
                
-                if (ifcPropertyEnumeratedValue.EnumerationReference != null && ifcPropertyEnumeratedValue.EnumerationReference.EnumerationValues.Count()>0)
+                if (ifcPropertyEnumeratedValue.EnumerationReference != null && ifcPropertyEnumeratedValue.EnumerationReference.EnumerationValues.Any())
                 {
                     var allowedValues = new AllowedValueCollectionType
                     {
-                        AttributeAllowedValue = new List<string>(ifcPropertyEnumeratedValue.EnumerationReference.EnumerationValues.Count())
+                        AttributeAllowedValue = new List<string>(ifcPropertyEnumeratedValue.EnumerationReference.EnumerationValues.Count)
                     };
                     foreach (var enumValue in ifcPropertyEnumeratedValue.EnumerationReference.EnumerationValues)
                     {
@@ -526,7 +526,7 @@ namespace Xbim.COBieLite
             return attributeType;
         }
 
-        static private AttributeValueType GetAttributeValue(IIfcPropertyBoundedValue ifcPropertyBoundedValue)
+        private static AttributeValueType GetAttributeValue(IIfcPropertyBoundedValue ifcPropertyBoundedValue)
         {
             var attributeValueType = new AttributeValueType();
             IIfcValue ifcValue = ifcPropertyBoundedValue.LowerBoundValue;
@@ -569,7 +569,7 @@ namespace Xbim.COBieLite
             return attributeValueType;
         }
 
-        static public TValue ConvertToSimpleType<TValue>(IIfcPropertySingleValue ifcProperty) where TValue : struct
+        public static TValue ConvertToSimpleType<TValue>(IIfcPropertySingleValue ifcProperty) where TValue : struct
         {
             IIfcValue ifcValue = ifcProperty.NominalValue;
             var expressValue = (IExpressValueType)ifcValue;
@@ -636,7 +636,7 @@ namespace Xbim.COBieLite
         }
 
 
-        static public AttributeValueType GetAttributeValueType(IIfcPropertySingleValue ifcProperty)
+        public static AttributeValueType GetAttributeValueType(IIfcPropertySingleValue ifcProperty)
         {
             IIfcValue ifcValue = ifcProperty.NominalValue;
             var attributeValueType = new AttributeValueType();
@@ -652,15 +652,14 @@ namespace Xbim.COBieLite
                     MonetaryValue = Convert.ToDecimal((double)expressValue.Value)
                 };
                 attributeValueType.Item = monetaryValue;
-                if (ifcProperty.Unit is IIfcMonetaryUnit)
-                {
-                    var mu = ifcProperty.Unit as IIfcMonetaryUnit;
-                    CurrencyUnitSimpleType cu;
-                    if (Enum.TryParse(mu.Currency.ToString(), true, out cu))
-                        monetaryValue.MonetaryUnit = cu;
-                    else
-                        CoBieLiteHelper.Logger.WarnFormat("Invalid monetary unit: {0} ", mu.Currency);
-                }
+                if (!(ifcProperty.Unit is IIfcMonetaryUnit))
+                    return attributeValueType;
+                var mu = (IIfcMonetaryUnit) ifcProperty.Unit;
+                CurrencyUnitSimpleType cu;
+                if (Enum.TryParse(mu.Currency.ToString(), true, out cu))
+                    monetaryValue.MonetaryUnit = cu;
+                else
+                    CoBieLiteHelper.Logger.WarnFormat("Invalid monetary unit: {0} ", mu.Currency);
             }
             else if (ifcValue is Xbim.Ifc4.DateTimeResource.IfcTimeStamp)
             {
@@ -680,7 +679,6 @@ namespace Xbim.COBieLite
                 var decimalValue = new AttributeDecimalValueType { DecimalValue = (double)expressValue.Value, DecimalValueSpecified = true };
                 attributeValueType.Item = decimalValue;
                 attributeValueType.ItemElementName = ItemChoiceType.AttributeDecimalValue;
-               
             }
             else if (underlyingType == typeof(string))
             {

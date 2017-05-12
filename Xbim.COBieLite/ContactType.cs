@@ -119,7 +119,7 @@ namespace Xbim.COBieLite
                         ContactPhoneNumber = string.Join(";", phoneNums, ContactPhoneNumber ?? "");
                     var url = string.Join(";", ifcTelecomAddresses.Where(p => p.WWWHomePageURL.HasValue).SelectMany(p => p.WWWHomePageURL.ToString()));
                     if (!string.IsNullOrWhiteSpace(url))
-                        ContactURL = string.Join(";", url, ContactURL ?? ""); ;
+                        ContactURL = string.Join(";", url, ContactURL ?? "");
                 }
 
                 var ifcPostalAddresses = postal as IIfcPostalAddress[] ?? postal.ToArray();

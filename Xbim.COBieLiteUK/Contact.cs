@@ -23,12 +23,15 @@ namespace Xbim.CobieLiteUk
         {
             get
             {
-                if (Attributes == null) return null;
+                if (Attributes == null)
+                    return null;
                 var attr = Attributes.FirstOrDefault(a => a.Name == "Description");
-                if (attr == null) return null;
+                if (attr == null)
+                    return null;
 
                 var strAttrVal = attr.Value as StringAttributeValue;
-                if (strAttrVal == null) return null;
+                if (strAttrVal == null)
+                    return null;
 
                 return strAttrVal.Value;
             }
