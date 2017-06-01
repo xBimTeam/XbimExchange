@@ -2,7 +2,7 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2011/10/nuspec.xsd">
   <metadata>
     <id>XplorerPlugin.CobieExport</id>
-    <version>4.0.7-V0009</version>
+    <version>4.0.7-V0010</version>
     <title>XplorerPlugin.CobieExport</title>
     <authors>xBIM team</authors>
     <owners>xBIM team</owners>
@@ -30,5 +30,11 @@
     <file src="XplorerPlugin.CobieExport\bin\Release\Xbim.Properties.dll"                   target="lib\net45\Xbim.Properties.dll"           />
     <file src="XplorerPlugin.CobieExport\bin\Release\Xbim.CobieExpress.IO.dll"              target="lib\net45\Xbim.CobieExpress.IO.dll"      />
     <file src="XplorerPlugin.CobieExport\bin\Release\Xbim.IO.TableStore.dll"                target="lib\net45\Xbim.IO.TableStore.dll"        />
+    
+    <file src="XplorerPlugin.CobieExport\bin\Release\NPOI.dll"                              target="lib\net45\NPOI.dll"                      />
+    <file src="XplorerPlugin.CobieExport\bin\Release\NPOI.OOXML.dll"                        target="lib\net45\NPOI.OOXML.dll"                />
+    <file src="XplorerPlugin.CobieExport\bin\Release\NPOI.OpenXml4Net.dll"                  target="lib\net45\NPOI.OpenXml4Net.dll"          />
+    <file src="XplorerPlugin.CobieExport\bin\Release\NPOI.OpenXmlFormats"                   target="lib\net45\NPOI.OpenXmlFormats"           />
+    <file src="XplorerPlugin.CobieExport\bin\Release\Newtonsoft.Json.dll"                   target="lib\net45\Newtonsoft.Json.dll"           />
   </files>
 </package>
