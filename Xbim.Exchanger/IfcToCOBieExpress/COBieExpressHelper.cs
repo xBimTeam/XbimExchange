@@ -76,6 +76,12 @@ namespace XbimExchanger.IfcToCOBieExpress
         /// </summary>
         public ExternalReferenceMode ExternalReferenceMode { get; set; }
 
+        /// <summary>
+        /// Create placeholder spaces for floors, site, etc, to allow for space link data to be
+        /// persisted when the source file links directly to a floor or site instead of a space
+        /// </summary>
+        public bool CreatePlaceholderSpaces { get; set; }
+
         #endregion
 
         #region Lookups
@@ -218,7 +224,7 @@ namespace XbimExchanger.IfcToCOBieExpress
         /// <param name="reportProgress"></param>
         /// <param name="extId"></param>
         /// <param name="sysMode"></param>
-        public COBieExpressHelper(IfcToCoBieExpressExchanger exchanger, Xbim.CobieLiteUk.ProgressReporter reportProgress, OutPutFilters filter = null, string configurationFile = null, EntityIdentifierMode extId = EntityIdentifierMode.IfcEntityLabels, SystemExtractionMode sysMode = SystemExtractionMode.System | SystemExtractionMode.Types, CobieContact creatorContact = null)
+        public COBieExpressHelper(IfcToCoBieExpressExchanger exchanger, Xbim.CobieLiteUk.ProgressReporter reportProgress, OutPutFilters filter = null, string configurationFile = null, EntityIdentifierMode extId = EntityIdentifierMode.IfcEntityLabels, SystemExtractionMode sysMode = SystemExtractionMode.System | SystemExtractionMode.Types, CobieContact creatorContact = null, bool createPlaceholderSpaces = true)
         {
             _categoryMapping = exchanger.GetOrCreateMappings<MappingIfcClassificationReferenceToCategory>();
             _externalObjectMapping = exchanger.GetOrCreateMappings<MappingStringToExternalObject>();
@@ -226,7 +232,6 @@ namespace XbimExchanger.IfcToCOBieExpress
             _contactMapping = exchanger.GetOrCreateMappings<MappingIfcActorToContact>();
             _documentMapping = exchanger.GetOrCreateMappings<MappingIfcDocumentSelectToDocument>();
             _now = DateTime.Now;
-
             _xbimContact = creatorContact;
 
             //set props
@@ -238,6 +243,7 @@ namespace XbimExchanger.IfcToCOBieExpress
             EntityIdentifierMode = extId;
             SystemMode = sysMode;
             _creatingApplication = _model.Header.CreatingApplication;
+            CreatePlaceholderSpaces = createPlaceholderSpaces;
             //pass the exchanger progress reporter over to helper
             ReportProgress = reportProgress; 
         }
@@ -536,7 +542,7 @@ namespace XbimExchanger.IfcToCOBieExpress
             if (SystemMode.HasFlag(SystemExtractionMode.System))
             {
                 _systemAssignment =
-                        _model.Instances.OfType<IIfcRelAssignsToGroup>().Where(r => r.RelatingGroup is IIfcSystem)
+                        _model.Instances.OfType<IIfcRelAssignsToGroup>().Where(r => (r.RelatingGroup is IIfcSystem) && !(r.RelatingGroup is IIfcZone)) // Exclude IfcZone (as Zone derives from System)
                         .Distinct(new IfcRelAssignsToGroupRelatedGroupObjCompare()) //make sure we do not have duplicate keys, or ToDictionary will throw ex. could lose RelatedObjects though. 
                         .ToDictionary(k => (IIfcSystem)k.RelatingGroup, v => v.RelatedObjects);
                 _systemLookup = new Dictionary<IIfcObjectDefinition, List<IIfcSystem>>();

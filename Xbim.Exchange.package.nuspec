@@ -2,8 +2,8 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2011/10/nuspec.xsd">
     <metadata>
         <id>Xbim.Exchange</id>
-        <!-- note: development versions are generally in the form 4.0.0-V0002, use 4 digits for consistency -->
-        <version>4.0.7-V0011</version>
+        <!-- note: development versions are generally in the form 4.0.0-V0001, use 4 digits for consistency next time -->
+        <version>4.0.7-V0012</version>
         <title>xBIM Exchange</title>
         <authors>xBIM Team</authors>
         <owners>Steve Lockley</owners>
@@ -30,6 +30,7 @@ IOS and Android versions are under development.</description>
         <dependency id="NPOI" version="2.3.0" />
         <dependency id="SharpZipLib" version="0.86.0" />
         <dependency id="Xbim.Essentials" version="4.0.29-V002" />
+        <!-- note: Xbim.Cobie is currently only used in the test project; this is strange and needs to be verified. -->
         <dependency id="Xbim.Cobie" version="4.0.29-V002" />
         <dependency id="Xbim.Geometry" version="4.0.15-V0018" />
       </dependencies>

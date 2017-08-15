@@ -18,11 +18,11 @@ namespace XbimExchanger.IfcToCOBieExpress
         /// <summary>
         /// Instantiates a new IIfcToCOBieLiteUkExchanger class.
         /// </summary>
-        public IfcToCoBieExpressExchanger(IfcStore source, IModel target, ReportProgressDelegate reportProgress = null, OutPutFilters filter = null, string configFile = null, EntityIdentifierMode extId = EntityIdentifierMode.IfcEntityLabels, SystemExtractionMode sysMode = SystemExtractionMode.System | SystemExtractionMode.Types, bool classify = false, CobieContact creatorContact = null) 
+        public IfcToCoBieExpressExchanger(IfcStore source, IModel target, ReportProgressDelegate reportProgress = null, OutPutFilters filter = null, string configFile = null, EntityIdentifierMode extId = EntityIdentifierMode.IfcEntityLabels, SystemExtractionMode sysMode = SystemExtractionMode.System | SystemExtractionMode.Types, bool classify = false, CobieContact creatorContact = null, bool createPlaceholderSpaces = true) 
             : base(source, target)
         {
             ReportProgress.Progress = reportProgress; //set reporter
-            Helper = new COBieExpressHelper(this, ReportProgress, filter, configFile, extId, sysMode, creatorContact);
+            Helper = new COBieExpressHelper(this, ReportProgress, filter, configFile, extId, sysMode, creatorContact, createPlaceholderSpaces);
             Helper.Init();
 
             _classify = classify;
