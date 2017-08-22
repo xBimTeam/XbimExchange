@@ -70,18 +70,20 @@ namespace XbimExchanger.IfcToCOBieExpress
 
             //Add spaces
             var ifcSpatialStructureElements = spaces != null ? spaces.ToList() : new List<IIfcSpatialElement>();
-            ifcSpatialStructureElements.Add(ifcSpatialStructureElement);
+            
 
-            if (Helper.CreatePlaceholderSpaces)
+            if (!Helper.CreatePlaceholderSpaces)
             {
-                foreach (var element in ifcSpatialStructureElements)
-                {
-                    CobieSpace space;
-                    if (!SpatialStructureToSpace.GetOrCreateTargetObject(element.EntityLabel, out space)) continue;
+                ifcSpatialStructureElements.Add(ifcSpatialStructureElement);
+            }
 
-                    space = SpatialStructureToSpace.AddMapping(element, space);
-                    space.Floor = target;
-                }
+            foreach (var element in ifcSpatialStructureElements)
+            {
+                CobieSpace space;
+                if (!SpatialStructureToSpace.GetOrCreateTargetObject(element.EntityLabel, out space)) continue;
+
+                space = SpatialStructureToSpace.AddMapping(element, space);
+                space.Floor = target;
             }
 
             //TODO: Floor Issues
