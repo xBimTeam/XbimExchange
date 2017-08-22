@@ -224,6 +224,8 @@ namespace XbimExchanger.IfcToCOBieExpress
         /// <param name="reportProgress"></param>
         /// <param name="extId"></param>
         /// <param name="sysMode"></param>
+        /// <param name="creatorContact"></param>
+        /// <param name="createPlaceholderSpaces"></param>
         public COBieExpressHelper(IfcToCoBieExpressExchanger exchanger, Xbim.CobieLiteUk.ProgressReporter reportProgress, OutPutFilters filter = null, string configurationFile = null, EntityIdentifierMode extId = EntityIdentifierMode.IfcEntityLabels, SystemExtractionMode sysMode = SystemExtractionMode.System | SystemExtractionMode.Types, CobieContact creatorContact = null, bool createPlaceholderSpaces = true)
         {
             _categoryMapping = exchanger.GetOrCreateMappings<MappingIfcClassificationReferenceToCategory>();
@@ -1510,7 +1512,16 @@ namespace XbimExchanger.IfcToCOBieExpress
             return ifcObject != null ? null : XbimSystem;
         }
 
-
+        private List<IIfcSpatialElement> GetOrCreateSpaceAssetLookup(IIfcElement element)
+        {
+            List<IIfcSpatialElement> spaceList;
+            if (!SpaceAssetLookup.TryGetValue(element, out spaceList))
+            {
+                spaceList = new List<IIfcSpatialElement>();
+                SpaceAssetLookup[element] = spaceList;
+            }
+            return spaceList;
+        }
  
         private void GetSpaceAssetLookup()
         {
@@ -1519,24 +1530,29 @@ namespace XbimExchanger.IfcToCOBieExpress
             _spaceAssetLookup = new Dictionary<IIfcElement, List<IIfcSpatialElement>>(); 
            
             var ifcRelContainedInSpaces = _model.Instances.OfType<IIfcRelContainedInSpatialStructure>().ToList();
-            ReportProgress.NextStage(ifcRelContainedInSpaces.Count, 40);
+            var ifcRelSpaceBoundaries = _model.Instances.OfType<IIfcRelSpaceBoundary>().Where(rsb => rsb.RelatedBuildingElement != null).ToList();
+            ReportProgress.NextStage(ifcRelContainedInSpaces.Count + ifcRelSpaceBoundaries.Count, 40);
             foreach (var ifcRelContainedInSpace in ifcRelContainedInSpaces)
             {
                 foreach (var element in ifcRelContainedInSpace.RelatedElements.OfType<IIfcElement>())
-                { 
-                    List<IIfcSpatialElement> spaceList;
-                    if (!SpaceAssetLookup.TryGetValue(element, out spaceList))
-                    {
-                        spaceList = new List<IIfcSpatialElement>();
-                        SpaceAssetLookup[element] = spaceList;
-
-                    }
+                {
+                    var spaceList = GetOrCreateSpaceAssetLookup(element);
                     var container = ifcRelContainedInSpace.RelatingStructure;
                     spaceList.Add(container);
                 }
                 ReportProgress.IncrementAndUpdate();
+            }            
+
+            foreach (var boundary in ifcRelSpaceBoundaries)
+            {
+                var element = boundary.RelatedBuildingElement;
+                var spaceList = GetOrCreateSpaceAssetLookup(element);
+                if (boundary.RelatingSpace is IIfcSpace)
+                {
+                    spaceList.Add(boundary.RelatingSpace as IIfcSpace);
+                }
+                ReportProgress.IncrementAndUpdate();
             }
-           
         }
         /// <summary>
         /// Returns all assets in the building but removes
