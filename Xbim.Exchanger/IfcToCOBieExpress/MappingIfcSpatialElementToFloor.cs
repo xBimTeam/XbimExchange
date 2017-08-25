@@ -2,6 +2,7 @@
 using System.Linq;
 using Xbim.CobieExpress;
 using Xbim.Ifc4.Interfaces;
+using Xbim.Ifc4.QuantityResource;
 
 namespace XbimExchanger.IfcToCOBieExpress
 {
@@ -27,6 +28,8 @@ namespace XbimExchanger.IfcToCOBieExpress
         protected override CobieFloor Mapping(IIfcSpatialElement ifcSpatialStructureElement, CobieFloor target)
         {
             base.Mapping(ifcSpatialStructureElement, target);
+
+            target.Description = FirstNonEmptyString(ifcSpatialStructureElement.Description, ifcSpatialStructureElement.LongName, ifcSpatialStructureElement.Name);
 
             IEnumerable<IIfcSpatialElement> spaces = null;
             var site = ifcSpatialStructureElement as IIfcSite;
@@ -66,7 +69,15 @@ namespace XbimExchanger.IfcToCOBieExpress
                 spaces = spaceElement.Spaces;
             }
 
-            Helper.TrySetSimpleValue<float>("FloorHeightValue", ifcSpatialStructureElement, f => target.Height = f);
+            var quantityLength = ifcSpatialStructureElement.IsDefinedBy.Select(p => p.RelatedObjects.OfType<IfcQuantityLength>()).FirstOrDefault()?.FirstOrDefault();
+            if (quantityLength != null)
+            {
+                target.Height = quantityLength.LengthValue;
+            }
+            else
+            {
+                Helper.TrySetSimpleValue<float>("FloorHeightValue", ifcSpatialStructureElement, f => target.Height = f);
+            }
 
             //Add spaces
             var ifcSpatialStructureElements = spaces != null ? spaces.ToList() : new List<IIfcSpatialElement>();

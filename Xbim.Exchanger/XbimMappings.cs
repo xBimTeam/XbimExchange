@@ -159,5 +159,20 @@ namespace XbimExchanger
         {
             return AddMapping((TSourceObject)source, (TTargetObject)target);
         }
+
+        protected string FirstNonEmptyString(params string[] values) => FirstNonEmptyString(values as IEnumerable<string>);
+
+        protected string FirstNonEmptyString(IEnumerable<string> potentialValues)
+        {
+            foreach (var val in potentialValues)
+            {
+                if (!string.IsNullOrWhiteSpace(val))
+                {
+                    return val;
+                }
+            }
+
+            return null;
+        }
     }
 }

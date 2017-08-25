@@ -14,7 +14,7 @@ namespace XbimExchanger.IfcToCOBieExpress
             target.ExternalId = helper.ExternalEntityIdentity(source);
             target.AltExternalId = source.GlobalId;
             target.Name = source.Name;
-            target.Description = source.Description;
+            target.Description = FirstNonEmptyString(source.Description, source.LongName, source.Name);
             return target;
         }
 

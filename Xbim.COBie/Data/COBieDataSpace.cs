@@ -186,7 +186,7 @@ namespace Xbim.COBie.Data
             else//if we fail on IfcAreaMeasure try GSA keys
             {
                 IfcQuantityArea spArea = ifcSpace.GetQuantity<IfcQuantityArea>("GSA Space Areas", "GSA BIM Area");
-                areavalue = spArea.AreaValue;
+                areavalue = spArea != null ? spArea.AreaValue : 0;
             }
             if (areavalue > 0.0)
 	        {
