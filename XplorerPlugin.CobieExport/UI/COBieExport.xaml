@@ -26,7 +26,7 @@
                               HorizontalAlignment="Left" VerticalAlignment="Center" Margin="5" 
                               />
                     <Label Grid.Column="0" Grid.Row="3" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="5">Template</Label>
-                    <ComboBox Grid.Column="1" Grid.Row="3"  HorizontalAlignment="Stretch" VerticalAlignment="Center" Margin="5" SelectedItem="{Binding SelectedTemplate}"  ItemsSource="{Binding Templates}" />
+                    <ComboBox IsEnabled="False" Grid.Column="1" Grid.Row="3"  HorizontalAlignment="Stretch" VerticalAlignment="Center" Margin="5" SelectedItem="{Binding SelectedTemplate}"  ItemsSource="{Binding Templates}" />
                     
                 </Grid>
             </TabItem>
