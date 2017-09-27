@@ -2,7 +2,7 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2011/10/nuspec.xsd">
   <metadata>
     <id>XplorerPlugin.CobieExport</id>
-    <version>4.0.7-V0011</version>
+    <version>4.0.7-V0017</version>
     <title>XplorerPlugin.CobieExport</title>
     <authors>xBIM team</authors>
     <owners>xBIM team</owners>
@@ -17,7 +17,7 @@
     <tags>Cobie Export, XplorerPlugin</tags>
     <!-- dependencies need to be worked out, at this stage they will be ignored during install -->
     <dependencies>
-      <dependency id="Xbim.WindowsUI" version="4.0.12-V0041" />
+      <dependency id="Xbim.WindowsUI" version="4.0.12-V0046" />
     </dependencies>
   </metadata>
   <files>
@@ -37,6 +37,6 @@
     <file src="XplorerPlugin.CobieExport\bin\Release\NPOI.OpenXmlFormats.dll"               target="lib\net45\NPOI.OpenXmlFormats.dll"       />
     <file src="XplorerPlugin.CobieExport\bin\Release\Newtonsoft.Json.dll"                   target="lib\net45\Newtonsoft.Json.dll"           />
     
-    <file src="XplorerPlugin.CobieExportCOBie-UK-2012-template.xls"                         target="lib\net45\COBie-UK-2012-template.xls"           />
+    <file src="XplorerPlugin.CobieExport\COBie-UK-2012-template.xls"                         target="lib\net45\COBie-UK-2012-template.xls"           />
   </files>
 </package>
