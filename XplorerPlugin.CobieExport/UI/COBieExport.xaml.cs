@@ -209,7 +209,7 @@ namespace XplorerPlugin.CobieExport.UI
 
             var context = new COBieContext
             {
-                TemplateFileName = CoBieTemplate,
+                TemplateFileName = templateFileName,
                 Model = Model,
                 Exclude = UserFilters
             };
