@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Xbim.CobieExpress;
 using Xbim.Ifc4.Interfaces;
+using Xbim.Ifc4.ProductExtension;
 using XbimExchanger.IfcHelpers;
 
 namespace XbimExchanger.IfcToCOBieExpress 
@@ -12,6 +13,9 @@ namespace XbimExchanger.IfcToCOBieExpress
         protected override CobieFacility Mapping(IIfcBuilding ifcBuilding, CobieFacility facility)
         {
             base.Mapping(ifcBuilding, facility);
+
+            // From COBie Annex A v3
+            List<string> altDescriptions = new List<string> { ifcBuilding.Description, ifcBuilding.LongName, ifcBuilding.Name };
 
             //Helper should do 10% of progress
             Exchanger.ReportProgress.NextStage(4, 42, string.Format("Creating Facility {0}", ifcBuilding.Name != null ? ifcBuilding.Name.ToString() : string.Empty));//finish progress at 42% 
@@ -27,15 +31,19 @@ namespace XbimExchanger.IfcToCOBieExpress
                 CobieProject cProject;
                 if(projectMapping.GetOrCreateTargetObject(ifcProject.EntityLabel, out cProject))
                     projectMapping.AddMapping(ifcProject, cProject);
-                facility.Project = cProject;
+                facility.Project = cProject;                
 
                 Exchanger.ReportProgress.IncrementAndUpdate(); 
                 var ifcSite = ifcProject.Sites.FirstOrDefault();
                 var siteMapping = Exchanger.GetOrCreateMappings<MappingIfcSiteToSite>();
 
+                altDescriptions.Add(ifcProject.Description);
+                altDescriptions.Add(ifcProject.Name);
+                altDescriptions.Add(ifcProject.LongName);
+
                 if (ifcSite != null)
                 {
-                     CobieSite site;
+                    CobieSite site;
                     if(siteMapping.GetOrCreateTargetObject(ifcSite.EntityLabel, out site))
                         siteMapping.AddMapping(ifcSite, site);
                     
@@ -45,6 +53,10 @@ namespace XbimExchanger.IfcToCOBieExpress
                         facility.Attributes.Add(helper.MakeAttribute(ifcSite, "RefLongtitude", ifcSite.RefLongitude.Value.AsDouble));
                     }
                     facility.Site = site;
+
+                    altDescriptions.Add(ifcSite.Description);
+                    altDescriptions.Add(ifcSite.Name);
+                    altDescriptions.Add(ifcSite.LongName);
                 }
                 else //create a default "External area"
                 {
@@ -61,12 +73,22 @@ namespace XbimExchanger.IfcToCOBieExpress
                 facility.VolumeUnits = helper.ModelVolumeUnit;
                 facility.CurrencyUnit = helper.ModelCurrencyUnit;
 
+                var ifcElementQuantityAreas = model.Instances.OfType<IfcElementQuantity>().FirstOrDefault();
+                facility.AreaMeasurement = (ifcElementQuantityAreas == null) ? "" : ifcElementQuantityAreas.MethodOfMeasurement.ToString();
+
+                var phaseMapping = Exchanger.GetOrCreateMappings<MappingIfcLabelToPhase>();
+                CobiePhase cPhase;
+                if (phaseMapping.GetOrCreateTargetObject(ifcProject.EntityLabel, out cPhase))
+                    phaseMapping.AddMapping(ifcProject.Phase, cPhase);
+                facility.Phase = cPhase;
+
                 var storeys = ifcBuilding.BuildingStoreys;
                 var cobieFloors = storeys.Cast<IIfcSpatialStructureElement>().ToList();
-                if (ifcSite != null)
+                if (Helper.CreatePlaceholderSpaces && ifcSite != null)
                     cobieFloors.Add(ifcSite);
                 Exchanger.ReportProgress.IncrementAndUpdate();
-                cobieFloors.Add(ifcBuilding);
+                if (Helper.CreatePlaceholderSpaces)
+                    cobieFloors.Add(ifcBuilding);
                 Exchanger.ReportProgress.IncrementAndUpdate();
                 Exchanger.ReportProgress.NextStage(cobieFloors.Count, 50); //finish progress at 50% 
                 var floorMappings = Exchanger.GetOrCreateMappings<MappingIfcSpatialElementToFloor>();
@@ -80,6 +102,8 @@ namespace XbimExchanger.IfcToCOBieExpress
                 }
 
             }
+
+            facility.Description = FirstNonEmptyString(altDescriptions);
             
 
             //attach orphan documents to the root facility

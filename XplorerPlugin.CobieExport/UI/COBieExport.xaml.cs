@@ -186,10 +186,30 @@ namespace XplorerPlugin.CobieExport.UI
             var f = new FileInfo(Path.ChangeExtension(Model.FileName, ".xls"));
             var outputFile = Path.Combine(TxtFolderName.Text, f.Name);
 
+            // configure settings for exporter
+            var ass = System.Reflection.Assembly.GetAssembly(GetType());
+            if (_parentWindow == null)
+            {
+                Log.Error("attempt to locate DiskLess assembly without a valid IXbimXplorerPluginMasterWindow.");
+                return false;
+            }
+            var assemblyFile = _parentWindow.GetAssemblyLocation(ass);
+
+            var pluginDir = new FileInfo(assemblyFile).Directory;
+            if (pluginDir == null)
+            {
+                Log.ErrorFormat("Failed to determine plugin folder under IXbimXplorerPluginMasterWindow.");
+                return false;
+            }
+
+
+            var templateFileName = Path.Combine(
+                pluginDir.FullName,
+                CoBieTemplate);
 
             var context = new COBieContext
             {
-                TemplateFileName = CoBieTemplate,
+                TemplateFileName = templateFileName,
                 Model = Model,
                 Exclude = UserFilters
             };

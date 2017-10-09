@@ -185,3 +185,4 @@ FakesAssemblies/
 SharedFileVersionInfo.cs
 /Tests/ValidationFiles
 DuplicateCodeReport.xml
+*.ide
