@@ -50,7 +50,7 @@ namespace XplorerPlugin.DPoW
         XbimColour _colourPass = new XbimColour("Green", 0.0, 1.0, 0.0, 0.5);
         XbimColour _colourFail = new XbimColour("Red", 1.0, 0.0, 0.0, 0.5);
         XbimColour _colourWarning = new XbimColour("Amber", 1.0, 0.64, 0.0, 0.5);
-        XbimColour _colourNa = new XbimColour("Blue", 0.0, 0.0, 1.0, 0.5);
+        XbimColour _colourNa = new XbimColour("Blue", .5, 0.5,.5, 1);
 
         XbimScene<WpfMeshGeometry3D, WpfMaterial> ILayerStyler.BuildScene(IModel model, XbimMatrix3D modelTransform, ModelVisual3D opaqueShapes, ModelVisual3D transparentShapes, List<Type> exclude)
         {
@@ -148,14 +148,18 @@ namespace XplorerPlugin.DPoW
 
         private LayerGroup GetLayerGroup(IPersistEntity ent)
         {
-            var asset = _window.ResolveAsset(ent);
+            var defaultRet = LayerGroup.Null;
+            if (UseAmber)
+                defaultRet = LayerGroup.Blue;
+
+            var asset = _window.ResolveVerifiedAsset(ent);
             if (asset == null)
-                return LayerGroup.Null;
+                return defaultRet;
             if (asset.Categories == null)
-                return LayerGroup.Null;
+                return defaultRet;
             var cat = asset.Categories.FirstOrDefault(x => x.Classification == @"DPoW");
             if (cat == null)
-                return LayerGroup.Null;
+                return defaultRet;
 
             switch (cat.Code)
             {
@@ -164,7 +168,7 @@ namespace XplorerPlugin.DPoW
                 case @"Failed":
                     return LayerGroup.Red;
                 default:
-                    return LayerGroup.Blue;
+                    return defaultRet;
             }
         }
 

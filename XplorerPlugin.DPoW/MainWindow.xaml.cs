@@ -180,11 +180,16 @@ namespace XplorerPlugin.DPoW
             SetFacility(ValFacility);
         }
 
-        private Dictionary<int, Asset> _validatedItems = new Dictionary<int, Asset>();
+        private Dictionary<int, Asset> _verifiedItems = new Dictionary<int, Asset>();
 
         private void PrepareAssetResolve(Facility valFacility)
         {
-            _validatedItems = new Dictionary<int, Asset>();
+            _verifiedItems = new Dictionary<int, Asset>();
+            if (valFacility.AssetTypes == null)
+            {
+                Log.WarnFormat("No AssetTypes defined in validated facility.");
+                return;
+            }
             foreach (var valFacilityAssetType in valFacility.AssetTypes)
             {
                 if (valFacilityAssetType.Assets == null)
@@ -194,7 +199,7 @@ namespace XplorerPlugin.DPoW
                     int iEl;
                     if (int.TryParse(asset.ExternalId, out iEl))
                     {
-                        _validatedItems.Add(iEl, asset);
+                        _verifiedItems.Add(iEl, asset);
                     }
                 }
             }
@@ -221,7 +226,7 @@ namespace XplorerPlugin.DPoW
         private void TrafficLight(object sender, RoutedEventArgs e)
         {
             var ls = new TrafficLightStyler(Model, this);
-            // ls.UseAmber = UseAmber;
+            ls.UseAmber = _useAmber;
             _xpWindow.DrawingControl.DefaultLayerStyler = ls;
             _xpWindow.DrawingControl.ReloadModel(DrawingControl3D.ModelRefreshOptions.ViewPreserveAll);
         }
@@ -300,10 +305,10 @@ namespace XplorerPlugin.DPoW
             SetFacility(ValFacility);
         }
 
-        public Asset ResolveAsset(IPersistEntity ent)
+        public Asset ResolveVerifiedAsset(IPersistEntity ent)
         {
             Asset a;
-            return _validatedItems.TryGetValue(ent.EntityLabel, out a) ? a : null;
+            return _verifiedItems.TryGetValue(ent.EntityLabel, out a) ? a : null;
         }
     }
 }
