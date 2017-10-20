@@ -337,8 +337,11 @@ namespace Xbim.WindowsUI.DPoWValidation.ViewModels
                         }
                         ActivityStatus = "Error Opening Ifc File\r\n\r\n" + sb;
                     }
+                    else
+                    {
+                        ActivityStatus = "Error/Ready";
+                    }
                     ActivityProgress = 0;
-                    ActivityStatus = "Error/Ready";
                 }
             };
         }
