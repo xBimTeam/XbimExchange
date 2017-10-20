@@ -4,11 +4,6 @@
     MinWidth="300" MinHeight="300"
     >
     <Grid>
-        <Button x:Name="OpenButton" 
-                Content="Open DPoW requirements" Click="OpenFile" 
-                Height="22" Width="200" HorizontalAlignment="Center" Grid.Row="0" 
-                Visibility="{Binding OpenButtonVisibility}" />
-
         <Grid x:Name="Ui" Visibility="{Binding UIVisibility}" >
             <Grid.RowDefinitions>
                 <RowDefinition Height="7*" />
@@ -59,6 +54,13 @@
             </TabControl>
             <GridSplitter Grid.Row="0" VerticalAlignment="Bottom" HorizontalAlignment="Stretch" Height="5"/>
             <TextBox Margin="5" x:Name="Report" TextWrapping="Wrap" Text="" Grid.Row="1" />
+        </Grid>
+        <Grid x:Name="OpenButton" Visibility="{Binding OpenButtonVisibility}" >
+            <TextBlock TextWrapping="Wrap" Margin="30" >Open both a requirement and a model to enable the DPoW window.</TextBlock>
+            <Button 
+                Content="Open DPoW requirements" Click="OpenFile" 
+                Height="22" Width="200" HorizontalAlignment="Center" Grid.Row="0" 
+                />
         </Grid>
     </Grid>
 </UserControl>

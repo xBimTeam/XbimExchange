@@ -72,6 +72,10 @@ namespace Xbim.WindowsUI.DPoWValidation
             
             string read;
             _f = Facility.ReadCobie(CobieFile.Text, out read);
+            if (_f == null)
+            {
+                System.Windows.Forms.MessageBox.Show("The provided files could not be read.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
             var flogger = new FileInfo(file);
             using (var logger = flogger.CreateText())
             {
@@ -191,6 +195,6 @@ namespace Xbim.WindowsUI.DPoWValidation
                 return;
 
             CobieFile.Text = dlg.FileName;
-        }
+        }     
     }
 }

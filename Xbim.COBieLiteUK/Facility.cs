@@ -465,17 +465,27 @@ namespace Xbim.CobieLiteUk
         {
             //use NPOI to open and access spreadsheet data
             IWorkbook workbook;
-            switch (type)
+            try
             {
-                case ExcelTypeEnum.XLS:
-                    workbook = new HSSFWorkbook(stream);
-                    break;
-                case ExcelTypeEnum.XLSX:
-                    workbook = new XSSFWorkbook(stream);
-                    break;
-                default:
-                    throw new ArgumentOutOfRangeException("type");
+                switch (type)
+                {
+                    case ExcelTypeEnum.XLS:
+                        workbook = new HSSFWorkbook(stream);
+                        break;
+                    case ExcelTypeEnum.XLSX:
+                        workbook = new XSSFWorkbook(stream);
+                        break;
+                    default:
+                        throw new ArgumentOutOfRangeException("type");
+                }
             }
+            catch (Exception ex)
+            {
+                message = "Excel reader encountered an error.";
+                Log.Error(message, ex);
+                return null;
+            }
+          
 
             Stopwatch stopWatch = new Stopwatch();
             stopWatch.Start();

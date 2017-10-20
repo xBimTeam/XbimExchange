@@ -33,10 +33,8 @@ namespace XplorerPlugin.DPoW
 
         private static WpfMeshGeometry3D PrepareMesh(XbimColour col)
         {
-            var matRed = new WpfMaterial();
-            matRed.CreateMaterial(col);
-            var mg = new WpfMeshGeometry3D(matRed, matRed);
-            return mg;
+            var wpfMaterial = new WpfMaterial(col);
+            return new WpfMeshGeometry3D(wpfMaterial, wpfMaterial);
         }
 
         public TrafficLightStyler(IModel model, MainWindow window)
@@ -46,27 +44,45 @@ namespace XplorerPlugin.DPoW
             UseAmber = false;
             UseBlue = true;
         }
+
         
-        XbimColour _colourPass = new XbimColour("Green", 0.0, 1.0, 0.0, 0.5);
-        XbimColour _colourFail = new XbimColour("Red", 1.0, 0.0, 0.0, 0.5);
-        XbimColour _colourWarning = new XbimColour("Amber", 1.0, 0.64, 0.0, 0.5);
-        XbimColour _colourNa = new XbimColour("Blue", .5, 0.5,.5, 1);
+
+        
 
         XbimScene<WpfMeshGeometry3D, WpfMaterial> ILayerStyler.BuildScene(IModel model, XbimMatrix3D modelTransform, ModelVisual3D opaqueShapes, ModelVisual3D transparentShapes, List<Type> exclude)
         {
+            
+            
             var excludedTypes = model.DefaultExclusions(exclude);
             var tmpOpaquesGroup = new Model3DGroup();
             var retScene = new XbimScene<WpfMeshGeometry3D, WpfMaterial>(model);
-            var meshes = new List<WpfMeshGeometry3D>();
+            
             
             if (_model.Instances == null || !_model.Instances.Any())
                 return retScene;
 
-            var red = PrepareMesh(_colourFail); meshes.Add(red);
-            var green = PrepareMesh(_colourPass); meshes.Add(green);
-            var blue = PrepareMesh(_colourNa); meshes.Add(blue);
-            var amber = PrepareMesh(_colourWarning); meshes.Add(amber);
+            // define colours
+            var colours = new Dictionary<LayerGroup, XbimColour>();
+            colours.Add(LayerGroup.Green, new XbimColour("Green", 0.0, 1.0, 0.0, 0.5));
+            colours.Add(LayerGroup.Red, new XbimColour("Red", 1.0, 0.0, 0.0, 0.5));
+            colours.Add(LayerGroup.Amber, new XbimColour("Amber", .5, 0.5, .5, .8)); // actually grey
 
+            // prepare meshes
+            //
+
+            var meshes = new List<WpfMeshGeometry3D>(); // this list gets added to the scene at the end.
+
+            // this dictionary holds the list of meshes that are currently used, as they are filled (in size), 
+            // new ones get replaced
+            //
+            var meshDic = new Dictionary<LayerGroup, WpfMeshGeometry3D>(); 
+            foreach (var group in colours.Keys)
+            {
+                var newItem = PrepareMesh(colours[group]);
+                meshDic.Add(group, newItem);
+                meshes.Add(newItem);
+            }
+            
             foreach (var mesh in meshes)
             {
                 mesh.WpfModel.SetValue(FrameworkElement.TagProperty, mesh);
@@ -86,33 +102,41 @@ namespace XplorerPlugin.DPoW
                     {
                         var ent = _model.Instances[shapeInstance.IfcProductLabel];
                         var grp = GetLayerGroup(ent);
-
                         if (grp == LayerGroup.Null)
-                            continue;
-                        if (!UseBlue && grp == LayerGroup.Blue)
                             continue;
                         if (!UseAmber && grp == LayerGroup.Amber)
                             continue;
 
-                        WpfMeshGeometry3D targetMergeMesh = null;
-
-                        switch (grp)
-                        {
-                            case LayerGroup.Red:
-                                targetMergeMesh = red;
-                                break;
-                            case LayerGroup.Green:
-                                targetMergeMesh = green;
-                                break;
-                            case LayerGroup.Blue:
-                                targetMergeMesh = blue;
-                                break;
-                            case LayerGroup.Amber:
-                                targetMergeMesh = amber;
-                                break;
-                        }
+                        WpfMeshGeometry3D targetMergeMesh;
+                        meshDic.TryGetValue(grp, out targetMergeMesh);
+                            
                         if (targetMergeMesh == null)
                             continue;
+
+                        // replace target mesh beyond suggested size
+                        // https://docs.microsoft.com/en-us/dotnet/framework/wpf/graphics-multimedia/maximize-wpf-3d-performance
+                        // 
+                        if (targetMergeMesh.PositionCount > 20000
+                            ||
+                            targetMergeMesh.TriangleIndexCount > 60000
+                        )
+                        {
+                            // end current mesh
+                            targetMergeMesh.EndUpdate();
+                            
+                            // prepare new one and add to the list
+                            var replace = PrepareMesh(colours[grp]);
+                            meshes.Add(replace);
+
+                            // swap mesh in dicionary and for this loop
+                            meshDic[grp] = replace;
+                            targetMergeMesh = replace;
+
+                            // prepare in output
+                            replace.WpfModel.SetValue(FrameworkElement.TagProperty, replace);
+                            replace.BeginUpdate();
+                            tmpOpaquesGroup.Children.Add(replace);
+                        }
 
                         IXbimShapeGeometryData shapeGeom = geomReader.ShapeGeometry(shapeInstance.ShapeGeometryLabel);
                         if (shapeGeom.Format == (byte)XbimGeometryType.PolyhedronBinary)
@@ -129,7 +153,7 @@ namespace XplorerPlugin.DPoW
                     }
                 }
             }
-            foreach (var mesh in meshes)
+            foreach (var mesh in meshDic.Values)
             {
                 mesh.EndUpdate();
             }
@@ -137,12 +161,6 @@ namespace XplorerPlugin.DPoW
                 return retScene;
             var mv = new ModelVisual3D { Content = tmpOpaquesGroup };
             opaqueShapes.Children.Add(mv);
-            // no transparents are present
-            //if (tmpTransparentsGroup.Children.Any())
-            //{
-            //    var mv = new ModelVisual3D { Content = tmpTransparentsGroup };
-            //    transparentShapes.Children.Add(mv);
-            //}
             return retScene;
         }
 
@@ -150,7 +168,7 @@ namespace XplorerPlugin.DPoW
         {
             var defaultRet = LayerGroup.Null;
             if (UseAmber)
-                defaultRet = LayerGroup.Blue;
+                defaultRet = LayerGroup.Amber;
 
             var asset = _window.ResolveVerifiedAsset(ent);
             if (asset == null)
@@ -170,14 +188,6 @@ namespace XplorerPlugin.DPoW
                 default:
                     return defaultRet;
             }
-        }
-
-        public void SetColors(XbimColour pass, XbimColour fail, XbimColour warning, XbimColour nonApplicable)
-        {
-            _colourPass = pass;
-            _colourFail = fail;
-            _colourWarning = warning;
-            _colourNa = nonApplicable;
         }
 
         void ILayerStyler.SetFederationEnvironment(IReferencedModel refModel)

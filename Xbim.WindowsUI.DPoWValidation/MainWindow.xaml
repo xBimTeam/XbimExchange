@@ -16,6 +16,7 @@
                         <RowDefinition Height="1*"/>
                     </Grid.RowDefinitions>
                     <StackPanel Margin="10,5">
+                        <TextBlock Foreground="Blue" >This function allows to convert an IFC2x3 file to COBie format.</TextBlock>
                         <TextBlock TextWrapping="Wrap" Margin="0,5"><Run Text="To create a COBie submission file, select an IFC 2x3 file and click 'Create COBie Submission' to produce the COBie spreadsheet file"/></TextBlock>
                         <TextBlock Margin="0,5"><Run Text="(Click "/><Hyperlink NavigateUri="http://www.google.com"><Run Text="here"/></Hyperlink><Run Text=" to see more information on how to create the IFC 2x3 file)"/></TextBlock>
                     </StackPanel>
@@ -43,8 +44,8 @@
                         <RowDefinition Height="0*"/>
                     </Grid.RowDefinitions>
                     <StackPanel Margin="10,5">
+                        <TextBlock Foreground="Blue">This function ensures that your COBie Excel file complies with the standards.</TextBlock>
                         <TextBlock TextWrapping="Wrap" Margin="0,5"><Run Text="To validate the compliance of a COBie file upload either an XLS or XLSX spreadsheet containing the COBie data."/></TextBlock>
-
                     </StackPanel>
                     <GroupBox Grid.Row="1" Grid.Column="0" Header="COBie File:" Margin="10,5">
                         <Grid>
@@ -55,11 +56,15 @@
                         </Grid>
                     </GroupBox>
                     <Button Grid.Row="2" Height="24" VerticalAlignment="Top" HorizontalAlignment="Right" Margin="10,20" Width="300" Content="Create Compliance Report" Click="Button_Click_2" />
-                    <TextBlock Grid.Row="3" TextWrapping="Wrap" Margin="0,5"><Run Text="To validate the compliance of a COBie file upload either an XLS or XLSX spreadsheet containing the COBie data."/></TextBlock>
+                    <StackPanel Grid.Row="3" Margin="10,5">
+                        <TextBlock Foreground="Blue">Once your file has been evaluated you may try to improve its compliance.</TextBlock>
+                        <TextBlock TextWrapping="Wrap" Margin="0,5"><Run Text="To attempt to fix the issues identified in your COBie file press the button below."/></TextBlock>
+                    </StackPanel>
+                    
                     <Button x:Name="ImproveCObie" IsEnabled="False" Grid.Row="4" Height="24" VerticalAlignment="Top" HorizontalAlignment="Right" Margin="10,20" Width="300" Content="Improve COBie Compliance" Click="Button_Click_3" />
                 </Grid>
             </TabItem>
-            <TabItem Header="Submission report">
+            <TabItem Header="Verification report">
                 <Grid x:Name="ValidationGrid"  Margin="10" >
                     <Grid.DataContext>
                         <viewModels:ValidationViewModel/>
@@ -78,7 +83,11 @@
                         <RowDefinition Height="1*"/>
                     </Grid.RowDefinitions>
 
-                    <TextBlock Grid.Row="0" TextWrapping="Wrap" Margin="0,5"><Run Text="To create a submission report you need to provide two files."/></TextBlock>
+                    <StackPanel Grid.Row="0" >
+                        <TextBlock Foreground="Blue" >This function produces a verification report given a requirement file and a model.</TextBlock>
+                        <TextBlock Grid.Row="0" TextWrapping="Wrap" Margin="0,5"><Run Text="To create a submission report you need to provide two files."/></TextBlock>
+                    </StackPanel>
+                    
 
 
                     <GroupBox Grid.Row="1" Grid.Column="0" Header="Requirement file:" Margin="0,5">
@@ -103,7 +112,7 @@
                         </Grid>
                     </GroupBox>
 
-                    <GroupBox Grid.Row="2" Grid.Column="0" Header="Submission file:" Margin="0,5">
+                    <GroupBox Grid.Row="2" Grid.Column="0" Header="Submission model:" Margin="0,5">
                         <Grid>
                             <Grid.RowDefinitions>
                                 <RowDefinition Height="Auto"/>
@@ -125,7 +134,7 @@
                         </Grid>
                     </GroupBox>
 
-                    <GroupBox Grid.Row="3" Grid.Column="0" Header="Submission report to save:" Margin="0,5">
+                    <GroupBox Grid.Row="3" Grid.Column="0" Header="File name for the new Verification report:" Margin="0,5">
                         <Grid>
                             <StackPanel Orientation="Vertical">
                                 <TextBox Margin="5" Height="24" IsEnabled="{Binding FilesCanChange}" Text="{Binding ReportFileSource, UpdateSourceTrigger=PropertyChanged}" />
@@ -140,7 +149,7 @@
                             <RowDefinition Height="1*"/>
                         </Grid.RowDefinitions>
                         <StackPanel>
-                            <Button Height="30" Width="Auto" Margin="5" Content="Create submission report" Command="{Binding ValidateAndSave}" Click="Button_Click" />
+                            <Button Height="30" Width="Auto" Margin="5" Content="Create verification report" Command="{Binding ValidateAndSave}" Click="Button_Click" />
                             <ProgressBar Value="{Binding ActivityProgress}" Height="10"  Margin="5"/>
                         </StackPanel>
                         <TextBox Margin="5" Grid.Row="1" Text="{Binding ActivityStatus}" />

@@ -172,7 +172,8 @@ namespace Xbim.WindowsUI.DPoWValidation.ViewModels
         internal void ExecuteValidation()
         {
             IsWorking = true;
-            if (PropertyChanged != null) PropertyChanged.Invoke(this, new PropertyChangedEventArgs(@"FilesCanChange"));
+            if (PropertyChanged != null)
+                PropertyChanged.Invoke(this, new PropertyChangedEventArgs(@"FilesCanChange"));
             SelectRequirement.ChangesHappened();
             SelectSubmission.ChangesHappened();
             SelectReport.ChangesHappened();

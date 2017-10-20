@@ -70,14 +70,13 @@ namespace XplorerPlugin.DPoW
             IsFileOpen = true;
             try
             {
-                Classifications.ItemsSource = facility.AssetTypes.Where(at => at.Categories != null)
+                var clss  = facility.AssetTypes.Where(at => at.Categories != null)
                     .SelectMany(x => x.Categories)
                     .Select(c => c.Code)
                     .Distinct().ToList();
-                if (Classifications.Items.Count > 0)
-                {
-                    Classifications.SelectedItem = 0;
-                }
+                clss.Add("*");
+              
+                Classifications.ItemsSource = clss;
             }
             catch (Exception ex)
             {
@@ -252,16 +251,18 @@ namespace XplorerPlugin.DPoW
 
         private void UpdateList(object sender, SelectionChangedEventArgs e)
         {
-            var selectedCode = Classifications.SelectedItem?.ToString();
-            if (string.IsNullOrEmpty(selectedCode))
-                return;
+            // empty if needed
             var lst = new ObservableCollection<AssetViewModel>();
+            LstAssets.ItemsSource = lst;
 
+            var selectedCode = Classifications.SelectedItem?.ToString();
+            var IgnoreCode = (selectedCode == "*");
+            
             if (ViewFacility.AssetTypes == null)
                 return;
             foreach (var assetType in ViewFacility.AssetTypes.Where(x => x.Categories != null))
             {
-                var valid = assetType.Categories.Any(x => x.Code == selectedCode);
+                var valid = IgnoreCode || assetType.Categories.Any(x => x.Code == selectedCode);
                 if (!valid)
                     continue;
                 if (assetType.Assets == null)
@@ -270,8 +271,7 @@ namespace XplorerPlugin.DPoW
                 {
                     lst.Add(new AssetViewModel(asset));
                 }               
-            }
-            LstAssets.ItemsSource = lst;    
+            }   
         }
 
         private void GotoAsset(object sender, MouseButtonEventArgs e)
