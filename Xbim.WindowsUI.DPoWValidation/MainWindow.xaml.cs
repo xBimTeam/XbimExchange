@@ -55,19 +55,9 @@ namespace Xbim.WindowsUI.DPoWValidation
 
         private Facility _f;
 
-        private void Button_Click_2(object sender, RoutedEventArgs e)
+        private void RunComplianceReport(object sender, RoutedEventArgs e)
         {
             if (!File.Exists(CobieFile.Text))
-                return;
-
-
-            var filters = new List<string>();
-            filters.Add("text file|*.txt");
-            //filters.Add(@"Automation format|*.json");
-            //filters.Add(@"Automation format|*.xml");
-
-            var file = GetSaveFileName("Select destination file", filters);
-            if (file == "")
                 return;
             
             string read;
@@ -76,33 +66,34 @@ namespace Xbim.WindowsUI.DPoWValidation
             {
                 System.Windows.Forms.MessageBox.Show("The provided files could not be read.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
-            var flogger = new FileInfo(file);
-            using (var logger = flogger.CreateText())
+            var loggerFile = new FileInfo(ComplianceReportFile.Text);
+            using (var logger = loggerFile.CreateText())
             {
                 _f.ValidateUK2012(logger, true);
             }
-            if (flogger.Exists)
+            // TODO: check: I suppose the file is only created if the model needs fixing
+            if (loggerFile.Exists)
             {
-                Process.Start(flogger.FullName);
+                Process.Start(loggerFile.FullName);
                 ImproveCObie.IsEnabled = true;
+
+                // if file exists but report is empty then autofill
+                //
+                var fi = new FileInfo(CobieFile.Text);
+                if (fi.Exists && string.IsNullOrEmpty(FixedCobie.Text))
+                {
+                    FixedCobie.Text = Path.ChangeExtension(CobieFile.Text, "fixed" + fi.Extension);
+                }
             }
         }
 
-        private void Button_Click_3(object sender, RoutedEventArgs e)
+        private void FixCobie(object sender, RoutedEventArgs e)
         {
             if (_f == null)
                 return;
+
             string log;
-
-            var filters = new List<string>();
-            filters.Add("COBie excel|*.xlsx");
-            filters.Add("COBie binary excel|*.xls");
-            //filters.Add(@"Automation format|*.json");
-            //filters.Add(@"Automation format|*.xml");
-
-            var file = GetSaveFileName("Select destination file", filters);
-            if (file == "")
-                return;
+            var file = FixedCobie.Text;
 
             _f.WriteCobie(file, out log);
             if (File.Exists(file))
@@ -154,8 +145,7 @@ namespace Xbim.WindowsUI.DPoWValidation
             var file = GetSaveFileName("Select destination file", filters);
             if (file == "")
                 return;
-
-
+            
             // _currentFile.File = dlg.FileName;
             // _vm.FilesUpdate();
 
@@ -176,7 +166,7 @@ namespace Xbim.WindowsUI.DPoWValidation
             return file;
         }
 
-        private void Button_Click_5(object sender, RoutedEventArgs e)
+        private void SelectCOBieForComplianceTest(object sender, RoutedEventArgs e)
         {
             const string filter = "COBie files|*.xls;*.xlsx";
             var dlg = new OpenFileDialog
@@ -184,17 +174,82 @@ namespace Xbim.WindowsUI.DPoWValidation
                 Filter = filter
             };
 
-            if (File.Exists(CobieFile.Text))
+            FileInfo fi;
+
+            if (!string.IsNullOrEmpty(CobieFile.Text))
             {
-                dlg.InitialDirectory = System.IO.Path.GetDirectoryName(IfcToConvert.Text);
+                fi = new FileInfo(CobieFile.Text);
+                if (fi.Directory.Exists)
+                {
+                    dlg.InitialDirectory = fi.Directory.FullName;
+                }
             }
 
             var result = dlg.ShowDialog();
-
             if (result != System.Windows.Forms.DialogResult.OK)
                 return;
-
             CobieFile.Text = dlg.FileName;
-        }     
+
+            // if file exists but report is empty then autofill
+            //
+            fi = new FileInfo(CobieFile.Text);
+            if (fi.Exists && string.IsNullOrEmpty(ComplianceReportFile.Text))
+            {
+                ComplianceReportFile.Text = Path.ChangeExtension(CobieFile.Text, "txt");
+            }
+        }
+
+        private void SelectOutputForComplianceTest(object sender, RoutedEventArgs e)
+        {
+            const string filter = "Text files|*.txt";
+            var dlg = new OpenFileDialog
+            {
+                Filter = filter
+            };
+
+            FileInfo fi;
+
+            if (!string.IsNullOrEmpty(ComplianceReportFile.Text))
+            {
+                fi = new FileInfo(ComplianceReportFile.Text);
+                if (fi.Directory.Exists)
+                {
+                    dlg.InitialDirectory = fi.Directory.FullName;
+                }
+            }
+
+            var result = dlg.ShowDialog();
+            if (result != System.Windows.Forms.DialogResult.OK)
+                return;
+            ComplianceReportFile.Text = dlg.FileName;
+        }
+
+        private void SelectOutputForFixedCobie(object sender, RoutedEventArgs e)
+        {
+            var filters = new List<string>();
+            filters.Add("COBie excel|*.xlsx");
+            filters.Add("COBie binary excel|*.xls");
+
+            var dlg = new OpenFileDialog
+            {
+                Filter = string.Join("|", filters.ToArray())
+            };
+
+            FileInfo fi;
+
+            if (!string.IsNullOrEmpty(FixedCobie.Text))
+            {
+                fi = new FileInfo(FixedCobie.Text);
+                if (fi.Directory.Exists)
+                {
+                    dlg.InitialDirectory = fi.Directory.FullName;
+                }
+            }
+
+            var result = dlg.ShowDialog();
+            if (result != System.Windows.Forms.DialogResult.OK)
+                return;
+            FixedCobie.Text = dlg.FileName;
+        }
     }
 }

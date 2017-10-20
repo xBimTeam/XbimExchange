@@ -4,7 +4,7 @@
         xmlns:viewModels="clr-namespace:Xbim.WindowsUI.DPoWValidation.ViewModels"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" mc:Ignorable="d"
         x:Class="Xbim.WindowsUI.DPoWValidation.MainWindow"
-        Title="Digital Plan of Work - Validation (Powered by Xbim)" 
+        Title="Digital Plan of Work - Validation (Powered by Xbim)" Height="638" Width="786" 
         >
     <Grid>
         <TabControl Margin="10">
@@ -28,9 +28,7 @@
                             </StackPanel>
                         </Grid>
                     </GroupBox>
-
                     <Button Grid.Row="2" Height="24" VerticalAlignment="Top" HorizontalAlignment="Right" Margin="10,20" Width="300" Content="Create COBie Submission" Command="{Binding SaveModelFacility}"  />
-
                 </Grid>
             </TabItem>
             <TabItem Header="COBie Compliance Check">
@@ -41,27 +39,48 @@
                         <RowDefinition Height="Auto"/>
                         <RowDefinition Height="Auto"/>
                         <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
                         <RowDefinition Height="0*"/>
                     </Grid.RowDefinitions>
                     <StackPanel Margin="10,5">
                         <TextBlock Foreground="Blue">This function ensures that your COBie Excel file complies with the standards.</TextBlock>
-                        <TextBlock TextWrapping="Wrap" Margin="0,5"><Run Text="To validate the compliance of a COBie file upload either an XLS or XLSX spreadsheet containing the COBie data."/></TextBlock>
+                        <TextBlock TextWrapping="Wrap" Margin="0,5"><Run Text="To validate the compliance of a COBie file select either an XLS or XLSX spreadsheet containing the COBie data."/></TextBlock>
                     </StackPanel>
                     <GroupBox Grid.Row="1" Grid.Column="0" Header="COBie File:" Margin="10,5">
                         <Grid>
                             <StackPanel Orientation="Vertical">
                                 <TextBox x:Name="CobieFile" Margin="5" Height="24" Text="" />
-                                <Button Height="24" HorizontalAlignment="Right" Margin="5" Width="70" Content="Browse" Click="Button_Click_5" />
+                                <Button Height="24" HorizontalAlignment="Right" Margin="5" Width="70" Content="Browse" Click="SelectCOBieForComplianceTest" />
                             </StackPanel>
                         </Grid>
                     </GroupBox>
-                    <Button Grid.Row="2" Height="24" VerticalAlignment="Top" HorizontalAlignment="Right" Margin="10,20" Width="300" Content="Create Compliance Report" Click="Button_Click_2" />
-                    <StackPanel Grid.Row="3" Margin="10,5">
-                        <TextBlock Foreground="Blue">Once your file has been evaluated you may try to improve its compliance.</TextBlock>
+                    <GroupBox Grid.Row="2" Grid.Column="0" Header="Compliance report File:" Margin="10,5">
+                        <Grid>
+                            <StackPanel Orientation="Vertical">
+                                <TextBox x:Name="ComplianceReportFile" Margin="5" Height="24" Text="" />
+                                <Button Height="24" HorizontalAlignment="Right" Margin="5" Width="70" Content="Browse" Click="SelectOutputForComplianceTest" />
+                            </StackPanel>
+                        </Grid>
+                    </GroupBox>
+
+                    <Button Grid.Row="3" Height="24" VerticalAlignment="Top" HorizontalAlignment="Right" Margin="10,20" Width="300" Content="Create Compliance Report" Click="RunComplianceReport" />
+
+                    <StackPanel Grid.Row="4" Margin="10,5">
+                        <TextBlock Foreground="Blue">Once your file has been evaluated you may attempt to improve its compliance.</TextBlock>
                         <TextBlock TextWrapping="Wrap" Margin="0,5"><Run Text="To attempt to fix the issues identified in your COBie file press the button below."/></TextBlock>
                     </StackPanel>
-                    
-                    <Button x:Name="ImproveCObie" IsEnabled="False" Grid.Row="4" Height="24" VerticalAlignment="Top" HorizontalAlignment="Right" Margin="10,20" Width="300" Content="Improve COBie Compliance" Click="Button_Click_3" />
+
+                    <GroupBox Grid.Row="5" Grid.Column="0" Header="Compliance report File:" Margin="10,5">
+                        <Grid>
+                            <StackPanel Orientation="Vertical">
+                                <TextBox x:Name="FixedCobie" Margin="5" Height="24" Text="" />
+                                <Button Height="24" HorizontalAlignment="Right" Margin="5" Width="70" Content="Browse" Click="SelectOutputForFixedCobie" />
+                            </StackPanel>
+                        </Grid>
+                    </GroupBox>
+
+                    <Button x:Name="ImproveCObie" IsEnabled="False" Grid.Row="6" Height="24" VerticalAlignment="Top" HorizontalAlignment="Right" Margin="10,20" Width="300" Content="Improve COBie Compliance" Click="FixCobie" />
                 </Grid>
             </TabItem>
             <TabItem Header="Verification report">
@@ -87,7 +106,7 @@
                         <TextBlock Foreground="Blue" >This function produces a verification report given a requirement file and a model.</TextBlock>
                         <TextBlock Grid.Row="0" TextWrapping="Wrap" Margin="0,5"><Run Text="To create a submission report you need to provide two files."/></TextBlock>
                     </StackPanel>
-                    
+
 
 
                     <GroupBox Grid.Row="1" Grid.Column="0" Header="Requirement file:" Margin="0,5">
@@ -102,7 +121,7 @@
                             </Grid.ColumnDefinitions>
 
                             <StackPanel Margin="5" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2">
-                                <TextBlock TextWrapping="Wrap" Margin="0,5"><Run Text="This is the requirements file that has been exported from the BIM Toolkit."/></TextBlock>
+                                <TextBlock TextWrapping="Wrap" Margin="0,5"><Run Text="This is the requirements file that has been exported from the BIM Toolkit online."/></TextBlock>
                                 <TextBlock Margin="0,5"><Run Text="(Click "/><Hyperlink NavigateUri="http://www.google.com"><Run Text="here"/></Hyperlink><Run Text=" for instructions on how to create a requirements file"/></TextBlock>
                             </StackPanel>
 
