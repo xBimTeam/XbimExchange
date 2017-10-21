@@ -15,9 +15,9 @@ namespace Xbim.WindowsUI.DPoWValidation.Commands
 
         public bool CanExecute(object parameter)
         {
-            return _vm.RequirementFileInfo.Exists 
-                && _vm.SubmissionFileInfo.Exists 
-                && !string.IsNullOrEmpty(_vm.ReportFileInfo.File);
+            return _vm.RequirementFileInfo.Exists
+                && _vm.SubmissionFileInfo.Exists
+                && _vm.ReportFileInfo.IsValidName(Models.SourceFile.AllowedExtensions.Cobie);
         }
 
         public event EventHandler CanExecuteChanged;

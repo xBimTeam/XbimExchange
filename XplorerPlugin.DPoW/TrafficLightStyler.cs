@@ -44,11 +44,7 @@ namespace XplorerPlugin.DPoW
             UseAmber = false;
             UseBlue = true;
         }
-
         
-
-        
-
         XbimScene<WpfMeshGeometry3D, WpfMaterial> ILayerStyler.BuildScene(IModel model, XbimMatrix3D modelTransform, ModelVisual3D opaqueShapes, ModelVisual3D transparentShapes, List<Type> exclude)
         {
             

@@ -80,7 +80,7 @@ namespace Xbim.WindowsUI.DPoWValidation.ViewModels
                     case @"Failed":
                         return Brushes.Red;
                     default:
-                        return Brushes.Blue;
+                        return Brushes.Gray;
                 }
             }
         }

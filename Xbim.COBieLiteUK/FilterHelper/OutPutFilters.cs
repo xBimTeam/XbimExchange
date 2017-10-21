@@ -417,7 +417,6 @@ namespace Xbim.CobieLiteUk.FilterHelper
                         exclude = IfcTypeObjectFilter.ItemsFilter(objType); 
                     }
                 }
-                
             }
             else if (obj is IIfcTypeProduct)
             {

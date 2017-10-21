@@ -178,9 +178,9 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="Commands\SubmittedFacilitySaveCommand.cs" />
+    <Compile Include="Commands\ConvertoCobieCommand.cs" />
     <Compile Include="Commands\FacilitySaveCommand.cs" />
-    <Compile Include="Commands\SelectReportFileCommand.cs" />
+    <Compile Include="Commands\SelectOutputFileCommand.cs" />
     <Compile Include="Commands\ValidateAndSaveCommand.cs" />
     <Compile Include="Commands\ValidateCommand.cs" />
     <Compile Include="Controls\DPoWFacilityViewer.xaml.cs">
@@ -194,6 +194,7 @@
     <Compile Include="Injection\SaveFileSelector.cs" />
     <Compile Include="IO\FacilityFromIfcConverter.cs" />
     <Compile Include="IO\FacilityReader.cs" />
+    <Compile Include="Models\FileGroup.cs" />
     <Compile Include="Models\SourceFile.cs" />
     <Compile Include="ViewModels\AssetTypeViewModel.cs" />
     <Compile Include="ViewModels\AssetViewModel.cs" />
@@ -214,7 +215,7 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Commands\SelectFileCommand.cs" />
+    <Compile Include="Commands\SelectInputFileCommand.cs" />
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>

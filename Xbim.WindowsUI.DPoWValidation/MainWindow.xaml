@@ -7,10 +7,15 @@
         Title="Digital Plan of Work - Validation (Powered by Xbim)" Height="638" Width="786" 
         >
     <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="Auto" />
+        </Grid.ColumnDefinitions>
         <TabControl Margin="10">
-            <TabItem Header="Create COBie Submission file">
+            <TabItem Header="Create COBie from your BIM file">
                 <Grid x:Name="CreateCobieGrid" Margin="10">
                     <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
                         <RowDefinition Height="Auto"/>
                         <RowDefinition Height="Auto"/>
                         <RowDefinition Height="1*"/>
@@ -23,12 +28,20 @@
                     <GroupBox Grid.Row="1" Grid.Column="0" Header="IFC 2x3 File:" Margin="10,5">
                         <Grid>
                             <StackPanel Orientation="Vertical">
-                                <TextBox x:Name="IfcToConvert" Margin="5" Height="24" IsEnabled="{Binding FilesCanChange}" Text="{Binding SubmissionFileSource, UpdateSourceTrigger=PropertyChanged}"  />
-                                <Button Height="24" HorizontalAlignment="Right" Margin="5" Width="70" Content="Browse" Command="{Binding SelectSubmission}" />
+                                <TextBox x:Name="IfcToConvert" Margin="5" Height="24" IsEnabled="{Binding FilesCanChange}" Text="{Binding BimFileSource, UpdateSourceTrigger=PropertyChanged}"  />
+                                <Button Height="24" HorizontalAlignment="Right" Margin="5" Width="70" Content="Browse" Command="{Binding SelectBimSubmission}" />
                             </StackPanel>
                         </Grid>
                     </GroupBox>
-                    <Button Grid.Row="2" Height="24" VerticalAlignment="Top" HorizontalAlignment="Right" Margin="10,20" Width="300" Content="Create COBie Submission" Command="{Binding SaveModelFacility}"  />
+                    <GroupBox Grid.Row="2" Grid.Column="0" Header="File name for the new COBie model:" Margin="10,5">
+                        <Grid>
+                            <StackPanel Orientation="Vertical">
+                                <TextBox x:Name="COBieToWrite" Margin="5" Height="24" IsEnabled="{Binding FilesCanChange}" Text="{Binding COBieToWrite, UpdateSourceTrigger=PropertyChanged}"/>
+                                <Button Height="24" HorizontalAlignment="Right" Margin="5" Width="70" Content="Browse" Command="{Binding SelectCOBieToWrite}" />
+                            </StackPanel>
+                        </Grid>
+                    </GroupBox>
+                    <Button Grid.Row="3" Height="24" VerticalAlignment="Top" HorizontalAlignment="Right" Margin="10,20" Width="300" Content="Create COBie Submission" Command="{Binding SaveBimToCobie}"  />
                 </Grid>
             </TabItem>
             <TabItem Header="COBie Compliance Check">
@@ -83,15 +96,11 @@
                     <Button x:Name="ImproveCObie" IsEnabled="False" Grid.Row="6" Height="24" VerticalAlignment="Top" HorizontalAlignment="Right" Margin="10,20" Width="300" Content="Improve COBie Compliance" Click="FixCobie" />
                 </Grid>
             </TabItem>
-            <TabItem Header="Verification report">
+            <TabItem Header="Perform Verification" Height="22" VerticalAlignment="Top">
                 <Grid x:Name="ValidationGrid"  Margin="10" >
                     <Grid.DataContext>
                         <viewModels:ValidationViewModel/>
                     </Grid.DataContext>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="7*"/>
-                        <ColumnDefinition Width="3*"/>
-                    </Grid.ColumnDefinitions>
                     <Grid.RowDefinitions>
                         <RowDefinition Height="Auto"/>
                         <RowDefinition Height="Auto"/>
@@ -162,20 +171,19 @@
                         </Grid>
                     </GroupBox>
 
-                    <Grid Grid.Row="0" Grid.Column="1" Grid.RowSpan="4" Background="DarkGray" Margin="10,0,0,0">
-                        <Grid.RowDefinitions>
-                            <RowDefinition Height="Auto"/>
-                            <RowDefinition Height="1*"/>
-                        </Grid.RowDefinitions>
-                        <StackPanel>
-                            <Button Height="30" Width="Auto" Margin="5" Content="Create verification report" Command="{Binding ValidateAndSave}" Click="Button_Click" />
-                            <ProgressBar Value="{Binding ActivityProgress}" Height="10"  Margin="5"/>
-                        </StackPanel>
-                        <TextBox Margin="5" Grid.Row="1" Text="{Binding ActivityStatus}" />
-
-                    </Grid>
+                    <Button Grid.Row="4" Height="24" VerticalAlignment="Top" HorizontalAlignment="Right" Margin="10,20" Width="300"  Content="Create verification report" Command="{Binding ValidateAndSave}" Click="Button_Click" />
                 </Grid>
             </TabItem>
         </TabControl>
+        <Grid Width="200" Grid.Column="1" Background="DarkGray" Margin="5,30,5,5">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="1*"/>
+            </Grid.RowDefinitions>
+            <StackPanel>
+                <ProgressBar Value="{Binding ActivityProgress}" Height="10"  Margin="5"/>
+            </StackPanel>
+            <TextBox Margin="5" Grid.Row="1" Text="{Binding ActivityStatus}" />
+        </Grid>
     </Grid>
 </Window>

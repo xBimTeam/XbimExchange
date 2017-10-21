@@ -16,20 +16,40 @@ using Xbim.WindowsUI.DPoWValidation.IO;
 using Xbim.WindowsUI.DPoWValidation.Models;
 using cobieUKValidation = Xbim.CobieLiteUk.Validation;
 
+// TODO: this viewmodel is all wrong... a lot of this should be moved to the model.
+// 2017-10-21. I'm posting changes to make it work, it will have to be refactored.
+
 namespace Xbim.WindowsUI.DPoWValidation.ViewModels
 {
     public class ValidationViewModel: INotifyPropertyChanged
     {
-        public SelectFileCommand SelectRequirement { get; set; }
-        public SelectFileCommand SelectSubmission { get; set; }
 
-        public SubmittedFacilitySaveCommand SaveModelFacility { get; set; }
+        #region commands
 
-        public ValidateCommand Validate { get; set; }
+        // for verification
 
-        public ValidateAndSaveCommand ValidateAndSave { get; set; }
+        public SelectInputFileCommand SelectRequirement { get; set; }
+
+        public SelectInputFileCommand SelectModelSubmission { get; set; }
+
+        public SelectOutputFileCommand SelectReport { get; set; }
+
+        public ValidateCommand Verify { get; set; }
+
+        public ValidateAndSaveCommand VerifyAndSave { get; set; }
+
+
+        // for BIM conversion to COBie
+        public SelectInputFileCommand SelectBimSubmission { get; set; }
+
+        public SelectOutputFileCommand  SelectCOBieToWrite { get; set; }
+        
+        public ConvertoCobieCommand SaveBimToCobie { get; set; }
+
+        // to be clarified
 
         public FacilitySaveCommand ExportFacility { get; set; }
+        #endregion
 
         public bool IsWorking { get; set; }
 
@@ -40,11 +60,11 @@ namespace Xbim.WindowsUI.DPoWValidation.ViewModels
 
         public string RequirementFileSource
         {
-            get { return RequirementFileInfo.File; }
+            get { return RequirementFileInfo.FileName; }
             set
             {
-                RequirementFileInfo.File = value;
-                Validate.ChangesHappened();
+                RequirementFileInfo.FileName = value;
+                Verify.ChangesHappened();
             }
         }
 
@@ -106,46 +126,83 @@ namespace Xbim.WindowsUI.DPoWValidation.ViewModels
 
         public DpoWFacilityViewModel ValidationFacilityVm { get; private set; }
 
+        
         public string SubmissionFileSource
         {
-            get { return SubmissionFileInfo.File; }
+            get { return SubmissionFileInfo.FileName; }
             set
             {
-                SubmissionFileInfo.File = value;
-                Validate.ChangesHappened();
+                SubmissionFileInfo.FileName = value;
+                Verify.ChangesHappened();
             }
         }
 
+      
         public string ReportFileSource
         {
-            get { return ReportFileInfo.File; }
+            get { return ReportFileInfo.FileName; }
             set
             {
-                ReportFileInfo.File = value;
-                Validate.ChangesHappened();
+                ReportFileInfo.FileName = value;
+                Verify.ChangesHappened();
             }
         }
 
+        public string BimFileSource
+        {
+            get { return BimFileInfo.FileName; }
+            set
+            {
+                // the underlying model
+                BimFileInfo.FileName = value;
+                // the command depending on this info
+                SaveBimToCobie.ChangesHappened();
+            }
+        }
+
+        public string COBieToWrite
+        {
+            get { return COBieToWriteFileInfo.FileName; }
+            set
+            {
+                // the underlying model
+                COBieToWriteFileInfo.FileName = value;
+                // the command depending on this info
+                SaveBimToCobie.ChangesHappened();
+            }
+        }
+        
+
+        // verification
         internal SourceFile RequirementFileInfo = new SourceFile();
         internal SourceFile SubmissionFileInfo = new SourceFile();
         internal SourceFile ReportFileInfo = new SourceFile();
 
+        // model conversion to cobie
+        internal SourceFile BimFileInfo = new SourceFile();
+        internal SourceFile COBieToWriteFileInfo = new SourceFile();
         
         public ValidationViewModel()
         {
             IsWorking = false;
-            SelectRequirement = new SelectFileCommand(RequirementFileInfo, this) { IncludeZip = true };
-            SelectSubmission = new SelectFileCommand(SubmissionFileInfo, this) {IncludeIfc = true};
-            SelectReport = new SelectReportFileCommand(ReportFileInfo, this);
-            
+
+            // for verification
+            SelectRequirement = new SelectInputFileCommand(RequirementFileInfo, this) { AllowCompressedSchemas = true };
+            SelectModelSubmission = new SelectInputFileCommand(SubmissionFileInfo, this) {IncludeBIM = true};
+            SelectReport = new SelectOutputFileCommand(ReportFileInfo, this);
+
+            // for COBie Conversion
+            SelectBimSubmission = new SelectInputFileCommand(BimFileInfo, this) { IncludeBIM = true, AllowCompressedSchemas = true, IncludeCobie = false };
+            SelectCOBieToWrite = new SelectOutputFileCommand(COBieToWriteFileInfo, this) { COBieSchemas = false };
+            SaveBimToCobie = new ConvertoCobieCommand(this);
 
             ExportOnValidated = false;
             OpenOnExported = false;
 
-            Validate = new ValidateCommand(this);
+            Verify = new ValidateCommand(this);
             ExportFacility = new FacilitySaveCommand(this);
-            ValidateAndSave = new ValidateAndSaveCommand(this);
-            SaveModelFacility = new SubmittedFacilitySaveCommand(this);
+            VerifyAndSave = new ValidateAndSaveCommand(this);
+            
         }
 
         public event PropertyChangedEventHandler PropertyChanged;
@@ -154,19 +211,27 @@ namespace Xbim.WindowsUI.DPoWValidation.ViewModels
         {
             if (PropertyChanged == null) 
                 return;
+
+            // verification
             PropertyChanged.Invoke(this, new PropertyChangedEventArgs(@"RequirementFileSource"));
             PropertyChanged.Invoke(this, new PropertyChangedEventArgs(@"SubmissionFileSource"));
             PropertyChanged.Invoke(this, new PropertyChangedEventArgs(@"ReportFileSource"));
 
-            SaveModelFacility.ChangesHappened();
-            Validate.ChangesHappened();
-            ValidateAndSave.ChangesHappened();
+            
+            Verify.ChangesHappened();
+            VerifyAndSave.ChangesHappened();
+
+            // cobie conversion
+            PropertyChanged.Invoke(this, new PropertyChangedEventArgs(@"BimFileSource"));
+            PropertyChanged.Invoke(this, new PropertyChangedEventArgs(@"COBieToWrite"));
+            SaveBimToCobie.ChangesHappened();
         }
 
         internal void ExecuteSaveCobie()
         {
-            ActivityStatus = "Loading submission file";
-            LoadSubmissionFile(SubmissionFileSource);
+            ActivityStatus = "Loading model file";
+            // once done loading the model file execute FacilityExportCobie
+            LoadModelFile(BimFileInfo.FileName, FacilityExportCobie);
         }
 
         internal void ExecuteValidation()
@@ -175,7 +240,7 @@ namespace Xbim.WindowsUI.DPoWValidation.ViewModels
             if (PropertyChanged != null)
                 PropertyChanged.Invoke(this, new PropertyChangedEventArgs(@"FilesCanChange"));
             SelectRequirement.ChangesHappened();
-            SelectSubmission.ChangesHappened();
+            SelectModelSubmission.ChangesHappened();
             SelectReport.ChangesHappened();
 
             ActivityStatus = "Loading requirement file";
@@ -183,7 +248,8 @@ namespace Xbim.WindowsUI.DPoWValidation.ViewModels
             RequirementFacility = fReader.LoadFacility(RequirementFileSource);
             
             ActivityStatus = "Loading submission file";
-            LoadSubmissionFile(SubmissionFileSource);
+            // once done loading the model file execute ValidateFacilities
+            LoadModelFile(SubmissionFileSource, ValidateFacilities);
         }
 
         private BackgroundWorker _worker;
@@ -213,7 +279,7 @@ namespace Xbim.WindowsUI.DPoWValidation.ViewModels
             args.Result = SubmissionFacility;
         }
 
-        public SelectReportFileCommand SelectReport { get; set; }
+        
 
         private void OpenIfcFile(object s, DoWorkEventArgs args)
         {
@@ -282,7 +348,7 @@ namespace Xbim.WindowsUI.DPoWValidation.ViewModels
 
         private IfcStore _model;
 
-        private void CreateWorker()
+        private void CreateWorker(Action<object, RunWorkerCompletedEventArgs> nextAction)
         {
             _worker = new BackgroundWorker
             {
@@ -293,114 +359,130 @@ namespace Xbim.WindowsUI.DPoWValidation.ViewModels
             {
                 ActivityProgress = args.ProgressPercentage;
                 ActivityStatus = (string) args.UserState;
-                Debug.WriteLine("{0}% {1}", args.ProgressPercentage, (string) args.UserState);
+                // Debug.WriteLine("{0}% {1}", args.ProgressPercentage, (string) args.UserState);
             };
 
-            _worker.RunWorkerCompleted += delegate(object s, RunWorkerCompletedEventArgs args)
-            {
-                if (args.Result is IfcStore) //all ok
-                {
-                    _model = args.Result as IfcStore;
-                    ActivityProgress = 0;
-                    // prepare the facility
-                    SubmissionFacility = FacilityFromIfcConverter.FacilityFromModel(_model);
-
-                    if (SubmissionFacility == null)
-                        return;
-                    var jsonFileName = Path.ChangeExtension(SubmissionFileSource, "json");
-                    if (!File.Exists(jsonFileName))
-                        SubmissionFacility.WriteJson(jsonFileName);
-
-                    ValidateLoadedFacilities();
-                }
-                else if (args.Result is Facility) //all ok; this is the model facility
-                {
-                    ValidateLoadedFacilities();
-                }
-                else //we have a problem
-                {
-                    var errMsg = args.Result as String;
-                    if (!string.IsNullOrEmpty(errMsg))
-                    {
-                        ActivityStatus = "Error Opening File";
-                    }
-                    if (args.Result is Exception)
-                    {
-                        var sb = new StringBuilder();
-                        var ex = args.Result as Exception;
-                        var indent = "";
-                        while (ex != null)
-                        {
-                            sb.AppendFormat("{0}{1}\n", indent, ex.Message);
-                            ex = ex.InnerException;
-                            indent += "\t";
-                        }
-                        ActivityStatus = "Error Opening Ifc File\r\n\r\n" + sb;
-                    }
-                    else
-                    {
-                        ActivityStatus = "Error/Ready";
-                    }
-                    ActivityProgress = 0;
-                }
-            };
+            _worker.RunWorkerCompleted += new RunWorkerCompletedEventHandler(nextAction);
         }
         
+        private void FacilityExportCobie(object sender, RunWorkerCompletedEventArgs args)
+        {
+            // we might be getting a model or a facility in the args, in case try to convert.
+            //
+            var fac = GetFacility(args);
+            if (fac is Facility) //all ok; this is the model facility
+            {
+                var asFac = fac as Facility;
+                string msg;
+
+                var fileToWrite = COBieToWriteFileInfo.FileName;
+
+                asFac.WriteCobie(fileToWrite, out msg);
+                if (OpenOnExported && File.Exists(fileToWrite))
+                {
+                    Process.Start(fileToWrite);
+                }
+            }
+            else //we have a problem
+            {
+                PresentErrorMessage(args);
+            }
+        }
+
+        private void ValidateFacilities(object sender, RunWorkerCompletedEventArgs args)
+        {
+            // we might be getting a model or a facility in the args, in case try to convert.
+            //
+            var fac = GetFacility(args);
+            if (fac is Facility) //all ok; this is the model facility
+            {
+                ValidateFacilities(RequirementFacility, fac as Facility);
+            }
+            else //we have a problem
+            {
+                PresentErrorMessage(args);
+            }
+        }
+
+        private object GetFacility(RunWorkerCompletedEventArgs args)
+        {
+            if (args.Result is IfcStore)
+            {
+                // a valid bim model
+                //
+                _model = args.Result as IfcStore;
+                ActivityProgress = 0;
+                // prepare the facility
+                SubmissionFacility = FacilityFromIfcConverter.FacilityFromModel(_model);
+                return SubmissionFacility;
+            }
+            else if (args.Result is Facility) //all ok; this is the model facility
+            {
+                return args.Result;
+            }
+            return null;
+        }
+
+        private void PresentErrorMessage(RunWorkerCompletedEventArgs args)
+        {
+            var errMsg = args.Result as String;
+            if (!string.IsNullOrEmpty(errMsg))
+            {
+                ActivityStatus = "Error Opening File";
+            }
+            if (args.Result is Exception)
+            {
+                var sb = new StringBuilder();
+                var ex = args.Result as Exception;
+                var indent = "";
+                while (ex != null)
+                {
+                    sb.AppendFormat("{0}{1}\n", indent, ex.Message);
+                    ex = ex.InnerException;
+                    indent += "\t";
+                }
+                ActivityStatus = "Error Opening Ifc File\r\n\r\n" + sb;
+            }
+            else
+            {
+                ActivityStatus = "Error/Ready";
+            }
+            ActivityProgress = 0;
+        }
+
         [Dependency]
         public ISaveFileSelector FileSelector { get; set; }
 
-        private void ValidateLoadedFacilities()
+        private void ValidateFacilities(Facility requirement, Facility submitted)
         {
-            if (RequirementFacility == null && SubmissionFacility != null)
-            {
-                // I want to save the cobie here.
-                var filters = new List<string>
-                {
-                    "COBie excel|*.xlsx", 
-                    "COBie binary excel|*.xls"
-                };
-                
-                FileSelector.Filter = string.Join("|", filters.ToArray());
-                FileSelector.Title = "Select destination file";
-
-                var ret = FileSelector.ShowDialog();
-                if (ret != DialogResult.OK) 
-                    return;
-                
-                string msg;
-                SubmissionFacility.WriteCobie(FileSelector.FileName, out msg);
-                if (OpenOnExported && File.Exists(FileSelector.FileName))
-                {
-                    Process.Start(FileSelector.FileName);
-                }
-            }
-            else if (RequirementFacility != null && SubmissionFacility != null)
+            if (requirement != null && submitted != null)
             {
                 ActivityStatus = "Validation in progress";
                 var f = new cobieUKValidation.FacilityValidator();
-                ValidationFacility = f.Validate(RequirementFacility, SubmissionFacility);
+                ValidationFacility = f.Validate(requirement, submitted);
                 ActivityStatus = "Validation completed";
                 if (ExportOnValidated)
                 {
                     ExportValidatedFacility();
                 }
             }
+            else
+            {
+                // todo: notify
+            }
         }
 
         private void CloseAndDeleteTemporaryFiles()
         {
-
             if (_worker != null && _worker.IsBusy)
                 _worker.CancelAsync(); //tell it to stop
-
             if (_model == null)
                 return;
             _model.Dispose();
             _model = null;
-
         }
 
-        public void LoadSubmissionFile(string modelFileName)
+        public void LoadModelFile(string modelFileName, Action<object, RunWorkerCompletedEventArgs> nextAction)
         {
             var fInfo = new FileInfo(modelFileName);
             if (!fInfo.Exists) // file does not exist; do nothing
@@ -408,9 +490,7 @@ namespace Xbim.WindowsUI.DPoWValidation.ViewModels
             
             // there's no going back; if it fails after this point the current file should be closed anyway
             CloseAndDeleteTemporaryFiles();
-
-            CreateWorker();
-
+            CreateWorker(nextAction);
             var ext = fInfo.Extension.ToLower();
             switch (ext)
             {
@@ -423,8 +503,8 @@ namespace Xbim.WindowsUI.DPoWValidation.ViewModels
                     break;
                 case ".ifc": //it is an Ifc File
                 case ".ifcxml": //it is an IfcXml File
-                case ".ifczip": //it is a xip file containing xbim or ifc File
-                case ".zip": //it is a xip file containing xbim or ifc File                   
+                case ".ifczip": //it is a zip file containing xbim or ifc File
+                case ".zip": //it is a zip file containing xbim or ifc File                   
                 case ".xbimf":
                 case ".xbim": 
                     _worker.DoWork += OpenIfcFile;
@@ -432,6 +512,8 @@ namespace Xbim.WindowsUI.DPoWValidation.ViewModels
                     break;
             }
         }
+
+        
 
         internal void ExportValidatedFacility()
         {

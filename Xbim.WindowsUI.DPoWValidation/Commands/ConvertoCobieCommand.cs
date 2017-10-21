@@ -8,7 +8,7 @@ using Xbim.WindowsUI.DPoWValidation.ViewModels;
 
 namespace Xbim.WindowsUI.DPoWValidation.Commands
 {
-    public class SubmittedFacilitySaveCommand : ICommand
+    public class ConvertoCobieCommand : ICommand
     {
         public event EventHandler CanExecuteChanged;
 
@@ -16,7 +16,8 @@ namespace Xbim.WindowsUI.DPoWValidation.Commands
 
         public bool CanExecute(object parameter)
         {
-            return _vm.SubmissionFileInfo.Exists;
+            return _vm.BimFileInfo.Exists
+                && _vm.COBieToWriteFileInfo.IsValidName(Models.SourceFile.AllowedExtensions.CobieSpreadsheet);
         }
 
         public void Execute(object parameter)
@@ -33,7 +34,7 @@ namespace Xbim.WindowsUI.DPoWValidation.Commands
             }
         }
 
-        public SubmittedFacilitySaveCommand(ValidationViewModel viewModel)
+        public ConvertoCobieCommand(ValidationViewModel viewModel)
         {
             _vm = viewModel;
         }

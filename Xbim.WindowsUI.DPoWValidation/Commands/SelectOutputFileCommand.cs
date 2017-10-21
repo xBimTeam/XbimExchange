@@ -10,17 +10,16 @@ using Xbim.WindowsUI.DPoWValidation.ViewModels;
 
 namespace Xbim.WindowsUI.DPoWValidation.Commands
 {
-    public class SelectReportFileCommand : ICommand
+    public class SelectOutputFileCommand : ICommand
     {
-        private readonly SourceFile _currentFile;
+        private readonly SourceFile _linkedFile;
         private readonly ValidationViewModel _vm;
         public bool IncludeIfc = false;
-
-
-        public SelectReportFileCommand(SourceFile tb, ValidationViewModel model)
+        
+        public SelectOutputFileCommand(SourceFile linkedFile, ValidationViewModel model)
         {
             FileSelector = ContainerBootstrapper.Instance.Container.Resolve<ISaveFileSelector>();
-            _currentFile = tb;
+            _linkedFile = linkedFile;
             _vm = model;
         }
 
@@ -41,27 +40,35 @@ namespace Xbim.WindowsUI.DPoWValidation.Commands
 
         ISaveFileSelector FileSelector { get; set; }
 
+        public bool COBieSpreadSheet { get; set; } = true;
+        public bool COBieSchemas { get; set; } = true;
+        
         public void Execute(object parameter)
         {
-            var filters = new List<string>();
-            filters.Add("Validation report|*.xlsx");
-            filters.Add("Validation report|*.xls");
-            filters.Add(@"Automation format|*.json");
-            filters.Add(@"Automation format|*.xml");
-
-            FileSelector.Filter = string.Join("|", filters.ToArray());
-
-            
-            if (_currentFile.Exists)
+            var filters = new List<FileGroup>();
+            if (COBieSpreadSheet)
             {
-                FileSelector.InitialDirectory = Path.GetDirectoryName(_currentFile.File);
+                filters.Add(new FileGroup("COBie Excel OpenFormat", "*.xlsx"));
+                filters.Add(new FileGroup("COBie Excel Binary", "*.xls"));
+            }
+            if (COBieSchemas)
+            {
+                filters.Add(new FileGroup("COBie Schema in Json format", "*.json"));
+                filters.Add(new FileGroup("COBie Schema in Xml format", "*.xml"));
+            }
+            
+            FileSelector.Filter = FileGroup.GetFilter(filters);
+            
+            if (_linkedFile.Exists)
+            {
+                FileSelector.InitialDirectory = Path.GetDirectoryName(_linkedFile.FileName);
             }
 
             var result = FileSelector.ShowDialog();
             if (result != DialogResult.OK) 
                 return;
 
-            _currentFile.File = FileSelector.FileName;
+            _linkedFile.FileName = FileSelector.FileName;
             _vm.FilesUpdate();
         }
     }

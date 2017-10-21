@@ -31,7 +31,5 @@ namespace Xbim.WindowsUI.DPoWValidation.ViewModels
         public string DocumentCode { get; private set; }
         public string DocumentName { get; private set; }
         public string DocumentDescription { get; private set; }
-
-
     }
 }
