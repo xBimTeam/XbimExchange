@@ -1,11 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
 using System.Text;
 using System.Threading;
-using System.Windows.Forms;
 using Microsoft.Practices.Unity;
 using Xbim.CobieLiteUk;
 using Xbim.Ifc;
@@ -21,13 +19,14 @@ using cobieUKValidation = Xbim.CobieLiteUk.Validation;
 
 namespace Xbim.WindowsUI.DPoWValidation.ViewModels
 {
-    public class ValidationViewModel: INotifyPropertyChanged
+    public class VerificationViewModel : INotifyPropertyChanged
     {
-
         #region commands
 
-        // for verification
 
+
+
+        // for verification
         public SelectInputFileCommand SelectRequirement { get; set; }
 
         public SelectInputFileCommand SelectModelSubmission { get; set; }
@@ -42,14 +41,73 @@ namespace Xbim.WindowsUI.DPoWValidation.ViewModels
         // for BIM conversion to COBie
         public SelectInputFileCommand SelectBimSubmission { get; set; }
 
-        public SelectOutputFileCommand  SelectCOBieToWrite { get; set; }
-        
+        public SelectOutputFileCommand SelectCOBieToWrite { get; set; }
+
         public ConvertoCobieCommand SaveBimToCobie { get; set; }
+
+        // for Cobie compliance
+        public SelectInputFileCommand SelectComplianceCobie { get; set; }
+        public SelectOutputFileCommand SelectComplianceReport { get; set; }
+        public SelectOutputFileCommand SelectComplianceFixed { get; set; }
+
+
+        public RelayCommand ComplianceReportCommand { get; set; }
+
+        public RelayCommand ComplianceImproveCommand { get; set; }
 
         // to be clarified
 
         public FacilitySaveCommand ExportFacility { get; set; }
         #endregion
+
+        private void RunComplianceReport(object parameter)
+        {
+
+            // todo: restore
+
+            //if (!File.Exists(CobieFile.Text))
+            //    return;
+
+            //string read;
+            //_f = Facility.ReadCobie(CobieFile.Text, out read);
+            //if (_f == null)
+            //{
+            //    System.Windows.Forms.MessageBox.Show("The provided files could not be read.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            //}
+            //var loggerFile = new FileInfo(ComplianceReportFile.Text);
+            //using (var logger = loggerFile.CreateText())
+            //{
+            //    _f.ValidateUK2012(logger, true);
+            //}
+            //// TODO: check: I suppose the file is only created if the model needs fixing
+            //if (loggerFile.Exists)    
+            //{
+            //    Process.Start(loggerFile.FullName);
+            //    ImproveCObie.IsEnabled = true;
+
+            //    // if file exists but report is empty then autofill
+            //    //
+            //    var fi = new FileInfo(CobieFile.Text);
+            //    if (fi.Exists && string.IsNullOrEmpty(FixedCobie.Text))
+            //    {
+            //        FixedCobie.Text = Path.ChangeExtension(CobieFile.Text, "fixed" + fi.Extension);
+            //    }
+            //}
+        }
+
+        private void FixCobie(object sender)
+        {
+            //// todo: restore
+            //if (_f == null)
+            //    return;
+
+            //string log;
+            //var file = FixedCobie.Text;
+
+            //_f.WriteCobie(file, out log);
+            //if (File.Exists(file))
+            //    Process.Start(file);
+        }
 
         public bool IsWorking { get; set; }
 
@@ -57,6 +115,8 @@ namespace Xbim.WindowsUI.DPoWValidation.ViewModels
         {
             get { return !IsWorking; }
         }
+
+
 
         public string RequirementFileSource
         {
@@ -75,9 +135,9 @@ namespace Xbim.WindowsUI.DPoWValidation.ViewModels
             get { return _requirementFacility; }
             set
             {
-                _requirementFacility = value; 
+                _requirementFacility = value;
                 RequirementFacilityVm = new DpoWFacilityViewModel(_requirementFacility);
-                
+
                 if (PropertyChanged == null)
                     return;
                 PropertyChanged.Invoke(this, new PropertyChangedEventArgs(@"RequirementFacilityVM"));
@@ -95,7 +155,7 @@ namespace Xbim.WindowsUI.DPoWValidation.ViewModels
             {
                 _submissionFacility = value;
                 SubmissionFacilityVm = new DpoWFacilityViewModel(_submissionFacility);
-                
+
                 if (PropertyChanged == null)
                     return;
                 PropertyChanged.Invoke(this, new PropertyChangedEventArgs(@"SubmissionFacilityVM"));
@@ -114,7 +174,7 @@ namespace Xbim.WindowsUI.DPoWValidation.ViewModels
                 _validationFacility = value;
                 ValidationFacilityVm = new DpoWFacilityViewModel(_validationFacility);
                 ExportFacility = new FacilitySaveCommand(this);
-                
+
                 if (PropertyChanged == null)
                     return;
 
@@ -126,7 +186,7 @@ namespace Xbim.WindowsUI.DPoWValidation.ViewModels
 
         public DpoWFacilityViewModel ValidationFacilityVm { get; private set; }
 
-        
+
         public string SubmissionFileSource
         {
             get { return SubmissionFileInfo.FileName; }
@@ -137,7 +197,7 @@ namespace Xbim.WindowsUI.DPoWValidation.ViewModels
             }
         }
 
-      
+
         public string ReportFileSource
         {
             get { return ReportFileInfo.FileName; }
@@ -171,24 +231,45 @@ namespace Xbim.WindowsUI.DPoWValidation.ViewModels
                 SaveBimToCobie.ChangesHappened();
             }
         }
-        
 
+        public string ComplianceSourceString => ComplianceSourceFileInfo.FileName;
+        public string ComplianceReportFile => ComplianceReportFileInfo.FileName;
+        public string FixedCobie => ComplianceFixedFileInfo.FileName;
+        
         // verification
-        internal SourceFile RequirementFileInfo = new SourceFile();
-        internal SourceFile SubmissionFileInfo = new SourceFile();
-        internal SourceFile ReportFileInfo = new SourceFile();
+        internal SourceFile RequirementFileInfo;
+        internal SourceFile SubmissionFileInfo;
+        internal SourceFile ReportFileInfo;
+
+        // COBie compliance
+        internal SourceFile ComplianceSourceFileInfo;
+        internal SourceFile ComplianceReportFileInfo;
+        internal SourceFile ComplianceFixedFileInfo;
 
         // model conversion to cobie
-        internal SourceFile BimFileInfo = new SourceFile();
-        internal SourceFile COBieToWriteFileInfo = new SourceFile();
+        internal SourceFile BimFileInfo;
+        internal SourceFile COBieToWriteFileInfo;
         
-        public ValidationViewModel()
+        public VerificationViewModel()
         {
             IsWorking = false;
 
+            RequirementFileInfo = new SourceFile(this);
+            SubmissionFileInfo = new SourceFile(this);
+            ReportFileInfo = new SourceFile(this);
+
+            // COBie compliance
+            ComplianceSourceFileInfo = new SourceFile(this, "ComplianceSourceString");
+            ComplianceReportFileInfo = new SourceFile(this, "ComplianceReportFile");
+            ComplianceFixedFileInfo = new SourceFile(this, "FixedCobie");
+
+            // model conversion to cobie
+            BimFileInfo = new SourceFile(this);
+            COBieToWriteFileInfo = new SourceFile(this);
+
             // for verification
             SelectRequirement = new SelectInputFileCommand(RequirementFileInfo, this) { AllowCompressedSchemas = true };
-            SelectModelSubmission = new SelectInputFileCommand(SubmissionFileInfo, this) {IncludeBIM = true};
+            SelectModelSubmission = new SelectInputFileCommand(SubmissionFileInfo, this) { IncludeBIM = true };
             SelectReport = new SelectOutputFileCommand(ReportFileInfo, this);
 
             // for COBie Conversion
@@ -196,13 +277,32 @@ namespace Xbim.WindowsUI.DPoWValidation.ViewModels
             SelectCOBieToWrite = new SelectOutputFileCommand(COBieToWriteFileInfo, this) { COBieSchemas = false };
             SaveBimToCobie = new ConvertoCobieCommand(this);
 
-            ExportOnValidated = false;
-            OpenOnExported = false;
+            // compliance report
+            SelectComplianceCobie = new SelectInputFileCommand(ComplianceSourceFileInfo, this) { IncludeCobieSchemas = false, AllowCompressedSchemas = false };
+            SelectComplianceReport = new SelectOutputFileCommand(ComplianceReportFileInfo, this) { Text = true, COBieSchemas = false, COBieSpreadSheet = false };
+            SelectComplianceFixed = new SelectOutputFileCommand(ComplianceFixedFileInfo, this) { COBieSchemas = false };
+
+            ComplianceReportCommand = new RelayCommand(RunComplianceReport, CanRunComplianceReport);
+            // ComplianceImproveCommand = new RelayCommand();
 
             Verify = new ValidateCommand(this);
             ExportFacility = new FacilitySaveCommand(this);
             VerifyAndSave = new ValidateAndSaveCommand(this);
-            
+
+        }
+
+        private bool CanRunComplianceReport(object obj)
+        {
+            return ComplianceSourceFileInfo.Exists
+                && ComplianceReportFileInfo.IsValidName(SourceFile.AllowedExtensions.Text);
+        }
+
+        public void UpdateProperty(string prop)
+        {
+            if (PropertyChanged == null)
+                return;
+            // verification
+            PropertyChanged.Invoke(this, new PropertyChangedEventArgs(prop));
         }
 
         public event PropertyChangedEventHandler PropertyChanged;
@@ -216,7 +316,6 @@ namespace Xbim.WindowsUI.DPoWValidation.ViewModels
             PropertyChanged.Invoke(this, new PropertyChangedEventArgs(@"RequirementFileSource"));
             PropertyChanged.Invoke(this, new PropertyChangedEventArgs(@"SubmissionFileSource"));
             PropertyChanged.Invoke(this, new PropertyChangedEventArgs(@"ReportFileSource"));
-
             
             Verify.ChangesHappened();
             VerifyAndSave.ChangesHappened();
@@ -225,6 +324,9 @@ namespace Xbim.WindowsUI.DPoWValidation.ViewModels
             PropertyChanged.Invoke(this, new PropertyChangedEventArgs(@"BimFileSource"));
             PropertyChanged.Invoke(this, new PropertyChangedEventArgs(@"COBieToWrite"));
             SaveBimToCobie.ChangesHappened();
+
+            // Compliance
+            
         }
 
         internal void ExecuteSaveCobie()
@@ -278,9 +380,7 @@ namespace Xbim.WindowsUI.DPoWValidation.ViewModels
             }
             args.Result = SubmissionFacility;
         }
-
         
-
         private void OpenIfcFile(object s, DoWorkEventArgs args)
         {
             var worker = s as BackgroundWorker;
@@ -317,9 +417,7 @@ namespace Xbim.WindowsUI.DPoWValidation.ViewModels
                 args.Result = new Exception(sb.ToString());
             }
         }
-
         
-
         private string _activityStatus;
         public string ActivityStatus
         {
@@ -461,10 +559,7 @@ namespace Xbim.WindowsUI.DPoWValidation.ViewModels
                 var f = new cobieUKValidation.FacilityValidator();
                 ValidationFacility = f.Validate(requirement, submitted);
                 ActivityStatus = "Validation completed";
-                if (ExportOnValidated)
-                {
-                    ExportValidatedFacility();
-                }
+                ExportValidatedFacility();                
             }
             else
             {
@@ -513,8 +608,6 @@ namespace Xbim.WindowsUI.DPoWValidation.ViewModels
             }
         }
 
-        
-
         internal void ExportValidatedFacility()
         {
             if (File.Exists(ReportFileInfo.FileInfo.FullName))
@@ -539,9 +632,7 @@ namespace Xbim.WindowsUI.DPoWValidation.ViewModels
                 ActivityStatus = @"Error.\r\n\r\n" + ex.Message;
             }
         }
-
-        public bool ExportOnValidated { get; set; }
-
+        
         public bool OpenOnExported { get; set; }
     }
 }

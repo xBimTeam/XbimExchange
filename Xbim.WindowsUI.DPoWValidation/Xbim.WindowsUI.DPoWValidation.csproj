@@ -180,6 +180,7 @@
     </ApplicationDefinition>
     <Compile Include="Commands\ConvertoCobieCommand.cs" />
     <Compile Include="Commands\FacilitySaveCommand.cs" />
+    <Compile Include="Commands\RelayCommand.cs" />
     <Compile Include="Commands\SelectOutputFileCommand.cs" />
     <Compile Include="Commands\ValidateAndSaveCommand.cs" />
     <Compile Include="Commands\ValidateCommand.cs" />
@@ -202,7 +203,7 @@
     <Compile Include="ViewModels\DocumentViewModel.cs" />
     <Compile Include="ViewModels\DPoWFacilityViewModel.cs" />
     <Compile Include="ViewModels\RequirementViewModel.cs" />
-    <Compile Include="ViewModels\ValidationViewModel.cs" />
+    <Compile Include="ViewModels\VerificationViewModel.cs" />
     <Page Include="Controls\DPoWFacilityViewer.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

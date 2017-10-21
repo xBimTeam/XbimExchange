@@ -13,10 +13,10 @@ namespace Xbim.WindowsUI.DPoWValidation.Commands
     public class SelectOutputFileCommand : ICommand
     {
         private readonly SourceFile _linkedFile;
-        private readonly ValidationViewModel _vm;
+        private readonly VerificationViewModel _vm;
         public bool IncludeIfc = false;
         
-        public SelectOutputFileCommand(SourceFile linkedFile, ValidationViewModel model)
+        public SelectOutputFileCommand(SourceFile linkedFile, VerificationViewModel model)
         {
             FileSelector = ContainerBootstrapper.Instance.Container.Resolve<ISaveFileSelector>();
             _linkedFile = linkedFile;
@@ -42,7 +42,8 @@ namespace Xbim.WindowsUI.DPoWValidation.Commands
 
         public bool COBieSpreadSheet { get; set; } = true;
         public bool COBieSchemas { get; set; } = true;
-        
+        public bool Text { get; set; } = false;
+
         public void Execute(object parameter)
         {
             var filters = new List<FileGroup>();
@@ -56,16 +57,20 @@ namespace Xbim.WindowsUI.DPoWValidation.Commands
                 filters.Add(new FileGroup("COBie Schema in Json format", "*.json"));
                 filters.Add(new FileGroup("COBie Schema in Xml format", "*.xml"));
             }
+            if (COBieSchemas)
+            {
+                filters.Add(new FileGroup("Text files", "*.txt"));
+            }
             
             FileSelector.Filter = FileGroup.GetFilter(filters);
-            
+
             if (_linkedFile.Exists)
             {
                 FileSelector.InitialDirectory = Path.GetDirectoryName(_linkedFile.FileName);
             }
 
             var result = FileSelector.ShowDialog();
-            if (result != DialogResult.OK) 
+            if (result != DialogResult.OK)
                 return;
 
             _linkedFile.FileName = FileSelector.FileName;

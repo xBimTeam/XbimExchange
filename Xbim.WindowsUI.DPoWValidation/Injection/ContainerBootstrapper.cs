@@ -19,7 +19,7 @@ namespace Xbim.WindowsUI.DPoWValidation.Injection
         {
             _container = new UnityContainer();
             _container.RegisterType<ISaveFileSelector, SaveFileSelector>();
-            _container.RegisterType<ValidationViewModel, ValidationViewModel>();
+            _container.RegisterType<VerificationViewModel, VerificationViewModel>();
             _container.RegisterType<ICanShow, MainWindow>();
         }
 

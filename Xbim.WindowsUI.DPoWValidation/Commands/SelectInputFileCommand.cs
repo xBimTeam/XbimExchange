@@ -11,13 +11,13 @@ namespace Xbim.WindowsUI.DPoWValidation.Commands
     public class SelectInputFileCommand : ICommand
     {
         private readonly SourceFile _linkedFile;
-        private readonly ValidationViewModel _vm;
+        private readonly VerificationViewModel _vm;
         public bool IncludeCobie = true;
         public bool IncludeCobieSchemas = true;
         public bool IncludeBIM = false;
         public bool AllowCompressedSchemas = false;
 
-        public SelectInputFileCommand(SourceFile linkedFile, ValidationViewModel viewModel)
+        public SelectInputFileCommand(SourceFile linkedFile, VerificationViewModel viewModel)
         {
             _linkedFile = linkedFile;
             _vm = viewModel;
@@ -74,6 +74,8 @@ namespace Xbim.WindowsUI.DPoWValidation.Commands
                 return;
 
             _linkedFile.FileName = dlg.FileName;
+
+            // todo: this should rather send an update for a property in the associated linkedFile
             _vm.FilesUpdate();
         }
     }

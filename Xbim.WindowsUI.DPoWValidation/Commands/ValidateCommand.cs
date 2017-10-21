@@ -11,7 +11,7 @@ namespace Xbim.WindowsUI.DPoWValidation.Commands
 
     public class ValidateCommand : ICommand
     {
-        private ValidationViewModel _vm;
+        private VerificationViewModel _vm;
 
         public bool CanExecute(object parameter)
         {
@@ -23,7 +23,7 @@ namespace Xbim.WindowsUI.DPoWValidation.Commands
         public event EventHandler CanExecuteChanged;
         
 
-        public ValidateCommand(ValidationViewModel validationViewModel)
+        public ValidateCommand(VerificationViewModel validationViewModel)
         {
             _vm = validationViewModel;
         }
@@ -38,7 +38,6 @@ namespace Xbim.WindowsUI.DPoWValidation.Commands
 
         public void Execute(object parameter)
         {
-            _vm.ExportOnValidated = false;
             _vm.OpenOnExported = false;
             _vm.ExecuteValidation();
         }

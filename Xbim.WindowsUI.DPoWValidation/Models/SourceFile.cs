@@ -1,15 +1,37 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using Xbim.WindowsUI.DPoWValidation.ViewModels;
 
 namespace Xbim.WindowsUI.DPoWValidation.Models
 {
     public class SourceFile
     {
-        public SourceFile()
-        { }
+        VerificationViewModel _vm;
+        string[] _props;
+        
+        public SourceFile(VerificationViewModel viewmodel, params string[] properties)
+        {
+            _vm = viewmodel;
+            _props = properties;
+        }
 
-        public string FileName { get; set; }
+        private string _fileName;
+        public string FileName
+        {
+            get
+            {
+                return _fileName;
+            }
+            set
+            {
+                _fileName = value;
+                foreach (var prop in _props)
+                {
+                    _vm.UpdateProperty(prop);
+                }
+            }
+        }
 
         public bool Exists
         {
@@ -29,6 +51,7 @@ namespace Xbim.WindowsUI.DPoWValidation.Models
             Any,
             Cobie,
             CobieSpreadsheet,
+            Text
         }
 
         public bool IsValidName(AllowedExtensions extensions)
@@ -41,6 +64,10 @@ namespace Xbim.WindowsUI.DPoWValidation.Models
             else if (extensions == AllowedExtensions.CobieSpreadsheet)
             {
                 acceptableExtensions = new List<string> { ".xlsx", ".xls"};
+            }
+            else if (extensions == AllowedExtensions.Text)
+            {
+                acceptableExtensions = new List<string> { ".txt" };
             }
 
 

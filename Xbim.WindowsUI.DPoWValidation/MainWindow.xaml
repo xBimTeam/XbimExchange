@@ -4,7 +4,7 @@
         xmlns:viewModels="clr-namespace:Xbim.WindowsUI.DPoWValidation.ViewModels"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" mc:Ignorable="d"
         x:Class="Xbim.WindowsUI.DPoWValidation.MainWindow"
-        Title="Digital Plan of Work - Validation (Powered by Xbim)" Height="638" Width="786" 
+        Title="Digital Plan of Work - Validation (Powered by Xbim)" Height="550" Width="800" 
         >
     <Grid>
         <Grid.ColumnDefinitions>
@@ -45,7 +45,7 @@
                 </Grid>
             </TabItem>
             <TabItem Header="COBie Compliance Check">
-                <Grid Margin="10">
+                <Grid x:Name="ComplianceGrid" Margin="10">
                     <Grid.RowDefinitions>
                         <RowDefinition Height="Auto"/>
                         <RowDefinition Height="Auto"/>
@@ -62,44 +62,51 @@
                     </StackPanel>
                     <GroupBox Grid.Row="1" Grid.Column="0" Header="COBie File:" Margin="10,5">
                         <Grid>
-                            <StackPanel Orientation="Vertical">
-                                <TextBox x:Name="CobieFile" Margin="5" Height="24" Text="" />
-                                <Button Height="24" HorizontalAlignment="Right" Margin="5" Width="70" Content="Browse" Click="SelectCOBieForComplianceTest" />
-                            </StackPanel>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="Auto" />
+                            </Grid.ColumnDefinitions>
+                            <TextBox HorizontalAlignment="Stretch" Margin="5" Height="24" Text="{Binding ComplianceSourceString}" />
+                            <Button Grid.Column="1" Height="24" HorizontalAlignment="Right" Margin="5" Width="70" Content="Browse" Command="{Binding SelectComplianceCobie}" />
                         </Grid>
                     </GroupBox>
                     <GroupBox Grid.Row="2" Grid.Column="0" Header="Compliance report File:" Margin="10,5">
                         <Grid>
-                            <StackPanel Orientation="Vertical">
-                                <TextBox x:Name="ComplianceReportFile" Margin="5" Height="24" Text="" />
-                                <Button Height="24" HorizontalAlignment="Right" Margin="5" Width="70" Content="Browse" Click="SelectOutputForComplianceTest" />
-                            </StackPanel>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="Auto" />
+                            </Grid.ColumnDefinitions>
+                            <TextBox Margin="5" Height="24" Text="{Binding ComplianceReportFile}" />
+                            <Button Grid.Column="1" Height="24" HorizontalAlignment="Right" Margin="5" Width="70" Content="Browse" Command="{Binding SelectComplianceReport}"  />
+
                         </Grid>
                     </GroupBox>
 
-                    <Button Grid.Row="3" Height="24" VerticalAlignment="Top" HorizontalAlignment="Right" Margin="10,20" Width="300" Content="Create Compliance Report" Click="RunComplianceReport" />
+                    <Button Grid.Row="3" Height="24" VerticalAlignment="Top" HorizontalAlignment="Right" Margin="10,20" Width="300" Content="Create Compliance Report" Command="{Binding ComplianceReportCommand}" />
 
                     <StackPanel Grid.Row="4" Margin="10,5">
                         <TextBlock Foreground="Blue">Once your file has been evaluated you may attempt to improve its compliance.</TextBlock>
                         <TextBlock TextWrapping="Wrap" Margin="0,5"><Run Text="To attempt to fix the issues identified in your COBie file press the button below."/></TextBlock>
                     </StackPanel>
 
-                    <GroupBox Grid.Row="5" Grid.Column="0" Header="Compliance report File:" Margin="10,5">
+                    <GroupBox Grid.Row="5" Grid.Column="0" Header="Fixed COBie File:" Margin="10,5">
                         <Grid>
-                            <StackPanel Orientation="Vertical">
-                                <TextBox x:Name="FixedCobie" Margin="5" Height="24" Text="" />
-                                <Button Height="24" HorizontalAlignment="Right" Margin="5" Width="70" Content="Browse" Click="SelectOutputForFixedCobie" />
-                            </StackPanel>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="Auto" />
+                            </Grid.ColumnDefinitions>
+                            <TextBox Margin="5" Height="24" Text="{Binding FixedCobie}" />
+                            <Button Grid.Column="1" Height="24" HorizontalAlignment="Right" Margin="5" Width="70" Content="Browse" Command="{Binding SelectComplianceFixed}" />
+
                         </Grid>
                     </GroupBox>
-
-                    <Button x:Name="ImproveCObie" IsEnabled="False" Grid.Row="6" Height="24" VerticalAlignment="Top" HorizontalAlignment="Right" Margin="10,20" Width="300" Content="Improve COBie Compliance" Click="FixCobie" />
+                    <Button x:Name="ImproveCObie" IsEnabled="False" Grid.Row="6" Height="24" VerticalAlignment="Top" HorizontalAlignment="Right" Margin="10" Width="300" Content="Improve COBie Compliance" Command="{Binding ComplianceImproveCommand}" />
                 </Grid>
             </TabItem>
             <TabItem Header="Perform Verification" Height="22" VerticalAlignment="Top">
-                <Grid x:Name="ValidationGrid"  Margin="10" >
+                <Grid x:Name="ValidationGrid" Margin="20" >
                     <Grid.DataContext>
-                        <viewModels:ValidationViewModel/>
+                        <viewModels:VerificationViewModel/>
                     </Grid.DataContext>
                     <Grid.RowDefinitions>
                         <RowDefinition Height="Auto"/>
@@ -157,25 +164,34 @@
                             </StackPanel>
 
                             <TextBox Grid.Row="1" Grid.Column="0" Margin="5" Height="24" IsEnabled="{Binding FilesCanChange}" Text="{Binding SubmissionFileSource, UpdateSourceTrigger=PropertyChanged}" />
-                            <Button Grid.Row="1" Grid.Column="1"  Height="24" HorizontalAlignment="Right" Margin="5" Width="70" Content="Browse" Command="{Binding SelectSubmission}"/>
+                            <Button Grid.Row="1" Grid.Column="1"  Height="24" HorizontalAlignment="Right" Margin="5" Width="70" Content="Browse" Command="{Binding SelectModelSubmission}"/>
 
                         </Grid>
                     </GroupBox>
 
-                    <GroupBox Grid.Row="3" Grid.Column="0" Header="File name for the new Verification report:" Margin="0,5">
+                    <GroupBox Grid.Row="3" Grid.Column="0" Header="File name for the new Verified Model:" Margin="0,5">
                         <Grid>
-                            <StackPanel Orientation="Vertical">
-                                <TextBox Margin="5" Height="24" IsEnabled="{Binding FilesCanChange}" Text="{Binding ReportFileSource, UpdateSourceTrigger=PropertyChanged}" />
-                                <Button Height="24" HorizontalAlignment="Right" Margin="5" Width="70" Content="Browse" Command="{Binding SelectReport}"/>
-                            </StackPanel>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                            </Grid.RowDefinitions>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="Auto" />
+                            </Grid.ColumnDefinitions>
+
+                            <TextBox Margin="5" Height="24" IsEnabled="{Binding FilesCanChange}" Text="{Binding ReportFileSource, UpdateSourceTrigger=PropertyChanged}" />
+                            <Button Height="24" Grid.Column="1" HorizontalAlignment="Right" Margin="5" Width="70" Content="Browse" Command="{Binding SelectReport}"/>
+
                         </Grid>
                     </GroupBox>
 
-                    <Button Grid.Row="4" Height="24" VerticalAlignment="Top" HorizontalAlignment="Right" Margin="10,20" Width="300"  Content="Create verification report" Command="{Binding ValidateAndSave}" Click="Button_Click" />
+                    <Button Grid.Row="4" Height="24" VerticalAlignment="Top" HorizontalAlignment="Right" Margin="10" Width="300"  Content="Create verification report" Command="{Binding VerifyAndSave}" />
                 </Grid>
             </TabItem>
         </TabControl>
-        <Grid Width="200" Grid.Column="1" Background="DarkGray" Margin="5,30,5,5">
+        <Grid x:Name="ReportGrid"
+            Width="200" Grid.Column="1" Background="DarkGray" Margin="5,34,5,5">
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="1*"/>

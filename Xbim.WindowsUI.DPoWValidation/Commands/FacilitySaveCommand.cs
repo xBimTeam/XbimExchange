@@ -12,7 +12,7 @@ namespace Xbim.WindowsUI.DPoWValidation.Commands
     {
         public event EventHandler CanExecuteChanged;
 
-        private ValidationViewModel _vm;
+        private VerificationViewModel _vm;
 
         public bool CanExecute(object parameter)
         {
@@ -32,7 +32,7 @@ namespace Xbim.WindowsUI.DPoWValidation.Commands
             }
         }
 
-        public FacilitySaveCommand(ValidationViewModel viewModel)
+        public FacilitySaveCommand(VerificationViewModel viewModel)
         {
             _vm = viewModel;
         }
