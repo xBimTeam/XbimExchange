@@ -50,23 +50,8 @@ namespace XbimDPoWTools
             Settings.Default.LastOpenedSubmission = vm.SubmissionFileSource;
             Settings.Default.Save();
         }
-
-        private Facility _f;
         
         [Dependency]
         public ISaveFileSelector FileSelector { get; set; }
-
-        private string GetSaveFileName(string repName, List<string> filters)
-        {
-            FileSelector.Filter = string.Join("|", filters.ToArray());
-            FileSelector.Title = repName;
-            
-            var file = "";
-            var result = FileSelector.ShowDialog();
-            if (result == System.Windows.Forms.DialogResult.OK)
-                file = FileSelector.FileName;
-            return file;
-        }
-        
     }
 }

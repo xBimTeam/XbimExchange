@@ -22,10 +22,7 @@ namespace Xbim.WindowsUI.DPoWValidation.ViewModels
     public class VerificationViewModel : INotifyPropertyChanged
     {
         #region commands
-
-
-
-
+        
         // for verification
         public SelectInputFileCommand SelectRequirement { get; set; }
 
@@ -49,14 +46,10 @@ namespace Xbim.WindowsUI.DPoWValidation.ViewModels
         public SelectInputFileCommand SelectComplianceCobie { get; set; }
         public SelectOutputFileCommand SelectComplianceReport { get; set; }
         public SelectOutputFileCommand SelectComplianceFixed { get; set; }
-
-
         public RelayCommand ComplianceReportCommand { get; set; }
-
         public RelayCommand ComplianceImproveCommand { get; set; }
 
         // to be clarified
-
         public FacilitySaveCommand ExportFacility { get; set; }
         #endregion
 
@@ -111,8 +104,7 @@ namespace Xbim.WindowsUI.DPoWValidation.ViewModels
 
             ActivityStatus = "Writing fixed COBie.";
             ActivityProgress = 10;
-
-
+            
             var file = FixedCobie;
             string log;
             _complianceCheckFacility.WriteCobie(file, out log);
@@ -130,16 +122,6 @@ namespace Xbim.WindowsUI.DPoWValidation.ViewModels
             get { return !IsWorking; }
         }
         
-        public string RequirementFileSource
-        {
-            get { return RequirementFileInfo.FileName; }
-            set
-            {
-                RequirementFileInfo.FileName = value;
-                Verify.ChangesHappened();
-            }
-        }
-
         private Facility _requirementFacility;
 
         internal Facility RequirementFacility
@@ -178,6 +160,8 @@ namespace Xbim.WindowsUI.DPoWValidation.ViewModels
 
         private Facility _validationFacility;
 
+        // todo: underlying VMs are probably not in use.
+
         internal Facility ValidationFacility
         {
             get { return _validationFacility; }
@@ -190,79 +174,37 @@ namespace Xbim.WindowsUI.DPoWValidation.ViewModels
                 if (PropertyChanged == null)
                     return;
 
-                PropertyChanged.Invoke(this, new PropertyChangedEventArgs(@"ValidationFacilityVM")); // notiffy that the VM has also changed
+                PropertyChanged.Invoke(this, new PropertyChangedEventArgs(@"ValidationFacilityVM")); // notify that the VM has also changed
                 PropertyChanged.Invoke(this, new PropertyChangedEventArgs(@"ValidationFacility"));
                 PropertyChanged.Invoke(this, new PropertyChangedEventArgs(@"ExportFacility"));
             }
         }
 
         public DpoWFacilityViewModel ValidationFacilityVm { get; private set; }
-
-
-        public string SubmissionFileSource
-        {
-            get { return SubmissionFileInfo.FileName; }
-            set
-            {
-                SubmissionFileInfo.FileName = value;
-                Verify.ChangesHappened();
-            }
-        }
-
-
-        public string ReportFileSource
-        {
-            get { return ReportFileInfo.FileName; }
-            set
-            {
-                ReportFileInfo.FileName = value;
-                Verify.ChangesHappened();
-            }
-        }
-
-        public string BimFileSource
-        {
-            get { return BimFileInfo.FileName; }
-            set
-            {
-                // the underlying model
-                BimFileInfo.FileName = value;
-                // the command depending on this info
-                SaveBimToCobie.ChangesHappened();
-            }
-        }
-
-        public string COBieToWrite
-        {
-            get { return COBieToWriteFileInfo.FileName; }
-            set
-            {
-                // the underlying model
-                COBieToWriteFileInfo.FileName = value;
-                // the command depending on this info
-                SaveBimToCobie.ChangesHappened();
-            }
-        }
-
-        public string ComplianceSourceString { get { return ComplianceSourceFileInfo.FileName; } set { ComplianceSourceFileInfo.FileName = value; } }
-        public string ComplianceReportFile { get { return ComplianceReportFileInfo.FileName; } set { ComplianceReportFileInfo.FileName = value; } }
-        public string FixedCobie { get { return ComplianceFixedFileInfo.FileName; } set { ComplianceFixedFileInfo.FileName = value; } }
-       
-        
+                
         // verification
         internal SourceFile RequirementFileInfo;
         internal SourceFile SubmissionFileInfo;
         internal SourceFile ReportFileInfo;
 
+        public string RequirementFileSource { get { return RequirementFileInfo.FileName; } set { RequirementFileInfo.FileName = value; } }
+        public string SubmissionFileSource { get { return SubmissionFileInfo.FileName; } set { SubmissionFileInfo.FileName = value; } }
+        public string ReportFileSource { get { return ReportFileInfo.FileName; } set { ReportFileInfo.FileName = value; } }
+
         // COBie compliance
         internal SourceFile ComplianceSourceFileInfo;
         internal SourceFile ComplianceReportFileInfo;
         internal SourceFile ComplianceFixedFileInfo;
+        public string ComplianceSourceString { get { return ComplianceSourceFileInfo.FileName; } set { ComplianceSourceFileInfo.FileName = value; } }
+        public string ComplianceReportFile { get { return ComplianceReportFileInfo.FileName; } set { ComplianceReportFileInfo.FileName = value; } }
+        public string FixedCobie { get { return ComplianceFixedFileInfo.FileName; } set { ComplianceFixedFileInfo.FileName = value; } }
 
         // model conversion to cobie
         internal SourceFile BimFileInfo;
         internal SourceFile COBieToWriteFileInfo;
-        
+        public string BimFileSource { get { return BimFileInfo.FileName; } set { BimFileInfo.FileName = value; } }
+        public string COBieToWrite { get { return COBieToWriteFileInfo.FileName; } set { COBieToWriteFileInfo.FileName = value; } }
+
         public VerificationViewModel()
         {
             IsWorking = false;
@@ -323,7 +265,6 @@ namespace Xbim.WindowsUI.DPoWValidation.ViewModels
         {
             if (PropertyChanged == null)
                 return;
-            // verification
             PropertyChanged.Invoke(this, new PropertyChangedEventArgs(prop));
         }
 
@@ -333,11 +274,11 @@ namespace Xbim.WindowsUI.DPoWValidation.ViewModels
         {
             if (PropertyChanged == null) 
                 return;
-
+            // todo: understand why RelayCommand does not need the changeshappened.
+            // probably to do with CanExecuteChanged
             Verify.ChangesHappened();
             VerifyAndSave.ChangesHappened();
             SaveBimToCobie.ChangesHappened();
-                       
         }
 
         internal void ExecuteSaveCobie()
@@ -437,8 +378,7 @@ namespace Xbim.WindowsUI.DPoWValidation.ViewModels
             set
             {
                 _activityStatus = value;
-                if (PropertyChanged != null)
-                    PropertyChanged.Invoke(this, new PropertyChangedEventArgs(@"ActivityStatus"));
+                UpdateProperty("ActivityStatus");
             }
         }
 
@@ -449,8 +389,7 @@ namespace Xbim.WindowsUI.DPoWValidation.ViewModels
             set
             {
                 _activityProgress = value;
-                if (PropertyChanged != null)
-                    PropertyChanged.Invoke(this, new PropertyChangedEventArgs(@"ActivityProgress"));
+                UpdateProperty("ActivityProgress");
             }
         }
         public string ActivityDescription { get; set; }
@@ -574,7 +513,7 @@ namespace Xbim.WindowsUI.DPoWValidation.ViewModels
             }
             else
             {
-                // todo: notify
+                ActivityStatus = "Invalid facilities.";
             }
         }
 
