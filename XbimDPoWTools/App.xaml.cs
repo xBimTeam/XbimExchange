@@ -8,7 +8,7 @@ using System.Windows;
 using Microsoft.Practices.Unity;
 using Xbim.WindowsUI.DPoWValidation.Injection;
 
-namespace Xbim.WindowsUI.DPoWValidation
+namespace XbimDPoWTools
 {
     /// <summary>
     /// Interaction logic for App.xaml

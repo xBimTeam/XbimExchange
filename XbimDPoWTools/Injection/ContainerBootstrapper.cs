@@ -1,11 +1,6 @@
-﻿using System.Windows.Forms;
-using Microsoft.Practices.Unity;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Microsoft.Practices.Unity;
 using Xbim.WindowsUI.DPoWValidation.ViewModels;
+using XbimDPoWTools;
 
 namespace Xbim.WindowsUI.DPoWValidation.Injection
 {

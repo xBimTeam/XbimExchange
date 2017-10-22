@@ -266,10 +266,11 @@ namespace Xbim.WindowsUI.DPoWValidation.ViewModels
         public VerificationViewModel()
         {
             IsWorking = false;
-
-            RequirementFileInfo = new SourceFile(this);
-            SubmissionFileInfo = new SourceFile(this);
-            ReportFileInfo = new SourceFile(this);
+            
+            // verification
+            RequirementFileInfo = new SourceFile(this, "RequirementFileSource");
+            SubmissionFileInfo = new SourceFile(this, "SubmissionFileSource");
+            ReportFileInfo = new SourceFile(this, "ReportFileSource");
 
             // COBie compliance
             ComplianceSourceFileInfo = new SourceFile(this, "ComplianceSourceString");
@@ -277,8 +278,8 @@ namespace Xbim.WindowsUI.DPoWValidation.ViewModels
             ComplianceFixedFileInfo = new SourceFile(this, "FixedCobie");
 
             // model conversion to cobie
-            BimFileInfo = new SourceFile(this);
-            COBieToWriteFileInfo = new SourceFile(this);
+            BimFileInfo = new SourceFile(this, "BimFileSource");
+            COBieToWriteFileInfo = new SourceFile(this, "COBieToWrite");
 
             // for verification
             SelectRequirement = new SelectInputFileCommand(RequirementFileInfo, this) { AllowCompressedSchemas = true };
@@ -333,21 +334,10 @@ namespace Xbim.WindowsUI.DPoWValidation.ViewModels
             if (PropertyChanged == null) 
                 return;
 
-            // verification
-            PropertyChanged.Invoke(this, new PropertyChangedEventArgs(@"RequirementFileSource"));
-            PropertyChanged.Invoke(this, new PropertyChangedEventArgs(@"SubmissionFileSource"));
-            PropertyChanged.Invoke(this, new PropertyChangedEventArgs(@"ReportFileSource"));
-            
             Verify.ChangesHappened();
             VerifyAndSave.ChangesHappened();
-
-            // cobie conversion
-            PropertyChanged.Invoke(this, new PropertyChangedEventArgs(@"BimFileSource"));
-            PropertyChanged.Invoke(this, new PropertyChangedEventArgs(@"COBieToWrite"));
             SaveBimToCobie.ChangesHappened();
-
-            // Compliance
-            
+                       
         }
 
         internal void ExecuteSaveCobie()

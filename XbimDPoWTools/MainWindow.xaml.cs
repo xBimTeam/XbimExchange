@@ -5,11 +5,11 @@ using System.Windows.Forms;
 using Microsoft.Practices.Unity;
 using Xbim.CobieLiteUk;
 using Xbim.WindowsUI.DPoWValidation.Injection;
-using Xbim.WindowsUI.DPoWValidation.Properties;
 using Xbim.WindowsUI.DPoWValidation.ViewModels;
 using System.Diagnostics;
+using Xbim.DPoWTools.Properties;
 
-namespace Xbim.WindowsUI.DPoWValidation
+namespace XbimDPoWTools
 {
     /// <summary>
     /// Interaction logic for MainWindow.xaml
@@ -52,11 +52,7 @@ namespace Xbim.WindowsUI.DPoWValidation
         }
 
         private Facility _f;
-
-       
-
-       
-
+        
         [Dependency]
         public ISaveFileSelector FileSelector { get; set; }
 

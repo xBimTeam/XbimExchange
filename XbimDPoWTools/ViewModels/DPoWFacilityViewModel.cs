@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 using NPOI.SS.Formula.Functions;
 using Xbim.CobieLiteUk;
 using Xbim.WindowsUI.DPoWValidation.Commands;
-using Xbim.WindowsUI.DPoWValidation.Properties;
+using Xbim.DPoWTools.Properties;
 
 namespace Xbim.WindowsUI.DPoWValidation.ViewModels
 {
@@ -54,7 +54,7 @@ namespace Xbim.WindowsUI.DPoWValidation.ViewModels
                     .Select(c => c.Classification)
                     .Distinct().ToList();
                 AvailableClassifications = new ObservableCollection<string>(s);
-
+                
                 SelectedClassification =
                     s.Contains(Settings.Default.PreferredClassification)
                         ? Settings.Default.PreferredClassification

@@ -3,8 +3,8 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:viewModels="clr-namespace:Xbim.WindowsUI.DPoWValidation.ViewModels"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" mc:Ignorable="d"
-        x:Class="Xbim.WindowsUI.DPoWValidation.MainWindow"
-        Title="Digital Plan of Work - Validation (Powered by Xbim)" Height="550" Width="800" 
+        x:Class="XbimDPoWTools.MainWindow"
+        Title="Digital Plan of Work - Verification tools (powered by Xbim)" Height="550" Width="800" 
         >
     <Grid>
         <Grid.ColumnDefinitions>
@@ -201,5 +201,6 @@
             </StackPanel>
             <TextBox Margin="5" Grid.Row="1" Text="{Binding ActivityStatus}" />
         </Grid>
+        <Image x:Name="Image1_png" Margin="0,0,123,4" Source="XbimLogo.png" Stretch="Uniform" Grid.ColumnSpan="2" Height="70" VerticalAlignment="Bottom" HorizontalAlignment="Right" Width="119"/>
     </Grid>
 </Window>
