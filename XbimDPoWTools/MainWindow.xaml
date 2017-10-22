@@ -4,7 +4,7 @@
         xmlns:viewModels="clr-namespace:Xbim.WindowsUI.DPoWValidation.ViewModels"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" mc:Ignorable="d"
         x:Class="XbimDPoWTools.MainWindow"
-        Title="Digital Plan of Work - Verification tools (powered by Xbim)" Height="550" Width="800" 
+        Title="Digital Plan of Work - Verification tools (powered by Xbim)" Height="505" Width="800" Icon="dpowlogo.ico" 
         >
     <Grid>
         <Grid.ColumnDefinitions>
@@ -58,7 +58,7 @@
                     </Grid.RowDefinitions>
                     <StackPanel Margin="10,5">
                         <TextBlock Foreground="Blue">This function ensures that your COBie Excel file complies with the standards.</TextBlock>
-                        <TextBlock TextWrapping="Wrap" Margin="0,5"><Run Text="To validate the compliance of a COBie file select either an XLS or XLSX spreadsheet containing the COBie data."/></TextBlock>
+                        <TextBlock TextWrapping="Wrap" Margin="0,5"><Run Text="To validate the compliance of a COBie file select either an XLS or XLSX spreadsheet."/></TextBlock>
                     </StackPanel>
                     <GroupBox Grid.Row="1" Grid.Column="0" Header="COBie File:" Margin="10,5">
                         <Grid>
@@ -86,7 +86,9 @@
 
                     <StackPanel Grid.Row="4" Margin="10,5">
                         <TextBlock Foreground="Blue">Once your file has been evaluated you may attempt to improve its compliance.</TextBlock>
+                        <!--
                         <TextBlock TextWrapping="Wrap" Margin="0,5"><Run Text="To attempt to fix the issues identified in your COBie file press the button below."/></TextBlock>
+                        -->
                     </StackPanel>
 
                     <GroupBox Grid.Row="5" Grid.Column="0" Header="Fixed COBie File:" Margin="10,5">
@@ -104,7 +106,7 @@
                 </Grid>
             </TabItem>
             <TabItem Header="Perform Verification" Height="22" VerticalAlignment="Top">
-                <Grid x:Name="ValidationGrid" Margin="20" >
+                <Grid x:Name="ValidationGrid" Margin="20,20,20,0" >
                     <Grid.DataContext>
                         <viewModels:VerificationViewModel/>
                     </Grid.DataContext>
@@ -138,7 +140,9 @@
 
                             <StackPanel Margin="5" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2">
                                 <TextBlock TextWrapping="Wrap" Margin="0,5"><Run Text="This is the requirements file that has been exported from the BIM Toolkit online."/></TextBlock>
+                                <!--
                                 <TextBlock Margin="0,5"><Run Text="(Click "/><Hyperlink NavigateUri="http://www.google.com"><Run Text="here"/></Hyperlink><Run Text=" for instructions on how to create a requirements file"/></TextBlock>
+                                -->
                             </StackPanel>
 
                             <TextBox Grid.Row="1" Grid.Column="0" Margin="5" Height="24" IsEnabled="{Binding FilesCanChange}" Text="{Binding RequirementFileSource, UpdateSourceTrigger=PropertyChanged}" />
@@ -159,8 +163,10 @@
                             </Grid.ColumnDefinitions>
 
                             <StackPanel Margin="0,5" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2">
-                                <TextBlock TextWrapping="Wrap" Margin="5"><Run Text="this is a COBie spreadsheet that has been created in your BIM authoring tool or converted from an IFC file using the 'Create COBie Submission file' tab."/></TextBlock>
+                                <TextBlock TextWrapping="Wrap" Margin="5"><Run Text="this is a COBie spreadsheet that has been created in your BIM authoring tool or converted from an IFC file using the 'Create COBie from your BIM file' tab."/></TextBlock>
+                                <!--
                                 <TextBlock Margin="5"><Run Text="(Click "/><Hyperlink NavigateUri="http://www.google.com"><Run Text="here"/></Hyperlink><Run Text=" for instructions on how to create a submission file"/></TextBlock>
+                                -->
                             </StackPanel>
 
                             <TextBox Grid.Row="1" Grid.Column="0" Margin="5" Height="24" IsEnabled="{Binding FilesCanChange}" Text="{Binding SubmissionFileSource, UpdateSourceTrigger=PropertyChanged}" />
@@ -169,7 +175,7 @@
                         </Grid>
                     </GroupBox>
 
-                    <GroupBox Grid.Row="3" Grid.Column="0" Header="File name for the new Verified Model:" Margin="0,5">
+                    <GroupBox Grid.Row="3" Grid.Column="0" Header="Verification output:" Margin="0,5">
                         <Grid>
                             <Grid.RowDefinitions>
                                 <RowDefinition Height="Auto"/>
@@ -179,19 +185,25 @@
                                 <ColumnDefinition Width="*" />
                                 <ColumnDefinition Width="Auto" />
                             </Grid.ColumnDefinitions>
+                            <StackPanel Orientation="Horizontal" Grid.ColumnSpan="2">
+                                <RadioButton Margin="5" IsChecked="True">Summary report</RadioButton>
+                                <RadioButton Margin="5">Submitted subset</RadioButton>
+                                <RadioButton Margin="5" IsEnabled="False" >Verified model</RadioButton>
+                                <RadioButton Margin="5" IsEnabled="False">Templated model</RadioButton>
+                            </StackPanel>
 
-                            <TextBox Margin="5" Height="24" IsEnabled="{Binding FilesCanChange}" Text="{Binding ReportFileSource, UpdateSourceTrigger=PropertyChanged}" />
-                            <Button Height="24" Grid.Column="1" HorizontalAlignment="Right" Margin="5" Width="70" Content="Browse" Command="{Binding SelectReport}"/>
+                            <TextBox Grid.Row="1" Margin="5" Height="24" IsEnabled="{Binding FilesCanChange}" Text="{Binding ReportFileSource, UpdateSourceTrigger=PropertyChanged}" />
+                            <Button Grid.Row="1" Height="24" Grid.Column="1" HorizontalAlignment="Right" Margin="5" Width="70" Content="Browse" Command="{Binding SelectReport}"/>
 
                         </Grid>
                     </GroupBox>
 
-                    <Button Grid.Row="4" Height="24" VerticalAlignment="Top" HorizontalAlignment="Right" Margin="10" Width="300"  Content="Create verification report" Command="{Binding VerifyAndSave}" />
+                    <Button Grid.Row="4" Height="24" VerticalAlignment="Top" HorizontalAlignment="Right" Margin="0,10" Width="300"  Content="Create verification report" Command="{Binding VerifyAndSave}" />
                 </Grid>
             </TabItem>
         </TabControl>
         <Grid x:Name="ReportGrid"
-            Width="200" Grid.Column="1" Background="DarkGray" Margin="5,34,5,5">
+            Width="200" Grid.Column="1" Background="DarkGray" Margin="0,34,10,10">
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="1*"/>
@@ -201,6 +213,6 @@
             </StackPanel>
             <TextBox Margin="5" Grid.Row="1" Text="{Binding ActivityStatus}" />
         </Grid>
-        <Image x:Name="Image1_png" Margin="0,0,123,4" Source="XbimLogo.png" Stretch="Uniform" Grid.ColumnSpan="2" Height="70" VerticalAlignment="Bottom" HorizontalAlignment="Right" Width="119"/>
+        <Image x:Name="Image1_png" Margin="0,0,123,10" Source="XbimLogo.png" Stretch="Uniform" Grid.ColumnSpan="2" Height="70" VerticalAlignment="Bottom" HorizontalAlignment="Right" Width="119"/>
     </Grid>
 </Window>
