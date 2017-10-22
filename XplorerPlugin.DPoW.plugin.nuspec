@@ -2,7 +2,7 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2011/10/nuspec.xsd">
   <metadata>
     <id>XplorerPlugin.DPoW</id>
-    <version>4.0.7-V0018</version>
+    <version>4.0.7-V0019</version>
     <title>XplorerPlugin.DPoW Validator</title>
     <authors>xBIM team</authors>
     <owners>xBIM team</owners>

@@ -60,53 +60,67 @@ namespace Xbim.WindowsUI.DPoWValidation.ViewModels
         public FacilitySaveCommand ExportFacility { get; set; }
         #endregion
 
+        string _lastComplianceCheckedFile = "";
+        Facility _complianceCheckFacility;
+
         private void RunComplianceReport(object parameter)
         {
+            // todo: prepare background task to enable progress update.
 
-            // todo: restore
+            ActivityStatus = "Reading COBie.";
+            ActivityProgress = 10;
 
-            //if (!File.Exists(CobieFile.Text))
-            //    return;
-
-            //string read;
-            //_f = Facility.ReadCobie(CobieFile.Text, out read);
-            //if (_f == null)
-            //{
-            //    System.Windows.Forms.MessageBox.Show("The provided files could not be read.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            //}
-            //var loggerFile = new FileInfo(ComplianceReportFile.Text);
-            //using (var logger = loggerFile.CreateText())
-            //{
-            //    _f.ValidateUK2012(logger, true);
-            //}
-            //// TODO: check: I suppose the file is only created if the model needs fixing
-            //if (loggerFile.Exists)    
-            //{
-            //    Process.Start(loggerFile.FullName);
-            //    ImproveCObie.IsEnabled = true;
-
-            //    // if file exists but report is empty then autofill
-            //    //
-            //    var fi = new FileInfo(CobieFile.Text);
-            //    if (fi.Exists && string.IsNullOrEmpty(FixedCobie.Text))
-            //    {
-            //        FixedCobie.Text = Path.ChangeExtension(CobieFile.Text, "fixed" + fi.Extension);
-            //    }
-            //}
+            string read;
+            _complianceCheckFacility = Facility.ReadCobie(ComplianceSourceFileInfo.FileName, out read);
+            if (_complianceCheckFacility == null)
+            {
+                ActivityStatus = "Error: The provided files could not be read.";
+                ActivityProgress = 0;
+                return;
+            }
+         
+            using (var logger = ComplianceReportFileInfo.FileInfo.CreateText())
+            {
+                ActivityStatus = "Checking COBie.";
+                ActivityProgress = 40;
+                _complianceCheckFacility.ValidateUK2012(logger, true);
+            }
+            // TODO: check: I suppose the file is only created if the model needs fixing
+            if (ComplianceReportFileInfo.FileInfo.Exists)
+            {
+                _lastComplianceCheckedFile = ComplianceSourceFileInfo.FileName;
+                ActivityStatus = "Opening file.";
+                ActivityProgress = 95;
+                Process.Start(ComplianceReportFileInfo.FileInfo.FullName);
+                
+                // if file exists but fixing field is empty then autofill
+                //
+                if (ComplianceReportFileInfo.Exists && string.IsNullOrEmpty(FixedCobie))
+                {
+                    FixedCobie = Path.ChangeExtension(ComplianceSourceFileInfo.FileName, "fixed" + ComplianceSourceFileInfo.FileInfo.Extension);
+                }
+            }
+            ActivityStatus = "Completed.";
+            ActivityProgress = 0;
         }
 
         private void FixCobie(object sender)
         {
-            //// todo: restore
-            //if (_f == null)
-            //    return;
+            if (_complianceCheckFacility == null)
+                return;
 
-            //string log;
-            //var file = FixedCobie.Text;
+            ActivityStatus = "Writing fixed COBie.";
+            ActivityProgress = 10;
 
-            //_f.WriteCobie(file, out log);
-            //if (File.Exists(file))
-            //    Process.Start(file);
+
+            var file = FixedCobie;
+            string log;
+            _complianceCheckFacility.WriteCobie(file, out log);
+            if (File.Exists(file))
+                Process.Start(file);
+
+            ActivityStatus = "Writing completed.";
+            ActivityProgress = 0;
         }
 
         public bool IsWorking { get; set; }
@@ -115,9 +129,7 @@ namespace Xbim.WindowsUI.DPoWValidation.ViewModels
         {
             get { return !IsWorking; }
         }
-
-
-
+        
         public string RequirementFileSource
         {
             get { return RequirementFileInfo.FileName; }
@@ -232,9 +244,10 @@ namespace Xbim.WindowsUI.DPoWValidation.ViewModels
             }
         }
 
-        public string ComplianceSourceString => ComplianceSourceFileInfo.FileName;
-        public string ComplianceReportFile => ComplianceReportFileInfo.FileName;
-        public string FixedCobie => ComplianceFixedFileInfo.FileName;
+        public string ComplianceSourceString { get { return ComplianceSourceFileInfo.FileName; } set { ComplianceSourceFileInfo.FileName = value; } }
+        public string ComplianceReportFile { get { return ComplianceReportFileInfo.FileName; } set { ComplianceReportFileInfo.FileName = value; } }
+        public string FixedCobie { get { return ComplianceFixedFileInfo.FileName; } set { ComplianceFixedFileInfo.FileName = value; } }
+       
         
         // verification
         internal SourceFile RequirementFileInfo;
@@ -279,16 +292,24 @@ namespace Xbim.WindowsUI.DPoWValidation.ViewModels
 
             // compliance report
             SelectComplianceCobie = new SelectInputFileCommand(ComplianceSourceFileInfo, this) { IncludeCobieSchemas = false, AllowCompressedSchemas = false };
-            SelectComplianceReport = new SelectOutputFileCommand(ComplianceReportFileInfo, this) { Text = true, COBieSchemas = false, COBieSpreadSheet = false };
+            SelectComplianceReport = new SelectOutputFileCommand(ComplianceReportFileInfo, this) { TextFormat = true, COBieSchemas = false, COBieSpreadSheet = false };
             SelectComplianceFixed = new SelectOutputFileCommand(ComplianceFixedFileInfo, this) { COBieSchemas = false };
 
             ComplianceReportCommand = new RelayCommand(RunComplianceReport, CanRunComplianceReport);
-            // ComplianceImproveCommand = new RelayCommand();
+            ComplianceImproveCommand = new RelayCommand(FixCobie, CanRunComplianceImprove );
 
             Verify = new ValidateCommand(this);
             ExportFacility = new FacilitySaveCommand(this);
             VerifyAndSave = new ValidateAndSaveCommand(this);
+        }
 
+        private bool CanRunComplianceImprove(object obj)
+        {
+            if (_complianceCheckFacility == null)
+                return false;
+            if (!ComplianceFixedFileInfo.IsValidName(SourceFile.AllowedExtensions.CobieSpreadsheet))
+                return false;
+            return (ComplianceSourceString == _lastComplianceCheckedFile);
         }
 
         private bool CanRunComplianceReport(object obj)

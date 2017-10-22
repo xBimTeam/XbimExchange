@@ -100,7 +100,7 @@
 
                         </Grid>
                     </GroupBox>
-                    <Button x:Name="ImproveCObie" IsEnabled="False" Grid.Row="6" Height="24" VerticalAlignment="Top" HorizontalAlignment="Right" Margin="10" Width="300" Content="Improve COBie Compliance" Command="{Binding ComplianceImproveCommand}" />
+                    <Button x:Name="ImproveCObie" Grid.Row="6" Height="24" VerticalAlignment="Top" HorizontalAlignment="Right" Margin="10" Width="300" Content="Improve COBie Compliance" Command="{Binding ComplianceImproveCommand}" />
                 </Grid>
             </TabItem>
             <TabItem Header="Perform Verification" Height="22" VerticalAlignment="Top">

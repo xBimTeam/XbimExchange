@@ -42,7 +42,7 @@ namespace Xbim.WindowsUI.DPoWValidation.Commands
 
         public bool COBieSpreadSheet { get; set; } = true;
         public bool COBieSchemas { get; set; } = true;
-        public bool Text { get; set; } = false;
+        public bool TextFormat { get; set; } = false;
 
         public void Execute(object parameter)
         {
@@ -57,7 +57,7 @@ namespace Xbim.WindowsUI.DPoWValidation.Commands
                 filters.Add(new FileGroup("COBie Schema in Json format", "*.json"));
                 filters.Add(new FileGroup("COBie Schema in Xml format", "*.xml"));
             }
-            if (COBieSchemas)
+            if (TextFormat)
             {
                 filters.Add(new FileGroup("Text files", "*.txt"));
             }
