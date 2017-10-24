@@ -83,7 +83,7 @@ namespace XbimExchanger.IfcToCOBieExpress
             var ifcSpatialStructureElements = spaces != null ? spaces.ToList() : new List<IIfcSpatialElement>();
             
 
-            if (!Helper.CreatePlaceholderSpaces)
+            if (Helper.CreatePlaceholderSpaces)
             {
                 ifcSpatialStructureElements.Add(ifcSpatialStructureElement);
             }
