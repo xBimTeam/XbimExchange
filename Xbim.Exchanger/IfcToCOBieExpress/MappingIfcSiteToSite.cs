@@ -13,7 +13,7 @@ namespace XbimExchanger.IfcToCOBieExpress
             site.ExternalObject = helper.GetExternalObject(ifcSite);
             site.ExternalId = helper.ExternalEntityIdentity(ifcSite);
             site.AltExternalId = ifcSite.GlobalId;
-            site.Name = ifcSite.LongName;
+            site.Name = ifcSite.Name;
             site.Description = FirstNonEmptyString(ifcSite.Description, ifcSite.LongName, ifcSite.Name);
             return site;
         }
