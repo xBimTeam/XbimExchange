@@ -1118,9 +1118,9 @@ namespace XbimExchanger.IfcToCOBieExpress
         }
 
 
-        private List<CobieCategory> ConvertToCategories(IEnumerable<IIfcClassificationReference> classifications)
+        private HashSet<CobieCategory> ConvertToCategories(IEnumerable<IIfcClassificationReference> classifications)
         {
-            var categories = new List<CobieCategory>();
+            var categories = new HashSet<CobieCategory>();
             foreach (var classification in classifications)
             { 
                 CobieCategory category;
@@ -1142,7 +1142,7 @@ namespace XbimExchanger.IfcToCOBieExpress
         /// </summary>
         /// <param name="strRef">Uniclass string</param>
         /// <returns>List of Category Objects</returns>
-        private List<CobieCategory> ConvertToCategories(string strRef)
+        private HashSet<CobieCategory> ConvertToCategories(string strRef)
         {
             var code = strRef;
             string description = null;
@@ -1154,11 +1154,11 @@ namespace XbimExchanger.IfcToCOBieExpress
 
             CobieCategory category;
             if (!_categoryMapping.GetOrCreateTargetObject(code, out category))
-                return new List<CobieCategory> {category};
+                return new HashSet<CobieCategory> {category};
 
             category.Value = code;
             category.Description = description;
-            return new List<CobieCategory>{category};
+            return new HashSet<CobieCategory>{category};
         }
 
         /// <summary>
@@ -1167,17 +1167,17 @@ namespace XbimExchanger.IfcToCOBieExpress
         /// <param name="code">Uniclass code</param>
         /// <param name="desc">Uniclass description</param>
         /// <returns>List of Category Objects</returns>
-        private List<CobieCategory> ConvertToCategories(string code, string desc)
+        private HashSet<CobieCategory> ConvertToCategories(string code, string desc)
         {
             CobieCategory category;
             if (!_categoryMapping.GetOrCreateTargetObject(code ?? desc ?? "unknown", out category))
-                return new List<CobieCategory> {category};
+                return new HashSet<CobieCategory> {category};
 
             if (!string.IsNullOrEmpty(code))
                 category.Value= code;
             if (!string.IsNullOrEmpty(desc))
                 category.Description= desc;
-            return new List<CobieCategory>{category};
+            return new HashSet<CobieCategory>{category};
         }
 
         /// <summary>
@@ -1186,7 +1186,7 @@ namespace XbimExchanger.IfcToCOBieExpress
         /// <param name="classifiedObject"></param>
         /// <param name="useProp"></param>
         /// <returns></returns>
-        public List<CobieCategory> GetCategories(IIfcDefinitionSelect classifiedObject, bool useProp = true)
+        public HashSet<CobieCategory> GetCategories(IIfcDefinitionSelect classifiedObject, bool useProp = true)
         {
             List<IIfcClassificationReference> classifications;
             if (_classifiedObjects.TryGetValue(classifiedObject, out classifications))
@@ -1203,7 +1203,7 @@ namespace XbimExchanger.IfcToCOBieExpress
                 }
             }
             //get category from properties
-            if (!useProp || !(classifiedObject is IIfcObjectDefinition)) return new List<CobieCategory>{ UnknownCategory };
+            if (!useProp || !(classifiedObject is IIfcObjectDefinition)) return new HashSet<CobieCategory>{ UnknownCategory };
 
             var code = GetCoBieProperty("CommonCategoryCode", (IIfcObjectDefinition) classifiedObject);
             var desc = GetCoBieProperty("CommonCategoryDescription", (IIfcObjectDefinition) classifiedObject);
@@ -1220,7 +1220,7 @@ namespace XbimExchanger.IfcToCOBieExpress
 
             if (string.IsNullOrEmpty(code) && string.IsNullOrEmpty(desc))
             {
-                return new List<CobieCategory> { UnknownCategory };
+                return new HashSet<CobieCategory> { UnknownCategory };
             }
 
             return ConvertToCategories(cat);
