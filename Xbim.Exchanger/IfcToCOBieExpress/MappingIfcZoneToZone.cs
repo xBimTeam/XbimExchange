@@ -31,7 +31,7 @@ namespace XbimExchanger.IfcToCOBieExpress
                 {
                     target.Categories.Clear();
                     var category =  StringToCategory.GetOrCreate(ifcZone.ObjectType);
-                    target.Categories.Add(category);
+                    target.Categories.AddIfNotPresent(category);
                 }
 
             //get spaces in zones

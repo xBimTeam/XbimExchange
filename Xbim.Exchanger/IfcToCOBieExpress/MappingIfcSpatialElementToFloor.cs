@@ -38,7 +38,7 @@ namespace XbimExchanger.IfcToCOBieExpress
             var spaceElement = ifcSpatialStructureElement as IIfcSpace;
             if (site != null)
             {
-                target.Categories.Add(StringToCategory.GetOrCreate("Site"));
+                target.Categories.AddIfNotPresent(StringToCategory.GetOrCreate("Site"));
                 //upgrade code below to use extension method GetSpaces()
 
                 if (site.IsDecomposedBy != null)
@@ -51,12 +51,12 @@ namespace XbimExchanger.IfcToCOBieExpress
             }
             else if (building != null)
             {
-                target.Categories.Add(StringToCategory.GetOrCreate("Building"));
+                target.Categories.AddIfNotPresent(StringToCategory.GetOrCreate("Building"));
                 spaces = building.Spaces;
             }
             else if (storey != null)
             {
-                target.Categories.Add(StringToCategory.GetOrCreate("Floor"));
+                target.Categories.AddIfNotPresent(StringToCategory.GetOrCreate("Floor"));
                 if (storey.Elevation.HasValue)
                 {
                     target.Elevation = storey.Elevation.Value;
@@ -65,7 +65,7 @@ namespace XbimExchanger.IfcToCOBieExpress
             }
             else if (spaceElement != null)
             {
-                target.Categories.Add(StringToCategory.GetOrCreate("Space"));
+                target.Categories.AddIfNotPresent(StringToCategory.GetOrCreate("Space"));
                 spaces = spaceElement.Spaces;
             }
 

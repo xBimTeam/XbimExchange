@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
+using Xbim.CobieExpress;
+using Xbim.Common;
 
 namespace XbimExchanger
 {
@@ -173,6 +175,22 @@ namespace XbimExchanger
             }
 
             return null;
+        }
+    }
+
+    public static class CollectionExtension
+    {
+        public static void AddIfNotPresent(this IOptionalItemSet<CobieCategory> collection, CobieCategory item)
+        {
+            foreach (var cat in collection)
+            {
+                if (cat.Value == item.Value)
+                {
+                    return;
+                }
+            }
+
+            collection.Add(item);
         }
     }
 }
