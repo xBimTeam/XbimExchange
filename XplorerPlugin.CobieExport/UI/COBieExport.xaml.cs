@@ -183,7 +183,11 @@ namespace XplorerPlugin.CobieExport.UI
                 }
             }
 
-            var f = new FileInfo(Path.ChangeExtension(Model.FileName, ".xls"));
+            var fName = Model.FileName;
+            if (string.IsNullOrEmpty(fName))
+                fName = "Unnamed";
+
+            var f = new FileInfo(Path.ChangeExtension(fName, ".xls"));
             var outputFile = Path.Combine(TxtFolderName.Text, f.Name);
 
             // configure settings for exporter

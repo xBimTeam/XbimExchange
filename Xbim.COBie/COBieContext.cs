@@ -127,7 +127,7 @@ namespace Xbim.COBie
                                 mergeRoles = mergeRoles ^ COBieMergeRoles.Unknown;
                         }
                     }
-                    mapModelToMergeRoles.Add((XbimModel)refModel.Model, mergeRoles);
+                    mapModelToMergeRoles.Add(refModel.Model, mergeRoles);
                 }
             }
             return mapModelToMergeRoles;

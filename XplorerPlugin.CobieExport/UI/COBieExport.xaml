@@ -1,7 +1,9 @@
 ﻿<Window x:Class="XplorerPlugin.CobieExport.UI.COBieExport"
-        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        Title="COBie Class Filter" Height="368" Width="746" WindowStartupLocation="CenterOwner" ResizeMode="NoResize">
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    Height="368" Width="746" 
+    Title="COBie Class Filter" WindowStartupLocation="CenterOwner" ResizeMode="NoResize"
+    >
     <Grid>
         <TabControl Margin="10,10,10,45">
             <TabItem Header="General">
