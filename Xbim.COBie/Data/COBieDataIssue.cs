@@ -111,7 +111,7 @@ namespace Xbim.COBie.Data
                 propValues = GetPropertyEnumValue(propertyList, "RiskOwner");
                 issue.Owner = propValues.Value;
 
-                propValues = GetPropertyValue(propertyList, "PreventiveMeassures");
+                propValues = GetPropertyValue(propertyList, "PreventiveMeasures");
                 issue.Mitigation = propValues.Value;
 
                 issue.ExtSystem = (ifcPropertySet != null) ? GetExternalSystem(ifcPropertySet) : DEFAULT_STRING;

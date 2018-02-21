@@ -150,7 +150,7 @@ namespace Xbim.COBie.Serialisers.XbimSerialiser
                 }
 
                 if (ValidateString(row.Mitigation))
-                    AddPropertySingleValue(ifcPropertySet, "PreventiveMeassures", "Identifies preventive measures to be taken to mitigate risk.", new IfcText(row.Mitigation), null);
+                    AddPropertySingleValue(ifcPropertySet, "PreventiveMeasures", "Identifies preventive measures to be taken to mitigate risk.", new IfcText(row.Mitigation), null);
 
                 //Add Identifier
                 if (ValidateString(row.ExtIdentifier))
