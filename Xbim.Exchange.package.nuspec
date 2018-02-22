@@ -3,7 +3,7 @@
     <metadata>
         <id>Xbim.Exchange</id>
         <!-- note: development versions are generally in the form 4.0.0-V0001, use 4 digits for consistency -->
-        <version>4.0.7-V0023</version>
+        <version>4.0.7-V0024</version>
         <title>xBIM Exchange</title>
         <authors>xBIM Team</authors>
         <owners>Steve Lockley</owners>
@@ -29,9 +29,9 @@ IOS and Android versions are under development.</description>
         <dependency id="Newtonsoft.Json" version="9.0.1" />
         <dependency id="NPOI" version="2.3.0" />
         <dependency id="SharpZipLib" version="0.86.0" />
-        <dependency id="Xbim.Essentials" version="4.0.29-V008" />
-        <dependency id="Xbim.Cobie" version="4.0.29-V008" />
-        <dependency id="Xbim.Geometry" version="4.0.15-V0021" />
+        <dependency id="Xbim.Essentials" version="4.0.30-V005" />
+        <dependency id="Xbim.Cobie" version="4.0.30-V005" />
+        <dependency id="Xbim.Geometry" version="4.0.15-V0030" />
       </dependencies>
     </metadata>
     <files>
