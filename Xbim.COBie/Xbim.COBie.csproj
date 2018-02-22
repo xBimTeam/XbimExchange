@@ -87,6 +87,7 @@
     <Compile Include="Data\COBieDataSystem.cs" />
     <Compile Include="Data\COBieDataType.cs" />
     <Compile Include="Data\COBieDataZone.cs" />
+    <Compile Include="Data\COBieHelpers.cs" />
     <Compile Include="Data\IAttributeProvider.cs" />
     <Compile Include="COBieProgress.cs" />
     <Compile Include="Enums.cs" />
