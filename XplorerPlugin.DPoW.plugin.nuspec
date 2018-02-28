@@ -23,6 +23,7 @@
   <files>
     <file src="XplorerPlugin.DPoW\bin\Release\XplorerPlugin.DPoW.exe"         target="lib\net45\" />
     <file src="XplorerPlugin.DPoW\bin\Release\Microsoft.Practices.ServiceLocation.dll"         target="lib\net45\" />
+    <file src="XplorerPlugin.DPoW\bin\Release\XbimDPoWTools.exe"         target="lib\net45\" />
     <file src="XplorerPlugin.DPoW\bin\Release\Microsoft.Practices.Unity.dll"         target="lib\net45\" />
     <file src="XplorerPlugin.DPoW\bin\Release\Xbim.CobieExpress.IO.dll"         target="lib\net45\" />
     <file src="XplorerPlugin.DPoW\bin\Release\Xbim.COBieLite.dll"         target="lib\net45\" />
