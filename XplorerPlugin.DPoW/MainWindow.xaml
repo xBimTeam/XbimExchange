@@ -49,6 +49,7 @@
                             </Grid>
                         </GroupBox>
                         <Button Margin="4,2" Content="Close file" Click="CloseFile"/>
+                        <Button Margin="4,2" Content="Export report" Click="Export"/>
                     </StackPanel>
                 </TabItem>
             </TabControl>
@@ -60,6 +61,10 @@
             <Button 
                 Content="Open DPoW requirements" Click="OpenFile" 
                 Height="22" Width="200" HorizontalAlignment="Center" Grid.Row="0" 
+                />
+            <Button 
+                Content="DPoW Tool" Click="OpenUI" 
+                Height="22" Width="200" VerticalAlignment="Bottom" HorizontalAlignment="Center" Grid.Row="0" Margin="10"
                 />
         </Grid>
     </Grid>

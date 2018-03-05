@@ -17,6 +17,8 @@ using Xbim.Presentation;
 using Xbim.Presentation.XplorerPluginSystem;
 using Xbim.WindowsUI.DPoWValidation.IO;
 using Xbim.WindowsUI.DPoWValidation.ViewModels;
+using Xbim.WindowsUI.DPoWValidation.Extensions;
+using System.IO;
 
 namespace XplorerPlugin.DPoW
 {
@@ -281,6 +283,7 @@ namespace XplorerPlugin.DPoW
 
         private void SetSelectedAsset(object sender, SelectionChangedEventArgs e)
         {
+            Report.Text = "";
             var avm = LstAssets.SelectedItem as AssetViewModel;
             if (avm == null)
                 return;
@@ -288,6 +291,12 @@ namespace XplorerPlugin.DPoW
             if (!selectedLabel.HasValue)
                 return;
             _xpWindow.SelectedItem = Model.Instances[selectedLabel.Value];
+
+            Report.Text = avm.Description + Environment.NewLine;
+            foreach (var item in avm.RequirementResults)
+            {
+                Report.Text += $"- {item.Name} ({item.Type})" + Environment.NewLine;
+            }
         }
 
         private void ViewModel(object sender, RoutedEventArgs e)
@@ -309,6 +318,22 @@ namespace XplorerPlugin.DPoW
         {
             Asset a;
             return _verifiedItems.TryGetValue(ent.EntityLabel, out a) ? a : null;
+        }
+
+        private void Export(object sender, RoutedEventArgs e)
+        {
+            var m = Model as IfcStore;
+            if (m == null)
+                return;
+            var newName = Path.ChangeExtension(m.FileName, ".report.xlsx");
+            var ret = ValFacility.ExportFacility(new FileInfo(newName));
+            MessageBox.Show(ret);
+        }
+
+        private void OpenUI(object sender, RoutedEventArgs e)
+        {
+            XbimDPoWTools.MainWindow m = new XbimDPoWTools.MainWindow();
+            m.Show();
         }
     }
 }

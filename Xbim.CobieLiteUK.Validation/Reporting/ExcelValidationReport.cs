@@ -447,6 +447,12 @@ namespace Xbim.CobieLiteUk.Validation.Reporting
         /// </summary>
         public string PreferredClassification = "Uniclass2015";
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="summaryPage"></param>
+        /// <param name="facility">is the validation resuls</param>
+        /// <returns></returns>
         private bool CreateSummarySheet(ISheet summaryPage, Facility facility)
         {
             try

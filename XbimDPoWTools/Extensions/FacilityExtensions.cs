@@ -14,7 +14,7 @@ namespace Xbim.WindowsUI.DPoWValidation.Extensions
                 fac.Categories.Any(c => c.Classification == @"DPoW" && (c.Code == "Passed" || c.Code == "Failed"));
         }
 
-        internal static string ExportFacility(this Facility fac, FileInfo fInfo)
+        public static string ExportFacility(this Facility fac, FileInfo fInfo)
         {
             var fExt = fInfo.Extension.ToLowerInvariant();
             switch (fExt)
