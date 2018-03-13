@@ -40,7 +40,7 @@ namespace XbimExchanger.IfcToCOBieLiteUK
                 //Facility Attributes
                 facility.Attributes = helper.GetAttributes(ifcBuilding);
                 
-                if (ifcSite != null)
+                if (ifcSite != null && facility.Attributes != null)
                 {
                     facility.Site = new Site();
                     siteMapping.AddMapping(ifcSite, facility.Site);
