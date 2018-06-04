@@ -98,8 +98,8 @@ namespace Xbim.COBie.Data
 
                 coordinate.RowName = coordinate.Name;
 
-                XbimPoint3D? ifcCartesianPointLower;
-                XbimPoint3D? ifcCartesianPointUpper;
+                XbimPoint3D? ifcCartesianPointLower = null;
+                XbimPoint3D? ifcCartesianPointUpper = null;
                 var transBox = new TransformedBoundingBox();
                 if (ifcProduct is IfcBuildingStorey)
                 {
@@ -130,30 +130,35 @@ namespace Xbim.COBie.Data
                             boundBox.Union(shapeInstance.BoundingBox);
                         transform = shapeInstance.Transformation;
                     }
-                    XbimMatrix3D m = globalTransform*transform;
-                    transBox = new TransformedBoundingBox(boundBox, m);
-                    //set points
-                    ifcCartesianPointLower = transBox.MinPt;
-                    ifcCartesianPointUpper = transBox.MaxPt;
-
+                    if (!boundBox.IsEmpty)
+                    {
+                        XbimMatrix3D m = globalTransform * transform;
+                        transBox = new TransformedBoundingBox (boundBox, m);
+                        //set points
+                        ifcCartesianPointLower = transBox.MinPt;
+                        ifcCartesianPointUpper = transBox.MaxPt;
+                    }
                 }
 
-                coordinate.CoordinateXAxis = string.Format("{0}", (double) ifcCartesianPointLower.Value.X);
-                coordinate.CoordinateYAxis = string.Format("{0}", (double) ifcCartesianPointLower.Value.Y);
-                coordinate.CoordinateZAxis = string.Format("{0}", (double) ifcCartesianPointLower.Value.Z);
-                coordinate.ExtSystem = GetExternalSystem(ifcProduct);
-                coordinate.ExtObject = ifcProduct.GetType().Name;
-                if (!string.IsNullOrEmpty(ifcProduct.GlobalId))
-                {
-                    coordinate.ExtIdentifier = ifcProduct.GlobalId.ToString();
-                }
+                if (ifcCartesianPointLower.HasValue)
+                    {
+                    coordinate.CoordinateXAxis = string.Format ("{0}", (double) ifcCartesianPointLower.Value.X);
+                    coordinate.CoordinateYAxis = string.Format ("{0}", (double) ifcCartesianPointLower.Value.Y);
+                    coordinate.CoordinateZAxis = string.Format ("{0}", (double) ifcCartesianPointLower.Value.Z);
+                    coordinate.ExtSystem = GetExternalSystem (ifcProduct);
+                    coordinate.ExtObject = ifcProduct.GetType ().Name;
+                    if (!string.IsNullOrEmpty (ifcProduct.GlobalId))
+                        {
+                        coordinate.ExtIdentifier = ifcProduct.GlobalId.ToString ();
+                        }
 
-                coordinate.ClockwiseRotation = transBox.ClockwiseRotation.ToString("F4");
-                coordinate.ElevationalRotation = transBox.ElevationalRotation.ToString("F4");
-                coordinate.YawRotation = transBox.YawRotation.ToString("F4");
+                    coordinate.ClockwiseRotation = transBox.ClockwiseRotation.ToString ("F4");
+                    coordinate.ElevationalRotation = transBox.ElevationalRotation.ToString ("F4");
+                    coordinate.YawRotation = transBox.YawRotation.ToString ("F4");
 
+                    coordinates.AddRow (coordinate);
+                    }
 
-                coordinates.AddRow(coordinate);
                 if (ifcCartesianPointUpper.HasValue) //we need a second row for upper point
                 {
                     var coordinateUpper = new COBieCoordinateRow(coordinates);
