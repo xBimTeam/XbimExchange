@@ -73,7 +73,8 @@ namespace Xbim.COBie.Data
                 space.CreatedOn = ValidateString(createdOn) ? createdOn : GetCreatedOnDateAsFmtString(ifcSpace.OwnerHistory);
 
                 space.Category = GetCategory(ifcSpace);
-                var floor = ifcSpace.Decomposes.FirstOrDefault();
+                var spaceDecompose = ifcSpace.Decomposes.FirstOrDefault ();
+                var floor = (spaceDecompose != null) ? spaceDecompose.RelatingObject : null;
                 space.FloorName = ((floor != null) && (!string.IsNullOrEmpty(floor.Name))) ? floor.Name.ToString() : DEFAULT_STRING;
                 string description = allPropertyValues.GetPropertySingleValueValue("COBieDescription", false);//support for COBie Toolkit for Autodesk Revit
                 space.Description = ValidateString(description) ? description : GetSpaceDescription(ifcSpace);
