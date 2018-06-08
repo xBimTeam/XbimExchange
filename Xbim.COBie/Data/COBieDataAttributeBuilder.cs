@@ -386,7 +386,7 @@ namespace Xbim.COBie.Data
                         if (ifcPropertyReferenceValue.PropertyReference != null)
                         {
                             value = ifcPropertyReferenceValue.PropertyReference.ToString();
-                            attribute.Unit = ifcPropertyReferenceValue.PropertyReference.GetType().Name;
+                            attribute.Unit = "";
                         }
 
                     }
