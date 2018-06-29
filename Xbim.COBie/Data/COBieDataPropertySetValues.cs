@@ -2,6 +2,7 @@
 using System.Linq;
 using Xbim.Ifc2x3.Kernel;
 using Xbim.Ifc2x3.PropertyResource;
+using Xbim.Ifc4.Interfaces;
 
 //using System;
 
@@ -242,6 +243,54 @@ namespace Xbim.COBie.Data
             return ifcPropertySingleValue.NominalValue.Value.ToString();
             else
                 return Constants.DEFAULT_STRING;
+        }
+
+        /// <summary>
+        /// Get the property value where the property name equals the passed in value. 
+        /// Always use  SetAllPropertyValues before calling this method
+        /// </summary>
+        /// <param name="propertyName">IfcProperty name</param>
+        /// <param name="containsString">Do Contains text match on PropertyName if true, exact match if false</param>
+        /// <returns></returns>
+        public string GetPropertyValue (string propertyName, bool containsString)
+        {
+
+            IIfcSimpleProperty ifcProperty = null;
+            if (containsString)
+                ifcProperty = ObjProperties.Where (p => p.Name.ToString ().Contains (propertyName)).FirstOrDefault ();
+            else
+                ifcProperty = ObjProperties.Where (p => p.Name == propertyName).FirstOrDefault ();
+
+            //return a string value
+            if (ifcProperty is IIfcPropertySingleValue)
+            {
+                var singleValue = ifcProperty as IIfcPropertySingleValue;
+                if (singleValue.NominalValue != null &&
+                    singleValue.NominalValue.Value != null
+                   )
+                {
+                    string value = singleValue.NominalValue.Value.ToString ();
+                    return value;
+                }
+            }
+            else if (ifcProperty is IIfcPropertyEnumeratedValue)
+            {
+                var enumValue = ifcProperty as IIfcPropertyEnumeratedValue;
+                if (enumValue.EnumerationValues != null &&
+                    enumValue.EnumerationValues.FirstOrDefault () != null &&
+                    enumValue.EnumerationValues.FirstOrDefault ().Value != null
+                   )
+                {
+                    string value = enumValue.EnumerationValues.FirstOrDefault ().Value.ToString ();
+                    return value;
+                }
+            }
+            else
+            {
+                System.Diagnostics.Debug.WriteLine ("GetPropertyValue is not implemented for " + ifcProperty.GetType ().Name);
+            }
+
+            return Constants.DEFAULT_STRING;
         }
 
         /// <summary>

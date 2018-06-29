@@ -275,8 +275,8 @@ namespace Xbim.COBie.Data
         {
                
             //get related object properties to extract from if main way fails
-            allPropertyValues.SetAllPropertyValues(type, "Pset_Asset");
             typeRow.AssetType =     GetAssetType(type, allPropertyValues); 
+
             allPropertyValues.SetAllPropertyValues(type, "Pset_ManufacturersTypeInformation");
             string manufacturer =   allPropertyValues.GetPropertySingleValueValue("Manufacturer", false);
             typeRow.Manufacturer =  ((manufacturer == DEFAULT_STRING) || (!IsEmailAddress(manufacturer))) ? Constants.DEFAULT_EMAIL : manufacturer;
@@ -333,7 +333,15 @@ namespace Xbim.COBie.Data
         /// <returns>String holding Asset Type</returns>
         private string GetAssetType(IfcTypeObject ifcTypeObject, COBieDataPropertySetValues allPropertyValues)
         {
-            string value = allPropertyValues.GetPropertySingleValueValue("AssetAccountingType", false);
+            allPropertyValues.SetAllPropertyValues (ifcTypeObject, "COBie_Asset");
+            string value = allPropertyValues.GetPropertyValue ("AssetType", false);
+
+            if (value == DEFAULT_STRING)
+            {
+                allPropertyValues.SetAllPropertyValues (ifcTypeObject, "Pset_Asset");
+                value = allPropertyValues.GetPropertySingleValueValue ("AssetAccountingType", false);
+            }
+
             if (value == DEFAULT_STRING)
 	        {
                 if (ifcTypeObject is IfcFurnitureType)
