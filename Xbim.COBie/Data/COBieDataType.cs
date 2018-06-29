@@ -279,7 +279,7 @@ namespace Xbim.COBie.Data
 
             allPropertyValues.SetAllPropertyValues(type, "Pset_ManufacturersTypeInformation");
             string manufacturer =   allPropertyValues.GetPropertySingleValueValue("Manufacturer", false);
-            typeRow.Manufacturer =  ((manufacturer == DEFAULT_STRING) || (!IsEmailAddress(manufacturer))) ? Constants.DEFAULT_EMAIL : manufacturer;
+            typeRow.Manufacturer =  (manufacturer == DEFAULT_STRING) ? Constants.DEFAULT_EMAIL : manufacturer;
 
             typeRow.ModelNumber =   GetModelNumber(type, allPropertyValues);
 
