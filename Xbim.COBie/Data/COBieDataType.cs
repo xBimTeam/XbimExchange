@@ -277,7 +277,7 @@ namespace Xbim.COBie.Data
             //get related object properties to extract from if main way fails
             typeRow.AssetType =     GetAssetType(type, allPropertyValues); 
 
-            allPropertyValues.SetAllPropertyValues(type, "Pset_ManufacturersTypeInformation");
+            allPropertyValues.SetAllPropertyValues(type, "Pset_ManufacturerTypeInformation");
             string manufacturer =   allPropertyValues.GetPropertySingleValueValue("Manufacturer", false);
             typeRow.Manufacturer =  ((manufacturer == DEFAULT_STRING) || (!IsEmailAddress(manufacturer))) ? Constants.DEFAULT_EMAIL : manufacturer;
 
