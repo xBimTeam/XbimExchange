@@ -152,7 +152,7 @@ namespace Xbim.COBie.Data
         /// <param name="allPropertyValues"></param>
         /// <param name="propertyName"></param>
         /// <returns></returns>
-        private string GetDateFromProperty(COBieDataPropertySetValues allPropertyValues, string propertyName)
+        private string GetDateFromProperty (COBieDataPropertySetValues allPropertyValues, string propertyName)
         {
             string startData = "";
             IfcPropertySingleValue ifcPropertySingleValue = allPropertyValues.GetPropertySingleValue(propertyName);
