@@ -285,6 +285,19 @@ namespace Xbim.COBie.Data
                     return value;
                 }
             }
+            else if (ifcProperty is IfcPropertyReferenceValue) //does not work with IFC4 interfaces!
+            {
+                var propReference = ifcProperty as IfcPropertyReferenceValue;
+                if (propReference != null)
+                {
+                    IfcObjectReferenceSelect referenceSelect = propReference.PropertyReference;
+                    if (referenceSelect != null)
+                    {
+                        string value = referenceSelect.ToString ();
+                        return value;
+                    }
+                }
+            }
             else
             {
                 System.Diagnostics.Debug.WriteLine ("GetPropertyValue is not implemented for " + ifcProperty.GetType ().Name);

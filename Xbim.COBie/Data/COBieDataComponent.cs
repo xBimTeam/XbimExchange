@@ -2,10 +2,10 @@
 using System.Collections.Generic;
 using System.Linq;
 using Xbim.COBie.Rows;
+using Xbim.Common.Geometry;
 using Xbim.Ifc2x3.Kernel;
 using Xbim.Ifc2x3.ProductExtension;
 using Xbim.Ifc2x3.PropertyResource;
-using Xbim.Common.Geometry;
 
 #if DEBUG
 using System.Diagnostics;
@@ -152,12 +152,21 @@ namespace Xbim.COBie.Data
         /// <param name="allPropertyValues"></param>
         /// <param name="propertyName"></param>
         /// <returns></returns>
-        private string GetDateFromProperty(COBieDataPropertySetValues allPropertyValues, string propertyName)
+        private string GetDateFromProperty (COBieDataPropertySetValues allPropertyValues, string propertyName)
         {
             string startData = "";
-            IfcPropertySingleValue ifcPropertySingleValue = allPropertyValues.GetPropertySingleValue(propertyName);
-            if ((ifcPropertySingleValue != null) && (ifcPropertySingleValue.NominalValue != null))
-                startData = ifcPropertySingleValue.NominalValue.ToString();
+            IfcPropertySingleValue ifcPropertySingleValue = allPropertyValues.GetPropertySingleValue (propertyName);
+            if (ifcPropertySingleValue != null)
+            {
+                if (ifcPropertySingleValue.NominalValue != null)
+                {
+                    startData = ifcPropertySingleValue.NominalValue.ToString ();
+                }
+            }
+            else
+            {
+                startData = allPropertyValues.GetPropertyValue (propertyName, false);
+            }
 
             DateTime frmDate;
             if (DateTime.TryParse(startData, out frmDate))
