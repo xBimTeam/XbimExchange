@@ -1412,7 +1412,7 @@ namespace XbimExchanger.IfcToCOBieLiteUK
                     return attributeCollection;
                 }
             }
-            return null;
+            return new List<Attribute>(0);
         }
 
         /// <summary>
