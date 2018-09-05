@@ -12,6 +12,8 @@ namespace XbimExchanger.IfcToCOBieLiteUK
     {
         protected override Facility Mapping(IIfcBuilding ifcBuilding, Facility facility)
         {
+            //Reset to prevent freezing in cases of various facilities
+            Exchanger.ReportProgress.Reset();
             //Helper should do 10% of progress
             Exchanger.ReportProgress.NextStage(4, 42, string.Format("Creating Facility {0}", ifcBuilding.Name != null ? ifcBuilding.Name.ToString() : string.Empty));//finish progress at 42% 
             var helper = ((IfcToCOBieLiteUkExchanger)Exchanger).Helper;
