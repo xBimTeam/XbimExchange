@@ -16,6 +16,7 @@ using Xbim.ModelGeometry.Scene;
 using XbimExchanger.COBieLiteUkToIfc;
 using XbimExchanger.IfcToCOBieExpress;
 using XbimExchanger.IfcToCOBieLiteUK;
+using Xbim.Ifc2x3;
 
 namespace Xbim.Exchange
 {
@@ -95,7 +96,7 @@ namespace Xbim.Exchange
                 //
                 w.Restart();
                 Console.WriteLine("Creating CobieExpress memoryModel...");
-                var cobie = new MemoryModel(new EntityFactory());
+                var cobie = new MemoryModel(new EntityFactoryIfc2x3());
                 var cobieExpressFile = GetSaveName(outDirectoryName, fileNameWithoutExtension, ".cobie");
                 var cobieExpressXmlFile = GetSaveName(outDirectoryName, fileNameWithoutExtension, ".cobieXml");
                 var cobieExpressZipFile = GetSaveName(outDirectoryName, fileNameWithoutExtension, ".cobieZip");
