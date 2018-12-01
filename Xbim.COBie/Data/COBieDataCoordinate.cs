@@ -4,11 +4,11 @@ using System.Linq;
 using Xbim.COBie.Rows;
 using Xbim.Ifc2x3.Kernel;
 using Xbim.Ifc2x3.ProductExtension;
-using Xbim.Ifc2x3.Extensions;
 
 
 using Xbim.Common.Geometry;
 using Xbim.ModelGeometry.Scene;
+using Xbim.Ifc.Extensions;
 
 namespace Xbim.COBie.Data
 {

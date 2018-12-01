@@ -2,18 +2,18 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using Xbim.Ifc2x3.UtilityResource;
-using Xbim.Ifc2x3.MeasureResource;
-using Xbim.Ifc2x3.Kernel;
-using Xbim.Ifc2x3.GeometryResource;
+using Xbim.Common;
+using Xbim.Ifc;
 using Xbim.Ifc2x3.ActorResource;
-using Xbim.Ifc2x3.ProductExtension;
-using Xbim.Ifc2x3.ExternalReferenceResource;
-using Xbim.Ifc2x3.PropertyResource;
-using Xbim.Ifc2x3.Extensions;
 using Xbim.Ifc2x3.ConstructionMgmtDomain;
-using Xbim.Ifc2x3.IO;
-using Xbim.IO.Esent;
+using Xbim.Ifc2x3.ExternalReferenceResource;
+using Xbim.Ifc2x3.GeometryResource;
+using Xbim.Ifc2x3.Kernel;
+using Xbim.Ifc2x3.MeasureResource;
+using Xbim.Ifc2x3.ProductExtension;
+using Xbim.Ifc2x3.PropertyResource;
+using Xbim.Ifc2x3.UtilityResource;
+using IIfcPersonAndOrganization = Xbim.Ifc4.Interfaces.IIfcPersonAndOrganization;
 
 namespace Xbim.COBie.Serialisers.XbimSerialiser
 {
@@ -33,7 +33,7 @@ namespace Xbim.COBie.Serialisers.XbimSerialiser
         /// <summary>
         /// Model from COBieXBimContext object
         /// </summary>
-        public XbimModel Model
+        public IfcStore Model
         {
             get { return XBimContext.Model; }
         } 
@@ -56,7 +56,7 @@ namespace Xbim.COBie.Serialisers.XbimSerialiser
         /// <summary>
         /// Contacts from COBieXBimContext object
         /// </summary>
-        public Dictionary<string, IfcPersonAndOrganization> Contacts
+        public Dictionary<string, IIfcPersonAndOrganization> Contacts
         {
             get { return XBimContext.Contacts; }
         }
@@ -87,12 +87,13 @@ namespace Xbim.COBie.Serialisers.XbimSerialiser
         /// </summary>
         /// <param name="trans">transaction to commit and restart start</param>
         /// <param name="number">number of instances in Model at start of transaction</param>
-        protected void BumpTransaction(XbimReadWriteTransaction trans, long number)
+        protected void BumpTransaction(ITransaction trans, long number)
         {
             if ((number % TransBatchCount) == 0)
             {
-                trans.Commit();
-                trans.Begin();
+                // TODO: Why are we doing this?
+                //trans.Commit();
+                //trans.Begin();
             }
         }
         /// <summary>
@@ -102,7 +103,7 @@ namespace Xbim.COBie.Serialisers.XbimSerialiser
         /// <param name="externalSystem">Application used to modify/create</param>
         /// <param name="createdBy">IfcPersonAndOrganization object</param>
         /// <param name="createdOn">Date the object was created on</param>
-        protected void SetNewOwnerHistory(IfcRoot ifcRoot, string externalSystem, IfcPersonAndOrganization createdBy, string createdOn)
+        protected void SetNewOwnerHistory(IfcRoot ifcRoot, string externalSystem, IIfcPersonAndOrganization createdBy, string createdOn)
         { 
             ifcRoot.OwnerHistory = CreateOwnerHistory(null,  externalSystem, createdBy, createdOn);
         }
@@ -114,7 +115,7 @@ namespace Xbim.COBie.Serialisers.XbimSerialiser
         /// <param name="externalSystem">Application used to modify/create</param>
         /// <param name="createdBy">IfcPersonAndOrganization object</param>
         /// <param name="createdOn">Date the object was created on</param>
-        protected void SetOwnerHistory(IfcRoot ifcRoot, string externalSystem, IfcPersonAndOrganization createdBy, string createdOn)
+        protected void SetOwnerHistory(IfcRoot ifcRoot, string externalSystem, IIfcPersonAndOrganization createdBy, string createdOn)
         {
             IfcTimeStamp? stamp = null;
             if (ValidateString(createdOn))
@@ -141,7 +142,7 @@ namespace Xbim.COBie.Serialisers.XbimSerialiser
         /// <param name="externalSystem">Application used to modify/create</param>
         /// <param name="createdBy">IfcPersonAndOrganization object</param>
         /// <param name="createdOn">Date the object was created on</param>
-        protected IfcOwnerHistory CreateOwnerHistory(IfcRoot ifcRoot, string externalSystem, IfcPersonAndOrganization createdBy, string createdOn)
+        protected IfcOwnerHistory CreateOwnerHistory(IfcRoot ifcRoot, string externalSystem, IIfcPersonAndOrganization createdBy, string createdOn)
         {
             IfcApplication ifcApplication = null;
             IfcOrganization ifcOrganization = null;
@@ -227,7 +228,7 @@ namespace Xbim.COBie.Serialisers.XbimSerialiser
                 (ifcRoot.OwnerHistory != null)
                 )
             {
-                ifcRoot.OwnerHistory.OwningUser = createdBy;
+                ifcRoot.OwnerHistory.OwningUser = (IfcPersonAndOrganization)createdBy;
                 ifcRoot.OwnerHistory.OwningApplication = ifcApplication;
                 ifcRoot.OwnerHistory.CreationDate = stamp;
                 ifcRoot.OwnerHistory.ChangeAction = IfcChangeActionEnum.MODIFIED;
@@ -236,7 +237,7 @@ namespace Xbim.COBie.Serialisers.XbimSerialiser
             else
                 return Model.Instances.New<IfcOwnerHistory>(oh =>
                                                 {
-                                                    oh.OwningUser = createdBy;
+                                                    oh.OwningUser = (IfcPersonAndOrganization)createdBy;
                                                     oh.OwningApplication = ifcApplication;
                                                     oh.LastModifyingApplication = ifcApplication;
                                                     oh.CreationDate = stamp;
@@ -268,7 +269,7 @@ namespace Xbim.COBie.Serialisers.XbimSerialiser
         /// Set the IfcPersonAndOrganization from using email only
         /// </summary>
         /// <param name="email">email</param>
-        protected IfcPersonAndOrganization SetEmailUser(string email)
+        protected IIfcPersonAndOrganization SetEmailUser(string email)
         {
             if (!Contacts.ContainsKey(email)) //should filter on merge also unless Contacts is reset
             {

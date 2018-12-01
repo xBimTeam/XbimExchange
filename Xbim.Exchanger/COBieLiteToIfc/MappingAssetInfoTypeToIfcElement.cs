@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Linq;
 using Xbim.COBieLite;
-using Xbim.Ifc2x3.Extensions;
 using Xbim.Ifc2x3.ProductExtension;
 
 namespace XbimExchanger.COBieLiteToIfc

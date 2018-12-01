@@ -4,7 +4,6 @@ using System.Linq;
 using Xbim.COBie.Rows;
 using Xbim.Ifc2x3.Kernel;
 using Xbim.Ifc2x3.ProductExtension;
-using Xbim.Ifc2x3.Extensions;
 using System.Reflection;
 using Xbim.Common;
 using Xbim.Common.Metadata;
@@ -34,7 +33,7 @@ namespace Xbim.COBie.Serialisers.XbimSerialiser
         /// <param name="cOBieSheet">COBieSheet of COBieSystemRow to read data from</param>
         public void SerialiseSystem(COBieSheet<COBieSystemRow> cOBieSheet)
         {
-            using (XbimReadWriteTransaction trans = Model.BeginTransaction("Add System"))
+            using (ITransaction trans = Model.BeginTransaction("Add System"))
             {
 
                 try

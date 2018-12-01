@@ -8,6 +8,7 @@ using Xbim.Ifc2x3.MeasureResource;
 using Xbim.Ifc2x3.ExternalReferenceResource;
 using Xbim.Ifc2x3.ConstructionMgmtDomain;
 using Xbim.IO.Esent;
+using Xbim.Common;
 
 namespace Xbim.COBie.Serialisers.XbimSerialiser
 {
@@ -41,7 +42,7 @@ namespace Xbim.COBie.Serialisers.XbimSerialiser
         /// <param name="cOBieSheet">COBieSheet of COBieAttributeRow to read data from</param>
         public void SerialiseAttribute(COBieSheet<COBieAttributeRow> cOBieSheet)
         {
-            using (XbimReadWriteTransaction trans = Model.BeginTransaction("Add Attribute"))
+            using (ITransaction trans = Model.BeginTransaction("Add Attribute"))
             {
                 try
                 {

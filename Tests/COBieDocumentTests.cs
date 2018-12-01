@@ -2,10 +2,11 @@
 using System.IO;
 using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Xbim.Common;
+using Xbim.Ifc;
 using Xbim.Ifc2x3.ExternalReferenceResource;
 using Xbim.Ifc2x3.Kernel;
 using Xbim.IO;
-using XbimModel = Xbim.Ifc2x3.IO.XbimModel;
 
 namespace Tests
 {
@@ -79,9 +80,8 @@ namespace Tests
         {
             var ifcFile = "Clinic-Handover-v12.ifc";
             var xbimFile = Path.ChangeExtension(ifcFile, "xbim");
-            using (var _model = new XbimModel())
+            using (var _model = IfcStore.Open(ifcFile))
             {
-                _model.CreateFrom(ifcFile, xbimFile, null, true);
                 var ifcRelAssociatesDocuments = _model.Instances.OfType<IfcRelAssociatesDocument>();
 
                 var dups = ifcRelAssociatesDocuments.GroupBy(d => d.RelatingDocument).SelectMany(grp => grp.Skip(1));
@@ -140,14 +140,14 @@ namespace Tests
                     }
 
                     CreateDocInfo(_model, "orphanDocA", @"c:");
-                    
+
 
                     var orphanDocB = _model.Instances.New<IfcDocumentReference>();
                     orphanDocB.Name = "orphanDocB";
                     orphanDocB.Location = @"x:";
                     txn.Commit();
 
-                    _model.SaveAs("Clinic-Handover_ChildDocs.ifc", IfcStorageType.Ifc);
+                    _model.SaveAs("Clinic-Handover_ChildDocs.ifc", StorageType.Ifc);
                 }
 
 
@@ -160,7 +160,7 @@ namespace Tests
 
                 //get the already attached to entity documents 
                 var docInfosAttached = docToObjs.Select(dictionary => dictionary.Key).OfType<IfcDocumentInformation>();
-                
+
                 //see if we have any documents not attached to IfcRoot objects, but could be attached as children documents to a parent document
                 var docInfosNotAttached = docAllInfos.Except(docInfosAttached);
 
@@ -184,7 +184,7 @@ namespace Tests
                 var docRefsAttached = docToObjs.Select(dictionary => dictionary.Key).OfType<IfcDocumentReference>();
                 //checked on direct attached to object document references
                 var docRefsNotAttached = docAllRefs.Except(docRefsAttached).ToList();
-                
+
                 //Check for document references held in the IfcDocumentInformation objects
                 var docRefsAttachedDocInfo = docAllInfos.Where(docInfo => docInfo.DocumentReferences != null).SelectMany(docInfo => docInfo.DocumentReferences);
                 //remove from Not Attached list
@@ -214,15 +214,15 @@ namespace Tests
                         //    {
                         //        Debug.WriteLine("Doc {0}", ((IfcDocumentReference)doc).Name);
                         //    }
-                            
+
                         //} 
                     }
                 }
-                    
+
             }
         }
 
-        private IfcDocumentInformation CreateDocInfo(XbimModel model, string name, string location)
+        private IfcDocumentInformation CreateDocInfo(IModel model, string name, string location)
         {
             var docinfo = model.Instances.New<IfcDocumentInformation>();
             docinfo.Name = name;

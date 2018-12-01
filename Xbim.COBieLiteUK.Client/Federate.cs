@@ -370,7 +370,7 @@ namespace Xbim.CobieLiteUk.Client
 
             using (var model = IfcStore.Open(filename))
             {
-                model.SaveAs(xbimFile,IfcStorageType.Xbim );
+                model.SaveAs(xbimFile, StorageType.Xbim );
                 model.Close();
             }
         }

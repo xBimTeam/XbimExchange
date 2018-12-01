@@ -4,7 +4,6 @@ using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
-using log4net;
 using Xbim.Common.Step21;
 using Xbim.CobieLiteUk;
 using Xbim.CobieLiteUk.FilterHelper;
@@ -12,12 +11,14 @@ using Xbim.Ifc;
 using Xbim.IO;
 using XbimExchanger.COBieLiteUkToIfc;
 using XbimExchanger.IfcHelpers;
+using Microsoft.Extensions.Logging;
+using Xbim.Common;
 
 namespace XbimExchanger.IfcToCOBieLiteUK.Conversion
 {
     public class CobieLiteConverter : ICobieConverter
     {
-        private static readonly ILog Logger = LogManager.GetLogger("Xbim.COBieLiteUK.Client.CobieLiteConverter");
+        private static readonly ILogger Logger = XbimLogging.CreateLogger<CobieLiteConverter>();
 
         public BackgroundWorker Worker { get; set; }
 
@@ -52,21 +53,21 @@ namespace XbimExchanger.IfcToCOBieLiteUK.Conversion
             {
                 const string message = "Invalid CobieConversionParams for exporter.";
                 Worker.ReportProgress(0, message);
-                Logger.Error(message);
+                Logger.LogError(message);
                 return;
             }
             if (parameters.Source == null)
             {
                 const string message = "No souce provided to exporter.";
                 Worker.ReportProgress(0, message);
-                Logger.Error(message);
+                Logger.LogError(message);
                 return;
             }
             if (string.IsNullOrEmpty(parameters.OutputFileName))
             {
                 const string message = "No output file name specified in exporter.";
                 Worker.ReportProgress(0, message);
-                Logger.Error(message);
+                Logger.LogError(message);
                 return;
             }
             e.Result = GenerateFile(parameters); //returns the excel file names in an enumerable
@@ -160,7 +161,7 @@ namespace XbimExchanger.IfcToCOBieLiteUK.Conversion
             creds.EditorsFamilyName = fvi.CompanyName;
             creds.ApplicationFullName = fvi.ProductName;
             creds.ApplicationVersion = fvi.ProductVersion;
-            using (var ifcModel = IfcStore.Create(IfcSchemaVersion.Ifc2X3, XbimStoreType.InMemoryModel))
+            using (var ifcModel = IfcStore.Create(XbimSchemaVersion.Ifc2X3, XbimStoreType.InMemoryModel))
             {
                 using (var txn = ifcModel.BeginTransaction("Convert from COBieLiteUK"))
                 {
@@ -169,7 +170,7 @@ namespace XbimExchanger.IfcToCOBieLiteUK.Conversion
                     txn.Commit();
                 }
                 Worker.ReportProgress(0, string.Format("Creating file: {0}", ifcName));
-                ifcModel.SaveAs(ifcName, IfcStorageType.Ifc);
+                ifcModel.SaveAs(ifcName, StorageType.Ifc);
                 ifcModel.Close();               
             }
             return ifcName;
@@ -239,7 +240,7 @@ namespace XbimExchanger.IfcToCOBieLiteUK.Conversion
                 {
                     string message =  string.Format("Source file not found {0}", sourceFile);
                     Worker.ReportProgress(0, message);
-                    Logger.Error(message);
+                    Logger.LogError(message);
                     return null;
                 }
                 var fileExt = Path.GetExtension(sourceFile);

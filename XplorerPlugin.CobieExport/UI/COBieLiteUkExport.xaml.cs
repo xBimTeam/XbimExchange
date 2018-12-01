@@ -7,7 +7,6 @@ using System.IO;
 using System.Linq;
 using System.Windows;
 using System.Windows.Data;
-using log4net;
 using Xbim.COBie;
 using Xbim.Presentation.XplorerPluginSystem;
 using Xbim.Ifc;
@@ -17,6 +16,8 @@ using Xbim.CobieLiteUk;
 using Xbim.CobieLiteUk.FilterHelper;
 using XbimExchanger.IfcToCOBieLiteUK;
 using XbimExchanger.IfcHelpers;
+using Microsoft.Extensions.Logging;
+using Xbim.Common;
 
 namespace XplorerPlugin.CobieExport.UI
 {
@@ -26,7 +27,7 @@ namespace XplorerPlugin.CobieExport.UI
     [XplorerUiElement(PluginWindowUiContainerEnum.Dialog, PluginWindowActivation.OnMenu, "File/Export/COBieLiteUk")]
     public partial class CobieLiteUkExport: IXbimXplorerPluginWindow
     {
-        private static readonly ILog Log = LogManager.GetLogger("XplorerPlugin.CobieExport.UI.CobieLiteUkExport");
+        private static readonly ILogger Log = XbimLogging.CreateLogger<CobieLiteUkExport>();
 
         public ObservableCollection<string> AvailableTemplates { get; set; }
 
@@ -122,7 +123,7 @@ namespace XplorerPlugin.CobieExport.UI
             var ass = System.Reflection.Assembly.GetAssembly(GetType());
             if (_parentWindow == null)
             {
-                Log.Error("attempt to locate DiskLess assembly without a valid IXbimXplorerPluginMasterWindow.");
+                Log.LogWarning("Attempt to locate DiskLess assembly without a valid IXbimXplorerPluginMasterWindow.");
                 return;
             }
             var assemblyFile = _parentWindow.GetAssemblyLocation(ass);
@@ -130,7 +131,7 @@ namespace XplorerPlugin.CobieExport.UI
             var pluginDir = new FileInfo(assemblyFile).Directory;
             if (pluginDir == null)
             {
-                Log.ErrorFormat("Failed to determine plugin folder under IXbimXplorerPluginMasterWindow.");
+                Log.LogWarning("Failed to determine plugin folder under IXbimXplorerPluginMasterWindow.");
                 return;
             }
 
@@ -247,7 +248,7 @@ namespace XplorerPlugin.CobieExport.UI
             }
             catch (Exception ex)
             {
-                Log.Error(string.Format("Error on work completion: {0}", ex.Message), ex);
+                Log.LogError(0, ex, "Error on work completion");
 
                 var sb = new StringBuilder();
                 var indent = "";
@@ -349,7 +350,7 @@ namespace XplorerPlugin.CobieExport.UI
             var excelType = GetExcelType();
             if (string.IsNullOrEmpty(Model.FileName))
             {
-                Log.Error("Model file needs to be saved.");
+                Log.LogError("Model file needs to be saved.");
                 return;
             }
 

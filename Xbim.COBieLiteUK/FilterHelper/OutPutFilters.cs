@@ -4,15 +4,16 @@ using System.Configuration;
 using System.IO;
 using System.Linq;
 using System.Xml.Serialization;
-using log4net;
+using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
+using Xbim.Common;
 using Xbim.Ifc4.Interfaces;
 
 namespace Xbim.CobieLiteUk.FilterHelper
 {
     public class OutPutFilters
     {
-        private static readonly ILog Log = LogManager.GetLogger("Xbim.CobieLiteUk.FilterHelper");
+        private static readonly ILogger Log = XbimLogging.CreateLogger<OutPutFilters>();
 
         #region Properties
 
@@ -215,7 +216,7 @@ namespace Xbim.CobieLiteUk.FilterHelper
                 {
                     if (input == null)
                     {
-                        Log.ErrorFormat("Could not load configuration file: {0}.", fileOrResourceName);
+                        Log.LogWarning("Could not load configuration file: {configfile}.", fileOrResourceName);
                         return null;
                     }
                     var tmpFile = Path.GetTempPath() + Guid.NewGuid() + ".tmp";
@@ -235,8 +236,7 @@ namespace Xbim.CobieLiteUk.FilterHelper
             }
             catch (Exception ex)
             {
-                var message = string.Format(@"Error loading configuration file '{0}'.", fileOrResourceName);
-                Log.Error(message, ex);
+                Log.LogError(0, ex, "Error loading configuration file '{configfile}'.", fileOrResourceName);
                 throw;
             }
             return config;

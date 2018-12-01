@@ -4,12 +4,12 @@ using System.Data;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using Microsoft.Extensions.Logging;
 using NPOI.HSSF.UserModel;
 using NPOI.SS.UserModel;
 using NPOI.SS.Util;
 using NPOI.XSSF.UserModel;
-using Xbim.Common.Logging;
-using Xbim.CobieLiteUk;
+using Xbim.Common;
 
 namespace Xbim.CobieLiteUk.Validation.Reporting
 {
@@ -19,7 +19,7 @@ namespace Xbim.CobieLiteUk.Validation.Reporting
     /// </summary>
     public class ExcelValidationReport
     {
-        internal static readonly ILogger Logger = LoggerFactory.GetLogger();
+        internal static readonly ILogger Logger = XbimLogging.CreateLogger<ExcelValidationReport>();
 
         /// <summary>
         /// Determines the format to be saved.
@@ -59,9 +59,9 @@ namespace Xbim.CobieLiteUk.Validation.Reporting
                     return result;
                 }
             }
-            catch (Exception e)
+            catch (Exception ex)
             {
-                Logger.ErrorFormat("Failed to save {0}, {1}", ssFileName, e.Message);
+                Logger.LogError(0, ex, "Failed to save {file}", ssFileName);
                 return false;
             }
         }
@@ -162,9 +162,9 @@ namespace Xbim.CobieLiteUk.Validation.Reporting
             {
                 workBook.Write(destinationStream);
             }
-            catch (Exception e)
+            catch (Exception ex)
             {
-                Logger.ErrorFormat("Failed to stream excel report: {1}", e.Message);
+                Logger.LogError(0, ex, "Failed to stream excel report");
                 return false;
             }
             return true;
@@ -190,7 +190,7 @@ namespace Xbim.CobieLiteUk.Validation.Reporting
             catch (Exception e)
             {
                 //log the error
-                Logger.Error("Failed to create Summary Sheet", e);
+                Logger.LogError(0, e, "Failed to create Summary Sheet");
                 return false;
             }
         }
@@ -312,7 +312,7 @@ namespace Xbim.CobieLiteUk.Validation.Reporting
             catch (Exception e)
             {
                 //log the error
-                Logger.Error("Failed to create detail Sheet", e);
+                Logger.LogError(0, e, "Failed to create detail Sheet");
                 return false;
             }
         }
@@ -436,7 +436,7 @@ namespace Xbim.CobieLiteUk.Validation.Reporting
             catch (Exception e)
             {
                 //log the error
-                Logger.Error("Failed to create detail Sheet", e);
+                Logger.LogError(0, e, "Failed to create detail Sheet");
                 return false;
             }
         }
@@ -488,7 +488,7 @@ namespace Xbim.CobieLiteUk.Validation.Reporting
             catch (Exception e)
             {
                 //log the error
-                Logger.Error("Failed to create Summary Sheet", e);
+                Logger.LogError(0, e, "Failed to create Summary Sheet");
                 return false;
             }
         }

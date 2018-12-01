@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Xbim.COBie.Rows;
+using Xbim.Common;
 using Xbim.Ifc2x3.Kernel;
 using Xbim.Ifc2x3.MeasureResource;
 using Xbim.IO.Esent;
@@ -29,7 +30,7 @@ namespace Xbim.COBie.Serialisers.XbimSerialiser
         /// <param name="cOBieSheet">COBieSheet of COBieImpactRow to read data from</param>
         public void SerialiseImpact(COBieSheet<COBieImpactRow> cOBieSheet)
         {
-            using (XbimReadWriteTransaction trans = Model.BeginTransaction("Add Impact"))
+            using (ITransaction trans = Model.BeginTransaction("Add Impact"))
             {
                 try
                 {

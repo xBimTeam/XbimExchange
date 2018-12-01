@@ -7,7 +7,6 @@ using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Input;
 using System.Windows.Media;
-using log4net;
 using Microsoft.Win32;
 using Xbim.Common;
 using Xbim.CobieLiteUk;
@@ -19,6 +18,7 @@ using Xbim.WindowsUI.DPoWValidation.IO;
 using Xbim.WindowsUI.DPoWValidation.ViewModels;
 using Xbim.WindowsUI.DPoWValidation.Extensions;
 using System.IO;
+using Microsoft.Extensions.Logging;
 
 namespace XplorerPlugin.DPoW
 {
@@ -28,7 +28,7 @@ namespace XplorerPlugin.DPoW
     [XplorerUiElement(PluginWindowUiContainerEnum.LayoutAnchorable, PluginWindowActivation.OnMenu, "Digital Plan of Works")]
     public partial class MainWindow : IXbimXplorerPluginWindow 
     {
-        private static readonly ILog Log = LogManager.GetLogger("XplorerPlugin.DPoWValidation.MainWindow");
+        private static readonly ILogger Log = XbimLogging.CreateLogger<MainWindow>();
 
         public MainWindow()
         {
@@ -82,7 +82,7 @@ namespace XplorerPlugin.DPoW
             }
             catch (Exception ex)
             {
-                Log.Error($"Error setting facility", ex);
+                Log.LogError(0, ex, "Error setting facility");
             }
         }
 
@@ -156,7 +156,7 @@ namespace XplorerPlugin.DPoW
                         }
                         catch (Exception ex)
                         {
-                            Log.Error( "Error in generating Facility from model " + model.FileName, ex);
+                            Log.LogError(0, ex, "Error in generating Facility from model {filename}",model.FileName);
                             ctrl.ModelFacility = null;
                         }
                     }
@@ -188,7 +188,7 @@ namespace XplorerPlugin.DPoW
             _verifiedItems = new Dictionary<int, Asset>();
             if (valFacility.AssetTypes == null)
             {
-                Log.WarnFormat("No AssetTypes defined in validated facility.");
+                Log.LogWarning("No AssetTypes defined in validated facility.");
                 return;
             }
             foreach (var valFacilityAssetType in valFacility.AssetTypes)

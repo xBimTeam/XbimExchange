@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Xbim.COBie.Rows;
+using Xbim.Common;
 using Xbim.Ifc2x3.ProductExtension;
 using Xbim.Ifc2x3.SharedBldgServiceElements;
 using Xbim.IO.Esent;
@@ -27,7 +28,7 @@ namespace Xbim.COBie.Serialisers.XbimSerialiser
         /// <param name="cOBieSheet">COBieSheet of COBieConnectionRow to read data from</param>
         public void SerialiseConnection(COBieSheet<COBieConnectionRow> cOBieSheet)
         {
-            using (XbimReadWriteTransaction trans = Model.BeginTransaction("Add Connection"))
+            using (ITransaction trans = Model.BeginTransaction("Add Connection"))
             {
 
                 try

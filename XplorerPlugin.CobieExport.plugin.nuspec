@@ -2,7 +2,7 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2011/10/nuspec.xsd">
   <metadata>
     <id>XplorerPlugin.CobieExport</id>
-    <version>4.0.7-V0029</version>
+    <version>5.0.0</version>
     <title>XplorerPlugin.CobieExport</title>
     <authors>xBIM team</authors>
     <owners>xBIM team</owners>

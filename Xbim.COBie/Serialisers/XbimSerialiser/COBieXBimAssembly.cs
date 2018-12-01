@@ -6,6 +6,7 @@ using Xbim.Ifc2x3.Kernel;
 using Xbim.Ifc2x3.ProductExtension;
 using Xbim.Ifc2x3.MaterialResource;
 using Xbim.IO.Esent;
+using Xbim.Common;
 
 namespace Xbim.COBie.Serialisers.XbimSerialiser
 {
@@ -33,7 +34,7 @@ namespace Xbim.COBie.Serialisers.XbimSerialiser
         public void SerialiseAssembly(COBieSheet<COBieAssemblyRow> cOBieSheet)
         {
 
-            using (XbimReadWriteTransaction trans = Model.BeginTransaction("Add Assembly"))
+            using (ITransaction trans = Model.BeginTransaction("Add Assembly"))
             {
                 try
                 {

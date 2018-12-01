@@ -14,7 +14,7 @@ namespace Xbim.COBieLite
             if (model == null)
             {
                 var credentials = new XbimEditorCredentials();
-                _model = IfcStore.Create(credentials, IfcSchemaVersion.Ifc4, XbimStoreType.EsentDatabase);               
+                _model = IfcStore.Create(credentials, XbimSchemaVersion.Ifc4, XbimStoreType.EsentDatabase);               
             }
             else
             {

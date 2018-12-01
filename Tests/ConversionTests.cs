@@ -17,8 +17,8 @@ namespace Tests
     [DeploymentItem(@"ValidationFiles\")]
     [DeploymentItem(@"TestFiles\")]
     [DeploymentItem(@"COBieAttributes.config")]
-    [DeploymentItem(@"x64\","x64")]
-    [DeploymentItem(@"x86\","x86")]
+    [DeploymentItem(@"Xbim.Geometry.Engine32.dll")]
+    [DeploymentItem(@"Xbim.Geometry.Engine64.dll")]
     [TestClass]
     public class ConversionTests
     {
@@ -95,7 +95,7 @@ namespace Tests
                 EditorsFamilyName = "Xbim Tester",
                 ApplicationVersion = "3.0"
             };
-            using (var model = IfcStore.Create(credentials, IfcSchemaVersion.Ifc2X3, XbimStoreType.InMemoryModel))
+            using (var model = IfcStore.Create(credentials, XbimSchemaVersion.Ifc2X3, XbimStoreType.InMemoryModel))
             {                                    
                
                 using (var txn = model.BeginTransaction("Convert from COBieLite"))
@@ -105,7 +105,7 @@ namespace Tests
                     txn.Commit();
                     //var err = model.Validate(model.Instances, Console.Out);
                 }
-                model.SaveAs(@"ConvertedFromCOBieLite.ifc", IfcStorageType.Ifc);
+                model.SaveAs(@"ConvertedFromCOBieLite.ifc", StorageType.Ifc);
             }
         }
 

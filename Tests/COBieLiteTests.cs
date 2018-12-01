@@ -47,7 +47,7 @@ namespace Xbim.Tests.COBie
         [TestMethod]
         public void CanOpenTemporaryModel()
         {
-            var model = IfcStore.Create(new XbimEditorCredentials(), IfcSchemaVersion.Ifc2X3, XbimStoreType.InMemoryModel);
+            var model = IfcStore.Create(new XbimEditorCredentials(), XbimSchemaVersion.Ifc2X3, XbimStoreType.InMemoryModel);
            
             var helper = new CoBieLiteHelper(model, "UniClass");
             foreach (var facilityType in helper.GetFacilities())

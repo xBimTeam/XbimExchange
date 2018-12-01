@@ -4,7 +4,6 @@ using System.Linq;
 using Xbim.Common.Geometry;
 using Xbim.COBie.Data;
 using Xbim.COBie.Rows;
-using Xbim.Ifc2x3.Extensions;
 using Xbim.Ifc2x3.GeometricConstraintResource;
 using Xbim.Ifc2x3.GeometricModelResource;
 using Xbim.Ifc2x3.GeometryResource;
@@ -14,6 +13,7 @@ using Xbim.Ifc2x3.ProfileResource;
 using Xbim.Ifc2x3.RepresentationResource;
 using Xbim.Ifc2x3.UtilityResource;
 using Xbim.IO.Esent;
+using Xbim.Common;
 
 namespace Xbim.COBie.Serialisers.XbimSerialiser
 {
@@ -33,7 +33,7 @@ namespace Xbim.COBie.Serialisers.XbimSerialiser
         /// <param name="cOBieSheet">COBieSheet of COBieCoordinateRow to read data from</param>
         public void SerialiseCoordinate(COBieSheet<COBieCoordinateRow> cOBieSheet)
         {
-            using (XbimReadWriteTransaction trans = Model.BeginTransaction("Add Coordinate"))
+            using (ITransaction trans = Model.BeginTransaction("Add Coordinate"))
             {
 
                 try

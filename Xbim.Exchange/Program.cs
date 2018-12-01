@@ -1,17 +1,20 @@
-﻿using System;
+﻿using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Xml;
 using Xbim.CobieExpress;
+using Xbim.CobieLiteUk;
 using Xbim.CobieLiteUk.Validation;
 using Xbim.CobieLiteUk.Validation.Reporting;
-using Xbim.Common.Step21;
-using Xbim.CobieLiteUk;
 using Xbim.Common;
+using Xbim.Common.Step21;
 using Xbim.Ifc;
 using Xbim.IO;
 using Xbim.IO.Memory;
+using Xbim.IO.Xml;
 using Xbim.ModelGeometry.Scene;
 using XbimExchanger.COBieLiteUkToIfc;
 using XbimExchanger.IfcToCOBieExpress;
@@ -22,13 +25,19 @@ namespace Xbim.Exchange
 {
     internal class Program
     {
+        static ILogger logger;
+
         static void Main(string[] args)
         {
+            var serviceProvider = ConfigureServices();
+            SetupXbimLogging(serviceProvider);
+
             var settings = new ExchangeSettings();
             
             var someAction = false;
             foreach (var arg in args)
-            {
+            { 
+            
                 if (!settings.IsOption(arg))
                 {
                     ProcessFile(arg, settings);
@@ -96,7 +105,7 @@ namespace Xbim.Exchange
                 //
                 w.Restart();
                 Console.WriteLine("Creating CobieExpress memoryModel...");
-                var cobie = new MemoryModel(new EntityFactoryIfc2x3());
+                var cobie = new MemoryModel(new EntityFactoryCobieExpress());
                 var cobieExpressFile = GetSaveName(outDirectoryName, fileNameWithoutExtension, ".cobie");
                 var cobieExpressXmlFile = GetSaveName(outDirectoryName, fileNameWithoutExtension, ".cobieXml");
                 var cobieExpressZipFile = GetSaveName(outDirectoryName, fileNameWithoutExtension, ".cobieZip");
@@ -111,7 +120,8 @@ namespace Xbim.Exchange
                 w.Restart();
                 cobie.SaveAsStep21(File.Create(cobieExpressFile));
                 cobie.SaveAsStep21Zip(File.Create(cobieExpressZipFile));
-                cobie.SaveAsXml(File.Create(cobieExpressXmlFile), new XmlWriterSettings {Indent = true, IndentChars = "\t"});
+                cobie.SaveAsXml(File.Create(cobieExpressXmlFile), new XmlWriterSettings {Indent = true, IndentChars = "\t"},
+                     XbimXmlSettings.IFC4Add2);
                 Console.WriteLine("3 COBieExpress files (.cobie., cobieXml and .cobieZip) saved in {0}ms",
                     w.ElapsedMilliseconds);
 
@@ -211,7 +221,7 @@ namespace Xbim.Exchange
                         EditorsFamilyName = "Xbim Tester",
                         ApplicationVersion = global::System.Reflection.Assembly.GetEntryAssembly().GetName().Version.ToString()
                     };
-                    using (var ifcModel = IfcStore.Create(credentials, IfcSchemaVersion.Ifc2X3, XbimStoreType.EsentDatabase))
+                    using (var ifcModel = IfcStore.Create(credentials, XbimSchemaVersion.Ifc2X3, XbimStoreType.EsentDatabase))
                     {
                         using (var txn = ifcModel.BeginTransaction("Convert from COBieLiteUK"))
                         {
@@ -220,7 +230,7 @@ namespace Xbim.Exchange
                             txn.Commit();
                             //var err = model.Validate(model.Instances, Console.Out);
                         }
-                        ifcModel.SaveAs(dPoWFile, IfcStorageType.Ifc);
+                        ifcModel.SaveAs(dPoWFile, StorageType.Ifc);
                         ifcModel.Close();
                     }
                     Console.WriteLine(" completed in {0}ms", w.ElapsedMilliseconds);
@@ -234,6 +244,32 @@ namespace Xbim.Exchange
             if (!extension.StartsWith("."))
                 extension = "." + extension;
             return Path.Combine(outDirectoryName, fileNameWithoutExtension + extension);
+        }
+
+        // mockup of what a .net core DI container
+        private static IServiceProvider ConfigureServices()
+        {
+            var serviceCollection = new ServiceCollection();
+
+            serviceCollection.AddLogging(conf => {
+                conf.SetMinimumLevel(LogLevel.Debug);   // Set the minimum log level
+                // Might also consider adding Serilog.Extensions.Logging.File to log to a rolling file.
+                // loggerFactory.AddFile("Logs/Exchanger-{Date}.log")
+                conf.AddConsole();
+            });
+
+            serviceCollection.AddSingleton<LoggerFactory>();
+            return serviceCollection.BuildServiceProvider();
+        }
+
+        private static void SetupXbimLogging(IServiceProvider serviceProvider)
+        {
+            var loggerFactory = serviceProvider.GetService<ILoggerFactory>();
+
+            XbimLogging.LoggerFactory = loggerFactory;
+
+            logger = loggerFactory.CreateLogger<Program>();
+            logger.LogInformation("Logging set up");
         }
 
         private static IfcStore GetModel(string fileName)

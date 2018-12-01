@@ -8,7 +8,6 @@ using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Xml;
 using System.Xml.Serialization;
-using log4net;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 using NPOI.HSSF.UserModel;
@@ -19,12 +18,14 @@ using Formatting = System.Xml.Formatting;
 using Xbim.CobieLiteUk.FilterHelper;
 using Xbim.COBie.EqCompare;
 using Xbim.CobieLiteUk.Schemas;
+using Microsoft.Extensions.Logging;
+using Xbim.Common;
 
 namespace Xbim.CobieLiteUk
 {
     public partial class Facility
     {
-        private static readonly ILog Log = LogManager.GetLogger("Xbim.COBieLiteUK.Facility");
+        private static readonly ILogger Log = XbimLogging.CreateLogger<Facility>();
 
         public Facility()
         {
@@ -482,7 +483,7 @@ namespace Xbim.CobieLiteUk
             catch (Exception ex)
             {
                 message = "Excel reader encountered an error.";
-                Log.Error(message, ex);
+                Log.LogError(0, ex, message);
                 return null;
             }
           
@@ -609,7 +610,7 @@ namespace Xbim.CobieLiteUk
                 templateStream = GetType().Assembly.GetManifestResourceStream(resourceName);
                 if (templateStream == null)
                 {
-                    Log.ErrorFormat("Template '{0}' could not be found in assembly streams.", resourceName);
+                    Log.LogWarning("Template '{resourceName}' could not be found in assembly streams.", resourceName);
                 }
             }
 

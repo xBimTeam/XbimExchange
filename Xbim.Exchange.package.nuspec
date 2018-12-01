@@ -2,8 +2,8 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2011/10/nuspec.xsd">
     <metadata>
         <id>Xbim.Exchange</id>
-        <!-- note: development versions are generally in the form 4.0.0-V0001, use 4 digits for consistency -->
-        <version>4.0.7-V0029</version>
+        <!-- Version numbers are maintained /assigned by the Axure Pipelines build -->
+        <version>5.0.0</version>
         <title>xBIM Exchange</title>
         <authors>xBIM Team</authors>
         <owners>Steve Lockley</owners>
@@ -11,27 +11,24 @@
         <projectUrl>https://github.com/xBimTeam/</projectUrl>
       <iconUrl>https://avatars1.githubusercontent.com/u/2284875?v=3&amp;s=240</iconUrl>
         <requireLicenseAcceptance>true</requireLicenseAcceptance>
-        <description>xBIM Exchange is the COBie, COBieLite and other Exchange based Xbim libraries. These suppport interoperation with other BIM Standards.
-xBIM is an Open Source Toolkit for developing IFC based applications (BuildingSmart Data model). 
-It provides full support for reading and writing geometry, topology and data in accordance with the Ifc2x3 schema.
-xBIM reads and writes Ifc, IfcXMl and IfcZip formats.
-The xBIM project provides packages to convert IFC models to COBie spreadsheets in both UK and US cultures as well as a range of 3D viewing controls for use with Windows forms, WPF, WEBGL and OpenGL platforms.
-IOS and Android versions are under development.</description>
+        <description>xBIM Exchange is the COBie, COBieLite and other Exchange based Xbim libraries. 
+        These suppport interoperation with other BIM Standards.
+The xBIM project provides packages to convert IFC models to COBie spreadsheets in both UK and US cultures as well as a range of 
+3D viewing controls for use with Windows forms, WPF, WEBGL and OpenGL platforms.
+</description>
         <summary>The .Net toolkit for developing BIM applications based on the IFC standard. Essential support for the Ifc data model</summary>
         <releaseNotes>
-          4.0 contains the code ported to the multiple schema infrastructure of Xbim.Essentials 4.         
+         v5.0 support the late Xbim.Essentials 5.0
         </releaseNotes>
         <language>en-GB</language>
       <tags>BIM, IFC, IfcXml, IfcZip, COBie, COBieLite, .Net, C#, BuildingSmart</tags>
       <dependencies>
-        <dependency id="log4net" version="2.0.8" />
-        <dependency id="ManagedEsent" version="1.9.4" />
-        <dependency id="Newtonsoft.Json" version="9.0.1" />
-        <dependency id="NPOI" version="2.3.0" />
+        <dependency id="Newtonsoft.Json" version="11.0.2" />
+        <dependency id="NPOI" version="2.2.1" />
         <dependency id="SharpZipLib" version="0.86.0" />
-        <dependency id="Xbim.Essentials" version="4.0.30-V033" />
-        <dependency id="Xbim.Cobie" version="4.0.30-V033" />
-        <dependency id="Xbim.Geometry" version="4.0.15-V0042" />
+        <dependency id="Xbim.Essentials" version="5.0.190" />
+        <dependency id="Xbim.CobieExpress.IO" version="5.0.108" />
+        <dependency id="Xbim.Geometry" version="5.0.136-prerelease" />
       </dependencies>
     </metadata>
     <files>

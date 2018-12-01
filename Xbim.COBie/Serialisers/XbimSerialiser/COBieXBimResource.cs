@@ -1,5 +1,6 @@
 ﻿using System;
 using Xbim.COBie.Rows;
+using Xbim.Common;
 using Xbim.Ifc2x3.ConstructionMgmtDomain;
 using Xbim.IO.Esent;
 
@@ -19,7 +20,7 @@ namespace Xbim.COBie.Serialisers.XbimSerialiser
         public void SerialiseResource(COBieSheet<COBieResourceRow> cOBieSheet)
         {
 
-            using (XbimReadWriteTransaction trans = Model.BeginTransaction("Add Resource"))
+            using (ITransaction trans = Model.BeginTransaction("Add Resource"))
             {
                 try
                 {

@@ -1,9 +1,10 @@
 ﻿using System.Collections.Generic;
 using Xbim.Common;
+using Xbim.Ifc;
 using Xbim.Ifc2x3.ActorResource;
 using Xbim.Ifc2x3.GeometryResource;
-using Xbim.Ifc2x3.IO;
 using Xbim.Ifc2x3.MeasureResource;
+using IIfcPersonAndOrganization = Xbim.Ifc4.Interfaces.IIfcPersonAndOrganization;
 
 namespace Xbim.COBie.Serialisers.XbimSerialiser
 {
@@ -23,7 +24,7 @@ namespace Xbim.COBie.Serialisers.XbimSerialiser
         /// <summary>
         /// Model to add COBie data too
         /// </summary>
-        public XbimModel Model { get; set; }
+        public IfcStore Model { get; set; }
 
         /// <summary>
         /// Flag for merging
@@ -38,7 +39,7 @@ namespace Xbim.COBie.Serialisers.XbimSerialiser
         /// <summary>
         /// Contacts dictionary keyed on email address
         /// </summary>
-        public Dictionary<string, IfcPersonAndOrganization> Contacts { get; private set; }
+        public Dictionary<string, IIfcPersonAndOrganization> Contacts { get; private set; }
         
         private IfcConversionBasedUnit _ifcConversionBasedUnitYear;
         /// <summary>
@@ -124,14 +125,14 @@ namespace Xbim.COBie.Serialisers.XbimSerialiser
         /// </summary>
         /// <param name="model">Model to add COBie data too</param>
         /// <param name="workBook">Work Book With COBie data </param>
-        public COBieXBimContext (XbimModel model)
+        public COBieXBimContext (IfcStore model)
         {
             Model = model;
-            Contacts = new Dictionary<string, IfcPersonAndOrganization>();
+            Contacts = new Dictionary<string, IIfcPersonAndOrganization>();
             
         }
 
-        public COBieXBimContext(XbimModel model, ReportProgressDelegate progressHandler = null)
+        public COBieXBimContext(IfcStore model, ReportProgressDelegate progressHandler = null)
             : this(model) 
         {
             if (progressHandler != null)

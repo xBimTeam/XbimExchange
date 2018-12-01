@@ -1,10 +1,10 @@
-using log4net;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.IO;
-using Xbim.Common.Federation;
-using Xbim.CobieLiteUk;
 using Xbim.CobieLiteUk.FilterHelper;
+using Xbim.Common;
+using Xbim.Common.Federation;
 using Xbim.Ifc;
 using Xbim.Ifc4.Interfaces;
 
@@ -12,7 +12,7 @@ namespace XbimExchanger.IfcHelpers
 {
     public static class IfcStoreExtensions
     {
-        private static readonly ILog Logger = LogManager.GetLogger("XbimExchanger.IfcToCOBieLiteUK.Conversion.IfcStoreExtensions");
+        private static readonly ILogger Logger = XbimLogging.CreateLogger("XbimExchanger.IfcHelpers.IfcStoreExtensions");
 
         /// <summary>
         /// Get the file to roles information
@@ -37,12 +37,12 @@ namespace XbimExchanger.IfcHelpers
                     }
                     else
                     {
-                        Logger.ErrorFormat("File path does not exist: {0}", refModel.Name);    
+                        Logger.LogError("File path does not exist: {path}", refModel.Name);    
                     }
                 }
                 catch (ArgumentException)
                 {
-                    Logger.ErrorFormat("File path is incorrect: {0}", refModel.Name);    
+                    Logger.LogError("File path is incorrect: {path}", refModel.Name);    
                 }
             }
             return modelRoles;

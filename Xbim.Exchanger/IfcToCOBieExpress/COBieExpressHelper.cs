@@ -7,13 +7,13 @@ using System.Reflection;
 using System.Text.RegularExpressions;
 using Xbim.CobieExpress;
 using Xbim.Common;
-using Xbim.Common.Logging;
 using Xbim.CobieLiteUk.FilterHelper;
 using Xbim.CobieLiteUk;
 using Xbim.Ifc;
 using Xbim.Ifc4.Interfaces;
 using XbimExchanger.IfcToCOBieExpress.EqCompare;
 using XbimExchanger.IfcHelpers;
+using Microsoft.Extensions.Logging;
 
 namespace XbimExchanger.IfcToCOBieExpress
 {
@@ -46,7 +46,7 @@ namespace XbimExchanger.IfcToCOBieExpress
     public class COBieExpressHelper
     {
 
-        internal static readonly ILogger Logger = LoggerFactory.GetLogger();
+        internal static readonly ILogger Logger = XbimLogging.CreateLogger<COBieExpressHelper>();
         /// <summary>
         /// Object to use to report progress on Exchangers
         /// </summary>

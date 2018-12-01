@@ -247,7 +247,7 @@ namespace Xbim.COBieLite
         public void WriteBson(BinaryWriter binaryWriter)
         {
             var serialiser = GetJsonSerializer();
-            var writer = new BsonWriter(binaryWriter);
+            var writer = new BsonDataWriter(binaryWriter);
             serialiser.Serialize(writer, this);
         }
 

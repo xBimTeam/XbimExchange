@@ -1,17 +1,14 @@
-﻿using System;
+﻿using Microsoft.Extensions.Logging;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
-using System.Linq;
-using System.Text;
-using log4net;
 using Xbim.CobieExpress.IO;
 using Xbim.CobieLiteUk;
 using Xbim.Common;
 using Xbim.Ifc;
 using XbimExchanger.IfcHelpers;
-using XbimExchanger.IfcToCOBieLiteUK.Conversion;
 
 
 namespace XbimExchanger.IfcToCOBieExpress.Conversion
@@ -19,7 +16,7 @@ namespace XbimExchanger.IfcToCOBieExpress.Conversion
 
     public class CobieExpressConverter : ICobieConverter
     {
-        private static readonly ILog Logger = LogManager.GetLogger("Xbim.COBieLiteUK.Client.CobieLiteConverter");
+        private static readonly ILogger Logger = XbimLogging.CreateLogger<CobieExpressConverter>();
 
         public CobieExpressConverter()
         {
@@ -56,21 +53,21 @@ namespace XbimExchanger.IfcToCOBieExpress.Conversion
             {
                 const string message = "Invalid CobieConversionParams for exporter.";
                 Worker.ReportProgress(0, message);
-                Logger.Error(message);
+                Logger.LogError(message);
                 return;
             }
             if (parameters.Source == null)
             {
                 const string message = "No souce provided to exporter.";
                 Worker.ReportProgress(0, message);
-                Logger.Error(message);
+                Logger.LogError(message);
                 return;
             }
             if (string.IsNullOrEmpty(parameters.OutputFileName))
             {
                 const string message = "No output file name specified in exporter.";
                 Worker.ReportProgress(0, message);
-                Logger.Error(message);
+                Logger.LogError(message);
                 return;
             }
             e.Result = GenerateFile(parameters); //returns the excel file names in an enumerable
@@ -148,7 +145,7 @@ namespace XbimExchanger.IfcToCOBieExpress.Conversion
                 {
                     string message = string.Format("Source file not found {0}", sourceFile);
                     Worker.ReportProgress(0, message);
-                    Logger.Error(message);
+                    Logger.LogError(message);
                     return null;
                 }
                 var fileExt = Path.GetExtension(sourceFile);

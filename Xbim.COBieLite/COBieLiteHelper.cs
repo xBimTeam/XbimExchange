@@ -10,12 +10,13 @@ using System.Xml.Serialization;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Bson;
 using Newtonsoft.Json.Converters;
-using Xbim.Common.Logging;
 using System.Xml;
 using Xbim.Common.Metadata;
 using Formatting = System.Xml.Formatting;
 using Xbim.Ifc;
 using Xbim.Ifc4.Interfaces;
+using Microsoft.Extensions.Logging;
+using Xbim.Common;
 
 namespace Xbim.COBieLite
 {
@@ -54,7 +55,7 @@ namespace Xbim.COBieLite
     public class CoBieLiteHelper
     {
 
-        internal static readonly ILogger Logger = LoggerFactory.GetLogger();
+        internal static readonly ILogger Logger = XbimLogging.CreateLogger<CoBieLiteHelper>();
        
         private readonly IfcStore _model;
         private IIfcClassification _classificationSystem; 
@@ -763,7 +764,8 @@ namespace Xbim.COBieLite
             serializerSettings.Converters.Add(new StringEnumConverter());
             var serialiser = JsonSerializer.Create(serializerSettings);
             // serialize product to BSON
-            var writer = new BsonWriter(binaryWriter);
+            
+            var writer = new BsonDataWriter(binaryWriter);
             serialiser.Serialize(writer, theFacility);
         }
 

@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using Xbim.COBie.Data;
 using Xbim.Ifc2x3.ActorResource;
-using Xbim.Ifc2x3.IO;
 using Xbim.Common;
 using Xbim.Ifc;
 

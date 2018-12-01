@@ -3,11 +3,12 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using System.Linq;
-using log4net;
+using Microsoft.Extensions.Logging;
 using NPOI.HSSF.UserModel;
 using NPOI.HSSF.Util;
 using NPOI.SS.UserModel;
 using Xbim.COBie.Contracts;
+using Xbim.Common;
 
 namespace Xbim.COBie.Serialisers
 {
@@ -17,7 +18,7 @@ namespace Xbim.COBie.Serialisers
     // ReSharper disable once InconsistentNaming
     public class COBieXLSSerialiser : ICOBieSerialiser
     {
-        private static readonly ILog Log = LogManager.GetLogger("Xbim.COBie.Serialisers.COBieXLSSerialiser");
+        private static readonly ILogger Log = XbimLogging.CreateLogger<COBieXLSSerialiser>();
 
         const string DefaultFileName = "Cobie.xls";
         const string DefaultTemplateFileName = @"Templates\COBie-UK-2012-template.xls";
@@ -77,7 +78,8 @@ namespace Xbim.COBie.Serialisers
                         "COBie creation error. Could not locate template file '{0}' from executing folder '{1}'",
                         TemplateFileName, di.FullName);
                 var e = new FileNotFoundException(msg, TemplateFileName);
-                Log.Error(msg, e);
+                Log.LogError(0, e, "COBie creation error.Could not locate template file '{template}' from executing folder '{folder}'",
+                    TemplateFileName, di.FullName);
                 throw e;
             }
             // Load template file
@@ -258,7 +260,7 @@ namespace Xbim.COBie.Serialisers
 
             if (cellStyle == null || dataFormat == null)
             {
-                Log.ErrorFormat("Error producing Excel cell style or format in workbook.");
+                Log.LogWarning("Error producing Excel cell style or format in workbook.");
                 return;
             }
                 
@@ -583,7 +585,7 @@ namespace Xbim.COBie.Serialisers
             }
             catch (SystemException se)
             {
-                Log.Error("Error in the excel file management", se);
+                Log.LogError(0, se, "Error in the excel file management");
             }
 
             return processed;
