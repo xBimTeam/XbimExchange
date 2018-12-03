@@ -5,29 +5,24 @@ parameters:
   minor: 0
   buildNo: 0
 
-variables:
-  major: ${{ parameters.major }}
-  minor: ${{ parameters.minor }}
-  buildNo: ${{ parameters.buildNo }}
-
 steps:
 # Windows script setting up $(packageversion) of the nuget package - based on branch
  - script: |
-    echo ##vso[task.setvariable variable=packageversion]$(major).$(minor).$(buildNo)-prerelease
+    echo ##vso[task.setvariable variable=packageversion]${{ parameters.major }}.${{ parameters.minor}}.${{ parameters.buildNo }}-prerelease
   name: 'SettingPrereleaseNugetPackageVersion'
   condition: eq(variables['Build.SourceBranch'], 'refs/heads/develop')
 - script: | 
-    echo ##vso[task.setvariable variable=version]$(major).$(minor).$(buildNo)
+    echo ##vso[task.setvariable variable=version]${{ parameters.major }}.${{ parameters.minor}}.${{ parameters.buildNo }}
   name: 'SettingNugetPackageVersion'
   condition: eq(variables['Build.SourceBranch'], 'refs/heads/master')
 
 # Windows script setting up $(fileversion) used to stamp AssemblyFileVersions. 
 # By convention we use 'Major.Minor.BuildNo.0' on Master and 'Major.Minor.0.BuildNo' on other branches
 - script: | 
-    echo ##vso[task.setvariable variable=fileversion]$(major).$(minor).$(buildNo).0
+    echo ##vso[task.setvariable variable=fileversion]${{ parameters.major }}.${{ parameters.minor}}.${{ parameters.buildNo }}.0
   name: 'SettingFileVersionMaster'
   condition: eq(variables['Build.SourceBranch'], 'refs/heads/master')
 - script: | 
-    echo ##vso[task.setvariable variable=fileversion]$(major).$(minor).0.$(buildNo)
+    echo ##vso[task.setvariable variable=fileversion]${{ parameters.major }}.${{ parameters.minor}}.0.${{ parameters.buildNo }}
   name: 'SettingFileVersionNonMaster'
   condition: ne(variables['Build.SourceBranch'], 'refs/heads/master')
