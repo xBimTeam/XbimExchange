@@ -92,7 +92,7 @@ steps:
 # Re-reference & Pack Xbim.Exchanger against DPoW and COBieLite[UK]
 - script: dotnet remove Xbim.Exchanger\Xbim.Exchanger.csproj reference ..\Xbim.COBieLite\Xbim.COBieLite.csproj ..\Xbim.COBieLiteUK\Xbim.COBieLiteUK.csproj ..\Xbim.DPoW\Xbim.DPoW.csproj
 - script: dotnet add    Xbim.Exchanger\Xbim.Exchanger.csproj package Xbim.COBieLite Xbim.COBieLiteUK Xbim.DPoW -s $(Build.BinariesDirectory) -v $(packageversion)
-  name: 'COBieLiteUK_Validation_Patch'
+  name: 'COBieExchanger_Patch'
 
 - template: buildnuget.yml 
   parameters:
