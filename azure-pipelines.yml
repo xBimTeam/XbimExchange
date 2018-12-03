@@ -58,6 +58,7 @@ steps:
   displayName: 'NuGet restore Solution $(packageversion)'
   inputs:
     restoreSolution: '$(solution)'
+    verbosityRestore: 'normal'
     feedsToUse: config
     nugetConfigPath: nuget.config
 

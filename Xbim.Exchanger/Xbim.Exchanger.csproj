@@ -41,17 +41,13 @@
     <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="2.1.1" />
     <PackageReference Include="NPOI" Version="2.4.0" />
     <PackageReference Include="Xbim.CobieExpress.IO" Version="5.0.109" />
+    <PackageReference Include="Xbim.Essentials" Version="5.0.191" />
     <PackageReference Include="Xbim.PropertySets" Version="4.0.1" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Xbim.COBieLiteUK\Xbim.COBieLiteUK.csproj" />
     <ProjectReference Include="..\Xbim.COBieLite\Xbim.COBieLite.csproj" />
     <ProjectReference Include="..\Xbim.DPoW\Xbim.DPoW.csproj" />
-  </ItemGroup>
-  <ItemGroup Condition="'$(TargetFramework)' == 'net47'">
-    <PackageReference Include="Xbim.Essentials">
-      <Version>5.0.191</Version>
-    </PackageReference>
   </ItemGroup>
   <ItemGroup>
     <None Update="IfcToCOBieExpress\Classifications\DataFiles\Uniclass2015_Ac_v0_1.csv">

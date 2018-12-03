@@ -7,8 +7,7 @@
     <FileVersion>5.0.0.0</FileVersion>
     <Title>Xbim.COBie</Title>
     <Copyright>Xbim Ltd.</Copyright>
-    <Description>Xbim original COBie translation library
-</Description>
+    <Description>Xbim original COBie translation library</Description>
     <Authors>xBIM Team</Authors>
     <Company>Xbim Ltd.</Company>
     <PackageLicenseUrl>https://raw.githubusercontent.com/xBimTeam/XbimEssentials/master/LICENCE.md</PackageLicenseUrl>
