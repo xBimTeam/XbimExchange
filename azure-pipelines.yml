@@ -11,7 +11,6 @@ trigger:
 - master
 - develop
 
-name: $(BuildDefinitionName)_$(SourceBranchName)_$(BuildID)
 
 pool:
   vmImage: 'VS2017-Win2016'
@@ -22,26 +21,29 @@ variables:
   buildConfiguration: 'Release'
   major: 5
   minor: 0
+  buildNo: $[counter('exchangeversioncounter', 100)]
+
+name: $(BuildDefinitionName)_$(SourceBranchName)_$(buildNo)
 
 steps:
 # Windows script setting up $(packageversion) of the nuget package if this is development branch build
 - script: |
-    echo ##vso[task.setvariable variable=packageversion]$(major).$(minor).$(BuildID)-prerelease
+    echo ##vso[task.setvariable variable=packageversion]$(major).$(minor).$(buildNo)-prerelease
   name: 'SettingPrereleaseNugetPackageVersion'
   condition: eq(variables['Build.SourceBranch'], 'refs/heads/develop')
 - script: | 
-    echo ##vso[task.setvariable variable=packageversion]$(major).$(minor).$(BuildID)
+    echo ##vso[task.setvariable variable=packageversion]$(major).$(minor).$(buildNo)
   name: 'SettingNugetPackageVersion'
   condition: eq(variables['Build.SourceBranch'], 'refs/heads/master')
 
 # Windows script setting up $(fileversion) used to stamp AssemblyFileVersions. 
 # By convention we use 'Major.Minor.BuildNo.0' on Master and 'Major.Minor.0.BuildNo' on other branches
 - script: | 
-    echo ##vso[task.setvariable variable=fileversion]$(major).$(minor).$(BuildID).0
+    echo ##vso[task.setvariable variable=fileversion]$(major).$(minor).$(buildNo).0
   name: 'SettingFileVersionMaster'
   condition: eq(variables['Build.SourceBranch'], 'refs/heads/master')
 - script: | 
-    echo ##vso[task.setvariable variable=fileversion]$(major).$(minor).0.$(BuildID)
+    echo ##vso[task.setvariable variable=fileversion]$(major).$(minor).0.$(buildNo)
   name: 'SettingFileVersionNonMaster'
   condition: ne(variables['Build.SourceBranch'], 'refs/heads/master')
 
