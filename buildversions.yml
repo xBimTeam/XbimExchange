@@ -4,9 +4,9 @@ parameters:
   major: 1
   minor: 0
   buildNo: 0
-  
+
 jobs:
-- job: Version Setup 
+- job: Version Setup for ${{ parameters.buildNo }}
   steps:
   # Windows script setting up $(packageversion) of the nuget package - based on branch
   - script: |
@@ -29,7 +29,7 @@ jobs:
     name: 'SettingFileVersionNonMaster'
     condition: ne(variables['Build.SourceBranch'], 'refs/heads/master')
 
- - job: Version Stamping
+- job: Version Stamping
   steps:
   - script: echo $(fileversion). Env = %FILEVERSION%
   - task: VersionDotNetCoreAssemblies@2
@@ -49,9 +49,9 @@ jobs:
   - task: VersionAssemblies@2
     displayName: 'Set AssemblyFileVersion in AssemblyInfo.cs - $(fileversion)'
     inputs: 
-        Path: $(Set Build.SourcesDirectory)
-        VersionNumber: $(fileversion)
-        VersionRegex: \d+\.\d+\.\d+\.\d+
-        FilenamePattern: AssemblyInfo.cs
-        Field: AssemblyFileVersion
-        OutputVersion: OutputedVersion
+      Path: $(Set Build.SourcesDirectory)
+      VersionNumber: $(fileversion)
+      VersionRegex: \d+\.\d+\.\d+\.\d+
+      FilenamePattern: AssemblyInfo.cs
+      Field: AssemblyFileVersion
+      OutputVersion: OutputedVersion
