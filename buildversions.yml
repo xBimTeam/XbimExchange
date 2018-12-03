@@ -18,8 +18,7 @@ steps:
     OutputVersion: OutputedVersion
 
 # Version 'classic' .NET Assemblies
-# Description - Applies a version to a .NET assembly via the assemblyinfo.cs or .vb files based on the build number.
-# For the Plugin project(s) which are ClickOnce
+# Description - Applies a version to a .NET assembly via the assemblyinfo.cs files based on the build number.
 - task: VersionAssemblies@2
   displayName: 'Set AssemblyFileVersion in AssemblyInfo.cs'
   inputs: 
