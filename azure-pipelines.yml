@@ -6,11 +6,11 @@
 
 # Basic build def. No Nuget packing yet
 
-name: $(TeamProject)_$(BuildDefinitionName)_$(SourceBranchName)_$(My.exchangeversioncounter)'
 
 trigger:
 - master
 - develop
+name: $(TeamProject)_$(BuildDefinitionName)_$(SourceBranchName)_$(My.buildNo)'
 
 pool:
   vmImage: 'VS2017-Win2016'
@@ -21,8 +21,9 @@ variables:
   buildConfiguration: 'Release'
   major: 5
   minor: 0
-  # creates a counter called versioncounter and seeds it at 100 and then assigns the value to a variable named patch.
-  patch: $[counter('exchangeversioncounter', 100)]
+  # creates a counter called versioncounter and seeds it at 100 and then assigns the value to a variable named buildNo.
+  buildNo: $[counter('exchangeversioncounter', 100)]
+
 
 steps:
 - task: NuGetToolInstaller@0
