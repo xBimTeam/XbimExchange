@@ -1,313 +1,41 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{7DA8C61A-ACCA-45CB-B688-93A4982FA44C}</ProjectGuid>
-    <OutputType>Library</OutputType>
-    <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Xbim.COBie</RootNamespace>
-    <AssemblyName>Xbim.COBie</AssemblyName>
-    <TargetFrameworkVersion>v4.7</TargetFrameworkVersion>
-    <FileAlignment>512</FileAlignment>
-    <SccProjectName>SAK</SccProjectName>
-    <SccLocalPath>SAK</SccLocalPath>
-    <SccProvider>SAK</SccProvider>
-    <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\</SolutionDir>
-    <SccAuxPath>SAK</SccAuxPath>
-    <NuGetPackageImportStamp>
-    </NuGetPackageImportStamp>
-    <TargetFrameworkProfile />
-    <AllowedOutputExtensionsInPackageBuildOutputFolder>$(AllowedOutputExtensionsInPackageBuildOutputFolder);.pdb</AllowedOutputExtensionsInPackageBuildOutputFolder>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <DebugSymbols>true</DebugSymbols>
-    <DebugType>full</DebugType>
-    <Optimize>false</Optimize>
-    <OutputPath>..\Output\Debug\</OutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-    <Prefer32Bit>false</Prefer32Bit>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <DebugType>pdbonly</DebugType>
-    <Optimize>true</Optimize>
-    <OutputPath>..\Output\Release\</OutputPath>
-    <DefineConstants>TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-    <DebugSymbols>true</DebugSymbols>
-    <Prefer32Bit>false</Prefer32Bit>
-    <DocumentationFile>..\Output\Release\Xbim.COBie.XML</DocumentationFile>
-    <NoWarn>1591;1572;1573;1574</NoWarn>
-  </PropertyGroup>
-  <PropertyGroup>
-    <SignAssembly>false</SignAssembly>
-  </PropertyGroup>
-  <PropertyGroup>
-    <AssemblyOriginatorKeyFile>XbimOpenSourceKeyFile.snk</AssemblyOriginatorKeyFile>
+    <TargetFrameworks>net47</TargetFrameworks>
+    <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
+    <Version>5.0.0.0</Version>
+    <AssemblyVersion>5.0.0.0</AssemblyVersion>
+    <FileVersion>5.0.0.0</FileVersion>
+    <Title>Xbim.COBie</Title>
+    <Copyright>Xbim Ltd.</Copyright>
+    <Description>Xbim original COBie translation library
+</Description>
+    <Authors>xBIM Team</Authors>
+    <Company>Xbim Ltd.</Company>
+    <PackageLicenseUrl>https://raw.githubusercontent.com/xBimTeam/XbimEssentials/master/LICENCE.md</PackageLicenseUrl>
+    <PackageProjectUrl>https://github.com/xBimTeam/XbimExchange</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/xBimTeam/XbimExchanges/tree/develop</RepositoryUrl>
+    <PackageTags>BIM, IFC, IfcXml, IfcZip, Ifc4, COBie</PackageTags>
+    <PackageReleaseNotes>v5.0 support the latest Xbim.Essentials 5.0</PackageReleaseNotes>
+    <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
+    <PackageIconUrl>https://avatars1.githubusercontent.com/u/2284875?v=3&amp;amp;s=240</PackageIconUrl>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="..\SharedAssemblyInfo.cs">
-      <Link>Properties\SharedAssemblyInfo.cs</Link>
-    </Compile>
-    <Compile Include="COBieAliasAttribute.cs" />
-    <Compile Include="COBieCell.cs" />
-    <Compile Include="COBieContext.cs" />
-    <Compile Include="COBieErrorCollection.cs" />
-    <Compile Include="COBieColumnRelationship.cs" />
-    <Compile Include="COBieWorkbook.cs" />
-    <Compile Include="Contracts\ICOBieDeserialiser.cs" />
-    <Compile Include="Contracts\ICOBieFederate.cs" />
-    <Compile Include="Contracts\ICOBieSerialiser.cs" />
-    <Compile Include="Contracts\ICOBieSheetValidationTemplate.cs" />
-    <Compile Include="Contracts\ICOBieValidationTemplate.cs" />
-    <Compile Include="Data\COBieData.cs" />
-    <Compile Include="Data\COBieDataAssembly.cs" />
-    <Compile Include="Data\COBieDataAttributeBuilder.cs" />
-    <Compile Include="Data\COBieDataComponent.cs" />
-    <Compile Include="Data\COBieDataConnection.cs" />
-    <Compile Include="Data\COBieDataContact.cs" />
-    <Compile Include="Data\COBieDataCoordinate.cs" />
-    <Compile Include="Data\COBieDataDocument.cs" />
-    <Compile Include="Data\COBieDataFacility.cs" />
-    <Compile Include="Data\COBieDataFloor.cs" />
-    <Compile Include="Data\COBieDataImpact.cs" />
-    <Compile Include="Constants.cs" />
-    <Compile Include="Data\COBieDataIssue.cs" />
-    <Compile Include="Data\COBieDataJob.cs" />
-    <Compile Include="Data\COBieDataPropertySetValues.cs" />
-    <Compile Include="Data\COBieDataResource.cs" />
-    <Compile Include="Data\COBieDataSpace.cs" />
-    <Compile Include="Data\COBieDataSpare.cs" />
-    <Compile Include="Data\COBieDataSystem.cs" />
-    <Compile Include="Data\COBieDataType.cs" />
-    <Compile Include="Data\COBieDataZone.cs" />
-    <Compile Include="Data\COBieHelpers.cs" />
-    <Compile Include="Data\IAttributeProvider.cs" />
-    <Compile Include="COBieProgress.cs" />
-    <Compile Include="Enums.cs" />
-    <Compile Include="Federate\FederateCOBie.cs" />
-    <Compile Include="FilterValues.cs" />
-    <Compile Include="FilterValuesOnMerge.cs" />
-    <Compile Include="IfcExtensions.cs" />
-    <Compile Include="IFCGuid.cs" />
-    <Compile Include="Resources\ErrorDescription.en-GB.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>ErrorDescription.en-GB.resx</DependentUpon>
-    </Compile>
-    <Compile Include="Resources\ErrorDescription.zh-TW.Designer.cs">
-      <DependentUpon>ErrorDescription.zh-TW.resx</DependentUpon>
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-    </Compile>
-    <Compile Include="Resources\ErrorDescription.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>ErrorDescription.resx</DependentUpon>
-    </Compile>
-    <Compile Include="ICOBieSheet.cs" />
-    <Compile Include="Rows\COBieAssemblyRow.cs" />
-    <Compile Include="Rows\COBieAttributeRow.cs" />
-    <Compile Include="COBieColumn.cs" />
-    <Compile Include="Rows\COBieComponentRow.cs" />
-    <Compile Include="Rows\COBieConnectionRow.cs" />
-    <Compile Include="Rows\COBieContactRow.cs" />
-    <Compile Include="Rows\COBieCoordinateRow.cs" />
-    <Compile Include="Rows\COBieDocumentRow.cs" />
-    <Compile Include="COBieAttributes.cs" />
-    <Compile Include="COBieError.cs" />
-    <Compile Include="COBieQueries.cs" />
-    <Compile Include="COBieBuilder.cs" />
-    <Compile Include="Rows\COBieFacilityRow.cs" />
-    <Compile Include="Rows\COBieFloorRow.cs" />
-    <Compile Include="Rows\COBieImpactRow.cs" />
-    <Compile Include="Rows\COBieIssueRow.cs" />
-    <Compile Include="Rows\COBieJobRow.cs" />
-    <Compile Include="Rows\COBiePickListsRow.cs" />
-    <Compile Include="Rows\COBieResourceRow.cs" />
-    <Compile Include="COBieRow.cs" />
-    <Compile Include="COBieSheet.cs" />
-    <Compile Include="Rows\COBieSpaceRow.cs" />
-    <Compile Include="Rows\COBieSpareRow.cs" />
-    <Compile Include="Rows\COBieSystemRow.cs" />
-    <Compile Include="Rows\COBieTypeRow.cs" />
-    <Compile Include="Rows\COBieZoneRow.cs" />
-    <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Serialisers\COBieBinaryDeserialiser.cs" />
-    <Compile Include="Serialisers\COBieBinarySerialiser.cs" />
-    <Compile Include="Serialisers\COBieJSONSerialiser.cs" />
-    <Compile Include="Serialisers\COBieXBimSerialiser.cs" />
-    <Compile Include="Serialisers\COBieXLSDeserialiser.cs" />
-    <Compile Include="Serialisers\COBieXLSSerialiser.cs" />
-    <Compile Include="Serialisers\COBieXLSXSerialiser.cs" />
-    <Compile Include="Serialisers\XbimSerialiser\COBieXBim.cs" />
-    <Compile Include="Serialisers\XbimSerialiser\COBieXBimAssembly.cs" />
-    <Compile Include="Serialisers\XbimSerialiser\COBieXBimAttribute.cs" />
-    <Compile Include="Serialisers\XbimSerialiser\COBieXBimComponent.cs" />
-    <Compile Include="Serialisers\XbimSerialiser\COBieXBimConnection.cs" />
-    <Compile Include="Serialisers\XbimSerialiser\COBieXBimContext.cs" />
-    <Compile Include="Serialisers\XbimSerialiser\COBieXBimContact.cs" />
-    <Compile Include="Serialisers\XbimSerialiser\COBieXBimCoordinate.cs" />
-    <Compile Include="Serialisers\XbimSerialiser\COBieXBimDocument.cs" />
-    <Compile Include="Serialisers\XbimSerialiser\COBieXBimEditScope.cs" />
-    <Compile Include="Serialisers\XbimSerialiser\COBieXBimFacility.cs" />
-    <Compile Include="Serialisers\XbimSerialiser\COBieXBimFloor.cs" />
-    <Compile Include="Serialisers\XbimSerialiser\COBieXBimImpact.cs" />
-    <Compile Include="Serialisers\XbimSerialiser\COBieXBimIssue.cs" />
-    <Compile Include="Serialisers\XbimSerialiser\COBieXBimJob.cs" />
-    <Compile Include="Serialisers\XbimSerialiser\COBieXBimResource.cs" />
-    <Compile Include="Serialisers\XbimSerialiser\COBieXBimSpace.cs" />
-    <Compile Include="Serialisers\XbimSerialiser\COBieXBimSpare.cs" />
-    <Compile Include="Serialisers\XbimSerialiser\COBieXBimSystem.cs" />
-    <Compile Include="Serialisers\XbimSerialiser\COBieXBimType.cs" />
-    <Compile Include="Serialisers\XbimSerialiser\COBieXBimZone.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="app.config" />
-    <None Include="ClassDiagram1.cd" />
-    <None Include="packages.config">
-      <SubType>Designer</SubType>
-    </None>
-    <None Include="XbimOpenSourceKeyFile.snk" />
+    <None Remove="PickLists.xml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="PickLists.xml" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Resources\ErrorDescription.en-GB.resx">
-      <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>ErrorDescription.en-GB.Designer.cs</LastGenOutput>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Resources\ErrorDescription.zh-TW.resx">
-      <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>ErrorDescription.zh-TW.Designer.cs</LastGenOutput>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Resources\ErrorDescription.resx">
-      <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>ErrorDescription.Designer.cs</LastGenOutput>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
+    <PackageReference Include="Newtonsoft.Json" Version="11.0.2" />
+    <PackageReference Include="NPOI" Version="2.4.0" />
+    <PackageReference Include="Xbim.Essentials" Version="5.0.191" />
+    <PackageReference Include="Xbim.Geometry" Version="5.0.139-prerelease" />
   </ItemGroup>
   <ItemGroup>
-    <Reference Include="Esent.Interop, Version=1.9.4.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\packages\ManagedEsent.1.9.4\lib\net40\Esent.Interop.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="ICSharpCode.SharpZipLib, Version=0.86.0.518, Culture=neutral, PublicKeyToken=1b03e6acf1164f73, processorArchitecture=MSIL">
-      <HintPath>..\packages\SharpZipLib.0.86.0\lib\20\ICSharpCode.SharpZipLib.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="Microsoft.Extensions.Configuration, Version=2.1.1.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.Extensions.Configuration.2.1.1\lib\netstandard2.0\Microsoft.Extensions.Configuration.dll</HintPath>
-    </Reference>
-    <Reference Include="Microsoft.Extensions.Configuration.Abstractions, Version=2.1.1.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.Extensions.Configuration.Abstractions.2.1.1\lib\netstandard2.0\Microsoft.Extensions.Configuration.Abstractions.dll</HintPath>
-    </Reference>
-    <Reference Include="Microsoft.Extensions.Configuration.Binder, Version=2.1.1.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.Extensions.Configuration.Binder.2.1.1\lib\netstandard2.0\Microsoft.Extensions.Configuration.Binder.dll</HintPath>
-    </Reference>
-    <Reference Include="Microsoft.Extensions.DependencyInjection.Abstractions, Version=2.1.1.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.Extensions.DependencyInjection.Abstractions.2.1.1\lib\netstandard2.0\Microsoft.Extensions.DependencyInjection.Abstractions.dll</HintPath>
-    </Reference>
-    <Reference Include="Microsoft.Extensions.Logging, Version=2.1.1.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.Extensions.Logging.2.1.1\lib\netstandard2.0\Microsoft.Extensions.Logging.dll</HintPath>
-    </Reference>
-    <Reference Include="Microsoft.Extensions.Logging.Abstractions, Version=2.1.1.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.Extensions.Logging.Abstractions.2.1.1\lib\netstandard2.0\Microsoft.Extensions.Logging.Abstractions.dll</HintPath>
-    </Reference>
-    <Reference Include="Microsoft.Extensions.Options, Version=2.1.1.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.Extensions.Options.2.1.1\lib\netstandard2.0\Microsoft.Extensions.Options.dll</HintPath>
-    </Reference>
-    <Reference Include="Microsoft.Extensions.Primitives, Version=2.1.6.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.Extensions.Primitives.2.1.6\lib\netstandard2.0\Microsoft.Extensions.Primitives.dll</HintPath>
-    </Reference>
-    <Reference Include="Newtonsoft.Json, Version=11.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
-      <HintPath>..\packages\Newtonsoft.Json.11.0.2\lib\net45\Newtonsoft.Json.dll</HintPath>
-    </Reference>
-    <Reference Include="NPOI, Version=2.4.0.0, Culture=neutral, PublicKeyToken=0df73ec7942b34e1, processorArchitecture=MSIL">
-      <HintPath>..\packages\NPOI.2.4.0\lib\net40\NPOI.dll</HintPath>
-    </Reference>
-    <Reference Include="NPOI.OOXML, Version=2.4.0.0, Culture=neutral, PublicKeyToken=0df73ec7942b34e1, processorArchitecture=MSIL">
-      <HintPath>..\packages\NPOI.2.4.0\lib\net40\NPOI.OOXML.dll</HintPath>
-    </Reference>
-    <Reference Include="NPOI.OpenXml4Net, Version=2.4.0.0, Culture=neutral, PublicKeyToken=0df73ec7942b34e1, processorArchitecture=MSIL">
-      <HintPath>..\packages\NPOI.2.4.0\lib\net40\NPOI.OpenXml4Net.dll</HintPath>
-    </Reference>
-    <Reference Include="NPOI.OpenXmlFormats, Version=2.4.0.0, Culture=neutral, PublicKeyToken=0df73ec7942b34e1, processorArchitecture=MSIL">
-      <HintPath>..\packages\NPOI.2.4.0\lib\net40\NPOI.OpenXmlFormats.dll</HintPath>
-    </Reference>
-    <Reference Include="System" />
-    <Reference Include="System.Buffers, Version=4.0.3.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
-      <HintPath>..\packages\System.Buffers.4.5.0\lib\netstandard2.0\System.Buffers.dll</HintPath>
-    </Reference>
-    <Reference Include="System.Configuration" />
-    <Reference Include="System.Configuration.ConfigurationManager, Version=4.0.1.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
-      <HintPath>..\packages\System.Configuration.ConfigurationManager.4.5.0\lib\net461\System.Configuration.ConfigurationManager.dll</HintPath>
-    </Reference>
-    <Reference Include="System.Data" />
-    <Reference Include="System.Data.OracleClient" />
-    <Reference Include="System.Drawing" />
-    <Reference Include="System.Memory, Version=4.0.1.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
-      <HintPath>..\packages\System.Memory.4.5.1\lib\netstandard2.0\System.Memory.dll</HintPath>
-    </Reference>
-    <Reference Include="System.Net" />
-    <Reference Include="System.Numerics" />
-    <Reference Include="System.Numerics.Vectors, Version=4.1.4.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
-      <HintPath>..\packages\System.Numerics.Vectors.4.5.0\lib\net46\System.Numerics.Vectors.dll</HintPath>
-    </Reference>
-    <Reference Include="System.Runtime.CompilerServices.Unsafe, Version=4.0.4.1, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
-      <HintPath>..\packages\System.Runtime.CompilerServices.Unsafe.4.5.2\lib\netstandard2.0\System.Runtime.CompilerServices.Unsafe.dll</HintPath>
-    </Reference>
-    <Reference Include="System.Security.AccessControl, Version=4.1.1.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
-      <HintPath>..\packages\System.Security.AccessControl.4.5.0\lib\net461\System.Security.AccessControl.dll</HintPath>
-    </Reference>
-    <Reference Include="System.Security.Permissions, Version=4.0.1.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
-      <HintPath>..\packages\System.Security.Permissions.4.5.0\lib\net461\System.Security.Permissions.dll</HintPath>
-    </Reference>
-    <Reference Include="System.Security.Principal.Windows, Version=4.1.1.1, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
-      <HintPath>..\packages\System.Security.Principal.Windows.4.5.1\lib\net461\System.Security.Principal.Windows.dll</HintPath>
-    </Reference>
-    <Reference Include="System.ServiceProcess" />
-    <Reference Include="System.Transactions" />
-    <Reference Include="System.XML" />
-    <Reference Include="Xbim.Common, Version=5.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Xbim.Common.5.0.190\lib\net47\Xbim.Common.dll</HintPath>
-    </Reference>
-    <Reference Include="Xbim.Geometry.Engine.Interop, Version=5.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Xbim.Geometry.Engine.Interop.5.0.136-prerelease\lib\net47\Xbim.Geometry.Engine.Interop.dll</HintPath>
-    </Reference>
-    <Reference Include="Xbim.Ifc, Version=5.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Xbim.Ifc.5.0.190\lib\net47\Xbim.Ifc.dll</HintPath>
-    </Reference>
-    <Reference Include="Xbim.Ifc2x3, Version=5.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Xbim.Ifc2x3.5.0.190\lib\net47\Xbim.Ifc2x3.dll</HintPath>
-    </Reference>
-    <Reference Include="Xbim.Ifc4, Version=5.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Xbim.Ifc4.5.0.190\lib\net47\Xbim.Ifc4.dll</HintPath>
-    </Reference>
-    <Reference Include="Xbim.IO.Esent, Version=5.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Xbim.IO.Esent.5.0.190\lib\net47\Xbim.IO.Esent.dll</HintPath>
-    </Reference>
-    <Reference Include="Xbim.IO.MemoryModel, Version=5.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Xbim.IO.MemoryModel.5.0.190\lib\net47\Xbim.IO.MemoryModel.dll</HintPath>
-    </Reference>
-    <Reference Include="Xbim.ModelGeometry.Scene, Version=5.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Xbim.ModelGeometry.Scene.5.0.136-prerelease\lib\net47\Xbim.ModelGeometry.Scene.dll</HintPath>
-    </Reference>
-    <Reference Include="Xbim.Tessellator, Version=5.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Xbim.Tessellator.5.0.190\lib\net47\Xbim.Tessellator.dll</HintPath>
-    </Reference>
+    <Compile Update="Resources\**\*.designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Resources\$([System.String]::Copy('%(FileName)').Replace('.Designer', '')).resx</DependentUpon>
+    </Compile>
   </ItemGroup>
-  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-  <Import Project="..\packages\Xbim.Geometry.Engine.Interop.5.0.136-prerelease\build\net47\Xbim.Geometry.Engine.Interop.targets" Condition="Exists('..\packages\Xbim.Geometry.Engine.Interop.5.0.136-prerelease\build\net47\Xbim.Geometry.Engine.Interop.targets')" />
-  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
-    <PropertyGroup>
-      <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
-    </PropertyGroup>
-    <Error Condition="!Exists('..\packages\Xbim.Geometry.Engine.Interop.5.0.136-prerelease\build\net47\Xbim.Geometry.Engine.Interop.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Xbim.Geometry.Engine.Interop.5.0.136-prerelease\build\net47\Xbim.Geometry.Engine.Interop.targets'))" />
-  </Target>
 </Project>
