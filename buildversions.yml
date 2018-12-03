@@ -28,7 +28,6 @@ steps:
     name: 'SettingFileVersionNonMaster'
     condition: ne(variables['Build.SourceBranch'], 'refs/heads/master')
 
-steps:
 - script: echo $(fileversion). Env = %FILEVERSION%
 - task: VersionDotNetCoreAssemblies@2
     displayName: 'Set FileVersion on *.csproj (netcore) $(fileversion)'
