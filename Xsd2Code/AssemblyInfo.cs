@@ -12,9 +12,9 @@ using System.Reflection;
 [assembly: AssemblyTitle("Xsd2Code")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("")]
+[assembly: AssemblyCompany("Xbim Team")]
 [assembly: AssemblyProduct("Xsd2Code")]
-[assembly: AssemblyCopyright("Pascal Cabanel")]
+[assembly: AssemblyCopyright("Pascal Cabanel (MIT)")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 

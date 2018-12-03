@@ -9,7 +9,7 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("Northumbria University")]
 [assembly: AssemblyProduct("Xbim.COBieLiteUK.CodeGeneration")]
-[assembly: AssemblyCopyright("Copyright © Northumbria University 2015")]
+[assembly: AssemblyCopyright("Copyright © Northumbria University 2018")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 

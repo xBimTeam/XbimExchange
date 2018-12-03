@@ -17,3 +17,5 @@
 // AssemblyVersion is the CLR version. Change this only when making breaking changes
 [assembly: AssemblyVersion("5.0")]
 [assembly: AssemblyInformationalVersion("5.0.0.0")]
+// FileVersion is updated in the build
+[assembly: AssemblyFileVersion("5.0.0.0")]
