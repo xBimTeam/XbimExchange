@@ -80,20 +80,24 @@ steps:
 # https://docs.microsoft.com/en-us/azure/devops/pipelines/tasks/file-matching-patterns?view=vsts
 - template: buildnuget.yml 
   parameters:
-    packagesToPack: 'Xbim.@(COBie|COBieLite|DPoW)?(UK)/Xbim.@(COBie|COBieLite|DPoW)?(UK).csproj'
+    packagesToPack: 'Xbim.@(COBie|COBieLite|COBieLiteUK|DPoW)/Xbim.@(COBie|COBieLite|COBieLiteUK|DPoW).csproj'
     packageversion: $(packageversion)
 
 
 # Re-reference & Pack Xbim.CobieLiteUK.Validation against COBieLiteUK
 - script: dotnet remove Xbim.CobieLiteUK.Validation\Xbim.CobieLiteUK.Validation.csproj reference ..\Xbim.COBieLiteUK\Xbim.COBieLiteUK.csproj
-- script: dotnet add    Xbim.CobieLiteUK.Validation\Xbim.CobieLiteUK.Validation.csproj package Xbim.COBieLiteUK -s $(Build.BinariesDirectory) -v $(version)
+- script: dotnet add    Xbim.CobieLiteUK.Validation\Xbim.CobieLiteUK.Validation.csproj package Xbim.COBieLiteUK -s $(Build.BinariesDirectory) -v $(packageversion)
+  name: 'COBieLiteUK_Validation_Patch'
+
+# Re-reference & Pack Xbim.Exchanger against DPoW and COBieLite[UK]
+- script: dotnet remove Xbim.Exchanger\Xbim.Exchanger.csproj reference ..\Xbim.COBieLite\Xbim.COBieLite.csproj ..\Xbim.COBieLiteUK\Xbim.COBieLiteUK.csproj ..\Xbim.DPoW\Xbim.DPoW.csproj
+- script: dotnet add    Xbim.Exchanger\Xbim.Exchanger.csproj package Xbim.COBieLite Xbim.COBieLiteUK Xbim.DPoW -s $(Build.BinariesDirectory) -v $(packageversion)
   name: 'COBieLiteUK_Validation_Patch'
 
 - template: buildnuget.yml 
   parameters:
-    packagesToPack: 'Xbim.CobieLiteUK.Validation\Xbim.CobieLiteUK.Validation.csproj'
+    packagesToPack: 'Xbim.@(CobieLiteUK.Validation|Exchanger)\Xbim.@(CobieLiteUK.Validation|Exchanger).csproj'
     packageversion: $(packageversion)
-
 
 - task: CopyFiles@2
   displayName: 'Copy Files to: $(build.artifactstagingdirectory)'
