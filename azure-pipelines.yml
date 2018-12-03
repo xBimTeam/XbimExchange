@@ -85,13 +85,13 @@ steps:
 
 
 # Re-reference & Pack Xbim.CobieLiteUK.Validation against COBieLiteUK
-- script: dotnet remove Xbim.CobieLiteUK.Validation\Xbim.Xbim.CobieLiteUK.Validation.csproj reference ..\Xbim.COBieLiteUK\Xbim.COBieLiteUK.csproj
-- script: dotnet add    Xbim.CobieLiteUK.Validation\Xbim.Xbim.CobieLiteUK.Validation.csproj package Xbim.COBieLiteUK -s $(Build.BinariesDirectory) -v $(version)
+- script: dotnet remove Xbim.CobieLiteUK.Validation\Xbim.CobieLiteUK.Validation.csproj reference ..\Xbim.COBieLiteUK\Xbim.COBieLiteUK.csproj
+- script: dotnet add    Xbim.CobieLiteUK.Validation\Xbim.CobieLiteUK.Validation.csproj package Xbim.COBieLiteUK -s $(Build.BinariesDirectory) -v $(version)
   name: 'COBieLiteUK_Validation_Patch'
 
 - template: buildnuget.yml 
   parameters:
-    packagesToPack: 'Xbim.CobieLiteUK.Validation\Xbim.Xbim.CobieLiteUK.Validation.csproj'
+    packagesToPack: 'Xbim.CobieLiteUK.Validation\Xbim.CobieLiteUK.Validation.csproj'
     packageversion: $(packageversion)
 
 
