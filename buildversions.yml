@@ -26,6 +26,6 @@ steps:
     Path: $(Build.SourcesDirectory)
     VersionNumber: ${{ parameters.fileversion }}
     VersionRegex: \d+\.\d+\.\d+\.\d+
-    FilenamePattern: AssemblyInfo.cs
+    FilenamePattern: SharedFileVersionInfo.cs
     Field: AssemblyFileVersion
     OutputVersion: OutputedVersion

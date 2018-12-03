@@ -76,28 +76,17 @@ steps:
 - script: nuget sources add -Name local -Source $(Build.BinariesDirectory)
   name: 'SetNugetSource'
 
-# Pack COBieLite
-#- script: dotnet pack Xbim.COBieLite/Xbim.COBieLite.csproj -c $(buildConfiguration) -o $(Build.BinariesDirectory) /p:PackageVersion=$(packageversion)
-#  name: 'Pack_COBieLite'
-
-#- task: NuGetCommand@2
-#  displayName: 'NuGet pack COBieLite'
-#  inputs:
-#    command: pack
-#    packagesToPack: 'Xbim.COBieLite/Xbim.COBieLite.csproj'
-#    configuration: $(BuildConfiguration)
-#    versioningScheme: byEnvVar
-#    versionEnvVar: packageversion
-
+# Pack COBieLite/COBieLiteUK & DPoW (which have no internal project references)
+# https://docs.microsoft.com/en-us/azure/devops/pipelines/tasks/file-matching-patterns?view=vsts
 - template: buildnuget.yml 
   parameters:
-    packagesToPack: 'Xbim.COBieLite*/Xbim.COBieLite*.csproj'
+    packagesToPack: 'Xbim.@(COBieLite|DPoW)?(UK)/Xbim.@(COBieLite|DPoW)?(UK).csproj'
     packageversion: $(packageversion)
 
-- template: buildnuget.yml
-  parameters:
-    packagesToPack: 'Xbim.DPoW/Xbim.DPoW.csproj'
-    packageversion: $(packageversion)
+# - template: buildnuget.yml
+#   parameters:
+#     packagesToPack: 'Xbim.DPoW/Xbim.DPoW.csproj'
+#     packageversion: $(packageversion)
 
 
 - task: CopyFiles@2
