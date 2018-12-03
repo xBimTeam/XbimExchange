@@ -16,7 +16,7 @@ pool:
   vmImage: 'VS2017-Win2016'
 
 variables:
-  solution: '**/*.sln'
+  solution: 'Xbim.Exchange.Nuget.sln'
   buildPlatform: 'Any CPU'
   buildConfiguration: 'Release'
   major: 5
