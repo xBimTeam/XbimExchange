@@ -50,3 +50,9 @@ steps:
   inputs:
     platform: '$(buildPlatform)'
     configuration: '$(buildConfiguration)'
+
+- script: nuget sources add -Name local -Source $(Build.BinariesDirectory)
+
+# Pack COBieLite
+- script: dotnet pack Xbim.COBieLite/Xbim.COBieLite.csproj -c $(buildConfiguration) -o $(Build.BinariesDirectory) /p:PackageVersion=$(packageversion)
+  name: 'Pack_COBieLite'
