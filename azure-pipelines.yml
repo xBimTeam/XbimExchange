@@ -67,13 +67,23 @@ steps:
     platform: '$(buildPlatform)'
     configuration: '$(buildConfiguration)'
 
-- task: VSTest@2
-  inputs:
-    platform: '$(buildPlatform)'
-    configuration: '$(buildConfiguration)'
+#- task: VSTest@2
+#  inputs:
+#    platform: '$(buildPlatform)'
+#    configuration: '$(buildConfiguration)'
+  
 
 - script: nuget sources add -Name local -Source $(Build.BinariesDirectory)
 
 # Pack COBieLite
-- script: dotnet pack Xbim.COBieLite/Xbim.COBieLite.csproj -c $(buildConfiguration) -o $(Build.BinariesDirectory) /p:PackageVersion=$(packageversion)
-  name: 'Pack_COBieLite'
+#- script: dotnet pack Xbim.COBieLite/Xbim.COBieLite.csproj -c $(buildConfiguration) -o $(Build.BinariesDirectory) /p:PackageVersion=$(packageversion)
+#  name: 'Pack_COBieLite'
+
+- task: NuGetCommand@2
+  displayName: 'NuGet pack COBieLite'
+  inputs:
+    command: pack
+    packagesToPack: 'Xbim.COBieLite/Xbim.COBieLite.csproj'
+    configuration: $(BuildConfiguration)
+    versioningScheme: byEnvVar
+    versionEnvVar: packageversion
