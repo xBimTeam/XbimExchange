@@ -74,16 +74,22 @@ steps:
   
 
 - script: nuget sources add -Name local -Source $(Build.BinariesDirectory)
+  name: Set Nuget Source
 
 # Pack COBieLite
 #- script: dotnet pack Xbim.COBieLite/Xbim.COBieLite.csproj -c $(buildConfiguration) -o $(Build.BinariesDirectory) /p:PackageVersion=$(packageversion)
 #  name: 'Pack_COBieLite'
 
-- task: NuGetCommand@2
-  displayName: 'NuGet pack COBieLite'
-  inputs:
-    command: pack
+#- task: NuGetCommand@2
+#  displayName: 'NuGet pack COBieLite'
+#  inputs:
+#    command: pack
+#    packagesToPack: 'Xbim.COBieLite/Xbim.COBieLite.csproj'
+#    configuration: $(BuildConfiguration)
+#    versioningScheme: byEnvVar
+#    versionEnvVar: packageversion
+
+- template: buildnuget.yml   # invoke a sub task
+  parameters:
     packagesToPack: 'Xbim.COBieLite/Xbim.COBieLite.csproj'
-    configuration: $(BuildConfiguration)
-    versioningScheme: byEnvVar
-    versionEnvVar: packageversion
+    packageversion: $(packageversion)

@@ -1,11 +1,11 @@
-# File: Common build steps for reuse
+# File: Common buildfile version stamping
 
 parameters:
   fileversion: ''
   packageversion: ''
 
 steps:
-- script: echo ${{ parameters.fileversion }} - ${{ parameters.packageversion }} 
+#- script: echo ${{ parameters.fileversion }} - ${{ parameters.packageversion }} 
 - task: VersionDotNetCoreAssemblies@2
   displayName: 'Set FileVersion on *.csproj (netcore)'
   inputs: 

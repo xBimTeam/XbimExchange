@@ -1,0 +1,14 @@
+
+parameters:
+  packagesToPack: ''
+  packageversion: ''
+
+steps:
+- task: NuGetCommand@2
+  displayName: 'NuGet packing ${{ parameters.packageToPack }}'
+  inputs:
+    command: pack
+    packagesToPack: '${{ parameters.packagesToPack }}'
+    configuration: $(BuildConfiguration)
+    versioningScheme: byEnvVar
+    versionEnvVar: packageversion
