@@ -5,6 +5,9 @@ parameters:
   minor: 0
   buildNo: 0
 
+variables:
+  fileversion: ''
+  packageversion: ''
 
 steps:
 # Windows script setting up $(packageversion) of the nuget package - based on branch
@@ -46,7 +49,7 @@ steps:
 - task: VersionAssemblies@2
   displayName: 'Set AssemblyFileVersion in AssemblyInfo.cs'
   inputs: 
-    Path: $(Set Build.SourcesDirectory)
+    Path: $(Build.SourcesDirectory)
     VersionNumber: $(fileversion)
     VersionRegex: \d+\.\d+\.\d+\.\d+
     FilenamePattern: AssemblyInfo.cs
