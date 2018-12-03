@@ -74,7 +74,7 @@ steps:
   
 
 - script: nuget sources add -Name local -Source $(Build.BinariesDirectory)
-  name: 'Set Nuget Source'
+  displayname: 'Set Nuget Source'
 
 # Pack COBieLite
 #- script: dotnet pack Xbim.COBieLite/Xbim.COBieLite.csproj -c $(buildConfiguration) -o $(Build.BinariesDirectory) /p:PackageVersion=$(packageversion)
