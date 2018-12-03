@@ -76,17 +76,23 @@ steps:
 - script: nuget sources add -Name local -Source $(Build.BinariesDirectory)
   name: 'SetNugetSource'
 
-# Pack COBieLite/COBieLiteUK & DPoW (which have no internal project references)
+# Pack COBie/COBieLite/COBieLiteUK & DPoW (which have no internal project references)
 # https://docs.microsoft.com/en-us/azure/devops/pipelines/tasks/file-matching-patterns?view=vsts
 - template: buildnuget.yml 
   parameters:
-    packagesToPack: 'Xbim.@(COBieLite|DPoW)?(UK)/Xbim.@(COBieLite|DPoW)?(UK).csproj'
+    packagesToPack: 'Xbim.@(COBie|COBieLite|DPoW)?(UK)/Xbim.@(COBie|COBieLite|DPoW)?(UK).csproj'
     packageversion: $(packageversion)
 
-# - template: buildnuget.yml
-#   parameters:
-#     packagesToPack: 'Xbim.DPoW/Xbim.DPoW.csproj'
-#     packageversion: $(packageversion)
+
+# Re-reference & Pack Xbim.CobieLiteUK.Validation against COBieLiteUK
+- script: dotnet remove Xbim.CobieLiteUK.Validation\Xbim.Xbim.CobieLiteUK.Validation.csproj reference ..\Xbim.COBieLiteUK\Xbim.COBieLiteUK.csproj
+- script: dotnet add    Xbim.CobieLiteUK.Validation\Xbim.Xbim.CobieLiteUK.Validation.csproj package Xbim.COBieLiteUK -s $(Build.BinariesDirectory) -v $(version)
+  name: 'COBieLiteUK_Validation_Patch'
+
+- template: buildnuget.yml 
+  parameters:
+    packagesToPack: 'Xbim.CobieLiteUK.Validation\Xbim.Xbim.CobieLiteUK.Validation.csproj'
+    packageversion: $(packageversion)
 
 
 - task: CopyFiles@2
