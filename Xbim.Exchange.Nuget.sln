@@ -10,6 +10,8 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{CFAD1D1D-D584-4FB9-B795-64F25B888F26}"
 	ProjectSection(SolutionItems) = preProject
 		.gitignore = .gitignore
+		azure-pipelines.yml = azure-pipelines.yml
+		nuget.config = nuget.config
 		SharedAssemblyInfo.cs = SharedAssemblyInfo.cs
 		Xbim.Exchange.package.nuspec = Xbim.Exchange.package.nuspec
 		XplorerPlugin.CobieExport.plugin.nuspec = XplorerPlugin.CobieExport.plugin.nuspec
