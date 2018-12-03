@@ -89,9 +89,14 @@ steps:
 #    versioningScheme: byEnvVar
 #    versionEnvVar: packageversion
 
-- template: buildnuget.yml   # invoke a sub task
+- template: buildnuget.yml 
   parameters:
-    packagesToPack: 'Xbim.COBieLite/Xbim.COBieLite.csproj Xbim.COBieLiteUK/Xbim.COBieLiteUK.csproj Xbim.DPoW/Xbim.DPoW.csproj'
+    packagesToPack: 'Xbim.COBieLite*/Xbim.COBieLite*.csproj'
+    packageversion: $(packageversion)
+
+- template: buildnuget.yml
+  parameters:
+    packagesToPack: 'Xbim.DPoW/Xbim.DPoW.csproj'
     packageversion: $(packageversion)
 
 
