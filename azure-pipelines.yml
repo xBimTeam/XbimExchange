@@ -11,6 +11,8 @@ trigger:
 - master
 - develop
 
+name: $(BuildDefinitionName)_$(SourceBranchName)_$(BuildID)'
+
 pool:
   vmImage: 'VS2017-Win2016'
 
@@ -20,10 +22,8 @@ variables:
   buildConfiguration: 'Release'
   major: 5
   minor: 0
-  # creates a counter called versioncounter and seeds it at 100 and then assigns the value to a variable named buildNo.
-  buildNo: $[counter('exchangeversioncounter', 100)]
+  buildNo: $(BuildID)
 
-name: $(TeamProject)_$(BuildDefinitionName)_$(SourceBranchName)_$(My.buildNo)'
 
 steps:
 - task: NuGetToolInstaller@0
