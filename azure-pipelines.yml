@@ -11,7 +11,7 @@ trigger:
 - master
 - develop
 
-name: $(BuildDefinitionName)_$(SourceBranchName)_$(BuildID)'
+name: $(BuildDefinitionName)_$(SourceBranchName)_$(BuildID)
 
 pool:
   vmImage: 'VS2017-Win2016'
@@ -24,13 +24,17 @@ variables:
   minor: 0
   buildNo: $(BuildID)
 
-
 steps:
+- template: buildversions.yml   # invoke a sub task
+  parameters:
+    major: $(major)
+    minor: $(minor)
+    buildNo: $(buildNo)
+
 - task: NuGetToolInstaller@0
 
-
 - task: NuGetCommand@2
-  displayName: 'NuGet restore Solution'
+  displayName: 'NuGet restore Solution $(packageversion)'
   inputs:
     restoreSolution: '$(solution)'
     feedsToUse: config
