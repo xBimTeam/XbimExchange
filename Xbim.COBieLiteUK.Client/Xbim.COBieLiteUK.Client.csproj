@@ -124,37 +124,37 @@
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
     <Reference Include="Xbim.CobieExpress, Version=5.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Xbim.CobieExpress.5.0.108\lib\net47\Xbim.CobieExpress.dll</HintPath>
+      <HintPath>..\packages\Xbim.CobieExpress.5.0.109\lib\net47\Xbim.CobieExpress.dll</HintPath>
     </Reference>
     <Reference Include="Xbim.CobieExpress.Exchanger, Version=5.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Xbim.CobieExpress.Exchanger.5.0.108\lib\net47\Xbim.CobieExpress.Exchanger.dll</HintPath>
+      <HintPath>..\packages\Xbim.CobieExpress.Exchanger.5.0.109\lib\net47\Xbim.CobieExpress.Exchanger.dll</HintPath>
     </Reference>
     <Reference Include="Xbim.CobieExpress.IO, Version=5.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Xbim.CobieExpress.IO.5.0.108\lib\net47\Xbim.CobieExpress.IO.dll</HintPath>
+      <HintPath>..\packages\Xbim.CobieExpress.IO.5.0.109\lib\net47\Xbim.CobieExpress.IO.dll</HintPath>
     </Reference>
     <Reference Include="Xbim.Common, Version=5.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Xbim.Common.5.0.190\lib\net47\Xbim.Common.dll</HintPath>
+      <HintPath>..\packages\Xbim.Common.5.0.191\lib\net47\Xbim.Common.dll</HintPath>
     </Reference>
     <Reference Include="Xbim.Ifc, Version=5.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Xbim.Ifc.5.0.190\lib\net47\Xbim.Ifc.dll</HintPath>
+      <HintPath>..\packages\Xbim.Ifc.5.0.191\lib\net47\Xbim.Ifc.dll</HintPath>
     </Reference>
     <Reference Include="Xbim.Ifc2x3, Version=5.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Xbim.Ifc2x3.5.0.190\lib\net47\Xbim.Ifc2x3.dll</HintPath>
+      <HintPath>..\packages\Xbim.Ifc2x3.5.0.191\lib\net47\Xbim.Ifc2x3.dll</HintPath>
     </Reference>
     <Reference Include="Xbim.Ifc4, Version=5.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Xbim.Ifc4.5.0.190\lib\net47\Xbim.Ifc4.dll</HintPath>
+      <HintPath>..\packages\Xbim.Ifc4.5.0.191\lib\net47\Xbim.Ifc4.dll</HintPath>
     </Reference>
     <Reference Include="Xbim.IO.Esent, Version=5.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Xbim.IO.Esent.5.0.190\lib\net47\Xbim.IO.Esent.dll</HintPath>
+      <HintPath>..\packages\Xbim.IO.Esent.5.0.191\lib\net47\Xbim.IO.Esent.dll</HintPath>
     </Reference>
     <Reference Include="Xbim.IO.MemoryModel, Version=5.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Xbim.IO.MemoryModel.5.0.190\lib\net47\Xbim.IO.MemoryModel.dll</HintPath>
+      <HintPath>..\packages\Xbim.IO.MemoryModel.5.0.191\lib\net47\Xbim.IO.MemoryModel.dll</HintPath>
     </Reference>
     <Reference Include="Xbim.IO.Table, Version=5.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Xbim.IO.Table.5.0.108\lib\net47\Xbim.IO.Table.dll</HintPath>
+      <HintPath>..\packages\Xbim.IO.Table.5.0.109\lib\net47\Xbim.IO.Table.dll</HintPath>
     </Reference>
     <Reference Include="Xbim.Tessellator, Version=5.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Xbim.Tessellator.5.0.190\lib\net47\Xbim.Tessellator.dll</HintPath>
+      <HintPath>..\packages\Xbim.Tessellator.5.0.191\lib\net47\Xbim.Tessellator.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
@@ -264,7 +264,9 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <None Include="App.config" />
+    <None Include="App.config">
+      <SubType>Designer</SubType>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Xbim.COBieLiteUK\Xbim.COBieLiteUK.csproj">
