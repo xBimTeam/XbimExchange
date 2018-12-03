@@ -4,7 +4,6 @@ using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
-using log4net.Util;
 using NPOI.SS.Formula.Functions;
 using Xbim.CobieLiteUK.Validation.Extensions;
 using Xbim.CobieLiteUK.Validation.RequirementDetails;
