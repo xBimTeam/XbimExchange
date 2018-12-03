@@ -30,7 +30,7 @@ steps:
 
 - script: echo $(fileversion). Env = %FILEVERSION%
 - task: VersionDotNetCoreAssemblies@2
-  displayName: 'Set FileVersion on *.csproj (netcore) $(fileversion)'
+  displayName: 'Set FileVersion on *.csproj (netcore)'
   inputs: 
     # Required arguments
     Path: $(Build.SourcesDirectory)
@@ -44,7 +44,7 @@ steps:
 # Description - Applies a version to a .NET assembly via the assemblyinfo.cs or .vb files based on the build number.
 # For the Plugin project(s) which are ClickOnce
 - task: VersionAssemblies@2
-  displayName: 'Set AssemblyFileVersion in AssemblyInfo.cs - $(fileversion)'
+  displayName: 'Set AssemblyFileVersion in AssemblyInfo.cs'
   inputs: 
     Path: $(Set Build.SourcesDirectory)
     VersionNumber: $(fileversion)
