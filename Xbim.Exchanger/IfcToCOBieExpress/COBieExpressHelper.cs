@@ -591,7 +591,7 @@ namespace XbimExchanger.IfcToCOBieExpress
         /// <summary>
         /// Get the property mappings for a given field name
         /// </summary>
-        /// <param name="filedKey">Field name</param>
+        /// <param name="fieldKey">Field name</param>
         /// <returns>string[]</returns>
         public string[] GetPropMap(string fieldKey)
         {

@@ -1,14 +1,14 @@
 ﻿using System.Xml;
 using FrameworkSystemIO = System.IO;
 
-/// <summary>
-/// This class is taken from http://stackoverflow.com/questions/870293/can-i-make-xmlserializer-ignore-the-namespace-on-deserialization
-/// 
-/// It's been used to try to read an XML file that does not fit the expeced namespace elements; 
-/// In particular from the 
-/// </summary>
 namespace Xbim.CobieLiteUk.Schemas
 {
+    /// <summary>
+    /// This class is taken from http://stackoverflow.com/questions/870293/can-i-make-xmlserializer-ignore-the-namespace-on-deserialization
+    /// 
+    /// It's been used to try to read an XML file that does not fit the expeced namespace elements; 
+    /// In particular from the 
+    /// </summary>
     internal class NamespaceTolerantXmlTextReader : XmlTextReader
     {
         public NamespaceTolerantXmlTextReader(FrameworkSystemIO.TextReader reader) : base(reader) { }

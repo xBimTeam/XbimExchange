@@ -80,9 +80,14 @@ namespace Xbim.COBie.EqCompare
         }
 
         /// <summary>
-        /// Write the text to the TextWriter
+        /// Writes a line
         /// </summary>
-        /// <param name="logMe">string to write</param>
+        /// <param name="rootObj"></param>
+        /// <param name="parentObj"></param>
+        /// <param name="mergeType"></param>
+        /// <param name="duplicateNo"></param>
+        /// <param name="mergedNo"></param>
+        /// <param name="depthIndicator"></param>
         public void WriteLine(CobieObject rootObj, CobieObject parentObj, Type mergeType, int duplicateNo, int mergedNo, int depthIndicator)
         {
             if (logger != null )

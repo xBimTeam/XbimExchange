@@ -124,6 +124,8 @@ namespace Xbim.CobieLiteUk.FilterHelper
         /// Constructor for default set configFileName = null, or passed in configuration file path
         /// </summary>
         /// <param name="configFileName"></param>
+        /// <param name="roleFlags"></param>
+        /// <param name="setsToImport"></param>
         public OutPutFilters(string configFileName, RoleFilter roleFlags, ImportSet setsToImport = ImportSet.All) : this()
         {
             AppliedRoles = roleFlags;
@@ -401,6 +403,7 @@ namespace Xbim.CobieLiteUk.FilterHelper
         /// filter on IfcObjectDefinition objects
         /// </summary>
         /// <param name="obj"></param>
+        /// <param name="checkType"></param>
         /// <returns>bool true = exclude</returns>
         public bool ObjFilter(IIfcObjectDefinition obj, bool checkType = true)
         {

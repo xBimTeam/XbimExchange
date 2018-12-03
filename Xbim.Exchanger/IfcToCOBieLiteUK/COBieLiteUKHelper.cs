@@ -525,7 +525,7 @@ namespace XbimExchanger.IfcToCOBieLiteUK
         /// <summary>
         /// Get the property mappings for a given field name
         /// </summary>
-        /// <param name="FiledKey">Field name</param>
+        /// <param name="fieldKey">Field name</param>
         /// <returns>string[]</returns>
         public string[] GetPropMap(string fieldKey)
         {
@@ -1161,6 +1161,7 @@ namespace XbimExchanger.IfcToCOBieLiteUK
         /// Returns the COBie Category for this object, based on the Ifc Classification
         /// </summary>
         /// <param name="classifiedObject"></param>
+        /// <param name="useProp"></param>
         /// <returns></returns>
         public List<Category> GetCategories(IIfcDefinitionSelect classifiedObject, bool useProp = true)
         {
@@ -1417,6 +1418,8 @@ namespace XbimExchanger.IfcToCOBieLiteUK
         /// 
         /// </summary>
         /// <param name="ifcObjectDefinition"></param>
+        /// <param name="attributeName"></param>
+        /// <param name="attributeValue"></param>
         /// <returns></returns>
         public Attribute MakeAttribute(IIfcObjectDefinition ifcObjectDefinition, string attributeName, object attributeValue)
         {

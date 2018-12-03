@@ -1253,7 +1253,6 @@ namespace Xbim.CobieLiteUk
     /// Merge a Facility to this Facility
     /// </summary>
     /// <param name="mFacility">Facility to merge</param>
-    /// <param name="checkInstanc">Controls if the ChainMapInst is used</param>
     /// <param name="logIt">Logger</param>
     public void Merge(Facility mFacility, TextWriter logIt = null)
         {
@@ -1426,8 +1425,6 @@ namespace Xbim.CobieLiteUk
         /// </summary>
         /// <typeparam name="T1">is CompareEqRule</typeparam>
         /// <typeparam name="T2"> Type we are testing</typeparam>
-        /// <param name="type">Mapped Type</param>
-        /// <param name="advancedCompare">if true extend equal test to other properties in equalcompare if supported</param>
         /// <returns>T</returns>
         private T1 GetCompare<T1, T2>() where T1 : CompareEqRule<T2>,  new()
         {
@@ -1454,7 +1451,9 @@ namespace Xbim.CobieLiteUk
         /// <typeparam name="T"></typeparam>
         /// <param name="to">Merge To</param>
         /// <param name="from">Merge from</param>
+        /// <param name="depthIndicator"></param>
         /// <param name="rootObj">Starting onject of the merge</param>
+        /// <param name="parentObj"></param>
         private void MergeCOBieObject<T>(T to, T from, int depthIndicator = 0, CobieObject rootObj = null, CobieObject parentObj = null) where T : CobieObject
         {
             //From fields:-
@@ -1550,6 +1549,7 @@ namespace Xbim.CobieLiteUk
         /// </summary>
         /// <param name="to">Floor</param>
         /// <param name="from">Floor</param>
+        /// <param name="depthIndicator"></param>
         /// <param name="rootObj">Starting object of the merge</param>
         /// <param name="parentObj">Object which caused thei mrthod to be called</param>
         private void MergeFloor(Floor to, Floor from, int depthIndicator, CobieObject rootObj, CobieObject parentObj)
@@ -1581,6 +1581,7 @@ namespace Xbim.CobieLiteUk
         /// </summary>
         /// <param name="to">Space</param>
         /// <param name="from">Space</param>
+        /// <param name="depthIndicator"></param>
         /// <param name="rootObj">Starting object of the merge</param>
         /// <param name="parentObj">Object which caused thei mrthod to be called</param>
         private void MergeSpace(Space to, Space from, int depthIndicator, CobieObject rootObj, CobieObject parentObj)
@@ -1618,6 +1619,7 @@ namespace Xbim.CobieLiteUk
         /// </summary>
         /// <param name="to">AssetType</param>
         /// <param name="from">AssetType</param>
+        /// <param name="depthIndicator"></param>
         /// <param name="rootObj">Starting object of the merge</param>
         /// <param name="parentObj">Object which caused thei mrthod to be called</param>
         private void MergeAssetType(AssetType to, AssetType from, int depthIndicator, CobieObject rootObj, CobieObject parentObj) 
@@ -1687,6 +1689,7 @@ namespace Xbim.CobieLiteUk
         /// </summary>
         /// <param name="to">Job</param>
         /// <param name="from">Job</param>
+        /// <param name="depthIndicator"></param>
         /// <param name="rootObj">Starting object of the merge</param>
         /// <param name="parentObj">Object which caused thei mrthod to be called</param>
         private void MergeJob(Job to, Job from, int depthIndicator, CobieObject rootObj, CobieObject parentObj)
@@ -1715,6 +1718,7 @@ namespace Xbim.CobieLiteUk
         /// </summary>
         /// <param name="to">Spare</param>
         /// <param name="from">Spare</param>
+        /// <param name="depthIndicator"></param>
         /// <param name="rootObj">Starting object of the merge</param>
         /// <param name="parentObj">Object which caused thei mrthod to be called</param>
         private void MergeSpare(Spare to, Spare from, int depthIndicator, CobieObject rootObj, CobieObject parentObj)
@@ -1745,8 +1749,8 @@ namespace Xbim.CobieLiteUk
         /// </summary>
         /// <param name="to">Asset</param>
         /// <param name="from">Asset</param>
+        /// <param name="depthIndicator"></param>
         /// <param name="rootObj">Root Object (started merge path)</param>
-        /// <param name="rootObj">Starting object of the merge</param>
         /// <param name="parentObj">Object which caused thei mrthod to be called</param>
         private void MergeAsset(Asset to, Asset from, int depthIndicator, CobieObject rootObj, CobieObject parentObj)
         {
@@ -1791,6 +1795,7 @@ namespace Xbim.CobieLiteUk
         /// </summary>
         /// <param name="to">System</param>
         /// <param name="from">System</param>
+        /// <param name="depthIndicator"></param>
         /// <param name="rootObj">Starting object of the merge</param>
         /// <param name="parentObj">Object which caused thei mrthod to be called</param>
         private void MergeSystem(System to, System from, int depthIndicator, CobieObject rootObj, CobieObject parentObj)
@@ -1804,6 +1809,7 @@ namespace Xbim.CobieLiteUk
         /// </summary>
         /// <param name="to">Zone</param>
         /// <param name="from">Zone</param>
+        /// <param name="depthIndicator"></param>
         /// <param name="rootObj">Starting object of the merge</param>
         /// <param name="parentObj">Object which caused thei mrthod to be called</param>
         private void MergeZone(Zone to, Zone from, int depthIndicator, CobieObject rootObj, CobieObject parentObj)
@@ -1815,8 +1821,9 @@ namespace Xbim.CobieLiteUk
         /// <summary>
         /// Merge ProjectStage to ProjectStage
         /// </summary>
-        /// <param name="to">ProjectStage</param>
-        /// <param name="from">ProjectStage</param>
+        /// <param name="projectStage1"></param>
+        /// <param name="projectStage2"></param>
+        /// <param name="depthIndicator"></param>
         /// <param name="rootObj">Starting object of the merge</param>
         /// <param name="parentObj">Object which caused thei mrthod to be called</param>
         private void MergeProjectStage(ProjectStage projectStage1, ProjectStage projectStage2, int depthIndicator, CobieObject rootObj, CobieObject parentObj)
@@ -1834,6 +1841,7 @@ namespace Xbim.CobieLiteUk
         /// <param name="to">List to merge to</param>
         /// <param name="from">List to merge from</param>
         /// <param name="compareKey">IEqualityComparer</param>
+        /// <param name="depthIndicator"></param>
         /// <param name="rootObj">Starting object of the merge</param>
         /// <param name="parentObj">Object which caused thei mrthod to be called</param>
         private List<T> MergeLists<T>(List<T> to, List<T> from, IEqualityComparer<T> compareKey, int depthIndicator = 0, CobieObject rootObj = null, CobieObject parentObj = null)  where T : CobieObject
@@ -1915,6 +1923,7 @@ namespace Xbim.CobieLiteUk
         /// <param name="to">List to merge to</param>
         /// <param name="from">List to merge from</param>
         /// <param name="compareKey">IEqualityComparer</param>
+        /// <param name="depthIndicator"></param>
         /// <param name="rootObj">Starting object of the merge</param>
         /// <param name="parentObj">Object which caused thei mrthod to be called</param>
         private List<T> MergeSimpleLists<T>(List<T> to, List<T> from, IEqualityComparer<T> compareKey, int depthIndicator = 0, CobieObject rootObj = null, CobieObject parentObj = null) 

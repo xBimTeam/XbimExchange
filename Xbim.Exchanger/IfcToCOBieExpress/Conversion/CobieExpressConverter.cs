@@ -227,7 +227,7 @@ namespace XbimExchanger.IfcToCOBieExpress.Conversion
         /// <summary>
         /// Get the facility from the COBie Excel sheets
         /// </summary>
-        /// <param name="parameters"></param>
+        /// <param name="sourceFile"></param>
         /// <param name="templateFile"></param>
         /// <returns></returns>
         private List<CobieModel> GetCobieModelsFromExcelFilename(string sourceFile, string templateFile)
@@ -239,7 +239,8 @@ namespace XbimExchanger.IfcToCOBieExpress.Conversion
         /// </summary>
         /// <param name="fileName">Root file name</param>
         /// <param name="parameters">Params</param>
-        /// <param name="facility">Facility</param>
+        /// <param name="cobie"></param>
+        /// <param name="report"></param>
         /// <returns>file name</returns>
         private string CreateExcelFile(string fileName, CobieConversionParams parameters, CobieModel cobie, out string report )
         {
@@ -255,7 +256,7 @@ namespace XbimExchanger.IfcToCOBieExpress.Conversion
         /// </summary>
         /// <param name="fileName">Root file name</param>
         /// <param name="parameters">Params</param>
-        /// <param name="facility">Facility</param>
+        /// <param name="cobie"></param>
         /// <returns>file name</returns>
         private string CreateStepFile(string fileName, CobieConversionParams parameters, CobieModel cobie)
         {

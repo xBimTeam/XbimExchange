@@ -113,12 +113,12 @@ namespace XbimExchanger.IfcToCOBieLiteUK
             return childDocList;
         }
 
-        
+
         /// <summary>
         /// Convert a IfcDocumentReference to Document
         /// </summary>
         /// <param name="ifcDocumentReference">Document Reference Object</param>
-        /// <param name="document">Document Object</param>
+        /// <param name="ifcDocumentInformation">Document Object</param>
         /// <returns>Document</returns>
         private Document ConvertToDocument(IIfcDocumentReference ifcDocumentReference, IIfcDocumentInformation ifcDocumentInformation)
         {

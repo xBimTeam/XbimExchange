@@ -62,7 +62,7 @@ namespace XbimExchanger.IfcToCOBieLiteUK
         /// Get system name from a IfcObjectDefinition
         /// </summary>
         /// <param name="helper">CoBieLiteUkHelper</param>
-        /// <param name="ifcObject">IfcObjectDefinition</param>
+        /// <param name="ifcObjects">List of IfcObjectDefinitions</param>
         /// <returns></returns>
         private static string GetSystemName(CoBieLiteUkHelper helper, IList<IIfcObjectDefinition> ifcObjects )
         {   string name = string.Empty;
