@@ -6,7 +6,7 @@
 
 # Basic build def. No Nuget packing yet
 
-#name 
+name: $(TeamProject)_$(BuildDefinitionName)_$(SourceBranchName)_$(My.exchangeversioncounter)'
 
 trigger:
 - master
