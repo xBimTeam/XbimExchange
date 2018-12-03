@@ -30,15 +30,15 @@ steps:
 
 - script: echo $(fileversion). Env = %FILEVERSION%
 - task: VersionDotNetCoreAssemblies@2
-    displayName: 'Set FileVersion on *.csproj (netcore) $(fileversion)'
-    inputs: 
-      # Required arguments
-      Path: $(Build.SourcesDirectory)
-      VersionNumber: $(fileversion)
-      VersionRegex: \d+\.\d+\.\d+\.\d+
-      FilenamePattern: .csproj
-      Field: FileVersion
-      OutputVersion: OutputedVersion
+  displayName: 'Set FileVersion on *.csproj (netcore) $(fileversion)'
+  inputs: 
+    # Required arguments
+    Path: $(Build.SourcesDirectory)
+    VersionNumber: $(fileversion)
+    VersionRegex: \d+\.\d+\.\d+\.\d+
+    FilenamePattern: .csproj
+    Field: FileVersion
+    OutputVersion: OutputedVersion
 
 # Version 'classic' .NET Assemblies
 # Description - Applies a version to a .NET assembly via the assemblyinfo.cs or .vb files based on the build number.
