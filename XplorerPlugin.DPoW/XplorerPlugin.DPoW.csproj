@@ -245,7 +245,7 @@
     </ProjectReference>
     <ProjectReference Include="..\XbimDPoWTools\XbimDPoWTools.csproj">
       <Project>{1E708A3F-4EB6-4BFD-98AE-FF3EFB60B78B}</Project>
-      <Name>Xbim.WindowsUI.DPoWValidation</Name>
+      <Name>XbimDPoWTools</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
