@@ -7,16 +7,19 @@
     <FileVersion>5.0.0.0</FileVersion>
     <Title>Xbim.Cobie</Title>
     <Copyright>Xbim Ltd.</Copyright>
-    <Description>Xbim original COBie translation library</Description>
+    <Description>Provides an object model for handling the COBie schema used in both the UK and US implementations.
+Supports easy transformation from IFC to COBie and exports to Spreadsheet, JSON and XML formats.
+</Description>
     <Authors>xBIM Team</Authors>
     <Company>Xbim Ltd.</Company>
-    <PackageLicenseUrl>https://raw.githubusercontent.com/xBimTeam/XbimEssentials/master/LICENCE.md</PackageLicenseUrl>
+    <PackageLicenseUrl>https://raw.githubusercontent.com/xBimTeam/XbimExchange/master/LICENCE.md</PackageLicenseUrl>
     <PackageProjectUrl>https://github.com/xBimTeam/XbimExchange</PackageProjectUrl>
-    <RepositoryUrl>https://github.com/xBimTeam/XbimExchanges/tree/develop</RepositoryUrl>
+    <RepositoryUrl>https://github.com/xBimTeam/XbimExchange/tree/develop</RepositoryUrl>
     <PackageTags>BIM, IFC, IfcXml, IfcZip, Ifc4, COBie</PackageTags>
-    <PackageReleaseNotes>v5.0 support the latest Xbim.Essentials 5.0</PackageReleaseNotes>
+    <PackageReleaseNotes>v5.0 supports the latest Xbim.Essentials 5.0</PackageReleaseNotes>
     <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
     <PackageIconUrl>https://avatars1.githubusercontent.com/u/2284875?v=3&amp;amp;s=240</PackageIconUrl>
+    <PackageId>Xbim.Cobie</PackageId>
   </PropertyGroup>
   <ItemGroup>
     <None Remove="PickLists.xml" />
