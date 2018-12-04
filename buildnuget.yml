@@ -12,3 +12,4 @@ steps:
     configuration: $(BuildConfiguration)
     versioningScheme: byEnvVar
     versionEnvVar: packageversion
+    packDirectory: $(Build.BinariesDirectory)

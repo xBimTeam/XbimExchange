@@ -5,7 +5,7 @@
     <Version>5.0.0.0</Version>
     <AssemblyVersion>5.0.0.0</AssemblyVersion>
     <FileVersion>5.0.0.0</FileVersion>
-    <Title>Xbim.COBieLiteUK.Validation</Title>
+    <Title>Xbim.CobieLiteUK.Validation</Title>
     <Copyright>Xbim Ltd.</Copyright>
     <Description>
       Provides validation services for data in the COBieLite UK schema

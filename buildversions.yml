@@ -5,7 +5,6 @@ parameters:
   packageversion: ''
 
 steps:
-#- script: echo ${{ parameters.fileversion }} - ${{ parameters.packageversion }} 
 - task: VersionDotNetCoreAssemblies@2
   displayName: 'Set FileVersion on *.csproj (netcore)'
   inputs: 

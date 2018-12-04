@@ -5,7 +5,7 @@
     <Version>5.0.0.0</Version>
     <AssemblyVersion>5.0.0.0</AssemblyVersion>
     <FileVersion>5.0.0.0</FileVersion>
-    <Title>Xbim.COBieLiteUK</Title>
+    <Title>Xbim.CobieLiteUK</Title>
     <Copyright>Xbim Ltd.</Copyright>
     <Description>
       UK COBieLite schema for the XBIM Exchange toolkit
@@ -19,8 +19,9 @@
     <PackageReleaseNotes>v5.0 support the latest Xbim.Essentials 5.0</PackageReleaseNotes>
     <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
     <PackageIconUrl>https://avatars1.githubusercontent.com/u/2284875?v=3&amp;amp;s=240</PackageIconUrl>
-    <AssemblyName>XBim.CobieLiteUk</AssemblyName>
+    <AssemblyName>Xbim.CobieLiteUK</AssemblyName>
     <RootNamespace>Xbim.CobieLiteUk</RootNamespace>
+    <PackageId>Xbim.COBieLiteUK</PackageId>
   </PropertyGroup>
   <ItemGroup>
     <None Remove="FilterHelper\COBieArchitecturalFilters.config" />

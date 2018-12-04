@@ -25,7 +25,7 @@ namespace Xbim.COBie.Data
         {
         }
 
-        #region Methods
+#region Methods
 
         /// <summary>
         /// Fill sheet rows for Coordinate sheet
@@ -33,7 +33,6 @@ namespace Xbim.COBie.Data
         public override COBieSheet<COBieCoordinateRow> Fill()
         {
             //get the conversion to the COBie units (metres or feet)
-
             double conversionFactor;
             var cobieUnits = Context.WorkBookUnits.LengthUnit.ToLowerInvariant();
             if (cobieUnits == "meters" || cobieUnits == "metres") conversionFactor = Model.ModelFactors.OneMetre;
@@ -191,7 +190,7 @@ namespace Xbim.COBie.Data
             return coordinates;
         }
 
-        #endregion
+#endregion
     }
 
     /// <summary>
