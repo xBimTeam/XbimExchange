@@ -22,6 +22,8 @@
     <AssemblyName>Xbim.CobieLiteUK</AssemblyName>
     <RootNamespace>Xbim.CobieLiteUk</RootNamespace>
     <PackageId>Xbim.COBieLiteUK</PackageId>
+    <SignAssembly>true</SignAssembly>
+    <AssemblyOriginatorKeyFile>..\XbimOpenSourceKeyFile.snk</AssemblyOriginatorKeyFile>
   </PropertyGroup>
   <ItemGroup>
     <None Remove="FilterHelper\COBieArchitecturalFilters.config" />
@@ -47,7 +49,7 @@
     <PackageReference Include="Newtonsoft.Json" Version="11.0.2" />
     <PackageReference Include="Newtonsoft.Json.Bson" Version="1.0.1" />
     <PackageReference Include="NPOI" Version="2.4.0" />
-    <PackageReference Include="Xbim.Essentials" Version="5.0.191" />
+    <PackageReference Include="Xbim.Essentials" Version="5.0.200" />
   </ItemGroup>
 
 </Project>

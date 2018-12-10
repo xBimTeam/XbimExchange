@@ -7,6 +7,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Xbim.Common.Step21;
 using Xbim.COBieLite;
 using Xbim.Ifc;
+using Xbim.IO;
 
 // ReSharper disable once CheckNamespace
 namespace Xbim.Tests.COBie

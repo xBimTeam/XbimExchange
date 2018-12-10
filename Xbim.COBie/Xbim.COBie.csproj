@@ -20,6 +20,8 @@ Supports easy transformation from IFC to COBie and exports to Spreadsheet, JSON 
     <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
     <PackageIconUrl>https://avatars1.githubusercontent.com/u/2284875?v=3&amp;amp;s=240</PackageIconUrl>
     <PackageId>Xbim.Cobie</PackageId>
+    <SignAssembly>true</SignAssembly>
+    <AssemblyOriginatorKeyFile>..\XbimOpenSourceKeyFile.snk</AssemblyOriginatorKeyFile>
   </PropertyGroup>
   <ItemGroup>
     <None Remove="PickLists.xml" />
@@ -30,8 +32,8 @@ Supports easy transformation from IFC to COBie and exports to Spreadsheet, JSON 
   <ItemGroup>
     <PackageReference Include="Newtonsoft.Json" Version="11.0.2" />
     <PackageReference Include="NPOI" Version="2.4.0" />
-    <PackageReference Include="Xbim.Essentials" Version="5.0.191" />
-    <PackageReference Include="Xbim.Geometry" Version="5.0.139-prerelease" />
+    <PackageReference Include="Xbim.Essentials" Version="5.0.200" />
+    <PackageReference Include="Xbim.Geometry" Version="5.0.146-develop" />
   </ItemGroup>
   <ItemGroup>
     <Compile Update="Resources\**\*.designer.cs">

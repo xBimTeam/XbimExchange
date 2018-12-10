@@ -1,7 +1,7 @@
 ﻿using System;
 using Xbim.Common.Step21;
 using Xbim.Ifc;
-
+using Xbim.IO;
 
 namespace Xbim.COBieLite
 {
