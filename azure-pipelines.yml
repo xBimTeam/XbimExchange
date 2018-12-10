@@ -6,7 +6,6 @@
 trigger:
 - master
 - develop
-- devbuild
 
 pool:
   vmImage: 'VS2017-Win2016'
@@ -19,7 +18,7 @@ variables:
   minor: 0
   buildNo: $[counter('exchangeversioncounter', 100)]
 
-name: $(BuildDefinitionName)_$(SourceBranchName)_$(buildNo)
+name: $(BuildDefinitionName)_$(SourceBranchName)_$(major).$(minor).$(buildNo)
 
 steps:
 # Windows script setting up $(packageversion) of the nuget package if this is development branch build
