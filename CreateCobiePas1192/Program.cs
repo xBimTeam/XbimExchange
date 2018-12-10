@@ -10,6 +10,7 @@ namespace CreateCobiePas1192
     {
         private static void Main(string[] args)
         {
+
             using (var m = IfcStore.Open("Lakeside_Restaurant.ifc"))
             {               
                 var facilities = new List<Facility>();

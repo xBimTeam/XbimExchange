@@ -32,6 +32,9 @@ namespace Xbim.Exchange
             var serviceProvider = ConfigureServices();
             SetupXbimLogging(serviceProvider);
 
+            // Configure the app to use Esent when appropriate
+            IfcStore.ModelProviderFactory.UseHeuristicModelProvider();
+
             var settings = new ExchangeSettings();
             
             var someAction = false;
