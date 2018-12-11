@@ -31,7 +31,7 @@ namespace Xbim.COBie.Data
         /// <summary>
         /// Data Component constructor
         /// </summary>
-        /// <param name="model">The context of the model being generated</param>
+        /// <param name="context">The context of the model being generated</param>
         public COBieDataComponent(COBieContext context)
             : base(context)
         {
@@ -144,12 +144,13 @@ namespace Xbim.COBie.Data
             return components;
         }
 
-        
-        
+
+
         /// <summary>
         /// Get Formatted Start Date
         /// </summary>
         /// <param name="allPropertyValues"></param>
+        /// <param name="propertyName"></param>
         /// <returns></returns>
         private string GetDateFromProperty(COBieDataPropertySetValues allPropertyValues, string propertyName)
         {

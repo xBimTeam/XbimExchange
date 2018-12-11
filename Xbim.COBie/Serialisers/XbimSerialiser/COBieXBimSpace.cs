@@ -177,7 +177,7 @@ namespace Xbim.COBie.Serialisers.XbimSerialiser
         /// <summary>
         /// Add space to the building story(Floor)
         /// </summary>
-        /// <param name="row"></param>
+        /// <param name="floorName"></param>
         /// <param name="ifcSpace"></param>
         private void AddSpaceToBuildingStory(string floorName, IfcSpace ifcSpace)
         {

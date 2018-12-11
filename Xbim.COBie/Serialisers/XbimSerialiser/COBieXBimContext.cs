@@ -124,7 +124,6 @@ namespace Xbim.COBie.Serialisers.XbimSerialiser
         /// Constructor
         /// </summary>
         /// <param name="model">Model to add COBie data too</param>
-        /// <param name="workBook">Work Book With COBie data </param>
         public COBieXBimContext (IfcStore model)
         {
             Model = model;

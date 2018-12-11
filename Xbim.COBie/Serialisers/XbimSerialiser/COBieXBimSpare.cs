@@ -112,7 +112,7 @@ namespace Xbim.COBie.Serialisers.XbimSerialiser
         /// <summary>
         /// Create the relationships between the Resource and the types it relates too
         /// </summary>
-        /// <param name="processObj">IfcResource Object</param>
+        /// <param name="resourceObj">IfcResource Object</param>
         /// <param name="typeObjs">IEnumerable of IfcTypeObject, list of IfcTypeObjects </param>
         public void SetRelAssignsToResource(IfcResource resourceObj, IEnumerable<IfcTypeObject> typeObjs)
         {

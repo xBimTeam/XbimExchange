@@ -521,6 +521,7 @@ namespace Xbim.COBie.Serialisers.XbimSerialiser
         /// </summary>
         /// <param name="ifcObject">IfcObject to add property set too</param>
         /// <param name="pSetName">name of the property set</param>
+        /// <param name="pSetDescription"></param>
         protected IfcPropertySet AddPropertySet(IfcTypeObject ifcObject, string pSetName, string pSetDescription)
         {
             var ifcPropertySet = ifcObject.GetPropertySet(pSetName);
@@ -541,6 +542,7 @@ namespace Xbim.COBie.Serialisers.XbimSerialiser
         /// <param name="propertyName">Single Value Property Name</param>
         /// <param name="propertyDescription">Single Value Property Description</param>
         /// <param name="value">IfcValue object</param>
+        /// <param name="unit"></param>
         protected IfcPropertySingleValue AddPropertySingleValue(IfcPropertySet ifcPropertySet, string propertyName, string propertyDescription, IfcValue value, IfcUnit unit)
         {
             //see if we have this property single value, if so overwrite the value
@@ -780,7 +782,7 @@ namespace Xbim.COBie.Serialisers.XbimSerialiser
         /// <summary>
         /// Add a property single value
         /// </summary>
-        /// <param name="IfcTypeObject">Object to add property too</param>
+        /// <param name="ifcObject">Object to add property too</param>
         /// <param name="pSetName">Property set name to add property single value too</param>
         /// <param name="pSetDescription">Property set description or null to leave unaltered</param>
         /// <param name="propertyName">Property single value name</param>
@@ -1051,7 +1053,6 @@ namespace Xbim.COBie.Serialisers.XbimSerialiser
         /// <summary>
         /// Determined the sheet the IfcRoot will have come from using the object type
         /// </summary>
-        /// <param name="ifcItem">object which inherits from IfcRoot </param>
         /// <returns>string holding sheet name</returns>
         public IfcRoot GetRootObject(string sheetName, string rowName)
         {

@@ -104,7 +104,6 @@ namespace Xbim.COBie.Data
         /// Set values for attribute sheet
         /// </summary>
         /// <param name="ifcObject">ifcObject to extract properties from</param>
-        /// <param name="_attributes">The attribute Sheet to add the properties to its rows</param>
         public void PopulateAttributesRows(IfcObject ifcObject)
         {
             if (PropertSetValues.PSetFilterOn) //we have a property set filter set in the PropertSetValues class, so reset to retrieve all property sets for this object
@@ -144,7 +143,6 @@ namespace Xbim.COBie.Data
         /// Set values for attribute sheet
         /// </summary>
         /// <param name="ifcTypeObject">ifcObject to extract properties from</param>
-        /// <param name="_attributes">The attribute Sheet to add the properties to its rows</param>
         public void PopulateAttributesRows(IfcTypeObject ifcTypeObject)
         {
             if (PropertSetValues.PSetFilterOn) //we have a property set filter set in the PropertSetValues class, so reset to retrieve all property sets for this object
@@ -220,7 +218,6 @@ namespace Xbim.COBie.Data
         /// <summary>
         /// Add Rows to the attribute sheet
         /// </summary>
-        /// <param name="_attributes">The attribute Sheet to add the properties to its rows</param>
         /// <param name="propertySet">IfcPropertySet which is holding the IfcPropertySingleValue</param>
         /// <param name="propertySetValues">IEnumerable list of IfcPropertySingleValue to extract to the attribute sheet</param>
         private void ProcessAttributeRow(IfcPropertySet propertySet, IEnumerable<IfcSimpleProperty> propertySetValues)

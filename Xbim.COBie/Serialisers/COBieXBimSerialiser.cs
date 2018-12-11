@@ -83,6 +83,7 @@ namespace Xbim.COBie.Serialisers
         /// XBim Serialise
         /// </summary>
         /// <param name="workbook">COBieWorkbook to Serialise</param>
+        /// <param name="validationTemplate"></param>
         public void Serialise(COBieWorkbook workbook, ICOBieValidationTemplate validationTemplate = null)
         {
             Create(workbook);
@@ -294,7 +295,6 @@ namespace Xbim.COBie.Serialisers
         /// <summary>
         /// Save Model Object To A File
         /// </summary>
-        /// <param name="fileName"></param>
         public void Save()
         {
             try

@@ -9,12 +9,15 @@ namespace Xbim.COBie.Data
 {
     internal class COBieHelpers
     {
-        private static IEnumerable<IfcRelSpaceBoundary> ifcRelSpaceBoundarys = null; 
+        private static IEnumerable<IfcRelSpaceBoundary> ifcRelSpaceBoundarys = null;
         /// <summary>
-                        /// Get Space name which holds the passed in IfcElement
-                        /// </summary>
-                        /// <param name="el">Element to extract space name from</param>
-                        /// <returns>string</returns>
+        /// Get Space name which holds the passed in IfcElement
+        /// </summary>
+        /// <param name="el">Element to extract space name from</param>
+        /// <param name="Model"></param>
+        /// <param name="SpaceBoundingBoxInfo"></param>
+        /// <param name="Context"></param>
+        /// <returns>string</returns>
         internal static string GetComponentRelatedSpace(IfcElement el, IfcStore Model, IEnumerable<SpaceInfo> SpaceBoundingBoxInfo, COBieContext Context)
         {
             string value = "";
@@ -68,6 +71,10 @@ namespace Xbim.COBie.Data
         /// Get the space name holding the element
         /// </summary>
         /// <param name="el">IfcElement to get containing space for</param>
+        /// <param name="Model"></param>
+        /// <param name="SpaceBoundingBoxInfo"></param>
+        /// <param name="ifcSpaces"></param>
+        /// <param name="Context"></param>
         /// <returns>Space name</returns>
         internal static string GetSpaceHoldingElement(IfcElement el, IfcStore Model, IEnumerable<SpaceInfo> SpaceBoundingBoxInfo, IEnumerable<IfcSpace> ifcSpaces, COBieContext Context)
         {
@@ -218,6 +225,7 @@ namespace Xbim.COBie.Data
         /// </summary>
         /// <param name="PtsWCS">list of points</param>
         /// <param name="hitTotarance">Distance the point is outside the space but considered still usable to reference the space</param>
+        /// <param name="SpaceBoundingBoxInfo"></param>
         /// <returns>Space name</returns>
         internal static string GetSpaceFromClosestPoints(IEnumerable<XbimPoint3D> PtsWCS, double hitTotarance, IEnumerable<SpaceInfo> SpaceBoundingBoxInfo)
         {
@@ -250,6 +258,7 @@ namespace Xbim.COBie.Data
         /// Get the space name if any of the points are within the space
         /// </summary>
         /// <param name="PtsWCS">list of points</param>
+        /// <param name="SpaceBoundingBoxInfo"></param>
         /// <returns>Space name</returns>
         internal static string GetSpaceFromPoints(IEnumerable<XbimPoint3D> PtsWCS, IEnumerable<SpaceInfo> SpaceBoundingBoxInfo)
         {

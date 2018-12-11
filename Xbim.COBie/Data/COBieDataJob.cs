@@ -18,7 +18,7 @@ namespace Xbim.COBie.Data
         /// <summary>
         /// Data Job constructor
         /// </summary>
-        /// <param name="model">The context of the model being generated</param>
+        /// <param name="context">The context of the model being generated</param>
         public COBieDataJob(COBieContext context) : base(context)
         { }
 
@@ -98,7 +98,7 @@ namespace Xbim.COBie.Data
         /// <summary>
         /// Get Formatted Start Date
         /// </summary>
-        /// <param name="allPropertyValues"></param>
+        /// <param name="ifcPropertySingleValue"></param>
         /// <returns></returns>
         private string GetStartTime(IfcPropertySingleValue ifcPropertySingleValue)
         {

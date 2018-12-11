@@ -19,7 +19,6 @@ namespace Xbim.COBie.Data
         /// <summary>
         /// Data Document constructor
         /// </summary>
-        /// <param name="model">The context of the model being generated</param>
         public COBieDataDocument(COBieContext context) : base(context)
         { }
 

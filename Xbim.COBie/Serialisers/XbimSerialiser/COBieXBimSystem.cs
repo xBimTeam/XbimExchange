@@ -142,7 +142,7 @@ namespace Xbim.COBie.Serialisers.XbimSerialiser
         /// <summary>
         /// Add products to system group and fill with data from COBieSystemRow
         /// </summary>
-        /// <param name="componentName">COBieSystemRow holding the data</param>
+        /// <param name="row">COBieSystemRow holding the data</param>
         private void AddProducts(COBieSystemRow row)
         {
             string componentNames = row.ComponentNames;

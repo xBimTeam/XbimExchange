@@ -18,7 +18,7 @@ namespace Xbim.COBie.Data
         /// <summary>
         /// Data Space constructor
         /// </summary>
-        /// <param name="model">The context of the model being generated</param>
+        /// <param name="context">The context of the model being generated</param>
         public COBieDataSpace(COBieContext context) : base(context)
         { }
 

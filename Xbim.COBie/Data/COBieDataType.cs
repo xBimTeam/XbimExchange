@@ -27,7 +27,7 @@ namespace Xbim.COBie.Data
         /// <summary>
         /// Data Type constructor
         /// </summary>
-        /// <param name="model">The context of the model being generated</param>
+        /// <param name="context">The context of the model being generated</param>
         public COBieDataType(COBieContext context) : base(context)
         {
             RowHashs = new Dictionary<string, bool>();
@@ -562,6 +562,7 @@ namespace Xbim.COBie.Data
         /// Get the Expected Life for the IfcTypeObject
         /// </summary>
         /// <param name="ifcTypeObject">IfcTypeObject object</param>
+        /// <param name="serviceDuration"></param>
         /// <param name="allPropertyValues">COBieDataPropertySetValues object holds all the properties for all the IfcSpace</param>
         /// <returns>property value as string or default value</returns>
         private string GetExpectedLife(IfcTypeObject ifcTypeObject, Interval serviceDuration, COBieDataPropertySetValues allPropertyValues)
@@ -775,10 +776,7 @@ namespace Xbim.COBie.Data
         /// <summary>
         /// Get the Time unit and value for the passed in property
         /// </summary>
-        /// <param name="typeObject">IfcTypeObject </param>
-        /// <param name="psetName">Property Set Name to retrieve IfcPropertySet Object</param>
-        /// <param name="propertyName">Property Name held in IfcPropertySingleValue object</param>
-        /// <param name="psetValues">List of IfcPropertySingleValue filtered to attribute names we require</param>
+        /// <param name="typeValue">IfcTypeObject </param>
         /// <returns>Dictionary holding unit and value e.g. Year, 2.0</returns>
         private Interval GetDurationUnitAndValue( IfcPropertySingleValue typeValue)
         {
@@ -817,7 +815,7 @@ namespace Xbim.COBie.Data
         /// <summary>
         /// Get the Category for the IfcTypeObject
         /// </summary>
-        /// <param name="type">IfcTypeObject</param>
+        /// <param name="allPropertyValues"></param>
         /// <returns>string of the category</returns>
         public string GetCategory(COBieDataPropertySetValues allPropertyValues)
         {

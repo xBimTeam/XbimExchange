@@ -16,7 +16,7 @@ namespace Xbim.COBie.Data
         /// <summary>
         /// Data Facility constructor
         /// </summary>
-        /// <param name="model">The context of the model being generated</param>
+        /// <param name="context">The context of the model being generated</param>
         public COBieDataFacility(COBieContext context) : base(context)
         { }
 

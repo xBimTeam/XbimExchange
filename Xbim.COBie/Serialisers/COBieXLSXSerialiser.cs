@@ -103,11 +103,12 @@ namespace Xbim.COBie.Serialisers
             Excludes = new FilterValues();//get the rules for excludes for generating COBie
         }
 
-        
+
         /// <summary>
         /// Formats the COBie data into an Excel XLS file
         /// </summary>
-        /// <param name="cobie"></param>
+        /// <param name="workbook"></param>
+        /// <param name="validationTemplate"></param>
         public void Serialise(COBieWorkbook workbook, ICOBieValidationTemplate validationTemplate = null)
         {
             if (workbook == null) { throw new ArgumentNullException("COBie", "COBieXLSXSerialiser.Serialise does not accept null as the COBie data parameter."); }

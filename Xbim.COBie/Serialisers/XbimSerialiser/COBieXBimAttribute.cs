@@ -215,7 +215,6 @@ namespace Xbim.COBie.Serialisers.XbimSerialiser
         /// <summary>
         /// Check if property set exists on object when in merge, if not merge just create property set
         /// </summary>
-        /// <param name="pSetName">Property set name</param>
         /// <returns>IfcPropertySet</returns>
         private IfcPropertySet CheckIfExistOnMerge(string extObject, string extIdentifier )
         {

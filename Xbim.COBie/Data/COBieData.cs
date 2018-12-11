@@ -74,7 +74,6 @@ namespace Xbim.COBie.Data
         /// <summary>
         /// Extract the Created On date from the passed entity
         /// </summary>
-        /// <param name="rootEntity">Entity to extract the Create On date</param>
         /// <returns></returns>
         protected string GetCreatedOnDateAsFmtString(IIfcOwnerHistory ownerHistory, bool requiresTime = true)
         {
@@ -107,7 +106,7 @@ namespace Xbim.COBie.Data
         /// <summary>
         /// Gets the name of the application that is linked with the supplied item
         /// </summary>
-        /// <param name="item"></param>
+        /// <param name="ifcOwnerHistory"></param>
         /// <returns></returns>
         public string GetExternalSystem(IIfcOwnerHistory ifcOwnerHistory)
         {
@@ -175,7 +174,7 @@ namespace Xbim.COBie.Data
         /// <summary>
         /// Extract the email address lists for the owner of the IfcOwnerHistory passed
         /// </summary>
-        /// <param name="ifcOwnerHistory">Entity to extract the email addresses for</param>
+        /// <param name="ifcPersonAndOrganization">Entity to extract the email addresses for</param>
         /// <returns>string of comma delimited addresses</returns>
         protected string GetTelecomTelephoneNumber(IfcPersonAndOrganization ifcPersonAndOrganization)
         {
@@ -257,7 +256,6 @@ namespace Xbim.COBie.Data
         /// <summary>
         /// Extract the email address lists for the owner of the IfcOwnerHistory passed
         /// </summary>
-        /// <param name="ifcOwnerHistory">Entity to extract the email addresses for</param>
         /// <returns>string of comma delimited addresses</returns>
         protected string GetTelecomEmailAddress(IfcPersonAndOrganization ifcPersonAndOrganization)
         {

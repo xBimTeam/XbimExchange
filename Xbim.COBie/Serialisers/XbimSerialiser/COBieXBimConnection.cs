@@ -118,6 +118,8 @@ namespace Xbim.COBie.Serialisers.XbimSerialiser
         /// <param name="realizingElement">List of IfcElement names</param>
         /// <param name="relatingPort">List of IfcPort Names</param>
         /// <param name="relatedPort">List of IfcPort Names</param>
+        /// <param name="relatingElement"></param>
+        /// <param name="relatedElement"></param>
         private void AddRelConnectsPorts(string realizingElement, string relatingPort, string relatedPort, IfcElement relatingElement, IfcElement relatedElement)
         {
             if (ValidateString(realizingElement) &&

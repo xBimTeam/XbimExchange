@@ -20,7 +20,7 @@ namespace Xbim.COBie.Data
         /// <summary>
         /// Data Issue constructor
         /// </summary>
-        /// <param name="model">The context of the model being generated</param>
+        /// <param name="context">The context of the model being generated</param>
         public COBieDataIssue(COBieContext context) : base(context)
         { }
 

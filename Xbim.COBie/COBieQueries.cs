@@ -16,7 +16,6 @@ namespace Xbim.COBie
         /// <summary>
         /// Constructor 
         /// </summary>
-        /// <param name="model">IModel to read data from</param>
         public COBieQueries(COBieContext context)
         {
             _context = context;
@@ -35,7 +34,6 @@ namespace Xbim.COBie
         /// <summary>
         /// Creates Contact COBieSheet Data
         /// </summary>
-        /// <param name="model">IModel to read data from</param>
         /// <returns>COBieSheet</returns>
         public COBieSheet<COBieContactRow> GetCOBieContactSheet()
         {
@@ -46,7 +44,6 @@ namespace Xbim.COBie
         /// <summary>
         /// Creates Document COBieSheet Data
         /// </summary>
-        /// <param name="model">IModel to read data from</param>
         /// <returns>COBieSheet</returns>
         public COBieSheet<COBieDocumentRow> GetCOBieDocumentSheet()
         {
@@ -57,7 +54,6 @@ namespace Xbim.COBie
         /// <summary>
         /// Creates Impact COBieSheet Data
         /// </summary>
-        /// <param name="model">IModel to read data from</param>
         /// <returns>COBieSheet</returns>
         public COBieSheet<COBieImpactRow> GetCOBieImpactSheet()
         {
@@ -69,7 +65,6 @@ namespace Xbim.COBie
         /// <summary>
         /// Creates Issue COBieSheet Data
         /// </summary>
-        /// <param name="model">IModel to read data from</param>
         /// <returns>COBieSheet</returns>
         public COBieSheet<COBieIssueRow> GetCOBieIssueSheet()
         {
@@ -80,7 +75,6 @@ namespace Xbim.COBie
         /// <summary>
         /// Creates Job COBieSheet Data
         /// </summary>
-        /// <param name="model">IModel to read data from</param>
         /// <returns>COBieSheet</returns>
         public COBieSheet<COBieJobRow> GetCOBieJobSheet()
         {
@@ -92,7 +86,6 @@ namespace Xbim.COBie
         /// <summary>
         /// Creates Resource COBieSheet Data
         /// </summary>
-        /// <param name="model">IModel to read data from</param>
         /// <returns>COBieSheet</returns>
         public COBieSheet<COBieResourceRow> GetCOBieResourceSheet()
         {
@@ -104,7 +97,6 @@ namespace Xbim.COBie
         /// <summary>
         /// Creates Floor COBieSheet Data
         /// </summary>
-        /// <param name="model">IModel to read data from</param>
         /// <returns>COBieSheet</returns>
         public COBieSheet<COBieFloorRow> GetCOBieFloorSheet()
         {
@@ -116,7 +108,6 @@ namespace Xbim.COBie
         /// <summary>
         /// Creates Space COBieSheet Data
         /// </summary>
-        /// <param name="model">IModel to read data from</param>
         /// <returns>COBieSheet</returns>
         public COBieSheet<COBieSpaceRow> GetCOBieSpaceSheet()
         {
@@ -128,7 +119,6 @@ namespace Xbim.COBie
         /// <summary>
         /// Creates Facility COBieSheet Data
         /// </summary>
-        /// <param name="model">IModel to read data from</param>
         /// <returns>COBieSheet</returns>
         public COBieSheet<COBieFacilityRow> GetCOBieFacilitySheet()
         {
@@ -140,7 +130,6 @@ namespace Xbim.COBie
         /// <summary>
         /// Creates Spare COBieSheet Data
         /// </summary>
-        /// <param name="model">IModel to read data from</param>
         /// <returns>COBieSheet</returns>
         public COBieSheet<COBieSpareRow> GetCOBieSpareSheet()
         {
@@ -153,7 +142,6 @@ namespace Xbim.COBie
         /// <summary>
         /// Creates Zone COBieSheet Data
         /// </summary>
-        /// <param name="model">IModel to read data from</param>
         /// <returns>COBieSheet</returns>
         public COBieSheet<COBieZoneRow> GetCOBieZoneSheet()
         {
@@ -166,7 +154,6 @@ namespace Xbim.COBie
         /// <summary>
         /// Creates Type COBieSheet Data
         /// </summary>
-        /// <param name="model">IModel to read data from</param>
         /// <returns>COBieSheet</returns>
         public COBieSheet<COBieTypeRow> GetCOBieTypeSheet()
         {
@@ -178,7 +165,6 @@ namespace Xbim.COBie
         /// <summary>
         /// Creates Component COBieSheet Data
         /// </summary>
-        /// <param name="model">IModel to read data from</param>
         /// <returns>COBieSheet</returns>
         public COBieSheet<COBieComponentRow> GetCOBieComponentSheet()
         {
@@ -191,7 +177,6 @@ namespace Xbim.COBie
         /// <summary>
         /// Creates System COBieSheet Data
         /// </summary>
-        /// <param name="model">IModel to read data from</param>
         /// <returns>COBieSheet</returns>
         public COBieSheet<COBieSystemRow> GetCOBieSystemSheet(Dictionary<string, HashSet<string>> compIndices)
         {
@@ -203,7 +188,6 @@ namespace Xbim.COBie
         /// <summary>
         /// Creates Assembly COBieSheet Data
         /// </summary>
-        /// <param name="model">IModel to read data from</param>
         /// <returns>COBieSheet</returns>
         public COBieSheet<COBieAssemblyRow> GetCOBieAssemblySheet()
         {
@@ -215,7 +199,6 @@ namespace Xbim.COBie
         /// <summary>
         /// Creates Connection COBieSheet Data
         /// </summary>
-        /// <param name="model">IModel to read data from</param>
         /// <returns>COBieSheet</returns>
         public COBieSheet<COBieConnectionRow> GetCOBieConnectionSheet()
         {
@@ -227,7 +210,6 @@ namespace Xbim.COBie
         /// <summary>
         /// Creates Coordinate COBieSheet Data
         /// </summary>
-        /// <param name="model">IModel to read data from</param>
         /// <returns>COBieSheet</returns>
         public COBieSheet<COBieCoordinateRow> GetCOBieCoordinateSheet()
         {
@@ -239,7 +221,6 @@ namespace Xbim.COBie
         /// <summary>
         /// Creates Attribute COBieSheet Data
         /// </summary>
-        /// <param name="model">IModel to read data from</param>
         /// <returns>COBieSheet</returns>
         public COBieSheet<COBieAttributeRow> GetCOBieAttributeSheet()
         {

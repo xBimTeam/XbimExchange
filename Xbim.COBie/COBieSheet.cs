@@ -246,8 +246,15 @@ namespace Xbim.COBie
         /// Validate the sheet
         /// </summary>
         /// <param name="workbook"></param>
+        /// <param name="errorRowIdx"></param>
+        /// <param name="SheetValidator"></param>
         public void Validate(COBieWorkbook workbook, ErrorRowIndexBase errorRowIdx, ICOBieSheetValidationTemplate SheetValidator)
         {
+            if (SheetValidator == null)
+            {
+                throw new ArgumentNullException(nameof(SheetValidator));
+            }
+
             _errorRowIdx = errorRowIdx; //set the index for error reporting on rows
             _errors.Clear();
 
@@ -410,7 +417,8 @@ namespace Xbim.COBie
         /// <summary>
         /// Validate the existence of the Foreign Key value on the referencing sheet, if not add error
         /// </summary>
-        /// <param name="context">COBieContext object holding global values for this model</param>
+        /// <param name="workbook">COBieWorkbook object holding global values for this model</param>
+        /// <param name="SheetValidator"></param>
         private void ValidateForeignKeys(COBieWorkbook workbook, ICOBieSheetValidationTemplate SheetValidator)
         {
             int rowIndex = 1;
@@ -515,8 +523,6 @@ namespace Xbim.COBie
         /// <summary>
         /// Match either side of a : delimited string or all of the string including the delimiter
         /// </summary>
-        /// <param name="hashSet">List of strings</param>
-        /// <param name="foreignKeyValue">string to match</param>
         /// <returns>true if a match, false if none</returns>
         private bool PickListMatch(COBieColumnRelationship reference, COBieCell cell)
         {
@@ -670,6 +676,8 @@ namespace Xbim.COBie
         /// Validating of the column COBieAttributeState attributes for null or n/a values
         /// </summary>
         /// <param name="cell">COBieCell</param>
+        /// <param name="state"></param>
+        /// <param name="errorLevel"></param>
         /// <param name="sheetName">Sheet name</param>
         /// <param name="row">Row index</param>
         /// <param name="col">Column index</param>
@@ -755,6 +763,8 @@ namespace Xbim.COBie
         /// check for Field format Error in passed cell
         /// </summary>
         /// <param name="cell">COBieCell</param>
+        /// <param name="state"></param>
+        /// <param name="errorLevel"></param>
         /// <param name="sheetName">Sheet name</param>
         /// <param name="row">Row index</param>
         /// <param name="col">Column index</param>
@@ -834,6 +844,8 @@ namespace Xbim.COBie
         /// Check for Field format length
         /// </summary>
         /// <param name="cell">COBieCell</param>
+        /// <param name="state"></param>
+        /// <param name="errorLevel"></param>
         /// <param name="sheetName">Sheet name</param>
         /// <param name="row">Row index</param>
         /// <param name="col">Column index</param>
