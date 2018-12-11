@@ -1,6 +1,6 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFrameworks>net47</TargetFrameworks>
+    <TargetFrameworks>net47;netstandard2.0</TargetFrameworks>
     <Title>Xbim.CobieLiteUK</Title>
     <Description>UK COBieLite schema for the XBIM Exchange toolkit</Description>
     <AssemblyName>Xbim.CobieLiteUK</AssemblyName>
