@@ -1,29 +1,14 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <TargetFrameworks>net47</TargetFrameworks>
-    <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
-    <Version>5.0.0.0</Version>
-    <AssemblyVersion>5.0.0.0</AssemblyVersion>
-    <FileVersion>5.0.0.0</FileVersion>
-    <Title>Xbim.Exchanger</Title>   
-    <Copyright>Xbim Ltd.</Copyright>
-    <Description>xBIM Exchanger is a library enabling file exchange between IFC and COBie, COBieLite[UK] and DPoW
-Supports multiple serialisation formats, including XML, JSON, STEP and native Excel / xslx.</Description>
-    <Authors>xBIM Team</Authors>
-    <Company>Xbim Ltd.</Company>
-    <PackageLicenseUrl>https://raw.githubusercontent.com/xBimTeam/XbimExchange/master/LICENCE.md</PackageLicenseUrl>
-    <PackageProjectUrl>https://github.com/xBimTeam/XbimExchange</PackageProjectUrl>
-    <RepositoryUrl>https://github.com/xBimTeam/XbimExchanges/tree/develop</RepositoryUrl>
-    <PackageTags>BIM, IFC, IfcXml, IfcZip, Ifc4,  COBie, .Net, C#, BuildingSmart</PackageTags>
-    <PackageReleaseNotes>v5.0 support the latest Xbim.Essentials 5.0</PackageReleaseNotes>    
-    <GeneratePackageOnBuild>false</GeneratePackageOnBuild>   
-    <PackageIconUrl>https://avatars1.githubusercontent.com/u/2284875?v=3&amp;amp;s=240</PackageIconUrl>   
-    <AssemblyName>XbimExchanger</AssemblyName>   
-    <RootNamespace>XbimExchanger</RootNamespace>   
-    <PackageId>Xbim.Exchanger</PackageId>   
-    <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
-    <SignAssembly>true</SignAssembly>
-    <AssemblyOriginatorKeyFile>..\XbimOpenSourceKeyFile.snk</AssemblyOriginatorKeyFile>
+    <Title>Xbim.Exchanger</Title>
+    <Description>
+      xBIM Exchanger is a library enabling file exchange between IFC and COBie, COBieLite[UK] and DPoW
+      Supports multiple serialisation formats, including XML, JSON, STEP and native Excel / xslx.
+    </Description>
+    <AssemblyName>XbimExchanger</AssemblyName>
+    <RootNamespace>XbimExchanger</RootNamespace>
+    <PackageId>Xbim.Exchanger</PackageId>
   </PropertyGroup>
   <ItemGroup>
     <None Remove="DPoWToCOBieLite\ClassificationMappings.config" />
