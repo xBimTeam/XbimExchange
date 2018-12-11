@@ -43,8 +43,8 @@ Supports multiple serialisation formats, including XML, JSON, STEP and native Ex
   <ItemGroup>
     <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="2.1.1" />
     <PackageReference Include="NPOI" Version="2.4.0" />
-    <PackageReference Include="Xbim.CobieExpress.IO" Version="5.0.114-develop" />
-    <PackageReference Include="Xbim.Essentials" Version="5.0.200" />
+    <PackageReference Include="Xbim.CobieExpress.IO" Version="5.0.122" />
+    <PackageReference Include="Xbim.Essentials" Version="5.0.204" />
     <PackageReference Include="Xbim.PropertySets" Version="4.0.1" />
   </ItemGroup>
   <ItemGroup>
