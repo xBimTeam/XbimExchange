@@ -1,0 +1,15 @@
+<Project>
+  <PropertyGroup>
+    <RepositoryRoot>$(MSBuildThisFileDirectory)</RepositoryRoot>
+    <RepoRelativeProjectDir>$([MSBuild]::MakeRelative($(RepositoryRoot), $(MSBuildProjectDirectory)))</RepoRelativeProjectDir>
+    
+    <IsTestProject Condition="$(MSBuildProjectName.EndsWith('Tests')) OR $(MSBuildProjectName.EndsWith('.Profiling'))">true</IsTestProject>
+    <IsSampleProject Condition="$(MSBuildProjectName.EndsWith('Pas1192'))">true</IsSampleProject>
+    <IsUtilityProject Condition="$(MSBuildProjectName.EndsWith('.CodeGeneration')) OR $(MSBuildProjectName.EndsWith('.WebOptimization'))">true</IsUtilityProject>
+    <IsClientProject Condition="$(MSBuildProjectName.EndsWith('.Client')) OR $(MSBuildProjectName.EndsWith('Tools')) OR $(MSBuildProjectName.Contains('Plugin'))">true</IsClientProject>
+  </PropertyGroup>
+  <PropertyGroup>
+    <GenerateDocumentationFile Condition=" '$(IsTestProject)' != 'true' AND '$(IsSampleProject)' != 'true' AND '$(IsUtilityProject)' != 'true' AND '$(IsClientProject)' != 'true'  ">true</GenerateDocumentationFile>
+    <NoWarn>CS1591;CS1573;CS1572</NoWarn>
+  </PropertyGroup>
+</Project>
