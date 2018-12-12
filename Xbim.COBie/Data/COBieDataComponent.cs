@@ -152,20 +152,20 @@ namespace Xbim.COBie.Data
         /// <param name="allPropertyValues"></param>
         /// <param name="propertyName"></param>
         /// <returns></returns>
-        private string GetDateFromProperty (COBieDataPropertySetValues allPropertyValues, string propertyName)
+        private string GetDateFromProperty(COBieDataPropertySetValues allPropertyValues, string propertyName)
         {
             string startData = "";
-            IfcPropertySingleValue ifcPropertySingleValue = allPropertyValues.GetPropertySingleValue (propertyName);
+            IfcPropertySingleValue ifcPropertySingleValue = allPropertyValues.GetPropertySingleValue(propertyName);
             if (ifcPropertySingleValue != null)
             {
                 if (ifcPropertySingleValue.NominalValue != null)
                 {
-                    startData = ifcPropertySingleValue.NominalValue.ToString ();
+                    startData = ifcPropertySingleValue.NominalValue.ToString();
                 }
             }
             else
             {
-                startData = allPropertyValues.GetPropertyValue (propertyName, false);
+                startData = allPropertyValues.GetPropertyValue(propertyName, false);
             }
 
             DateTime frmDate;
@@ -173,7 +173,7 @@ namespace Xbim.COBie.Data
                 startData = frmDate.ToString(Constants.DATE_FORMAT);
             else if (string.IsNullOrEmpty(startData))
                 startData = Constants.DEFAULT_STRING;//Context.RunDate;
-            
+
             return startData;
         }
 

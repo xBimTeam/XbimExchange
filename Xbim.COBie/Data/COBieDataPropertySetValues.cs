@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using Microsoft.Extensions.Logging;
+using System.Collections.Generic;
 using System.Linq;
 using Xbim.Ifc2x3.Kernel;
 using Xbim.Ifc2x3.PropertyResource;
@@ -18,6 +19,8 @@ namespace Xbim.COBie.Data
         #region Fields
         private IfcObjectDefinition _currentObject;
         private Dictionary<IfcPropertySet, IEnumerable<IfcSimpleProperty>> _mapPsetToProps;
+        private ILogger logger;
+        
         #endregion
 
         #region Properties
@@ -66,6 +69,7 @@ namespace Xbim.COBie.Data
         public COBieDataPropertySetValues()
         {
             _mapPsetToProps = new Dictionary<IfcPropertySet, IEnumerable<IfcSimpleProperty>>();
+            logger = Common.XbimLogging.CreateLogger<COBieDataPropertySetValues>();
         }
 
          /// <summary>
@@ -247,60 +251,55 @@ namespace Xbim.COBie.Data
 
         /// <summary>
         /// Get the property value where the property name equals the passed in value. 
-        /// Always use  SetAllPropertyValues before calling this method
+        /// Always use SetAllPropertyValues before calling this method
         /// </summary>
         /// <param name="propertyName">IfcProperty name</param>
         /// <param name="containsString">Do Contains text match on PropertyName if true, exact match if false</param>
         /// <returns></returns>
-        public string GetPropertyValue (string propertyName, bool containsString)
+        public string GetPropertyValue(string propertyName, bool containsString)
         {
 
             IIfcSimpleProperty ifcProperty = null;
             if (containsString)
-                ifcProperty = ObjProperties.Where (p => p.Name.ToString ().Contains (propertyName)).FirstOrDefault ();
+                ifcProperty = ObjProperties.Where(p => p.Name.ToString().Contains(propertyName)).FirstOrDefault();
             else
-                ifcProperty = ObjProperties.Where (p => p.Name == propertyName).FirstOrDefault ();
+                ifcProperty = ObjProperties.Where(p => p.Name == propertyName).FirstOrDefault();
+
+            if(ifcProperty == null)
+                return Constants.DEFAULT_STRING;
 
             //return a string value
-            if (ifcProperty is IIfcPropertySingleValue)
+            if (ifcProperty is IIfcPropertySingleValue singleValue)
             {
-                var singleValue = ifcProperty as IIfcPropertySingleValue;
                 if (singleValue.NominalValue != null &&
-                    singleValue.NominalValue.Value != null
-                   )
+                    singleValue.NominalValue.Value != null)
                 {
-                    string value = singleValue.NominalValue.Value.ToString ();
-                    return value;
+                    return singleValue.NominalValue.Value.ToString();
                 }
             }
-            else if (ifcProperty is IIfcPropertyEnumeratedValue)
+            else if (ifcProperty is IIfcPropertyEnumeratedValue enumValue)
             {
-                var enumValue = ifcProperty as IIfcPropertyEnumeratedValue;
                 if (enumValue.EnumerationValues != null &&
-                    enumValue.EnumerationValues.FirstOrDefault () != null &&
-                    enumValue.EnumerationValues.FirstOrDefault ().Value != null
-                   )
+                    enumValue.EnumerationValues.FirstOrDefault() != null &&
+                    enumValue.EnumerationValues.FirstOrDefault().Value != null)
                 {
-                    string value = enumValue.EnumerationValues.FirstOrDefault ().Value.ToString ();
-                    return value;
+                    return enumValue.EnumerationValues.FirstOrDefault().Value.ToString();
                 }
             }
-            else if (ifcProperty is IfcPropertyReferenceValue) //does not work with IFC4 interfaces!
+            else if (ifcProperty is IfcPropertyReferenceValue propReference) //does not work with IFC4 interfaces!
             {
-                var propReference = ifcProperty as IfcPropertyReferenceValue;
-                if (propReference != null)
+                
+                IfcObjectReferenceSelect referenceSelect = propReference.PropertyReference;
+                if (referenceSelect != null)
                 {
-                    IfcObjectReferenceSelect referenceSelect = propReference.PropertyReference;
-                    if (referenceSelect != null)
-                    {
-                        string value = referenceSelect.ToString ();
-                        return value;
-                    }
+                    string value = referenceSelect.ToString();
+                    return value;
                 }
+                
             }
             else
             {
-                System.Diagnostics.Debug.WriteLine ("GetPropertyValue is not implemented for " + ifcProperty.GetType ().Name);
+                logger.LogWarning("GetPropertyValue is not implemented for {propertyType}", ifcProperty.GetType().Name);
             }
 
             return Constants.DEFAULT_STRING;
