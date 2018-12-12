@@ -326,29 +326,29 @@ namespace Xbim.COBie.Data
         }
 
         /// <summary>
-        /// Get the Asset Type from the property set property if nothing found then default to Moveable/Fixed decided on object type
+        /// Get the Asset Type from the property set property. If nothing found then default to Moveable/Fixed decided on IfcObjectType
         /// </summary>
         /// <param name="ifcTypeObject">IfcTypeObject Object</param>
         /// <param name="allPropertyValues">COBieDataPropertySetValues object holding the property sets</param>
         /// <returns>String holding Asset Type</returns>
         private string GetAssetType(IfcTypeObject ifcTypeObject, COBieDataPropertySetValues allPropertyValues)
         {
-            allPropertyValues.SetAllPropertyValues (ifcTypeObject, "COBie_Asset");
-            string value = allPropertyValues.GetPropertyValue ("AssetType", false);
+            allPropertyValues.SetAllPropertyValues(ifcTypeObject, "COBie_Asset");
+            string value = allPropertyValues.GetPropertyValue("AssetType", false);
 
             if (value == DEFAULT_STRING)
             {
-                allPropertyValues.SetAllPropertyValues (ifcTypeObject, "Pset_Asset");
-                value = allPropertyValues.GetPropertySingleValueValue ("AssetAccountingType", false);
+                allPropertyValues.SetAllPropertyValues(ifcTypeObject, "Pset_Asset");
+                value = allPropertyValues.GetPropertySingleValueValue("AssetAccountingType", false);
             }
 
             if (value == DEFAULT_STRING)
-	        {
+            {
                 if (ifcTypeObject is IfcFurnitureType)
-                    value = "Moveable";                   
+                    value = "Moveable";     // Could be NonFixed in US picklists
                 else
                     value = "Fixed";
-	        }
+            }
             return value;
         }
 
