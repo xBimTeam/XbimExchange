@@ -250,10 +250,6 @@ namespace Xbim.COBie
         /// <param name="SheetValidator"></param>
         public void Validate(COBieWorkbook workbook, ErrorRowIndexBase errorRowIdx, ICOBieSheetValidationTemplate SheetValidator)
         {
-            if (SheetValidator == null)
-            {
-                throw new ArgumentNullException(nameof(SheetValidator));
-            }
 
             _errorRowIdx = errorRowIdx; //set the index for error reporting on rows
             _errors.Clear();
