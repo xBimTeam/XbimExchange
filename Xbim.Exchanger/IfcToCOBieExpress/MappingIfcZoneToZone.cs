@@ -24,12 +24,14 @@ namespace XbimExchanger.IfcToCOBieExpress
         {
             base.Mapping(ifcZone, target);
 
+            target.Description = FirstNonEmptyString(ifcZone.Description, ifcZone.Name);
+
             if (!target.Categories.Any() || target.Categories.Contains(Helper.UnknownCategory))
                 if (!string.IsNullOrWhiteSpace(ifcZone.ObjectType))
                 {
                     target.Categories.Clear();
                     var category =  StringToCategory.GetOrCreate(ifcZone.ObjectType);
-                    target.Categories.Add(category);
+                    target.Categories.AddIfNotPresent(category);
                 }
 
             //get spaces in zones

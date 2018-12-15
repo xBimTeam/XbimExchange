@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using Xbim.COBie.Data;
 using Xbim.Ifc2x3.ActorResource;
-using Xbim.Ifc2x3.IO;
 using Xbim.Common;
 using Xbim.Ifc;
 
@@ -127,7 +126,7 @@ namespace Xbim.COBie
                                 mergeRoles = mergeRoles ^ COBieMergeRoles.Unknown;
                         }
                     }
-                    mapModelToMergeRoles.Add((XbimModel)refModel.Model, mergeRoles);
+                    mapModelToMergeRoles.Add(refModel.Model, mergeRoles);
                 }
             }
             return mapModelToMergeRoles;

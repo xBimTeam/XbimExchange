@@ -7,13 +7,13 @@ using System.Reflection;
 using System.Text.RegularExpressions;
 using Xbim.CobieExpress;
 using Xbim.Common;
-using Xbim.Common.Logging;
 using Xbim.CobieLiteUk.FilterHelper;
 using Xbim.CobieLiteUk;
 using Xbim.Ifc;
 using Xbim.Ifc4.Interfaces;
 using XbimExchanger.IfcToCOBieExpress.EqCompare;
 using XbimExchanger.IfcHelpers;
+using Microsoft.Extensions.Logging;
 
 namespace XbimExchanger.IfcToCOBieExpress
 {
@@ -46,7 +46,7 @@ namespace XbimExchanger.IfcToCOBieExpress
     public class COBieExpressHelper
     {
 
-        internal static readonly ILogger Logger = LoggerFactory.GetLogger();
+        internal static readonly ILogger Logger = XbimLogging.CreateLogger<COBieExpressHelper>();
         /// <summary>
         /// Object to use to report progress on Exchangers
         /// </summary>
@@ -75,6 +75,12 @@ namespace XbimExchanger.IfcToCOBieExpress
         /// 
         /// </summary>
         public ExternalReferenceMode ExternalReferenceMode { get; set; }
+
+        /// <summary>
+        /// Create placeholder spaces for floors, site, etc, to allow for space link data to be
+        /// persisted when the source file links directly to a floor or site instead of a space
+        /// </summary>
+        public bool CreatePlaceholderSpaces { get; set; }
 
         #endregion
 
@@ -203,6 +209,10 @@ namespace XbimExchanger.IfcToCOBieExpress
                     SundryContacts.Add(_xbimContact.Email, _xbimContact);
                 return _xbimContact;
             }
+            set
+            {
+                _xbimContact = value;
+            }
         }
 
         /// <summary>
@@ -214,7 +224,9 @@ namespace XbimExchanger.IfcToCOBieExpress
         /// <param name="reportProgress"></param>
         /// <param name="extId"></param>
         /// <param name="sysMode"></param>
-        public COBieExpressHelper(IfcToCoBieExpressExchanger exchanger, Xbim.CobieLiteUk.ProgressReporter reportProgress, OutPutFilters filter = null, string configurationFile = null, EntityIdentifierMode extId = EntityIdentifierMode.IfcEntityLabels, SystemExtractionMode sysMode = SystemExtractionMode.System | SystemExtractionMode.Types)
+        /// <param name="creatorContact"></param>
+        /// <param name="createPlaceholderSpaces"></param>
+        public COBieExpressHelper(IfcToCoBieExpressExchanger exchanger, Xbim.CobieLiteUk.ProgressReporter reportProgress, OutPutFilters filter = null, string configurationFile = null, EntityIdentifierMode extId = EntityIdentifierMode.IfcEntityLabels, SystemExtractionMode sysMode = SystemExtractionMode.System | SystemExtractionMode.Types, CobieContact creatorContact = null, bool createPlaceholderSpaces = true)
         {
             _categoryMapping = exchanger.GetOrCreateMappings<MappingIfcClassificationReferenceToCategory>();
             _externalObjectMapping = exchanger.GetOrCreateMappings<MappingStringToExternalObject>();
@@ -222,6 +234,7 @@ namespace XbimExchanger.IfcToCOBieExpress
             _contactMapping = exchanger.GetOrCreateMappings<MappingIfcActorToContact>();
             _documentMapping = exchanger.GetOrCreateMappings<MappingIfcDocumentSelectToDocument>();
             _now = DateTime.Now;
+            _xbimContact = creatorContact;
 
             //set props
             _configFileName = configurationFile;
@@ -232,6 +245,7 @@ namespace XbimExchanger.IfcToCOBieExpress
             EntityIdentifierMode = extId;
             SystemMode = sysMode;
             _creatingApplication = _model.Header.CreatingApplication;
+            CreatePlaceholderSpaces = createPlaceholderSpaces;
             //pass the exchanger progress reporter over to helper
             ReportProgress = reportProgress; 
         }
@@ -530,7 +544,7 @@ namespace XbimExchanger.IfcToCOBieExpress
             if (SystemMode.HasFlag(SystemExtractionMode.System))
             {
                 _systemAssignment =
-                        _model.Instances.OfType<IIfcRelAssignsToGroup>().Where(r => r.RelatingGroup is IIfcSystem)
+                        _model.Instances.OfType<IIfcRelAssignsToGroup>().Where(r => (r.RelatingGroup is IIfcSystem) && !(r.RelatingGroup is IIfcZone)) // Exclude IfcZone (as Zone derives from System)
                         .Distinct(new IfcRelAssignsToGroupRelatedGroupObjCompare()) //make sure we do not have duplicate keys, or ToDictionary will throw ex. could lose RelatedObjects though. 
                         .ToDictionary(k => (IIfcSystem)k.RelatingGroup, v => v.RelatedObjects);
                 _systemLookup = new Dictionary<IIfcObjectDefinition, List<IIfcSystem>>();
@@ -577,7 +591,7 @@ namespace XbimExchanger.IfcToCOBieExpress
         /// <summary>
         /// Get the property mappings for a given field name
         /// </summary>
-        /// <param name="filedKey">Field name</param>
+        /// <param name="fieldKey">Field name</param>
         /// <returns>string[]</returns>
         public string[] GetPropMap(string fieldKey)
         {
@@ -1104,9 +1118,9 @@ namespace XbimExchanger.IfcToCOBieExpress
         }
 
 
-        private List<CobieCategory> ConvertToCategories(IEnumerable<IIfcClassificationReference> classifications)
+        private HashSet<CobieCategory> ConvertToCategories(IEnumerable<IIfcClassificationReference> classifications)
         {
-            var categories = new List<CobieCategory>();
+            var categories = new HashSet<CobieCategory>();
             foreach (var classification in classifications)
             { 
                 CobieCategory category;
@@ -1128,7 +1142,7 @@ namespace XbimExchanger.IfcToCOBieExpress
         /// </summary>
         /// <param name="strRef">Uniclass string</param>
         /// <returns>List of Category Objects</returns>
-        private List<CobieCategory> ConvertToCategories(string strRef)
+        private HashSet<CobieCategory> ConvertToCategories(string strRef)
         {
             var code = strRef;
             string description = null;
@@ -1140,11 +1154,11 @@ namespace XbimExchanger.IfcToCOBieExpress
 
             CobieCategory category;
             if (!_categoryMapping.GetOrCreateTargetObject(code, out category))
-                return new List<CobieCategory> {category};
+                return new HashSet<CobieCategory> {category};
 
             category.Value = code;
             category.Description = description;
-            return new List<CobieCategory>{category};
+            return new HashSet<CobieCategory>{category};
         }
 
         /// <summary>
@@ -1153,17 +1167,17 @@ namespace XbimExchanger.IfcToCOBieExpress
         /// <param name="code">Uniclass code</param>
         /// <param name="desc">Uniclass description</param>
         /// <returns>List of Category Objects</returns>
-        private List<CobieCategory> ConvertToCategories(string code, string desc)
+        private HashSet<CobieCategory> ConvertToCategories(string code, string desc)
         {
             CobieCategory category;
             if (!_categoryMapping.GetOrCreateTargetObject(code ?? desc ?? "unknown", out category))
-                return new List<CobieCategory> {category};
+                return new HashSet<CobieCategory> {category};
 
             if (!string.IsNullOrEmpty(code))
                 category.Value= code;
             if (!string.IsNullOrEmpty(desc))
                 category.Description= desc;
-            return new List<CobieCategory>{category};
+            return new HashSet<CobieCategory>{category};
         }
 
         /// <summary>
@@ -1172,7 +1186,7 @@ namespace XbimExchanger.IfcToCOBieExpress
         /// <param name="classifiedObject"></param>
         /// <param name="useProp"></param>
         /// <returns></returns>
-        public List<CobieCategory> GetCategories(IIfcDefinitionSelect classifiedObject, bool useProp = true)
+        public HashSet<CobieCategory> GetCategories(IIfcDefinitionSelect classifiedObject, bool useProp = true)
         {
             List<IIfcClassificationReference> classifications;
             if (_classifiedObjects.TryGetValue(classifiedObject, out classifications))
@@ -1189,7 +1203,7 @@ namespace XbimExchanger.IfcToCOBieExpress
                 }
             }
             //get category from properties
-            if (!useProp || !(classifiedObject is IIfcObjectDefinition)) return new List<CobieCategory>{ UnknownCategory };
+            if (!useProp || !(classifiedObject is IIfcObjectDefinition)) return new HashSet<CobieCategory>{ UnknownCategory };
 
             var code = GetCoBieProperty("CommonCategoryCode", (IIfcObjectDefinition) classifiedObject);
             var desc = GetCoBieProperty("CommonCategoryDescription", (IIfcObjectDefinition) classifiedObject);
@@ -1206,7 +1220,7 @@ namespace XbimExchanger.IfcToCOBieExpress
 
             if (string.IsNullOrEmpty(code) && string.IsNullOrEmpty(desc))
             {
-                return new List<CobieCategory> { UnknownCategory };
+                return new HashSet<CobieCategory> { UnknownCategory };
             }
 
             return ConvertToCategories(cat);
@@ -1498,7 +1512,16 @@ namespace XbimExchanger.IfcToCOBieExpress
             return ifcObject != null ? null : XbimSystem;
         }
 
-
+        private List<IIfcSpatialElement> GetOrCreateSpaceAssetLookup(IIfcElement element)
+        {
+            List<IIfcSpatialElement> spaceList;
+            if (!SpaceAssetLookup.TryGetValue(element, out spaceList))
+            {
+                spaceList = new List<IIfcSpatialElement>();
+                SpaceAssetLookup[element] = spaceList;
+            }
+            return spaceList;
+        }
  
         private void GetSpaceAssetLookup()
         {
@@ -1507,24 +1530,29 @@ namespace XbimExchanger.IfcToCOBieExpress
             _spaceAssetLookup = new Dictionary<IIfcElement, List<IIfcSpatialElement>>(); 
            
             var ifcRelContainedInSpaces = _model.Instances.OfType<IIfcRelContainedInSpatialStructure>().ToList();
-            ReportProgress.NextStage(ifcRelContainedInSpaces.Count, 40);
+            var ifcRelSpaceBoundaries = _model.Instances.OfType<IIfcRelSpaceBoundary>().Where(rsb => rsb.RelatedBuildingElement != null).ToList();
+            ReportProgress.NextStage(ifcRelContainedInSpaces.Count + ifcRelSpaceBoundaries.Count, 40);
             foreach (var ifcRelContainedInSpace in ifcRelContainedInSpaces)
             {
                 foreach (var element in ifcRelContainedInSpace.RelatedElements.OfType<IIfcElement>())
-                { 
-                    List<IIfcSpatialElement> spaceList;
-                    if (!SpaceAssetLookup.TryGetValue(element, out spaceList))
-                    {
-                        spaceList = new List<IIfcSpatialElement>();
-                        SpaceAssetLookup[element] = spaceList;
-
-                    }
+                {
+                    var spaceList = GetOrCreateSpaceAssetLookup(element);
                     var container = ifcRelContainedInSpace.RelatingStructure;
                     spaceList.Add(container);
                 }
                 ReportProgress.IncrementAndUpdate();
+            }            
+
+            foreach (var boundary in ifcRelSpaceBoundaries)
+            {
+                var element = boundary.RelatedBuildingElement;
+                var spaceList = GetOrCreateSpaceAssetLookup(element);
+                if (boundary.RelatingSpace is IIfcSpace)
+                {
+                    spaceList.Add(boundary.RelatingSpace as IIfcSpace);
+                }
+                ReportProgress.IncrementAndUpdate();
             }
-           
         }
         /// <summary>
         /// Returns all assets in the building but removes

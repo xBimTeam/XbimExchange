@@ -8,6 +8,8 @@ using Xbim.Ifc2x3.ProductExtension;
 using Xbim.Ifc2x3.ConstructionMgmtDomain;
 using Xbim.Ifc2x3.MeasureResource;
 using Xbim.IO.Esent;
+using Xbim.Common;
+using Xbim.Ifc2x3.ActorResource;
 
 namespace Xbim.COBie.Serialisers.XbimSerialiser
 {
@@ -35,7 +37,7 @@ namespace Xbim.COBie.Serialisers.XbimSerialiser
         public void SerialiseDocument(COBieSheet<COBieDocumentRow> cOBieSheet)
         {
 
-            using (XbimReadWriteTransaction trans = Model.BeginTransaction("Add Document"))
+            using (ITransaction trans = Model.BeginTransaction("Add Document"))
             {
                 try
                 {
@@ -76,7 +78,7 @@ namespace Xbim.COBie.Serialisers.XbimSerialiser
             SetUserHistory(ifcRelAssociatesDocument, row.ExtSystem, row.CreatedBy, row.CreatedOn );
             
             if (Contacts.ContainsKey(row.CreatedBy))
-                ifcDocumentInformation.DocumentOwner = Contacts[row.CreatedBy];
+                ifcDocumentInformation.DocumentOwner = (IfcPersonAndOrganization)Contacts[row.CreatedBy];
 
             //using statement will set the Model.OwnerHistoryAddObject to IfcConstructionProductResource.OwnerHistory as OwnerHistoryAddObject is used upon any property changes, 
             //then swaps the original OwnerHistoryAddObject back in the dispose, so set any properties within the using statement

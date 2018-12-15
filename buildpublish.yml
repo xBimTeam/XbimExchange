@@ -1,0 +1,23 @@
+# File: Common buildfile for publishing packages
+
+steps:
+# Publish to master or develop MyGet feed based on the source branch
+- task: NuGetCommand@2
+  displayName: 'Publish to MyGetMaster'
+  condition: eq(variables['Build.SourceBranch'], 'refs/heads/master')
+  inputs:
+    command: push
+    nuGetFeedType: external
+    publishFeedCredentials: 'MyGetMaster'
+    versioningScheme: byEnvVar
+    versionEnvVar: packageversion
+
+- task: NuGetCommand@2
+  displayName: 'Publish to MyGetDevelop'
+  condition: eq(variables['Build.SourceBranch'], 'refs/heads/develop')
+  inputs:
+    command: push
+    nuGetFeedType: external
+    publishFeedCredentials: 'MyGetDev'
+    versioningScheme: byEnvVar
+    versionEnvVar: packageversion

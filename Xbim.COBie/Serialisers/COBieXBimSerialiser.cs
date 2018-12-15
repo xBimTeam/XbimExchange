@@ -7,12 +7,11 @@ using Xbim.Common.Step21;
 using Xbim.COBie.Contracts;
 using Xbim.COBie.Rows;
 using Xbim.COBie.Serialisers.XbimSerialiser;
-using Xbim.Ifc2x3.Extensions;
 using Xbim.Ifc2x3.Kernel;
 using Xbim.Ifc2x3.GeometryResource;
 using Xbim.IO;
 using Xbim.IO.Esent;
-using XbimModel = Xbim.Ifc2x3.IO.XbimModel;
+using Xbim.Ifc;
 
 //using Xbim.XbimExtensions.Parser;
 
@@ -43,7 +42,7 @@ namespace Xbim.COBie.Serialisers
         /// <summary>
         /// XBim Model Object
         /// </summary>
-        public XbimModel Model
+        public IfcStore Model
         {
             get { return XBimContext.Model; }
         }
@@ -61,7 +60,7 @@ namespace Xbim.COBie.Serialisers
         public COBieXBimSerialiser(string fileName)
         {
             var fileNameDB = Path.ChangeExtension(fileName, ".xBIM");
-            XBimContext = new COBieXBimContext(XbimModel.CreateModel(fileNameDB)) {IsMerge = false};
+            XBimContext = new COBieXBimContext(IfcStore.Create(fileNameDB, null, XbimSchemaVersion.Ifc2X3)) {IsMerge = false};
             FileName = fileName;
             MergeGeometryOnly = true;
         }
@@ -72,7 +71,7 @@ namespace Xbim.COBie.Serialisers
         public COBieXBimSerialiser(string fileName, ReportProgressDelegate progressHandler) 
         {
             var fileNameDB = Path.ChangeExtension(fileName, ".xBIM");
-            XBimContext = new COBieXBimContext(XbimModel.CreateModel(fileNameDB), progressHandler) {IsMerge = false};
+            XBimContext = new COBieXBimContext(IfcStore.Create(fileNameDB, null, XbimSchemaVersion.Ifc2X3), progressHandler) {IsMerge = false};
             FileName = fileName;
             MergeGeometryOnly = true;
         }
@@ -84,6 +83,7 @@ namespace Xbim.COBie.Serialisers
         /// XBim Serialise
         /// </summary>
         /// <param name="workbook">COBieWorkbook to Serialise</param>
+        /// <param name="validationTemplate"></param>
         public void Serialise(COBieWorkbook workbook, ICOBieValidationTemplate validationTemplate = null)
         {
             Create(workbook);
@@ -254,10 +254,7 @@ namespace Xbim.COBie.Serialisers
                 //TODO add correct IfcPersonAndOrganization to DefaultOwningUser
                 Model.DefaultOwningUser.ThePerson.FamilyName = "Unknown";
                 Model.DefaultOwningUser.TheOrganization.Name = "Unknown";
-                if (Model.Header == null)
-                {
-                    Model.Header = new StepFileHeader(StepFileHeader.HeaderCreationMode.InitWithXbimDefaults);
-                }
+                
                 Model.Header.FileDescription.Description.Clear();
                 Model.Header.FileDescription.Description.Add("ViewDefinition[CoordinationView]");
                 Model.Header.FileName.Name = Path.GetFileName(FileName);
@@ -279,13 +276,9 @@ namespace Xbim.COBie.Serialisers
         {
             if (Model != null)
             {
-                //close model server if it is the case
-                if (Model is XbimModel)
-                {
-                    (Model as XbimModel).Dispose();
-                    XBimContext.Model = null;
-                }
 
+                Model.Dispose();
+                XBimContext.Model = null;
             }
         }
 
@@ -294,23 +287,20 @@ namespace Xbim.COBie.Serialisers
         /// </summary>
         /// <param name="trans"></param>
         /// <returns></returns>
-        public String Validate(XbimReadWriteTransaction trans)
+        public String Validate(ITransaction trans)
         {
-            var sw = new StringWriter();
-            var errors = Model.Validate(trans.Modified(), sw);
-            return errors > 0 ? sw.ToString() : null;
+            throw new NotImplementedException();
         }
 
         /// <summary>
         /// Save Model Object To A File
         /// </summary>
-        /// <param name="fileName"></param>
         public void Save()
         {
             try
             {
                 //write the Ifc File
-                Model.SaveAs(FileName, IfcStorageType.Ifc);
+                Model.SaveAs(FileName, StorageType.Ifc);
                 //Model.Close(); //let dispose close use COBieXBimSerialiser in a using statement
 #if DEBUG
                 Console.WriteLine(FileName + " has been successfully written");

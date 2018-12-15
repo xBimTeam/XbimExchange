@@ -1,5 +1,5 @@
 ﻿using System;
-using Xbim.Ifc2x3.IO;
+using Xbim.Ifc;
 using Xbim.Ifc2x3.UtilityResource;
 
 namespace Xbim.COBie.Serialisers.XbimSerialiser
@@ -7,9 +7,9 @@ namespace Xbim.COBie.Serialisers.XbimSerialiser
     class COBieXBimEditScope : IDisposable
     {
         private IfcOwnerHistory _owner;
-        private XbimModel Model {  get;  set; }
+        private IfcStore Model {  get;  set; }
 
-        public COBieXBimEditScope(XbimModel model, IfcOwnerHistory owner)
+        public COBieXBimEditScope(IfcStore model, IfcOwnerHistory owner)
         {
             Model = model;
             _owner = owner;

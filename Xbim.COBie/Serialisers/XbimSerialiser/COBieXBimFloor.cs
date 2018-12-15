@@ -1,9 +1,9 @@
 ﻿using System;
-using Xbim.Ifc2x3.Extensions;
 using Xbim.COBie.Rows;
 using Xbim.Ifc2x3.ProductExtension;
 using Xbim.Ifc2x3.MeasureResource;
 using Xbim.IO.Esent;
+using Xbim.Common;
 
 namespace Xbim.COBie.Serialisers.XbimSerialiser
 {
@@ -22,7 +22,7 @@ namespace Xbim.COBie.Serialisers.XbimSerialiser
         /// <param name="cOBieSheet">COBieSheet of COBieFloorRows to read data from</param>
         public void SerialiseFloor(COBieSheet<COBieFloorRow> cOBieSheet)
         {
-            using (XbimReadWriteTransaction trans = Model.BeginTransaction("Add Floor"))
+            using (ITransaction trans = Model.BeginTransaction("Add Floor"))
             {
 
                 try

@@ -4,9 +4,9 @@ using System.IO;
 using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Xbim.CobieExpress;
-using Xbim.CobieExpress.IO;
 using Xbim.Common;
 using Xbim.Ifc;
+using Xbim.IO.CobieExpress;
 using XbimExchanger.IfcToCOBieExpress;
 
 namespace Tests

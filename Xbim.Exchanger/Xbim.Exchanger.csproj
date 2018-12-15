@@ -1,310 +1,51 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{5540768D-8ACD-4CC0-B3CD-1951DEF54C20}</ProjectGuid>
-    <OutputType>Library</OutputType>
-    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <TargetFrameworks>net47</TargetFrameworks>
+    <Title>Xbim.Exchanger</Title>
+    <Description>
+      xBIM Exchanger is a library enabling file exchange between IFC and COBie, COBieLite[UK] and DPoW
+      Supports multiple serialisation formats, including XML, JSON, STEP and native Excel / xslx.
+    </Description>
+    <AssemblyName>XbimExchanger</AssemblyName>
     <RootNamespace>XbimExchanger</RootNamespace>
-    <AssemblyName>Xbim.Exchanger</AssemblyName>
-    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
-    <FileAlignment>512</FileAlignment>
-    <NuGetPackageImportStamp>314c6614</NuGetPackageImportStamp>
-    <TargetFrameworkProfile />
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <DebugSymbols>true</DebugSymbols>
-    <DebugType>full</DebugType>
-    <Optimize>false</Optimize>
-    <OutputPath>..\Output\Debug\</OutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-    <DocumentationFile>
-    </DocumentationFile>
-    <Prefer32Bit>false</Prefer32Bit>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <DebugType>pdbonly</DebugType>
-    <Optimize>true</Optimize>
-    <OutputPath>..\Output\Release\</OutputPath>
-    <DefineConstants>TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-    <DocumentationFile>..\Output\Release\Xbim.Exchanger.xml</DocumentationFile>
-    <NoWarn>1591</NoWarn>
-    <Prefer32Bit>false</Prefer32Bit>
-  </PropertyGroup>
-  <PropertyGroup>
-    <SignAssembly>true</SignAssembly>
-  </PropertyGroup>
-  <PropertyGroup>
-    <AssemblyOriginatorKeyFile>XbimOpenSourceKeyFile.snk</AssemblyOriginatorKeyFile>
+    <PackageId>Xbim.Exchanger</PackageId>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Esent.Interop, Version=1.9.4.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\packages\ManagedEsent.1.9.4\lib\net40\Esent.Interop.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="log4net, Version=1.2.15.0, Culture=neutral, PublicKeyToken=669e0ddf0bb1aa2a, processorArchitecture=MSIL">
-      <HintPath>..\packages\log4net.2.0.5\lib\net45-full\log4net.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="NPOI, Version=2.2.1.0, Culture=neutral, PublicKeyToken=0df73ec7942b34e1, processorArchitecture=MSIL">
-      <HintPath>..\packages\NPOI.2.2.1\lib\net40\NPOI.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="NPOI.OOXML, Version=2.2.1.0, Culture=neutral, PublicKeyToken=0df73ec7942b34e1, processorArchitecture=MSIL">
-      <HintPath>..\packages\NPOI.2.2.1\lib\net40\NPOI.OOXML.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="NPOI.OpenXml4Net, Version=2.2.1.0, Culture=neutral, PublicKeyToken=0df73ec7942b34e1, processorArchitecture=MSIL">
-      <HintPath>..\packages\NPOI.2.2.1\lib\net40\NPOI.OpenXml4Net.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="NPOI.OpenXmlFormats, Version=2.2.1.0, Culture=neutral, PublicKeyToken=0df73ec7942b34e1, processorArchitecture=MSIL">
-      <HintPath>..\packages\NPOI.2.2.1\lib\net40\NPOI.OpenXmlFormats.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="System" />
-    <Reference Include="System.Configuration" />
-    <Reference Include="System.Core" />
-    <Reference Include="System.Xml.Linq" />
-    <Reference Include="System.Data.DataSetExtensions" />
-    <Reference Include="Microsoft.CSharp" />
-    <Reference Include="System.Data" />
-    <Reference Include="System.Xml" />
-    <Reference Include="Xbim.CobieExpress, Version=4.0.0.0, Culture=neutral, PublicKeyToken=11e3655e576ec5a9, processorArchitecture=MSIL">
-      <HintPath>..\packages\Xbim.Essentials.4.0.13\lib\net40\Xbim.CobieExpress.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="Xbim.CobieExpress.IO, Version=4.0.0.0, Culture=neutral, PublicKeyToken=11e3655e576ec5a9, processorArchitecture=MSIL">
-      <HintPath>..\packages\Xbim.Cobie.4.0.13\lib\net40\Xbim.CobieExpress.IO.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="Xbim.Common, Version=4.0.0.0, Culture=neutral, PublicKeyToken=11e3655e576ec5a9, processorArchitecture=MSIL">
-      <HintPath>..\packages\Xbim.Essentials.4.0.13\lib\net40\Xbim.Common.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="Xbim.Ifc, Version=4.0.0.0, Culture=neutral, PublicKeyToken=11e3655e576ec5a9, processorArchitecture=MSIL">
-      <HintPath>..\packages\Xbim.Essentials.4.0.13\lib\net40\Xbim.Ifc.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="Xbim.Ifc.Extensions, Version=4.0.0.0, Culture=neutral, PublicKeyToken=11e3655e576ec5a9, processorArchitecture=MSIL">
-      <HintPath>..\packages\Xbim.Essentials.4.0.13\lib\net40\Xbim.Ifc.Extensions.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="Xbim.Ifc2x3, Version=4.0.0.0, Culture=neutral, PublicKeyToken=11e3655e576ec5a9, processorArchitecture=MSIL">
-      <HintPath>..\packages\Xbim.Essentials.4.0.13\lib\net40\Xbim.Ifc2x3.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="Xbim.Ifc2x3.IO, Version=4.0.0.0, Culture=neutral, PublicKeyToken=11e3655e576ec5a9, processorArchitecture=MSIL">
-      <HintPath>..\packages\Xbim.Essentials.4.0.13\lib\net40\Xbim.Ifc2x3.IO.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="Xbim.Ifc4, Version=4.0.0.0, Culture=neutral, PublicKeyToken=11e3655e576ec5a9, processorArchitecture=MSIL">
-      <HintPath>..\packages\Xbim.Essentials.4.0.13\lib\net40\Xbim.Ifc4.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="Xbim.IO, Version=4.0.0.0, Culture=neutral, PublicKeyToken=11e3655e576ec5a9, processorArchitecture=MSIL">
-      <HintPath>..\packages\Xbim.Essentials.4.0.13\lib\net40\Xbim.IO.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="Xbim.IO.TableStore, Version=4.0.0.0, Culture=neutral, PublicKeyToken=11e3655e576ec5a9, processorArchitecture=MSIL">
-      <HintPath>..\packages\Xbim.Cobie.4.0.13\lib\net40\Xbim.IO.TableStore.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="Xbim.Properties, Version=3.1.0.0, Culture=neutral, PublicKeyToken=11e3655e576ec5a9, processorArchitecture=MSIL">
-      <HintPath>..\packages\Xbim.PropertySets.4.0.1\lib\net40\Xbim.Properties.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="Xbim.Tessellator, Version=4.0.0.0, Culture=neutral, PublicKeyToken=11e3655e576ec5a9, processorArchitecture=MSIL">
-      <HintPath>..\packages\Xbim.Essentials.4.0.13\lib\net40\Xbim.Tessellator.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Include="COBieLiteHelpers\AssetTypeInfoTypeComparer.cs" />
-    <Compile Include="COBieLiteHelpers\AttributeValueTypeExtensions.cs" />
-    <Compile Include="COBieLiteHelpers\ValueBaseTypeExtensions.cs" />
-    <Compile Include="COBieLiteHelpers\XbimSimplePropertyType.cs" />
-    <Compile Include="COBieLiteToDPoW\COBieLiteToDPoWExchanger.cs" />
-    <Compile Include="COBieLiteToDPoW\COBieLiteToDPoWMapping.cs" />
-    <Compile Include="COBieLiteToDPoW\Helper.cs" />
-    <Compile Include="COBieLiteToDPoW\MappingFacilityTypeToPlanOfWork.cs" />
-    <Compile Include="COBieLiteToIfc\COBieLiteIfcMappings.cs" />
-    <Compile Include="COBieLiteToIfc\COBieLiteToIfcExchanger.cs" />
-    <Compile Include="COBieLiteToIfc\MappingAssetInfoTypeToIfcElement.cs" />
-    <Compile Include="COBieLiteToIfc\MappingAssetTypeInfoTypeToIfcTypeObject.cs" />
-    <Compile Include="COBieLiteToIfc\MappingFacilityTypeToIfcBuilding.cs" />
-    <Compile Include="COBieLiteToIfc\MappingFloorTypeToIfcBuildingStorey.cs" />
-    <Compile Include="COBieLiteToIfc\MappingProjectTypeToIfcProject.cs" />
-    <Compile Include="COBieLiteToIfc\MappingSiteTypeToIfcSite.cs" />
-    <Compile Include="COBieLiteToIfc\MappingSpaceTypeToIfcSpace.cs" />
-    <Compile Include="COBieLiteUkToIfc\AttributeValueExtensions.cs" />
-    <Compile Include="COBieLiteUkToIfc\COBieLiteUkIfcMappings.cs" />
-    <Compile Include="COBieLiteUkToIfc\COBieLiteUkToIfcExchanger.cs" />
-    <Compile Include="COBieLiteUkToIfc\MappingAssetToIfcElement.cs" />
-    <Compile Include="COBieLiteUkToIfc\MappingAssetTypeToIfcTypeObject.cs" />
-    <Compile Include="COBieLiteUkToIfc\MappingContactToIfcPersonAndOrganization.cs" />
-    <Compile Include="COBieLiteUkToIfc\MappingDocumentToIfcDocumentSelect.cs" />
-    <Compile Include="COBieLiteUkToIfc\MappingFacilityToIfcBuilding.cs" />
-    <Compile Include="COBieLiteUkToIfc\MappingFloorToIfcBuildingStorey.cs" />
-    <Compile Include="COBieLiteUkToIfc\MappingProjectToIfcProject.cs" />
-    <Compile Include="COBieLiteUkToIfc\MappingSiteToIfcSite.cs" />
-    <Compile Include="COBieLiteUkToIfc\MappingSpaceToIfcSpace.cs" />
-    <Compile Include="COBieLiteUkToIfc\MappingSpareToIfcConstructionProductResource.cs" />
-    <Compile Include="COBieLiteUkToIfc\MappingZoneToIfcZone.cs" />
-    <Compile Include="COBieLiteUkToIfc\OwnerHistoryEditScope.cs" />
-    <Compile Include="DPoWToCOBieLiteUK\DPoWToCOBieLiteUKExchanger.cs" />
-    <Compile Include="DPoWToCOBieLiteUK\DPoWToCOBieLiteUKMapping.cs" />
-    <Compile Include="DPoWToCOBieLiteUK\Extensions.cs" />
-    <Compile Include="DPoWToCOBieLiteUK\MappingAssemblyTypeToAssemblyType.cs" />
-    <Compile Include="DPoWToCOBieLiteUK\MappingAssetTypeToAssetType.cs" />
-    <Compile Include="DPoWToCOBieLiteUK\MappingAttributableObjectToCOBieObject.cs" />
-    <Compile Include="DPoWToCOBieLiteUK\MappingContactToContact.cs" />
-    <Compile Include="DPoWToCOBieLiteUK\MappingDocumentToDocumentType.cs" />
-    <Compile Include="DPoWToCOBieLiteUK\MappingDPoWObjectToCOBieObject.cs" />
-    <Compile Include="DPoWToCOBieLiteUK\MappingJobToIssueType.cs" />
-    <Compile Include="DPoWToCOBieLiteUK\MappingPlanOfWorkToFacilityType.cs" />
-    <Compile Include="DPoWToCOBieLiteUK\MappingProjectStageToProjectStage.cs" />
-    <Compile Include="DPoWToCOBieLiteUK\MappingRoleToContact.cs" />
-    <Compile Include="DPoWToCOBieLiteUK\MappingSpaceTypeToZone.cs" />
-    <Compile Include="DPoWToCOBieLite\ClassificationMappings.cs" />
-    <Compile Include="DPoWToCOBieLite\DPoWToCOBieLiteExchanger.cs" />
-    <Compile Include="DPoWToCOBieLite\DPoWToCOBieLiteMapping.cs" />
-    <Compile Include="DPoWToCOBieLite\Extensions.cs" />
-    <Compile Include="DPoWToCOBieLite\MappingAssemblyTypeToAssemblyType.cs" />
-    <Compile Include="DPoWToCOBieLite\MappingAssetTypeToAssetType.cs" />
-    <Compile Include="DPoWToCOBieLite\MappingAttributableObjectToCOBieObject.cs" />
-    <Compile Include="DPoWToCOBieLite\MappingContactToContact.cs" />
-    <Compile Include="DPoWToCOBieLite\MappingDocumentToDocumentType.cs" />
-    <Compile Include="DPoWToCOBieLite\MappingDPoWObjectToCOBieObject.cs" />
-    <Compile Include="DPoWToCOBieLite\MappingJobToIssueType.cs" />
-    <Compile Include="DPoWToCOBieLite\MappingPlanOfWorkToFacilityType.cs" />
-    <Compile Include="DPoWToCOBieLite\MappingRoleToContact.cs" />
-    <Compile Include="DPoWToCOBieLite\MappingSpaceTypeToSpaceType.cs" />
-    <Compile Include="IfcToCOBieExpress\Conversion\CobieExpressConverter.cs" />
-    <Compile Include="IfcToCOBieExpress\MappingIfcObjectToAsset.cs" />
-    <Compile Include="IfcToCOBieExpress\MappingStringToCategory.cs" />
-    <Compile Include="IfcToCOBieExpress\MappingStringToExternalSystem.cs" />
-    <Compile Include="IfcToCOBieExpress\MappingStringToExternalObject.cs" />
-    <Compile Include="IfcHelpers\IfcMappings.cs" />
-    <Compile Include="IfcHelpers\Ifc2x3\IfcPropertySetDefinitionExtensions.cs" />
-    <Compile Include="IfcHelpers\IfcUnitComparer.cs" />
-    <Compile Include="IfcHelpers\Ifc2x3\IfcUnitConverter.cs" />
-    <Compile Include="IfcToCOBieExpress\Classifications\ClassificationMappingReader.cs" />
-    <Compile Include="IfcToCOBieExpress\Classifications\Classifier.cs" />
-    <Compile Include="IfcToCOBieExpress\Classifications\Components\ClassificationSystem.cs" />
-    <Compile Include="IfcToCOBieExpress\Classifications\Components\InferredClassification.cs" />
-    <Compile Include="IfcToCOBieExpress\Classifications\Components\Pointer.cs" />
-    <Compile Include="IfcToCOBieExpress\Classifications\Components\RegexPatterns.cs" />
-    <Compile Include="IfcToCOBieExpress\COBieExpressHelper.cs" />
-    <Compile Include="IfcToCOBieExpress\EqCompare\IfcRelAssignsToGroupRelatedGroupObjCompare.cs" />
-    <Compile Include="IfcToCOBieExpress\IfcToCoBieExpressExchanger.cs" />
-    <Compile Include="IfcToCOBieExpress\MappingIfcClassificationReferenceToCategory.cs" />
-    <Compile Include="IfcToCOBieExpress\MappingIfcActorToContact.cs" />
-    <Compile Include="IfcToCOBieExpress\MappingIfcBuildingToFacility.cs" />
-    <Compile Include="IfcToCOBieExpress\MappingIfcClassificationToCobieClassification.cs" />
-    <Compile Include="IfcToCOBieExpress\MappingIfcConstructionProductResourceToSpare.cs" />
-    <Compile Include="IfcToCOBieExpress\MappingIfcDocumentSelectToDocument.cs" />
-    <Compile Include="IfcToCOBieExpress\MappingIfcElementToComponent.cs" />
-    <Compile Include="IfcToCOBieExpress\MappingIfcProjectToProject.cs" />
-    <Compile Include="IfcToCOBieExpress\MappingIfcSiteToSite.cs" />
-    <Compile Include="IfcToCOBieExpress\MappingIfcSpatialElementToFloor.cs" />
-    <Compile Include="IfcToCOBieExpress\MappingIfcSpatialElementToSpace.cs" />
-    <Compile Include="IfcToCOBieExpress\MappingIfcSystemToSystem.cs" />
-    <Compile Include="IfcToCOBieExpress\MappingIfcZoneToZone.cs" />
-    <Compile Include="IfcToCOBieExpress\MappingSystemViaIfcPropertyToSystem.cs" />
-    <Compile Include="IfcToCOBieExpress\MappingXbimIfcProxyTypeObjectToAssetType.cs" />
-    <Compile Include="IfcToCOBieExpress\XbimAttributedObject.cs" />
-    <Compile Include="IfcToCOBieExpress\XbimIfcProxyTypeObject.cs" />
-    <Compile Include="IfcToCOBieLiteUK\COBieLiteUKHelper.cs" />
-    <Compile Include="IfcToCOBieLiteUK\ContactConverter.cs" />
-    <Compile Include="IfcHelpers\CobieConversionParams.cs" />
-    <Compile Include="IfcToCOBieLiteUK\Conversion\CobieLiteConverter.cs" />
-    <Compile Include="IfcHelpers\ExportTypeEnum.cs" />
-    <Compile Include="IfcHelpers\IfcStoreExtensions.cs" />
-    <Compile Include="IfcHelpers\ICOBieConverter.cs" />
-    <Compile Include="IfcToCOBieLiteUK\EqCompare\IfcRelAssignsToGroupRelatedGroupObjCompare.cs" />
-    <Compile Include="IfcToCOBieLiteUK\IfcToCOBieLiteUkExchanger.cs" />
-    <Compile Include="IfcToCOBieLiteUK\MappingIfcActorToContact.cs" />
-    <Compile Include="IfcToCOBieLiteUK\MappingIfcConstructionProductResourceToSpare.cs" />
-    <Compile Include="IfcToCOBieLiteUK\MappingIfcDocumentSelectToDocument.cs" />
-    <Compile Include="IfcToCOBieLiteUK\MappingIfcSpatialStructureElementToFloor.cs" />
-    <Compile Include="IfcToCOBieLiteUK\MappingIfcElementToComponent.cs" />
-    <Compile Include="IfcToCOBieLiteUK\MappingIfcProjectToProject.cs" />
-    <Compile Include="IfcToCOBieLiteUK\MappingIfcBuildingToFacility.cs" />
-    <Compile Include="IfcToCOBieLiteUK\MappingIfcSiteToSite.cs" />
-    <Compile Include="IfcToCOBieLiteUK\MappingIfcSpatialStructureElementToSpace.cs" />
-    <Compile Include="IfcToCOBieLiteUK\MappingIfcSystemToSystem.cs" />
-    <Compile Include="IfcToCOBieLiteUK\MappingSystemViaIfcPropertyToSystem.cs" />
-    <Compile Include="IfcToCOBieLiteUK\MappingXbimIfcProxyTypeObjectToAssetType.cs" />
-    <Compile Include="IfcToCOBieLiteUK\MappingIfcZoneToZone.cs" />
-    <Compile Include="IfcToCOBieLiteUK\XbimAttributedObject.cs" />
-    <Compile Include="IfcToCOBieLiteUK\XbimIfcProxyTypeObject.cs" />
-    <Compile Include="IXbimMappings.cs" />
-    <Compile Include="XbimMappings.cs" />
-    <Compile Include="..\SharedAssemblyInfo.cs">
-      <Link>Properties\SharedAssemblyInfo.cs</Link>
-    </Compile>
-    <Compile Include="..\SharedFileVersionInfo.cs">
-      <Link>Properties\SharedFileVersionInfo.cs</Link>
-    </Compile>
-    <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="XbimExchanger.cs" />
+    <None Remove="DPoWToCOBieLite\ClassificationMappings.config" />
+    <None Remove="IfcToCOBieExpress\COBieAttributes.config" />
+    <None Remove="IfcToCOBieLiteUK\COBieAttributes.config" />
+    <None Remove="Uniclass2015_Ac_v0_1.csv" />
+    <None Remove="Uniclass2015_Pr_v1_1.csv" />
+    <None Remove="Uniclass2015_Ss_v1_1.csv" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="DPoWToCOBieLite\ClassificationMappings.config">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </EmbeddedResource>
-    <EmbeddedResource Include="IfcToCOBieLiteUK\COBieAttributes.config">
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <None Include="app.config" />
-    <None Include="IfcToCOBieExpress\Classifications\DataFiles\Uniclass2015_Ac_v0_1.csv">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="IfcToCOBieExpress\Classifications\DataFiles\Uniclass2015_Pr_v1_1.csv">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="IfcToCOBieExpress\Classifications\DataFiles\Uniclass2015_Ss_v1_1.csv">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <EmbeddedResource Include="IfcToCOBieExpress\COBieAttributes.config">
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <None Include="packages.config">
-      <SubType>Designer</SubType>
-    </None>
-    <None Include="XbimOpenSourceKeyFile.snk" />
+    <EmbeddedResource Include="IfcToCOBieExpress\COBieAttributes.config" />
+    <EmbeddedResource Include="IfcToCOBieLiteUK\COBieAttributes.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Xbim.COBieLiteUK\Xbim.COBieLiteUK.csproj">
-      <Project>{90def072-96c7-4972-835e-909c41169cb4}</Project>
-      <Name>Xbim.COBieLiteUK</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Xbim.COBieLite\Xbim.COBieLite.csproj">
-      <Project>{E550C721-50AF-4AD0-998E-0C61F305EEC8}</Project>
-      <Name>Xbim.COBieLite</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Xbim.DPoW\Xbim.DPoW.csproj">
-      <Project>{79e7f597-f509-49ec-a606-fdc8326e72f5}</Project>
-      <Name>Xbim.DPoW</Name>
-    </ProjectReference>
+    <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="2.1.1" />
+    <PackageReference Include="NPOI" Version="2.4.0" />
+    <PackageReference Include="Xbim.Essentials" Version="5.0.213" />
+    <PackageReference Include="Xbim.IO.CobieExpress" Version="5.0.126" />
+    <PackageReference Include="Xbim.PropertySets" Version="4.0.1" />
   </ItemGroup>
-  <ItemGroup />
   <ItemGroup>
-    <Content Include="DPoWToCOBieLite\Conventions.txt" />
+    <ProjectReference Include="..\Xbim.COBieLiteUK\Xbim.COBieLiteUK.csproj" />
+    <ProjectReference Include="..\Xbim.COBieLite\Xbim.COBieLite.csproj" />
+    <ProjectReference Include="..\Xbim.DPoW\Xbim.DPoW.csproj" />
   </ItemGroup>
-  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
-       Other similar extension points exist, see Microsoft.Common.targets.
-  <Target Name="BeforeBuild">
-  </Target>
-  <Target Name="AfterBuild">
-  </Target>
-  -->
+  <ItemGroup>
+    <None Update="IfcToCOBieExpress\Classifications\DataFiles\Uniclass2015_Ac_v0_1.csv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="IfcToCOBieExpress\Classifications\DataFiles\Uniclass2015_Pr_v1_1.csv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="IfcToCOBieExpress\Classifications\DataFiles\Uniclass2015_Ss_v1_1.csv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
 </Project>

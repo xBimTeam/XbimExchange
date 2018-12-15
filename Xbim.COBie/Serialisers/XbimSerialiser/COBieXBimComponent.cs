@@ -7,7 +7,6 @@ using Xbim.Common;
 using Xbim.Common.Metadata;
 using Xbim.Ifc2x3.ProductExtension;
 using Xbim.Ifc2x3.MeasureResource;
-using Xbim.Ifc2x3.Extensions;
 
 namespace Xbim.COBie.Serialisers.XbimSerialiser
 {

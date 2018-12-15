@@ -8,11 +8,12 @@ using System.IO;
 using System.Threading;
 using System.Windows;
 using System.Windows.Data;
-using log4net;
 using Xbim.COBie;
 using Xbim.COBie.Serialisers;
 using Xbim.Presentation.XplorerPluginSystem;
 using Xbim.Ifc;
+using Microsoft.Extensions.Logging;
+using Xbim.Common;
 
 namespace XplorerPlugin.CobieExport.UI
 {
@@ -22,7 +23,7 @@ namespace XplorerPlugin.CobieExport.UI
         const string UkTemplate = "COBie-UK-2012-template.xls";
         const string UsTemplate = "COBie-US-2_4-template.xls";
 
-        private static readonly ILog Log = LogManager.GetLogger("Xbim.WinUI");
+        private static readonly ILogger Log = XbimLogging.CreateLogger<COBieExport>();
 
         public ObservableCollection<string> Templates { get; set; }
         
@@ -152,8 +153,7 @@ namespace XplorerPlugin.CobieExport.UI
             }
             catch (Exception ex)
             {
-                var msg = string.Format("Error exporting cobie from plugin.");
-                Log.Error(msg, ex);
+                Log.LogError(0, ex, "Error exporting cobie from plugin.");
             }
         }
 
@@ -183,13 +183,37 @@ namespace XplorerPlugin.CobieExport.UI
                 }
             }
 
-            var f = new FileInfo(Path.ChangeExtension(Model.FileName, ".xls"));
+            var fName = Model.FileName;
+            if (string.IsNullOrEmpty(fName))
+                fName = "Unnamed";
+
+            var f = new FileInfo(Path.ChangeExtension(fName, ".xls"));
             var outputFile = Path.Combine(TxtFolderName.Text, f.Name);
 
+            // configure settings for exporter
+            var ass = System.Reflection.Assembly.GetAssembly(GetType());
+            if (_parentWindow == null)
+            {
+                Log.LogError("attempt to locate DiskLess assembly without a valid IXbimXplorerPluginMasterWindow.");
+                return false;
+            }
+            var assemblyFile = _parentWindow.GetAssemblyLocation(ass);
+
+            var pluginDir = new FileInfo(assemblyFile).Directory;
+            if (pluginDir == null)
+            {
+                Log.LogError("Failed to determine plugin folder under IXbimXplorerPluginMasterWindow.");
+                return false;
+            }
+
+
+            var templateFileName = Path.Combine(
+                pluginDir.FullName,
+                CoBieTemplate);
 
             var context = new COBieContext
             {
-                TemplateFileName = CoBieTemplate,
+                TemplateFileName = templateFileName,
                 Model = Model,
                 Exclude = UserFilters
             };
@@ -204,7 +228,7 @@ namespace XplorerPlugin.CobieExport.UI
             }
             catch (Exception ex)
             {
-                Log.Error("CurrentUICulture could not be set to en-GB.", ex);
+                Log.LogError(0, ex, "CurrentUICulture could not be set to en-GB.");
             }
 
             // actual export code
@@ -222,7 +246,7 @@ namespace XplorerPlugin.CobieExport.UI
             }
             catch (Exception ex)
             {
-                Log.Error("CurrentUICulture could not restored.", ex);
+                Log.LogError(0, ex, "CurrentUICulture could not restored.");
             }
 
             if (ChkOpenExcel.IsChecked.HasValue && ChkOpenExcel.IsChecked.Value)

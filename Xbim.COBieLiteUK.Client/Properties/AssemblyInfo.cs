@@ -9,7 +9,7 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("XBim Team")]
 [assembly: AssemblyProduct("XBim Exchange Tools")]
-[assembly: AssemblyCopyright("")]
+[assembly: AssemblyCopyright("Copyright © Xbim Team 2018")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 

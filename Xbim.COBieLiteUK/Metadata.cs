@@ -5,7 +5,6 @@ using System.IO;
 using System.Linq;
 using NPOI.SS.UserModel;
 using NPOI.SS.Util;
-using Xbim.CobieLiteUk.Net40PortHelpers;
 
 namespace Xbim.CobieLiteUk
 {

@@ -27,7 +27,7 @@ namespace Xbim.COBie.Serialisers.XbimSerialiser
         /// <param name="cOBieSheet">COBieSheet of COBieFacilityRows to read data from</param>
         public void SerialiseFacility(COBieSheet<COBieFacilityRow> cOBieSheet)
         {
-            using (XbimReadWriteTransaction trans = Model.BeginTransaction("Add Facility"))
+            using (ITransaction trans = Model.BeginTransaction("Add Facility"))
             {
                 try
                 {
@@ -47,7 +47,7 @@ namespace Xbim.COBie.Serialisers.XbimSerialiser
 
                     //set up relationships
                     GetSite().AddBuilding(GetBuilding());
-                    Model.IfcProject.AddSite(GetSite());
+                    Model.GetProject().AddSite(GetSite());
 
                     ProgressIndicator.Finalise();
                    
@@ -175,7 +175,7 @@ namespace Xbim.COBie.Serialisers.XbimSerialiser
         /// <param name="row">COBieFacilityRow object to read data from</param>
         private void SetUpProject(COBieFacilityRow row)
         {
-            IfcProject ifcProject = Model.IfcProject;
+            IfcProject ifcProject = Model.GetProject();
             ifcProject.Initialize(ProjectUnits.SIUnitsUK);
             SetOwnerHistory(ifcProject, row.ExternalSystem, Model.DefaultOwningUser, row.CreatedOn);
             //using statement will set the Model.OwnerHistoryAddObject to ifcProject.OwnerHistory as OwnerHistoryAddObject is used upon any property changes, 
@@ -320,7 +320,7 @@ namespace Xbim.COBie.Serialisers.XbimSerialiser
         /// </summary>
         private IfcUnitAssignment GetProjectUnitAssignment()
         {
-            IfcProject ifcProject = Model.IfcProject;
+            IfcProject ifcProject = Model.GetProject();
             if (ifcProject.UnitsInContext == null)
             {
                 ifcProject.UnitsInContext = Model.Instances.New<IfcUnitAssignment>();

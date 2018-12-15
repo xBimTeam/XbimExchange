@@ -4,11 +4,11 @@ using System.Linq;
 using Xbim.COBie.Rows;
 using Xbim.Ifc2x3.Kernel;
 using Xbim.Ifc2x3.ProductExtension;
-using Xbim.Ifc2x3.Extensions;
 
 
 using Xbim.Common.Geometry;
 using Xbim.ModelGeometry.Scene;
+using Xbim.Ifc.Extensions;
 
 namespace Xbim.COBie.Data
 {
@@ -25,7 +25,7 @@ namespace Xbim.COBie.Data
         {
         }
 
-        #region Methods
+#region Methods
 
         /// <summary>
         /// Fill sheet rows for Coordinate sheet
@@ -33,7 +33,6 @@ namespace Xbim.COBie.Data
         public override COBieSheet<COBieCoordinateRow> Fill()
         {
             //get the conversion to the COBie units (metres or feet)
-
             double conversionFactor;
             var cobieUnits = Context.WorkBookUnits.LengthUnit.ToLowerInvariant();
             if (cobieUnits == "meters" || cobieUnits == "metres") conversionFactor = Model.ModelFactors.OneMetre;
@@ -98,8 +97,8 @@ namespace Xbim.COBie.Data
 
                 coordinate.RowName = coordinate.Name;
 
-                XbimPoint3D? ifcCartesianPointLower;
-                XbimPoint3D? ifcCartesianPointUpper;
+                XbimPoint3D? ifcCartesianPointLower = null;
+                XbimPoint3D? ifcCartesianPointUpper = null;
                 var transBox = new TransformedBoundingBox();
                 if (ifcProduct is IfcBuildingStorey)
                 {
@@ -130,30 +129,35 @@ namespace Xbim.COBie.Data
                             boundBox.Union(shapeInstance.BoundingBox);
                         transform = shapeInstance.Transformation;
                     }
-                    XbimMatrix3D m = globalTransform*transform;
-                    transBox = new TransformedBoundingBox(boundBox, m);
-                    //set points
-                    ifcCartesianPointLower = transBox.MinPt;
-                    ifcCartesianPointUpper = transBox.MaxPt;
-
+                    if (!boundBox.IsEmpty)
+                    {
+                        XbimMatrix3D m = globalTransform * transform;
+                        transBox = new TransformedBoundingBox (boundBox, m);
+                        //set points
+                        ifcCartesianPointLower = transBox.MinPt;
+                        ifcCartesianPointUpper = transBox.MaxPt;
+                    }
                 }
 
-                coordinate.CoordinateXAxis = string.Format("{0}", (double) ifcCartesianPointLower.Value.X);
-                coordinate.CoordinateYAxis = string.Format("{0}", (double) ifcCartesianPointLower.Value.Y);
-                coordinate.CoordinateZAxis = string.Format("{0}", (double) ifcCartesianPointLower.Value.Z);
-                coordinate.ExtSystem = GetExternalSystem(ifcProduct);
-                coordinate.ExtObject = ifcProduct.GetType().Name;
-                if (!string.IsNullOrEmpty(ifcProduct.GlobalId))
-                {
-                    coordinate.ExtIdentifier = ifcProduct.GlobalId.ToString();
-                }
+                if (ifcCartesianPointLower.HasValue)
+                    {
+                    coordinate.CoordinateXAxis = string.Format ("{0}", (double) ifcCartesianPointLower.Value.X);
+                    coordinate.CoordinateYAxis = string.Format ("{0}", (double) ifcCartesianPointLower.Value.Y);
+                    coordinate.CoordinateZAxis = string.Format ("{0}", (double) ifcCartesianPointLower.Value.Z);
+                    coordinate.ExtSystem = GetExternalSystem (ifcProduct);
+                    coordinate.ExtObject = ifcProduct.GetType ().Name;
+                    if (!string.IsNullOrEmpty (ifcProduct.GlobalId))
+                        {
+                        coordinate.ExtIdentifier = ifcProduct.GlobalId.ToString ();
+                        }
 
-                coordinate.ClockwiseRotation = transBox.ClockwiseRotation.ToString("F4");
-                coordinate.ElevationalRotation = transBox.ElevationalRotation.ToString("F4");
-                coordinate.YawRotation = transBox.YawRotation.ToString("F4");
+                    coordinate.ClockwiseRotation = transBox.ClockwiseRotation.ToString ("F4");
+                    coordinate.ElevationalRotation = transBox.ElevationalRotation.ToString ("F4");
+                    coordinate.YawRotation = transBox.YawRotation.ToString ("F4");
 
+                    coordinates.AddRow (coordinate);
+                    }
 
-                coordinates.AddRow(coordinate);
                 if (ifcCartesianPointUpper.HasValue) //we need a second row for upper point
                 {
                     var coordinateUpper = new COBieCoordinateRow(coordinates);
@@ -186,7 +190,7 @@ namespace Xbim.COBie.Data
             return coordinates;
         }
 
-        #endregion
+#endregion
     }
 
     /// <summary>

@@ -36,6 +36,10 @@ namespace XbimExchanger.IfcToCOBieExpress
 
             //Space Assignments
             var spatialElements = Helper.GetSpaces(ifcElement);
+            if (!Helper.CreatePlaceholderSpaces)
+            {
+                spatialElements = spatialElements.OfType<IIfcSpace>();
+            }
 
             var ifcSpatialStructureElements = spatialElements.ToList();
             if (ifcSpatialStructureElements.Any())

@@ -75,7 +75,7 @@ namespace Tests
                     EditorsFamilyName = "Xbim Tester",
                     ApplicationVersion = "3.0"
                 };
-                using (var model = IfcStore.Create(credentials, IfcSchemaVersion.Ifc2X3, XbimStoreType.InMemoryModel))
+                using (var model = IfcStore.Create(credentials, XbimSchemaVersion.Ifc2X3, XbimStoreType.InMemoryModel))
                 {                                    
                     using (var txn = model.BeginTransaction("Convert from COBieLite"))
                     {
@@ -83,7 +83,7 @@ namespace Tests
                         c2Ifc.Convert();
                         txn.Commit();
                     }
-                    model.SaveAs(outputIfc, IfcStorageType.Ifc);
+                    model.SaveAs(outputIfc, StorageType.Ifc);
 
                     if (facility.AssetTypes != null)
                         Assert.AreEqual(facility.AssetTypes.Count(), model.Instances.OfType<IfcTypeObject>().Count());

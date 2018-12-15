@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
+using Xbim.CobieExpress;
+using Xbim.Common;
 
 namespace XbimExchanger
 {
@@ -158,6 +160,37 @@ namespace XbimExchanger
         object IXbimMappings<TSourceRepository, TTargetRepository>.AddMapping(object source, object target)
         {
             return AddMapping((TSourceObject)source, (TTargetObject)target);
+        }
+
+        protected string FirstNonEmptyString(params string[] values) => FirstNonEmptyString(values as IEnumerable<string>);
+
+        protected string FirstNonEmptyString(IEnumerable<string> potentialValues)
+        {
+            foreach (var val in potentialValues)
+            {
+                if (!string.IsNullOrWhiteSpace(val))
+                {
+                    return val;
+                }
+            }
+
+            return null;
+        }
+    }
+
+    public static class CollectionExtension
+    {
+        public static void AddIfNotPresent(this IOptionalItemSet<CobieCategory> collection, CobieCategory item)
+        {
+            foreach (var cat in collection)
+            {
+                if (cat.Value == item.Value)
+                {
+                    return;
+                }
+            }
+
+            collection.Add(item);
         }
     }
 }

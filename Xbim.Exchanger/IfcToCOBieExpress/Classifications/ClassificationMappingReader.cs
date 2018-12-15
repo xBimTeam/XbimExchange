@@ -1,11 +1,12 @@
-﻿using System;
+﻿using Microsoft.Extensions.Logging;
+using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Configuration;
 using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
-using log4net;
+using Xbim.Common;
 using XbimExchanger.IfcToCOBieExpress.Classifications.Components;
 using Assembly = System.Reflection.Assembly;
 
@@ -13,7 +14,7 @@ namespace XbimExchanger.IfcToCOBieExpress.Classifications
 {
     internal class ClassificationMappingReader
     {
-        private static readonly ILog Log = LogManager.GetLogger("Xbim.Exchanger.IfcToCOBieLiteUK.Classifications.ClassificationMappingReader");
+        private static readonly ILogger Log = XbimLogging.CreateLogger<ClassificationMappingReader>();
 
         private readonly Dictionary<string, Pointer> _mappingTable = new Dictionary<string, Pointer>();
 
@@ -67,13 +68,13 @@ namespace XbimExchanger.IfcToCOBieExpress.Classifications
                     uri = configValue;
             }
             var diLocal = new DirectoryInfo(".");
-            Log.DebugFormat("Trying to load classification mapping files from '{0}' running in '{1}'", uri, diLocal.FullName);
+            Log.LogDebug("Trying to load classification mapping files from '{uri}' running in '{directory}'", uri, diLocal.FullName);
             var d = new DirectoryInfo(uri);
             if (d.Exists)
                 _classificationMappingFiles = Directory.GetFiles(uri);
             else
             {
-                Log.ErrorFormat("Failed to load classification mapping files from '{0}' running in '{1}'", uri, diLocal.FullName);
+                Log.LogError("Failed to load classification mapping files from '{uri}' running in '{directory}'", uri, diLocal.FullName);
             }
         }
 

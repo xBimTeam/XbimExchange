@@ -15,7 +15,6 @@ namespace Xbim.COBie.Data
         /// <summary>
         /// Data Connection constructor
         /// </summary>
-        /// <param name="model">The context of the model being generated</param>
         public COBieDataConnection(COBieContext context) : base(context)
         { }
 

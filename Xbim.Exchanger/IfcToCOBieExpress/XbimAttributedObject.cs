@@ -1,8 +1,10 @@
-﻿using System;
+﻿using Microsoft.Extensions.Logging;
+using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using Xbim.CobieExpress;
+using Xbim.COBieLite;
 using Xbim.Common;
 using Xbim.Ifc4.DateTimeResource;
 using Xbim.Ifc4.Interfaces;
@@ -16,6 +18,7 @@ namespace XbimExchanger.IfcToCOBieExpress
     /// </summary>
     public class XbimAttributedObject
     {
+        static readonly ILogger logger = XbimLogging.CreateLogger<XbimAttributedObject>();
         private readonly IIfcObjectDefinition _ifcObject;
         private readonly IModel _targetModel;
         private readonly Dictionary<string, IIfcProperty> _properties = new Dictionary<string, IIfcProperty>();
@@ -53,12 +56,14 @@ namespace XbimExchanger.IfcToCOBieExpress
         {
             if (string.IsNullOrWhiteSpace(pSetDef.Name))
             {
-                COBieExpressHelper.Logger.WarnFormat("Property Set Definition: #{0}, has no defined name. It has been ignored", pSetDef.EntityLabel);
+                
+                logger.LogWarning("Property Set Definition: #{psetId}, has no defined name. It has been ignored", pSetDef.EntityLabel);
                 return;
             }
             if ( _propertySets.ContainsKey(pSetDef.Name))
             {
-                COBieExpressHelper.Logger.WarnFormat("Property Set Definition: #{0}={1}, is duplicated in Entity #{2}={3}. Duplicate ignored", pSetDef.EntityLabel, pSetDef.Name, _ifcObject.EntityLabel, _ifcObject.GetType().Name);
+                logger.LogWarning("Property Set Definition: #{psetId}={psetName}, is duplicated in Entity #{entityId}={entityType}. Duplicate ignored", 
+                    pSetDef.EntityLabel, pSetDef.Name, _ifcObject.EntityLabel, _ifcObject.GetType().Name);
                 return;
             }
             _propertySets.Add(pSetDef.Name,pSetDef);
@@ -71,7 +76,8 @@ namespace XbimExchanger.IfcToCOBieExpress
                     var uniquePropertyName = pSetDef.Name + "." + prop.Name;
                     if (_properties.ContainsKey(uniquePropertyName))
                     {
-                        COBieExpressHelper.Logger.WarnFormat("Property: #{0}={1}.{2}, is duplicated in Entity #{3}={4}. Duplicate ignored", prop.EntityLabel, pSetDef.Name, prop.Name, _ifcObject.EntityLabel, _ifcObject.GetType().Name);
+                        logger.LogWarning("Property: #{propId}={psetName}.{propName}, is duplicated in Entity #{entityId}={entityType}. Duplicate ignored", 
+                            prop.EntityLabel, pSetDef.Name, prop.Name, _ifcObject.EntityLabel, _ifcObject.GetType().Name);
                         continue;
                     }
                     _properties[uniquePropertyName] = prop;
@@ -83,7 +89,8 @@ namespace XbimExchanger.IfcToCOBieExpress
                 {
                     if (_quantities.ContainsKey(pSetDef.Name + "." + quantity.Name))
                     {
-                        COBieExpressHelper.Logger.WarnFormat("Quantity: #{0}={1}.{2}, is duplicated in Entity #{3}={4}. Duplicate ignored", quantity.EntityLabel, pSetDef.Name, quantity.Name, _ifcObject.EntityLabel, _ifcObject.GetType().Name);
+                        logger.LogWarning("Quantity: #{qtyId}={psetName}.{qtyName}, is duplicated in Entity #{entityId}={entityType}. Duplicate ignored", 
+                            quantity.EntityLabel, pSetDef.Name, quantity.Name, _ifcObject.EntityLabel, _ifcObject.GetType().Name);
                         continue;
                     }
                     _quantities[pSetDef.Name + "." + quantity.Name]= quantity;
@@ -211,7 +218,8 @@ namespace XbimExchanger.IfcToCOBieExpress
                 return result.TrimEnd(';', ' ');
             }
 
-            COBieExpressHelper.Logger.WarnFormat("Conversion Error: #{0}={1} [{2}] cannot be converted to s simple value type", ifcProperty.EntityLabel, ifcProperty.Name, ifcProperty.GetType().Name);
+            logger.LogWarning("Conversion Error: #{propId}={propName} [{propType}] cannot be converted to a simple value type", 
+                ifcProperty.EntityLabel, ifcProperty.Name, ifcProperty.GetType().Name);
             return null;
         }
 
@@ -265,7 +273,7 @@ namespace XbimExchanger.IfcToCOBieExpress
                     result = (TSimpleType)(object)string.Join(";", ifcPropertyEnumeratedValue.EnumerationValues);
                     return true;
                 }
-                COBieExpressHelper.Logger.WarnFormat("IfcPropertyEnumeratedValue Conversion: Multiple Enumerated values can only be stored in a string type");
+                logger.LogWarning("IfcPropertyEnumeratedValue Conversion: Multiple Enumerated values can only be stored in a string type");
                 result = default(TSimpleType);
                 return false;
             }
@@ -278,7 +286,7 @@ namespace XbimExchanger.IfcToCOBieExpress
                                                      ifcPropertyBoundedValue.UpperBoundValue);
                     return true;
                 }
-                COBieExpressHelper.Logger.WarnFormat("IfcPropertyBoundedValue Conversion: Bounded values can only be stored in a string type");
+                logger.LogWarning("IfcPropertyBoundedValue Conversion: Bounded values can only be stored in a string type");
             }
             else if (ifcPropertyTableValue != null)
             {
@@ -298,7 +306,7 @@ namespace XbimExchanger.IfcToCOBieExpress
                     result = (TSimpleType) (object) string.Join(";", ifcPropertyListValue.ListValues);
                     return true;
                 }
-                COBieExpressHelper.Logger.WarnFormat("IfcPropertyList Conversion: ValueMultiple List values can only be stored in a string type");
+                logger.LogWarning("IfcPropertyList Conversion: ValueMultiple List values can only be stored in a string type");
             }
 
             result = default(TSimpleType);
@@ -348,7 +356,7 @@ namespace XbimExchanger.IfcToCOBieExpress
                         result = default(TSimpleType);
                         return true;
                     }
-                    //CoBieLiteUkHelper.Logger.WarnFormat("ifcValue is null.");
+                    //logger.WarnFormat("ifcValue is null.");
                 }
                 catch (ArgumentNullException)
                 {
@@ -358,7 +366,7 @@ namespace XbimExchanger.IfcToCOBieExpress
                         result = default(TSimpleType);
                         return true;
                     }
-                    //CoBieLiteUkHelper.Logger.WarnFormat("Decimal Conversion: String is null.");
+                    //logger.WarnFormat("Decimal Conversion: String is null.");
                 }
                 catch (FormatException)
                 {
@@ -368,7 +376,7 @@ namespace XbimExchanger.IfcToCOBieExpress
                         result = default(TSimpleType);
                         return true;
                     }
-                    //CoBieLiteUkHelper.Logger.WarnFormat("Decimal Conversion: String does not consist of an " + "optional sign followed by a series of digits.");
+                    //logger.WarnFormat("Decimal Conversion: String does not consist of an " + "optional sign followed by a series of digits.");
                 }
                 catch (OverflowException)
                 {
@@ -378,7 +386,7 @@ namespace XbimExchanger.IfcToCOBieExpress
                         result = default(TSimpleType);
                         return true;
                     }
-                    //CoBieLiteUkHelper.Logger.WarnFormat("Decimal Conversion: Overflow in string to int conversion.");
+                    //logger.WarnFormat("Decimal Conversion: Overflow in string to int conversion.");
                 }
                 result = default(TSimpleType);
                 return false;
@@ -398,7 +406,7 @@ namespace XbimExchanger.IfcToCOBieExpress
                         result = default(TSimpleType);
                         return true;
                     }
-                    //CoBieLiteUkHelper.Logger.WarnFormat("ifcValue is null.");
+                    //logger.WarnFormat("ifcValue is null.");
                 }
                 catch (ArgumentNullException)
                 {
@@ -407,15 +415,15 @@ namespace XbimExchanger.IfcToCOBieExpress
                         result = default(TSimpleType);
                         return true;
                     }
-                    //CoBieLiteUkHelper.Logger.WarnFormat("Boolean Conversion: String is null.");
+                    //logger.WarnFormat("Boolean Conversion: String is null.");
                 }
                 catch (FormatException)
                 {
-                    //CoBieLiteUkHelper.Logger.WarnFormat("Boolean Conversion: String does not consist of an " + "optional sign followed by a series of digits.");
+                    //logger.WarnFormat("Boolean Conversion: String does not consist of an " + "optional sign followed by a series of digits.");
                 }
                 catch (OverflowException)
                 {
-                    //CoBieLiteUkHelper.Logger.WarnFormat("Boolean Conversion: Overflow in string to int conversion.");
+                    //logger.WarnFormat("Boolean Conversion: Overflow in string to int conversion.");
                 }
                 result = default(TSimpleType);
                 return false;
@@ -444,7 +452,7 @@ namespace XbimExchanger.IfcToCOBieExpress
                         result = default(TSimpleType);
                         return true;
                     }
-                    //CoBieLiteUkHelper.Logger.WarnFormat("ifcValue is null.");
+                    //logger.WarnFormat("ifcValue is null.");
                 }
                 catch (ArgumentNullException)
                 {
@@ -456,16 +464,16 @@ namespace XbimExchanger.IfcToCOBieExpress
                         result = default(TSimpleType);
                         return true;
                     }
-                    //CoBieLiteUkHelper.Logger.WarnFormat("Integer Conversion: String is null.");
+                    //logger.WarnFormat("Integer Conversion: String is null.");
                 }
                 catch (FormatException)
                 {
-                    //CoBieLiteUkHelper.Logger.WarnFormat("Integer Conversion: String does not consist of an " +
+                    //logger.WarnFormat("Integer Conversion: String does not consist of an " +
                     //                                  "optional sign followed by a series of digits.");
                 }
                 catch (OverflowException)
                 {
-                    //CoBieLiteUkHelper.Logger.WarnFormat("Integer Conversion: Overflow in string to int conversion.");
+                    //logger.WarnFormat("Integer Conversion: Overflow in string to int conversion.");
                 }
                 result = default(TSimpleType);
                 return false;
@@ -484,7 +492,7 @@ namespace XbimExchanger.IfcToCOBieExpress
                 }
             }
 
-            COBieExpressHelper.Logger.Warn("Unexpected type " + targetType.Name);
+            logger.LogWarning("Unexpected type {target}", targetType.Name);
             result = default(TSimpleType);
             return false;
         }
@@ -557,19 +565,19 @@ namespace XbimExchanger.IfcToCOBieExpress
             }
             if (ifcPropertyBoundedValue != null)
             {
-                COBieExpressHelper.Logger.WarnFormat("Conversion Error: PropertyBoundedValue #{0}={1} cannot be converted to s simple value type", ifcProperty.EntityLabel, ifcProperty.Name);
+                logger.LogWarning("Conversion Error: PropertyBoundedValue #{entityId}={entityType} cannot be converted to a simple value type", ifcProperty.EntityLabel, ifcProperty.Name);
             }
             else if (ifcPropertyTableValue != null)
             {
-                COBieExpressHelper.Logger.WarnFormat("Conversion Error: PropertyTableValue #{0}={1} cannot be converted to s simple value type", ifcProperty.EntityLabel, ifcProperty.Name);
+                logger.LogWarning("Conversion Error: PropertyTableValue #{entityId}={entityType} cannot be converted to a simple value type", ifcProperty.EntityLabel, ifcProperty.Name);
             }
             else if (ifcPropertyReferenceValue != null)
             {
-                COBieExpressHelper.Logger.WarnFormat("Conversion Error: PropertyReferenceValue #{0}={1} cannot be converted to s simple value type", ifcProperty.EntityLabel, ifcProperty.Name);
+                logger.LogWarning("Conversion Error: PropertyReferenceValue #{entityId}={entityType} cannot be converted to a simple value type", ifcProperty.EntityLabel, ifcProperty.Name);
             }
             else if (ifcPropertyListValue != null)
             {
-                COBieExpressHelper.Logger.WarnFormat("Conversion Error: PropertyListValue #{0}={1} cannot be converted to s simple value type", ifcProperty.EntityLabel, ifcProperty.Name);
+                logger.LogWarning("Conversion Error: PropertyListValue #{entityId}={entityType} cannot be converted to a simple value type", ifcProperty.EntityLabel, ifcProperty.Name);
             }
             return default(TValue);
         }
@@ -633,15 +641,15 @@ namespace XbimExchanger.IfcToCOBieExpress
 
             if (ifcPropertyTableValue != null)
             {
-                COBieExpressHelper.Logger.WarnFormat("Table values are not supported in COBie");
+                logger.LogWarning("Table values are not supported in COBie");
             }
             else if (ifcPropertyReferenceValue != null)
             {
-                COBieExpressHelper.Logger.WarnFormat("Reference property values are not supported in COBie");
+                logger.LogWarning("Reference property values are not supported in COBie");
             }
             else if (ifcPropertyListValue != null)
             {
-                COBieExpressHelper.Logger.WarnFormat("Multiple List values are not supported in COBie");
+                logger.LogWarning("Multiple List values are not supported in COBie");
             }
             return attribute;
         }
@@ -758,7 +766,7 @@ namespace XbimExchanger.IfcToCOBieExpress
             }
             catch (Exception) //eat and log exception so default is returned
             {
-                COBieExpressHelper.Logger.WarnFormat("Date Time Conversion: An illegal date time string has been found [{0}]", str);
+                logger.LogWarning("Date Time Conversion: An illegal date time string has been found [{stringValue}]", str);
             }
             return default(DateTime);
         }

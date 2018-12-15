@@ -19,7 +19,6 @@ namespace Xbim.COBie.Data
         /// <summary>
         /// Data Document constructor
         /// </summary>
-        /// <param name="model">The context of the model being generated</param>
         public COBieDataDocument(COBieContext context) : base(context)
         { }
 
@@ -89,11 +88,13 @@ namespace Xbim.COBie.Data
                 doc.ExtObject = relatedObjectInfo.ExtObject;
                 doc.ExtIdentifier = relatedObjectInfo.ExtIdentifier;
                 doc.ExtSystem = relatedObjectInfo.ExtSystem;
-                
-                FileInformation fileInfo = GetFileInformation(ifcRelAssociatesDocument);
-                doc.File = fileInfo.Name;
-                doc.Directory = GetDirectory(!string.IsNullOrWhiteSpace(fileInfo.Location) ? fileInfo.Location : fileInfo.Name);
 
+                if (ifcRelAssociatesDocument != null)
+                {
+                    FileInformation fileInfo = GetFileInformation(ifcRelAssociatesDocument);
+                    doc.File = fileInfo.Name;
+                    doc.Directory = GetDirectory(!string.IsNullOrWhiteSpace(fileInfo.Location) ? fileInfo.Location : fileInfo.Name);
+                }
                 
                 doc.Description = (string.IsNullOrEmpty(di.Description)) ? DEFAULT_STRING : di.Description.ToString();
                 doc.Reference = (string.IsNullOrEmpty(di.DocumentId.Value.ToString())) ? DEFAULT_STRING : di.DocumentId.Value.ToString();

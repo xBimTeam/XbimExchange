@@ -2,7 +2,7 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2011/10/nuspec.xsd">
   <metadata>
     <id>XplorerPlugin.CobieExport</id>
-    <version>4.0.4</version>
+    <version>5.0.0</version>
     <title>XplorerPlugin.CobieExport</title>
     <authors>xBIM team</authors>
     <owners>xBIM team</owners>
@@ -17,7 +17,7 @@
     <tags>Cobie Export, XplorerPlugin</tags>
     <!-- dependencies need to be worked out, at this stage they will be ignored during install -->
     <dependencies>
-      <dependency id="Xbim.WindowsUI" version="4.0.10" />
+      <dependency id="Xbim.WindowsUI" version="4.0.12-V0069" />
     </dependencies>
   </metadata>
   <files>
@@ -30,5 +30,13 @@
     <file src="XplorerPlugin.CobieExport\bin\Release\Xbim.Properties.dll"                   target="lib\net45\Xbim.Properties.dll"           />
     <file src="XplorerPlugin.CobieExport\bin\Release\Xbim.CobieExpress.IO.dll"              target="lib\net45\Xbim.CobieExpress.IO.dll"      />
     <file src="XplorerPlugin.CobieExport\bin\Release\Xbim.IO.TableStore.dll"                target="lib\net45\Xbim.IO.TableStore.dll"        />
+    
+    <file src="XplorerPlugin.CobieExport\bin\Release\NPOI.dll"                              target="lib\net45\NPOI.dll"                      />
+    <file src="XplorerPlugin.CobieExport\bin\Release\NPOI.OOXML.dll"                        target="lib\net45\NPOI.OOXML.dll"                />
+    <file src="XplorerPlugin.CobieExport\bin\Release\NPOI.OpenXml4Net.dll"                  target="lib\net45\NPOI.OpenXml4Net.dll"          />
+    <file src="XplorerPlugin.CobieExport\bin\Release\NPOI.OpenXmlFormats.dll"               target="lib\net45\NPOI.OpenXmlFormats.dll"       />
+    <file src="XplorerPlugin.CobieExport\bin\Release\Newtonsoft.Json.dll"                   target="lib\net45\Newtonsoft.Json.dll"           />
+    
+    <file src="XplorerPlugin.CobieExport\COBie-UK-2012-template.xls"                         target="lib\net45\COBie-UK-2012-template.xls"           />
   </files>
 </package>

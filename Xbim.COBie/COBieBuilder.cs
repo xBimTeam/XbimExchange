@@ -90,7 +90,7 @@ namespace Xbim.COBie
                 SetExcludeObjTypeTypes(CobiePickLists);
             }
             //start the Cache
-            Context.Model.BeginCaching();
+            Context.Model.BeginEntityCaching();
                 
             //contact sheet first as it will fill contact information lookups for other sheets
             Workbook.Add(cq.GetCOBieContactSheet());
@@ -238,10 +238,11 @@ namespace Xbim.COBie
             }
         }
 
-		/// <summary>
+        /// <summary>
         /// Passes this instance of the COBieReader into the provided ICOBieSerialiser
-		/// </summary>
+        /// </summary>
         /// <param name="serialiser">The object implementing the ICOBieSerialiser interface.</param>
+        /// <param name="ValidationTemplate"></param>
         public void Export(ICOBieSerialiser serialiser, ICOBieValidationTemplate ValidationTemplate = null)
 		{
             if (serialiser == null) { throw new ArgumentNullException("formatter", "Parameter passed to COBieReader.Export(ICOBieSerialiser) must not be null."); }

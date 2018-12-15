@@ -1,0 +1,29 @@
+# File: Common buildfile version stamping
+
+parameters:
+  fileversion: ''
+  packageversion: ''
+
+steps:
+- task: VersionDotNetCoreAssemblies@2
+  displayName: 'Set FileVersion on *.csproj (netcore)'
+  inputs: 
+    # Required arguments
+    Path: $(Build.SourcesDirectory)
+    VersionNumber: ${{ parameters.fileversion }}
+    VersionRegex: \d+\.\d+\.\d+\.\d+
+    FilenamePattern: .csproj
+    Field: FileVersion
+    OutputVersion: OutputedVersion
+
+# Version 'classic' .NET Assemblies
+# Description - Applies a version to a .NET assembly via the assemblyinfo.cs files based on the build number.
+- task: VersionAssemblies@2
+  displayName: 'Set AssemblyFileVersion in AssemblyInfo.cs'
+  inputs: 
+    Path: $(Build.SourcesDirectory)
+    VersionNumber: ${{ parameters.fileversion }}
+    VersionRegex: \d+\.\d+\.\d+\.\d+
+    FilenamePattern: '*AssemblyInfo.cs'
+    Field: AssemblyFileVersion
+    OutputVersion: OutputedVersion

@@ -7,6 +7,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Xbim.Common.Step21;
 using Xbim.COBieLite;
 using Xbim.Ifc;
+using Xbim.IO;
 
 // ReSharper disable once CheckNamespace
 namespace Xbim.Tests.COBie
@@ -47,7 +48,7 @@ namespace Xbim.Tests.COBie
         [TestMethod]
         public void CanOpenTemporaryModel()
         {
-            var model = IfcStore.Create(new XbimEditorCredentials(), IfcSchemaVersion.Ifc2X3, XbimStoreType.InMemoryModel);
+            var model = IfcStore.Create(new XbimEditorCredentials(), XbimSchemaVersion.Ifc2X3, XbimStoreType.InMemoryModel);
            
             var helper = new CoBieLiteHelper(model, "UniClass");
             foreach (var facilityType in helper.GetFacilities())

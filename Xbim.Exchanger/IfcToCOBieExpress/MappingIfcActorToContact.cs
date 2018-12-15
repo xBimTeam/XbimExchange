@@ -82,7 +82,6 @@ namespace XbimExchanger.IfcToCOBieExpress
 
                 if (postal!=null)
                 {
-
                     target.Department = postal.InternalLocation;
                     target.Street = postal.AddressLines != null && postal.AddressLines.Any()? string.Join(", ", postal.AddressLines) : null;
                     target.PostalBox = postal.PostalBox;

@@ -26,6 +26,9 @@ namespace Xbim.COBie.Client
             InitializeComponent();
             MergeItemsList = new List<string>();
             UserFilters = new FilterValues(); //class filters
+
+            // Configure the app to use Esent when appropriate
+            IfcStore.ModelProviderFactory.UseHeuristicModelProvider();
         }
 
         public string ModelFile

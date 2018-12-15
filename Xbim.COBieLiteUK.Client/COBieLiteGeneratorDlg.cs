@@ -13,6 +13,7 @@ using XbimExchanger.IfcToCOBieLiteUK;
 using XbimExchanger.IfcToCOBieLiteUK.Conversion;
 using XbimExchanger.IfcToCOBieExpress.Conversion;
 using XbimExchanger.IfcHelpers;
+using Xbim.Ifc;
 
 namespace Xbim.CobieLiteUk.Client
 {
@@ -52,6 +53,10 @@ namespace Xbim.CobieLiteUk.Client
         public COBieLiteGeneratorDlg()
         {
             InitializeComponent();
+
+            // Configure the app to use Esent when appropriate
+            IfcStore.ModelProviderFactory.UseHeuristicModelProvider();
+
             //set default role filters held in FillRolesFilterHolder property list
             var dir = new DirectoryInfo(AppDomain.CurrentDomain.BaseDirectory);
             ConfigFile = new FileInfo(Path.Combine(dir.FullName, "COBieAttributesCustom.config"));

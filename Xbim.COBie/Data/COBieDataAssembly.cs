@@ -20,7 +20,6 @@ namespace Xbim.COBie.Data
         /// <summary>
         /// Data Assembly constructor
         /// </summary>
-        /// <param name="model">The context of the model being generated</param>
         public COBieDataAssembly(COBieContext context) : base(context)
         { }
 
@@ -290,7 +289,6 @@ namespace Xbim.COBie.Data
         /// <summary>
         /// Get list of child object names from relatedObjects property of a ifcProduct asset and join with a " : " delimiter
         /// </summary>
-        /// <param name="ra">IfcRelDecomposes relationship object</param>
         /// <returns>List of strings fixed to a string limit per string entry</returns>
         private ChildNamesList ConCatChildNamesList(ChildNamesList childNamesUnique, int fieldLength)
         {

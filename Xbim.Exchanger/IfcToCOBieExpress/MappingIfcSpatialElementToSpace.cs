@@ -9,8 +9,7 @@ namespace XbimExchanger.IfcToCOBieExpress
         {
             base.Mapping(ifcSpatialElement, target);
 
-            if(string.IsNullOrWhiteSpace(target.Description))
-                target.Description = ifcSpatialElement.Description;
+            target.Description = FirstNonEmptyString(ifcSpatialElement.Description, ifcSpatialElement.LongName, ifcSpatialElement.Name);
 
             //use some of the attributes to fill in properties
             Helper.TrySetSimpleValue<string>("SpaceSignageName", ifcSpatialElement, s => target.RoomTag = s);

@@ -8,6 +8,7 @@ using Xbim.Ifc2x3.ControlExtension;
 using Xbim.Ifc2x3.PropertyResource;
 using Xbim.Ifc2x3.ActorResource;
 using Xbim.Ifc4.Interfaces;
+using Xbim.Ifc2x3.ProductExtension;
 
 namespace Xbim.COBie.Data
 {
@@ -19,7 +20,7 @@ namespace Xbim.COBie.Data
         /// <summary>
         /// Data Issue constructor
         /// </summary>
-        /// <param name="model">The context of the model being generated</param>
+        /// <param name="context">The context of the model being generated</param>
         public COBieDataIssue(COBieContext context) : base(context)
         { }
 
@@ -36,13 +37,13 @@ namespace Xbim.COBie.Data
 
             //create new sheet
             var issues = new COBieSheet<COBieIssueRow>(Constants.WORKSHEET_ISSUE);
-            
-            //IEnumerable<IfcPropertySet> ifcProperties = Model.FederatedInstances.OfType<IfcPropertySet>().Where(ps => ps.Name.ToString() == "Pset_Risk");
-            
 
+            //IEnumerable<IfcPropertySet> ifcProperties = Model.FederatedInstances.OfType<IfcPropertySet>().Where(ps => ps.Name.ToString() == "Pset_Risk");
+
+            #region IFcApproval
             // get all IfcApproval objects from IFC file
             IEnumerable<IfcApproval> ifcApprovals = Model.FederatedInstances.OfType<IfcApproval>();
-            ProgressIndicator.Initialise("Creating Issues", ifcApprovals.Count());
+            ProgressIndicator.Initialise("Creating Issues (from IfcApprovals)", ifcApprovals.Count());
 
             List<IfcRelAssociatesApproval> ifcRelAssociatesApprovals = Model.FederatedInstances.OfType<IfcRelAssociatesApproval>().ToList();
 
@@ -111,7 +112,7 @@ namespace Xbim.COBie.Data
                 propValues = GetPropertyEnumValue(propertyList, "RiskOwner");
                 issue.Owner = propValues.Value;
 
-                propValues = GetPropertyValue(propertyList, "PreventiveMeassures");
+                propValues = GetPropertyValue(propertyList, "PreventiveMeasures");
                 issue.Mitigation = propValues.Value;
 
                 issue.ExtSystem = (ifcPropertySet != null) ? GetExternalSystem(ifcPropertySet) : DEFAULT_STRING;
@@ -120,10 +121,111 @@ namespace Xbim.COBie.Data
 
                 issues.AddRow(issue);
             }
+            ProgressIndicator.Finalise();
+            #endregion
+            
+            #region HS_Risk_UK
+            // get all HS_Risk_UK Issues
+            IEnumerable<IfcPropertySet> ifcProperties = Model.FederatedInstances.OfType<IfcPropertySet>().Where(ps => ps.Name.ToString() == "HS_Risk_UK");
+
+            ProgressIndicator.Initialise("Creating Issues (from HS_Risk_UK psets)", ifcProperties.Count());
+
+            foreach (IfcPropertySet propSet in ifcProperties)
+            {
+                ProgressIndicator.IncrementAndUpdate();
+
+                COBieIssueRow issue = new COBieIssueRow(issues);
+                List<IfcSimpleProperty> HSpropertyList = propSet.HasProperties.OfType<IfcSimpleProperty>().ToList();
+
+                Interval propValues = GetPropertyValue(HSpropertyList, "RiskName");
+                issue.Name = (propValues.Value == DEFAULT_STRING) ? propSet.Name.ToString() : propValues.Value.ToString();
+
+                //
+                //lets default the creator to that user who created the project for now, no direct link to OwnerHistory on IfcApproval
+                if (propSet != null)
+                {
+                    //use "Pset_Risk" Property Set as source for this
+                    issue.CreatedBy = GetTelecomEmailAddress(propSet.OwnerHistory);
+                    issue.CreatedOn = GetCreatedOnDateAsFmtString(propSet.OwnerHistory);
+                }
+                else
+                {
+                    //if property set is null use project defaults
+                    issue.CreatedBy = GetTelecomEmailAddress(ifcProject.OwnerHistory);
+                    issue.CreatedOn = GetCreatedOnDateAsFmtString(ifcProject.OwnerHistory);
+                }
+
+                propValues = GetPropertyValue(HSpropertyList, "RiskCategory");
+                issue.Type = propValues.Value;
+
+                propValues = GetPropertyValue(HSpropertyList, "LevelOfRisk");
+                issue.Risk = propValues.Value;
+
+                propValues = GetPropertyValue(HSpropertyList, "RiskLikelihood");
+                issue.Chance = propValues.Value;
+
+                propValues = GetPropertyValue(HSpropertyList, "RiskConsequence");
+                issue.Impact = propValues.Value;
+
+
+                //TODO: We need to extend the functionality here as right now we make some assumptions:
+                //1. The Issue SheetName1/RowName1 refers to a Component attached to the property set (it could be something else)
+                //2. The component has an associated space, which makes up Sheetname2/Rowname2
+                IfcRoot ifcRoot = GetAssociatedObject(propSet);
+                issue.SheetName1 = GetSheetByObjectType(ifcRoot.GetType());
+                issue.RowName1 = (!string.IsNullOrEmpty(ifcRoot.Name.ToString())) ? ifcRoot.Name.ToString() : DEFAULT_STRING;
+             
+                var SpaceBoundingBoxInfo = new List<SpaceInfo>();
+                issue.RowName2 = COBieHelpers.GetComponentRelatedSpace(ifcRoot as IfcElement, Model, SpaceBoundingBoxInfo, Context);
+                issue.SheetName2 = "Space";
+                //End TODO
+
+                propValues = GetPropertyValue(HSpropertyList, "RiskDescription");
+                issue.Description = (propValues.Value == DEFAULT_STRING) ? propSet.Name.ToString() : propValues.Value.ToString();
+
+                propValues = GetPropertyValue(HSpropertyList, "OwnerDiscipline");
+                issue.Owner = propValues.Value;
+
+                propValues = GetPropertyValue(HSpropertyList, "AgreedMitigation");
+                issue.Mitigation = propValues.Value;
+
+                issue.ExtSystem = (propSet != null) ? GetExternalSystem(propSet) : DEFAULT_STRING;
+                issue.ExtObject = "HS_Risk_UK";
+                issue.ExtIdentifier = propSet.GlobalId.ToString();//ifcApproval.Identifier.ToString();
+                //
+
+                issues.AddRow(issue);
+            }
 
             issues.OrderBy(s => s.Name);
 
             ProgressIndicator.Finalise();
+            #endregion
+
+            #region PSet_Risk
+            // get all PSet_Risk issues
+            ifcProperties = Model.FederatedInstances.OfType<IfcPropertySet>().Where(ps => ps.Name.ToString() == "PSet_Risk");
+
+            ProgressIndicator.Initialise("Creating Issues (from PSet_Risk)", ifcProperties.Count());
+
+            foreach (IfcPropertySet propSet in ifcProperties)
+            {
+                ProgressIndicator.IncrementAndUpdate();
+
+                COBieIssueRow issue = new COBieIssueRow(issues);
+                List<IfcSimpleProperty> RiskpropertyList = propSet.HasProperties.OfType<IfcSimpleProperty>().ToList();
+
+                Interval propValues = GetPropertyValue(RiskpropertyList, "RiskName");
+                issue.Name = (propValues.Value == DEFAULT_STRING) ? propSet.Name.ToString() : propValues.Value.ToString();
+
+                //TODO: Fill in the rest of these properties
+
+                issues.AddRow(issue);
+            }
+            ProgressIndicator.Finalise();
+            #endregion
+
+            issues.OrderBy(s => s.Name);
             return issues;
         }
 
@@ -153,6 +255,27 @@ namespace Xbim.COBie.Data
             }
             
             return ifcRootObjs;
+        }
+
+        /// <summary>
+        /// Get IfcPropertySet first associated object
+        /// </summary>
+        /// <param name="ps"></param>
+        /// <returns></returns>
+        private IfcRoot GetAssociatedObject(IfcPropertySet ps)
+        {
+            if ((ps.PropertyDefinitionOf.FirstOrDefault() != null) &&
+                (ps.PropertyDefinitionOf.First().RelatedObjects.FirstOrDefault() != null)
+                )
+            {
+                return ps.PropertyDefinitionOf.First().RelatedObjects.First();
+            }
+            if (ps.DefinesType.FirstOrDefault() != null)
+            {
+                return ps.DefinesType.FirstOrDefault();
+            }
+
+            return null;
         }
 
         //Fields for GetContact function

@@ -13,6 +13,7 @@ using Xbim.Ifc4.Kernel;
 using XbimExchanger.IfcToCOBieLiteUK.Conversion;
 using IfcRoleEnum = Xbim.Ifc4.Interfaces.IfcRoleEnum;
 using XbimExchanger.IfcHelpers;
+using Xbim.IO;
 
 namespace Xbim.CobieLiteUk.Client
 {
@@ -115,7 +116,7 @@ namespace Xbim.CobieLiteUk.Client
         /// <param name="ifcVersion">Ifc schema version</param>
         /// <param name="storage">Type of xbim file store</param>
         public void Create(string author, string organisation, string prjName = null,
-            IfcSchemaVersion ifcVersion = IfcSchemaVersion.Ifc4, XbimStoreType storage = XbimStoreType.InMemoryModel
+            XbimSchemaVersion ifcVersion = XbimSchemaVersion.Ifc4, XbimStoreType storage = XbimStoreType.InMemoryModel
             )
         {
             var creds = new XbimEditorCredentials

@@ -16,7 +16,7 @@ namespace Xbim.COBie.Data
         /// <summary>
         /// Data System constructor
         /// </summary>
-        /// <param name="model">The context of the model being generated</param>
+        /// <param name="context">The context of the model being generated</param>
         public COBieDataSystem(COBieContext context) : base(context)
         { }
 

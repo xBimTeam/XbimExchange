@@ -1,17 +1,14 @@
-﻿using System;
+﻿using Microsoft.Extensions.Logging;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
-using System.Linq;
-using System.Text;
-using log4net;
-using Xbim.CobieExpress.IO;
 using Xbim.CobieLiteUk;
 using Xbim.Common;
 using Xbim.Ifc;
+using Xbim.IO.CobieExpress;
 using XbimExchanger.IfcHelpers;
-using XbimExchanger.IfcToCOBieLiteUK.Conversion;
 
 
 namespace XbimExchanger.IfcToCOBieExpress.Conversion
@@ -19,7 +16,7 @@ namespace XbimExchanger.IfcToCOBieExpress.Conversion
 
     public class CobieExpressConverter : ICobieConverter
     {
-        private static readonly ILog Logger = LogManager.GetLogger("Xbim.COBieLiteUK.Client.CobieLiteConverter");
+        private static readonly ILogger Logger = XbimLogging.CreateLogger<CobieExpressConverter>();
 
         public CobieExpressConverter()
         {
@@ -56,21 +53,21 @@ namespace XbimExchanger.IfcToCOBieExpress.Conversion
             {
                 const string message = "Invalid CobieConversionParams for exporter.";
                 Worker.ReportProgress(0, message);
-                Logger.Error(message);
+                Logger.LogError(message);
                 return;
             }
             if (parameters.Source == null)
             {
                 const string message = "No souce provided to exporter.";
                 Worker.ReportProgress(0, message);
-                Logger.Error(message);
+                Logger.LogError(message);
                 return;
             }
             if (string.IsNullOrEmpty(parameters.OutputFileName))
             {
                 const string message = "No output file name specified in exporter.";
                 Worker.ReportProgress(0, message);
-                Logger.Error(message);
+                Logger.LogError(message);
                 return;
             }
             e.Result = GenerateFile(parameters); //returns the excel file names in an enumerable
@@ -148,7 +145,7 @@ namespace XbimExchanger.IfcToCOBieExpress.Conversion
                 {
                     string message = string.Format("Source file not found {0}", sourceFile);
                     Worker.ReportProgress(0, message);
-                    Logger.Error(message);
+                    Logger.LogError(message);
                     return null;
                 }
                 var fileExt = Path.GetExtension(sourceFile);
@@ -230,7 +227,7 @@ namespace XbimExchanger.IfcToCOBieExpress.Conversion
         /// <summary>
         /// Get the facility from the COBie Excel sheets
         /// </summary>
-        /// <param name="parameters"></param>
+        /// <param name="sourceFile"></param>
         /// <param name="templateFile"></param>
         /// <returns></returns>
         private List<CobieModel> GetCobieModelsFromExcelFilename(string sourceFile, string templateFile)
@@ -242,7 +239,8 @@ namespace XbimExchanger.IfcToCOBieExpress.Conversion
         /// </summary>
         /// <param name="fileName">Root file name</param>
         /// <param name="parameters">Params</param>
-        /// <param name="facility">Facility</param>
+        /// <param name="cobie"></param>
+        /// <param name="report"></param>
         /// <returns>file name</returns>
         private string CreateExcelFile(string fileName, CobieConversionParams parameters, CobieModel cobie, out string report )
         {
@@ -258,7 +256,7 @@ namespace XbimExchanger.IfcToCOBieExpress.Conversion
         /// </summary>
         /// <param name="fileName">Root file name</param>
         /// <param name="parameters">Params</param>
-        /// <param name="facility">Facility</param>
+        /// <param name="cobie"></param>
         /// <returns>file name</returns>
         private string CreateStepFile(string fileName, CobieConversionParams parameters, CobieModel cobie)
         {

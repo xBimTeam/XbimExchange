@@ -1009,7 +1009,6 @@ namespace XbimExchanger.COBieLiteUkToIfc
         /// <summary>
         /// Create the owner history
         /// </summary>
-        /// <param name="ifcRoot">Object to add the owner history</param>
         /// <param name="externalSystem">Application used to modify/create</param>
         /// <param name="createdBy">IfcPersonAndOrganization object</param>
         /// <param name="createdOn">Date the object was created on</param>

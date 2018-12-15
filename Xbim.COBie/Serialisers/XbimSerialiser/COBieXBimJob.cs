@@ -8,7 +8,7 @@ using Xbim.Ifc2x3.PropertyResource;
 using Xbim.Ifc2x3.ConstructionMgmtDomain;
 using Xbim.Ifc2x3.ProcessExtension;
 using Xbim.IO.Esent;
-
+using Xbim.Common;
 
 namespace Xbim.COBie.Serialisers.XbimSerialiser
 {
@@ -33,7 +33,7 @@ namespace Xbim.COBie.Serialisers.XbimSerialiser
         public void SerialiseJob(COBieSheet<COBieJobRow> cOBieSheet)
         {
 
-            using (XbimReadWriteTransaction trans = Model.BeginTransaction("Add Job"))
+            using (ITransaction trans = Model.BeginTransaction("Add Job"))
             {
                 try
                 {

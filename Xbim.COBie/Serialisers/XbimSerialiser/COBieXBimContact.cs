@@ -2,6 +2,8 @@
 using Xbim.Ifc2x3.ActorResource;
 using Xbim.COBie.Rows;
 using Xbim.IO.Esent;
+using Xbim.Common;
+using Xbim.Ifc4.Interfaces;
 
 namespace Xbim.COBie.Serialisers.XbimSerialiser
 {
@@ -22,7 +24,7 @@ namespace Xbim.COBie.Serialisers.XbimSerialiser
 
             
                     
-            using (XbimReadWriteTransaction trans = Model.BeginTransaction("Add Contacts"))
+            using (ITransaction trans = Model.BeginTransaction("Add Contacts"))
             {
                 try
                 {
@@ -60,7 +62,7 @@ namespace Xbim.COBie.Serialisers.XbimSerialiser
         }
 
 
-        public void CreatePersonAndOrganization(COBieContactRow row, IfcPersonAndOrganization ifcPersonAndOrganization = null)
+        public void CreatePersonAndOrganization(COBieContactRow row, IIfcPersonAndOrganization ifcPersonAndOrganization = null)
         {
             if (!Contacts.ContainsKey(row.Email)) //should filter on merge also unless Contacts is reset
             {

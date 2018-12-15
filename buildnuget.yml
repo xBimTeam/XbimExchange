@@ -1,0 +1,15 @@
+
+parameters:
+  packagesToPack: ''
+  packageversion: ''
+
+steps:
+- task: DotNetCoreCLI@2
+  displayName: 'NuGet packing with dotnet pack'
+  inputs:
+    command: 'pack' # Options: build, push, pack, publish, restore, run, test, custom
+    packagesToPack: '${{ parameters.packagesToPack }}'
+    configuration: $(BuildConfiguration)
+    versioningScheme: byEnvVar
+    versionEnvVar: packageversion
+    packDirectory: $(Build.BinariesDirectory)

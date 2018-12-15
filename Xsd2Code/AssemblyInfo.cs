@@ -12,9 +12,9 @@ using System.Reflection;
 [assembly: AssemblyTitle("Xsd2Code")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("")]
+[assembly: AssemblyCompany("Xbim Team")]
 [assembly: AssemblyProduct("Xsd2Code")]
-[assembly: AssemblyCopyright("Pascal Cabanel")]
+[assembly: AssemblyCopyright("Pascal Cabanel (MIT)")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
@@ -52,6 +52,3 @@ using System.Reflection;
 //       attribute as [assembly: AssemblyKeyFile( "..\\..\\mykey.snk" )]
 //   ( * ) Delay Signing is an advanced option - see the Microsoft .NET Framework
 //       documentation for more information on this.
-[assembly: AssemblyDelaySign(false)]
-[assembly: AssemblyKeyFile("")]
-[assembly: AssemblyKeyName("")]

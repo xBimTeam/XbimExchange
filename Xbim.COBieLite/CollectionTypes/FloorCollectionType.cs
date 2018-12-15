@@ -17,10 +17,7 @@ namespace Xbim.COBieLite
         }
 
         [XmlIgnore][JsonIgnore]
-        public List<FloorType> InnerList
-        {
-            get { return Floor ?? (Floor = new List<FloorType>()); }
-        }
+        public List<FloorType> InnerList => Floor ?? (Floor = new List<FloorType>());
 
         IEnumerator IEnumerable.GetEnumerator()
         {

@@ -18,7 +18,7 @@ namespace Xbim.COBie.Data
         /// <summary>
         /// Data Space constructor
         /// </summary>
-        /// <param name="model">The context of the model being generated</param>
+        /// <param name="context">The context of the model being generated</param>
         public COBieDataSpace(COBieContext context) : base(context)
         { }
 
@@ -73,7 +73,8 @@ namespace Xbim.COBie.Data
                 space.CreatedOn = ValidateString(createdOn) ? createdOn : GetCreatedOnDateAsFmtString(ifcSpace.OwnerHistory);
 
                 space.Category = GetCategory(ifcSpace);
-                var floor = ifcSpace.Decomposes.FirstOrDefault();
+                var spaceDecompose = ifcSpace.Decomposes.FirstOrDefault ();
+                var floor = (spaceDecompose != null) ? spaceDecompose.RelatingObject : null;
                 space.FloorName = ((floor != null) && (!string.IsNullOrEmpty(floor.Name))) ? floor.Name.ToString() : DEFAULT_STRING;
                 string description = allPropertyValues.GetPropertySingleValueValue("COBieDescription", false);//support for COBie Toolkit for Autodesk Revit
                 space.Description = ValidateString(description) ? description : GetSpaceDescription(ifcSpace);
@@ -186,7 +187,7 @@ namespace Xbim.COBie.Data
             else//if we fail on IfcAreaMeasure try GSA keys
             {
                 IfcQuantityArea spArea = ifcSpace.GetQuantity<IfcQuantityArea>("GSA Space Areas", "GSA BIM Area");
-                areavalue = spArea.AreaValue;
+                areavalue = spArea != null ? spArea.AreaValue : 0;
             }
             if (areavalue > 0.0)
 	        {

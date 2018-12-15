@@ -1,258 +1,37 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{90DEF072-96C7-4972-835E-909C41169CB4}</ProjectGuid>
-    <OutputType>Library</OutputType>
-    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <TargetFrameworks>net47;netstandard2.0</TargetFrameworks>
+    <Title>Xbim.CobieLiteUK</Title>
+    <Description>UK COBieLite schema for the XBIM Exchange toolkit</Description>
+    <AssemblyName>Xbim.CobieLiteUK</AssemblyName>
     <RootNamespace>Xbim.CobieLiteUk</RootNamespace>
-    <AssemblyName>Xbim.COBieLiteUK</AssemblyName>
-    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
-    <FileAlignment>512</FileAlignment>
-    <NuGetPackageImportStamp>
-    </NuGetPackageImportStamp>
-    <TargetFrameworkProfile />
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <DebugSymbols>true</DebugSymbols>
-    <DebugType>full</DebugType>
-    <Optimize>false</Optimize>
-    <OutputPath>..\Output\Debug\</OutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-    <Prefer32Bit>false</Prefer32Bit>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <DebugType>pdbonly</DebugType>
-    <Optimize>true</Optimize>
-    <OutputPath>..\Output\Release\</OutputPath>
-    <DefineConstants>TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-    <PlatformTarget>AnyCPU</PlatformTarget>
-    <DocumentationFile>..\Output\Release\Xbim.COBieLiteUK.XML</DocumentationFile>
-    <NoWarn>1591</NoWarn>
-    <Prefer32Bit>false</Prefer32Bit>
-  </PropertyGroup>
-  <PropertyGroup>
-    <SignAssembly>true</SignAssembly>
-  </PropertyGroup>
-  <PropertyGroup>
-    <AssemblyOriginatorKeyFile>XbimOpenSourceKeyFile.snk</AssemblyOriginatorKeyFile>
+    <PackageId>Xbim.COBieLiteUK</PackageId>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Esent.Interop, Version=1.9.4.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\packages\ManagedEsent.1.9.4\lib\net40\Esent.Interop.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="log4net, Version=1.2.15.0, Culture=neutral, PublicKeyToken=669e0ddf0bb1aa2a, processorArchitecture=MSIL">
-      <HintPath>..\packages\log4net.2.0.5\lib\net45-full\log4net.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="Newtonsoft.Json, Version=9.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
-      <HintPath>..\packages\Newtonsoft.Json.9.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="NPOI, Version=2.2.1.0, Culture=neutral, PublicKeyToken=0df73ec7942b34e1, processorArchitecture=MSIL">
-      <HintPath>..\packages\NPOI.2.2.1\lib\net40\NPOI.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="NPOI.OOXML, Version=2.2.1.0, Culture=neutral, PublicKeyToken=0df73ec7942b34e1, processorArchitecture=MSIL">
-      <HintPath>..\packages\NPOI.2.2.1\lib\net40\NPOI.OOXML.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="NPOI.OpenXml4Net, Version=2.2.1.0, Culture=neutral, PublicKeyToken=0df73ec7942b34e1, processorArchitecture=MSIL">
-      <HintPath>..\packages\NPOI.2.2.1\lib\net40\NPOI.OpenXml4Net.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="NPOI.OpenXmlFormats, Version=2.2.1.0, Culture=neutral, PublicKeyToken=0df73ec7942b34e1, processorArchitecture=MSIL">
-      <HintPath>..\packages\NPOI.2.2.1\lib\net40\NPOI.OpenXmlFormats.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="System" />
-    <Reference Include="System.Configuration" />
-    <Reference Include="System.Core" />
-    <Reference Include="System.IO.Compression" />
-    <Reference Include="System.IO.Compression.FileSystem" />
-    <Reference Include="System.Xml.Linq" />
-    <Reference Include="System.Data.DataSetExtensions" />
-    <Reference Include="Microsoft.CSharp" />
-    <Reference Include="System.Data" />
-    <Reference Include="System.Xml" />
-    <Reference Include="Xbim.CobieExpress, Version=4.0.0.0, Culture=neutral, PublicKeyToken=11e3655e576ec5a9, processorArchitecture=MSIL">
-      <HintPath>..\packages\Xbim.Essentials.4.0.13\lib\net40\Xbim.CobieExpress.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="Xbim.Common, Version=4.0.0.0, Culture=neutral, PublicKeyToken=11e3655e576ec5a9, processorArchitecture=MSIL">
-      <HintPath>..\packages\Xbim.Essentials.4.0.13\lib\net40\Xbim.Common.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="Xbim.Geometry.Engine.Interop, Version=4.0.0.0, Culture=neutral, PublicKeyToken=11e3655e576ec5a9, processorArchitecture=MSIL">
-      <HintPath>..\packages\Xbim.Geometry.4.0.11\lib\net40\Xbim.Geometry.Engine.Interop.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="Xbim.Ifc, Version=4.0.0.0, Culture=neutral, PublicKeyToken=11e3655e576ec5a9, processorArchitecture=MSIL">
-      <HintPath>..\packages\Xbim.Essentials.4.0.13\lib\net40\Xbim.Ifc.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="Xbim.Ifc.Extensions, Version=4.0.0.0, Culture=neutral, PublicKeyToken=11e3655e576ec5a9, processorArchitecture=MSIL">
-      <HintPath>..\packages\Xbim.Essentials.4.0.13\lib\net40\Xbim.Ifc.Extensions.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="Xbim.Ifc2x3, Version=4.0.0.0, Culture=neutral, PublicKeyToken=11e3655e576ec5a9, processorArchitecture=MSIL">
-      <HintPath>..\packages\Xbim.Essentials.4.0.13\lib\net40\Xbim.Ifc2x3.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="Xbim.Ifc2x3.IO, Version=4.0.0.0, Culture=neutral, PublicKeyToken=11e3655e576ec5a9, processorArchitecture=MSIL">
-      <HintPath>..\packages\Xbim.Essentials.4.0.13\lib\net40\Xbim.Ifc2x3.IO.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="Xbim.Ifc4, Version=4.0.0.0, Culture=neutral, PublicKeyToken=11e3655e576ec5a9, processorArchitecture=MSIL">
-      <HintPath>..\packages\Xbim.Essentials.4.0.13\lib\net40\Xbim.Ifc4.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="Xbim.IO, Version=4.0.0.0, Culture=neutral, PublicKeyToken=11e3655e576ec5a9, processorArchitecture=MSIL">
-      <HintPath>..\packages\Xbim.Essentials.4.0.13\lib\net40\Xbim.IO.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="Xbim.ModelGeometry.Scene, Version=4.0.0.0, Culture=neutral, PublicKeyToken=11e3655e576ec5a9, processorArchitecture=MSIL">
-      <HintPath>..\packages\Xbim.Geometry.4.0.11\lib\net40\Xbim.ModelGeometry.Scene.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="Xbim.Tessellator, Version=4.0.0.0, Culture=neutral, PublicKeyToken=11e3655e576ec5a9, processorArchitecture=MSIL">
-      <HintPath>..\packages\Xbim.Essentials.4.0.13\lib\net40\Xbim.Tessellator.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
+    <None Remove="FilterHelper\COBieArchitecturalFilters.config" />
+    <None Remove="FilterHelper\COBieDefaultFilters.config" />
+    <None Remove="FilterHelper\COBieElectricalFilters.config" />
+    <None Remove="FilterHelper\COBieFireProtectionFilters.config" />
+    <None Remove="FilterHelper\COBieMechanicalFilters.config" />
+    <None Remove="FilterHelper\COBiePlumbingFilters.config" />
+    <None Remove="Templates\UK2012.xls" />
+    <None Remove="Templates\UK2012.xlsx" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AdditionalAttributes\AdditionalAttributes.cs" />
-    <Compile Include="Assembly.cs" />
-    <Compile Include="Asset.cs" />
-    <Compile Include="AssetType.cs" />
-    <Compile Include="Attribute.cs" />
-    <Compile Include="AttributeValues\AttributeValue.cs" />
-    <Compile Include="AttributeValues\BooleanAttributeValue.cs" />
-    <Compile Include="Category.cs" />
-    <Compile Include="CobieObject.cs" />
-    <Compile Include="Connection.cs" />
-    <Compile Include="Contact.cs" />
-    <Compile Include="Converters\AttributeConverter.cs" />
-    <Compile Include="AttributeValues\DateTimeAttributeValue.cs" />
-    <Compile Include="AttributeValues\DecimalAttributeValue.cs" />
-    <Compile Include="Converters\KeyConverter.cs" />
-    <Compile Include="Document.cs" />
-    <Compile Include="EntityKeys\AssetKey.cs" />
-    <Compile Include="EntityKeys\AssetTypeKey.cs" />
-    <Compile Include="EntityKeys\EntityKey.cs" />
-    <Compile Include="EntityKeys\IEntityKey.cs" />
-    <Compile Include="EntityKeys\JobKey.cs" />
-    <Compile Include="EntityKeys\ProjectStageKey.cs" />
-    <Compile Include="EntityKeys\ResourceKey.cs" />
-    <Compile Include="EntityKeys\SpaceKey.cs" />
-    <Compile Include="EqCompare\AssetCompareKey.cs" />
-    <Compile Include="EqCompare\AssetTypeCompareKey.cs" />
-    <Compile Include="EqCompare\AttributeCompareKey.cs" />
-    <Compile Include="EqCompare\CategoryCompareKey.cs" />
-    <Compile Include="EqCompare\CompareEqRule.cs" />
-    <Compile Include="EqCompare\CompareLogger.cs" />
-    <Compile Include="EqCompare\ConnectionCompareKey.cs" />
-    <Compile Include="EqCompare\ContactCompareKey.cs" />
-    <Compile Include="EqCompare\FloorCompareKey.cs" />
-    <Compile Include="EqCompare\EntityKeyCompareKey.cs" />
-    <Compile Include="EqCompare\ICompareEqRule.cs" />
-    <Compile Include="EqCompare\ImpactCompareKey.cs" />
-    <Compile Include="EqCompare\IssueCompareKey.cs" />
-    <Compile Include="EqCompare\JobCompareKey.cs" />
-    <Compile Include="EqCompare\JobKeyCompareKey.cs" />
-    <Compile Include="EqCompare\NameCompareKey.cs" />
-    <Compile Include="EqCompare\DocumentCompareKey.cs" />
-    <Compile Include="EqCompare\MetadataCompareKey.cs" />
-    <Compile Include="EqCompare\ProjectCompareKey.cs" />
-    <Compile Include="EqCompare\RepresentationCompareKey.cs" />
-    <Compile Include="EqCompare\SiteCompareKey.cs" />
-    <Compile Include="EqCompare\SpaceCompareKey.cs" />
-    <Compile Include="EqCompare\SpareCompareKey.cs" />
-    <Compile Include="EqCompare\StringBuilderExtender.cs" />
-    <Compile Include="EqCompare\StringCompareKey.cs" />
-    <Compile Include="FilterHelper\CobiePropertyMapping.cs" />
-    <Compile Include="FilterHelper\ImportSet.cs" />
-    <Compile Include="FilterHelper\ObjectFilter.cs" />
-    <Compile Include="FilterHelper\PropertyFilter.cs" />
-    <Compile Include="FilterHelper\OutPutFilters.cs" />
-    <Compile Include="FilterHelper\RoleFilter.cs" />
-    <Compile Include="FilterHelper\SerializableDictionary.cs" />
-    <Compile Include="Floor.cs" />
-    <Compile Include="Impact.cs" />
-    <Compile Include="AttributeValues\IntegerAttributeValue.cs" />
-    <Compile Include="Issue.cs" />
-    <Compile Include="Job.cs" />
-    <Compile Include="Metadata.cs" />
-    <Compile Include="Net40Port\Net40CustomAttributeExtensions.cs" />
-    <Compile Include="ReportProgress\ProgressReporter.cs" />
-    <Compile Include="Resource.cs" />
-    <Compile Include="Schemas\Attributes.cs" />
-    <Compile Include="Facility.cs" />
-    <Compile Include="..\SharedAssemblyInfo.cs">
-      <Link>Properties\SharedAssemblyInfo.cs</Link>
-    </Compile>
-    <Compile Include="..\SharedFileVersionInfo.cs">
-      <Link>Properties\SharedFileVersionInfo.cs</Link>
-    </Compile>
-    <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Schemas\cobieliteuk.designer.cs" />
-    <Compile Include="EntityKeys\ContactKey.cs" />
-    <Compile Include="Schemas\NamespaceTolerantXmlTextReader.cs" />
-    <Compile Include="Space.cs" />
-    <Compile Include="Spare.cs" />
-    <Compile Include="AttributeValues\StringAttributeValue.cs" />
-    <Compile Include="System.cs" />
-    <Compile Include="Templates\Templates.cs" />
-    <Compile Include="Zone.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="FilterHelper\COBieDefaultFilters.config">
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="FilterHelper\COBieArchitecturalFilters.config">
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="FilterHelper\COBieElectricalFilters.config">
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="FilterHelper\COBieFireProtectionFilters.config">
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="FilterHelper\COBieMechanicalFilters.config">
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="FilterHelper\COBiePlumbingFilters.config">
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <None Include="Schemas\cobieliteuk.cd" />
-    <None Include="packages.config" />
-    <None Include="Schemas\cobieliteuk.xsd">
-      <SubType>Designer</SubType>
-    </None>
+    <EmbeddedResource Include="FilterHelper\COBieArchitecturalFilters.config" />
+    <EmbeddedResource Include="FilterHelper\COBieDefaultFilters.config" />
+    <EmbeddedResource Include="FilterHelper\COBieElectricalFilters.config" />
+    <EmbeddedResource Include="FilterHelper\COBieFireProtectionFilters.config" />
+    <EmbeddedResource Include="FilterHelper\COBieMechanicalFilters.config" />
+    <EmbeddedResource Include="FilterHelper\COBiePlumbingFilters.config" />
     <EmbeddedResource Include="Templates\UK2012.xls" />
     <EmbeddedResource Include="Templates\UK2012.xlsx" />
-    <None Include="XbimOpenSourceKeyFile.snk" />
   </ItemGroup>
-  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-  <Import Project="..\packages\Xbim.Geometry.4.0.11\build\Xbim.Geometry.targets" Condition="Exists('..\packages\Xbim.Geometry.4.0.11\build\Xbim.Geometry.targets')" />
-  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
-    <PropertyGroup>
-      <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
-    </PropertyGroup>
-    <Error Condition="!Exists('..\packages\Xbim.Geometry.4.0.11\build\Xbim.Geometry.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Xbim.Geometry.4.0.11\build\Xbim.Geometry.targets'))" />
-  </Target>
-  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
-       Other similar extension points exist, see Microsoft.Common.targets.
-  <Target Name="BeforeBuild">
-  </Target>
-  <Target Name="AfterBuild">
-  </Target>
-  -->
+  <ItemGroup>
+    <PackageReference Include="Newtonsoft.Json" Version="11.0.2" />
+    <PackageReference Include="Newtonsoft.Json.Bson" Version="1.0.1" />
+    <PackageReference Include="NPOI" Version="2.4.0" />
+    <PackageReference Include="Xbim.Essentials" Version="5.0.213" />
+  </ItemGroup>
+
 </Project>

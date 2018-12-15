@@ -3,8 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using Xbim.Ifc2x3.ProductExtension;
 using Xbim.COBie.Rows;
-using Xbim.Ifc2x3.Extensions;
 using Xbim.IO.Esent;
+using Xbim.Common;
 
 namespace Xbim.COBie.Serialisers.XbimSerialiser
 {
@@ -27,7 +27,7 @@ namespace Xbim.COBie.Serialisers.XbimSerialiser
         /// <param name="cOBieSheet">COBieSheet of COBieZoneRow to read data from</param>
         public void SerialiseZone(COBieSheet<COBieZoneRow> cOBieSheet)
         {
-            using (XbimReadWriteTransaction trans = Model.BeginTransaction("Add Zone"))
+            using (ITransaction trans = Model.BeginTransaction("Add Zone"))
             {
                 try
                 {
@@ -115,8 +115,8 @@ namespace Xbim.COBie.Serialisers.XbimSerialiser
         /// <summary>
         /// Add space to the building story(Floor)
         /// </summary>
-        /// <param name="row"></param>
-        /// <param name="ifcSpace"></param>
+        /// <param name="spaceName"></param>
+        /// <param name="ifcZone"></param>
         private void AddSpaceToZone(string spaceName, IfcZone ifcZone)
         {
             if (ValidateString(spaceName))

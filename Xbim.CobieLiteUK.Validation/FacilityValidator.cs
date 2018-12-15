@@ -116,10 +116,9 @@ namespace Xbim.CobieLiteUk.Validation
             {
                 retFacility.CurrencyUnitCustom = submitted.CurrencyUnitCustom;
             }
-
+            // b) Project
             if (requirement.Project != null)
             {
-                // to be added project level validation here.
                 var pv = new ProjectValidator(requirement.Project);
                 retFacility.Project = pv.Validate(submitted.Project);
 

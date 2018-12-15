@@ -88,13 +88,13 @@ namespace XbimExchanger.IfcToCOBieExpress
         /// <summary>
         /// Returns the categories for the type null if no Ifc Type exists
         /// </summary>
-        public List<CobieCategory> Categories 
+        public HashSet<CobieCategory> Categories 
         {
             get
             {
                 return _ifcTypeObject!=null ? 
                     _helper.GetCategories(_ifcTypeObject) : 
-                    new List<CobieCategory> { _helper.UnknownCategory };
+                    new HashSet<CobieCategory> { _helper.UnknownCategory };
             }
         }
         /// <summary>

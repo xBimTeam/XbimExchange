@@ -2,8 +2,10 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Xml.Serialization;
+using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using Xbim.COBieLite.CollectionTypes;
+using Xbim.Common;
 using Xbim.Ifc4.Interfaces;
 
 
@@ -11,8 +13,8 @@ namespace Xbim.COBieLite
 {
     public partial class AssetTypeInfoType : ICOBieObject
     {
-       
-     
+
+        static readonly ILogger logger = XbimLogging.CreateLogger<AssetTypeInfoType>();
 
         public AssetTypeInfoType(IIfcTypeObject ifcTypeObject, CoBieLiteHelper helper)
             : this()
@@ -28,7 +30,8 @@ namespace Xbim.COBieLite
                 AssetTypeAccountingCategory = accCategoryEnum;
             else
             {
-                CoBieLiteHelper.Logger.WarnFormat("AssetTypeAccountingCategory: An illegal value of [{0}] has been passed for the category of #{1}={2}. It has been replaced with a value of 'Item'", accCategoryString, ifcTypeObject.EntityLabel, ifcTypeObject.GetType().Name);
+                logger.LogWarning("AssetTypeAccountingCategory: An illegal value of [{category}] has been passed for the category of #{entityId}={entityType}. It has been replaced with a value of 'Item'", 
+                    accCategoryString, ifcTypeObject.EntityLabel, ifcTypeObject.GetType().Name);
                 AssetTypeAccountingCategory = AssetPortabilitySimpleType.Item;
             }
             if (string.IsNullOrWhiteSpace(AssetTypeCategory)) //try the asset assignment
@@ -67,7 +70,9 @@ namespace Xbim.COBieLite
             else
             {
                 //just in case we have a problem
-                CoBieLiteHelper.Logger.ErrorFormat("Asset Type: Failed to locate Asset Type #{0}={1}", ifcTypeObject.EntityLabel,ifcTypeObject.GetType().Name);
+                logger.LogWarning("Asset Type: Failed to locate Asset Type #{entityLabel}={entityType}", 
+                    ifcTypeObject.EntityLabel,
+                    ifcTypeObject.GetType().Name);
             }
 
             //Attributes

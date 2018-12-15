@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Xbim.COBie.Rows;
+using Xbim.Common;
 using Xbim.Ifc2x3.ConstructionMgmtDomain;
 using Xbim.Ifc2x3.Kernel;
 using Xbim.Ifc2x3.MeasureResource;
@@ -29,7 +30,7 @@ namespace Xbim.COBie.Serialisers.XbimSerialiser
         public void SerialiseSpare(COBieSheet<COBieSpareRow> cOBieSheet)
         {
 
-            using (XbimReadWriteTransaction trans = Model.BeginTransaction("Add Spare"))
+            using (ITransaction trans = Model.BeginTransaction("Add Spare"))
             {
                 try
                 {
@@ -111,7 +112,7 @@ namespace Xbim.COBie.Serialisers.XbimSerialiser
         /// <summary>
         /// Create the relationships between the Resource and the types it relates too
         /// </summary>
-        /// <param name="processObj">IfcResource Object</param>
+        /// <param name="resourceObj">IfcResource Object</param>
         /// <param name="typeObjs">IEnumerable of IfcTypeObject, list of IfcTypeObjects </param>
         public void SetRelAssignsToResource(IfcResource resourceObj, IEnumerable<IfcTypeObject> typeObjs)
         {

@@ -3,11 +3,6 @@
 # Add steps that publish symbols, save build artifacts, and more:
 # https://docs.microsoft.com/azure/devops/pipelines/apps/windows/dot-net
 
-
-# Basic build def. No Nuget packing yet
-
-#name 
-
 trigger:
 - master
 - develop
@@ -16,28 +11,136 @@ pool:
   vmImage: 'VS2017-Win2016'
 
 variables:
-  solution: '**/*.sln'
+  solution: '**.sln'
   buildPlatform: 'Any CPU'
   buildConfiguration: 'Release'
   major: 5
   minor: 0
-  # creates a counter called versioncounter and seeds it at 100 and then assigns the value to a variable named patch.
-  patch: $[counter('exchangeversioncounter', 100)]
+  buildNo: $[counter('exchangeversioncounter', 100)]
+
+name: $(BuildDefinitionName)_$(SourceBranchName)_$(major).$(minor).$(buildNo)
 
 steps:
+# Windows script setting up $(packageversion) of the nuget package if this is development branch build
+# Master branch
+- script: |
+    echo ##vso[task.setvariable variable=packageversion]$(major).$(minor).$(buildNo)
+  displayName: 'Setting Nuget PackageVersion'
+  condition: eq(variables['Build.SourceBranch'], 'refs/heads/master')
+# Any other branch
+- script: |
+    echo ##vso[task.setvariable variable=packageversion]$(major).$(minor).$(buildNo)-$(Build.SourceBranchName)
+  displayName: 'Setting Prerelease Nuget PackageVersion'
+  condition: ne(variables['Build.SourceBranch'], 'refs/heads/master')
+
+# Windows script setting up $(fileversion) used to stamp AssemblyFileVersions. 
+# By convention we use 'Major.Minor.BuildNo.0' on Master and 'Major.Minor.0.BuildNo' on other branches
+# Master branch
+- script: | 
+    echo ##vso[task.setvariable variable=fileversion]$(major).$(minor).$(buildNo).0
+  displayName: 'Setting FileVersion'
+  condition: eq(variables['Build.SourceBranch'], 'refs/heads/master')
+# Any other branch
+- script: | 
+    echo ##vso[task.setvariable variable=fileversion]$(major).$(minor).0.$(buildNo)
+  displayName: 'Setting Prerelease FileVersion'
+  condition: ne(variables['Build.SourceBranch'], 'refs/heads/master')
+
+# Update build numbers
+- template: buildversions.yml   # invoke a sub task
+  parameters:
+    fileversion: $(fileversion)
+    packageversion: $(packageversion)
+
+# Delete all Package(s) including 
+- task: DeleteFiles@1
+  displayName: 'Delete old *.nupkg files from BinariesDirectory'
+  inputs:
+    SourceFolder: '$(Build.BinariesDirectory)'
+    Contents: '**.nupkg'
+
 - task: NuGetToolInstaller@0
+  displayName: 'Upgrade Nuget Tool'
+  inputs:
+    versionSpec: '4.6.2'
 
 - task: NuGetCommand@2
+  displayName: 'NuGet restore Solution'
   inputs:
     restoreSolution: '$(solution)'
+    verbosityRestore: 'normal'
+    feedsToUse: config
+    nugetConfigPath: nuget.config
 
 - task: VSBuild@1
+  displayName: 'Build Solution'
   inputs:
     solution: '$(solution)'
     platform: '$(buildPlatform)'
     configuration: '$(buildConfiguration)'
 
 - task: VSTest@2
+  displayName: 'Run Unit Tests'
   inputs:
     platform: '$(buildPlatform)'
-    configuration: '$(buildConfiguration)'
+    configuration: '$(buildConfiguration)'  
+
+- script: nuget sources add -Name xbimlocal -Source $(Build.BinariesDirectory)
+  displayName: 'Set Nuget Source for internal references'
+  continueOnError: true
+
+# Pack COBie/COBieLite/COBieLiteUK & DPoW (which have no internal project references)
+# https://docs.microsoft.com/en-us/azure/devops/pipelines/tasks/file-matching-patterns?view=vsts
+- template: buildnuget.yml 
+  parameters:
+    packagesToPack: 'Xbim.@(COBie|COBieLite|COBieLiteUK|DPoW)/Xbim.@(COBie|COBieLite|COBieLiteUK|DPoW).csproj'
+    packageversion: $(packageversion)
+
+
+# Re-reference & Pack Xbim.CobieLiteUK.Validation against COBieLiteUK
+- script: dotnet remove Xbim.CobieLiteUK.Validation\Xbim.CobieLiteUK.Validation.csproj reference ..\Xbim.COBieLiteUK\Xbim.COBieLiteUK.csproj
+  displayName: 'Xbim.CobieLiteUK.Validation - remove project reference'
+- script: dotnet add    Xbim.CobieLiteUK.Validation\Xbim.CobieLiteUK.Validation.csproj package Xbim.CobieLiteUK -s $(Build.BinariesDirectory) -v $(packageversion)
+  displayName: 'Xbim.CobieLiteUK.Validation - adding package reference'
+
+# Re-reference & Pack Xbim.Exchanger against DPoW and COBieLite[UK]
+- script: dotnet remove Xbim.Exchanger\Xbim.Exchanger.csproj reference ..\Xbim.COBieLite\Xbim.COBieLite.csproj ..\Xbim.COBieLiteUK\Xbim.COBieLiteUK.csproj ..\Xbim.DPoW\Xbim.DPoW.csproj
+  displayName: 'Xbim.Exchanger - remove project references'
+- script: dotnet add    Xbim.Exchanger\Xbim.Exchanger.csproj package Xbim.CobieLite -s $(Build.BinariesDirectory) -v $(packageversion)
+  displayName: 'Xbim.Exchanger - adding COBieLite package reference'
+- script: dotnet add    Xbim.Exchanger\Xbim.Exchanger.csproj package Xbim.CobieLiteUK -s $(Build.BinariesDirectory) -v $(packageversion)
+  displayName: 'Xbim.Exchanger - adding COBieLiteUK package reference'
+- script: dotnet add    Xbim.Exchanger\Xbim.Exchanger.csproj package Xbim.DPoW -s $(Build.BinariesDirectory) -v $(packageversion)
+  displayName: 'Xbim.Exchanger - adding DPoW package reference'
+
+# Now pack the above 2 packages 
+- template: buildnuget.yml 
+  parameters:
+    packagesToPack: 'Xbim.@(CobieLiteUK.Validation|Exchanger)\Xbim.@(CobieLiteUK.Validation|Exchanger).csproj'
+    packageversion: $(packageversion)
+
+# Create and Pack Xbim.Exchange meta package
+- powershell: |
+    ((Get-Content -path Xbim.Exchange.tmpl -Raw) -replace '{{version}}','$(packageversion)') | Set-Content -Path Xbim.Exchange.nuspec
+  displayName: 'Generate Xbim.Exchange Nuspec'
+
+- script: nuget pack Xbim.Exchange.nuspec -OutputDirectory $(Build.BinariesDirectory)
+  displayName: 'Nuget Packing metapackage'
+
+# Collect artifacts
+- task: CopyFiles@2
+  displayName: 'Copy Nuget Packages to Artifacts'
+  inputs:
+    SourceFolder: '$(Build.BinariesDirectory)'
+    Contents: '**.nupkg'
+    TargetFolder: '$(build.artifactstagingdirectory)'
+  condition: succeededOrFailed()
+
+# Push to Myget/Nuget
+- template: buildpublish.yml 
+
+- task: PublishBuildArtifacts@1
+  displayName: 'Publish Artifact to drop'
+  inputs:
+    PathtoPublish: '$(build.artifactstagingdirectory)'
+  condition: succeededOrFailed()

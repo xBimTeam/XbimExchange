@@ -35,12 +35,14 @@ namespace Xbim.COBie
             }
         }
 
-        
+
         /// <summary>
         /// Runs validation rules on each sheet and updates the Errors collection
         /// on each sheet.
         /// </summary>
         ///<param name="errorRowIdx">excel sheet = ErrorRowIndexBase.RowTwo, datasets = ErrorRowIndexBase.RowOne </param>
+        /// <param name="ValidationTemplate"></param>
+        /// <param name="progressCallback"></param>
         public void Validate( ErrorRowIndexBase errorRowIdx, ICOBieValidationTemplate ValidationTemplate = null, Action<int> progressCallback = null) //default for excel row index's on error rows
         {
             // Enumerates the sheets and validates each

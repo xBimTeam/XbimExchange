@@ -4,7 +4,6 @@ using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
-using log4net;
 using Xbim.CobieLiteUk;
 using Xbim.Common;
 using Xbim.CobieLiteUk.FilterHelper;
@@ -13,13 +12,12 @@ using XbimExchanger.IfcToCOBieLiteUK.EqCompare;
 using Attribute = Xbim.CobieLiteUk.Attribute;
 using SystemAssembly = System.Reflection.Assembly;
 using System.Diagnostics;
+using XbimExchanger.CobieHelpers;
 using XbimExchanger.IfcHelpers;
+using Microsoft.Extensions.Logging;
 
 namespace XbimExchanger.IfcToCOBieLiteUK
-{
-    
-
-    
+{    
     /// <summary>
     /// 
     /// </summary>
@@ -45,7 +43,7 @@ namespace XbimExchanger.IfcToCOBieLiteUK
     /// </summary>
     public class CoBieLiteUkHelper
     {
-        private static readonly ILog Logger = LogManager.GetLogger("XbimExchanger.IfcToCOBieLiteUK.CoBieLiteUkHelper");
+        private static readonly ILogger Logger = XbimLogging.CreateLogger<CoBieLiteUkHelper>();
         /// <summary>
         /// Object to use to report progress on Exchangers
         /// </summary>
@@ -527,7 +525,7 @@ namespace XbimExchanger.IfcToCOBieLiteUK
         /// <summary>
         /// Get the property mappings for a given field name
         /// </summary>
-        /// <param name="FiledKey">Field name</param>
+        /// <param name="fieldKey">Field name</param>
         /// <returns>string[]</returns>
         public string[] GetPropMap(string fieldKey)
         {
@@ -1163,6 +1161,7 @@ namespace XbimExchanger.IfcToCOBieLiteUK
         /// Returns the COBie Category for this object, based on the Ifc Classification
         /// </summary>
         /// <param name="classifiedObject"></param>
+        /// <param name="useProp"></param>
         /// <returns></returns>
         public List<Category> GetCategories(IIfcDefinitionSelect classifiedObject, bool useProp = true)
         {
@@ -1419,6 +1418,8 @@ namespace XbimExchanger.IfcToCOBieLiteUK
         /// 
         /// </summary>
         /// <param name="ifcObjectDefinition"></param>
+        /// <param name="attributeName"></param>
+        /// <param name="attributeValue"></param>
         /// <returns></returns>
         public Attribute MakeAttribute(IIfcObjectDefinition ifcObjectDefinition, string attributeName, object attributeValue)
         {
@@ -1616,48 +1617,14 @@ namespace XbimExchanger.IfcToCOBieLiteUK
             //sort out createdByKeys, these will always be IIfcPersonAndOrganization which are held in IfcOwnerHistory fields
             foreach (var actor in actors.OfType<IIfcPersonAndOrganization>())
             {
-                _createdByKeys.Add(actor, new ContactKey { Email = EmailAddressOf(actor) });
+                _createdByKeys.Add(actor, new ContactKey { Email = ContactFunctions.EmailAddressOf(actor) });
                 ReportProgress.IncrementAndUpdate();
             }
             _sundryContacts = new Dictionary<string, Contact>();
         }
 
-        public string EmailAddressOf(IIfcActorSelect personOrg)
-        {
-            IIfcPerson person = null;
-            IIfcOrganization organisation= null;
-            if (personOrg is IIfcPerson)
-            {
-                person = personOrg as IIfcPerson;
-            }
-            if (personOrg is IIfcOrganization)
-            {
-                organisation = personOrg as IIfcOrganization;
-            }
-            if (personOrg is IIfcPersonAndOrganization)
-            {
-                person = (personOrg as IIfcPersonAndOrganization).ThePerson;
-                organisation = (personOrg as IIfcPersonAndOrganization).TheOrganization;
-            }
-            
-            //get a default that will be unique
-            var email = string.Format("unknown{0}@undefined.email", ((IPersistEntity)personOrg).EntityLabel);
-            if ((organisation != null) && (organisation.Addresses != null))
-            {
-                var telecom = organisation.Addresses.OfType<IIfcTelecomAddress>().FirstOrDefault(a=>a.ElectronicMailAddresses.Any(e=>!string.IsNullOrWhiteSpace(e)));
-                if (telecom != null)
-                    email = telecom.ElectronicMailAddresses.FirstOrDefault(e => !string.IsNullOrWhiteSpace(e));
-            }
-            //overwrite if we have it at person level
-            if ((person != null) && (person.Addresses != null))
-            {
-                var telecom = person.Addresses.OfType<IIfcTelecomAddress>().FirstOrDefault(a => a.ElectronicMailAddresses.Any(e => !string.IsNullOrWhiteSpace(e)));
-                if (telecom != null)
-                    email = telecom.ElectronicMailAddresses.FirstOrDefault(e => !string.IsNullOrWhiteSpace(e));
-            }
-            return email;
-        }
-
+      
+        
         /// <summary>
         /// 
         /// </summary>
@@ -1823,12 +1790,14 @@ namespace XbimExchanger.IfcToCOBieLiteUK
             {
                 return GetCreatedBy(actor);
             }
+            
 
             ContactKey key;
             if (_createdByKeys.TryGetValue(actorSelect, out key))
             {
                 return key;
             }
+
 
             return new ContactKey {Email = XbimCreatedBy.Email};
         }
