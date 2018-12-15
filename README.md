@@ -1,7 +1,7 @@
-Branch | Status
------- | -------
-Master | [![Build Status](https://dev.azure.com/xBIMTeam/xBIMToolkit/_apis/build/status/xBimTeam.XbimExchange?branchName=master)](https://dev.azure.com/xBIMTeam/xBIMToolkit/_build/latest?definitionId=5&branchName=master)
-Develop | [![Build Status](https://dev.azure.com/xBIMTeam/xBIMToolkit/_apis/build/status/xBimTeam.XbimExchange?branchName=develop)](https://dev.azure.com/xBIMTeam/xBIMToolkit/_build/latest?definitionId=5&branchName=develop)
+Branch | Build Status  | MyGet | NuGet
+------ | ------- | --- | --- |
+Master | [![Build Status](https://dev.azure.com/xBIMTeam/xBIMToolkit/_apis/build/status/xBimTeam.XbimExchange?branchName=master)](https://dev.azure.com/xBIMTeam/xBIMToolkit/_build/latest?definitionId=5&branchName=master) | ![master](https://img.shields.io/myget/xbim-master/v/Xbim.Exchange.svg) | ![](https://img.shields.io/nuget/v/Xbim.Exchange.svg)
+Develop | [![Build Status](https://dev.azure.com/xBIMTeam/xBIMToolkit/_apis/build/status/xBimTeam.XbimExchange?branchName=develop)](https://dev.azure.com/xBIMTeam/xBIMToolkit/_build/latest?definitionId=5&branchName=develop) | ![](https://img.shields.io/myget/xbim-develop/vpre/Xbim.Exchange.svg) | -
 
 
 # XbimExchange
