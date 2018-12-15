@@ -4,10 +4,10 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
-using Xbim.CobieExpress.IO;
 using Xbim.CobieLiteUk;
 using Xbim.Common;
 using Xbim.Ifc;
+using Xbim.IO.CobieExpress;
 using XbimExchanger.IfcHelpers;
 
 

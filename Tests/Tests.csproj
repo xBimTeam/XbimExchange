@@ -280,9 +280,6 @@
     <Reference Include="Xbim.CobieExpress, Version=5.0.0.0, Culture=neutral, PublicKeyToken=11e3655e576ec5a9, processorArchitecture=MSIL">
       <HintPath>..\packages\Xbim.CobieExpress.5.0.125\lib\net47\Xbim.CobieExpress.dll</HintPath>
     </Reference>
-    <Reference Include="Xbim.CobieExpress.IO, Version=5.0.0.0, Culture=neutral, PublicKeyToken=11e3655e576ec5a9, processorArchitecture=MSIL">
-      <HintPath>..\packages\Xbim.CobieExpress.IO.5.0.122\lib\net47\Xbim.CobieExpress.IO.dll</HintPath>
-    </Reference>
     <Reference Include="Xbim.Common, Version=5.0.0.0, Culture=neutral, PublicKeyToken=11e3655e576ec5a9, processorArchitecture=MSIL">
       <HintPath>..\packages\Xbim.Common.5.0.213\lib\net47\Xbim.Common.dll</HintPath>
     </Reference>
@@ -297,6 +294,9 @@
     </Reference>
     <Reference Include="Xbim.Ifc4, Version=5.0.0.0, Culture=neutral, PublicKeyToken=11e3655e576ec5a9, processorArchitecture=MSIL">
       <HintPath>..\packages\Xbim.Ifc4.5.0.213\lib\net47\Xbim.Ifc4.dll</HintPath>
+    </Reference>
+    <Reference Include="Xbim.IO.CobieExpress, Version=5.0.0.0, Culture=neutral, PublicKeyToken=11e3655e576ec5a9, processorArchitecture=MSIL">
+      <HintPath>..\packages\Xbim.IO.CobieExpress.5.0.125\lib\net47\Xbim.IO.CobieExpress.dll</HintPath>
     </Reference>
     <Reference Include="Xbim.IO.Esent, Version=5.0.0.0, Culture=neutral, PublicKeyToken=11e3655e576ec5a9, processorArchitecture=MSIL">
       <HintPath>..\packages\Xbim.IO.Esent.5.0.213\lib\net47\Xbim.IO.Esent.dll</HintPath>
