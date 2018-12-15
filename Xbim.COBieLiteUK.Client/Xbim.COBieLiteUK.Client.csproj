@@ -130,10 +130,10 @@
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
     <Reference Include="Xbim.CobieExpress, Version=5.0.0.0, Culture=neutral, PublicKeyToken=11e3655e576ec5a9, processorArchitecture=MSIL">
-      <HintPath>..\packages\Xbim.CobieExpress.5.0.125\lib\net47\Xbim.CobieExpress.dll</HintPath>
+      <HintPath>..\packages\Xbim.CobieExpress.5.0.126\lib\net47\Xbim.CobieExpress.dll</HintPath>
     </Reference>
     <Reference Include="Xbim.CobieExpress.Exchanger, Version=5.0.0.0, Culture=neutral, PublicKeyToken=11e3655e576ec5a9, processorArchitecture=MSIL">
-      <HintPath>..\packages\Xbim.CobieExpress.Exchanger.5.0.125\lib\net47\Xbim.CobieExpress.Exchanger.dll</HintPath>
+      <HintPath>..\packages\Xbim.CobieExpress.Exchanger.5.0.126\lib\net47\Xbim.CobieExpress.Exchanger.dll</HintPath>
     </Reference>
     <Reference Include="Xbim.Common, Version=5.0.0.0, Culture=neutral, PublicKeyToken=11e3655e576ec5a9, processorArchitecture=MSIL">
       <HintPath>..\packages\Xbim.Common.5.0.213\lib\net47\Xbim.Common.dll</HintPath>
@@ -148,7 +148,7 @@
       <HintPath>..\packages\Xbim.Ifc4.5.0.213\lib\net47\Xbim.Ifc4.dll</HintPath>
     </Reference>
     <Reference Include="Xbim.IO.CobieExpress, Version=5.0.0.0, Culture=neutral, PublicKeyToken=11e3655e576ec5a9, processorArchitecture=MSIL">
-      <HintPath>..\packages\Xbim.IO.CobieExpress.5.0.125\lib\net47\Xbim.IO.CobieExpress.dll</HintPath>
+      <HintPath>..\packages\Xbim.IO.CobieExpress.5.0.126\lib\net47\Xbim.IO.CobieExpress.dll</HintPath>
     </Reference>
     <Reference Include="Xbim.IO.Esent, Version=5.0.0.0, Culture=neutral, PublicKeyToken=11e3655e576ec5a9, processorArchitecture=MSIL">
       <HintPath>..\packages\Xbim.IO.Esent.5.0.213\lib\net47\Xbim.IO.Esent.dll</HintPath>
@@ -157,7 +157,7 @@
       <HintPath>..\packages\Xbim.IO.MemoryModel.5.0.213\lib\net47\Xbim.IO.MemoryModel.dll</HintPath>
     </Reference>
     <Reference Include="Xbim.IO.Table, Version=5.0.0.0, Culture=neutral, PublicKeyToken=11e3655e576ec5a9, processorArchitecture=MSIL">
-      <HintPath>..\packages\Xbim.IO.Table.5.0.125\lib\net47\Xbim.IO.Table.dll</HintPath>
+      <HintPath>..\packages\Xbim.IO.Table.5.0.126\lib\net47\Xbim.IO.Table.dll</HintPath>
     </Reference>
     <Reference Include="Xbim.Tessellator, Version=5.0.0.0, Culture=neutral, PublicKeyToken=11e3655e576ec5a9, processorArchitecture=MSIL">
       <HintPath>..\packages\Xbim.Tessellator.5.0.213\lib\net47\Xbim.Tessellator.dll</HintPath>
