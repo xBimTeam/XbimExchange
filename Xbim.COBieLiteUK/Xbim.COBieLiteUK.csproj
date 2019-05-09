@@ -30,8 +30,8 @@
   <ItemGroup>
     <PackageReference Include="Newtonsoft.Json" Version="11.0.2" />
     <PackageReference Include="Newtonsoft.Json.Bson" Version="1.0.1" />
-    <PackageReference Include="NPOI" Version="2.4.0" />
-    <PackageReference Include="Xbim.Essentials" Version="5.0.213" />
+    <PackageReference Include="NPOI" Version="2.4.1" />
+    <PackageReference Include="Xbim.Essentials" Version="5.0.252-develop" />
   </ItemGroup>
 
 </Project>
