@@ -132,7 +132,10 @@ namespace Xbim.COBie.Data
         /// <returns></returns>
         public string GetExternalSystem(IfcRoot item)
         {
-            return GetExternalSystem(item.OwnerHistory);
+            if (item != null)
+                return GetExternalSystem(item.OwnerHistory);
+            else
+                return DEFAULT_STRING;
         }
 
         //fields for GetMaterialOwnerHistory function
