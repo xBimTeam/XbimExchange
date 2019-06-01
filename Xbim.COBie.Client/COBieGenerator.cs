@@ -618,7 +618,7 @@ namespace Xbim.COBie.Client
                 }
                 else
                 {
-                    ProgressBar.Value = args.ProgressPercentage;
+                    ProgressBar.Value = Math.Max (0, Math.Min (args.ProgressPercentage, 100));
                 }
             };
 
