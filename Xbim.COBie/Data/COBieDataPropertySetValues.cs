@@ -1,7 +1,9 @@
-﻿using System.Collections.Generic;
+﻿using Microsoft.Extensions.Logging;
+using System.Collections.Generic;
 using System.Linq;
 using Xbim.Ifc2x3.Kernel;
 using Xbim.Ifc2x3.PropertyResource;
+using Xbim.Ifc4.Interfaces;
 
 //using System;
 
@@ -17,6 +19,8 @@ namespace Xbim.COBie.Data
         #region Fields
         private IfcObjectDefinition _currentObject;
         private Dictionary<IfcPropertySet, IEnumerable<IfcSimpleProperty>> _mapPsetToProps;
+        private ILogger logger;
+        
         #endregion
 
         #region Properties
@@ -65,6 +69,7 @@ namespace Xbim.COBie.Data
         public COBieDataPropertySetValues()
         {
             _mapPsetToProps = new Dictionary<IfcPropertySet, IEnumerable<IfcSimpleProperty>>();
+            logger = Common.XbimLogging.CreateLogger<COBieDataPropertySetValues>();
         }
 
          /// <summary>
@@ -242,6 +247,62 @@ namespace Xbim.COBie.Data
             return ifcPropertySingleValue.NominalValue.Value.ToString();
             else
                 return Constants.DEFAULT_STRING;
+        }
+
+        /// <summary>
+        /// Get the property value where the property name equals the passed in value. 
+        /// Always use SetAllPropertyValues before calling this method
+        /// </summary>
+        /// <param name="propertyName">IfcProperty name</param>
+        /// <param name="containsString">Do Contains text match on PropertyName if true, exact match if false</param>
+        /// <returns></returns>
+        public string GetPropertyValue(string propertyName, bool containsString)
+        {
+
+            IIfcSimpleProperty ifcProperty = null;
+            if (containsString)
+                ifcProperty = ObjProperties.Where(p => p.Name.ToString().Contains(propertyName)).FirstOrDefault();
+            else
+                ifcProperty = ObjProperties.Where(p => p.Name == propertyName).FirstOrDefault();
+
+            if(ifcProperty == null)
+                return Constants.DEFAULT_STRING;
+
+            //return a string value
+            if (ifcProperty is IIfcPropertySingleValue singleValue)
+            {
+                if (singleValue.NominalValue != null &&
+                    singleValue.NominalValue.Value != null)
+                {
+                    return singleValue.NominalValue.Value.ToString();
+                }
+            }
+            else if (ifcProperty is IIfcPropertyEnumeratedValue enumValue)
+            {
+                if (enumValue.EnumerationValues != null &&
+                    enumValue.EnumerationValues.FirstOrDefault() != null &&
+                    enumValue.EnumerationValues.FirstOrDefault().Value != null)
+                {
+                    return enumValue.EnumerationValues.FirstOrDefault().Value.ToString();
+                }
+            }
+            else if (ifcProperty is IfcPropertyReferenceValue propReference) //does not work with IFC4 interfaces!
+            {
+                
+                IfcObjectReferenceSelect referenceSelect = propReference.PropertyReference;
+                if (referenceSelect != null)
+                {
+                    string value = referenceSelect.ToString();
+                    return value;
+                }
+                
+            }
+            else
+            {
+                logger.LogWarning("GetPropertyValue is not implemented for {propertyType}", ifcProperty.GetType().Name);
+            }
+
+            return Constants.DEFAULT_STRING;
         }
 
         /// <summary>

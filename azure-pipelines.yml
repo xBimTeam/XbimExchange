@@ -22,7 +22,7 @@ variables:
   buildPlatform: 'Any CPU'
   buildConfiguration: 'Release'
   major: 5
-  minor: 0
+  minor: 1
   buildNo: $[counter('exchangeversioncounter', 100)]
 
 name: $(BuildDefinitionName)_$(SourceBranchName)_$(major).$(minor).$(buildNo)

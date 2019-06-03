@@ -145,7 +145,7 @@ namespace Xbim.CobieLiteUk
                 if (delay > 0)
                 {
                     var delayNo = TimeMonitor.ElapsedMilliseconds + delay;
-                    while (TimeMonitor.ElapsedMilliseconds < delayNo)
+                    while (TimeMonitor.ElapsedMilliseconds < delayNo && TimeMonitor.IsRunning)
                     {
 
                     }
