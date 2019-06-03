@@ -44,12 +44,11 @@ namespace XplorerPlugin.DPoW
             UseAmber = false;
             UseBlue = true;
         }
-        
-        XbimScene<WpfMeshGeometry3D, WpfMaterial> ILayerStyler.BuildScene(IModel model, XbimMatrix3D modelTransform, ModelVisual3D opaqueShapes, ModelVisual3D transparentShapes, List<Type> exclude)
+
+        public XbimScene<WpfMeshGeometry3D, WpfMaterial> BuildScene(IModel model, XbimMatrix3D modelTransform, ModelVisual3D opaqueShapes, ModelVisual3D transparentShapes, List<IPersistEntity> isolateInstances = null, List<IPersistEntity> hideInstances = null, List<Type> excludeTypes = null)
         {
             
-            
-            var excludedTypes = model.DefaultExclusions(exclude);
+            var excludedTypes = model.DefaultExclusions(excludeTypes);
             var tmpOpaquesGroup = new Model3DGroup();
             var retScene = new XbimScene<WpfMeshGeometry3D, WpfMaterial>(model);
             
@@ -190,5 +189,6 @@ namespace XplorerPlugin.DPoW
         {
             
         }
+
     }
 }
