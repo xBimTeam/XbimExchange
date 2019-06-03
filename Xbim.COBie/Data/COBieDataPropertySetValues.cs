@@ -297,19 +297,6 @@ namespace Xbim.COBie.Data
                 }
                 
             }
-            else if (ifcProperty is IfcPropertyReferenceValue) //does not work with IFC4 interfaces!
-            {
-                var propReference = ifcProperty as IfcPropertyReferenceValue;
-                if (propReference != null)
-                {
-                    IfcObjectReferenceSelect referenceSelect = propReference.PropertyReference;
-                    if (referenceSelect != null)
-                    {
-                        string value = referenceSelect.ToString ();
-                        return value;
-                    }
-                }
-            }
             else
             {
                 logger.LogWarning("GetPropertyValue is not implemented for {propertyType}", ifcProperty.GetType().Name);
