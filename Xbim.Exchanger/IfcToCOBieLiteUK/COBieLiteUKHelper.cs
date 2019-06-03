@@ -602,7 +602,7 @@ namespace XbimExchanger.IfcToCOBieLiteUK
 
             //retrieve all the IfcElements from the model and exclude them if they are a member of an IIfcType, 
             var unCategorizedAssets = _model.Instances.OfType<IIfcElement>()
-                .Where(t => !(t is IIfcFeatureElement) && !assemblyParts.Contains(t) && !Filter.ObjFilter(t)) //filter IIfcElement it IIfcTypeObject it is defined by is in excluded list of IIfcTypeobjects
+                .Where(t => !(t is IIfcFeatureElement) && !Filter.ObjFilter(t)) 
                 .Except(existingAssets);
             //convert to a Lookup with the key the type of the IIfcElement and the value a list of IIfcElements
             //if the object has a classification we use this to distinguish types
