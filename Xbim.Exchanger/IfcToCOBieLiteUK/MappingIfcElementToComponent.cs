@@ -65,6 +65,24 @@ namespace XbimExchanger.IfcToCOBieLiteUK
             //    space.KeyType = EntityType.Space;
             //    target.Spaces.Add(space);
             //}
+            else // if it is part of an aggregated element, add spaces of the aggregated element
+            {
+                var assemblyParts = ifcElement.Model.Instances.OfType<IIfcRelAggregates>().Where(b => b.RelatedObjects.Contains(ifcElement)).FirstOrDefault();
+                if (assemblyParts != null)
+                {
+                    ifcSpatialStructureElements = helper.GetSpaces((IIfcElement)assemblyParts.RelatingObject).ToList();
+                    target.Spaces = new List<SpaceKey>();
+                    if (ifcSpatialStructureElements.Any())
+                    {
+
+                        foreach (var spatialElement in ifcSpatialStructureElements)
+                        {
+                            var Fspace = new SpaceKey { Name = spatialElement.Name };
+                            target.Spaces.Add(Fspace);
+                        }
+                    }
+                }
+            }
 
 
             //Issues

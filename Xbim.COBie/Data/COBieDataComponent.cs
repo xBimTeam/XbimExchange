@@ -155,8 +155,17 @@ namespace Xbim.COBie.Data
         {
             string startData = "";
             IfcPropertySingleValue ifcPropertySingleValue = allPropertyValues.GetPropertySingleValue(propertyName);
-            if ((ifcPropertySingleValue != null) && (ifcPropertySingleValue.NominalValue != null))
-                startData = ifcPropertySingleValue.NominalValue.ToString();
+            if (ifcPropertySingleValue != null)
+            {
+                if (ifcPropertySingleValue.NominalValue != null)
+                {
+                    startData = ifcPropertySingleValue.NominalValue.ToString();
+                }
+            }
+            else
+            {
+                startData = allPropertyValues.GetPropertyValue(propertyName, false);
+            }
 
             DateTime frmDate;
             if (DateTime.TryParse(startData, out frmDate))
