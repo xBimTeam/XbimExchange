@@ -2,7 +2,7 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2011/10/nuspec.xsd">
   <metadata>
     <id>XplorerPlugin.DPoW</id>
-    <version>5.1.100-develop</version>
+    <version>5.1.101-develop</version>
     <title>XplorerPlugin.DPoW Validator</title>
     <authors>xBIM team</authors>
     <owners>xBIM team</owners>
@@ -33,12 +33,25 @@
     <file src="XplorerPlugin.DPoW\bin\Release\Xbim.CobieLiteUK.Validation.dll"              target="lib\net45\" />
     <file src="XplorerPlugin.DPoW\bin\Release\Xbim.DPoW.dll"                                target="lib\net45\" />
     <file src="XplorerPlugin.DPoW\bin\Release\XbimExchanger.dll"                            target="lib\net45\" />
-	<file src="XplorerPlugin.DPoW\bin\Release\Xbim.Properties.dll"                          target="lib\net45\" />
+	  <file src="XplorerPlugin.DPoW\bin\Release\Xbim.Properties.dll"                          target="lib\net45\" />
 
+    <!-- NPOI -->
     <file src="XplorerPlugin.CobieExport\bin\Release\NPOI.dll"                              target="lib\net45\NPOI.dll"                      />
     <file src="XplorerPlugin.CobieExport\bin\Release\NPOI.OOXML.dll"                        target="lib\net45\NPOI.OOXML.dll"                />
     <file src="XplorerPlugin.CobieExport\bin\Release\NPOI.OpenXml4Net.dll"                  target="lib\net45\NPOI.OpenXml4Net.dll"          />
     <file src="XplorerPlugin.CobieExport\bin\Release\NPOI.OpenXmlFormats.dll"               target="lib\net45\NPOI.OpenXmlFormats.dll"       />
+
+    <!-- NPOI requirements -->
+    <file src="XplorerPlugin.CobieExport\bin\Release\ICSharpCode.SharpZipLib.dll"           target="lib\net45\ICSharpCode.SharpZipLib.dll"       />
+
+    <!-- COBieLite requirements -->
+    <file src="XplorerPlugin.CobieExport\bin\Release\Newtonsoft.Json.Bson.dll"                   target="lib\net45\Newtonsoft.Json.Bson.dll"           />
     <file src="XplorerPlugin.CobieExport\bin\Release\Newtonsoft.Json.dll"                   target="lib\net45\Newtonsoft.Json.dll"           />
+
+    <!-- XbimExchanger requirements -->
+    <file src="XplorerPlugin.CobieExport\bin\Release\Xbim.CobieExpress.dll"                 target="lib\net45\Xbim.CobieExpress.dll"            />
+    <file src="XplorerPlugin.CobieExport\bin\Release\Xbim.IO.CobieExpress.dll"              target="lib\net45\Xbim.IO.CobieExpress.dll"            />
+    <file src="XplorerPlugin.CobieExport\bin\Release\Xbim.IO.Table.dll"                     target="lib\net45\Xbim.IO.Table.dll"            />
+    
   </files>
 </package>
