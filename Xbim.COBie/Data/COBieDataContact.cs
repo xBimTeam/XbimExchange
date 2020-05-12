@@ -62,9 +62,10 @@ namespace Xbim.COBie.Data
                 var ifcPerson = ifcPersonAndOrganization.ThePerson;
                 contact.Email = email;
 
-                //lets default the creator to that user who created the project for now, no direct link to OwnerHistory on IfcPersonAndOrganization, IfcPerson or IfcOrganization
-                contact.CreatedBy = GetTelecomEmailAddress(ifcProject.OwnerHistory);
-                contact.CreatedOn = GetCreatedOnDateAsFmtString(ifcProject.OwnerHistory);
+                //
+                var ifcOwnerHistory = FindOwnerHistory(ifcPersonAndOrganization, ifcProject);
+                contact.CreatedBy = GetTelecomEmailAddress(ifcOwnerHistory);
+                contact.CreatedOn = GetCreatedOnDateAsFmtString(ifcOwnerHistory);
 
                 //Conract.Category
                 //according Responsibility Matrix v17: 
@@ -88,7 +89,16 @@ namespace Xbim.COBie.Data
                 
                 contact.Company = (string.IsNullOrEmpty(ifcOrganization.Name)) ? DEFAULT_STRING : ifcOrganization.Name.ToString();
                 contact.Phone = GetTelecomTelephoneNumber(ifcPersonAndOrganization);
-                contact.ExtSystem = DEFAULT_STRING;   // TODO: Person is not a Root object so has no Owner. What should this be?
+
+                string extSystem = DEFAULT_STRING;
+                if (ifcOwnerHistory.OwningApplication != null)
+                {
+                    if (ifcOwnerHistory.OwningApplication.ApplicationFullName != null)
+                    {
+                        extSystem = ifcOwnerHistory.OwningApplication.ApplicationFullName;
+                    }
+                }
+                contact.ExtSystem = extSystem; 
                 
                 contact.ExtObject = "IfcPersonAndOrganization";
                 if (!string.IsNullOrEmpty(ifcPerson.Id))
@@ -163,6 +173,23 @@ namespace Xbim.COBie.Data
             contacts.OrderBy(s => s.Email);
 
             return contacts;
+        }
+
+        private IIfcOwnerHistory FindOwnerHistory(IIfcPersonAndOrganization ifcPersonAndOrganization, IIfcProject ifcProject)
+        {
+            foreach (var ownerHistory in Model.FederatedInstances.OfType<IIfcOwnerHistory>())
+            {
+                if (ownerHistory != null)
+                {
+                    if (ownerHistory.OwningUser == ifcPersonAndOrganization)
+                    {
+                        return ownerHistory;
+                    }
+                }
+            }
+
+            //not found - use default
+            return ifcProject.OwnerHistory;
         }
 
         private static void CollectRoles (SortedSet<string> roles, IEnumerable<IfcActorRole> ifcRoles)
