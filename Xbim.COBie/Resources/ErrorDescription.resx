@@ -135,7 +135,7 @@
     <comment>US to US spelling as default</comment>
   </data>
   <data name="Null_ForeignKey_Value" xml:space="preserve">
-    <value>Invalid value</value>
+    <value>Value is required</value>
   </data>
   <data name="Numeric_Value_Expected" xml:space="preserve">
     <value>Value must be a valid number</value>
