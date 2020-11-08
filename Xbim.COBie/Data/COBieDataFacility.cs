@@ -76,12 +76,21 @@ namespace Xbim.COBie.Data
 
                 facility.Name = (string.IsNullOrEmpty(name)) ? "The Facility Name Here" : name;
 
-                var createBy = ifcBuilding.GetPropertySingleNominalValue("Other", "COBieCreatedBy");//support for COBie Toolkit for Autodesk Revit
-                facility.CreatedBy = ((createBy != null) && ValidateString(createBy.ToString())) ? createBy.ToString() : GetTelecomEmailAddress(ifcBuilding.OwnerHistory);
-                var createdOn = ifcBuilding.GetPropertySingleNominalValue("Other", "COBieCreatedOn");//support for COBie Toolkit for Autodesk Revit
-                facility.CreatedOn = ((createdOn != null) && ValidateString(createdOn.ToString())) ? createdOn.ToString() : GetCreatedOnDateAsFmtString(ifcBuilding.OwnerHistory);
-
-                facility.Category = GetCategory(ifcBuilding);
+                if (ifcBuilding != null)
+                {                    
+                    var createBy = ifcBuilding.GetPropertySingleNominalValue("Other", "COBieCreatedBy");//support for COBie Toolkit for Autodesk Revit
+                    facility.CreatedBy = ((createBy != null) && ValidateString(createBy.ToString())) ? createBy.ToString() : GetTelecomEmailAddress(ifcBuilding.OwnerHistory);
+                    var createdOn = ifcBuilding.GetPropertySingleNominalValue("Other", "COBieCreatedOn");//support for COBie Toolkit for Autodesk Revit
+                    facility.CreatedOn = ((createdOn != null) && ValidateString(createdOn.ToString())) ? createdOn.ToString() : GetCreatedOnDateAsFmtString(ifcBuilding.OwnerHistory);
+                
+                    facility.Category = GetCategory(ifcBuilding);
+                }
+                else
+                {
+                    facility.CreatedBy = DEFAULT_STRING;
+                    facility.CreatedOn = DEFAULT_STRING;
+                    facility.Category = DEFAULT_STRING;
+                }
 
                 facility.ProjectName = GetFacilityProjectName(ifcProject);
                 facility.SiteName = GetFacilitySiteName(ifcSite);
@@ -103,7 +112,7 @@ namespace Xbim.COBie.Data
                 facility.ExternalSiteIdentifier = (ifcSite != null) ? ifcSite.GlobalId.ToString() : DEFAULT_STRING;
 
                 facility.ExternalFacilityObject = "IfcBuilding";
-                facility.ExternalFacilityIdentifier = ifcBuilding.GlobalId;
+                facility.ExternalFacilityIdentifier = (ifcBuilding != null) ? ifcBuilding.GlobalId.ToString() : DEFAULT_STRING;
 
                 facility.Description = GetFacilityDescription(ifcBuilding);
                 facility.ProjectDescription = GetFacilityProjectDescription(ifcProject);

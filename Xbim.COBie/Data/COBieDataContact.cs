@@ -62,25 +62,43 @@ namespace Xbim.COBie.Data
                 var ifcPerson = ifcPersonAndOrganization.ThePerson;
                 contact.Email = email;
 
-                //lets default the creator to that user who created the project for now, no direct link to OwnerHistory on IfcPersonAndOrganization, IfcPerson or IfcOrganization
-                contact.CreatedBy = GetTelecomEmailAddress(ifcProject.OwnerHistory);
-                contact.CreatedOn = GetCreatedOnDateAsFmtString(ifcProject.OwnerHistory);
-                
-                IfcActorRole ifcActorRole = null;
-                if (ifcPerson.Roles != null)
-                    ifcActorRole = ifcPerson.Roles.FirstOrDefault();
-                if (ifcOrganization.Roles != null)
-                    ifcActorRole = ifcOrganization.Roles.FirstOrDefault();
-                if ((ifcActorRole != null) && (!string.IsNullOrEmpty(ifcActorRole.UserDefinedRole)))
-                {
-                    contact.Category = ifcActorRole.UserDefinedRole.ToString();
-                }
-                else
-                    contact.Category = DEFAULT_STRING;
+                //
+                var ifcOwnerHistory = FindOwnerHistory(ifcPersonAndOrganization, ifcProject);
+                contact.CreatedBy = GetTelecomEmailAddress(ifcOwnerHistory);
+                contact.CreatedOn = GetCreatedOnDateAsFmtString(ifcOwnerHistory);
+
+                //Conract.Category
+                //according Responsibility Matrix v17: 
+                //IfcActorRole.UserDefinedRole
+                //Constructs a comma delimitted list of the unique strings found in 
+                //IfcPersonAndOrganization.Roles, IfcPersonAndOrganization.ThePerson.Roles, and IfcPersonAndOrganization.TheOrganization.Roles
+                var roles = new SortedSet<string>();
+                CollectRoles(roles, ifcPersonAndOrganization.Roles);
+                CollectRoles(roles, ifcPerson.Roles);
+                CollectRoles(roles, ifcOrganization.Roles);
+
+                string category = DEFAULT_STRING;
+                foreach ( var role in roles )
+                    {
+                    if ( category.Length > 0 )
+                        category += ",";
+                    category += role;
+                    }
+
+                contact.Category = category;
                 
                 contact.Company = (string.IsNullOrEmpty(ifcOrganization.Name)) ? DEFAULT_STRING : ifcOrganization.Name.ToString();
                 contact.Phone = GetTelecomTelephoneNumber(ifcPersonAndOrganization);
-                contact.ExtSystem = DEFAULT_STRING;   // TODO: Person is not a Root object so has no Owner. What should this be?
+
+                string extSystem = DEFAULT_STRING;
+                if (ifcOwnerHistory.OwningApplication != null)
+                {
+                    if (ifcOwnerHistory.OwningApplication.ApplicationFullName != null)
+                    {
+                        extSystem = ifcOwnerHistory.OwningApplication.ApplicationFullName;
+                    }
+                }
+                contact.ExtSystem = extSystem; 
                 
                 contact.ExtObject = "IfcPersonAndOrganization";
                 if (!string.IsNullOrEmpty(ifcPerson.Id))
@@ -155,6 +173,38 @@ namespace Xbim.COBie.Data
             contacts.OrderBy(s => s.Email);
 
             return contacts;
+        }
+
+        private IIfcOwnerHistory FindOwnerHistory(IIfcPersonAndOrganization ifcPersonAndOrganization, IIfcProject ifcProject)
+        {
+            foreach (var ownerHistory in Model.FederatedInstances.OfType<IIfcOwnerHistory>())
+            {
+                if (ownerHistory != null)
+                {
+                    if (ownerHistory.OwningUser == ifcPersonAndOrganization)
+                    {
+                        return ownerHistory;
+                    }
+                }
+            }
+
+            //not found - use default
+            return ifcProject.OwnerHistory;
+        }
+
+        private static void CollectRoles (SortedSet<string> roles, IEnumerable<IfcActorRole> ifcRoles)
+        {
+            foreach ( var ifcRole in ifcRoles )
+            {
+                if (ifcRole != null && ifcRole.UserDefinedRole != null)
+                {
+                    var role = ifcRole.UserDefinedRole.ToString();
+                    if (!string.IsNullOrEmpty(role))
+                    {
+                        roles.Add(role);
+                    }
+                }
+            }
         }
 
         private static void GetContactAddress(COBieContactRow contact, IEnumerable<IfcAddress> addresses)
