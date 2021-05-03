@@ -84,6 +84,16 @@ namespace XbimExchanger.IfcToCOBieLiteUK
                 }
             }
 
+            // Assemblies
+            var assemblyMapping = Exchanger.GetOrCreateMappings<MappingIfcRelAggregatesToAssembly>();
+            assemblyMapping.EntityType = EntityType.Asset;
+
+            bool hasAttributes = helper.AssemblyLookup.ContainsKey(ifcElement);
+            if (hasAttributes)
+            {
+                IIfcRelAggregates ifcRelAggregates = helper.AssemblyLookup[ifcElement];
+                target.AssemblyOf = assemblyMapping.AddMapping(ifcRelAggregates, new Assembly());
+            }
 
             //Issues
 

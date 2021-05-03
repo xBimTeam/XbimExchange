@@ -143,6 +143,15 @@ namespace XbimExchanger.IfcToCOBieLiteUK
         public Dictionary<IIfcPropertySet, IEnumerable<IIfcObjectDefinition>> SystemViaPropAssignment { get; private set; }
         #endregion
 
+        #region Assemblies
+
+        public Dictionary<IIfcObjectDefinition, IIfcRelAggregates> AssemblyLookup
+        { get; private set; }
+        public Dictionary<IIfcObjectDefinition, string> TypeEntityKeyLookup
+        { get; private set; }
+
+        #endregion
+
         #region Filters
 
         private OutPutFilters Filter  { get; set; }
@@ -554,6 +563,8 @@ namespace XbimExchanger.IfcToCOBieLiteUK
             _objectToTypeObjectMap = new Dictionary<IIfcObject, XbimIfcProxyTypeObject>();
             _assetAsignments = new Dictionary<IIfcTypeObject, IIfcAsset>();
 
+            TypeEntityKeyLookup = new Dictionary<IIfcObjectDefinition, string>();
+
             var relDefinesByType = _model.Instances.OfType<IIfcRelDefinesByType>().Where(r => !Filter.ObjFilter(r.RelatingType)).ToList();
             
             //creates a dictionary of uniqueness for type objects
@@ -564,6 +575,9 @@ namespace XbimExchanger.IfcToCOBieLiteUK
             {
                 var hash = GetTypeObjectHashString(typeObject);
                 var typeName = BuildTypeName(typeObject);
+
+                TypeEntityKeyLookup.Add(typeObject, typeName);
+
                 // it is possible for elements in the distinct call above to have the same hash, so we test before adding.
                 if (!proxyTypesByHash.ContainsKey(hash))
                     proxyTypesByHash.Add(hash, new XbimIfcProxyTypeObject(this, typeObject, typeName));
@@ -642,6 +656,23 @@ namespace XbimExchanger.IfcToCOBieLiteUK
                     if ((assetType is IIfcTypeObject) && !Filter.ObjFilter(assetType))
                         AssetAsignments[(IIfcTypeObject)assetType] = (IIfcAsset)assetRel.RelatingGroup;
                 ReportProgress.IncrementAndUpdate();
+            }
+
+            // ASSEMBLIES
+            AssemblyLookup = new Dictionary<IIfcObjectDefinition, IIfcRelAggregates>();
+
+            List<IIfcObjectDefinition> assemblyParents = _model.Instances.OfType<IIfcTypeObject>().Cast<IIfcObjectDefinition>().ToList();
+            assemblyParents = assemblyParents.Concat(_model.Instances.OfType<IIfcElement>().Cast<IIfcObjectDefinition>()).ToList();
+
+            List<IIfcRelAggregates> assemblies = _model.Instances.OfType<IIfcRelAggregates>().ToList();
+            foreach (IIfcObjectDefinition ifcObjectDefinition in assemblyParents)
+            {
+                List<IIfcRelAggregates> ifcRelAggregates = assemblies.Where(r => r.RelatingObject.EntityLabel.Equals(ifcObjectDefinition.EntityLabel)).ToList();
+                if (ifcRelAggregates.Any())
+                {
+                    IIfcRelAggregates ifcRelAggregate = ifcRelAggregates.First();
+                    AssemblyLookup.Add(ifcObjectDefinition, ifcRelAggregate);
+                }
             }
         }
 
