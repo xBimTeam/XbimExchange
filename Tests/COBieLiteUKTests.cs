@@ -898,5 +898,64 @@ namespace Tests
             submitted.WriteCobie("Lakeside_restaurant_submission.xlsx", out msg);
             Assert.IsTrue(string.IsNullOrWhiteSpace(msg));
         }
+
+        [DeploymentItem("TestFiles\\BasicFM_wAssembly.ifc")]
+        [TestMethod]
+        public void ImportWithAssemblies()
+        {
+            const string ifcTestFile = @"BasicFM_wAssembly.ifc";
+            using (var m = IfcStore.Open(ifcTestFile))
+            {
+                var facilities = new List<Facility>();
+
+                var ifcToCoBieLiteUkExchanger = new IfcToCOBieLiteUkExchanger(m, facilities);
+                facilities = ifcToCoBieLiteUkExchanger.Convert();
+
+                foreach (var facilityType in facilities)
+                {
+                    var log = new StringWriter();
+                    facilityType.ValidateUK2012(log, true);
+
+                    AssetType assetType = facilityType.AssetTypes.Find(type => type.Name.Equals("WallType.2 IW-1"));
+
+                    Assembly typeAssembly = assetType.AssemblyOf;
+                    Assert.AreEqual("myTypeAssembly", typeAssembly.Name);
+                    Assert.AreEqual("myDescription", typeAssembly.Description);
+                    Assert.IsNotNull( typeAssembly.ExternalEntity);
+                    Assert.IsNotNull( typeAssembly.ExternalId);
+                    Assert.IsNotNull( typeAssembly.AltExternalId);
+                    Assert.IsNotNull( typeAssembly.ExternalSystem);
+                    Assert.IsNotNull( typeAssembly.Categories);
+                    Assert.IsNotNull( typeAssembly.CreatedBy);
+                    Assert.IsNotNull( typeAssembly.CreatedOn);
+
+                    EntityKey typeChild = typeAssembly.ChildAssetsOrTypes.First();
+                    Assert.AreEqual("WallType.1 AW-1", typeChild.Name);
+                    Assert.AreEqual(EntityType.AssetType, typeChild.KeyType);
+
+                    Asset component = facilityType.AssetTypes
+                        .SelectMany(type => type.Assets)
+                        .ToList()
+                        .Find(asset => asset.Name.Equals("Slab 001"));
+
+                    Assembly componentAssembly = component.AssemblyOf;
+                    Assert.AreEqual("myAssetComponentAssembly", componentAssembly.Name);
+                    Assert.AreEqual("myDescription", componentAssembly.Description);
+                    Assert.IsNotNull(componentAssembly.ExternalEntity);
+                    Assert.IsNotNull(componentAssembly.ExternalId);
+                    Assert.IsNotNull(componentAssembly.AltExternalId);
+                    Assert.IsNotNull(componentAssembly.ExternalSystem);
+                    Assert.IsNotNull(componentAssembly.Categories);
+                    Assert.IsNotNull(componentAssembly.CreatedBy);
+                    Assert.IsNotNull(componentAssembly.CreatedOn);
+
+                    EntityKey componentChild = componentAssembly.ChildAssetsOrTypes.First();
+                    Assert.AreEqual("Slab 002", componentChild.Name);
+                    Assert.AreEqual(EntityType.Asset, componentChild.KeyType);
+
+                    break;
+                }
+            }
+        }
     }
 }

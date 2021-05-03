@@ -1,0 +1,2369 @@
+ISO-10303-21;
+HEADER;
+
+/* test file to verify concepts required for Basic FM Handover  ------------------ */
+/* Exchange scenario is the CAD (Architectural BIM) to CAFM exchange --------------------------- */
+/* Header information includes: Exchange purpose, Author, Company, Application, Date  ---------- */
+
+FILE_DESCRIPTION(('ViewDefinition [CoordinationView, FMHandOverView]'),'2;1');
+FILE_NAME('D:\\Daten\\IAI\\R2x3\\EXPRESS-X\\Testdateien\\Test_BasicFM-HandOver_01.ifc',
+	'2009-10-03T18:30:14',
+	('Thomas Liebich'),
+	('AEC3'),
+	'IFC text editor',
+	'IFC text editor',
+	'reference file created for the Basic FM Handover View');
+FILE_SCHEMA(('IFC2X3'));
+ENDSEC;
+
+DATA;
+
+/* commonly used instances: maybe shared for efficiency: however not mandatory ----------------- */
+/* shared coordinates                                                                            */
+#1= IFCAXIS2PLACEMENT3D(#20,$,$);
+#10= IFCDIRECTION((0.,0.,1.));
+#11= IFCDIRECTION((0.,1.,0.));
+#12= IFCDIRECTION((1.,0.,0.));
+#13= IFCDIRECTION((0.,0.,-1.));
+#14= IFCDIRECTION((0.,-1.,0.));
+#15= IFCDIRECTION((-1.,0.,0.));
+#16= IFCDIRECTION((1.,0.));
+#17= IFCDIRECTION((0.,1.));
+#18= IFCDIRECTION((-1.,0.));
+#19= IFCDIRECTION((0.,-1.));
+#20= IFCCARTESIANPOINT((0.,0.,0.));
+
+/* shared owner history ------------------------------------------------------------------------ */
+/* note: having individual owner history objects to capture creation/modification time prefered  */
+#4= IFCOWNERHISTORY(#40,#41,$,.ADDED.,$,$,$,1179073813);
+#40= IFCPERSONANDORGANIZATION(#42,#43,$);
+#41= IFCAPPLICATION(#43,'Version 1','IFC text editor','IFCtext');
+#42= IFCPERSON($,'Liebich','Thomas',$,$,$,$,$);
+#43= IFCORGANIZATION($,'AEC3',$,$,$);
+
+/* project settings  --------------------------------------------------------------------------- */
+/* project #100 shall pass                                                                       */
+/* --------------------------------------------------------------------------------------------- */
+/* Project attributes: number, full name, desciption provided                                    */ 
+#100= IFCPROJECT('3KFKb0sfrDJwSHalGIQFZT',#4,'FM-A-01',$,$,'FM Architectural Handover',$,(#111,#112),#140); 
+/* --------------------------------------------------------------------------------------------- */
+/* Project settings:  representation context                                                     */
+/* - only relevant if the optional geometry is imported into CAFM system                         */
+#111= IFCGEOMETRICREPRESENTATIONCONTEXT($,'Model',3,1.00000000000000E-5,#1,#17);
+#112= IFCGEOMETRICREPRESENTATIONCONTEXT($,'Plan',3,1.00000000000000E-5,#1,#17);
+#113= IFCGEOMETRICREPRESENTATIONSUBCONTEXT('Axis','Plan',*,*,*,*,#112,0.01,.PLAN_VIEW.,$);
+/* --------------------------------------------------------------------------------------------- */
+/* Project units: global units                                                                   */
+/* - required for import, sets also the default units for properties and quantities              */
+/* - length, area and volume units provided                                                      */
+#140= IFCUNITASSIGNMENT((#122,#126,#127,#128));
+#122= IFCSIUNIT(*,.LENGTHUNIT.,$,.METRE.);
+#126= IFCCONVERSIONBASEDUNIT(#125,.PLANEANGLEUNIT.,'DEGREE',#124);
+#123= IFCSIUNIT(*,.PLANEANGLEUNIT.,$,.RADIAN.);
+#124= IFCMEASUREWITHUNIT(IFCPLANEANGLEMEASURE(0.0174532925199433),#123);
+#125= IFCDIMENSIONALEXPONENTS(0,0,0,0,0,0,0);
+#127= IFCSIUNIT(*,.AREAUNIT.,$,.SQUARE_METRE.);
+#128= IFCSIUNIT(*,.VOLUMEUNIT.,$,.CUBIC_METRE.);
+/* --------------------------------------------------------------------------------------------- */
+/* Project decomposition: Site contained in Project:                                  shall pass */
+#10100= IFCRELAGGREGATES('28TV8HFXz4QfogZkH9aaab',#4,$,$,#100,(#10010));
+
+
+/* spatial structure - site -------------------------------------------------------------------- */
+/* single site #10010 shall pass                                                                 */
+/* --------------------------------------------------------------------------------------------- */
+/* Site Attributes: number, full name, description provided                                      */ 
+/* Site Geographic Location: longitude, latitude, elevation provided                             */
+#10010= IFCSITE('28hfXoRX9EMhvGvGhmaaad',#4,'01.1','Site object for testing Basic FM Handover',$,#10011,$,'FM Test Site',.ELEMENT.,(50,58,33,110400),(11,20,32,161199),249.,$,#10021);
+#10011= IFCLOCALPLACEMENT($,#1);
+/* --------------------------------------------------------------------------------------------- */
+/* Site Address: Address line, zip, city and country provided                                    */ 
+#10021=IFCPOSTALADDRESS($,$,$,$,('Albrecht-D\X\FCrer-Strasse 18'),$,'Weimar',$,'99423','Deutschland');
+/* --------------------------------------------------------------------------------------------- */
+/* Spatial decomposition: Building contained in Site:                                 shall pass */
+#10110= IFCRELAGGREGATES('28TV8HFXz4QfogZkH9XM_y',#4,$,$,#10010,(#11000));
+
+
+/* spatial structure - building ---------------------------------------------------------------- */
+/* single building #11000 shall pass                                                             */
+/* --------------------------------------------------------------------------------------------- */
+/* Building Attributes: number, full name, description provided                                  */ 
+#11000= IFCBUILDING('28hfXoRX9EMhvGvGhmaaae',#4,'01.1.A','Building object for testing Basic FM Handover',$,#11001,$,'FM Test Building A',.ELEMENT.,249.,$,$);
+#11001= IFCLOCALPLACEMENT(#10011,#1);
+/* --------------------------------------------------------------------------------------------- */
+/* Building Common Properies:                                                         shall pass */
+#11150= IFCPROPERTYSET('3VOudnDubsdvkFmFgomREH',#4,'Pset_BuildingCommon',$,(#11151,#11152));
+#11151= IFCPROPERTYSINGLEVALUE('YearOfConstruction',$,IFCLABEL('2002'),$);
+#11152= IFCPROPERTYSINGLEVALUE('IsLandmarked',$,IFCLOGICAL(.F.),$);
+#11169= IFCRELDEFINESBYPROPERTIES('2aWq7jxefqFPpseDNp82nX',#4,$,$,(#11000),#11150);
+/* --------------------------------------------------------------------------------------------- */
+/* Building Storey contained in Building:                                             shall pass */
+#10120= IFCRELAGGREGATES('1Hj1fsgcjEmPaN5VCa9PCM',#4,$,$,#11000,(#20100,#20200,#20300));
+/* --------------------------------------------------------------------------------------------- */
+
+
+/* spatial structure - building storey --------------------------------------------------------- */
+/* building storey #20100 shall pass                                                             */
+/* --------------------------------------------------------------------------------------------- */
+/* Building Storey Attributes: number, full name provided                                        */ 
+/* Building Storey Elevation: elevation provided                                                 */
+#20100= IFCBUILDINGSTOREY('0h$ksovXH3Jeg0w$H7aaaf',#4,'A.-1','Kellergeschoss',$,#20101,$,'KG',.ELEMENT.,-3.2);
+#20101= IFCLOCALPLACEMENT(#11001,#20110);
+#20110= IFCAXIS2PLACEMENT3D(#20111,#10,#12);
+#20111= IFCCARTESIANPOINT((0.,0.,-3.2));
+/* --------------------------------------------------------------------------------------------- */
+/* Elements contained in Building Storey:                                             shall pass */
+#20120= IFCRELCONTAINEDINSPATIALSTRUCTURE('1Hj1fsgcjEmPjw5Vs59PCM',#4,$,$,(#50100),#20100);
+/* --------------------------------------------------------------------------------------------- */
+
+/* spatial structure - building storey --------------------------------------------------------- */
+/* building storey #20200 shall pass                                                             */
+/* --------------------------------------------------------------------------------------------- */
+/* Building Storey Attributes: number, full name provided                                        */
+/* Building Storey Elevation: elevation provided                                                 */
+#20200= IFCBUILDINGSTOREY('0h$ksovXH3Jeg0w$H7yFJf',#4,'A.0',$,$,#20201,$,'EG',.ELEMENT.,0.);
+#20201= IFCLOCALPLACEMENT(#11001,#20210);
+#20210= IFCAXIS2PLACEMENT3D(#20211,#10,#12);
+#20211= IFCCARTESIANPOINT((0.,0.,0.));
+/* --------------------------------------------------------------------------------------------- */
+/* Building Storey Common Properies:                                                  shall pass */
+#20250= IFCPROPERTYSET('3VOudnDubsdvkdfFgomREH',#4,'Pset_BuildingStoreyCommon',$,(#20251,#20252));
+#20251= IFCPROPERTYSINGLEVALUE('EntranceLevel',$,IFCBOOLEAN(.T.),$);
+#20252= IFCPROPERTYSINGLEVALUE('AboveGround',$,IFCLOGICAL(.T.),$);
+#20269= IFCRELDEFINESBYPROPERTIES('2aWq7t7efqFPpseDNp82nX',#4,$,$,(#20200),#20250);
+/* --------------------------------------------------------------------------------------------- */
+/* Building Storey Base Quantities                                                    shall pass */
+#20270= IFCELEMENTQUANTITY('3VOud55gbsdvNXmFgomREH',#4,'BaseQuantities',$,$,(#20271,#20272,#20273));
+#20271= IFCQUANTITYAREA('NetHeight','3.2-0.2',$,3.0);
+#20272= IFCQUANTITYAREA('GrossHeight','3.2',$,3.2);
+#20273= IFCQUANTITYAREA('LIBAL','99999',$,99999);
+#20279= IFCRELDEFINESBYPROPERTIES('2aWq7t7efqFP0keDNp82nX',#4,$,$,(#20200),#20270);
+
+/* --------------------------------------------------------------------------------------------- */
+/* Spaces contained in Building Storey:                                               shall pass */
+#11210= IFCRELAGGREGATES('1Hj1fsgcjEmP2D5VCa9PCM',#4,$,$,#20200,(#30100,#30200,#30300,#30400));
+/* --------------------------------------------------------------------------------------------- */
+/* Elements contained in Building Storey:                                             shall pass */
+/* includes door #110300 being contained in story                                                 */
+/* includes window #100200 being contained in story                                              */
+#20220= IFCRELCONTAINEDINSPATIALSTRUCTURE('1Hj1fsgcjEmPjw5VCa9PCM',#4,$,$,(#40100,#40200,#40300,#40400,#40500,#40600,#40700,#50200,#100100,#100200,#110300,#120100,#130100),#20200);
+
+
+/* spatial structure - building storey --------------------------------------------------------- */
+/* building storey #20300 shall pass                                                             */
+/* --------------------------------------------------------------------------------------------- */
+/* Building Storey Attributes: number, full name provided                                        */
+/* Building Storey Elevation: elevation provided                                                 */
+#20300= IFCBUILDINGSTOREY('0h$ksovXH3Jee5w$H7yFJf',#4,'A.+1',$,$,#20301,$,'1.OG',.ELEMENT.,3.2);
+#20301= IFCLOCALPLACEMENT(#11001,#20310);
+#20310= IFCAXIS2PLACEMENT3D(#20311,#10,#12);
+#20311= IFCCARTESIANPOINT((0.,0.,3.2));
+/* --------------------------------------------------------------------------------------------- */
+/* Building Storey Base Quantities                                                    shall pass */
+#20370= IFCELEMENTQUANTITY('3VOud55bbsdvNXmFgomREH',#4,'BaseQuantities',$,$,(#20371,#20372));
+#20371= IFCQUANTITYAREA('NetHeight','3.2-0.2',$,3.0);
+#20372= IFCQUANTITYAREA('GrossHeight','3.2',$,3.2);
+#20379= IFCRELDEFINESBYPROPERTIES('2aWq7t7efqFP0keDgr82nX',#4,$,$,(#20300),#20370);
+/* --------------------------------------------------------------------------------------------- */
+/* Spaces contained in Building Storey:                                               shall pass */
+#11310= IFCRELAGGREGATES('1Hj1fsgcjE7P2D5VCa9PCM',#4,$,$,#20300,(#30500,#30600,#30700,#30800));
+/* --------------------------------------------------------------------------------------------- */
+/* Elements contained in Building Storey:                                             shall pass */
+/* includes door #110400 being contained in story                                                 */
+/* includes window #100300 being contained in story                                              */
+#20320= IFCRELCONTAINEDINSPATIALSTRUCTURE('1Hj1fsgcjEmP2D5VCa9P1a',#4,$,$,(#41100,#41200,#41300,#41400,#41500,#41600,#50300,#110400,#100300),#20300);
+
+
+
+/* test space no.1 ----------------------------------------------------------------------------- */
+/* space #30100 shall pass                                                                       */
+/* --------------------------------------------------------------------------------------------- */
+/* Space Attributes: number, full name, description, internal/external provided                  */
+/* Space Classification as DIN277-2 see #39110 ff                                              */
+#30100= IFCSPACE('0h$ksovXH3Jeg0w$H724af',#4,'EG.001','Space-001 object for testing Basic FM Handover',$,#30101,#30120,'Main function room',.ELEMENT.,.INTERNAL.,$);
+/* test space - placement, only relevant for import, if geometry is supported in CAFM ---------- */
+#30101= IFCLOCALPLACEMENT(#20201,#30110);
+#30110= IFCAXIS2PLACEMENT3D(#30111,#10,#12);
+#30111= IFCCARTESIANPOINT((0.,0.,0.));
+/* test space - geometry, only relevant for import, if geometry is supported in CAFM  ---------- */
+#30120= IFCPRODUCTDEFINITIONSHAPE($,$,(#30121,#30131));
+#30121= IFCSHAPEREPRESENTATION(#113,'FootPrint','GeometricCurveSet',(#30122));
+#30122= IFCPOLYLINE((#30123,#30124,#30125,#30126,#30123));
+#30123= IFCCARTESIANPOINT((0.1,0.1));
+#30124= IFCCARTESIANPOINT((12.9,0.1));
+#30125= IFCCARTESIANPOINT((12.9,9.9));
+#30126= IFCCARTESIANPOINT((0.1,9.9));
+#30131= IFCSHAPEREPRESENTATION(#111,'Body','SweptSolid',(#30132));
+#30132= IFCEXTRUDEDAREASOLID(#30134,#30133,#10,3.);
+#30133= IFCAXIS2PLACEMENT3D(#20,$,$);
+#30134= IFCARBITRARYPROFILEDEFWITHVOIDS(.AREA.,$,#30122,(#30135));
+#30135= IFCPOLYLINE((#30136,#30137,#30138,#30139,#30136));
+#30136= IFCCARTESIANPOINT((6.9,4.9));
+#30137= IFCCARTESIANPOINT((6.9,5.1));
+#30138= IFCCARTESIANPOINT((7.1,5.1));
+#30139= IFCCARTESIANPOINT((7.1,4.9));
+
+/* --------------------------------------------------------------------------------------------- */
+/* Space Common Properies: standard covering information provided                     shall pass */
+#30150= IFCPROPERTYSET('3VOudnDubsdvNXmFgomREH',#4,'Pset_SpaceCommon',$,(#30151,#30152,#30153));
+#30151= IFCPROPERTYSINGLEVALUE('FloorCovering',$,IFCLABEL('Parquet'),$);
+#30152= IFCPROPERTYSINGLEVALUE('WallCovering',$,IFCLABEL('Paint'),$);
+#30153= IFCPROPERTYSINGLEVALUE('CeilingCovering',$,IFCLABEL('Paint'),$);
+#30159= IFCRELDEFINESBYPROPERTIES('2aWq7jxeH4FPpseDNp82nX',#4,$,$,(#30100),#30150);
+/* --------------------------------------------------------------------------------------------- */
+/* Space Base Quantities: standard quantities provided                                shall pass */
+#30160= IFCELEMENTQUANTITY('3VOud5nubsdvNXmFgomREH',#4,'BaseQuantities',$,$,(#30161,#30162,#30163,#30164,#30165,#30166,#30167,#30168));
+#30161= IFCQUANTITYAREA('NetFloorArea','12.8*9.8-0.2*0.2',$,125.40);
+#30162= IFCQUANTITYAREA('GrossFloorArea','12.8*9.8',$,125.44);
+#30163= IFCQUANTITYAREA('NetWallArea','2*(12.8+9.8)*3-4.5-2*0.2*0.2',$,130.3);
+#30164= IFCQUANTITYAREA('GrossWallArea','2*(12.8+9.8)*3',$,135.6);
+#30165= IFCQUANTITYAREA('NetCeilingArea','12.8*9.8-0.2*0.2',$,125.40);
+#30166= IFCQUANTITYAREA('GrossCeilingArea','12.8*9.8',$,125.44);
+#30167= IFCQUANTITYLENGTH('FinishCeilingHeight','3.0-0.1',$,2.9);
+#30168= IFCQUANTITYLENGTH('GrossPerimeter','2x12.8+2x9.8',$,45.2);
+#30169= IFCRELDEFINESBYPROPERTIES('2aWq7jxeH4FP2oeDNp82nX',#4,$,$,(#30100),#30160);
+/* --------------------------------------------------------------------------------------------- */
+/* Space Boundaries: doors bounding space - see #110300 ff                            shall pass */
+/* --------------------------------------------------------------------------------------------- */
+/* Elements contained in Space:                                                       shall pass */
+/* NOTE: sprinklers are included in the space containment                                             */
+#30190= IFCRELCONTAINEDINSPATIALSTRUCTURE('1Hj1fsgcs6m5hw5VCa9PCM',#4,$,$,(#80400,#80500,#80600),#30100);
+
+/* test space no.2 ----------------------------------------------------------------------------- */
+/* space #30200 shall pass                                                                       */
+/* --------------------------------------------------------------------------------------------- */
+/* - space attributes: number, full name, description provided                                   */
+/* Space Classification as DIN277 - see #39110 ff                                                */
+#30200= IFCSPACE('0h$ksovXH3Jeg0w$H7s8af',#4,'EG.002','Space-002 object for testing Basic FM Handover',$,#30201,#30220,'Preparation room',.ELEMENT.,.NOTDEFINED.,$);
+/* test space - placement, only relevant for import, if geometry is supported in CAFM ---------- */
+#30201= IFCLOCALPLACEMENT(#20201,#30210);
+#30210= IFCAXIS2PLACEMENT3D(#30211,#10,#12);
+#30211= IFCCARTESIANPOINT((13.,5.,0.));
+/* test space - geometry, only relevant for import, if geometry is supported in CAFM  ---------- */
+#30220= IFCPRODUCTDEFINITIONSHAPE($,$,(#30221,#30231));
+#30221= IFCSHAPEREPRESENTATION(#113,'FootPrint','GeometricCurveSet',(#30222));
+#30222= IFCPOLYLINE((#30223,#30224,#30225,#30226,#30223));
+#30223= IFCCARTESIANPOINT((0.1,0.1));
+#30224= IFCCARTESIANPOINT((6.9,0.1));
+#30225= IFCCARTESIANPOINT((6.9,4.9));
+#30226= IFCCARTESIANPOINT((0.1,4.9));
+#30231= IFCSHAPEREPRESENTATION(#111,'Body','SweptSolid',(#30232));
+#30232= IFCEXTRUDEDAREASOLID(#30234,#30233,#10,3.);
+#30233= IFCAXIS2PLACEMENT3D(#20,$,$);
+#30234= IFCARBITRARYCLOSEDPROFILEDEF(.AREA.,$,#30222);
+/* --------------------------------------------------------------------------------------------- */
+/* Space Common Properies: standard covering information provided                     shall pass */
+/* Note material value for Ceiling should be overriden by the covering object                    */
+#30250= IFCPROPERTYSET('3VOudnD8hC6vNXmFgomREH',#4,'Pset_SpaceCommon',$,(#30251,#30252,#30253));
+#30251= IFCPROPERTYSINGLEVALUE('FloorCovering',$,IFCLABEL('Tiles'),$);
+#30252= IFCPROPERTYSINGLEVALUE('WallCovering',$,IFCLABEL('Paint'),$);
+#30253= IFCPROPERTYSINGLEVALUE('CeilingCovering',$,IFCLABEL('Paint'),$);
+#30259= IFCRELDEFINESBYPROPERTIES('2aWq7pdeH4FPpS9DNp82nX',#4,$,$,(#30200),#30250);
+/* --------------------------------------------------------------------------------------------- */
+/* Space Base Quantities: standard quantities provided                                shall pass */
+#30260= IFCELEMENTQUANTITY('3VOud5nubs37NXmFgomREH',#4,'BaseQuantities',$,$,(#30261,#30262,#30263,#30264));
+#30261= IFCQUANTITYAREA('NetFloorArea','6.8 * 4.8',$,32.64);
+#30262= IFCQUANTITYAREA('GrossFloorArea','6.8 * 4.8',$,32.64);
+#30263= IFCQUANTITYLENGTH('FinishCeilingHeight','3.0 - 0.1',$,2.9);
+#30264= IFCQUANTITYLENGTH('GrossPerimeter','2 x 6.8 + 2 x 4.8',$,23.20);
+#30269= IFCRELDEFINESBYPROPERTIES('2aWq7jxeH4nk2oeDNp82nX',#4,$,$,(#30200),#30260);
+/* --------------------------------------------------------------------------------------------- */
+/* Elements contained in Space:                                                       shall pass */
+/* NOTE: contains a suspended ceiling as covering object                                         */
+/* NOTE: contains furniture element                                                              */
+#30290= IFCRELCONTAINEDINSPATIALSTRUCTURE('1Hjf6sgcs6mPjw5VCa9PCM',#4,$,$,(#70200,#70300,#90100,#90200,#90300),#30200);
+/* --------------------------------------------------------------------------------------------- */
+/* Space Boundaries: doors bounding space - see #110300 ff                            shall pass */
+/* Space Boundaries: window bounding space - see #100200 ff                                      */
+
+
+/* test space no.3 ----------------------------------------------------------------------------- */
+/* space #30300 shall pass                                                                       */
+/* --------------------------------------------------------------------------------------------- */
+/* - space attributes: number, full name, description provided                                   */
+#30300= IFCSPACE('0h$ksovXH3Je2d9dH7s8af',#4,'EG.003','Space-003 object for testing Basic FM Handover',$,#30301,#30320,'Hall',.ELEMENT.,.NOTDEFINED.,$);
+/* test space - placement, only relevant for import, if geometry is supported in CAFM ---------- */
+#30301= IFCLOCALPLACEMENT(#20201,#30310);
+#30310= IFCAXIS2PLACEMENT3D(#30311,#10,#12);
+#30311= IFCCARTESIANPOINT((13.,0.,0.));
+/* test space - geometry, only relevant for import, if geometry is supported in CAFM  ---------- */
+#30320= IFCPRODUCTDEFINITIONSHAPE($,$,(#30321,#30331));
+#30321= IFCSHAPEREPRESENTATION(#113,'FootPrint','GeometricCurveSet',(#30322));
+#30322= IFCPOLYLINE((#30323,#30324,#30325,#30326,#30323));
+#30323= IFCCARTESIANPOINT((0.1,0.1));
+#30324= IFCCARTESIANPOINT((3.4,0.1));
+#30325= IFCCARTESIANPOINT((3.4,4.9));
+#30326= IFCCARTESIANPOINT((0.1,4.9));
+#30331= IFCSHAPEREPRESENTATION(#111,'Body','SweptSolid',(#30332));
+#30332= IFCEXTRUDEDAREASOLID(#30334,#30333,#10,3.);
+#30333= IFCAXIS2PLACEMENT3D(#20,$,$);
+#30334= IFCARBITRARYCLOSEDPROFILEDEF(.AREA.,$,#30322);
+/* --------------------------------------------------------------------------------------------- */
+/* Space Common Properies: standard covering information provided                     shall pass */
+#30350= IFCPROPERTYSET('3VOudnDubC6vs3mFgomREH',#4,'Pset_SpaceCommon',$,(#30351,#30352,#30353));
+#30351= IFCPROPERTYSINGLEVALUE('FloorCovering',$,IFCLABEL('Tiles'),$);
+#30352= IFCPROPERTYSINGLEVALUE('WallCovering',$,IFCLABEL('Paint'),$);
+#30353= IFCPROPERTYSINGLEVALUE('CeilingCovering',$,IFCLABEL('Paint'),$);
+#30359= IFCRELDEFINESBYPROPERTIES('2aWqg8xeH4FPpS9DNp82nX',#4,$,$,(#30300),#30350);
+/* --------------------------------------------------------------------------------------------- */
+/* Space Base Quantities: standard quantities provided                                shall pass */
+#30360= IFCELEMENTQUANTITY('3VOudg6ubs37NXmFgomREH',#4,'BaseQuantities',$,$,(#30361,#30362,#30363,#30364));
+#30361= IFCQUANTITYAREA('NetFloorArea','3.3 * 4.8',$,15.84);
+#30362= IFCQUANTITYAREA('GrossFloorArea','3.3 * 4.8',$,15.84);
+#30363= IFCQUANTITYLENGTH('FinishCeilingHeight','3.0 - 0.1',$,2.9);
+#30364= IFCQUANTITYLENGTH('GrossPerimeter','2x3.3 + 2x4.8',$,16.20);
+#30369= IFCRELDEFINESBYPROPERTIES('2aWpajxeH4nk2oeDNp82nX',#4,$,$,(#30300),#30360);
+
+
+/* test space no.4 ----------------------------------------------------------------------------- */
+/* space #30400 shall pass                                                                       */
+/* --------------------------------------------------------------------------------------------- */
+/* - space attributes: number, full name, description provided                                   */
+#30400= IFCSPACE('0h$ksovXH3Jeg02dH7s8af',#4,'EG.004','Space-004 object for testing Basic FM Handover',$,#30401,#30420,'Vestibule',.ELEMENT.,.NOTDEFINED.,$);
+/* test space - placement, only relevant for import, if geometry is supported in CAFM ---------- */
+#30401= IFCLOCALPLACEMENT(#20201,#30410);
+#30410= IFCAXIS2PLACEMENT3D(#30411,#10,#12);
+#30411= IFCCARTESIANPOINT((16.5,0.,0.));
+/* test space - geometry, only relevant for import, if geometry is supported in CAFM  ---------- */
+#30420= IFCPRODUCTDEFINITIONSHAPE($,$,(#30421,#30431));
+#30421= IFCSHAPEREPRESENTATION(#113,'FootPrint','GeometricCurveSet',(#30422));
+#30422= IFCPOLYLINE((#30423,#30424,#30425,#30426,#30423));
+#30423= IFCCARTESIANPOINT((0.1,0.1));
+#30424= IFCCARTESIANPOINT((3.4,0.1));
+#30425= IFCCARTESIANPOINT((3.4,4.9));
+#30426= IFCCARTESIANPOINT((0.1,4.9));
+#30431= IFCSHAPEREPRESENTATION(#111,'Body','SweptSolid',(#30432));
+#30432= IFCEXTRUDEDAREASOLID(#30434,#30433,#10,3.);
+#30433= IFCAXIS2PLACEMENT3D(#20,$,$);
+#30434= IFCARBITRARYCLOSEDPROFILEDEF(.AREA.,$,#30422);
+/* --------------------------------------------------------------------------------------------- */
+/* Space Common Properies: standard covering information provided                     shall pass */
+/* NOTE that the flooring is provided by an covering element                                     */
+/* NOTE the value of property Flooring shall be overriden by material name at covering           */
+#30450= IFCPROPERTYSET('3VOudnDubC6vNsDFgomREH',#4,'Pset_SpaceCommon',$,(#30451,#30452,#30453));
+#30451= IFCPROPERTYSINGLEVALUE('FloorCovering',$,IFCLABEL('Slate'),$);
+#30452= IFCPROPERTYSINGLEVALUE('WallCovering',$,IFCLABEL('Paint'),$);
+#30453= IFCPROPERTYSINGLEVALUE('CeilingCovering',$,IFCLABEL('Paint'),$);
+#30459= IFCRELDEFINESBYPROPERTIES('2aWqg4xeH4FPpS9DNp82nX',#4,$,$,(#30400),#30450);
+/* --------------------------------------------------------------------------------------------- */
+/* Space Base Quantities: standard quantities provided                                shall pass */
+#30460= IFCELEMENTQUANTITY('3VOud5nubsdvNXmFr6mREH',#4,'BaseQuantities',$,$,(#30461,#30462,#30463,#30464));
+#30461= IFCQUANTITYAREA('NetFloorArea','3.4 * 4.8',$,15.84);
+#30462= IFCQUANTITYAREA('GrossFloorArea','3.4 * 4.8',$,15.84);
+#30463= IFCQUANTITYLENGTH('FinishCeilingHeight','3.0 - 0.1',$,2.9);
+#30464= IFCQUANTITYLENGTH('GrossPerimeter','2x3.3 + 2x4.8',$,16.20);
+#30469= IFCRELDEFINESBYPROPERTIES('2aWq7jxeH4do2oeDNp82nX',#4,$,$,(#30400),#30460);
+/* --------------------------------------------------------------------------------------------- */
+/* Elements contained in Space:                                                       shall pass */
+/* NOTE: doors are included in the space containment                                             */
+/* NOTE: space contains MEP elements                                                             */
+#30490= IFCRELCONTAINEDINSPATIALSTRUCTURE('1Hj1fsgcs6mPjw5VCa9PCM',#4,$,$,(#110100,#110200,#70100,#80100,#80200,#80300),#30400);
+
+
+/* test space no.5 ----------------------------------------------------------------------------- */
+/* space #30500 shall pass                                                                       */
+/* --------------------------------------------------------------------------------------------- */
+/* - space attributes: number, full name, description provided                                   */
+#30500= IFCSPACE('0h$ksovXH2xeg02dH7s8af',#4,'OG1.001','Space-005 object for testing Basic FM Handover',$,#30501,#30520,'Terrace',.ELEMENT.,.NOTDEFINED.,$);
+/* test space - placement, only relevant for import, if geometry is supported in CAFM ---------- */
+#30501= IFCLOCALPLACEMENT(#20301,#30510);
+#30510= IFCAXIS2PLACEMENT3D(#30511,#10,#12);
+#30511= IFCCARTESIANPOINT((0.,0.,0.));
+/* test space - geometry, only relevant for import, if geometry is supported in CAFM  ---------- */
+#30520= IFCPRODUCTDEFINITIONSHAPE($,$,(#30521,#30531));
+#30521= IFCSHAPEREPRESENTATION(#113,'FootPrint','GeometricCurveSet',(#30522));
+#30522= IFCPOLYLINE((#30523,#30524,#30525,#30526,#30523));
+#30523= IFCCARTESIANPOINT((-0.1,-0.1));
+#30524= IFCCARTESIANPOINT((6.9,-0.1));
+#30525= IFCCARTESIANPOINT((6.9,10.1));
+#30526= IFCCARTESIANPOINT((-0.1,10.1));
+#30531= IFCSHAPEREPRESENTATION(#111,'Body','SweptSolid',(#30532));
+#30532= IFCEXTRUDEDAREASOLID(#30534,#30533,#10,2.);
+#30533= IFCAXIS2PLACEMENT3D(#20,$,$);
+#30534= IFCARBITRARYCLOSEDPROFILEDEF(.AREA.,$,#30522);
+/* --------------------------------------------------------------------------------------------- */
+#30550= IFCPROPERTYSET('3VOudnDubSdvNXmFgomREH',#4,'Pset_SpaceCommon',$,(#30551,#30552));
+#30551= IFCPROPERTYSINGLEVALUE('Reference',$,IFCLABEL('R-005'),$);
+#30552= IFCPROPERTYSINGLEVALUE('FloorCovering',$,IFCLABEL('Granite'),$);
+#30559= IFCRELDEFINESBYPROPERTIES('2aWq7jxeH4FhtS9DNp82nX',#4,$,$,(#30500),#30550);
+/* --------------------------------------------------------------------------------------------- */
+/* Space Base Quantities: standard quantities provided                                shall pass */
+#30560= IFCELEMENTQUANTITY('3VOud5FGbsdvNXmFgomREH',#4,'BaseQuantities',$,$,(#30561,#30562,#30568));
+#30561= IFCQUANTITYAREA('NetFloorArea','7.0*10.2',$,71.4);
+#30562= IFCQUANTITYAREA('GrossFloorArea','7.0*10.2',$,71.4);
+#30568= IFCQUANTITYLENGTH('GrossPerimeter','2x7.0+2x10.2',$,34.40);
+#30569= IFCRELDEFINESBYPROPERTIES('2aWq7jxeH4FOioeDNp82nX',#4,$,$,(#30500),#30560);
+
+
+/* test space no.6 ----------------------------------------------------------------------------- */
+/* space #30600 shall pass                                                                       */
+/* --------------------------------------------------------------------------------------------- */
+/* - space attributes: number, full name, description provided                                   */
+#30600= IFCSPACE('0h$kk5vXHc56g02dH7s8af',#4,'OG1.002','Space-006 object for testing Basic FM Handover',$,#30601,#30620,'Meeting room',.ELEMENT.,.NOTDEFINED.,$);
+/* test space - placement, only relevant for import, if geometry is supported in CAFM ---------- */
+#30601= IFCLOCALPLACEMENT(#20301,#30610);
+#30610= IFCAXIS2PLACEMENT3D(#30611,#10,#12);
+#30611= IFCCARTESIANPOINT((7.,0.,0.));
+/* test space - geometry, only relevant for import, if geometry is supported in CAFM  ---------- */
+#30620= IFCPRODUCTDEFINITIONSHAPE($,$,(#30621,#30631));
+#30621= IFCSHAPEREPRESENTATION(#113,'FootPrint','GeometricCurveSet',(#30622));
+#30622= IFCPOLYLINE((#30623,#30624,#30625,#30626,#30627,#30628,#30623));
+#30623= IFCCARTESIANPOINT((0.1,0.1));
+#30624= IFCCARTESIANPOINT((6.1,0.1));
+#30625= IFCCARTESIANPOINT((6.1,6.3));
+#30626= IFCCARTESIANPOINT((12.9,6.3));
+#30627= IFCCARTESIANPOINT((12.9,9.9));
+#30628= IFCCARTESIANPOINT((0.1,9.9));
+#30631= IFCSHAPEREPRESENTATION(#111,'Body','SweptSolid',(#30632));
+#30632= IFCEXTRUDEDAREASOLID(#30634,#30633,#10,3.);
+#30633= IFCAXIS2PLACEMENT3D(#20,$,$);
+#30634= IFCARBITRARYCLOSEDPROFILEDEF(.AREA.,$,#30622);
+/* --------------------------------------------------------------------------------------------- */
+#30650= IFCPROPERTYSET('3VOudnDuwD6vNXmFgomREH',#4,'Pset_SpaceCommon',$,(#30651,#30652,#30653,#30654));
+#30651= IFCPROPERTYSINGLEVALUE('Reference',$,IFCLABEL('R-006'),$);
+#30652= IFCPROPERTYSINGLEVALUE('FloorCovering',$,IFCLABEL('Parquet'),$);
+#30653= IFCPROPERTYSINGLEVALUE('WallCovering',$,IFCLABEL('Paint'),$);
+#30654= IFCPROPERTYSINGLEVALUE('CeilingCovering',$,IFCLABEL('Paint'),$);
+#30659= IFCRELDEFINESBYPROPERTIES('2aW89jxeH4FPpS9DNp82nX',#4,$,$,(#30600),#30650);
+/* --------------------------------------------------------------------------------------------- */
+/* Space Base Quantities: standard quantities provided                                shall pass */
+#30660= IFCELEMENTQUANTITY('3VOud5nubsd4cXmFgomREH',#4,'BaseQuantities',$,$,(#30661,#30662,#30663,#30664,#30665,#30666,#30667,#30668));
+#30661= IFCQUANTITYAREA('NetFloorArea','6x6.2+12.8x3.6',$,83.28);
+#30662= IFCQUANTITYAREA('GrossFloorArea','6x6.2+12.8x3.6',$,83.28);
+#30663= IFCQUANTITYAREA('NetWallArea','GrossPerimeter*2.9-4.5-3',$,123.58);
+#30664= IFCQUANTITYAREA('GrossWallArea','GrossPerimeter*3.0',$,135.6);
+#30665= IFCQUANTITYAREA('NetCeilingArea','6x6.2+12.8x3.6',$,83.28);
+#30666= IFCQUANTITYAREA('GrossCeilingArea','6x6.2+12.8x3.6',$,83.28);
+#30667= IFCQUANTITYLENGTH('FinishCeilingHeight','3.0-0.1',$,2.9);
+#30668= IFCQUANTITYLENGTH('GrossPerimeter','6+6.2+6.8+3.6+12.8+9.8',$,45.20);
+#30669= IFCRELDEFINESBYPROPERTIES('2aWq7jxSc4FP2oeDNp82nX',#4,$,$,(#30600),#30660);
+/* --------------------------------------------------------------------------------------------- */
+/* Space Boundaries: doors bounding space - see #110400 ff                            shall pass */
+/* Space Boundaries: window bounding space - see #100300 ff                                      */
+
+
+/* test space no.7 ----------------------------------------------------------------------------- */
+/* space #30700 shall pass                                                                       */
+/* --------------------------------------------------------------------------------------------- */
+/* - space attributes: number, full name, description provided                                   */
+#30700= IFCSPACE('0h$kk5vvG2xeg02dH7s8af',#4,'OG1.003','Space-007 object for testing Basic FM Handover',$,#30701,#30720,'Kitchen',.ELEMENT.,.NOTDEFINED.,$);
+/* test space - placement, only relevant for import, if geometry is supported in CAFM ---------- */
+#30701= IFCLOCALPLACEMENT(#20301,#30710);
+#30710= IFCAXIS2PLACEMENT3D(#30711,#10,#12);
+#30711= IFCCARTESIANPOINT((13.0,0.,0.));
+/* test space - geometry, only relevant for import, if geometry is supported in CAFM  ---------- */
+#30720= IFCPRODUCTDEFINITIONSHAPE($,$,(#30721,#30731));
+#30721= IFCSHAPEREPRESENTATION(#113,'FootPrint','GeometricCurveSet',(#30722));
+#30722= IFCPOLYLINE((#30723,#30724,#30725,#30726,#30723));
+#30723= IFCCARTESIANPOINT((0.1,0.1));
+#30724= IFCCARTESIANPOINT((3.4,0.1));
+#30725= IFCCARTESIANPOINT((3.4,5.1));
+#30726= IFCCARTESIANPOINT((0.1,5.1));
+#30731= IFCSHAPEREPRESENTATION(#111,'Body','SweptSolid',(#30732));
+#30732= IFCEXTRUDEDAREASOLID(#30734,#30733,#10,3.);
+#30733= IFCAXIS2PLACEMENT3D(#20,$,$);
+#30734= IFCARBITRARYCLOSEDPROFILEDEF(.AREA.,$,#30722);
+/* --------------------------------------------------------------------------------------------- */
+#30750= IFCPROPERTYSET('3VOudnDubC34NXmFgomREH',#4,'Pset_SpaceCommon',$,(#30751,#30752,#30753,#30754));
+#30751= IFCPROPERTYSINGLEVALUE('Reference',$,IFCLABEL('R-007'),$);
+#30752= IFCPROPERTYSINGLEVALUE('FloorCovering',$,IFCLABEL('Tiles'),$);
+#30753= IFCPROPERTYSINGLEVALUE('WallCovering',$,IFCLABEL('Paint'),$);
+#30754= IFCPROPERTYSINGLEVALUE('CeilingCovering',$,IFCLABEL('Paint'),$);
+#30759= IFCRELDEFINESBYPROPERTIES('2aWq7jxe3kFPpS9DNp82nX',#4,$,$,(#30700),#30750);
+/* --------------------------------------------------------------------------------------------- */
+/* Space Base Quantities: standard quantities provided                                shall pass */
+#30760= IFCELEMENTQUANTITY('3VOudrGubsd4cXmFgomREH',#4,'BaseQuantities',$,$,(#30761,#30762,#30763,#30764,#30765,#30766,#30767,#30768));
+#30761= IFCQUANTITYAREA('NetFloorArea','3.3x5.0',$,16.5);
+#30762= IFCQUANTITYAREA('GrossFloorArea','3.3x5.0',$,16.5);
+#30763= IFCQUANTITYAREA('NetWallArea','GrossPerimeter*2.9',$,48.14);
+#30764= IFCQUANTITYAREA('GrossWallArea','GrossPerimeter*3.0',$,49.8);
+#30765= IFCQUANTITYAREA('NetCeilingArea','3.3x5.0',$,16.5);
+#30766= IFCQUANTITYAREA('GrossCeilingArea','3.3x5.0',$,16.5);
+#30767= IFCQUANTITYLENGTH('FinishCeilingHeight','3.0-0.1',$,2.9);
+#30768= IFCQUANTITYLENGTH('GrossPerimeter','2x(3.3+5.0)',$,16.6);
+#30769= IFCRELDEFINESBYPROPERTIES('2aWq7jx4S4FP2oeDNp82nX',#4,$,$,(#30700),#30760);
+
+
+/* test space no.8 ----------------------------------------------------------------------------- */
+/* space #30800 shall pass                                                                       */
+/* --------------------------------------------------------------------------------------------- */
+/* - space attributes: number, full name, description provided                                   */
+#30800= IFCSPACE('0h$kk5vvG2xeg6vdH7s8af',#4,'OG1.004','Space-008 object for testing Basic FM Handover',$,#30801,#30820,'Toilette',.ELEMENT.,.NOTDEFINED.,$);
+/* test space - placement, only relevant for import, if geometry is supported in CAFM ---------- */
+#30801= IFCLOCALPLACEMENT(#20301,#30810);
+#30810= IFCAXIS2PLACEMENT3D(#30811,#10,#12);
+#30811= IFCCARTESIANPOINT((16.5,0.,0.));
+/* test space - geometry, only relevant for import, if geometry is supported in CAFM  ---------- */
+#30820= IFCPRODUCTDEFINITIONSHAPE($,$,(#30821,#30831));
+#30821= IFCSHAPEREPRESENTATION(#113,'FootPrint','GeometricCurveSet',(#30822));
+#30822= IFCPOLYLINE((#30823,#30824,#30825,#30826,#30823));
+#30823= IFCCARTESIANPOINT((0.1,0.1));
+#30824= IFCCARTESIANPOINT((3.4,0.1));
+#30825= IFCCARTESIANPOINT((3.4,4.9));
+#30826= IFCCARTESIANPOINT((0.1,4.9));
+#30831= IFCSHAPEREPRESENTATION(#111,'Body','SweptSolid',(#30832));
+#30832= IFCEXTRUDEDAREASOLID(#30834,#30833,#10,3.);
+#30833= IFCAXIS2PLACEMENT3D(#20,$,$);
+#30834= IFCARBITRARYCLOSEDPROFILEDEF(.AREA.,$,#30822);
+/* --------------------------------------------------------------------------------------------- */
+#30850= IFCPROPERTYSET('3VOudnDuw734NXmFgomREH',#4,'Pset_SpaceCommon',$,(#30851,#30852,#30853,#30854));
+#30851= IFCPROPERTYSINGLEVALUE('Reference',$,IFCLABEL('R-008'),$);
+#30852= IFCPROPERTYSINGLEVALUE('FloorCovering',$,IFCLABEL('Tiles'),$);
+#30853= IFCPROPERTYSINGLEVALUE('WallCovering',$,IFCLABEL('Tiles'),$);
+#30854= IFCPROPERTYSINGLEVALUE('CeilingCovering',$,IFCLABEL('Paint'),$);
+#30859= IFCRELDEFINESBYPROPERTIES('2aWq7jxeSWFPpS9DNp82nX',#4,$,$,(#30800),#30850);
+/* --------------------------------------------------------------------------------------------- */
+/* Space Base Quantities: standard quantities provided                                shall pass */
+#30860= IFCELEMENTQUANTITY('3VOudrGubsd4cX4ggomREH',#4,'BaseQuantities',$,$,(#30861,#30862,#30863,#30864,#30865,#30866,#30867,#30868));
+#30861= IFCQUANTITYAREA('NetFloorArea','3.3x4.8',$,15.84);
+#30862= IFCQUANTITYAREA('GrossFloorArea','3.3x4.8',$,15.84);
+#30863= IFCQUANTITYAREA('NetWallArea','GrossPerimeter*2.9',$,46.98);
+#30864= IFCQUANTITYAREA('GrossWallArea','GrossPerimeter*3.0',$,48.6);
+#30865= IFCQUANTITYAREA('NetCeilingArea','3.3x4.8',$,15.84);
+#30866= IFCQUANTITYAREA('GrossCeilingArea','3.3x4.8',$,15.84);
+#30867= IFCQUANTITYLENGTH('FinishCeilingHeight','3.0-0.1',$,2.9);
+#30868= IFCQUANTITYLENGTH('GrossPerimeter','2x(3.3+4.8)',$,16.2);
+#30869= IFCRELDEFINESBYPROPERTIES('2aWq7jx4S48k2oeDNp82nX',#4,$,$,(#30800),#30860);
+
+/* test space zoning --------------------------------------------------------------------------- */
+/* zone #38100 shall pass                                                                        */
+/* --------------------------------------------------------------------------------------------- */
+/* Space zone: name and description provided                                                     */
+#38100= IFCZONE('0h$ksovXH3Jeg0w$Hl1aaf',#4,'Zone-001','Security zone for entrance',$);
+/* Building Storey contained in Building:                                             shall pass */
+#38191= IFCRELASSIGNSTOGROUP('1Hj1fsgcjEmPa8dVCa9PCM',#4,$,$,(#30200,#30300,#30400),$,#38100);
+ 
+
+/* test space classification ------------------------------------------------------------------- */
+/* space classifications #39110ff shall pass                                                     */
+/* --------------------------------------------------------------------------------------------- */
+/* Space Classification: item key, item name provided                                            */
+#39110= IFCCLASSIFICATIONREFERENCE($,'1','Wohnen und Aufenthalt',#39100);
+#39111= IFCCLASSIFICATIONREFERENCE($,'1.1','Wohnr\X\E4ume',#39100);
+#39112= IFCCLASSIFICATIONREFERENCE($,'1.2','Gemeinschaftsr\X\E4ume',#39100);
+#39113= IFCCLASSIFICATIONREFERENCE($,'1.3','Pausenr\X\E4ume',#39100);
+#39114= IFCCLASSIFICATIONREFERENCE($,'1.4','Warter\X\E4ume',#39100);
+#39115= IFCCLASSIFICATIONREFERENCE($,'1.5','Speiser\X\E4ume',#39100);
+#39116= IFCCLASSIFICATIONREFERENCE($,'1.6','Haftr\X\E4ume',#39100);
+#39120= IFCCLASSIFICATIONREFERENCE($,'2','B\X\FCroarbeit',#39100);
+#39121= IFCCLASSIFICATIONREFERENCE($,'2.1','B\X\FCror\X\E4ume', #39100);
+#39122= IFCCLASSIFICATIONREFERENCE($,'2.2','Grossraumb\X\FCro', #39100);
+#39123= IFCCLASSIFICATIONREFERENCE($,'2.3','Besprechungsr\X\E4ume', #39100);
+#39124= IFCCLASSIFICATIONREFERENCE($,'2.4','Konstruktionsr\X\E4ume', #39100);
+#39125= IFCCLASSIFICATIONREFERENCE($,'2.5','Schalterr\X\E4ume', #39100);
+#39126= IFCCLASSIFICATIONREFERENCE($,'2.6','Bedienungsr\X\E4ume', #39100);
+#39127= IFCCLASSIFICATIONREFERENCE($,'2.7','Aufsichtsr\X\E4ume', #39100);
+#39128= IFCCLASSIFICATIONREFERENCE($,'2.8','B\X\FCrotechnikr\X\E4ume', #39100);
+#39129= IFCCLASSIFICATIONREFERENCE($,'2.9','sonstige B\X\FCrof\X\E4chen', #39100);
+#39130= IFCCLASSIFICATIONREFERENCE($,'3','Produktion, Experimente, Arbeit',#39100);
+#39131= IFCCLASSIFICATIONREFERENCE($,'3.1','Werkhallen',#39100);
+#39132= IFCCLASSIFICATIONREFERENCE($,'3.2','Werkst\X\E4tten',#39100);
+#39133= IFCCLASSIFICATIONREFERENCE($,'3.3','Technologische Labors',#39100);
+#39134= IFCCLASSIFICATIONREFERENCE($,'3.4','Physikalische und elektrotechnische Labors',#39100);
+#39135= IFCCLASSIFICATIONREFERENCE($,'3.5','Chemische und biologische Labors',#39100);
+#39136= IFCCLASSIFICATIONREFERENCE($,'3.6','R\X\E4ume f\X\FCr Tierhaltung',#39100);
+#39137= IFCCLASSIFICATIONREFERENCE($,'3.7','R\X\E4ume f\X\FCr Pflanzenzucht',#39100);
+#39138= IFCCLASSIFICATIONREFERENCE($,'3.8','K\X\FCchen',#39100);
+#39139= IFCCLASSIFICATIONREFERENCE($,'3.9','Sonderarbeitsr\X\E4ume',#39100);
+#39140= IFCCLASSIFICATIONREFERENCE($,'4','Lagern, Verteilen und Verkaufen',#39100);
+#39141= IFCCLASSIFICATIONREFERENCE($,'4.1','Lagerr\X\E4ume',#39100);
+#39142= IFCCLASSIFICATIONREFERENCE($,'4.2','Sammlungsr\X\E4ume, Archive',#39100);
+#39143= IFCCLASSIFICATIONREFERENCE($,'4.3','K\X\FChlr\X\E4ume',#39100);
+#39144= IFCCLASSIFICATIONREFERENCE($,'4.4','Annahme- und Ausgaber\X\E4ume',#39100);
+#39145= IFCCLASSIFICATIONREFERENCE($,'4.5','Verkaufsr\X\E4ume',#39100);
+#39146= IFCCLASSIFICATIONREFERENCE($,'4.6','Ausstellungsr\X\E4ume',#39100);
+#39149= IFCCLASSIFICATIONREFERENCE($,'4.9','sonstige Lagerr\X\E4ume',#39100);
+#39150= IFCCLASSIFICATIONREFERENCE($,'5','Bildung, Kultur und Unterricht',#39100);
+#39160= IFCCLASSIFICATIONREFERENCE($,'6','Heilen und Pflegen',#39100);
+#39170= IFCCLASSIFICATIONREFERENCE($,'7','sonstige Nutzfl\X\E4chen',#39100);
+#39171= IFCCLASSIFICATIONREFERENCE($,'7.1','Sanit\X\E4rr\X\E4ume',#39100);
+#39172= IFCCLASSIFICATIONREFERENCE($,'7.2','Garderoben',#39100);
+#39173= IFCCLASSIFICATIONREFERENCE($,'7.3','Abstellr\X\E4ume',#39100);
+#39174= IFCCLASSIFICATIONREFERENCE($,'7.4','Fahrzeugabstellfl\X\E4chen',#39100);
+#39175= IFCCLASSIFICATIONREFERENCE($,'7.5','Fahrgastfl\X\E4chen',#39100);
+#39176= IFCCLASSIFICATIONREFERENCE($,'7.6','R\X\E4ume f\X\FCr zentrale Technik',#39100);
+#39177= IFCCLASSIFICATIONREFERENCE($,'7.7','Schutzr\X\E4ume',#39100);
+#39179= IFCCLASSIFICATIONREFERENCE($,'7.9','sonstige R\X\E4ume',#39100);
+#39180= IFCCLASSIFICATIONREFERENCE($,'8','technische Anlagen',#39100);
+#39181= IFCCLASSIFICATIONREFERENCE($,'8.1','Abwasser, Gase, Wasserversorgung',#39100);
+#39182= IFCCLASSIFICATIONREFERENCE($,'8.2','Heizung, Brauchwassererw\X\E4rmung',#39100);
+#39183= IFCCLASSIFICATIONREFERENCE($,'8.3','raumlufttechnische Anlagen',#39100);
+#39184= IFCCLASSIFICATIONREFERENCE($,'8.4','elektrische Stromversorgung',#39100);
+#39185= IFCCLASSIFICATIONREFERENCE($,'8.5','Fernmeldetechnik',#39100);
+#39186= IFCCLASSIFICATIONREFERENCE($,'8.6','Aufzugs- und F\X\F6rderanlagen',#39100);
+#39189= IFCCLASSIFICATIONREFERENCE($,'8.9','sonstige betriebstechnische Anlagen',#39100);
+#39190= IFCCLASSIFICATIONREFERENCE($,'9','Verkehrserschliessung und -sicherung',#39100);
+#39191= IFCCLASSIFICATIONREFERENCE($,'9.1','Flure, Hallen',#39100);
+#39192= IFCCLASSIFICATIONREFERENCE($,'9.2','Treppen',#39100);
+#39193= IFCCLASSIFICATIONREFERENCE($,'9.3','Sch\X\E4chte f\X\FCr F\X\F6rderanlagen',#39100);
+#39194= IFCCLASSIFICATIONREFERENCE($,'9.4','Fahrzeugverkehrsfl\X\E4chen',#39100);
+#39199= IFCCLASSIFICATIONREFERENCE($,'9.9','sonstige Verkehrsfl\X\E4chen',#39100);
+#39100= IFCCLASSIFICATION('','2005',$,'DIN277-2');
+/* #39100= IFCCLASSIFICATION('SMB AG', '3.9', $, 'DIN277-Katalog'); */
+/* --------------------------------------------------------------------------------------------- */
+/* Space classification assignment to spaces                                                     */
+#39201= IFCRELASSOCIATESCLASSIFICATION('0vuKKyGsb3zg67rSocZjRu',#4,$,$,(#30500,#30600,#30700),#39110);
+#39202= IFCRELASSOCIATESCLASSIFICATION('0vus3yGsb3zg67rSocZjRu',#4,$,$,(#30100),#39115);
+#39203= IFCRELASSOCIATESCLASSIFICATION('0vus7yGsb3zg67rSocZjRu',#4,$,$,(#30800),#39170);
+#39204= IFCRELASSOCIATESCLASSIFICATION('0vufs1Gsb3zg67rSocZjRu',#4,$,$,(#30300,#30400),#39170);
+#39205= IFCRELASSOCIATESCLASSIFICATION('0vuff9Gsb3zg67rSocZjRu',#4,$,$,(#30200),#39138);
+
+
+
+/* test wall no.1 ------------------------------------------------------------------------------ */
+/* wall #40100 shall pass                                                                        */
+/* --------------------------------------------------------------------------------------------- */
+/* - only relevant if the optional building elements and geometry is imported into CAFM system   */
+#40100= IFCWALLSTANDARDCASE('2csSOee297hgpgiLZgUjoF',#4,'Wall 001',$,$,#40101,#40120,$);
+/* test wall #40100 - placement ---------------------------------------------------------------- */
+#40101= IFCLOCALPLACEMENT(#20201,#40110);
+#40110= IFCAXIS2PLACEMENT3D(#40111,#10,#12);
+#40111= IFCCARTESIANPOINT((0.,0.,0.));
+/* test wall #40100 - shape representation ----------------------------------------------------- */
+#40120= IFCPRODUCTDEFINITIONSHAPE($,$,(#40121,#40131));
+#40121= IFCSHAPEREPRESENTATION(#113,'Axis','Curve2D',(#40122));
+#40122= IFCPOLYLINE((#40123,#40124));
+#40123= IFCCARTESIANPOINT((0.,0.));
+#40124= IFCCARTESIANPOINT((20.,0.));
+#40131= IFCSHAPEREPRESENTATION(#111,'Body','SweptSolid',(#40132));
+#40132= IFCEXTRUDEDAREASOLID(#40133,#40139,#10,3.); 
+#40133= IFCARBITRARYCLOSEDPROFILEDEF(.AREA.,$,#40134);
+#40134= IFCPOLYLINE((#40135,#40136,#40137,#40138,#40135));
+#40135= IFCCARTESIANPOINT((-0.1,-0.1));
+#40136= IFCCARTESIANPOINT((20.1,-0.1));
+#40137= IFCCARTESIANPOINT((19.9,0.1));
+#40138= IFCCARTESIANPOINT((0.1,0.1));
+#40139= IFCAXIS2PLACEMENT3D(#20,$,$);
+/* test wall #40100 - material definition ------------------------------------------------------ */
+#40170= IFCMATERIALLAYERSETUSAGE(#49110,.AXIS2.,.POSITIVE.,-0.1);
+#40179= IFCRELASSOCIATESMATERIAL('111zvl3jz6Uuvd16Ra5dg2',#4,$,$,(#40100),#40170);
+/* test wall type #40150 - wall properties ----------------------------------------------------- */
+#40150= IFCPROPERTYSET('2bWTYwcZP8a9lzY5mzsdHO',#4,'Pset_WallCommon',$,(#40151,#40152));
+#40151= IFCPROPERTYSINGLEVALUE('Reference',$,IFCLABEL('AW-1'),$);
+#40152= IFCPROPERTYSINGLEVALUE('IsExternal',$,IFCLOGICAL(.T.),$);
+#40169= IFCRELDEFINESBYPROPERTIES('1l52Y6dB1Ei8Fxvsdm2E_g',#4,$,$,(#40100),#40150);
+
+/* test wall no.2 ------------------------------------------------------------------------------ */
+/* wall #40200 shall pass                                                                        */
+/* --------------------------------------------------------------------------------------------- */
+/* - only relevant if the optional building elements and geometry is imported into CAFM system   */
+#40200= IFCWALLSTANDARDCASE('2csSOee297w4pgiLZgUjoF',#4,'Wall 002',$,$,#40201,#40220,$);
+/* test wall #40200 - placement ---------------------------------------------------------------- */
+#40201= IFCLOCALPLACEMENT(#20201,#40210);
+#40210= IFCAXIS2PLACEMENT3D(#40211,#10,#11);
+#40211= IFCCARTESIANPOINT((20.,0.,0.));
+/* test wall #40200 - shape representation ----------------------------------------------------- */
+#40220= IFCPRODUCTDEFINITIONSHAPE($,$,(#40221,#40231));
+#40221= IFCSHAPEREPRESENTATION(#113,'Axis','Curve2D',(#40222));
+#40222= IFCPOLYLINE((#40223,#40224));
+#40223= IFCCARTESIANPOINT((0.,0.));
+#40224= IFCCARTESIANPOINT((10.,0.));
+#40231= IFCSHAPEREPRESENTATION(#111,'Body','SweptSolid',(#40232));
+#40232= IFCEXTRUDEDAREASOLID(#40233,#40239,#10,3.); 
+#40233= IFCARBITRARYCLOSEDPROFILEDEF(.AREA.,$,#40234);
+#40234= IFCPOLYLINE((#40235,#40236,#40237,#40238,#40235));
+#40235= IFCCARTESIANPOINT((-0.1,-0.1));
+#40236= IFCCARTESIANPOINT((10.1,-0.1));
+#40237= IFCCARTESIANPOINT((9.9,0.1));
+#40238= IFCCARTESIANPOINT((0.1,0.1));
+#40239= IFCAXIS2PLACEMENT3D(#20,$,$);
+/* test wall #40200 - material definition ------------------------------------------------------ */
+#40270= IFCMATERIALLAYERSETUSAGE(#49110,.AXIS2.,.POSITIVE.,-0.1);
+#40279= IFCRELASSOCIATESMATERIAL('111g1l3jz6Uuvd16Ra5dg2',#4,$,$,(#40200),#40270);
+/* test wall type #40250 - wall properties ----------------------------------------------------- */
+#40250= IFCPROPERTYSET('2bWTYwcZP8a9lg55mzaaHO',#4,'Pset_WallCommon',$,(#40251));
+#40251= IFCPROPERTYSINGLEVALUE('Reference',$,IFCLABEL('AW-1'),$);
+#40269= IFCRELDEFINESBYPROPERTIES('1l52Y6dB1Ei8drvqpm2E_g',#4,$,$,(#40200),#40250);
+
+
+/* test wall no.3 ------------------------------------------------------------------------------ */
+/* wall #40300 shall pass                                                                        */
+/* --------------------------------------------------------------------------------------------- */
+/* - only relevant if the optional building elements and geometry is imported into CAFM system   */
+#40300= IFCWALLSTANDARDCASE('2cf2Oee297hgpgiLZgUjoF',#4,'Wall 003',$,$,#40301,#40320,$);
+/* test wall #40300 - placement ---------------------------------------------------------------- */
+#40301= IFCLOCALPLACEMENT(#20201,#40310);
+#40310= IFCAXIS2PLACEMENT3D(#40311,#10,#15);
+#40311= IFCCARTESIANPOINT((20.,10.,0.));
+/* test wall #40300 - shape representation ----------------------------------------------------- */
+#40320= IFCPRODUCTDEFINITIONSHAPE($,$,(#40321,#40331));
+#40321= IFCSHAPEREPRESENTATION(#113,'Axis','Curve2D',(#40322));
+#40322= IFCPOLYLINE((#40323,#40324));
+#40323= IFCCARTESIANPOINT((0.,0.));
+#40324= IFCCARTESIANPOINT((20.,0.));
+#40331= IFCSHAPEREPRESENTATION(#111,'Body','SweptSolid',(#40332));
+#40332= IFCEXTRUDEDAREASOLID(#40333,#40339,#10,3.); 
+#40333= IFCARBITRARYCLOSEDPROFILEDEF(.AREA.,$,#40334);
+#40334= IFCPOLYLINE((#40335,#40336,#40337,#40338,#40335));
+#40335= IFCCARTESIANPOINT((-0.1,-0.1));
+#40336= IFCCARTESIANPOINT((20.1,-0.1));
+#40337= IFCCARTESIANPOINT((19.9,0.1));
+#40338= IFCCARTESIANPOINT((0.1,0.1));
+#40339= IFCAXIS2PLACEMENT3D(#20,$,$);
+/* test wall #40300 - material definition ------------------------------------------------------ */
+#40370= IFCMATERIALLAYERSETUSAGE(#49110,.AXIS2.,.POSITIVE.,-0.1);
+#40379= IFCRELASSOCIATESMATERIAL('111zde3jz6Uuvd16Ra5dg2',#4,$,$,(#40300),#40370);
+/* test wall type #40350 - wall properties ----------------------------------------------------- */
+#40350= IFCPROPERTYSET('2bWTYwcZP8a9ler5mzaaHO',#4,'Pset_WallCommon',$,(#40351));
+#40351= IFCPROPERTYSINGLEVALUE('Reference',$,IFCLABEL('AW-1'),$);
+#40369= IFCRELDEFINESBYPROPERTIES('1l52Y6vg1Ei8Fxvqpm2E_g',#4,$,$,(#40300),#40350);
+
+
+/* test wall no.4 ------------------------------------------------------------------------------ */
+/* wall #40400 shall pass                                                                        */
+/* --------------------------------------------------------------------------------------------- */
+/* - only relevant if the optional building elements and geometry is imported into CAFM system   */
+#40400= IFCWALLSTANDARDCASE('2csSOee297hgf5iLZgUjoF',#4,'Wall 004',$,$,#40401,#40420,$);
+/* test wall #40400 - placement ---------------------------------------------------------------- */
+#40401= IFCLOCALPLACEMENT(#20201,#40410);
+#40410= IFCAXIS2PLACEMENT3D(#40411,#10,#14);
+#40411= IFCCARTESIANPOINT((0.,10.,0.));
+/* test wall #40400 - shape representation ----------------------------------------------------- */
+#40420= IFCPRODUCTDEFINITIONSHAPE($,$,(#40421,#40431));
+#40421= IFCSHAPEREPRESENTATION(#113,'Axis','Curve2D',(#40422));
+#40422= IFCPOLYLINE((#40423,#40424));
+#40423= IFCCARTESIANPOINT((0.,0.));
+#40424= IFCCARTESIANPOINT((10.0,0.));
+#40431= IFCSHAPEREPRESENTATION(#111,'Body','SweptSolid',(#40432));
+#40432= IFCEXTRUDEDAREASOLID(#40433,#40439,#10,3.);
+#40433= IFCARBITRARYCLOSEDPROFILEDEF(.AREA.,$,#40434);
+#40434= IFCPOLYLINE((#40435,#40436,#40437,#40438,#40435));
+#40435= IFCCARTESIANPOINT((-0.1,-0.1));
+#40436= IFCCARTESIANPOINT((10.1,-0.1));
+#40437= IFCCARTESIANPOINT((9.9,0.1));
+#40438= IFCCARTESIANPOINT((0.1,0.1));
+#40439= IFCAXIS2PLACEMENT3D(#20,$,$);
+/* test wall #40400 - material definition ------------------------------------------------------ */
+#40470= IFCMATERIALLAYERSETUSAGE(#49110,.AXIS2.,.POSITIVE.,-0.1);
+#40479= IFCRELASSOCIATESMATERIAL('1d2zvl3jz6Uuvd16Ra5dg2',#4,$,$,(#40400),#40470);
+/* test wall type #40450 - wall properties ----------------------------------------------------- */
+#40450= IFCPROPERTYSET('2bWTYwcZP8a9leD5mzaaHO',#4,'Pset_WallCommon',$,(#40451));
+#40451= IFCPROPERTYSINGLEVALUE('Reference',$,IFCLABEL('AW-1'),$);
+#40469= IFCRELDEFINESBYPROPERTIES('1lh8Y6dB1Ei8Fxvqpm2E_g',#4,$,$,(#40400),#40450);
+
+
+/* test wall no.5 ------------------------------------------------------------------------------ */
+/* wall #40500 shall pass                                                                        */
+/* --------------------------------------------------------------------------------------------- */
+/* - only relevant if the optional building elements and geometry is imported into CAFM system   */
+#40500= IFCWALLSTANDARDCASE('2csSOee2f2hgpgiLZgUjoF',#4,'Wall 005',$,$,#40501,#40520,$);
+/* test wall #40500 - placement ---------------------------------------------------------------- */
+#40501= IFCLOCALPLACEMENT(#20201,#40510);
+#40510= IFCAXIS2PLACEMENT3D(#40511,#10,#11);
+#40511= IFCCARTESIANPOINT((13.,0.,0.));
+/* test wall #40500 - shape representation ----------------------------------------------------- */
+#40520= IFCPRODUCTDEFINITIONSHAPE($,$,(#40521,#40531));
+#40521= IFCSHAPEREPRESENTATION(#113,'Axis','Curve2D',(#40522));
+#40522= IFCPOLYLINE((#40523,#40524));
+#40523= IFCCARTESIANPOINT((0.,0.));
+#40524= IFCCARTESIANPOINT((10.,0.));
+#40531= IFCSHAPEREPRESENTATION(#111,'Body','SweptSolid',(#40532));
+#40532= IFCEXTRUDEDAREASOLID(#40533,#40539,#10,3.); 
+#40533= IFCARBITRARYCLOSEDPROFILEDEF(.AREA.,$,#40534);
+#40534= IFCPOLYLINE((#40535,#40536,#40537,#40538,#40535));
+#40535= IFCCARTESIANPOINT((0.1,-0.1));
+#40536= IFCCARTESIANPOINT((9.9,-0.1));
+#40537= IFCCARTESIANPOINT((9.9,0.1));
+#40538= IFCCARTESIANPOINT((0.1,0.1));
+#40539= IFCAXIS2PLACEMENT3D(#20,$,$);
+/* test wall #40500 - material definition ------------------------------------------------------ */
+#40570= IFCMATERIALLAYERSETUSAGE(#49210,.AXIS2.,.POSITIVE.,-0.1);
+#40579= IFCRELASSOCIATESMATERIAL('111zd43jz6Uuvd16Ra5dg2',#4,$,$,(#40500),#40570);
+/* test wall type #40550 - wall properties ----------------------------------------------------- */
+#40550= IFCPROPERTYSET('2bWTYwcZPs39lzY5mzaaHO',#4,'Pset_WallCommon',$,(#40551));
+#40551= IFCPROPERTYSINGLEVALUE('Reference',$,IFCLABEL('IW-1'),$);
+#40569= IFCRELDEFINESBYPROPERTIES('1l5vf6dB1Ei8Fxvqpm2E_g',#4,$,$,(#40500),#40550);
+
+/* test wall no.6 ------------------------------------------------------------------------------ */
+/* wall #40600 shall pass                                                                        */
+/* --------------------------------------------------------------------------------------------- */
+/* - only relevant if the optional building elements and geometry is imported into CAFM system   */
+#40600= IFCWALLSTANDARDCASE('2csSOeev37hgpgiLZgUjoF',#4,'Wall 006',$,$,#40601,#40620,$);
+/* test wall #40600 - placement ---------------------------------------------------------------- */
+#40601= IFCLOCALPLACEMENT(#20201,#40610);
+#40610= IFCAXIS2PLACEMENT3D(#40611,#10,#12);
+#40611= IFCCARTESIANPOINT((13.,5.,0.));
+/* test wall #40600 - shape representation ----------------------------------------------------- */
+#40620= IFCPRODUCTDEFINITIONSHAPE($,$,(#40621,#40631));
+#40621= IFCSHAPEREPRESENTATION(#113,'Axis','Curve2D',(#40622));
+#40622= IFCPOLYLINE((#40623,#40624));
+#40623= IFCCARTESIANPOINT((0.,0.));
+#40624= IFCCARTESIANPOINT((7.,0.));
+#40631= IFCSHAPEREPRESENTATION(#111,'Body','SweptSolid',(#40632));
+#40632= IFCEXTRUDEDAREASOLID(#40633,#40636,#40638,3.); 
+#40633= IFCRECTANGLEPROFILEDEF(.AREA.,$,#40634,6.8,0.2);
+#40634= IFCAXIS2PLACEMENT2D(#40635,$);
+#40635= IFCCARTESIANPOINT((3.5,0.));
+#40636= IFCAXIS2PLACEMENT3D(#40637,$,$);
+#40637= IFCCARTESIANPOINT((0.,0.,0.));
+#40638= IFCDIRECTION((0.,0.,1.));
+/* test wall #40600 - material definition ------------------------------------------------------ */
+#40670= IFCMATERIALLAYERSETUSAGE(#49210,.AXIS2.,.POSITIVE.,-0.1);
+#40679= IFCRELASSOCIATESMATERIAL('111zf53jz6Uuvd16Ra5dg2',#4,$,$,(#40600),#40670);
+/* test wall type #40650 - wall properties ----------------------------------------------------- */
+#40650= IFCPROPERTYSET('2bWTYwcZPsF9lzY5mzaaHO',#4,'Pset_WallCommon',$,(#40651));
+#40651= IFCPROPERTYSINGLEVALUE('Reference',$,IFCLABEL('IW-1'),$);
+#40669= IFCRELDEFINESBYPROPERTIES('1l52YhaB1Ei8Fxvqpm2E_g',#4,$,$,(#40600),#40650);
+
+
+/* test wall no.7 ------------------------------------------------------------------------------ */
+/* wall #40700 shall pass                                                                        */
+/* --------------------------------------------------------------------------------------------- */
+/* - only relevant if the optional building elements and geometry is imported into CAFM system   */
+#40700= IFCWALLSTANDARDCASE('2csSOf3297hgpgiLZgUjoF',#4,'Wall 007',$,$,#40701,#40720,$);
+/* test wall #40700 - placement ---------------------------------------------------------------- */
+#40701= IFCLOCALPLACEMENT(#20201,#40710);
+#40710= IFCAXIS2PLACEMENT3D(#40711,#10,#11);
+#40711= IFCCARTESIANPOINT((16.5,0.0,0.));
+/* test wall #40700 - shape representation ----------------------------------------------------- */
+#40720= IFCPRODUCTDEFINITIONSHAPE($,$,(#40721,#40731));
+#40721= IFCSHAPEREPRESENTATION(#113,'Axis','Curve2D',(#40722));
+#40722= IFCPOLYLINE((#40723,#40724));
+#40723= IFCCARTESIANPOINT((0.,0.));
+#40724= IFCCARTESIANPOINT((5.,0.));
+#40731= IFCSHAPEREPRESENTATION(#111,'Body','SweptSolid',(#40732));
+#40732= IFCEXTRUDEDAREASOLID(#40733,#40736,#40738,3.); 
+#40733= IFCRECTANGLEPROFILEDEF(.AREA.,$,#40734,4.8,0.2);
+#40734= IFCAXIS2PLACEMENT2D(#40735,$);
+#40735= IFCCARTESIANPOINT((2.5,0.));
+#40736= IFCAXIS2PLACEMENT3D(#40737,$,$);
+#40737= IFCCARTESIANPOINT((0.,0.,0.));
+#40738= IFCDIRECTION((0.,0.,1.));
+/* test wall #40700 - material definition ------------------------------------------------------ */
+#40770= IFCMATERIALLAYERSETUSAGE(#49210,.AXIS2.,.POSITIVE.,-0.1);
+#40779= IFCRELASSOCIATESMATERIAL('1109vl3jz6Uuvd16Ra5dg2',#4,$,$,(#40700),#40770);
+/* test wall type #40750 - wall properties ----------------------------------------------------- */
+#40750= IFCPROPERTYSET('2bWTYwcZP8a923Y5mzaaHO',#4,'Pset_WallCommon',$,(#40751));
+#40751= IFCPROPERTYSINGLEVALUE('Reference',$,IFCLABEL('IW-1'),$);
+#40769= IFCRELDEFINESBYPROPERTIES('1lbdY6dB1Ei8Fxvqpm2E_g',#4,$,$,(#40700),#40750);
+
+
+/* test wall no.1-1----------------------------------------------------------------------------- */
+/* wall #41100 shall pass                                                                        */
+/* --------------------------------------------------------------------------------------------- */
+/* - only relevant if the optional building elements and geometry is imported into CAFM system   */
+#41100= IFCWALLSTANDARDCASE('2csSOeede7hgpgiLZgUjoF',#4,'Wall 011',$,$,#41101,#41120,$);
+/* test wall #41100 - placement ---------------------------------------------------------------- */
+#41101= IFCLOCALPLACEMENT(#20301,#41110);
+#41110= IFCAXIS2PLACEMENT3D(#41111,#10,#12);
+#41111= IFCCARTESIANPOINT((7.,0.,0.));
+/* test wall #41100 - shape representation ----------------------------------------------------- */
+#41120= IFCPRODUCTDEFINITIONSHAPE($,$,(#41121,#41131));
+#41121= IFCSHAPEREPRESENTATION(#113,'Axis','Curve2D',(#41122));
+#41122= IFCPOLYLINE((#41123,#41124));
+#41123= IFCCARTESIANPOINT((0.,0.));
+#41124= IFCCARTESIANPOINT((13.,0.));
+#41131= IFCSHAPEREPRESENTATION(#111,'Body','SweptSolid',(#41132));
+#41132= IFCEXTRUDEDAREASOLID(#41133,#41139,#10,3.); 
+#41133= IFCARBITRARYCLOSEDPROFILEDEF(.AREA.,$,#41134);
+#41134= IFCPOLYLINE((#41135,#41136,#41137,#41138,#41135));
+#41135= IFCCARTESIANPOINT((-0.1,-0.1));
+#41136= IFCCARTESIANPOINT((13.1,-0.1));
+#41137= IFCCARTESIANPOINT((12.9,0.1));
+#41138= IFCCARTESIANPOINT((0.1,0.1));
+#41139= IFCAXIS2PLACEMENT3D(#20,$,$);
+/* test wall #40800 - material definition ------------------------------------------------------ */
+#41170= IFCMATERIALLAYERSETUSAGE(#49110,.AXIS2.,.POSITIVE.,-0.1);
+#41179= IFCRELASSOCIATESMATERIAL('111zbsdjz6Uuvd16Ra5dg2',#4,$,$,(#41100),#41170);
+/* test wall type #40850 - wall properties ----------------------------------------------------- */
+#41150= IFCPROPERTYSET('2bWTYwcZS8afgzY5mzaaHO',#4,'Pset_WallCommon',$,(#41151));
+#41151= IFCPROPERTYSINGLEVALUE('Reference',$,IFCLABEL('AW-1'),$);
+#41169= IFCRELDEFINESBYPROPERTIES('1l52Y6dbvEi8Fxvagm2E_g',#4,$,$,(#41100),#41150);
+
+
+/* test wall no.12 ----------------------------------------------------------------------------- */
+/* wall #41200 shall pass                                                                        */
+/* --------------------------------------------------------------------------------------------- */
+/* - only relevant if the optional building elements and geometry is imported into CAFM system   */
+#41200= IFCWALLSTANDARDCASE('2csSOeede7hgs7iLZgUjoF',#4,'Wall 012',$,$,#41201,#41220,$);
+/* test wall #41200 - placement ---------------------------------------------------------------- */
+#41201= IFCLOCALPLACEMENT(#20301,#41210);
+#41210= IFCAXIS2PLACEMENT3D(#41211,#10,#11);
+#41211= IFCCARTESIANPOINT((20.,0.,0.));
+/* test wall #41200 - shape representation ----------------------------------------------------- */
+#41220= IFCPRODUCTDEFINITIONSHAPE($,$,(#41221,#41231));
+#41221= IFCSHAPEREPRESENTATION(#113,'Axis','Curve2D',(#41222));
+#41222= IFCPOLYLINE((#41223,#41224));
+#41223= IFCCARTESIANPOINT((0.,0.));
+#41224= IFCCARTESIANPOINT((10.,0.));
+#41231= IFCSHAPEREPRESENTATION(#111,'Body','SweptSolid',(#41232));
+#41232= IFCEXTRUDEDAREASOLID(#41233,#41239,#10,3.); 
+#41233= IFCARBITRARYCLOSEDPROFILEDEF(.AREA.,$,#41234);
+#41234= IFCPOLYLINE((#41235,#41236,#41237,#41238,#41235));
+#41235= IFCCARTESIANPOINT((-0.1,-0.1));
+#41236= IFCCARTESIANPOINT((10.1,-0.1));
+#41237= IFCCARTESIANPOINT((9.9,0.1));
+#41238= IFCCARTESIANPOINT((0.1,0.1));
+#41239= IFCAXIS2PLACEMENT3D(#20,$,$);
+/* test wall #40800 - material definition ------------------------------------------------------ */
+#41270= IFCMATERIALLAYERSETUSAGE(#49110,.AXIS2.,.POSITIVE.,-0.1);
+#41279= IFCRELASSOCIATESMATERIAL('111zbd3jz6Uuvd1WFa5dg2',#4,$,$,(#41200),#41270);
+/* test wall type #40850 - wall properties ----------------------------------------------------- */
+#41250= IFCPROPERTYSET('2bWTYwcZdS8a9zh4mzaaHO',#4,'Pset_WallCommon',$,(#41251));
+#41251= IFCPROPERTYSINGLEVALUE('Reference',$,IFCLABEL('AW-1'),$);
+#41269= IFCRELDEFINESBYPROPERTIES('1l52Y6dbvEnwFxvqpm2E_g',#4,$,$,(#41200),#41250);
+
+
+/* test wall no.13 ----------------------------------------------------------------------------- */
+/* wall #41300 shall pass                                                                        */
+/* --------------------------------------------------------------------------------------------- */
+/* - only relevant if the optional building elements and geometry is imported into CAFM system   */
+#41300= IFCWALLSTANDARDCASE('2csSOees23hgs7iLZgUjoF',#4,'Wall 013',$,$,#41301,#41320,$);
+/* test wall #41300 - placement ---------------------------------------------------------------- */
+#41301= IFCLOCALPLACEMENT(#20301,#41310);
+#41310= IFCAXIS2PLACEMENT3D(#41311,#10,#15);
+#41311= IFCCARTESIANPOINT((20.,10.,0.));
+/* test wall #41300 - shape representation ----------------------------------------------------- */
+#41320= IFCPRODUCTDEFINITIONSHAPE($,$,(#41321,#41331));
+#41321= IFCSHAPEREPRESENTATION(#113,'Axis','Curve2D',(#41322));
+#41322= IFCPOLYLINE((#41323,#41324));
+#41323= IFCCARTESIANPOINT((0.,0.));
+#41324= IFCCARTESIANPOINT((13.,0.));
+#41331= IFCSHAPEREPRESENTATION(#111,'Body','SweptSolid',(#41332));
+#41332= IFCEXTRUDEDAREASOLID(#41333,#41339,#10,3.); 
+#41333= IFCARBITRARYCLOSEDPROFILEDEF(.AREA.,$,#41334);
+#41334= IFCPOLYLINE((#41335,#41336,#41337,#41338,#41335));
+#41335= IFCCARTESIANPOINT((-0.1,-0.1));
+#41336= IFCCARTESIANPOINT((13.1,-0.1));
+#41337= IFCCARTESIANPOINT((12.9,0.1));
+#41338= IFCCARTESIANPOINT((0.1,0.1));
+#41339= IFCAXIS2PLACEMENT3D(#20,$,$);
+/* test wall #40800 - material definition ------------------------------------------------------ */
+#41370= IFCMATERIALLAYERSETUSAGE(#49110,.AXIS2.,.POSITIVE.,-0.1);
+#41379= IFCRELASSOCIATESMATERIAL('111zbd3jdfUuvd16R25dg2',#4,$,$,(#41300),#41370);
+/* test wall type #40850 - wall properties ----------------------------------------------------- */
+#41350= IFCPROPERTYSET('2bWTYwcZdS8a9zY5mzaaHO',#4,'Pset_WallCommon',$,(#41351));
+#41351= IFCPROPERTYSINGLEVALUE('Reference',$,IFCLABEL('AW-1'),$);
+#41369= IFCRELDEFINESBYPROPERTIES('1l52Y6dfkEi8Fxvqpm2E_g',#4,$,$,(#41300),#41350);
+
+
+/* test wall no.14 ----------------------------------------------------------------------------- */
+/* wall #41400 shall pass                                                                        */
+/* --------------------------------------------------------------------------------------------- */
+/* - only relevant if the optional building elements and geometry is imported into CAFM system   */
+/* - has openings and exterior door and window                                                   */
+#41400= IFCWALLSTANDARDCASE('2csSOeea03hgs7iLZgUjoF',#4,'Wall 014',$,$,#41401,#41420,$);
+/* test wall #41400 - placement ---------------------------------------------------------------- */
+#41401= IFCLOCALPLACEMENT(#20301,#41410);
+#41410= IFCAXIS2PLACEMENT3D(#41411,#10,#14);
+#41411= IFCCARTESIANPOINT((7.,10.,0.));
+/* test wall #41400 - shape representation ----------------------------------------------------- */
+#41420= IFCPRODUCTDEFINITIONSHAPE($,$,(#41421,#41431));
+#41421= IFCSHAPEREPRESENTATION(#113,'Axis','Curve2D',(#41422));
+#41422= IFCPOLYLINE((#41423,#41424));
+#41423= IFCCARTESIANPOINT((0.,0.));
+#41424= IFCCARTESIANPOINT((10.,0.));
+#41431= IFCSHAPEREPRESENTATION(#111,'Body','SweptSolid',(#41432));
+#41432= IFCEXTRUDEDAREASOLID(#41433,#41439,#10,3.); 
+#41433= IFCARBITRARYCLOSEDPROFILEDEF(.AREA.,$,#41434);
+#41434= IFCPOLYLINE((#41435,#41436,#41437,#41438,#41435));
+#41435= IFCCARTESIANPOINT((-0.1,-0.1));
+#41436= IFCCARTESIANPOINT((10.1,-0.1));
+#41437= IFCCARTESIANPOINT((9.9,0.1));
+#41438= IFCCARTESIANPOINT((0.1,0.1));
+#41439= IFCAXIS2PLACEMENT3D(#20,$,$);
+/* test wall #40800 - material definition ------------------------------------------------------ */
+#41470= IFCMATERIALLAYERSETUSAGE(#49110,.AXIS2.,.POSITIVE.,-0.1);
+#41479= IFCRELASSOCIATESMATERIAL('111zbd3jz6Uuvd1A6a5dg2',#4,$,$,(#41400),#41470);
+/* test wall type #40850 - wall properties ----------------------------------------------------- */
+#41450= IFCPROPERTYSET('2bWTYwcZdS8a9zY5KAaaHO',#4,'Pset_WallCommon',$,(#41451));
+#41451= IFCPROPERTYSINGLEVALUE('Reference',$,IFCLABEL('AW-1'),$);
+#41469= IFCRELDEFINESBYPROPERTIES('1l52Y6dk2Ei8Fxvqpm2E_g',#4,$,$,(#41400),#41450);
+
+
+/* test wall no.15 ----------------------------------------------------------------------------- */
+/* wall #41500 shall pass                                                                        */
+/* --------------------------------------------------------------------------------------------- */
+/* - only relevant if the optional building elements and geometry is imported into CAFM system   */
+#41500= IFCWALLSTANDARDCASE('2csSOeea0dtgs7iLZgUjoF',#4,'Wall 015',$,$,#41501,#41520,$);
+/* test wall #41500 - placement ---------------------------------------------------------------- */
+#41501= IFCLOCALPLACEMENT(#20301,#41510);
+#41510= IFCAXIS2PLACEMENT3D(#41511,#10,#11);
+#41511= IFCCARTESIANPOINT((16.5,0.,0.));
+/* test wall #41500 - shape representation ----------------------------------------------------- */
+#41520= IFCPRODUCTDEFINITIONSHAPE($,$,(#41521,#41531));
+#41521= IFCSHAPEREPRESENTATION(#113,'Axis','Curve2D',(#41522));
+#41522= IFCPOLYLINE((#41523,#41524));
+#41523= IFCCARTESIANPOINT((0.,0.));
+#41524= IFCCARTESIANPOINT((5.,0.));
+#41531= IFCSHAPEREPRESENTATION(#111,'Body','SweptSolid',(#41532));
+#41532= IFCEXTRUDEDAREASOLID(#41533,#41539,#10,3.); 
+#41533= IFCARBITRARYCLOSEDPROFILEDEF(.AREA.,$,#41534);
+#41534= IFCPOLYLINE((#41535,#41536,#41537,#41538,#41535));
+#41535= IFCCARTESIANPOINT((0.1,-0.1));
+#41536= IFCCARTESIANPOINT((4.9,-0.1));
+#41537= IFCCARTESIANPOINT((5.1,0.1));
+#41538= IFCCARTESIANPOINT((0.1,0.1));
+#41539= IFCAXIS2PLACEMENT3D(#20,$,$);
+/* test wall #40800 - material definition ------------------------------------------------------ */
+#41570= IFCMATERIALLAYERSETUSAGE(#49210,.AXIS2.,.POSITIVE.,-0.1);
+#41579= IFCRELASSOCIATESMATERIAL('111zbd3jz6Uuvd16ML5dg2',#4,$,$,(#41500),#41570);
+/* test wall type #40850 - wall properties ----------------------------------------------------- */
+#41550= IFCPROPERTYSET('2bWTYwcZdS8a9zY5mggaHO',#4,'Pset_WallCommon',$,(#41551));
+#41551= IFCPROPERTYSINGLEVALUE('Reference',$,IFCLABEL('IW-1'),$);
+#41569= IFCRELDEFINESBYPROPERTIES('1l52YmmbvEi8Fxvqpm2E_g',#4,$,$,(#41500),#41550);
+
+
+/* test wall no.16 ----------------------------------------------------------------------------- */
+/* wall #41600 shall pass                                                                        */
+/* --------------------------------------------------------------------------------------------- */
+/* - only relevant if the optional building elements and geometry is imported into CAFM system   */
+#41600= IFCWALLSTANDARDCASE('2cs23eea03hgs7iLZgUjoF',#4,'Wall 016',$,$,#41601,#41620,$);
+/* test wall #41600 - placement ---------------------------------------------------------------- */
+#41601= IFCLOCALPLACEMENT(#20301,#41610);
+#41610= IFCAXIS2PLACEMENT3D(#41611,#10,#12);
+#41611= IFCCARTESIANPOINT((16.5,5.,0.));
+/* test wall #41600 - shape representation ----------------------------------------------------- */
+#41620= IFCPRODUCTDEFINITIONSHAPE($,$,(#41621,#41631));
+#41621= IFCSHAPEREPRESENTATION(#113,'Axis','Curve2D',(#41622));
+#41622= IFCPOLYLINE((#41623,#41624));
+#41623= IFCCARTESIANPOINT((0.,0.));
+#41624= IFCCARTESIANPOINT((3.5,0.));
+#41631= IFCSHAPEREPRESENTATION(#111,'Body','SweptSolid',(#41632));
+#41632= IFCEXTRUDEDAREASOLID(#41633,#41639,#10,3.); 
+#41633= IFCARBITRARYCLOSEDPROFILEDEF(.AREA.,$,#41634);
+#41634= IFCPOLYLINE((#41635,#41636,#41637,#41638,#41635));
+#41635= IFCCARTESIANPOINT((0.1,-0.1));
+#41636= IFCCARTESIANPOINT((3.4,-0.1));
+#41637= IFCCARTESIANPOINT((3.4,0.1));
+#41638= IFCCARTESIANPOINT((-0.1,0.1));
+#41639= IFCAXIS2PLACEMENT3D(#20,$,$);
+/* test wall #40800 - material definition ------------------------------------------------------ */
+#41670= IFCMATERIALLAYERSETUSAGE(#49210,.AXIS2.,.POSITIVE.,-0.1);
+#41679= IFCRELASSOCIATESMATERIAL('111zbd3jz6Uuvd16Ra2gg2',#4,$,$,(#41600),#41670);
+/* test wall type #40850 - wall properties ----------------------------------------------------- */
+#41650= IFCPROPERTYSET('2bWTYwcZdS8a9zY5mzs7HO',#4,'Pset_WallCommon',$,(#41651));
+#41651= IFCPROPERTYSINGLEVALUE('Reference',$,IFCLABEL('IW-1'),$);
+#41669= IFCRELDEFINESBYPROPERTIES('1l52Y6do1Ei8Fxvqpm2E_g',#4,$,$,(#41600),#41650);
+
+
+
+/* wall style no.1 ----------------------------------------------------------------------------- */
+/* wall type #49100 shall pass                                                                   */
+/* --------------------------------------------------------------------------------------------- */
+/* - only relevant if the optional building elements and geometry is imported into CAFM system   */
+#49100= IFCWALLTYPE('1n3SjvM3zBQ8$gvRb9vmuL',#4,'AW-1','exterior wall structure',$,$,$,$,$,.STANDARD.);
+/* --------------------------------------------------------------------------------------------- */
+#49119= IFCRELASSOCIATESMATERIAL('111zbd3jz8suvd16Ra2gg2',#4,$,$,(#49100),#49110);
+#49110= IFCMATERIALLAYERSET((#49111),'Brick Wall 200mm');
+#49111= IFCMATERIALLAYER(#49112,0.200,$);
+#49112= IFCMATERIAL('Cored Bricks');
+/* --------------------------------------------------------------------------------------------- */
+#49129= IFCRELDEFINESBYTYPE('2DSGqTIpd7npksSLn8G7em',#4,$,$,(#40100,#40200,#40300,#40400,#41100,#41200,#41300,#41400),#49100);
+
+
+/* wall style no.2 ----------------------------------------------------------------------------- */
+/* wall type #49200 shall pass                                                                   */
+/* --------------------------------------------------------------------------------------------- */
+/* - only relevant if the optional building elements and geometry is imported into CAFM system   */
+#49200= IFCWALLTYPE('1n3SjvM3zBQ8$gvR53vmuL',#4,'IW-1','interior wall structure',$,$,$,$,$,.STANDARD.);
+/* --------------------------------------------------------------------------------------------- */
+#49219= IFCRELASSOCIATESMATERIAL('111zbd3jz8j0fd16Ra2gg2',#4,$,$,(#49200),#49210);
+#49210= IFCMATERIALLAYERSET((#49211),'Concrete Block Wall 200mm');
+#49211= IFCMATERIALLAYER(#49212,0.200,$);
+#49212= IFCMATERIAL('Concrete Block');
+/* --------------------------------------------------------------------------------------------- */
+#49229= IFCRELDEFINESBYTYPE('2DSGqTIpd7npm1SLn8G7em',#4,$,$,(#40500,#40600,#40700,#41500,#41600),#49200);
+
+#288689=IFCRELAGGREGATES('1zhfLxlHH3vxgnM3QloH2I',#4,'myTypeAssembly','myDescription',#49200,(#49100));
+
+#288671=IFCPROPERTYSINGLEVALUE('ATTNR_FLA_AR','',IFCAREAMEASURE(0.111),$);
+#288672= IFCPROPERTYSET('YYYYYYYYYYYYYYYYY',#4,'AAAAA',$,(#288671));
+#288673= IFCRELDEFINESBYPROPERTIES('XXXXXXXXXXXXXXXXX',#4,$,$,(#288689),#288672);
+
+
+#288670=IFCRELAGGREGATES('1zhfLxlXXXXXXXXXXXXXXX',#4,'myAssetComponentAssembly','myDescription',#50100,(#50200));
+
+/* test slab no.1 ------------------------------------------------------------------------------ */
+/* slab #50100 shall pass                                                                        */
+/* --------------------------------------------------------------------------------------------- */
+/* - only relevant if the optional building elements and geometry is imported into CAFM system   */
+#50100= IFCSLAB('2cs23eea03hgs7iLZsujoF',#4,'Slab 001',$,$,#50101,#50120,$,.BASESLAB.);
+/* test slab #50100 - placement ---------------------------------------------------------------- */
+#50101= IFCLOCALPLACEMENT(#20101,#50110);
+#50110= IFCAXIS2PLACEMENT3D(#50111,#10,#12);
+#50111= IFCCARTESIANPOINT((0.,0.,3.));
+/* test slab #50100 - shape representation ----------------------------------------------------- */
+#50120= IFCPRODUCTDEFINITIONSHAPE($,$,(#50131));
+#50131= IFCSHAPEREPRESENTATION(#111,'Body','SweptSolid',(#50132));
+#50132= IFCEXTRUDEDAREASOLID(#50133,#50139,#10,0.2); 
+#50133= IFCARBITRARYCLOSEDPROFILEDEF(.AREA.,$,#50134);
+#50134= IFCPOLYLINE((#50135,#50136,#50137,#50138,#50135));
+#50135= IFCCARTESIANPOINT((-0.1,-0.1));
+#50136= IFCCARTESIANPOINT((20.1,-0.1));
+#50137= IFCCARTESIANPOINT((20.1,10.1));
+#50138= IFCCARTESIANPOINT((-0.1,10.1));
+#50139= IFCAXIS2PLACEMENT3D(#20,$,$);
+/* test slab #40800 - material definition ------------------------------------------------------ */
+#50170= IFCMATERIALLAYERSETUSAGE(#59110,.AXIS3.,.POSITIVE.,0.);
+#50179= IFCRELASSOCIATESMATERIAL('111akd3jz6Uuvd16Ra2gg2',#4,$,$,(#50100),#50170);
+/* test slab - slab properties ----------------------------------------------------------------- */
+#50150= IFCPROPERTYSET('2bWTYwcZdS88szY5mzs7HO',#4,'Pset_SlabCommon',$,(#50151));
+#50151= IFCPROPERTYSINGLEVALUE('Reference',$,IFCLABEL('DE-1'),$);
+#50169= IFCRELDEFINESBYPROPERTIES('1l5229do1Ei8Fxvqpm2E_g',#4,$,$,(#50100),#50150);
+
+
+/* test slab no.2 ------------------------------------------------------------------------------ */
+/* slab #50200 shall pass                                                                        */
+/* --------------------------------------------------------------------------------------------- */
+/* - only relevant if the optional building elements and geometry is imported into CAFM system   */
+#50200= IFCSLAB('2cs23eea03hgs5lLZsujoF',#4,'Slab 002',$,$,#50201,#50220,$,.FLOOR.);
+/* test slab #50200 - placement ---------------------------------------------------------------- */
+#50201= IFCLOCALPLACEMENT(#20201,#50210);
+#50210= IFCAXIS2PLACEMENT3D(#50211,#10,#12);
+#50211= IFCCARTESIANPOINT((0.,0.,3.));
+/* test slab #50200 - shape representation ----------------------------------------------------- */
+#50220= IFCPRODUCTDEFINITIONSHAPE($,$,(#50231));
+#50231= IFCSHAPEREPRESENTATION(#111,'Body','SweptSolid',(#50232));
+#50232= IFCEXTRUDEDAREASOLID(#50233,#50239,#10,0.2); 
+#50233= IFCARBITRARYCLOSEDPROFILEDEF(.AREA.,$,#50234);
+#50234= IFCPOLYLINE((#50235,#50236,#50237,#50238,#50235));
+#50235= IFCCARTESIANPOINT((-0.1,-0.1));
+#50236= IFCCARTESIANPOINT((20.1,-0.1));
+#50237= IFCCARTESIANPOINT((20.1,10.1));
+#50238= IFCCARTESIANPOINT((-0.1,10.1));
+#50239= IFCAXIS2PLACEMENT3D(#20,$,$);
+/* test slab #40800 - material definition ------------------------------------------------------ */
+#50270= IFCMATERIALLAYERSETUSAGE(#59110,.AXIS3.,.POSITIVE.,0.);
+#50279= IFCRELASSOCIATESMATERIAL('111akd3jz6Uus116Ra2gg2',#4,$,$,(#50200),#50270);
+/* test slab - slab properties ----------------------------------------------------------------- */
+#50250= IFCPROPERTYSET('2bWTYksZdS88szY5mzs7HO',#4,'Pset_SlabCommon',$,(#50251));
+#50251= IFCPROPERTYSINGLEVALUE('Reference',$,IFCLABEL('DE-1'),$);
+#50269= IFCRELDEFINESBYPROPERTIES('1l520kdo1Ei8Fxvqpm2E_g',#4,$,$,(#50200),#50250);
+
+
+/* test slab no.2 ------------------------------------------------------------------------------ */
+/* slab #50300 shall pass                                                                        */
+/* --------------------------------------------------------------------------------------------- */
+/* - only relevant if the optional building elements and geometry is imported into CAFM system   */
+#50300= IFCSLAB('2cs23ee343hgs5lLZsujoF',#4,'Slab 003',$,$,#50301,#50320,$,.ROOF.);
+/* test slab #50300 - placement ---------------------------------------------------------------- */
+#50301= IFCLOCALPLACEMENT(#20301,#50310);
+#50310= IFCAXIS2PLACEMENT3D(#50311,#10,#12);
+#50311= IFCCARTESIANPOINT((7.,0.,3.));
+/* test slab #50300 - shape representation ----------------------------------------------------- */
+#50320= IFCPRODUCTDEFINITIONSHAPE($,$,(#50331));
+#50331= IFCSHAPEREPRESENTATION(#111,'Body','SweptSolid',(#50332));
+#50332= IFCEXTRUDEDAREASOLID(#50333,#50339,#10,0.2); 
+#50333= IFCARBITRARYCLOSEDPROFILEDEF(.AREA.,$,#50334);
+#50334= IFCPOLYLINE((#50335,#50336,#50337,#50338,#50335));
+#50335= IFCCARTESIANPOINT((-0.1,-0.1));
+#50336= IFCCARTESIANPOINT((13.1,-0.1));
+#50337= IFCCARTESIANPOINT((13.1,10.1));
+#50338= IFCCARTESIANPOINT((-0.1,10.1));
+#50339= IFCAXIS2PLACEMENT3D(#20,$,$);
+/* test slab #40800 - material definition ------------------------------------------------------ */
+#50370= IFCMATERIALLAYERSETUSAGE(#59110,.AXIS3.,.POSITIVE.,0.);
+#50379= IFCRELASSOCIATESMATERIAL('111akd3jz6fgs116Ra2gg2',#4,$,$,(#50300),#50370);
+/* test slab - slab properties ----------------------------------------------------------------- */
+#50350= IFCPROPERTYSET('2bWTYksg1S88szY5mzs7HO',#4,'Pset_SlabCommon',$,(#50351));
+#50351= IFCPROPERTYSINGLEVALUE('Reference',$,IFCLABEL('DE-1'),$);
+#50369= IFCRELDEFINESBYPROPERTIES('1l520kdo1EbfFxvqpm2E_g',#4,$,$,(#50300),#50350);
+
+
+/* test slab opening no.1-1 -------------------------------------------------------------------- */
+/* slab opening #58100 shall pass                                                                */
+/* --------------------------------------------------------------------------------------------- */
+/* - only relevant if the optional building elements and geometry is imported into CAFM system   */
+#58100= IFCOPENINGELEMENT('2cs23eea03hgs7iLZsghoF',#4,'Slab opening 001-1',$,$,#58101,#58120,$);
+/* test slab opening #58100 - placement -------------------------------------------------------- */
+#58101= IFCLOCALPLACEMENT(#50201,#58110);
+#58110= IFCAXIS2PLACEMENT3D(#58111,#10,#12);
+#58111= IFCCARTESIANPOINT((13.1,5.1,0.));
+/* test slab opening #58100 - shape representation --------------------------------------------- */
+#58120= IFCPRODUCTDEFINITIONSHAPE($,$,(#58131));
+#58131= IFCSHAPEREPRESENTATION(#111,'Body','SweptSolid',(#58132));
+#58132= IFCEXTRUDEDAREASOLID(#58133,#58139,#10,0.2); 
+#58133= IFCARBITRARYCLOSEDPROFILEDEF(.AREA.,$,#58134);
+#58134= IFCPOLYLINE((#58135,#58136,#58137,#58138,#58135));
+#58135= IFCCARTESIANPOINT((0.,0.));
+#58136= IFCCARTESIANPOINT((6.8,0.));
+#58137= IFCCARTESIANPOINT((6.8,1.2));
+#58138= IFCCARTESIANPOINT((0.,1.2));
+#58139= IFCAXIS2PLACEMENT3D(#20,$,$);
+/* test slab opening - opening properties ------------------------------------------------------ */
+#58150= IFCPROPERTYSET('2b25YwcZdS88szY5mzs7HO',#4,'Pset_OpeningElementCommon',$,(#58151));
+#58151= IFCPROPERTYSINGLEVALUE('Reference',$,IFCLABEL('DE-1:0-1'),$);
+#58169= IFCRELDEFINESBYPROPERTIES('1l52tgdo1Ei8Fxvqpm2E_g',#4,$,$,(#58100),#58150);
+/* test slab opening voiding ------------------------------------------------------------------- */
+#58180= IFCRELVOIDSELEMENT('1l52tgdo1Ei8Fxaspm2E_g',#4,$,$,#50200,#58100);
+
+
+/* --------------------------------------------------------------------------------------------- */
+/* slab style */
+#59110= IFCMATERIALLAYERSET((#59111),'RC 200mm');
+#59111= IFCMATERIALLAYER(#59112,0.200,$);
+#59112= IFCMATERIAL('Reinforced concrete');
+
+
+
+/* test wall opening no.1-1 -------------------------------------------------------------------- */
+/* wall opening #68100 shall pass                                                                */
+/* --------------------------------------------------------------------------------------------- */
+/* - only relevant if the optional building elements and geometry is imported into CAFM system   */
+#68100= IFCOPENINGELEMENT('2cs233fa03hgs7iLZsghoF',#4,'Wall opening 001-1',$,$,#68101,#68120,$);
+/* test wall opening #68100 - placement -------------------------------------------------------- */
+#68101= IFCLOCALPLACEMENT(#40101,#68110);
+#68110= IFCAXIS2PLACEMENT3D(#68111,#11,#10);
+#68111= IFCCARTESIANPOINT((18.5,-0.1,0.));
+/* test wall opening #68100 - shape representation --------------------------------------------- */
+#68120= IFCPRODUCTDEFINITIONSHAPE($,$,(#68131));
+#68131= IFCSHAPEREPRESENTATION(#111,'Body','SweptSolid',(#68132));
+#68132= IFCEXTRUDEDAREASOLID(#68133,#68136,#10,0.2); 
+#68133= IFCRECTANGLEPROFILEDEF(.AREA.,$,#68134,2.25,1.);
+#68134= IFCAXIS2PLACEMENT2D(#68135,$);
+#68135= IFCCARTESIANPOINT((1.125,0.5));
+#68136= IFCAXIS2PLACEMENT3D(#68137,$,$);
+#68137= IFCCARTESIANPOINT((0.,0.,0.));
+#68138= IFCDIRECTION((0.,0.,1.));
+/* test wall opening - opening properties ------------------------------------------------------ */
+#68150= IFCPROPERTYSET('2b25YwcZdc88szY5mzs7HO',#4,'Pset_OpeningElementCommon',$,(#68151));
+#68151= IFCPROPERTYSINGLEVALUE('Reference',$,IFCLABEL('AW-1:0-1'),$);
+#68169= IFCRELDEFINESBYPROPERTIES('1d352tgdo1Ei8Fxvqp2E_g',#4,$,$,(#68100),#68150);
+/* test wall opening voiding ------------------------------------------------------------------- */
+#68180= IFCRELVOIDSELEMENT('1l52tq7o1Ei8Fxaspm2E_g',#4,$,$,#40100,#68100);
+
+
+/* test wall opening no.7-1 -------------------------------------------------------------------- */
+/* wall opening #68200 shall pass                                                                */
+/* --------------------------------------------------------------------------------------------- */
+/* - only relevant if the optional building elements and geometry is imported into CAFM system   */
+#68200= IFCOPENINGELEMENT('2cs233fdv3hgs7iLZsghoF',#4,'Wall opening 007-1',$,$,#68201,#68220,$);
+/* test wall opening #68200 - placement -------------------------------------------------------- */
+#68201= IFCLOCALPLACEMENT(#40701,#68210);
+#68210= IFCAXIS2PLACEMENT3D(#68211,#10,#15);
+#68211= IFCCARTESIANPOINT((4.1,0.1,0.));
+/* test wall opening #68200 - shape representation --------------------------------------------- */
+#68220= IFCPRODUCTDEFINITIONSHAPE($,$,(#68231));
+#68231= IFCSHAPEREPRESENTATION(#111,'Body','SweptSolid',(#68232));
+#68232= IFCEXTRUDEDAREASOLID(#68233,#68236,#10,0.2); 
+#68233= IFCRECTANGLEPROFILEDEF(.AREA.,$,#68234,2.25,1.);
+#68234= IFCAXIS2PLACEMENT2D(#68235,$);
+#68235= IFCCARTESIANPOINT((1.125,0.5));
+#68236= IFCAXIS2PLACEMENT3D(#68237,#11,#10);
+#68237= IFCCARTESIANPOINT((0.,0.,0.));
+#68238= IFCDIRECTION((0.,0.,1.));
+/* test wall opening - opening properties ------------------------------------------------------ */
+#68250= IFCPROPERTYSET('2b25YKHZdc88szY5mzs7HO',#4,'Pset_OpeningElementCommon',$,(#68251));
+#68251= IFCPROPERTYSINGLEVALUE('Reference',$,IFCLABEL('AW-7:0-1'),$);
+#68269= IFCRELDEFINESBYPROPERTIES('1d352tgd1SEi8Fxvqp2E_g',#4,$,$,(#68200),#68250);
+/* test wall opening voiding ------------------------------------------------------------------- */
+#68280= IFCRELVOIDSELEMENT('1l52tq7oAbi8Fxaspm2E_g',#4,$,$,#40700,#68200);
+
+
+/* test wall opening no.5-1 -------------------------------------------------------------------- */
+/* wall opening #68300 shall pass                                                                */
+/* --------------------------------------------------------------------------------------------- */
+/* - only relevant if the optional building elements and geometry is imported into CAFM system   */
+#68300= IFCOPENINGELEMENT('2cs233fdv3hgs7iLfAghoF',#4,'Wall opening 005-1',$,$,#68301,#68320,$);
+/* test wall opening #68300 - placement -------------------------------------------------------- */
+#68301= IFCLOCALPLACEMENT(#40501,#68310);
+#68310= IFCAXIS2PLACEMENT3D(#68311,#10,#12);
+#68311= IFCCARTESIANPOINT((6.5,-0.1,0.));
+/* test wall opening #68300 - shape representation --------------------------------------------- */
+#68320= IFCPRODUCTDEFINITIONSHAPE($,$,(#68331));
+#68331= IFCSHAPEREPRESENTATION(#111,'Body','SweptSolid',(#68332));
+#68332= IFCEXTRUDEDAREASOLID(#68333,#68336,#10,0.2); 
+#68333= IFCRECTANGLEPROFILEDEF(.AREA.,$,#68334,2.25,2.);
+#68334= IFCAXIS2PLACEMENT2D(#68335,$);
+#68335= IFCCARTESIANPOINT((1.125,1.0));
+#68336= IFCAXIS2PLACEMENT3D(#68337,#11,#10);
+#68337= IFCCARTESIANPOINT((0.,0.,0.));
+#68338= IFCDIRECTION((0.,0.,1.));
+/* test wall opening - opening properties ------------------------------------------------------ */
+#68350= IFCPROPERTYSET('2b25YKHZdc88SFn5mzs7HO',#4,'Pset_OpeningElementCommon',$,(#68351));
+#68351= IFCPROPERTYSINGLEVALUE('Reference',$,IFCLABEL('IW-5:0-1'),$);
+#68369= IFCRELDEFINESBYPROPERTIES('1d35SVgd1SEi8Fxvqp2E_g',#4,$,$,(#68300),#68350);
+/* test wall opening voiding ------------------------------------------------------------------- */
+#68380= IFCRELVOIDSELEMENT('1l52tq7oAbi8xCaspm2E_g',#4,$,$,#40500,#68300);
+
+
+/* test wall opening no.14-1 ------------------------------------------------------------------- */
+/* wall opening #68400 shall pass                                                                */
+/* --------------------------------------------------------------------------------------------- */
+/* - only relevant if the optional building elements and geometry is imported into CAFM system   */
+#68400= IFCOPENINGELEMENT('2cs233fdv3hgsdgLfAghoF',#4,'Wall opening 014-1',$,$,#68401,#68420,$);
+/* test wall opening #68400 - placement -------------------------------------------------------- */
+#68401= IFCLOCALPLACEMENT(#41401,#68410);
+#68410= IFCAXIS2PLACEMENT3D(#68411,#10,#12);
+#68411= IFCCARTESIANPOINT((6.5,-0.1,0.));
+/* test wall opening #68400 - shape representation --------------------------------------------- */
+#68420= IFCPRODUCTDEFINITIONSHAPE($,$,(#68431));
+#68431= IFCSHAPEREPRESENTATION(#111,'Body','SweptSolid',(#68432));
+#68432= IFCEXTRUDEDAREASOLID(#68433,#68436,#10,0.2); 
+#68433= IFCRECTANGLEPROFILEDEF(.AREA.,$,#68434,2.25,2.);
+#68434= IFCAXIS2PLACEMENT2D(#68435,$);
+#68435= IFCCARTESIANPOINT((1.125,1.0));
+#68436= IFCAXIS2PLACEMENT3D(#68437,#11,#10);
+#68437= IFCCARTESIANPOINT((0.,0.,0.));
+#68438= IFCDIRECTION((0.,0.,1.));
+/* test wall opening - opening properties ------------------------------------------------------ */
+#68450= IFCPROPERTYSET('2b25YKHd3c88SFn5mzs7HO',#4,'Pset_OpeningElementCommon',$,(#68451));
+#68451= IFCPROPERTYSINGLEVALUE('Reference',$,IFCLABEL('AW-14:0-1'),$);
+#68469= IFCRELDEFINESBYPROPERTIES('1d3baVgd1SEi8Fxvqp2E_g',#4,$,$,(#68400),#68450);
+/* test wall opening voiding ------------------------------------------------------------------- */
+#68480= IFCRELVOIDSELEMENT('1l52tq7oAbzdxCaspm2E_g',#4,$,$,#41400,#68400);
+
+
+
+/* test wall opening no.14-2 ------------------------------------------------------------------- */
+/* wall opening #68500 shall pass                                                                */
+/* --------------------------------------------------------------------------------------------- */
+/* - only relevant if the optional building elements and geometry is imported into CAFM system   */
+#68500= IFCOPENINGELEMENT('2cs2s3fdv3hgsdgLfAghoF',#4,'Wall opening 014-2',$,$,#68501,#68520,$);
+/* test wall opening #68500 - placement -------------------------------------------------------- */
+#68501= IFCLOCALPLACEMENT(#41401,#68510);
+#68510= IFCAXIS2PLACEMENT3D(#68511,#10,#12);
+#68511= IFCCARTESIANPOINT((1.5,-0.1,1.25));
+/* test wall opening #68500 - shape representation --------------------------------------------- */
+#68520= IFCPRODUCTDEFINITIONSHAPE($,$,(#68531));
+#68531= IFCSHAPEREPRESENTATION(#111,'Body','SweptSolid',(#68532));
+#68532= IFCEXTRUDEDAREASOLID(#68533,#68536,#10,0.2); 
+#68533= IFCRECTANGLEPROFILEDEF(.AREA.,$,#68534,1.,3.);
+#68534= IFCAXIS2PLACEMENT2D(#68535,$);
+#68535= IFCCARTESIANPOINT((0.5,1.5));
+#68536= IFCAXIS2PLACEMENT3D(#68537,#11,#10);
+#68537= IFCCARTESIANPOINT((0.,0.,0.));
+#68538= IFCDIRECTION((0.,0.,1.));
+/* test wall opening - opening properties ------------------------------------------------------ */
+#68550= IFCPROPERTYSET('2b25YKHd3c88f3n5mzs7HO',#4,'Pset_OpeningElementCommon',$,(#68551));
+#68551= IFCPROPERTYSINGLEVALUE('Reference',$,IFCLABEL('AW-14:0-2'),$);
+#68569= IFCRELDEFINESBYPROPERTIES('1d3ghVgd1SEi8Fxvqp2E_g',#4,$,$,(#68500),#68550);
+/* test wall opening voiding ------------------------------------------------------------------- */
+#68580= IFCRELVOIDSELEMENT('1l52tq7oAb37xCaspm2E_g',#4,$,$,#41400,#68500);
+
+
+
+/* test wall opening no.2-1 -------------------------------------------------------------------- */
+/* wall opening #68600 shall pass                                                                */
+/* --------------------------------------------------------------------------------------------- */
+/* - only relevant if the optional building elements and geometry is imported into CAFM system   */
+#68600= IFCOPENINGELEMENT('2cs233fdvfdgs7iLfAghoF',#4,'Wall opening 002-1',$,$,#68601,#68620,$);
+/* test wall opening #68600 - placement -------------------------------------------------------- */
+#68601= IFCLOCALPLACEMENT(#40201,#68610);
+#68610= IFCAXIS2PLACEMENT3D(#68611,#10,#12);
+#68611= IFCCARTESIANPOINT((6.5,-0.1,0.75));
+/* test wall opening #68600 - shape representation --------------------------------------------- */
+#68620= IFCPRODUCTDEFINITIONSHAPE($,$,(#68631));
+#68631= IFCSHAPEREPRESENTATION(#111,'Body','SweptSolid',(#68632));
+#68632= IFCEXTRUDEDAREASOLID(#68633,#68636,#10,0.2); 
+#68633= IFCRECTANGLEPROFILEDEF(.AREA.,$,#68634,1.5,2.);
+#68634= IFCAXIS2PLACEMENT2D(#68635,$);
+#68635= IFCCARTESIANPOINT((0.75,1.0));
+#68636= IFCAXIS2PLACEMENT3D(#68637,#11,#10);
+#68637= IFCCARTESIANPOINT((0.,0.,0.));
+#68638= IFCDIRECTION((0.,0.,1.));
+/* test wall opening - opening properties ------------------------------------------------------ */
+#68650= IFCPROPERTYSET('2b25YKHZdc88SF5m3D7HOj',#4,'Pset_OpeningElementCommon',$,(#68651));
+#68651= IFCPROPERTYSINGLEVALUE('Reference',$,IFCLABEL('AW-2:0-1'),$);
+#68669= IFCRELDEFINESBYPROPERTIES('1d35SVAV1SEi8Fxvqp2E_g',#4,$,$,(#68600),#68650);
+/* test wall opening voiding ------------------------------------------------------------------- */
+#68680= IFCRELVOIDSELEMENT('1l52tq7oAbi8xCaDDm2E_g',#4,$,$,#40200,#68600);
+
+
+/* test wall opening no.3-1 -------------------------------------------------------------------- */
+/* wall opening #68700 shall pass                                                                */
+/* --------------------------------------------------------------------------------------------- */
+/* - only relevant if the optional building elements and geometry is imported into CAFM system   */
+#68700= IFCOPENINGELEMENT('2cs233fdvfsws7iLfAghoF',#4,'Wall opening 003-1',$,$,#68701,#68720,$);
+/* test wall opening #68700 - placement -------------------------------------------------------- */
+#68701= IFCLOCALPLACEMENT(#40301,#68710);
+#68710= IFCAXIS2PLACEMENT3D(#68711,#10,#12);
+#68711= IFCCARTESIANPOINT((0.8,-0.1,0.75));
+/* test wall opening #68700 - shape representation --------------------------------------------- */
+#68720= IFCPRODUCTDEFINITIONSHAPE($,$,(#68731));
+#68731= IFCSHAPEREPRESENTATION(#111,'Body','SweptSolid',(#68732));
+#68732= IFCEXTRUDEDAREASOLID(#68733,#68736,#10,0.2); 
+#68733= IFCRECTANGLEPROFILEDEF(.AREA.,$,#68734,1.5,2.);
+#68734= IFCAXIS2PLACEMENT2D(#68735,$);
+#68735= IFCCARTESIANPOINT((0.75,1.0));
+#68736= IFCAXIS2PLACEMENT3D(#68737,#11,#10);
+#68737= IFCCARTESIANPOINT((0.,0.,0.));
+#68738= IFCDIRECTION((0.,0.,1.));
+/* test wall opening - opening properties ------------------------------------------------------ */
+#68750= IFCPROPERTYSET('2b25YKHZdc88S8lm3D7HOj',#4,'Pset_OpeningElementCommon',$,(#68751));
+#68751= IFCPROPERTYSINGLEVALUE('Reference',$,IFCLABEL('AW-3:0-1'),$);
+#68769= IFCRELDEFINESBYPROPERTIES('1d35SVAV1SEi8Fx4Hp2E_g',#4,$,$,(#68700),#68750);
+/* test wall opening voiding ------------------------------------------------------------------- */
+#68780= IFCRELVOIDSELEMENT('1l52tq7oAbi83haDDm2E_g',#4,$,$,#40300,#68700);
+
+
+
+
+/* test floor covering no.1 of space 4 --------------------------------------------------------- */
+/* Floor covering #70200 shall pass                                                              */
+/* --------------------------------------------------------------------------------------------- */
+/* Floor covering attributes: name, description, type enumerator provided                        */
+#70100= IFCCOVERING('0h$ksovXH3Jeg02dHdf8af',#4,'FB-1:EG.004','Flooring-001 object for testing Basic FM Handover',$,#70101,#70120,$,.FLOORING.);
+/* Test floor - placement, only relevant for import, if geometry is supported in CAFM ---------- */
+#70101= IFCLOCALPLACEMENT(#20201,#70110);
+#70110= IFCAXIS2PLACEMENT3D(#70111,#10,#12);
+#70111= IFCCARTESIANPOINT((16.5,0.,0.));
+/* Test floor - geometry, only relevant for import, if geometry is supported in CAFM  ---------- */
+#70120= IFCPRODUCTDEFINITIONSHAPE($,$,(#70121,#70131));
+#70121= IFCSHAPEREPRESENTATION(#113,'FootPrint','GeometricCurveSet',(#70122));
+#70122= IFCPOLYLINE((#70123,#70124,#70125,#70126,#70123));
+#70123= IFCCARTESIANPOINT((0.1,0.1));
+#70124= IFCCARTESIANPOINT((3.4,0.1));
+#70125= IFCCARTESIANPOINT((3.4,4.9));
+#70126= IFCCARTESIANPOINT((0.1,4.9));
+#70131= IFCSHAPEREPRESENTATION(#111,'Body','SweptSolid',(#70132));
+#70132= IFCEXTRUDEDAREASOLID(#70134,#70133,#10,0.1);
+#70133= IFCAXIS2PLACEMENT3D(#20,$,$);
+#70134= IFCARBITRARYCLOSEDPROFILEDEF(.AREA.,$,#70122);
+/* --------------------------------------------------------------------------------------------- */
+/* Floor Covering Common Properies: standard covering information provided            shall pass */
+#70150= IFCPROPERTYSET('3VOudnDuss6vNsDFgomREH',#4,'Pset_CoveringCommon',$,(#70151));
+#70151= IFCPROPERTYSINGLEVALUE('Reference',$,IFCLABEL('FB-1'),$);
+#70159= IFCRELDEFINESBYPROPERTIES('2aWqg4xeH4FP769DNp82nX',#4,$,$,(#70100),#70150);
+/* --------------------------------------------------------------------------------------------- */
+/* Floor Covering Base Quantities: standard quantities provided                       shall pass */
+#70160= IFCELEMENTQUANTITY('3VOud5nubsdvNXmFhgmREH',#4,'BaseQuantities',$,$,(#70161,#70162));
+#70161= IFCQUANTITYAREA('NetArea','3.4*4.9',$,16.66);
+#70162= IFCQUANTITYAREA('GrossArea','3.4*4.9',$,16.66);
+#70169= IFCRELDEFINESBYPROPERTIES('2aWq7jxeH4d7xoeDNp82nX',#4,$,$,(#70100),#70160);
+/* --------------------------------------------------------------------------------------------- */
+/* Floor covering #70100 - material definition                                        shall pass */
+#70179= IFCRELASSOCIATESMATERIAL('111g1l3d96Uuvd16Ra5dg2',#4,$,$,(#70100),#79110);
+
+
+/* test ceiling covering no.1 of space 2 ------------------------------------------------------- */
+/* Ceiling covering #70200 shall pass                                                            */
+/* --------------------------------------------------------------------------------------------- */
+/* Ceiling covering attributes: name, description, type enumerator provided                      */
+#70200= IFCCOVERING('0h$ksovXH3Jegs2dHdf8af',#4,'UD-1:EG.004','Ceiling-002 object for testing Basic FM Handover',$,#70201,#70220,$,.CEILING.);
+/* Test Ceiling - placement, only relevant for import, if geometry is supported in CAFM -------- */
+#70201= IFCLOCALPLACEMENT(#20201,#70210);
+#70210= IFCAXIS2PLACEMENT3D(#70211,#10,#12);
+#70211= IFCCARTESIANPOINT((13.0,5.0,2.5));
+/* Test Ceiling - geometry, only relevant for import, if geometry is supported in CAFM  -------- */
+#70220= IFCPRODUCTDEFINITIONSHAPE($,$,(#70221,#70231));
+#70221= IFCSHAPEREPRESENTATION(#113,'FootPrint','GeometricCurveSet',(#70222));
+#70222= IFCPOLYLINE((#70223,#70224,#70225,#70226,#70223));
+#70223= IFCCARTESIANPOINT((0.1,1.3));
+#70224= IFCCARTESIANPOINT((6.9,1.3));
+#70225= IFCCARTESIANPOINT((6.9,4.9));
+#70226= IFCCARTESIANPOINT((0.1,4.9));
+#70231= IFCSHAPEREPRESENTATION(#111,'Body','SweptSolid',(#70232));
+#70232= IFCEXTRUDEDAREASOLID(#70234,#70233,#10,0.1);
+#70233= IFCAXIS2PLACEMENT3D(#20,$,$);
+#70234= IFCARBITRARYCLOSEDPROFILEDEF(.AREA.,$,#70222);
+/* --------------------------------------------------------------------------------------------- */
+/* Ceiling Covering Common Properies: standard covering information provided          shall pass */
+#70250= IFCPROPERTYSET('3VOudnDussg1NsDFgomREH',#4,'Pset_CoveringCommon',$,(#70251));
+#70251= IFCPROPERTYSINGLEVALUE('Reference',$,IFCLABEL('UD-1'),$);
+#70259= IFCRELDEFINESBYPROPERTIES('2aWqdgxeH4FP769DNp82nX',#4,$,$,(#70200),#70250);
+/* --------------------------------------------------------------------------------------------- */
+/* Ceiling Covering Base Quantities: standard quantities provided                     shall pass */
+#70260= IFCELEMENTQUANTITY('3VOud5nubsdvNX83hgmREH',#4,'BaseQuantities',$,$,(#70261,#70262));
+#70261= IFCQUANTITYAREA('NetArea','6.8*3.7',$,25.16);
+#70262= IFCQUANTITYAREA('GrossArea','6.8*3.7',$,25.16);
+#70269= IFCRELDEFINESBYPROPERTIES('2aWq7jxeH4d7f1eDNp82nX',#4,$,$,(#70200),#70260);
+/* --------------------------------------------------------------------------------------------- */
+/* Ceiling covering #70200 - material definition                                      shall pass */
+#70279= IFCRELASSOCIATESMATERIAL('111g1l3d96Uufa16Ra5dg2',#4,$,$,(#70200),#79210);
+
+
+/* test ceiling covering no.2 of space 2 ------------------------------------------------------- */
+/* Ceiling covering #70300 shall pass                                                            */
+/* --------------------------------------------------------------------------------------------- */
+/* Ceiling covering attributes: name, description, type enumerator provided                      */
+#70300= IFCCOVERING('0h$ksovXH3Jegsd3Hdf8af',#4,'UD-1a:EG.004','Ceiling-003 object for testing Basic FM Handover',$,#70301,#70320,$,.CEILING.);
+/* Test Ceiling - placement, only relevant for import, if geometry is supported in CAFM -------- */
+#70301= IFCLOCALPLACEMENT(#20201,#70310);
+#70310= IFCAXIS2PLACEMENT3D(#70311,#11,#12);
+#70311= IFCCARTESIANPOINT((13.0,6.3,2.6));
+/* Test Ceiling - geometry, only relevant for import, if geometry is supported in CAFM  -------- */
+#70320= IFCPRODUCTDEFINITIONSHAPE($,$,(#70321,#70331));
+#70321= IFCSHAPEREPRESENTATION(#113,'FootPrint','GeometricCurveSet',(#70322));
+#70322= IFCPOLYLINE((#70323,#70324,#70325,#70326,#70323));
+#70323= IFCCARTESIANPOINT((0.1,0.0));
+#70324= IFCCARTESIANPOINT((6.9,0.0));
+#70325= IFCCARTESIANPOINT((6.9,-0.4));
+#70326= IFCCARTESIANPOINT((0.1,-0.4));
+#70331= IFCSHAPEREPRESENTATION(#111,'Body','SweptSolid',(#70332));
+#70332= IFCEXTRUDEDAREASOLID(#70334,#70333,#10,0.1);
+#70333= IFCAXIS2PLACEMENT3D(#20,$,$);
+#70334= IFCARBITRARYCLOSEDPROFILEDEF(.AREA.,$,#70322);
+/* --------------------------------------------------------------------------------------------- */
+/* Ceiling Covering Common Properies: standard covering information provided          shall pass */
+#70350= IFCPROPERTYSET('3VOudnDussgrgsDFgomREH',#4,'Pset_CoveringCommon',$,(#70351));
+#70351= IFCPROPERTYSINGLEVALUE('Reference',$,IFCLABEL('UD-1'),$);
+#70359= IFCRELDEFINESBYPROPERTIES('2aWq7jxeH4FP769DNp82nX',#4,$,$,(#70300),#70350);
+/* --------------------------------------------------------------------------------------------- */
+/* Ceiling Covering Base Quantities: standard quantities provided                     shall pass */
+#70360= IFCELEMENTQUANTITY('3VOud5nubsdHGX83hgmREH',#4,'BaseQuantities',$,$,(#70361,#70362));
+#70361= IFCQUANTITYAREA('NetArea','6.8*0.4',$,2.72);
+#70362= IFCQUANTITYAREA('GrossArea','6.8*0.4',$,2.72);
+#70369= IFCRELDEFINESBYPROPERTIES('2aWql7xeH4d7f1eDNp82nX',#4,$,$,(#70300),#70360);
+/* --------------------------------------------------------------------------------------------- */
+/* Ceiling covering #70300 - material definition                                      shall pass */
+#70379= IFCRELASSOCIATESMATERIAL('111g1l33l6Uufa16Ra5dg2',#4,$,$,(#70300),#79210);
+
+
+
+/* common style for flooring ------------------------------------------------------------------- */
+/* floor covering material information                                                           */
+/* --------------------------------------------------------------------------------------------- */
+/* Floor covering material layers                                                                */
+#79110= IFCMATERIALLAYERSET((#79111,#79112),'Slate on flooting floor');
+#79111= IFCMATERIALLAYER(#79121,0.03,$);
+#79112= IFCMATERIALLAYER(#79122,0.07,$);
+#79121= IFCMATERIAL('Slate');
+#79122= IFCMATERIAL('Flooting floor');
+
+
+
+/* common style for ceiling -------------------------------------------------------------------- */
+/* Ceiling covering material information                                                         */
+/* --------------------------------------------------------------------------------------------- */
+/* Ceiling covering material layers                                                              */
+#79210= IFCMATERIALLAYERSET((#79211),'Suspended ceiling gypsum panels');
+#79211= IFCMATERIALLAYER(#79121,0.1,$);
+#79221= IFCMATERIAL('Gypsum');
+
+
+
+/* test toggle switch no.1 of space 4 ---------------------------------------------------------- */
+/* toggle switch #80100 shall pass                                                               */
+/* --------------------------------------------------------------------------------------------- */
+/* MEP Attributes: name, description provided                                                    */
+#80100= IFCFLOWCONTROLLER('0h$ksovXH3Jeg0dpHdsfaf',#4,'Switch-01:EG.004','Switch-001 object for testing basic FM Handover',$,#80101,#80120,$);
+/* toggle switch - placement, only relevant for import, if geometry is supported in CAFM ------- */
+#80101= IFCLOCALPLACEMENT(#20201,#80110);
+#80110= IFCAXIS2PLACEMENT3D(#80111,#10,#12);
+#80111= IFCCARTESIANPOINT((18.3,0.1,1.2));
+/* toggle switch - geometry, only relevant for import, if geometry is supported in CAFM  ------- */
+#80120= IFCPRODUCTDEFINITIONSHAPE($,$,(#80121));
+#80121= IFCSHAPEREPRESENTATION(#111,'Body','MappedRepresentation',(#80122));
+#80122= IFCMAPPEDITEM(#89110,#80123);
+#80123= IFCCARTESIANTRANSFORMATIONOPERATOR3D($,$,#20,$,$);
+/* --------------------------------------------------------------------------------------------- */
+/* Note: standard manufacturer information provided at MEP type                                  */
+
+
+/* test toggle switch no.2 of space 4 ---------------------------------------------------------- */
+/* toggle switch #80200 shall pass                                                               */
+/* --------------------------------------------------------------------------------------------- */
+/* MEP Attributes: name, description provided                                                    */
+#80200= IFCFLOWCONTROLLER('0h$ksovXH3Jeg0dpHdw4af',#4,'Switch-02:EG.004','Switch-002 object for testing basic FM Handover',$,#80201,#80220,$);
+/* toggle switch - placement, only relevant for import, if geometry is supported in CAFM ------- */
+#80201= IFCLOCALPLACEMENT(#20201,#80210);
+#80210= IFCAXIS2PLACEMENT3D(#80211,#10,#11);
+#80211= IFCCARTESIANPOINT((16.65,2.8,1.2));
+/* toggle switch - geometry, only relevant for import, if geometry is supported in CAFM  ------- */
+#80220= IFCPRODUCTDEFINITIONSHAPE($,$,(#80221));
+#80221= IFCSHAPEREPRESENTATION(#111,'Body','MappedRepresentation',(#80222));
+#80222= IFCMAPPEDITEM(#89110,#80223);
+#80223= IFCCARTESIANTRANSFORMATIONOPERATOR3D($,$,#20,$,$);
+/* --------------------------------------------------------------------------------------------- */
+/* Note: standard manufacturer information provided at MEP type                                  */
+
+
+/* test lighting fixture 1 of space 4 ---------------------------------------------------------- */
+/* lighting fixture #80300 shall pass                                                            */
+/* --------------------------------------------------------------------------------------------- */
+/* MEP Attributes: name, description provided                                                    */
+#80300= IFCFLOWTERMINAL('0h$ksovXH3JeggppHdsfaf',#4,'Light-01:EG.004','Lighting-001 object for testing basic FM Handover',$,#80301,#80320,$);
+/* toggle switch - placement, only relevant for import, if geometry is supported in CAFM ------- */
+#80301= IFCLOCALPLACEMENT(#20201,#80310);
+#80310= IFCAXIS2PLACEMENT3D(#80311,#10,#12);
+#80311= IFCCARTESIANPOINT((18.3,2.5,2.9));
+/* toggle switch - geometry, only relevant for import, if geometry is supported in CAFM  ------- */
+#80320= IFCPRODUCTDEFINITIONSHAPE($,$,(#80321));
+#80321= IFCSHAPEREPRESENTATION(#111,'Body','MappedRepresentation',(#80322));
+#80322= IFCMAPPEDITEM(#89210,#80323);
+#80323= IFCCARTESIANTRANSFORMATIONOPERATOR3D($,$,#20,$,$);
+/* --------------------------------------------------------------------------------------------- */
+/* Note: standard manufacturer information provided at MEP type                                  */
+
+
+/* test sprinkler 1 of space 1 ---------------------------------------------------------- */
+/* sprinkler #80400 shall pass                                                            */
+/* --------------------------------------------------------------------------------------------- */
+/* MEP Attributes: name, description provided                                                    */
+#80400= IFCFLOWTERMINAL('0h$ksovXH3JhAgppHdsfaf',#4,'Spk-01:EG.001','Sprinkler-001 object for testing basic FM Handover',$,#80401,#80420,$);
+/* sprinkler - placement, only relevant for import, if geometry is supported in CAFM ------- */
+#80401= IFCLOCALPLACEMENT(#20201,#80410);
+#80410= IFCAXIS2PLACEMENT3D(#80411,#10,#12);
+#80411= IFCCARTESIANPOINT((2.0,5.,2.9));
+/* sprinkler - geometry, only relevant for import, if geometry is supported in CAFM  ------- */
+#80420= IFCPRODUCTDEFINITIONSHAPE($,$,(#80421));
+#80421= IFCSHAPEREPRESENTATION(#111,'Body','MappedRepresentation',(#80422));
+#80422= IFCMAPPEDITEM(#89310,#80423);
+#80423= IFCCARTESIANTRANSFORMATIONOPERATOR3D($,$,#20,$,$);
+/* --------------------------------------------------------------------------------------------- */
+/* Note: standard manufacturer information provided at MEP type                                  */
+
+
+/* test sprinkler 2 of space 1 ---------------------------------------------------------- */
+/* sprinkler #80500 shall pass                                                            */
+/* --------------------------------------------------------------------------------------------- */
+/* MEP Attributes: name, description provided                                                    */
+#80500= IFCFLOWTERMINAL('0h$ksovXH3JhpappHdsfaf',#4,'Spk-02:EG.001','Sprinkler-002 object for testing basic FM Handover',$,#80501,#80520,$);
+/* sprinkler - placement, only relevant for import, if geometry is supported in CAFM ------- */
+#80501= IFCLOCALPLACEMENT(#20201,#80510);
+#80510= IFCAXIS2PLACEMENT3D(#80511,#10,#12);
+#80511= IFCCARTESIANPOINT((5.0,5.,2.9));
+/* sprinkler - geometry, only relevant for import, if geometry is supported in CAFM  ------- */
+#80520= IFCPRODUCTDEFINITIONSHAPE($,$,(#80521));
+#80521= IFCSHAPEREPRESENTATION(#111,'Body','MappedRepresentation',(#80522));
+#80522= IFCMAPPEDITEM(#89310,#80523);
+#80523= IFCCARTESIANTRANSFORMATIONOPERATOR3D($,$,#20,$,$);
+/* --------------------------------------------------------------------------------------------- */
+/* Note: standard manufacturer information provided at MEP type                                  */
+
+
+/* test sprinkler 3 of space 1 ---------------------------------------------------------- */
+/* sprinkler #80600 shall pass                                                            */
+/* --------------------------------------------------------------------------------------------- */
+/* MEP Attributes: name, description provided                                                    */
+#80600= IFCFLOWTERMINAL('0h$ksovXH3JhAgpmndsfaf',#4,'Spk-03:EG.001','Sprinkler-003 object for testing basic FM Handover',$,#80601,#80620,$);
+/* sprinkler - placement, only relevant for import, if geometry is supported in CAFM ------- */
+#80601= IFCLOCALPLACEMENT(#20201,#80610);
+#80610= IFCAXIS2PLACEMENT3D(#80611,#10,#12);
+#80611= IFCCARTESIANPOINT((10.0,5.,2.9));
+/* sprinkler - geometry, only relevant for import, if geometry is supported in CAFM  ------- */
+#80620= IFCPRODUCTDEFINITIONSHAPE($,$,(#80621));
+#80621= IFCSHAPEREPRESENTATION(#111,'Body','MappedRepresentation',(#80622));
+#80622= IFCMAPPEDITEM(#89310,#80623);
+#80623= IFCCARTESIANTRANSFORMATIONOPERATOR3D($,$,#20,$,$);
+/* --------------------------------------------------------------------------------------------- */
+/* Note: standard manufacturer information provided at MEP type                                  */
+
+
+
+/* test system classification ------------------------------------------------------------------ */
+/* system classifications #87100ff shall pass                                                    */
+/* --------------------------------------------------------------------------------------------- */
+/* Space Classification: item key, item name provided                                            */
+#87400= IFCCLASSIFICATIONREFERENCE($,'400','Bauwerk - Technische Anlagen',#87900);
+#87410= IFCCLASSIFICATIONREFERENCE($,'410','Abwasser-, Wasser-, Gasanlagen',#87900);
+#87414= IFCCLASSIFICATIONREFERENCE($,'410','Feuerl\X\F6schanlagen',#87900);
+#87440= IFCCLASSIFICATIONREFERENCE($,'440','Starkstromanlagen',#87900);
+#87445= IFCCLASSIFICATIONREFERENCE($,'445','Beleuchtungsanlagen',#87900);
+#87900= IFCCLASSIFICATION('','2006-11',$,'DIN276-1');
+/* --------------------------------------------------------------------------------------------- */
+/* Space classification assignment to spaces                                                     */
+#87901= IFCRELASSOCIATESCLASSIFICATION('0vuKKyGsb3zdh7rSocZjRu',#4,$,$,(#88100,#88200),#87445);
+#87902= IFCRELASSOCIATESCLASSIFICATION('0vus3y8kb3zg67rSocZjRu',#4,$,$,(#88300),#87414);
+
+
+/* test distribution systems ------------------------------------------------------------------- */
+/* system #88100 shall pass                                                                      */
+/* --------------------------------------------------------------------------------------------- */
+/* System Attributes: name and description provided                                              */
+#88100= IFCSYSTEM('0h$ksovX47geg0w$Hl1aaf',#4,'EL-1','Electrical circuit for building',$);
+/* Component System Assignment ----------------------------------------------------------------- */
+#88191= IFCRELASSIGNSTOGROUP('1Hj1fsg6mEmPafhQCa9PCM',#4,$,$,(#88200),$,#88100);
+/* System Services Buildings ------------------------------------------------------------------- */
+#88192= IFCRELSERVICESBUILDINGS('1Hjd4sg6mEmPaf2VCa9PCM',#4,$,$,#88100,(#11000));
+
+
+/* test distribution sub systems --------------------------------------------------------------- */
+/* system #88200 shall pass                                                                      */
+/* --------------------------------------------------------------------------------------------- */
+/* System Attributes: name and description provided                                              */
+#88200= IFCSYSTEM('0h$ksovXHhgeg0w$Hl1aaf',#4,'El-1.1','Electrical circuit for entrance',$);
+/* Component System Assignment ----------------------------------------------------------------- */
+#88291= IFCRELASSIGNSTOGROUP('1Hj1fsg6mEmPaf2VCa9PCM',#4,$,$,(#80100,#80200,#80300),$,#88200);
+
+
+/* test distribution systems ------------------------------------------------------------------- */
+/* system #88200 shall pass                                                                      */
+/* --------------------------------------------------------------------------------------------- */
+/* System Attributes: name and description provided                                              */
+#88300= IFCSYSTEM('0h$ksov7jhgeg0w$Hl1aaf',#4,'Sprinkler-001','Sprinkler system for main function',$);
+/* Component System Assignment ----------------------------------------------------------------- */
+#88391= IFCRELASSIGNSTOGROUP('1Hj1DPg6mEmPaf2VCa9PCM',#4,$,$,(#80400,#80500,#80600),$,#88300);
+/* System Services Buildings ------------------------------------------------------------------- */
+#88392= IFCRELSERVICESBUILDINGS('1Hjd4sg6DlmPaf2VCa9PCM',#4,$,$,#88300,(#11000));
+
+
+/* test toggle switch type no.1 ---------------------------------------------------------------- */
+/* toggle switch type #89100 shall pass                                                          */
+/* --------------------------------------------------------------------------------------------- */
+/* MEP Type Attributes: name, description provided                                               */
+#89100= IFCSWITCHINGDEVICETYPE('1n3SjvMMvBQ8$gvRb9vmuL',#4,'026102','Standard toggle switch',$,(#89180,#89190),(#89110),$,'S1010101_011_026102_1004',.TOGGLESWITCH.);
+/* toggle switch type - shared geometry, only relevant, if geometry is supported in CAFM  ------ */
+#89110= IFCREPRESENTATIONMAP(#89111,#89131);
+#89111= IFCAXIS2PLACEMENT3D(#20,#10,#12);
+#89122= IFCPOLYLINE((#89123,#89124,#89125,#89126,#89123));
+#89123= IFCCARTESIANPOINT((0.0,0.0));
+#89124= IFCCARTESIANPOINT((0.1,0.0));
+#89125= IFCCARTESIANPOINT((0.1,0.05));
+#89126= IFCCARTESIANPOINT((0.0,0.05));
+#89131= IFCSHAPEREPRESENTATION(#111,'Body','SweptSolid',(#89132));
+#89132= IFCEXTRUDEDAREASOLID(#89134,#89133,#10,0.1);
+#89133= IFCAXIS2PLACEMENT3D(#20,$,$);
+#89134= IFCARBITRARYCLOSEDPROFILEDEF(.AREA.,$,#89122);
+/* --------------------------------------------------------------------------------------------- */
+/* MEP Type Properties: standard manufacturer information provided                    shall pass */
+#89180= IFCPROPERTYSET('3VOudnDussgfNsDFgomREH',#4,'Pset_SwitchingDeviceTypeCommon',$,(#89181,#89182));
+#89181= IFCPROPERTYSINGLEVALUE('Reference',$,IFCLABEL('S1010101_011_026102_1004'),$);
+#89182= IFCPROPERTYENUMERATEDVALUE('SwitchFunction',$,(IFCTEXT('OnOffSwitch')),$);
+#89190= IFCPROPERTYSET('36ZaEJBYb5CB$GiFByImLH',#4,'Pset_ManufacturerTypeInformation',$,(#89191,#89192,#89193,#89194,#89195));
+#89191= IFCPROPERTYSINGLEVALUE('ArticleNumber',$,IFCIDENTIFIER('026102'),$);
+#89192= IFCPROPERTYSINGLEVALUE('ModelReference',$,IFCLABEL('Standard toggle switch (Tehalit G2801)'),$);
+#89193= IFCPROPERTYSINGLEVALUE('ModelLabel',$,IFCLABEL('Sw-tgl-1'),$);
+#89194= IFCPROPERTYSINGLEVALUE('Manufacturer',$,IFCLABEL('ZVEH'),$);
+#89195= IFCPROPERTYSINGLEVALUE('ProductionYear',$,IFCLABEL('2007'),$);
+/* --------------------------------------------------------------------------------------------- */
+#89189= IFCRELDEFINESBYTYPE('2aWqg56eH4FP769DNp82nX',#4,$,$,(#80100,#80200),#89100);
+
+
+
+/* test lighting fixture type no.1 ------------------------------------------------------------- */
+/* lighting fixture type #89200 shall pass                                                       */
+/* --------------------------------------------------------------------------------------------- */
+/* MEP Type Attributes: name, description provided                                               */
+#89200= IFCLIGHTFIXTURETYPE('1n3SjvMMvBQ8$gvf99vmuL',#4,'L-1009','Ceiling light',$,(#89280,#89290),(#89210),$,'S1010101_011_04562_1076',.DIRECTIONSOURCE.);
+/* lighting fixture type - shared geometry, only relevant, if geometry is supported in CAFM ---- */
+#89210= IFCREPRESENTATIONMAP(#89211,#89231);
+#89211= IFCAXIS2PLACEMENT3D(#20,#10,#12);
+#89222= IFCPOLYLINE((#89223,#89224,#89225,#89226,#89223));
+#89223= IFCCARTESIANPOINT((-0.1,-0.1));
+#89224= IFCCARTESIANPOINT((0.1,-0.1));
+#89225= IFCCARTESIANPOINT((0.1,0.1));
+#89226= IFCCARTESIANPOINT((-0.1,0.1));
+#89231= IFCSHAPEREPRESENTATION(#111,'Body','SweptSolid',(#89232));
+#89232= IFCEXTRUDEDAREASOLID(#89234,#89233,#10,0.1);
+#89233= IFCAXIS2PLACEMENT3D(#20,$,$);
+#89234= IFCARBITRARYCLOSEDPROFILEDEF(.AREA.,$,#89222);
+/* --------------------------------------------------------------------------------------------- */
+/* MEP Type Properties: standard manufacturer information provided                    shall pass */
+#89280= IFCPROPERTYSET('3VOudnDuss46NsDFgomREH',#4,'Pset_ElectricalDeviceCommon',$,(#89281,#89282));
+#89281= IFCPROPERTYSINGLEVALUE('Reference',$,IFCLABEL('S1010101_011_04562_1076'),$);
+#89282= IFCPROPERTYSINGLEVALUE('NominalCurrent',$,IFCELECTRICCURRENTMEASURE(10.0),$);
+#89290= IFCPROPERTYSET('36ZaEJBYb5CB$G92ByImLH',#4,'Pset_ManufacturerTypeInformation',$,(#89291,#89292,#89293,#89294,#89295));
+#89291= IFCPROPERTYSINGLEVALUE('ArticleNumber',$,IFCIDENTIFIER('L-10091'),$);
+#89292= IFCPROPERTYSINGLEVALUE('ModelReference',$,IFCLABEL('Ceiling mounted light - 0102'),$);
+#89293= IFCPROPERTYSINGLEVALUE('ModelLabel',$,IFCLABEL('Lgh-C-1'),$);
+#89294= IFCPROPERTYSINGLEVALUE('Manufacturer',$,IFCLABEL('LUX'),$);
+#89295= IFCPROPERTYSINGLEVALUE('ProductionYear',$,IFCLABEL('2007'),$);
+/* --------------------------------------------------------------------------------------------- */
+#89289= IFCRELDEFINESBYTYPE('2aWqg56eH47g769DNp82nX',#4,$,$,(#80300),#89200);
+
+
+/* test sprinkler type no.1 -------------------------------------------------------------------- */
+/* sprinkler type #89300 shall pass                                                              */
+/* --------------------------------------------------------------------------------------------- */
+/* MEP Type Attributes: name, description provided                                               */
+#89300= IFCFIRESUPPRESSIONTERMINALTYPE('1n3Sjv5NvBQ8$gvf99vmuL',#4,'Spk-001','Ceiling sprinkler',$,(#89380,#89390),(#89310),$,'S1010101_067_0447_1021',.SPRINKLER.);
+/* sprinkler type - shared geometry, only relevant, if geometry is supported in CAFM ----------- */
+#89310= IFCREPRESENTATIONMAP(#89311,#89331);
+#89311= IFCAXIS2PLACEMENT3D(#20,#10,#12);
+#89322= IFCPOLYLINE((#89323,#89324,#89325,#89326,#89323));
+#89323= IFCCARTESIANPOINT((-0.05,-0.05));
+#89324= IFCCARTESIANPOINT((0.05,-0.05));
+#89325= IFCCARTESIANPOINT((0.05,0.05));
+#89326= IFCCARTESIANPOINT((-0.05,0.05));
+#89331= IFCSHAPEREPRESENTATION(#111,'Body','SweptSolid',(#89332));
+#89332= IFCEXTRUDEDAREASOLID(#89334,#89333,#10,0.1);
+#89333= IFCAXIS2PLACEMENT3D(#20,$,$);
+#89334= IFCARBITRARYCLOSEDPROFILEDEF(.AREA.,$,#89322);
+/* --------------------------------------------------------------------------------------------- */
+/* MEP Type Properties: standard manufacturer information provided                    shall pass */
+#89380= IFCPROPERTYSET('3VOudnDuss46NsDFgN2REH',#4,'Pset_FireSuppressionTerminalTypeSprinkler',$,(#89381,#89382));
+#89381= IFCPROPERTYSINGLEVALUE('Reference',$,IFCLABEL('S1010101_067_0447_1021'),$);
+#89382= IFCPROPERTYENUMERATEDVALUE('SprinklerType',$,(IFCTEXT('Ceiling')),$);
+#89390= IFCPROPERTYSET('36ZaEJBYb5CB$G9fMyImLH',#4,'Pset_ManufacturerTypeInformation',$,(#89391,#89392,#89393,#89394,#89395));
+#89391= IFCPROPERTYSINGLEVALUE('ArticleNumber',$,IFCIDENTIFIER('Spk-10091'),$);
+#89392= IFCPROPERTYSINGLEVALUE('ModelReference',$,IFCLABEL('Ceiling mounted sprinkler - 0132'),$);
+#89393= IFCPROPERTYSINGLEVALUE('ModelLabel',$,IFCLABEL('Spk-C-1'),$);
+#89394= IFCPROPERTYSINGLEVALUE('Manufacturer',$,IFCLABEL('World Sprinklers'),$);
+#89395= IFCPROPERTYSINGLEVALUE('ProductionYear',$,IFCLABEL('2007'),$);
+/* --------------------------------------------------------------------------------------------- */
+#89389= IFCRELDEFINESBYTYPE('2aWqg56eH4M1769DNp82nX',#4,$,$,(#80400,#80500,#80600),#89300);
+
+
+/* test furniture element no.1 of space 2 ------------------------------------------------------ */
+/* furniture #90100 shall pass                                                                   */
+/* --------------------------------------------------------------------------------------------- */
+/* Furniture Attributes: name, description provided                                              */
+#90100= IFCFURNISHINGELEMENT('0h$ksovXH3Jeg0dd2dsfaf',#4,'Kitchenette:EG.002','Kitchenette-001 object for testing Basic FM Handover',$,#90101,#90120,$);
+/* Furniture - placement, only relevant for import, if geometry is supported in CAFM ----------- */
+#90101= IFCLOCALPLACEMENT(#20201,#90110);
+#90110= IFCAXIS2PLACEMENT3D(#90111,#10,#12);
+#90111= IFCCARTESIANPOINT((13.7,9.3,0.0));
+/* Furniture - geometry, only relevant for import, if geometry is supported in CAFM  ----------- */
+/* note: geometry given as reduced bounding box geometry                                         */
+#90120= IFCPRODUCTDEFINITIONSHAPE($,$,(#90121,#90130));
+#90121= IFCSHAPEREPRESENTATION(#111,'Box','BoundingBox',(#90122));
+#90122= IFCBOUNDINGBOX(#90123,5.6,0.6,0.7);
+#90123= IFCCARTESIANPOINT((0.,0.,0.));
+#90130= IFCSHAPEREPRESENTATION(#111,'Body','SweptSolid',(#90131));
+#90131= IFCEXTRUDEDAREASOLID(#90133,#90132,#10,0.7);
+#90132= IFCAXIS2PLACEMENT3D(#20,$,$);
+#90133= IFCRECTANGLEPROFILEDEF(.AREA.,$,#90134,5.6,0.6);
+#90134= IFCAXIS2PLACEMENT2D(#90135,$);
+#90135= IFCCARTESIANPOINT((2.8,0.3));
+/* --------------------------------------------------------------------------------------------- */
+/* Furnishing Common Properties                                                                  */
+#90180= IFCPROPERTYSET('36ZaEJBs25CB$GiFdsImLH',#4,'Pset_FurnitureTypeCommon',$,(#90181,#90182,#90183));
+#90181= IFCPROPERTYSINGLEVALUE('NominalLength',$,IFCLENGTHMEASURE(5.6),$);
+#90182= IFCPROPERTYSINGLEVALUE('NominalDepth',$,IFCLENGTHMEASURE(0.6),$);
+#90183= IFCPROPERTYSINGLEVALUE('NominalHeight',$,IFCLENGTHMEASURE(0.7),$);
+#90189= IFCRELDEFINESBYPROPERTIES('1l5xa6dbvEnwFxvqpm2E_g',#4,$,$,(#90100),#90180);
+/* --------------------------------------------------------------------------------------------- */
+/* Furniture contained in Space see space #30200                                                 */
+
+
+
+/* test furniture element no.2 of space 2 ------------------------------------------------------ */
+/* furniture #90200 shall pass                                                                   */
+/* --------------------------------------------------------------------------------------------- */
+/* Furniture Attributes: name, description provided                                              */
+#90200= IFCFURNISHINGELEMENT('0h$ksovsQ3Jeg0dd2dsfaf',#4,'Cupboard(1):EG.002','Cupboard-001 for testing Basic FM Handover',$,#90201,#90220,$);
+/* Furniture - placement, only relevant for import, if geometry is supported in CAFM ----------- */
+#90201= IFCLOCALPLACEMENT(#20201,#90210);
+#90210= IFCAXIS2PLACEMENT3D(#90211,#10,#12);
+#90211= IFCCARTESIANPOINT((13.1,9.3,0.0));
+/* Furniture - geometry, only relevant for import, if geometry is supported in CAFM  ----------- */
+/* note: geometry given as reduced bounding box geometry                                         */
+#90220= IFCPRODUCTDEFINITIONSHAPE($,$,(#90221));
+#90221= IFCSHAPEREPRESENTATION(#111,'Body','MappedRepresentation',(#90222));
+#90222= IFCMAPPEDITEM(#99110,#90223);
+#90223= IFCCARTESIANTRANSFORMATIONOPERATOR3D($,$,#20,$,$);
+/* --------------------------------------------------------------------------------------------- */
+/* Furnishing Common Properties                                                                  */
+#90280= IFCPROPERTYSET('36ZaEJBs25CgfGiFdsImLH',#4,'Pset_FurnitureTypeCommon',$,(#90281,#90282,#90283));
+#90281= IFCPROPERTYSINGLEVALUE('NominalLength',$,IFCLENGTHMEASURE(0.6),$);
+#90282= IFCPROPERTYSINGLEVALUE('NominalDepth',$,IFCLENGTHMEASURE(0.6),$);
+#90283= IFCPROPERTYSINGLEVALUE('NominalHeight',$,IFCLENGTHMEASURE(2.5),$);
+#90289= IFCRELDEFINESBYPROPERTIES('1l5xa6dbvEnwg2vqpm2E_g',#4,$,$,(#90200),#90280);
+/* --------------------------------------------------------------------------------------------- */
+/* Furniture contained in Space see space #30200                                                 */
+
+
+
+/* test furniture element no.3 of space 2 ------------------------------------------------------ */
+/* furniture #90300 shall pass                                                                   */
+/* --------------------------------------------------------------------------------------------- */
+/* Furniture Attributes: name, description provided                                              */
+#90300= IFCFURNISHINGELEMENT('0h$ksovsQ3Jerfdd2dsfaf',#4,'Cupboard(2):EG.002','Cupboard-002 for testing Basic FM Handover',$,#90301,#90320,$);
+/* Furniture - placement, only relevant for import, if geometry is supported in CAFM ----------- */
+#90301= IFCLOCALPLACEMENT(#20201,#90310);
+#90310= IFCAXIS2PLACEMENT3D(#90311,#10,#12);
+#90311= IFCCARTESIANPOINT((19.3,9.3,0.0));
+/* Furniture - geometry, only relevant for import, if geometry is supported in CAFM  ----------- */
+/* note: geometry given as reduced bounding box geometry                                         */
+#90320= IFCPRODUCTDEFINITIONSHAPE($,$,(#90321));
+#90321= IFCSHAPEREPRESENTATION(#111,'Body','MappedRepresentation',(#90322));
+#90322= IFCMAPPEDITEM(#99110,#90323);
+#90323= IFCCARTESIANTRANSFORMATIONOPERATOR3D($,$,#20,$,$);
+/* --------------------------------------------------------------------------------------------- */
+/* Furnishing Common Properties                                                                  */
+#90380= IFCPROPERTYSET('36ZaEJBs2fvgfGiFdsImLH',#4,'Pset_FurnitureTypeCommon',$,(#90381,#90382,#90383));
+#90381= IFCPROPERTYSINGLEVALUE('NominalLength',$,IFCLENGTHMEASURE(0.6),$);
+#90382= IFCPROPERTYSINGLEVALUE('NominalDepth',$,IFCLENGTHMEASURE(0.6),$);
+#90383= IFCPROPERTYSINGLEVALUE('NominalHeight',$,IFCLENGTHMEASURE(2.5),$);
+#90389= IFCRELDEFINESBYPROPERTIES('1l5xa6dhhEnwg2vqpm2E_g',#4,$,$,(#90300),#90380);
+/* --------------------------------------------------------------------------------------------- */
+/* Furniture contained in Space see space #30200                                                 */
+
+
+
+/* test furnishing type no.1 ------------------------------------------------------------------- */
+/* furnishing type #99100 shall pass                                                             */
+/* --------------------------------------------------------------------------------------------- */
+/* Furnishing Type Attributes: name, description provided                                        */
+#99100= IFCFURNISHINGELEMENTTYPE('1n3Sjv5NvBQ8$g4g99vmuL',#4,'Cbd-001','Cupboard high',$,(#99180),(#99110),$,$);
+/* Furnishing Type - shared geometry, only relevant, if geometry is supported in CAFM ---------- */
+#99110= IFCREPRESENTATIONMAP(#99111,#99120);
+#99111= IFCAXIS2PLACEMENT3D(#20,#10,#12);
+#99120= IFCSHAPEREPRESENTATION(#111,'Body','SweptSolid',(#99121));
+#99121= IFCEXTRUDEDAREASOLID(#99123,#99122,#10,2.5);
+#99122= IFCAXIS2PLACEMENT3D(#20,$,$);
+#99123= IFCRECTANGLEPROFILEDEF(.AREA.,$,#99124,0.6,0.6);
+#99124= IFCAXIS2PLACEMENT2D(#99125,$);
+#99125= IFCCARTESIANPOINT((0.3,0.3));
+/* --------------------------------------------------------------------------------------------- */
+/* Furnishing Manufacturer Properties                                                            */
+#99180= IFCPROPERTYSET('36ZaEJBs25CB$G5bByImLH',#4,'Pset_ManufacturerTypeInformation',$,(#99181,#99182,#99183,#99184,#99185));
+#99181= IFCPROPERTYSINGLEVALUE('ArticleNumber',$,IFCIDENTIFIER('D-23-H1'),$);
+#99182= IFCPROPERTYSINGLEVALUE('ModelReference',$,IFCLABEL('K\X\FCchenzeile Granid Hochschrank'),$);
+#99183= IFCPROPERTYSINGLEVALUE('ModelNumber',$,IFCLABEL('D-23'),$);
+#99184= IFCPROPERTYSINGLEVALUE('Manufacturer',$,IFCLABEL('Marquardt Emleben'),$);
+#99185= IFCPROPERTYSINGLEVALUE('ProductionYear',$,IFCLABEL('2008'),$);
+/* --------------------------------------------------------------------------------------------- */
+#99199= IFCRELDEFINESBYTYPE('2aWqg547H4M1769DNp82nX',#4,$,$,(#90200,#90300),#99100);
+
+
+/* test furnishing type no.2 ------------------------------------------------------------------- */
+/* furnishing type #99100 shall pass                                                             */
+/* --------------------------------------------------------------------------------------------- */
+/* Furnishing Type Attributes: name, description provided                                        */
+#99200= IFCFURNISHINGELEMENTTYPE('1n3SjvhgvBQ8$g4g99vmuL',#4,'Kit-001','Kitchenette granid',$,(#99280),$,$,$);
+/* --------------------------------------------------------------------------------------------- */
+/* Furnishing Manufacturer Properties                                                            */
+#99280= IFCPROPERTYSET('36ZaEJBs25CB$GiFByImLH',#4,'Pset_ManufacturerTypeInformation',$,(#99281,#99282,#99283,#99284,#99285));
+#99281= IFCPROPERTYSINGLEVALUE('ArticleNumber',$,IFCIDENTIFIER('D-23-X2'),$);
+#99282= IFCPROPERTYSINGLEVALUE('ModelReference',$,IFCLABEL('K\X\FCchenzeile Granid'),$);
+#99283= IFCPROPERTYSINGLEVALUE('ModelNumber',$,IFCLABEL('D-23'),$);
+#99284= IFCPROPERTYSINGLEVALUE('Manufacturer',$,IFCLABEL('Marquardt Emleben'),$);
+#99285= IFCPROPERTYSINGLEVALUE('ProductionYear',$,IFCLABEL('2008'),$);
+/* --------------------------------------------------------------------------------------------- */
+#99299= IFCRELDEFINESBYTYPE('2aWqg5jyH4M1769DNp82nX',#4,$,$,(#90100),#99200);
+
+
+
+/* test window room 2-1 ------------------------------------------------------------------------ */
+/* window #100100                                                                    shall pass  */
+/* NOTE window is directly contained in space                                                    */
+/* --------------------------------------------------------------------------------------------- */
+/* Window Attributes: window number and description provided                                     */
+#100100= IFCWINDOW('2cs23eea03hs33eLZsghoF',#4,'AF-2.EG.002','Window-002 for testing Basic FM Handover',$,#100101,#100120,$,1.5,2.0);
+/* test window #100100 - placement ------------------------------------------------------------- */
+/* - only relevant if the optional building elements and geometry is imported into CAFM system   */
+#100101= IFCLOCALPLACEMENT(#68701,#100110);
+#100110= IFCAXIS2PLACEMENT3D(#100111,#10,#12);
+#100111= IFCCARTESIANPOINT((0.,0.,0.));
+/* test window #100100 - shape representation -------------------------------------------------- */
+/* - only relevant if the optional building elements and geometry is imported into CAFM system   */
+#100120= IFCPRODUCTDEFINITIONSHAPE($,$,(#100131));
+#100131= IFCSHAPEREPRESENTATION(#111,'Body','SweptSolid',(#100132));
+#100132= IFCEXTRUDEDAREASOLID(#100133,#100136,#10,0.05); 
+#100133= IFCRECTANGLEPROFILEDEF(.AREA.,$,#100134,1.5,2.0);
+#100134= IFCAXIS2PLACEMENT2D(#100135,$);
+#100135= IFCCARTESIANPOINT((0.75,1.0));
+#100136= IFCAXIS2PLACEMENT3D(#100137,#11,#10);
+#100137= IFCCARTESIANPOINT((0.,0.,0.));
+#100138= IFCDIRECTION((0.,0.,1.));
+/* --------------------------------------------------------------------------------------------- */
+/* Window Common Properies:                                                             shall pass */
+#100150= IFCPROPERTYSET('2bWT3b1ZdSa39zY5mzs7HO',#4,'Pset_WindowCommon',$,(#100151,#100152,#100153,#100154));
+#100151= IFCPROPERTYSINGLEVALUE('Reference',$,IFCLABEL('AF-1'),$);
+#100152= IFCPROPERTYSINGLEVALUE('GlazingAreaFraction',$,IFCPOSITIVERATIOMEASURE(0.8),$);
+#100153= IFCPROPERTYSINGLEVALUE('IsExternal',$,IFCLOGICAL(.T.),$);
+#100154= IFCPROPERTYSINGLEVALUE('FireResistence',$,IFCLABEL('F30'),$);
+#100169= IFCRELDEFINESBYPROPERTIES('1l5f46dodsi8Fxvqpm2E_g',#4,$,$,(#100100),#100150);
+/* --------------------------------------------------------------------------------------------- */
+/* Windew Base Quantities                                                             shall pass */
+#100170= IFCELEMENTQUANTITY('3VOudspbbd9vNXmFgomREH',#4,'BaseQuantities',$,$,(#100171,#100172,#100173));
+#100171= IFCQUANTITYLENGTH('Height','',$,2.0);
+#100172= IFCQUANTITYLENGTH('Width','',$,1.5);
+#100173= IFCQUANTITYAREA('Area','2.25 * 2.0',$,3.0);
+#100179= IFCRELDEFINESBYPROPERTIES('2aLM7t7efqFP0keDgr82nX',#4,$,$,(#100100),#100170);
+/* --------------------------------------------------------------------------------------------- */
+#100180= IFCRELFILLSELEMENT('0Gq588_519cQneAOHa$wpH',#4,$,$,#68700,#100100);
+/* --------------------------------------------------------------------------------------------- */
+/* Window bounding space: a logical space boundary between the window and one space              */
+/* as it is an external window, it can be directly assigned to the space                         */
+#100191= IFCRELSPACEBOUNDARY('0oXPS5r2X0w2JzeEIr9Zpq',#4,$,$,#30200,#100100,$,.PHYSICAL.,.EXTERNAL.);
+
+
+
+
+/* test window room 1-2 ------------------------------------------------------------------------ */
+/* window #100200                                                                    shall pass  */
+/* NOTE window is directly contained in space                                                    */
+/* --------------------------------------------------------------------------------------------- */
+/* Window Attributes: window number and description provided                                     */
+#100200= IFCWINDOW('2cs23eea036s33eLZsghoF',#4,'AF-2.EG.002','Window-002 for testing Basic FM Handover',$,#100201,#100220,$,1.5,2.0);
+/* test window #100200 - placement ------------------------------------------------------------- */
+/* - only relevant if the optional building elements and geometry is imported into CAFM system   */
+#100201= IFCLOCALPLACEMENT(#68601,#100210);
+#100210= IFCAXIS2PLACEMENT3D(#100211,#10,#12);
+#100211= IFCCARTESIANPOINT((0.,0.,0.));
+/* test window #100200 - shape representation -------------------------------------------------- */
+/* - only relevant if the optional building elements and geometry is imported into CAFM system   */
+#100220= IFCPRODUCTDEFINITIONSHAPE($,$,(#100231));
+#100231= IFCSHAPEREPRESENTATION(#111,'Body','SweptSolid',(#100232));
+#100232= IFCEXTRUDEDAREASOLID(#100233,#100236,#10,0.05); 
+#100233= IFCRECTANGLEPROFILEDEF(.AREA.,$,#100234,1.5,2.0);
+#100234= IFCAXIS2PLACEMENT2D(#100235,$);
+#100235= IFCCARTESIANPOINT((0.75,1.0));
+#100236= IFCAXIS2PLACEMENT3D(#100237,#11,#10);
+#100237= IFCCARTESIANPOINT((0.,0.,0.));
+#100238= IFCDIRECTION((0.,0.,1.));
+/* --------------------------------------------------------------------------------------------- */
+/* Window Common Properies:                                                             shall pass */
+#100250= IFCPROPERTYSET('2bWT3b1ZdSa39zgOmzs7HO',#4,'Pset_WindowCommon',$,(#100251,#100252,#100253,#100254));
+#100251= IFCPROPERTYSINGLEVALUE('Reference',$,IFCLABEL('AF-1'),$);
+#100252= IFCPROPERTYSINGLEVALUE('GlazingAreaFraction',$,IFCPOSITIVERATIOMEASURE(0.8),$);
+#100253= IFCPROPERTYSINGLEVALUE('IsExternal',$,IFCLOGICAL(.T.),$);
+#100254= IFCPROPERTYSINGLEVALUE('FireResistence',$,IFCLABEL('F30'),$);
+#100269= IFCRELDEFINESBYPROPERTIES('1l5f46KHdsi8Fxvqpm2E_g',#4,$,$,(#100200),#100250);
+/* --------------------------------------------------------------------------------------------- */
+/* Windew Base Quantities                                                             shall pass */
+#100270= IFCELEMENTQUANTITY('3VOudspbbd9vNWdFgomREH',#4,'BaseQuantities',$,$,(#100271,#100272,#100273));
+#100271= IFCQUANTITYLENGTH('Height','',$,2.0);
+#100272= IFCQUANTITYLENGTH('Width','',$,1.5);
+#100273= IFCQUANTITYAREA('Area','2.25 * 2.0',$,3.0);
+#100279= IFCRELDEFINESBYPROPERTIES('2aLM7tp5fqFP0keDgr82nX',#4,$,$,(#100200),#100270);
+/* --------------------------------------------------------------------------------------------- */
+#100280= IFCRELFILLSELEMENT('0Gq588_519cQn3BOHa$wpH',#4,$,$,#68600,#100200);
+/* --------------------------------------------------------------------------------------------- */
+/* Window bounding space: a logical space boundary between the window and one space              */
+/* as it is an external window, it can be directly assigned to the space                         */
+#100291= IFCRELSPACEBOUNDARY('0oXPS5r2X0w2eteEIr9Zpq',#4,$,$,#30200,#100200,$,.PHYSICAL.,.EXTERNAL.);
+
+
+
+/* test window room 14-1 ----------------------------------------------------------------------- */
+/* window #100300                                                                    shall pass  */
+/* NOTE window bounded by one space boundary that assignes it to a space                         */
+/* --------------------------------------------------------------------------------------------- */
+/* Window Attributes: window number provided                                                     */
+#100300= IFCWINDOW('2cs23eejw3hs33eLZsghoF',#4,'AF-1.OG1.002',$,$,#100301,#100320,$,1.0,3.0);
+/* test window #100300 - placement ------------------------------------------------------------- */
+/* - only relevant if the optional building elements and geometry is imported into CAFM system   */
+#100301= IFCLOCALPLACEMENT(#68501,#100310);
+#100310= IFCAXIS2PLACEMENT3D(#100311,#10,#12);
+#100311= IFCCARTESIANPOINT((0.,0.05,0.));
+/* test window #100300 - shape representation -------------------------------------------------- */
+/* - only relevant if the optional building elements and geometry is imported into CAFM system   */
+#100320= IFCPRODUCTDEFINITIONSHAPE($,$,(#100331));
+#100331= IFCSHAPEREPRESENTATION(#111,'Body','SweptSolid',(#100332));
+#100332= IFCEXTRUDEDAREASOLID(#100333,#100336,#10,0.05); 
+#100333= IFCRECTANGLEPROFILEDEF(.AREA.,$,#100334,1.0,3.0);
+#100334= IFCAXIS2PLACEMENT2D(#100335,$);
+#100335= IFCCARTESIANPOINT((0.5,1.5));
+#100336= IFCAXIS2PLACEMENT3D(#100337,#11,#10);
+#100337= IFCCARTESIANPOINT((0.,0.,0.));
+#100338= IFCDIRECTION((0.,0.,1.));
+/* --------------------------------------------------------------------------------------------- */
+/* Window Common Properies:                                                           shall pass */
+#100350= IFCPROPERTYSET('2bWT3b1ZdjG39zY5mzs7HO',#4,'Pset_WindowCommon',$,(#100351,#100352,#100353,#100354));
+#100351= IFCPROPERTYSINGLEVALUE('Reference',$,IFCLABEL('AF-2'),$);
+#100352= IFCPROPERTYSINGLEVALUE('GlazingAreaFraction',$,IFCPOSITIVERATIOMEASURE(0.8),$);
+#100353= IFCPROPERTYSINGLEVALUE('IsExternal',$,IFCLOGICAL(.T.),$);
+#100354= IFCPROPERTYSINGLEVALUE('FireResistence',$,IFCLABEL('F30'),$);
+#100369= IFCRELDEFINESBYPROPERTIES('1l5flAdodsi8Fxvqpm2E_g',#4,$,$,(#100300),#100350);
+/* --------------------------------------------------------------------------------------------- */
+/* Windew Base Quantities                                                             shall pass */
+#100370= IFCELEMENTQUANTITY('3VOudspbbd9ugWdFgomREH',#4,'BaseQuantities',$,$,(#100371,#100372,#100373));
+#100371= IFCQUANTITYLENGTH('Height','',$,1.0);
+#100372= IFCQUANTITYLENGTH('Width','',$,3.0);
+#100373= IFCQUANTITYAREA('Area','1.0 * 3.0',$,3.0);
+#100379= IFCRELDEFINESBYPROPERTIES('2aLM7t3gfqFP0keDgr82nX',#4,$,$,(#100300),#100370);
+/* --------------------------------------------------------------------------------------------- */
+#100380= IFCRELFILLSELEMENT('0Gq588_519cQPLAOHa$wpH',#4,$,$,#68500,#100300);
+/* --------------------------------------------------------------------------------------------- */
+/* Window bounding space: a logical space boundary between the window and one space              */
+/* as it is an external window, it can be directly assigned to the space                         */
+#100391= IFCRELSPACEBOUNDARY('0oXPSLd2X0w2JzeEIr9Zpq',#4,$,$,#30600,#100300,$,.PHYSICAL.,.EXTERNAL.);
+
+
+/* test window type ---------------------------------------------------------------------------- */
+/* window style #109110 shall pass                                                               */
+/* --------------------------------------------------------------------------------------------- */
+/* Window type: Name, Operation type (double panel)                                              */
+/* #109110= IFCWINDOWSTYLE('3Yq2sq7brEif5ojF_gf$NM',#4,'Dreh- Kippfenster 2-fl\S\|gelig',$,$,(#109111,#109112,#109113),$,$,.NOTDEFINED.,.DOUBLE_PANEL_VERTICAL.,.T.,.F.); */
+/* #109111= IFCWINDOWLININGPROPERTIES('2j$NYiCgsAfQNNYqslQsb$',#4,$,$,0.2,$,0.05,$,$,$,0.5,$,$); */
+#109110= IFCWINDOWSTYLE('3Yq2sq7brEif5ojF_gf$NM',#4,'tilt and turn two panel window - external',$,$,(#109111,#109112,#109113),$,$,.NOTDEFINED.,.DOUBLE_PANEL_HORIZONTAL.,.T.,.F.);
+#109111= IFCWINDOWLININGPROPERTIES('2j$NYiCgsAfQNNYqslQsb$',#4,$,$,0.2,0.05,0.05,$,0.5,$,$,$,$);
+#109112= IFCWINDOWPANELPROPERTIES('1zUMIGK4f7FRd64wbpahkn',#4,$,$,.SIDEHUNGLEFTHAND.,.LEFT.,0.05,0.05,$);
+#109113= IFCWINDOWPANELPROPERTIES('1zUMIGK432FRd64wbpahkn',#4,$,$,.TILTANDTURNRIGHTHAND.,.RIGHT.,0.05,0.05,$);
+#109119= IFCRELDEFINESBYTYPE('2DSGqTIpP75glZcdn8G7em',#4,$,$,(#100100,#100200),#109110);
+
+
+/* test window type ---------------------------------------------------------------------------- */
+/* window style #109210 shall pass                                                               */
+/* --------------------------------------------------------------------------------------------- */
+/* Window type: Name, Operation type (double panel)                                              */
+#109210= IFCWINDOWSTYLE('3Yq2sj3brEif5ojF_gf$NM',#4,'fixed glazing window',$,$,(#109211,#109212),$,$,.NOTDEFINED.,.SINGLE_PANEL.,.T.,.F.);
+#109211= IFCWINDOWLININGPROPERTIES('2j$j7iCgsAfQNNYqslQsb$',#4,$,$,0.2,0.05,$,$,$,$,$,$,$);
+#109212= IFCWINDOWPANELPROPERTIES('1zUMIGK4f7Fd164wbpahkn',#4,$,$,.REMOVABLECASEMENT.,.MIDDLE.,0.05,0.05,$);
+#109219= IFCRELDEFINESBYTYPE('2DSGqTIpP75glZcgl8G7em',#4,$,$,(#100300),#109210);
+
+
+
+/* test door room 4-1 -------------------------------------------------------------------------- */
+/* door #110100                                                                      shall pass  */
+/* NOTE door is directly contained in space                                                      */
+/* --------------------------------------------------------------------------------------------- */
+/* Door Attributes: door number and description provided                                         */
+#110100= IFCDOOR('2cs23eea03hgs3eLZsghoF',#4,'AT-1.EG.004','Door-001 for testing Basic FM Handover',$,#110101,#110120,$,2.25,1.);
+/* test door #110100 - placement --------------------------------------------------------------- */
+/* - only relevant if the optional building elements and geometry is imported into CAFM system   */
+#110101= IFCLOCALPLACEMENT(#68101,#110110);
+#110110= IFCAXIS2PLACEMENT3D(#110111,#12,#11);
+#110111= IFCCARTESIANPOINT((0.,0.,0.));
+/* test door #110100 - shape representation ---------------------------------------------------- */
+/* - only relevant if the optional building elements and geometry is imported into CAFM system   */
+#110120= IFCPRODUCTDEFINITIONSHAPE($,$,(#110131));
+#110131= IFCSHAPEREPRESENTATION(#111,'Body','SweptSolid',(#110132));
+#110132= IFCEXTRUDEDAREASOLID(#110133,#110136,#10,0.05); 
+#110133= IFCRECTANGLEPROFILEDEF(.AREA.,$,#110134,2.15,1.);
+#110134= IFCAXIS2PLACEMENT2D(#110135,$);
+#110135= IFCCARTESIANPOINT((1.075,0.5));
+#110136= IFCAXIS2PLACEMENT3D(#110137,#11,#10);
+#110137= IFCCARTESIANPOINT((0.,0.15,0.1));
+#110138= IFCDIRECTION((0.,0.,1.));
+/* --------------------------------------------------------------------------------------------- */
+/* Door Common Properies:                                                             shall pass */
+#110150= IFCPROPERTYSET('2bWT3fcZdS8a9zY5mzs7HO',#4,'Pset_DoorCommon',$,(#110151,#110152,#110153,#110154));
+#110151= IFCPROPERTYSINGLEVALUE('Reference',$,IFCLABEL('AT-1'),$);
+#110152= IFCPROPERTYSINGLEVALUE('FireRating',$,IFCLABEL('T90'),$);
+#110153= IFCPROPERTYSINGLEVALUE('IsExternal',$,IFCLOGICAL(.T.),$);
+#110154= IFCPROPERTYSINGLEVALUE('FireResistence',$,IFCLABEL('T60'),$);
+#110169= IFCRELDEFINESBYPROPERTIES('1l52Y6dohqi8Fxvqpm2E_g',#4,$,$,(#110100),#110150);
+/* --------------------------------------------------------------------------------------------- */
+/* Door Base Quantities                                                               shall pass */
+#110170= IFCELEMENTQUANTITY('3VOudspbbs34NXmFgomREH',#4,'BaseQuantities',$,$,(#110171,#110172,#110173));
+#110171= IFCQUANTITYLENGTH('Height','',$,2.25);
+#110172= IFCQUANTITYLENGTH('Width','',$,1.0);
+#110173= IFCQUANTITYAREA('Area','2.25 * 1.0',$,2.25);
+#110179= IFCRELDEFINESBYPROPERTIES('2aPKf17efqFP0keDgr82nX',#4,$,$,(#110300),#110170);
+/* --------------------------------------------------------------------------------------------- */
+#110180= IFCRELFILLSELEMENT('0GqlLd_519cQneAOXD$wpH',#4,$,$,#68100,#110100);
+
+
+/* test door room 4-2 -------------------------------------------------------------------------- */
+/* door #110200                                                                      shall pass  */
+/* NOTE door is directly contained in space                                                      */
+/* --------------------------------------------------------------------------------------------- */
+/* Door Attributes: door number provided                                                         */
+#110200= IFCDOOR('2cs23eea03h3g3eLZsghoF',#4,'IT-1.EG.004',$,$,#110201,#110220,$,2.25,1.);
+/* test door #110200 - placement --------------------------------------------------------------- */
+/* - only relevant if the optional building elements and geometry is imported into CAFM system   */
+#110201= IFCLOCALPLACEMENT(#68201,#110210);
+#110210= IFCAXIS2PLACEMENT3D(#110211,#10,#12);
+#110211= IFCCARTESIANPOINT((0.,0.,0.));
+/* test door #110200 - shape representation ---------------------------------------------------- */
+/* - only relevant if the optional building elements and geometry is imported into CAFM system   */
+#110220= IFCPRODUCTDEFINITIONSHAPE($,$,(#110231));
+#110231= IFCSHAPEREPRESENTATION(#111,'Body','SweptSolid',(#110232));
+#110232= IFCEXTRUDEDAREASOLID(#110233,#110236,#10,0.05); 
+#110233= IFCRECTANGLEPROFILEDEF(.AREA.,$,#110234,2.25,1.);
+#110234= IFCAXIS2PLACEMENT2D(#110235,$);
+#110235= IFCCARTESIANPOINT((1.075,0.5));
+#110236= IFCAXIS2PLACEMENT3D(#110237,#11,#10);
+#110237= IFCCARTESIANPOINT((0.,0.15,0.1));
+#110238= IFCDIRECTION((0.,0.,1.));
+/* --------------------------------------------------------------------------------------------- */
+/* Door Common Properies:                                                             shall pass */
+#110250= IFCPROPERTYSET('2bWT3fcZdSa39zY5mzs7HO',#4,'Pset_DoorCommon',$,(#110251,#110252,#110253,#110254));
+#110251= IFCPROPERTYSINGLEVALUE('Reference',$,IFCLABEL('IT-1'),$);
+#110252= IFCPROPERTYSINGLEVALUE('GlazingAreaFraction',$,IFCPOSITIVERATIOMEASURE(0.6),$);
+#110253= IFCPROPERTYSINGLEVALUE('IsExternal',$,IFCLOGICAL(.F.),$);
+#110254= IFCPROPERTYSINGLEVALUE('FireResistence',$,IFCLABEL('T30'),$);
+#110269= IFCRELDEFINESBYPROPERTIES('1l52Y6dodsi8Fxvqpm2E_g',#4,$,$,(#110200),#110250);
+/* --------------------------------------------------------------------------------------------- */
+/* Door Base Quantities                                                               shall pass */
+#110270= IFCELEMENTQUANTITY('3VOudspbbsdvNXmtKomREH',#4,'BaseQuantities',$,$,(#110271,#110272,#110273));
+#110271= IFCQUANTITYLENGTH('Height','',$,2.25);
+#110272= IFCQUANTITYLENGTH('Width','',$,2.0);
+#110273= IFCQUANTITYAREA('Area','2.25 * 2.0',$,4.5);
+#110279= IFCRELDEFINESBYPROPERTIES('2aPK7t7er9FP0keDgr82nX',#4,$,$,(#110300),#110270);
+/* --------------------------------------------------------------------------------------------- */
+#110280= IFCRELFILLSELEMENT('0Gqlf8_519cQneAwLa$wpH',#4,$,$,#68200,#110200);
+
+
+/* test door room 2-1 -------------------------------------------------------------------------- */
+/* door #110300                                                                      shall pass  */
+/* NOTE door is not directly contained in space, only bound to the two connected spaces          */
+/* --------------------------------------------------------------------------------------------- */
+/* Door Attributes: door number provided                                                         */
+#110300= IFCDOOR('2cs23eea03h3g387ZsghoF',#4,'IT-2.EG.002',$,$,#110301,#110320,$,2.25,2.);
+/* test door #110300 - placement --------------------------------------------------------------- */
+/* - only relevant if the optional building elements and geometry is imported into CAFM system   */
+#110301= IFCLOCALPLACEMENT(#68301,#110310);
+#110310= IFCAXIS2PLACEMENT3D(#110311,#10,#12);
+#110311= IFCCARTESIANPOINT((0.,0.,0.));
+/* test door #110300 - shape representation ----------------------------------------------------- */
+/* - only relevant if the optional building elements and geometry is imported into CAFM system   */
+#110320= IFCPRODUCTDEFINITIONSHAPE($,$,(#110331));
+#110331= IFCSHAPEREPRESENTATION(#111,'Body','SweptSolid',(#110332));
+#110332= IFCEXTRUDEDAREASOLID(#110333,#110336,#10,0.05); 
+#110333= IFCRECTANGLEPROFILEDEF(.AREA.,$,#110334,2.25,2.);
+#110334= IFCAXIS2PLACEMENT2D(#110335,$);
+#110335= IFCCARTESIANPOINT((1.075,1.));
+#110336= IFCAXIS2PLACEMENT3D(#110337,#11,#10);
+#110337= IFCCARTESIANPOINT((0.,0.15,0.1));
+#110338= IFCDIRECTION((0.,0.,1.));
+/* --------------------------------------------------------------------------------------------- */
+/* Door Common Properies:                                                             shall pass */
+#110350= IFCPROPERTYSET('2bWT3fcZdSa39zYs3zs7HO',#4,'Pset_DoorCommon',$,(#110351,#110352,#110353,#110354));
+#110351= IFCPROPERTYSINGLEVALUE('Reference',$,IFCLABEL('IT-2'),$);
+#110352= IFCPROPERTYSINGLEVALUE('GlazingAreaFraction',$,IFCPOSITIVERATIOMEASURE(0.2),$);
+#110353= IFCPROPERTYSINGLEVALUE('IsExternal',$,IFCLOGICAL(.F.),$);
+#110354= IFCPROPERTYSINGLEVALUE('FireResistence',$,IFCLABEL('T30'),$);
+#110369= IFCRELDEFINESBYPROPERTIES('1l52Y6defsi8Fxvqpm2E_g',#4,$,$,(#110300),#110350);
+/* --------------------------------------------------------------------------------------------- */
+/* Door Base Quantities                                                               shall pass */
+#110370= IFCELEMENTQUANTITY('3VOudspbbsdvNXmFgomREH',#4,'BaseQuantities',$,$,(#110371,#110372,#110373));
+#110371= IFCQUANTITYLENGTH('Height','',$,2.25);
+#110372= IFCQUANTITYLENGTH('Width','',$,2.0);
+#110373= IFCQUANTITYAREA('Area','2.25 * 2.0',$,4.5);
+#110379= IFCRELDEFINESBYPROPERTIES('2aPK7t7efqFP0keDgr82nX',#4,$,$,(#110300),#110370);
+/* --------------------------------------------------------------------------------------------- */
+#110380= IFCRELFILLSELEMENT('0Gqlf8_519cQnes2Ha$wpH',#4,$,$,#68300,#110300);
+/* --------------------------------------------------------------------------------------------- */
+/* Door bounding space: a logical space boundary between the door and the two spaces             */
+/* the choice to which space it belongs has to be determined on import, e.g. by user input       */
+#110391= IFCRELSPACEBOUNDARY('0oXPS5rWX0VPJzeEIr9Zpq',#4,$,$,#30100,#110300,$,.PHYSICAL.,.INTERNAL.);
+#110392= IFCRELSPACEBOUNDARY('0oXPS5rWX0VPJzedfr9Zpq',#4,$,$,#30200,#110300,$,.PHYSICAL.,.INTERNAL.);
+
+
+/* test door room 14-1 ------------------------------------------------------------------------- */
+/* door #110400                                                                       shall pass  */
+/* NOTE door is not directly contained in space, only bound to the one connected space           */
+/*      it is an external door and thereby has only one space boundary                           */
+/* --------------------------------------------------------------------------------------------- */
+/* Door Attributes: door number provided                                                         */
+#110400= IFCDOOR('2cs23eea03h3g3sDZsghoF',#4,'IT-2.EG.002',$,$,#110401,#110420,$,2.25,2.);
+/* test door #110400 - placement ---------------------------------------------------------------- */
+/* - only relevant if the optional building elements and geometry is imported into CAFM system   */
+#110401= IFCLOCALPLACEMENT(#68401,#110410);
+#110410= IFCAXIS2PLACEMENT3D(#110411,#10,#12);
+#110411= IFCCARTESIANPOINT((0.,0.,0.));
+/* test door #110400 - shape representation ----------------------------------------------------- */
+/* - only relevant if the optional building elements and geometry is imported into CAFM system   */
+#110420= IFCPRODUCTDEFINITIONSHAPE($,$,(#110431));
+#110431= IFCSHAPEREPRESENTATION(#111,'Body','SweptSolid',(#110432));
+#110432= IFCEXTRUDEDAREASOLID(#110433,#110436,#10,0.05); 
+#110433= IFCRECTANGLEPROFILEDEF(.AREA.,$,#110434,2.25,2.);
+#110434= IFCAXIS2PLACEMENT2D(#110435,$);
+#110435= IFCCARTESIANPOINT((1.075,1.));
+#110436= IFCAXIS2PLACEMENT3D(#110437,#11,#10);
+#110437= IFCCARTESIANPOINT((0.,0.15,0.1));
+#110438= IFCDIRECTION((0.,0.,1.));
+/* --------------------------------------------------------------------------------------------- */
+/* Door Common Properies:                                                             shall pass */
+#110450= IFCPROPERTYSET('2bWT3fcZdSv39zYs3zs7HO',#4,'Pset_DoorCommon',$,(#110451,#110452,#110453,#110454));
+#110451= IFCPROPERTYSINGLEVALUE('Reference',$,IFCLABEL('AT-2'),$);
+#110452= IFCPROPERTYSINGLEVALUE('GlazingAreaFraction',$,IFCPOSITIVERATIOMEASURE(0.8),$);
+#110453= IFCPROPERTYSINGLEVALUE('IsExternal',$,IFCLOGICAL(.T.),$);
+#110454= IFCPROPERTYSINGLEVALUE('FireResistence',$,IFCLABEL('T30'),$);
+#110469= IFCRELDEFINESBYPROPERTIES('1lw3Y6defsi8Fxvqpm2E_g',#4,$,$,(#110400),#110450);
+/* --------------------------------------------------------------------------------------------- */
+#110480= IFCRELFILLSELEMENT('0Gqlf8_51dFQnes2Ha$wpH',#4,$,$,#68400,#110400);
+/* --------------------------------------------------------------------------------------------- */
+/* Door bounding space: a logical space boundary between the door and the two spaces             */
+/* the choice to which space it belongs has to be determined on import, e.g. by user input       */
+#110491= IFCRELSPACEBOUNDARY('0oXPS5rWX0SxJzeEIr9Zpq',#4,$,$,#30600,#110400,$,.PHYSICAL.,.EXTERNAL.);
+
+
+/* test door type ------------------------------------------------------------------------------ */
+/* door style #119110 shall pass                                                                  */
+/* --------------------------------------------------------------------------------------------- */
+/* Door type: Name, Operation type (single swing opening to the right)                           */
+#119110= IFCDOORSTYLE('3Yq2sq7brEif5ojF_S9$NM',#4,'single right swing door - internal',$,$,(#119111,#119112),$,$,.SINGLE_SWING_RIGHT.,.NOTDEFINED.,.T.,.F.);
+#119111= IFCDOORLININGPROPERTIES('2j$NYiCabAfQNNYqslQsb$',#4,$,$,0.2,0.05,$,$,$,$,$,$,$,$,$);
+#119112= IFCDOORPANELPROPERTIES('1zUMIGK4f7FR6M4wbpahkn',#4,$,$,0.05,.SWINGING.,1.,.MIDDLE.,$);
+#119119= IFCRELDEFINESBYTYPE('2DSGqTIpP75glZycn8G7em',#4,$,$,(#110100),#119110);
+
+
+/* test door type ------------------------------------------------------------------------------ */
+/* door style #119210 shall pass                                                                  */
+/* --------------------------------------------------------------------------------------------- */
+/* Door type: Name, Operation type  (single swing opening to the left)                           */
+#119210= IFCDOORSTYLE('3Yq2sq7brEif5ojF_S4gNM',#4,'single left swing door - internal',$,$,(#119211,#119212),$,$,.SINGLE_SWING_LEFT.,.NOTDEFINED.,.T.,.F.);
+#119211= IFCDOORLININGPROPERTIES('2j$NYid3bAfQNNYqslQsb$',#4,$,$,0.2,0.05,$,$,$,$,$,$,$,$,$);
+#119212= IFCDOORPANELPROPERTIES('1zUMIGg6f7FR6M4wbpahkn',#4,$,$,0.05,.SWINGING.,1.,.MIDDLE.,$);
+#119219= IFCRELDEFINESBYTYPE('2DSGqTIpP75gksycn8G7em',#4,$,$,(#110200),#119210);
+
+
+/* test door type ------------------------------------------------------------------------------ */
+/* door style #119310 shall pass                                                                  */
+/* --------------------------------------------------------------------------------------------- */
+/* Door type: Name, Operation type double swing)                                                 */
+#119310= IFCDOORSTYLE('3Yq2sq7bdWif5ojF_S4gNM',#4,'double swing door - internal',$,$,(#119311,#119312,#119313),$,$,.DOUBLE_DOOR_DOUBLE_SWING.,.NOTDEFINED.,.T.,.F.);
+#119311= IFCDOORLININGPROPERTIES('2j$NYid3bAfQNskqslQsb$',#4,$,$,0.2,0.05,$,$,$,$,$,$,$,$,$);
+#119312= IFCDOORPANELPROPERTIES('1zUMIGg6f0kR6M4wbpahkn',#4,$,$,0.05,.SWINGING.,0.5,.LEFT.,$);
+#119313= IFCDOORPANELPROPERTIES('1zUMIGkw6f7FR6M4wbpah3',#4,$,$,0.05,.SWINGING.,0.5,.RIGHT.,$);
+#119319= IFCRELDEFINESBYTYPE('2DSGqTIpP7npksycn8G7em',#4,$,$,(#110300),#119310);
+
+
+/* test door type ------------------------------------------------------------------------------ */
+/* door style #119410 shall pass                                                                  */
+/* --------------------------------------------------------------------------------------------- */
+/* Door type: Name, Operation type double swing)                                                 */
+#119410= IFCDOORSTYLE('3Yq2sq7bdwif5ojF_S4gNM',#4,'double swing door - external',$,$,(#119411,#119412,#119413),$,$,.DOUBLE_DOOR_DOUBLE_SWING.,.NOTDEFINED.,.T.,.F.);
+#119411= IFCDOORLININGPROPERTIES('2j$NYid3b3dQNskqslQsb$',#4,$,$,0.2,0.05,$,$,$,$,$,$,$,$,$);
+#119412= IFCDOORPANELPROPERTIES('1zUMIGg6f0kR6S1wbpahkn',#4,$,$,0.05,.SWINGING.,0.5,.LEFT.,$);
+#119413= IFCDOORPANELPROPERTIES('1zUMIGkw6f7FvBM4wbpah3',#4,$,$,0.05,.SWINGING.,0.5,.RIGHT.,$);
+#119419= IFCRELDEFINESBYTYPE('2DSGqTIpP7npksSLn8G7em',#4,$,$,(#110400),#119410);
+
+
+/* test column no.1 ---------------------------------------------------------------------------- */
+/* wall #120100 shall pass                                                                       */
+/* --------------------------------------------------------------------------------------------- */
+/* - only relevant if the optional building elements and geometry is imported into CAFM system   */
+#120100= IFCCOLUMN('2csSOeed47hgpgiLZgUjoF',#4,'Column 001',$,$,#120101,#120120,$);
+/* test column #120100 - placement ------------------------------------------------------------- */
+#120101= IFCLOCALPLACEMENT(#20201,#120110);
+#120110= IFCAXIS2PLACEMENT3D(#120111,#10,#12);
+#120111= IFCCARTESIANPOINT((7.,5.,0.));
+/* test column #120100 - shape representation -------------------------------------------------- */
+#120120= IFCPRODUCTDEFINITIONSHAPE($,$,(#120131));
+#120131= IFCSHAPEREPRESENTATION(#111,'Body','SweptSolid',(#120132));
+#120132= IFCEXTRUDEDAREASOLID(#120133,#120139,#10,2.8); 
+#120133= IFCRECTANGLEPROFILEDEF(.AREA.,$,#120134,0.2,0.2);
+#120134= IFCAXIS2PLACEMENT2D(#120135,$);
+#120135= IFCCARTESIANPOINT((0.,0.));
+#120139= IFCAXIS2PLACEMENT3D(#20,$,$);
+/* test column #120100 - material definition --------------------------------------------------- */
+#120170= IFCMATERIAL('Concrete');
+#120179= IFCRELASSOCIATESMATERIAL('111zvl3s46Uuvd16Ra5dg2',#4,$,$,(#120100),#120170);
+/* test column type #120150 - column properties ------------------------------------------------ */
+#120150= IFCPROPERTYSET('2bWTYwcZP8a9lzd67CsdHO',#4,'Pset_ColumnCommon',$,(#120151,#120152));
+#120151= IFCPROPERTYSINGLEVALUE('Reference',$,IFCLABEL('CO-1'),$);
+#120152= IFCPROPERTYSINGLEVALUE('IsExternal',$,IFCLOGICAL(.F.),$);
+#120169= IFCRELDEFINESBYPROPERTIES('1l52Y6dB1Ei8jAvsdm2E_g',#4,$,$,(#120100),#120150);
+
+
+/* test beam no.1 ------------------------------------------------------------------------------ */
+/* wall #130100 shall pass                                                                       */
+/* --------------------------------------------------------------------------------------------- */
+/* - only relevant if the optional building elements and geometry is imported into CAFM system   */
+#130100= IFCBEAM('2csSOeed47sFpgiLZgUjoF',#4,'Beam 001',$,$,#130101,#130120,$);
+/* test beam #130100 - placement --------------------------------------------------------------- */
+#130101= IFCLOCALPLACEMENT(#20201,#130110);
+#130110= IFCAXIS2PLACEMENT3D(#130111,#14,#12);
+#130111= IFCCARTESIANPOINT((7.,9.9,2.9));
+/* test beam #130100 - shape representation ---------------------------------------------------- */
+#130120= IFCPRODUCTDEFINITIONSHAPE($,$,(#130131));
+#130131= IFCSHAPEREPRESENTATION(#111,'Body','SweptSolid',(#130132));
+#130132= IFCEXTRUDEDAREASOLID(#130133,#130139,#10,9.8); 
+#130133= IFCRECTANGLEPROFILEDEF(.AREA.,$,#130134,0.2,0.2);
+#130134= IFCAXIS2PLACEMENT2D(#130135,$);
+#130135= IFCCARTESIANPOINT((0.,0.));
+#130139= IFCAXIS2PLACEMENT3D(#20,$,$);
+/* test beam #130100 - material definition ----------------------------------------------------- */
+#130170= IFCMATERIAL('Concrete');
+#130179= IFCRELASSOCIATESMATERIAL('111zuC3s46Uuvd16Ra5dg2',#4,$,$,(#130100),#130170);
+/* test beam type #130150 - beam properties ---------------------------------------------------- */
+#130150= IFCPROPERTYSET('2bWTYwcZP8a9DDd67CsdHO',#4,'Pset_BeamCommon',$,(#130151,#130152));
+#130151= IFCPROPERTYSINGLEVALUE('Reference',$,IFCLABEL('BE-1'),$);
+#130152= IFCPROPERTYSINGLEVALUE('IsExternal',$,IFCLOGICAL(.F.),$);
+#130169= IFCRELDEFINESBYPROPERTIES('1l52SvdB1Ei8jAvsdm2E_g',#4,$,$,(#130100),#130150);
+
+
+
+/* wall connection ----------------------------------------------------------------------------- */
+/* wall connections only relevant, if the optional building elements and geometry is imported    */
+/* --------------------------------------------------------------------------------------------- */
+#200101= IFCRELCONNECTSPATHELEMENTS('2SF_YWFrr0M814p8ONX_tH',#4,$,$,#200102,#40300,#40400,(),(),.ATSTART.,.ATEND.);
+#200102= IFCCONNECTIONCURVEGEOMETRY(#200103,#200106);
+#200103= IFCPOLYLINE((#200104,#200105));
+#200104= IFCCARTESIANPOINT((20.1,-0.1));
+#200105= IFCCARTESIANPOINT((19.9,0.1));
+#200106= IFCPOLYLINE((#200107,#200108));
+#200107= IFCCARTESIANPOINT((0.1,0.1));
+#200108= IFCCARTESIANPOINT((-0.1,-0.1));
+#200111= IFCRELCONNECTSPATHELEMENTS('2SF_Y4hrr0M814p8ONX_tH',#4,$,$,#200112,#40400,#40100,(),(),.ATSTART.,.ATEND.);
+#200112= IFCCONNECTIONCURVEGEOMETRY(#200113,#200116);
+#200113= IFCPOLYLINE((#200114,#200115));
+#200114= IFCCARTESIANPOINT((10.1,-0.1));
+#200115= IFCCARTESIANPOINT((9.9,0.1));
+#200116= IFCPOLYLINE((#200117,#200118));
+#200117= IFCCARTESIANPOINT((0.1,0.1));
+#200118= IFCCARTESIANPOINT((-0.1,-0.1));
+#200121= IFCRELCONNECTSPATHELEMENTS('2SF_Y4h450M814p8ONX_tH',#4,$,$,$,#40100,#40200,(),(),.ATSTART.,.ATEND.);
+#200131= IFCRELCONNECTSPATHELEMENTS('2SF_Y4hrr0Mth4p8ONX_tH',#4,$,$,$,#40200,#40300,(),(),.ATSTART.,.ATEND.);
+#200141= IFCRELCONNECTSPATHELEMENTS('2SF_Y4hrr0Mth45gONX_tH',#4,$,$,#200142,#40500,#40100,(),(),.ATPATH.,.ATSTART.);
+#200142= IFCCONNECTIONCURVEGEOMETRY(#200143,$);
+#200143= IFCPOLYLINE((#200144,#200145));
+#200144= IFCCARTESIANPOINT((0.1,-0.1));
+#200145= IFCCARTESIANPOINT((0.1,0.1));
+#200151= IFCRELCONNECTSPATHELEMENTS('2SF_Y4hrgTMth45gONX_tH',#4,$,$,$,#40500,#40300,(),(),.ATPATH.,.ATEND.);
+#200161= IFCRELCONNECTSPATHELEMENTS('2SF_Y4hrg6Mth45gONX_tH',#4,$,$,$,#40700,#40100,(),(),.ATPATH.,.ATSTART.);
+#200171= IFCRELCONNECTSPATHELEMENTS('2SF_Y4h776Mth45gONX_tH',#4,$,$,$,#40700,#40600,(),(),.ATPATH.,.ATEND.);
+#200181= IFCRELCONNECTSPATHELEMENTS('2SF_Y4h776MgB45gONX_tH',#4,$,$,$,#40600,#40500,(),(),.ATPATH.,.ATSTART.);
+
+ENDSEC;
+END-ISO-10303-21;
