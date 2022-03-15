@@ -7,6 +7,7 @@ using Microsoft.Extensions.Logging;
 using NPOI.HSSF.UserModel;
 using NPOI.HSSF.Util;
 using NPOI.SS.UserModel;
+using NPOI.SS.Util;
 using Xbim.COBie.Contracts;
 using Xbim.Common;
 
@@ -597,7 +598,7 @@ namespace Xbim.COBie.Serialisers
         {
             // Ensures the spreadsheet formulas will be recalulated the next time the file is opened
             excelSheet.ForceFormulaRecalculation = true;
-            excelSheet.SetActiveCell(1, 0);
+            excelSheet.ActiveCell = new CellAddress(1, 0);
 
         }
     }

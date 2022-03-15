@@ -1,4 +1,4 @@
-﻿using Microsoft.Practices.Unity;
+﻿using Unity;
 using Xbim.WindowsUI.DPoWValidation.ViewModels;
 using XbimDPoWTools;
 
