@@ -1,6 +1,6 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFrameworks>net47;netstandard2.0</TargetFrameworks>
+    <TargetFrameworks>net472;netstandard2.0</TargetFrameworks>
     <Title>Xbim.CobieLite</Title>
     <Description>COBieLite schema for the XBIM Exchange toolkit</Description>
     <GeneratePackageOnBuild>false</GeneratePackageOnBuild>

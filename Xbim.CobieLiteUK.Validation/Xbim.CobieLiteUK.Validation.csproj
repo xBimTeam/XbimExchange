@@ -1,6 +1,6 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFrameworks>net47;</TargetFrameworks>
+    <TargetFrameworks>net472;</TargetFrameworks>
     <Title>Xbim.CobieLiteUK.Validation</Title>
     <Description>Provides validation services for data in the COBieLite UK schema</Description>
   </PropertyGroup>

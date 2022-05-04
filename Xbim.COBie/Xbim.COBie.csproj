@@ -1,6 +1,6 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFrameworks>net47</TargetFrameworks>
+    <TargetFrameworks>net472</TargetFrameworks>
     <Title>Xbim.Cobie</Title>
     <PackageId>Xbim.Cobie</PackageId>
     <Description>Provides an object model for handling the COBie schema used in both the UK and US implementations.

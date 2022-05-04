@@ -1,6 +1,6 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFrameworks>net47</TargetFrameworks>
+    <TargetFrameworks>net472</TargetFrameworks>
     <Title>Xbim.Exchanger</Title>
     <Description>
       xBIM Exchanger is a library enabling file exchange between IFC and COBie, COBieLite[UK] and DPoW

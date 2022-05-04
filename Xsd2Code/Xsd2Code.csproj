@@ -32,7 +32,7 @@
     <SccProvider>SAK</SccProvider>
     <OldToolsVersion>3.5</OldToolsVersion>
     <SignAssembly>false</SignAssembly>
-    <TargetFrameworkVersion>v4.7</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
     <PublishUrl>publish\</PublishUrl>
     <Install>true</Install>
     <InstallFrom>Disk</InstallFrom>
