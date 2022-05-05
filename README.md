@@ -17,7 +17,7 @@ This is the home of a number of related libraries:
 * [Xbim.COBie](Xbim.COBie/Xbim.Cobie.csproj) : a library to convert IFC files to COBie XLSX file
   * And a [Windows Client](Xbim.COBie.Client/Xbim.COBie.Client.csproj)
 * [Xbim.Exchanger](Xbim.Exchanger/Xbim.Exchanger.csproj) : a toolkit to map between a variety of formats include COBie, COBieLite, IFC and DPoW
-  * A [Windows Client](Xbim.CobieLiteUk.Client/Xbim.CobieLiteUk.Client.csproj) 
+  * A [Windows Client](Xbim.COBieLiteUK.Client/Xbim.COBieLiteUK.Client.csproj) 
   * A [validator for COBieLiteUK files](Xbim.CobieLiteUK.Validation/Xbim.CobieLiteUK.Validation.csproj)
 * XbimXplorer Plugins:
   * For [COBie Export](XplorerPlugin.COBieExport/XplorerPlugin.COBieExport.csproj)
@@ -26,12 +26,12 @@ This is the home of a number of related libraries:
 
 ## Compilation
 
-**Visual Studio 2017 is recommended.**
-Prior versions of Visual Studio may work, but we'd recomments 2017 where possible.
-The [free VS 2017 Community Edition](https://visualstudio.microsoft.com/downloads/) will be fine. 
+**Visual Studio 2017 or higher is recommended.**
+
+The [free VS 2019 Community Edition](https://visualstudio.microsoft.com/downloads/) will be fine. 
 All projects target .NET Framework 4.7
 
-The XBIM toolkit uses the NuGet technology for the management of several packages.
+The XBIM toolkit uses the NuGet for the management of several packages.
 We have custom NuGet feeds for the *master* and *develop* branches of the solution, and use
 Myget for CI builds. The [nuget.config](nuget.config) file should automatically add these feeds for you.
 
