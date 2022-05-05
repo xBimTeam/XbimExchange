@@ -158,7 +158,6 @@ namespace Xsd2Code.Library.Extensions
         /// <summary>
         /// Gets the Silverlight save to isolate storage file.
         /// </summary>
-        /// <param name="type">CodeTypeDeclaration type.</param>
         /// <returns>return the save to file code DOM method statment </returns>
         protected override CodeMemberMethod GetSaveToFileMethod()
         {
