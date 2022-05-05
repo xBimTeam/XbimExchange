@@ -18,8 +18,8 @@ Supports easy transformation from IFC to COBie and exports to Spreadsheet, JSON 
     </None>
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="Newtonsoft.Json" Version="11.0.2" />
-    <PackageReference Include="NPOI" Version="2.4.0" />
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
+    <PackageReference Include="NPOI" Version="2.5.6" />
     <PackageReference Include="Xbim.Essentials" Version="5.1.341" />
     <PackageReference Include="Xbim.Geometry" Version="5.1.437" />
   </ItemGroup>

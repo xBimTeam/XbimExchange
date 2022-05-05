@@ -7,7 +7,7 @@ using NPOI.XSSF.UserModel;
 using NPOI.SS.UserModel;
 using System.IO;
 using System.Globalization;
-
+using NPOI.HSSF.Util;
 
 namespace Xbim.COBie.Serialisers
 {
@@ -146,8 +146,7 @@ namespace Xbim.COBie.Serialisers
         private void WriteSheet(ICOBieSheet<COBieRow> sheet)
         {
 
-            ISheet excelSheet = ExcelWorkbook.GetSheet(sheet.SheetName) ?? ExcelWorkbook.CreateSheet(sheet.SheetName);
-
+            var excelSheet = ExcelWorkbook.GetSheet(sheet.SheetName) ?? ExcelWorkbook.CreateSheet(sheet.SheetName);
             var datasetHeaders = sheet.Columns.Values.ToList();
             var sheetHeaders = GetTargetHeaders(excelSheet);
             ValidateHeaders(datasetHeaders, sheetHeaders, sheet.SheetName);
@@ -182,13 +181,14 @@ namespace Xbim.COBie.Serialisers
                 //&& (_colours.ContainsKey("Grey"))
                 )
             {
-                if (IsXlsx)
+                if (IsXlsx && excelSheet is XSSFSheet asSheet)
                 {
-                    ((XSSFSheet)excelSheet).SetTabColor(IndexedColors.Grey50Percent.Index); 
+                    asSheet.TabColor = XSSFColor.ToXSSFColor(new HSSFColor.Grey50Percent());
                 }
                 else if (_colours.ContainsKey("Grey"))
                 {
-                    excelSheet.TabColorIndex = _colours["Grey"].Indexed;
+                    // todo: is there a way?
+                    // excelSheet.TabColorIndex = _colours["Grey"];
                 }
                 
             }
@@ -450,7 +450,8 @@ namespace Xbim.COBie.Serialisers
             }
             else
             {
-                    cellStyle.FillForegroundColor = _colours[colourName].Indexed;
+                // todo: is there a way to set the color?
+                // cellStyle.FillForegroundColor = _colours[colourName].Indexed;
             }
             
             cellStyle.FillPattern = FillPattern.SolidForeground;
@@ -816,8 +817,7 @@ namespace Xbim.COBie.Serialisers
         {
             // Ensures the spreadsheet formulas will be recalculated the next time the file is opened
             excelSheet.ForceFormulaRecalculation = true;
-            excelSheet.SetActiveCell(1, 0);
-
+            excelSheet.SetActiveCellRange(1, 1, 0, 0);
         }
     }
 }

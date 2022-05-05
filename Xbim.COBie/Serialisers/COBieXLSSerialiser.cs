@@ -597,8 +597,7 @@ namespace Xbim.COBie.Serialisers
         {
             // Ensures the spreadsheet formulas will be recalulated the next time the file is opened
             excelSheet.ForceFormulaRecalculation = true;
-            excelSheet.SetActiveCell(1, 0);
-
+            excelSheet.SetActiveCellRange(1, 1, 0, 0);
         }
     }
 }
