@@ -37,11 +37,10 @@
   <ItemGroup>
     <PackageReference Include="Microsoft.CSharp" Version="4.7.0" />
     <PackageReference Include="Microsoft.Extensions.Primitives" Version="2.1.6" />
-    <PackageReference Include="System.Configuration.ConfigurationManager" Version="5.0.0" />
-    <PackageReference Include="System.Data.DataSetExtensions" Version="4.5.0" />
-    <PackageReference Include="Xbim.CobieExpress.Exchanger" Version="5.1.147-develop" />
+        <PackageReference Include="System.Data.DataSetExtensions" Version="4.5.0" />
+    <PackageReference Include="Xbim.CobieExpress.Exchanger" Version="5.1.154" />
     <PackageReference Include="Xbim.Essentials" Version="5.1.341" />
-    <PackageReference Include="Xbim.IO.CobieExpress" Version="5.1.147-develop" />
+    <PackageReference Include="Xbim.IO.CobieExpress" Version="5.1.154" />
     <PackageReference Include="Microsoft.DotNet.UpgradeAssistant.Extensions.Default.Analyzers" Version="0.3.310801">
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
