@@ -9,7 +9,6 @@
 //------------------------------------------------------------------------------
 
 namespace Xbim.CobieLiteUk.Client.Properties {
-    using System;
     
     
     /// <summary>

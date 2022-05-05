@@ -1,317 +1,127 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{65C0C5FF-70D7-49CC-ACCF-057C91F382CC}</ProjectGuid>
+    <TargetFramework>net472</TargetFramework>
     <OutputType>Library</OutputType>
-    <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Tests</RootNamespace>
-    <AssemblyName>Tests</AssemblyName>
-    <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
-    <FileAlignment>512</FileAlignment>
-    <ProjectTypeGuids>{3AC096D0-A1C2-E12C-1390-A8335801FDAB};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
-    <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
-    <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
-    <ReferencePath>$(ProgramFiles)\Common Files\microsoft shared\VSTT\$(VisualStudioVersion)\UITestExtensionPackages</ReferencePath>
-    <IsCodedUITest>False</IsCodedUITest>
-    <TestProjectType>UnitTest</TestProjectType>
     <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\</SolutionDir>
-    <NuGetPackageImportStamp>
-    </NuGetPackageImportStamp>
-    <TargetFrameworkProfile />
+    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <DebugSymbols>true</DebugSymbols>
-    <DebugType>full</DebugType>
-    <Optimize>false</Optimize>
     <OutputPath>..\Output\Debug\</OutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <DebugType>pdbonly</DebugType>
-    <Optimize>true</Optimize>
     <OutputPath>..\Output\Release\</OutputPath>
-    <DefineConstants>TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup>
     <SignAssembly>true</SignAssembly>
   </PropertyGroup>
   <PropertyGroup>
     <AssemblyOriginatorKeyFile>..\XbimOpenSourceKeyFile.snk</AssemblyOriginatorKeyFile>
-  </PropertyGroup>
-  <Choose>
-    <When Condition="('$(VisualStudioVersion)' == '10.0' or '$(VisualStudioVersion)' == '') and '$(TargetFrameworkVersion)' == 'v3.5'">
-      <ItemGroup>
-        <Reference Include="Microsoft.VisualStudio.QualityTools.UnitTestFramework, Version=10.1.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL" />
-      </ItemGroup>
-    </When>
-    <Otherwise />
-  </Choose>
+  </PropertyGroup>  
   <ItemGroup>
-    <Compile Include="CobieExpressTests.cs" />
-    <Compile Include="COBieLiteTests.cs" />
-    <Compile Include="CobieLiteUKValidationExtraTests.cs" />
-    <Compile Include="CobieLiteUKValidationTests.cs" />
-    <Compile Include="DPoWToCOBieLiteUKTests.cs" />
-    <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="ConversionTests.cs" />
-    <Compile Include="COBieLiteUKTests.cs" />
-    <Compile Include="DPoWToCOBieLiteTests.cs" />
-    <Compile Include="IfcToCOBieLiteUKTests.cs" />
-    <Compile Include="ConvertCobieLiteUKToValidationReportTests.cs" />
-    <Compile Include="FacilityMergeTest.cs" />
-    <Compile Include="COBieDocumentTests.cs" />
-    <Compile Include="ValidationMockUp.cs" />
+    <ProjectReference Include="..\Xbim.CobieLiteUK.Validation\Xbim.CobieLiteUK.Validation.csproj" />
+    <ProjectReference Include="..\Xbim.COBieLiteUK\Xbim.COBieLiteUK.csproj" />
+    <ProjectReference Include="..\Xbim.COBieLite\Xbim.COBieLite.csproj" />
+    <ProjectReference Include="..\Xbim.DPoW\Xbim.DPoW.csproj" />
+    <ProjectReference Include="..\Xbim.Exchanger\Xbim.Exchanger.csproj" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Xbim.CobieLiteUK.Validation\Xbim.CobieLiteUK.Validation.csproj">
-      <Project>{d2d0b192-93b2-409f-aaa0-47bd3038c87e}</Project>
-      <Name>Xbim.CobieLiteUK.Validation</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Xbim.COBieLiteUK\Xbim.COBieLiteUK.csproj">
-      <Project>{90def072-96c7-4972-835e-909c41169cb4}</Project>
-      <Name>Xbim.COBieLiteUK</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Xbim.COBieLite\Xbim.COBieLite.csproj">
-      <Project>{e550c721-50af-4ad0-998e-0c61f305eec8}</Project>
-      <Name>Xbim.COBieLite</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Xbim.DPoW\Xbim.DPoW.csproj">
-      <Project>{79e7f597-f509-49ec-a606-fdc8326e72f5}</Project>
-      <Name>Xbim.DPoW</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Xbim.Exchanger\Xbim.Exchanger.csproj">
-      <Project>{5540768D-8ACD-4CC0-B3CD-1951DEF54C20}</Project>
-      <Name>Xbim.Exchanger</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="App.config">
-      <SubType>Designer</SubType>
-    </None>
-    <None Include="DemoFiles\LakesideRestaurant_Deliverables.DPoW.json">
+    <None Update="DemoFiles\LakesideRestaurant_Deliverables.DPoW.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="packages.config" />
-    <None Include="DemoFiles\LakesideRestaurant_stage6_Requirements.DPoW.json">
+    <None Update="DemoFiles\LakesideRestaurant_stage6_Requirements.DPoW.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="TestFiles\001-Lakeside_Restaurant.dpow">
+    <None Update="TestFiles\001-Lakeside_Restaurant.dpow">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="TestFiles\013-Lakeside_Restaurant.dpow">
+    <None Update="TestFiles\013-Lakeside_Restaurant.dpow">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="TestFiles\2012-03-23-Duplex-Design.xlsx">
+    <None Update="TestFiles\2012-03-23-Duplex-Design.xlsx">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Include="TestFiles\Example_Bim_Toolkit_Stage4.zip">
+    <None Update="TestFiles\Example_Bim_Toolkit_Stage4.zip">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="TestFiles\Ifc\Clinic-Handover-v12.ifc">
+    <None Update="TestFiles\Ifc\Clinic-Handover-v12.ifc">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="TestFiles\NewtownHighSchool.new.dpow">
+    <None Update="TestFiles\NewtownHighSchool.new.dpow">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="test.runsettings" />
-    <None Include="TestFiles\COBieLite.json">
+    <None Update="TestFiles\COBieLite.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="TestFiles\NewtownHighSchool.COBieLite.json">
+    <None Update="TestFiles\NewtownHighSchool.COBieLite.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="TestFiles\NewtownHighSchool.dpow">
+    <None Update="TestFiles\NewtownHighSchool.dpow">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="TestFiles\2012-03-23-Duplex-Handover.ifc">
+    <None Update="TestFiles\2012-03-23-Duplex-Handover.ifc">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="TestFiles\Duplex_MEP_20110907.ifc">
+    <None Update="TestFiles\Duplex_MEP_20110907.ifc">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="TestFiles\OBN1-COBie-UK-2014.xlsx">
+    <None Update="TestFiles\OBN1-COBie-UK-2014.xlsx">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="TestFiles\ValidationReport.json">
+    <None Update="TestFiles\ValidationReport.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="ValidationFiles\LakesideWithDocuments.xls">
+    <None Update="ValidationFiles\LakesideWithDocuments.xls">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="ValidationFiles\Lakeside_Restaurant-FacilityNotRequired.json">
+    <None Update="ValidationFiles\Lakeside_Restaurant-FacilityNotRequired.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="ValidationFiles\Lakeside_Restaurant-stage0-COBie.json">
+    <None Update="ValidationFiles\Lakeside_Restaurant-stage0-COBie.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="ValidationFiles\Lakeside_Restaurant-stage1-COBie.json">
+    <None Update="ValidationFiles\Lakeside_Restaurant-stage1-COBie.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="ValidationFiles\Lakeside_Restaurant-stage2-COBie.json" />
-    <None Include="ValidationFiles\Lakeside_Restaurant-stage3-COBie.json" />
-    <None Include="ValidationFiles\Lakeside_Restaurant-stage4-COBie.json" />
-    <None Include="ValidationFiles\Lakeside_Restaurant-stage5-COBie.json" />
-    <None Include="ValidationFiles\Lakeside_Restaurant-stage6-COBie.json">
+    <None Update="ValidationFiles\Lakeside_Restaurant-stage6-COBie.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="ValidationFiles\Lakeside_Restaurant-stage7-COBie.json" />
-    <None Include="ValidationFiles\Lakeside_Restaurant.dpow">
+    <None Update="ValidationFiles\Lakeside_Restaurant.dpow">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="ValidationFiles\Lakeside_Restaurant.ifc">
+    <None Update="ValidationFiles\Lakeside_Restaurant.ifc">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="TestFiles\Lakeside_Restaurant.xlsx">
+    <None Update="TestFiles\Lakeside_Restaurant.xlsx">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="ValidationFiles\Lakeside_Restaurant.json">
+    <None Update="ValidationFiles\Lakeside_Restaurant.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="ValidationFiles\Lakeside_Restaurant_fabric_only.ifczip">
+    <None Update="ValidationFiles\Lakeside_Restaurant_fabric_only.ifczip">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="ValidationFiles\VP\Required.xlsx">
+    <None Update="ValidationFiles\VP\Required.xlsx">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="ValidationFiles\VP\Submitted.xlsx">
+    <None Update="ValidationFiles\VP\Submitted.xlsx">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="ValidationFiles\XLSX\LakesideWithDocuments.xlsx">
+    <None Update="ValidationFiles\XLSX\LakesideWithDocuments.xlsx">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="ValidationFiles\XLSX\Requirements6.xlsx">
+    <None Update="ValidationFiles\XLSX\Requirements6.xlsx">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
   </ItemGroup>
   <ItemGroup>
-    <Reference Include="Esent.Interop, Version=1.9.4.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\packages\ManagedEsent.1.9.4\lib\net40\Esent.Interop.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="ICSharpCode.SharpZipLib, Version=0.86.0.518, Culture=neutral, PublicKeyToken=1b03e6acf1164f73, processorArchitecture=MSIL">
-      <HintPath>..\packages\SharpZipLib.0.86.0\lib\20\ICSharpCode.SharpZipLib.dll</HintPath>
-    </Reference>
-    <Reference Include="Microsoft.Extensions.Configuration, Version=2.1.1.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.Extensions.Configuration.2.1.1\lib\netstandard2.0\Microsoft.Extensions.Configuration.dll</HintPath>
-    </Reference>
-    <Reference Include="Microsoft.Extensions.Configuration.Abstractions, Version=2.1.1.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.Extensions.Configuration.Abstractions.2.1.1\lib\netstandard2.0\Microsoft.Extensions.Configuration.Abstractions.dll</HintPath>
-    </Reference>
-    <Reference Include="Microsoft.Extensions.Configuration.Binder, Version=2.1.1.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.Extensions.Configuration.Binder.2.1.1\lib\netstandard2.0\Microsoft.Extensions.Configuration.Binder.dll</HintPath>
-    </Reference>
-    <Reference Include="Microsoft.Extensions.DependencyInjection.Abstractions, Version=2.1.1.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.Extensions.DependencyInjection.Abstractions.2.1.1\lib\netstandard2.0\Microsoft.Extensions.DependencyInjection.Abstractions.dll</HintPath>
-    </Reference>
-    <Reference Include="Microsoft.Extensions.Logging, Version=2.1.1.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.Extensions.Logging.2.1.1\lib\netstandard2.0\Microsoft.Extensions.Logging.dll</HintPath>
-    </Reference>
-    <Reference Include="Microsoft.Extensions.Logging.Abstractions, Version=2.1.1.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.Extensions.Logging.Abstractions.2.1.1\lib\netstandard2.0\Microsoft.Extensions.Logging.Abstractions.dll</HintPath>
-    </Reference>
-    <Reference Include="Microsoft.Extensions.Options, Version=2.1.1.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.Extensions.Options.2.1.1\lib\netstandard2.0\Microsoft.Extensions.Options.dll</HintPath>
-    </Reference>
-    <Reference Include="Microsoft.Extensions.Primitives, Version=2.1.6.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.Extensions.Primitives.2.1.6\lib\netstandard2.0\Microsoft.Extensions.Primitives.dll</HintPath>
-    </Reference>
     <Reference Include="Microsoft.VisualStudio.QualityTools.UnitTestFramework, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
       <Private>False</Private>
     </Reference>
-    <Reference Include="Newtonsoft.Json, Version=11.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
-      <HintPath>..\packages\Newtonsoft.Json.11.0.2\lib\net45\Newtonsoft.Json.dll</HintPath>
-    </Reference>
-    <Reference Include="NPOI, Version=2.4.0.0, Culture=neutral, PublicKeyToken=0df73ec7942b34e1, processorArchitecture=MSIL">
-      <HintPath>..\packages\NPOI.2.4.0\lib\net40\NPOI.dll</HintPath>
-    </Reference>
-    <Reference Include="NPOI.OOXML, Version=2.4.0.0, Culture=neutral, PublicKeyToken=0df73ec7942b34e1, processorArchitecture=MSIL">
-      <HintPath>..\packages\NPOI.2.4.0\lib\net40\NPOI.OOXML.dll</HintPath>
-    </Reference>
-    <Reference Include="NPOI.OpenXml4Net, Version=2.4.0.0, Culture=neutral, PublicKeyToken=0df73ec7942b34e1, processorArchitecture=MSIL">
-      <HintPath>..\packages\NPOI.2.4.0\lib\net40\NPOI.OpenXml4Net.dll</HintPath>
-    </Reference>
-    <Reference Include="NPOI.OpenXmlFormats, Version=2.4.0.0, Culture=neutral, PublicKeyToken=0df73ec7942b34e1, processorArchitecture=MSIL">
-      <HintPath>..\packages\NPOI.2.4.0\lib\net40\NPOI.OpenXmlFormats.dll</HintPath>
-    </Reference>
-    <Reference Include="System" />
-    <Reference Include="System.Buffers, Version=4.0.3.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
-      <HintPath>..\packages\System.Buffers.4.5.0\lib\netstandard2.0\System.Buffers.dll</HintPath>
-    </Reference>
-    <Reference Include="System.configuration" />
-    <Reference Include="System.Configuration.ConfigurationManager, Version=4.0.1.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
-      <HintPath>..\packages\System.Configuration.ConfigurationManager.4.5.0\lib\net461\System.Configuration.ConfigurationManager.dll</HintPath>
-    </Reference>
-    <Reference Include="System.Data" />
     <Reference Include="System.Data.Linq" />
     <Reference Include="System.Data.OracleClient" />
-    <Reference Include="System.Drawing" />
-    <Reference Include="System.Memory, Version=4.0.1.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
-      <HintPath>..\packages\System.Memory.4.5.1\lib\netstandard2.0\System.Memory.dll</HintPath>
-    </Reference>
     <Reference Include="System.Net" />
-    <Reference Include="System.Numerics" />
-    <Reference Include="System.Numerics.Vectors, Version=4.1.4.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
-      <HintPath>..\packages\System.Numerics.Vectors.4.5.0\lib\net46\System.Numerics.Vectors.dll</HintPath>
-    </Reference>
-    <Reference Include="System.Runtime.CompilerServices.Unsafe, Version=4.0.4.1, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
-      <HintPath>..\packages\System.Runtime.CompilerServices.Unsafe.4.5.2\lib\netstandard2.0\System.Runtime.CompilerServices.Unsafe.dll</HintPath>
-    </Reference>
-    <Reference Include="System.Security.AccessControl, Version=4.1.1.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
-      <HintPath>..\packages\System.Security.AccessControl.4.5.0\lib\net461\System.Security.AccessControl.dll</HintPath>
-    </Reference>
-    <Reference Include="System.Security.Permissions, Version=4.0.1.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
-      <HintPath>..\packages\System.Security.Permissions.4.5.0\lib\net461\System.Security.Permissions.dll</HintPath>
-    </Reference>
-    <Reference Include="System.Security.Principal.Windows, Version=4.1.1.1, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
-      <HintPath>..\packages\System.Security.Principal.Windows.4.5.1\lib\net461\System.Security.Principal.Windows.dll</HintPath>
-    </Reference>
     <Reference Include="System.ServiceProcess" />
     <Reference Include="System.Transactions" />
-    <Reference Include="System.XML" />
-    <Reference Include="Xbim.CobieExpress, Version=5.1.0.0, Culture=neutral, PublicKeyToken=11e3655e576ec5a9, processorArchitecture=MSIL">
-      <HintPath>..\packages\Xbim.CobieExpress.5.1.147-develop\lib\net47\Xbim.CobieExpress.dll</HintPath>
-    </Reference>
-    <Reference Include="Xbim.Common, Version=5.1.0.0, Culture=neutral, PublicKeyToken=11e3655e576ec5a9, processorArchitecture=MSIL">
-      <HintPath>..\packages\Xbim.Common.5.1.283-develop\lib\net47\Xbim.Common.dll</HintPath>
-    </Reference>
-    <Reference Include="Xbim.Geometry.Engine.Interop, Version=5.1.0.0, Culture=neutral, PublicKeyToken=11e3655e576ec5a9, processorArchitecture=MSIL">
-      <HintPath>..\packages\Xbim.Geometry.Engine.Interop.5.1.312-develop\lib\net47\Xbim.Geometry.Engine.Interop.dll</HintPath>
-    </Reference>
-    <Reference Include="Xbim.Ifc, Version=5.1.0.0, Culture=neutral, PublicKeyToken=11e3655e576ec5a9, processorArchitecture=MSIL">
-      <HintPath>..\packages\Xbim.Ifc.5.1.283-develop\lib\net47\Xbim.Ifc.dll</HintPath>
-    </Reference>
-    <Reference Include="Xbim.Ifc2x3, Version=5.1.0.0, Culture=neutral, PublicKeyToken=11e3655e576ec5a9, processorArchitecture=MSIL">
-      <HintPath>..\packages\Xbim.Ifc2x3.5.1.283-develop\lib\net47\Xbim.Ifc2x3.dll</HintPath>
-    </Reference>
-    <Reference Include="Xbim.Ifc4, Version=5.1.0.0, Culture=neutral, PublicKeyToken=11e3655e576ec5a9, processorArchitecture=MSIL">
-      <HintPath>..\packages\Xbim.Ifc4.5.1.283-develop\lib\net47\Xbim.Ifc4.dll</HintPath>
-    </Reference>
-    <Reference Include="Xbim.IO.CobieExpress, Version=5.1.0.0, Culture=neutral, PublicKeyToken=11e3655e576ec5a9, processorArchitecture=MSIL">
-      <HintPath>..\packages\Xbim.IO.CobieExpress.5.1.147-develop\lib\net47\Xbim.IO.CobieExpress.dll</HintPath>
-    </Reference>
-    <Reference Include="Xbim.IO.Esent, Version=5.1.0.0, Culture=neutral, PublicKeyToken=11e3655e576ec5a9, processorArchitecture=MSIL">
-      <HintPath>..\packages\Xbim.IO.Esent.5.1.283-develop\lib\net47\Xbim.IO.Esent.dll</HintPath>
-    </Reference>
-    <Reference Include="Xbim.IO.MemoryModel, Version=5.1.0.0, Culture=neutral, PublicKeyToken=11e3655e576ec5a9, processorArchitecture=MSIL">
-      <HintPath>..\packages\Xbim.IO.MemoryModel.5.1.283-develop\lib\net47\Xbim.IO.MemoryModel.dll</HintPath>
-    </Reference>
-    <Reference Include="Xbim.IO.Table, Version=5.1.0.0, Culture=neutral, PublicKeyToken=11e3655e576ec5a9, processorArchitecture=MSIL">
-      <HintPath>..\packages\Xbim.IO.Table.5.1.147-develop\lib\net47\Xbim.IO.Table.dll</HintPath>
-    </Reference>
-    <Reference Include="Xbim.ModelGeometry.Scene, Version=5.1.0.0, Culture=neutral, PublicKeyToken=11e3655e576ec5a9, processorArchitecture=MSIL">
-      <HintPath>..\packages\Xbim.ModelGeometry.Scene.5.1.312-develop\lib\net47\Xbim.ModelGeometry.Scene.dll</HintPath>
-    </Reference>
-    <Reference Include="Xbim.Tessellator, Version=5.1.0.0, Culture=neutral, PublicKeyToken=11e3655e576ec5a9, processorArchitecture=MSIL">
-      <HintPath>..\packages\Xbim.Tessellator.5.1.283-develop\lib\net47\Xbim.Tessellator.dll</HintPath>
-    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Content Include="TestFiles\2012-03-23-Duplex-Requirements.CobieLight.xml">
@@ -327,7 +137,25 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <PackageReference Include="Microsoft.Extensions.Primitives" Version="2.1.6" />
+    <PackageReference Include="Newtonsoft.Json" Version="11.0.2" />
+    <PackageReference Include="System.Numerics.Vectors" Version="4.5.0" />
+    <PackageReference Include="Xbim.Essentials" Version="5.1.341" />
+    <PackageReference Include="Xbim.Geometry" Version="5.1.437" />
+    <PackageReference Include="Xbim.IO.CobieExpress" Version="5.1.147-develop" />
+    <PackageReference Include="System.Configuration.ConfigurationManager" Version="5.0.0" />
+	  <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.*" />
+	  <PackageReference Include="MSTest.TestAdapter" Version="2.2.3" />
+	  <PackageReference Include="MSTest.TestFramework" Version="2.2.3" />
+    <PackageReference Include="Microsoft.DotNet.UpgradeAssistant.Extensions.Default.Analyzers" Version="0.3.310801">
+      <PrivateAssets>all</PrivateAssets>
+    </PackageReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Remove="ClassificationMappingReaderTests.cs" />
+    <Compile Remove="UnitTest1.cs" />
+  </ItemGroup>
   <Choose>
     <When Condition="'$(VisualStudioVersion)' == '10.0' And '$(IsCodedUITest)' == 'True'">
       <ItemGroup>
@@ -346,20 +174,4 @@
       </ItemGroup>
     </When>
   </Choose>
-  <Import Project="$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets" Condition="Exists('$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets')" />
-  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-  <Import Project="..\packages\Xbim.Geometry.Engine.Interop.5.1.312-develop\build\net47\Xbim.Geometry.Engine.Interop.targets" Condition="Exists('..\packages\Xbim.Geometry.Engine.Interop.5.1.312-develop\build\net47\Xbim.Geometry.Engine.Interop.targets')" />
-  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
-    <PropertyGroup>
-      <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
-    </PropertyGroup>
-    <Error Condition="!Exists('..\packages\Xbim.Geometry.Engine.Interop.5.1.312-develop\build\net47\Xbim.Geometry.Engine.Interop.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Xbim.Geometry.Engine.Interop.5.1.312-develop\build\net47\Xbim.Geometry.Engine.Interop.targets'))" />
-  </Target>
-  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
-       Other similar extension points exist, see Microsoft.Common.targets.
-  <Target Name="BeforeBuild">
-  </Target>
-  <Target Name="AfterBuild">
-  </Target>
-  -->
 </Project>

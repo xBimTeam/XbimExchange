@@ -190,5 +190,9 @@ namespace XplorerPlugin.DPoW
             
         }
 
+        public void Clear()
+        {
+
+        }
     }
 }
