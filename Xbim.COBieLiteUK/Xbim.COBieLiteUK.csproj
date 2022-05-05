@@ -7,6 +7,7 @@
     <RootNamespace>Xbim.CobieLiteUk</RootNamespace>
     <PackageId>Xbim.COBieLiteUK</PackageId>
     <PackageIcon>Icon.png</PackageIcon>
+    <RepositoryType>git</RepositoryType>
   </PropertyGroup>
   <ItemGroup>
     <None Remove="FilterHelper\COBieArchitecturalFilters.config" />
