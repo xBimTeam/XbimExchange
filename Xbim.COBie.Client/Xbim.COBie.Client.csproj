@@ -115,8 +115,5 @@
     <PackageReference Include="Xbim.ModelGeometry.Scene" Version="5.1.437" />
     <PackageReference Include="Xbim.Tessellator" Version="5.1.341" />
     <PackageReference Include="System.Configuration.ConfigurationManager" Version="5.0.0" />
-    <PackageReference Include="Microsoft.DotNet.UpgradeAssistant.Extensions.Default.Analyzers" Version="0.3.310801">
-      <PrivateAssets>all</PrivateAssets>
-    </PackageReference>
   </ItemGroup>
 </Project>
