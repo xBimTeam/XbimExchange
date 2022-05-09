@@ -585,7 +585,7 @@ namespace Xbim.CobieLiteUk.Validation.Reporting
         {
             var font = excelCell.Sheet.Workbook.CreateFont();
             font.FontHeightInPoints = 14;
-            font.Boldweight = (short) FontBoldWeight.Bold;
+            font.IsBold = true;
             excelCell.CellStyle = excelCell.Sheet.Workbook.CreateCellStyle();
             excelCell.CellStyle.SetFont(font);
         }
