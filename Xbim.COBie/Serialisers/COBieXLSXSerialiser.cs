@@ -7,7 +7,7 @@ using NPOI.XSSF.UserModel;
 using NPOI.SS.UserModel;
 using System.IO;
 using System.Globalization;
-using NPOI.SS.Util;
+
 
 namespace Xbim.COBie.Serialisers
 {
@@ -27,17 +27,16 @@ namespace Xbim.COBie.Serialisers
 
         public string FileName
         {
-            get
-            {
+            get {
                 if (IsXlsx)
                 {
                     _fileName = IsXlsx ? Path.ChangeExtension(_fileName, ".xlsx") : Path.ChangeExtension(_fileName, ".xls");
                 }
-                return _fileName;
+                return _fileName; 
             }
             set { _fileName = value; }
         }
-
+        
         /// <summary>
         /// Path and name of template file to use
         /// </summary>
@@ -46,17 +45,16 @@ namespace Xbim.COBie.Serialisers
 
         public string TemplateFileName
         {
-            get
-            {
+            get {
                 if (IsXlsx)
                 {
                     _templateFileName = IsXlsx ? Path.ChangeExtension(_templateFileName, ".xlsx") : Path.ChangeExtension(_templateFileName, ".xls");
                 }
-                return _templateFileName;
+                return _templateFileName; 
             }
             set { _templateFileName = value; }
         }
-
+        
         /// <summary>
         /// NPOI Workbook object
         /// </summary>
@@ -78,14 +76,14 @@ namespace Xbim.COBie.Serialisers
         const string DefaultTemplateFileName = @"Templates\COBie-UK-2012-template.xls";
         const string InstructionsSheet = "Instruction";
         const string ErrorsSheet = "Errors";
-        const string RulesSheet = "Rules";
+        const string RulesSheet = "Rules"; 
         #endregion
 
         #region local variables
         Dictionary<string, IColor> _colours = new Dictionary<string, IColor>();
         //need two keys to get correct style so used Tuple
         Dictionary<Tuple<string, COBieAllowedType>, ICellStyle> _cellStyles = new Dictionary<Tuple<string, COBieAllowedType>, ICellStyle>();
-        public int _commentCount = 0;
+        public int _commentCount = 0; 
         #endregion
 
         public COBieXLSXSerialiser() : this(DefaultFileName, DefaultTemplateFileName)
@@ -180,27 +178,27 @@ namespace Xbim.COBie.Serialisers
                 }
             }
 
-            if ((sheet.RowCount == 0)
+            if ((sheet.RowCount == 0) 
                 //&& (_colours.ContainsKey("Grey"))
                 )
             {
                 if (IsXlsx)
                 {
-                    ((XSSFSheet)excelSheet).TabColor = new XSSFColor(IndexedColors.Grey50Percent);
+                    ((XSSFSheet)excelSheet).SetTabColor(IndexedColors.Grey50Percent.Index); 
                 }
                 else if (_colours.ContainsKey("Grey"))
                 {
-                    ((XSSFSheet)excelSheet).TabColor = new XSSFColor(IndexedColors.Grey50Percent);
-
+                    excelSheet.TabColorIndex = _colours["Grey"].Indexed;
                 }
-                if (sheet.SheetName != Constants.WORKSHEET_PICKLISTS)
-                {
-                    HighlightErrors(excelSheet, sheet);
-                }
-
-
-                RecalculateSheet(excelSheet);
+                
             }
+            if (sheet.SheetName != Constants.WORKSHEET_PICKLISTS)
+            {
+                HighlightErrors(excelSheet, sheet);
+            }
+
+
+            RecalculateSheet(excelSheet);
         }
 
         /// <summary>
@@ -236,7 +234,7 @@ namespace Xbim.COBie.Serialisers
                         if (excelCell != null)
                         {
                             string description = error.ErrorDescription;
-                            if (hasErrorLevel)
+                            if(hasErrorLevel)
                             {
                                 if (error.ErrorLevel == COBieError.ErrorLevels.Warning)
                                     description = "Warning: " + description;
@@ -253,11 +251,11 @@ namespace Xbim.COBie.Serialisers
                                     IClientAnchor anchor = null;
                                     if (IsXlsx)
                                     {
-                                        anchor = new XSSFClientAnchor(0, 0, 0, 0, error.Column, error.Row, error.Column + 3, error.Row + 3);
+                                        anchor =  new XSSFClientAnchor(0, 0, 0, 0, error.Column, error.Row, error.Column + 3, error.Row + 3);
                                     }
                                     else
                                     {
-                                        anchor = new HSSFClientAnchor(0, 0, 0, 0, error.Column, error.Row, error.Column + 3, error.Row + 3);
+                                        anchor =  new HSSFClientAnchor(0, 0, 0, 0, error.Column, error.Row, error.Column + 3, error.Row + 3);
                                     }
 
                                     IComment comment = patr.CreateCellComment(anchor);
@@ -265,11 +263,11 @@ namespace Xbim.COBie.Serialisers
                                     IRichTextString str = null;
                                     if (IsXlsx)
                                     {
-                                        str = new XSSFRichTextString(description);
+                                        str = new XSSFRichTextString(description); 
                                     }
                                     else
                                     {
-                                        str = new HSSFRichTextString(description);
+                                        str = new HSSFRichTextString(description); 
                                     }
 
                                     comment.String = str;
@@ -294,12 +292,12 @@ namespace Xbim.COBie.Serialisers
                                     description = excelCell.CellComment.String.ToString() + " Also " + description;
                                     excelCell.CellComment.String = new HSSFRichTextString(description);
                                 }
-
+                                
                             }
-
-
+                            
+                            
                         }
-
+                        
                     }
                 }
             }
@@ -319,7 +317,7 @@ namespace Xbim.COBie.Serialisers
                 {
                     CreateStyle(colour, type);
                 }
-
+                
             }
         }
 
@@ -365,7 +363,7 @@ namespace Xbim.COBie.Serialisers
                     //}
                     //NPOI.HSSF.Record.PaletteRecord.STANDARD_PALETTE_SIZE++;
                     colour = palette.AddColor(red, green, blue);
-                }
+                } 
             }
             _colours.Add(colourName, colour);
         }
@@ -433,7 +431,7 @@ namespace Xbim.COBie.Serialisers
                 default:
                     return "White";
             }
-
+            
         }
 
         /// <summary>
@@ -444,7 +442,7 @@ namespace Xbim.COBie.Serialisers
         private void CreateStyle(string colourName, COBieAllowedType type)
         {
             ICellStyle cellStyle;
-            cellStyle = ExcelWorkbook.CreateCellStyle();
+            cellStyle = ExcelWorkbook.CreateCellStyle() ;
 
             if (IsXlsx)
             {
@@ -452,16 +450,16 @@ namespace Xbim.COBie.Serialisers
             }
             else
             {
-                ((XSSFCellStyle)cellStyle).FillForegroundXSSFColor = (XSSFColor)_colours[colourName];
+                    cellStyle.FillForegroundColor = _colours[colourName].Indexed;
             }
-
+            
             cellStyle.FillPattern = FillPattern.SolidForeground;
 
             cellStyle.BorderBottom = BorderStyle.Thin;
             cellStyle.BorderLeft = BorderStyle.Thin;
             cellStyle.BorderRight = BorderStyle.Thin;
             cellStyle.BorderTop = BorderStyle.Thin;
-            AppendFormat(type, cellStyle); //add format for value display
+            AppendFormat(type,cellStyle); //add format for value display
 
             // TODO:maybe clone from the template?
             var tuple = new Tuple<string, COBieAllowedType>(colourName, type);
@@ -503,21 +501,21 @@ namespace Xbim.COBie.Serialisers
             //if we are validating here then ensure we have Indices on each sheet
             //workbook.CreateIndices();
             ICOBieSheetValidationTemplate SheetValidator = null;
-
-
-            foreach (var sheet in workbook.OrderBy(w => w.SheetName))
+    
+            
+            foreach(var sheet in workbook.OrderBy(w=>w.SheetName))
             {
-                if (sheet.SheetName != Constants.WORKSHEET_PICKLISTS)
+                if(sheet.SheetName != Constants.WORKSHEET_PICKLISTS)
                 {
                     if (ValidationTemplate != null && ValidationTemplate.Sheet.ContainsKey(sheet.SheetName))
                     {
                         SheetValidator = ValidationTemplate.Sheet[sheet.SheetName];
                     }
                     // Ensure the validation is up to date
-                    sheet.Validate(workbook, ErrorRowIndexBase.RowTwo, SheetValidator);
+                     sheet.Validate(workbook, ErrorRowIndexBase.RowTwo, SheetValidator);
                 }
 
-                WriteErrors(errorsSheet, sheet.Errors);
+                WriteErrors(errorsSheet, sheet.Errors);  
             }
         }
 
@@ -530,7 +528,7 @@ namespace Xbim.COBie.Serialisers
                           .GroupBy(row => new { row.SheetName, row.FieldName, row.ErrorType })
                           .Select(grp => new { grp.Key.SheetName, grp.Key.ErrorType, grp.Key.FieldName, CountError = grp.Count(err => err.ErrorLevel == COBieError.ErrorLevels.Error), CountWarning = grp.Count(err => err.ErrorLevel == COBieError.ErrorLevels.Warning) })
                           .OrderBy(r => r.SheetName);
-
+            
             //just in case we do not have ErrorLevel property in sheet COBieErrorCollection COBieError
             if (!hasErrorLevel)
             {
@@ -540,7 +538,7 @@ namespace Xbim.COBie.Serialisers
                           .OrderBy(r => r.SheetName);
             }
 
-
+            
             //Add Header
             if (_row == 0)
             {
@@ -567,10 +565,10 @@ namespace Xbim.COBie.Serialisers
                 excelCell.SetCellValue("Warning Count");
                 col++;
 
-                _row++;
+                _row++; 
             }
-
-            foreach (var error in summary)
+            
+            foreach(var error in summary)
             {
 
                 IRow excelRow = errorsSheet.GetRow(_row + 1) ?? errorsSheet.CreateRow(_row + 1);
@@ -595,10 +593,10 @@ namespace Xbim.COBie.Serialisers
                 excelCell = excelRow.GetCell(col) ?? excelRow.CreateCell(col);
                 excelCell.SetCellValue(error.CountWarning);
                 col++;
-
+                
                 _row++;
             }
-            for (int c = 0; c < 5; c++)
+            for (int c = 0 ; c < 5 ; c++)
             {
                 errorsSheet.AutoSizeColumn(c);
             }
@@ -709,7 +707,7 @@ namespace Xbim.COBie.Serialisers
             }
         }
 
-
+        
 
         private void ValidateHeaders(List<COBieColumn> columns, List<string> sheetHeaders, string sheetName)
         {
@@ -733,7 +731,7 @@ namespace Xbim.COBie.Serialisers
 
 
 
-
+        
         private List<string> GetTargetHeaders(ISheet excelSheet)
         {
             List<string> headers = new List<string>();
@@ -750,7 +748,7 @@ namespace Xbim.COBie.Serialisers
 
         }
 
-
+        
 
         private void SetCellValue(ICell excelCell, COBieCell cell)
         {
@@ -758,7 +756,7 @@ namespace Xbim.COBie.Serialisers
             {
                 //check text length will fit in cell
                 if (cell.CellValue.Length >= short.MaxValue)
-                {
+                { 
                     //truncate cell text to max length
                     excelCell.SetCellValue(cell.CellValue.Substring(0, short.MaxValue - 1));
                 }
@@ -813,12 +811,13 @@ namespace Xbim.COBie.Serialisers
         }
 
 
-
+        
         private static void RecalculateSheet(ISheet excelSheet)
         {
             // Ensures the spreadsheet formulas will be recalculated the next time the file is opened
             excelSheet.ForceFormulaRecalculation = true;
-            excelSheet.ActiveCell = new CellAddress(1, 0);
+            excelSheet.SetActiveCell(1, 0);
+
         }
     }
 }

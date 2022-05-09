@@ -1,9 +1,13 @@
-﻿using System.IO;
+﻿using System.Collections.Generic;
+using System.IO;
 using System.Windows;
-using Unity;
-using Xbim.DPoWTools.Properties;
+using System.Windows.Forms;
+using Microsoft.Practices.Unity;
+using Xbim.CobieLiteUk;
 using Xbim.WindowsUI.DPoWValidation.Injection;
 using Xbim.WindowsUI.DPoWValidation.ViewModels;
+using System.Diagnostics;
+using Xbim.DPoWTools.Properties;
 
 namespace XbimDPoWTools
 {

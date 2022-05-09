@@ -5,7 +5,7 @@ using System.Data;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
-using Unity;
+using Microsoft.Practices.Unity;
 using Xbim.WindowsUI.DPoWValidation.Injection;
 
 namespace XbimDPoWTools

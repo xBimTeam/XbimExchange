@@ -28,11 +28,10 @@
     <EmbeddedResource Include="Templates\UK2012.xlsx" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
-    <PackageReference Include="Newtonsoft.Json.Bson" Version="1.0.2" />
-    <PackageReference Include="NPOI" Version="2.5.5" />
-    <PackageReference Include="System.Configuration.ConfigurationManager" Version="6.0.0" />
-    <PackageReference Include="Xbim.Essentials" Version="5.1.323" />
+    <PackageReference Include="Newtonsoft.Json" Version="11.0.2" />
+    <PackageReference Include="Newtonsoft.Json.Bson" Version="1.0.1" />
+    <PackageReference Include="NPOI" Version="2.4.0" />
+    <PackageReference Include="Xbim.Essentials" Version="5.1.259" />
   </ItemGroup>
 
 </Project>
