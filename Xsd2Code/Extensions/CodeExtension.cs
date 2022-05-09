@@ -1725,6 +1725,7 @@ namespace Xsd2Code.Library.Extensions
         /// </summary>
         /// <param name="name">Name of object</param>
         /// <param name="type">CodeTypeReference Type</param>
+        /// <param name="parameters">undocumented</param>
         /// <returns>return instance CodeConditionStatement</returns>
         protected virtual CodeConditionStatement CreateInstanceIfNotNull(string name, CodeTypeReference type, params CodeExpression[] parameters)
         {
@@ -1777,6 +1778,7 @@ namespace Xsd2Code.Library.Extensions
         /// </summary>
         /// <param name="name">The name.</param>
         /// <param name="type">The type.</param>
+        /// <param name="parameters">Undocumented</param>
         /// <returns></returns>
         private static CodeAssignStatement CollectionInitilializerStatement(string name, CodeTypeReference type, params CodeExpression[] parameters)
         {

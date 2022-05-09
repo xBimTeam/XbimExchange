@@ -1,15 +1,23 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFrameworks>net47;netstandard2.0</TargetFrameworks>
+    <TargetFrameworks>net472;</TargetFrameworks>
     <Title>Xbim.CobieLiteUK.Validation</Title>
     <Description>Provides validation services for data in the COBieLite UK schema</Description>
+    <PackageIcon>Icon.png</PackageIcon>
+    <RepositoryType>git</RepositoryType>
   </PropertyGroup>
   <ItemGroup>
     <Compile Remove="AssetTypeValidator.cs" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="Newtonsoft.Json" Version="11.0.2" />
-    <PackageReference Include="NPOI" Version="2.4.0" />
+    <None Include="..\Icon.png">
+      <Pack>True</Pack>
+      <PackagePath>\</PackagePath>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
+    <PackageReference Include="NPOI" Version="2.5.6" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Xbim.COBieLiteUK\Xbim.COBieLiteUK.csproj" />
@@ -19,5 +27,4 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
   </ItemGroup>
-
 </Project>

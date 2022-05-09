@@ -244,7 +244,6 @@ namespace Xsd2Code.Library.Helpers
         /// Creates the instance.
         /// </summary>
         /// <param name="type">The instance type.</param>
-        /// <param name="ctorParams">The ctor params.</param>
         /// <returns>return code of new objectinstance</returns>
         internal static CodeObjectCreateExpression CreateInstance(Type type)
         {

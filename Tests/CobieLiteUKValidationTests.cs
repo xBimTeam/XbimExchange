@@ -126,11 +126,18 @@ namespace Tests
         [TestMethod]
         public void LakeSideXls0ValidationReport()
         {
+            var repNames = new[]
+            {
+                @"..\..\LakeSideXls0ValidationReport.xlsx",
+                @"..\..\LakeSideXls0ValidationReport.xls",
+            };
             var validated = LakeSide0();
-            const string repName = @"..\..\LakeSideXls0ValidationReport.xlsx";
-            var xRep = new ExcelValidationReport();
-            var ret = xRep.Create(validated, repName);
-            Assert.IsTrue(ret, "File not created");
+            foreach (var repName in repNames)
+            {
+                var xRep = new ExcelValidationReport();
+                var ret = xRep.Create(validated, repName);
+                Assert.IsTrue(ret, "File not created");
+            }           
         }
 
         private static Facility LakeSide0()

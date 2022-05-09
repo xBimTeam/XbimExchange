@@ -440,16 +440,14 @@ namespace Tests
             };
 
             //save model to file to check it
-            string msg;
             const string xmlFile = "facility.cobielite.xml";
             const string jsonFile = "facility.cobielite.json";
             const string xlsxFile = "facility.cobielite.xlsx";
             facility.WriteXml(xmlFile, true);
             facility.WriteJson(jsonFile, true);
-            facility.WriteCobie(xlsxFile, out msg);
-
-            var facility2 = Facility.ReadXml(xmlFile);
-            var facility3 = Facility.ReadJson(jsonFile);
+            facility.WriteCobie(xlsxFile, out _);
+            _ = Facility.ReadXml(xmlFile);
+            _ = Facility.ReadJson(jsonFile);
         }
 
         [TestMethod]
