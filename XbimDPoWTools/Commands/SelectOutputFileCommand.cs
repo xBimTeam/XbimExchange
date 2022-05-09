@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Windows.Forms;
 using System.Windows.Input;
-using Unity;
+using Microsoft.Practices.Unity;
 using Xbim.WindowsUI.DPoWValidation.Injection;
 using Xbim.WindowsUI.DPoWValidation.Models;
 using Xbim.WindowsUI.DPoWValidation.ViewModels;

@@ -26,9 +26,9 @@
     <EmbeddedResource Include="IfcToCOBieLiteUK\COBieAttributes.config" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="6.0.1" />
-    <PackageReference Include="NPOI" Version="2.5.5" />
-    <PackageReference Include="Xbim.Essentials" Version="5.1.323" />
+    <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="2.1.1" />
+    <PackageReference Include="NPOI" Version="2.4.0" />
+    <PackageReference Include="Xbim.Essentials" Version="5.1.259" />
     <PackageReference Include="Xbim.IO.CobieExpress" Version="5.1.146" />
     <PackageReference Include="Xbim.PropertySets" Version="4.0.1" />
   </ItemGroup>
